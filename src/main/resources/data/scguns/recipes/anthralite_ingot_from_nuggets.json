@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "group": "anthralite_ingot",
+  "key": {
+    "#": {
+      "item": "scguns:anthralite_nugget"
+    }
+  },
+  "pattern": [
+    "###",
+    "###",
+    "###"
+  ],
+  "result": {
+    "item": "scguns:anthralite_ingot"
+  }
+}

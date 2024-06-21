@@ -1,0 +1,15 @@
+{
+  "values": [
+    "minecraft:blaze",
+    "minecraft:ghast",
+    "minecraft:hoglin",
+    "minecraft:husk",
+    "minecraft:magma_cube",
+    "minecraft:piglin",
+    "minecraft:piglin_brute",
+    "minecraft:strider",
+    "minecraft:wither",
+    "minecraft:wither_skeleton",
+    "minecraft:enderman"
+  ]
+}

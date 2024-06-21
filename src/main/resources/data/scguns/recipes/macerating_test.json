@@ -1,0 +1,13 @@
+{
+  "type": "scguns:macerating",
+  "processingTime": 100,
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  ],
+  "result": {
+    "item": "minecraft:diamond",
+    "count": 1
+  }
+}

@@ -1,0 +1,42 @@
+modLoader="javafml"
+loaderVersion="[40,)"
+license="GNU GPLv3"
+
+[[mods]]
+modId="scguns"
+version="0.3.1"
+displayName="Scorched Guns"
+authors="ribs"
+credits="MrCrayfish, Bomb787"
+description="SCORCHED GUNSSSSS"
+
+[[dependencies.scguns]]
+    modId="forge"
+    mandatory=true
+    versionRange="[46, 48)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.scguns]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20, 1.20.2)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.scguns]]
+    modId="framework"
+    mandatory=true
+    versionRange="[0.6.16,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.scguns]]
+    modId="controllable"
+    mandatory=false
+    versionRange="[0.16.3,)"
+    ordering="AFTER"
+    side="CLIENT"
+[[dependencies.scguns]]
+    modId="backpacked"
+    mandatory=false
+    versionRange="[2.1.9,)"
+    ordering="AFTER"
+    side="CLIENT"

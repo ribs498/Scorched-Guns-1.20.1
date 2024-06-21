@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "scguns:anthralite_ingot"
+  },
+  "base": {
+    "item": "minecraft:iron_helmet"
+  },
+  "result": {
+    "item": "scguns:anthralite_helmet"
+  },
+  "template": {
+    "item": "minecraft:leather"
+  }
+}

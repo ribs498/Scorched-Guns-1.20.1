@@ -1,0 +1,152 @@
+plugins {
+    id 'eclipse'
+    id 'maven-publish'
+    id 'net.minecraftforge.gradle' version '5.1.+'
+    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'org.parchmentmc.librarian.forgegradle' version '1.+'
+}
+
+version = "0.3.1-1.20.1"
+group = "top.ribs"
+archivesBaseName = "ScorchedGuns"
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+mixin {
+    add sourceSets.main, "scguns.refmap.json"
+    config 'scguns.mixins.json'
+}
+
+minecraft {
+    //mappings channel: 'official', version: '1.20.1'
+    mappings channel: 'parchment', version: '2023.09.03-1.20.1'
+    accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
+    runs {
+        client {
+            workingDirectory project.file('run')
+            property 'mixin.env.disableRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            mods {
+                scguns {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        server {
+            workingDirectory project.file('run')
+            property 'mixin.env.disableRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            arg '-mixin.config=scguns.mixins.json'
+            mods {
+                scguns {
+                    source sourceSets.main
+                }
+            }
+        }
+
+        data {
+            workingDirectory project.file('run')
+            property 'mixin.env.disableRefMap', 'true'
+            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
+            property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
+            property 'forge.logging.console.level', 'debug'
+            args '--mod', 'scguns', '--all', '--output', file('src/generated/resources/')
+            arg '-mixin.config=scguns.mixins.json'
+            mods {
+                scguns {
+                    source sourceSets.main
+                }
+            }
+        }
+    }
+}
+
+repositories {
+    maven {
+        name = "BlameJared"
+        url = "https://maven.blamejared.com/"
+        content {
+            includeGroup "com.blamejared.crafttweaker"
+            includeGroup "org.openzen.zencode"
+            includeGroup "mezz.jei"
+        }
+    }
+    maven {
+        name = "Modmaven"
+        url = "https://modmaven.dev/"
+        content {
+            includeGroup "mezz.jei"
+        }
+    }
+    maven {
+        name = "Cursemaven"
+        url "https://www.cursemaven.com"
+        content {
+            includeGroup "curse.maven"
+        }
+    }
+    maven {
+        // location of the maven that hosts JEI files since January 2023
+        name = "Jared's maven"
+        url = "https://maven.blamejared.com/"
+    }
+    maven { url "https://maven.ryanliptak.com/" }
+    maven { // TOP
+        url "https://maven.k-4u.nl"
+    }
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.1-47.2.0'
+    implementation fg.deobf('curse.maven:framework-549225:4718251')
+    implementation fg.deobf('curse.maven:backpacked-352835:4725669')
+    compileOnly fg.deobf('curse.maven:controllable-317269:4598985')
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
+    compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
+    runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
+    implementation fg.deobf("curse.maven:better-third-person-435044:4596768")
+    implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
+}
+
+jar {
+    manifest {
+        attributes([
+                "Specification-Title"     : "Scorched Guns",
+                "Specification-Vendor"    : "ribs",
+                "Specification-Version"   : "1",
+                "Implementation-Title"    : "Scorched Guns",
+                "Implementation-Version"  : project.version,
+                "Implementation-Vendor"   : "ribs",
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs"            : "scguns.mixins.json"
+        ])
+    }
+}
+
+jar.finalizedBy('reobfJar')
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+        }
+    }
+    repositories {
+        maven {
+            url "file:///X:/localmaven/mcmods"
+        }
+    }
+}

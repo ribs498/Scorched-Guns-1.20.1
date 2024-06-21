@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "group": "sulfur_chunk",
+  "experience": 0.7,
+  "ingredient": {
+    "item": "scguns:sulfur_ore"
+  },
+  "result": "scguns:sulfur_chunk"
+}

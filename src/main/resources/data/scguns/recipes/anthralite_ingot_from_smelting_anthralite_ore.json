@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "group": "anthralite_ingot",
+  "experience": 0.7,
+  "ingredient": {
+    "item": "scguns:anthralite_ore"
+  },
+  "result": "scguns:anthralite_ingot"
+}

@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "layers=1": {
+      "model": "scguns:block/niter_height2"
+    },
+    "layers=2": {
+      "model": "scguns:block/niter_height4"
+    },
+    "layers=3": {
+      "model": "scguns:block/niter_height6"
+    },
+    "layers=4": {
+      "model": "scguns:block/niter_height8"
+    },
+    "layers=5": {
+      "model": "scguns:block/niter_height10"
+    },
+    "layers=6": {
+      "model": "scguns:block/niter_height12"
+    },
+    "layers=7": {
+      "model": "scguns:block/niter_height14"
+    },
+    "layers=8": {
+      "model": "scguns:block/niter_block"
+    }
+  }
+}

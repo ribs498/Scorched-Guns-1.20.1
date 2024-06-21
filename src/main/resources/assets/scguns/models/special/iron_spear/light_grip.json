@@ -1,0 +1,113 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"3": "scguns:item/carabine_grips",
+		"particle": "scguns:item/carabine_grips"
+	},
+	"elements": [
+		{
+			"from": [7.13447, 2.4, 6.05],
+			"to": [8.88447, 2.9, 9.25],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.00947, 1.6, 5.45]},
+			"faces": {
+				"north": {"uv": [8, 6, 10, 6.5], "texture": "#3"},
+				"east": {"uv": [7, 7, 10, 7.5], "texture": "#3"},
+				"south": {"uv": [7, 8, 9, 8.5], "texture": "#3"},
+				"west": {"uv": [8, 1, 11, 1.5], "texture": "#3"},
+				"up": {"uv": [2, 3, 0, 0], "texture": "#3"},
+				"down": {"uv": [4, 0, 2, 3], "texture": "#3"}
+			}
+		},
+		{
+			"from": [7.38447, 2.875, 6.3],
+			"to": [8.63447, 3.875, 9],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.00947, 2.375, 5.45]},
+			"faces": {
+				"north": {"uv": [8, 2, 9.5, 3], "texture": "#3"},
+				"east": {"uv": [0, 6, 2.5, 7], "texture": "#3"},
+				"south": {"uv": [3, 8, 4.5, 9], "texture": "#3"},
+				"west": {"uv": [6, 0, 8.5, 1], "texture": "#3"},
+				"up": {"uv": [5.5, 2.5, 4, 0], "texture": "#3"},
+				"down": {"uv": [5.5, 3, 4, 5.5], "texture": "#3"}
+			}
+		},
+		{
+			"from": [7.38447, 3.875, 6.91],
+			"to": [8.63447, 4.425, 7.42],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.00947, 2.175, 5.45]},
+			"faces": {
+				"north": {"uv": [2, 9, 3.5, 9.5], "texture": "#3"},
+				"east": {"uv": [8, 11, 8.5, 11.5], "texture": "#3"},
+				"south": {"uv": [4, 9, 5.5, 9.5], "texture": "#3"},
+				"west": {"uv": [11, 8, 11.5, 8.5], "texture": "#3"},
+				"up": {"uv": [7.5, 9.5, 6, 9], "texture": "#3"},
+				"down": {"uv": [9.5, 9, 8, 9.5], "texture": "#3"}
+			}
+		},
+		{
+			"from": [7.38447, 3.875, 7.875],
+			"to": [8.63447, 4.425, 8.385],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.00947, 2.175, 5.45]},
+			"faces": {
+				"north": {"uv": [9, 8, 10.5, 8.5], "texture": "#3"},
+				"east": {"uv": [9, 11, 9.5, 11.5], "texture": "#3"},
+				"south": {"uv": [0, 10, 1.5, 10.5], "texture": "#3"},
+				"west": {"uv": [10, 11, 10.5, 11.5], "texture": "#3"},
+				"up": {"uv": [11.5, 0.5, 10, 0], "texture": "#3"},
+				"down": {"uv": [3.5, 10, 2, 10.5], "texture": "#3"}
+			}
+		},
+		{
+			"from": [7.25947, 2, 6.125],
+			"to": [8.75947, 2.5, 9.125],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6.88447, 1.2, 5.525]},
+			"faces": {
+				"north": {"uv": [10, 2, 11.5, 2.5], "texture": "#3"},
+				"east": {"uv": [8, 3, 11, 3.5], "texture": "#3"},
+				"south": {"uv": [4, 10, 5.5, 10.5], "texture": "#3"},
+				"west": {"uv": [8, 4, 11, 4.5], "texture": "#3"},
+				"up": {"uv": [1.5, 6, 0, 3], "texture": "#3"},
+				"down": {"uv": [3.5, 3, 2, 6], "texture": "#3"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.25, -6.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.25, -6.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 9.25, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.25, 9.25, 0]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-2, 3.5, 0],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [4, 6, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "LightGrip",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4]
+		}
+	]
+}

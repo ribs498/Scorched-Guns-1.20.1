@@ -1,0 +1,91 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "scguns:item/pump_shotgun",
+		"particle": "scguns:item/pump_shotgun"
+	},
+	"elements": [
+		{
+			"name": "Pumpy 1",
+			"from": [7.6, 2.37, 8.98],
+			"to": [8.4, 2.72, 11.475],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.155, 2.37, 10.23]},
+			"faces": {
+				"north": {"uv": [9.5, 5.75, 9.25, 5.5], "rotation": 90, "texture": "#0"},
+				"east": {"uv": [6.25, 5.25, 9.25, 5.75], "texture": "#0"},
+				"south": {"uv": [9.5, 5.75, 9.25, 5.5], "rotation": 90, "texture": "#0"},
+				"west": {"uv": [9.25, 5.25, 6.25, 5.75], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Pumpy 2",
+			"from": [7.71646, 2.09, 8.98],
+			"to": [8.28146, 2.655, 11.48],
+			"rotation": {"angle": -45, "axis": "z", "origin": [7.99646, 2.37, 10.23]},
+			"faces": {
+				"north": {"uv": [10, 6.25, 9.25, 5.5], "rotation": 270, "texture": "#0"},
+				"east": {"uv": [9.25, 6.25, 6.25, 5.75], "texture": "#0"},
+				"south": {"uv": [10, 6.25, 9.25, 5.5], "rotation": 180, "texture": "#0"},
+				"down": {"uv": [6.25, 6.25, 9.25, 5.75], "rotation": 90, "texture": "#0"}
+			}
+		},
+		{
+			"name": "Ejector",
+			"from": [7.82792, 2.7475, 12.98],
+			"to": [8.24292, 3.1625, 15.48],
+			"rotation": {"angle": -45, "axis": "z", "origin": [8.24042, 3.09, 13.73]},
+			"faces": {
+				"north": {"uv": [8.5, 0.75, 8.25, 0.5], "rotation": 270, "texture": "#0"},
+				"east": {"uv": [8.25, 0.75, 9.75, 0.5], "rotation": 180, "texture": "#0"},
+				"south": {"uv": [9.75, 0.75, 9.5, 0.5], "rotation": 270, "texture": "#0"},
+				"west": {"uv": [9.75, 0.75, 8.25, 0.5], "rotation": 180, "texture": "#0"},
+				"up": {"uv": [9.75, 0.75, 8.25, 0.5], "rotation": 270, "texture": "#0"},
+				"down": {"uv": [8.25, 0.75, 9.75, 0.5], "rotation": 270, "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 7, -6.75],
+			"scale": [1.25, 1.25, 1.25]
+		},
+		"firstperson_righthand": {
+			"translation": [-2.5, 10, -2.5],
+			"scale": [1.25, 1.25, 1.25]
+		},
+		"firstperson_lefthand": {
+			"translation": [3.75, -3.25, 0]
+		},
+		"ground": {
+			"translation": [0, 5, -1],
+			"scale": [1.25, 1.25, 1.25]
+		},
+		"gui": {
+			"rotation": [30, 225, 0],
+			"translation": [1.25, 4.5, 0],
+			"scale": [1.25, 1.25, 1.25]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [-3.25, 11.25, -2],
+			"scale": [2, 2, 2]
+		}
+	},
+	"groups": [
+		{
+			"name": "Pump",
+			"origin": [8, 0.8, -1.5],
+			"color": 0,
+			"children": [
+				{
+					"name": "Pumpy",
+					"origin": [8, 0.8, -1.5],
+					"color": 0,
+					"children": [0, 1]
+				},
+				2
+			]
+		}
+	]
+}

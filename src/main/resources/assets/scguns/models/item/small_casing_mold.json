@@ -1,0 +1,7 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "item/generated",
+	"textures": {
+		"layer0": "scguns:item/small_casing_mold"
+	}
+}

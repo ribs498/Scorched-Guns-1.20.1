@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "scguns:niter_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "scguns:niter_dust"
+  }
+}

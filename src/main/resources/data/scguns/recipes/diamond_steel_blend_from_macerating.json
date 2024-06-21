@@ -1,0 +1,22 @@
+{
+  "type": "scguns:macerating",
+  "processingTime": 200,
+  "ingredients": [
+    {
+      "item": "scguns:anthralite_ingot"
+    },
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "minecraft:redstone_dust"
+    },
+    {
+      "item": "minecraft:lapis_lazuli"
+    }
+  ],
+  "result": {
+    "item": "scguns:diamond_steel_blend",
+    "count": 1
+  }
+}

@@ -1,0 +1,24 @@
+{
+    "required": true,
+    "package": "top.ribs.scguns.mixin",
+    "compatibilityLevel": "JAVA_8",
+    "minVersion": "0.8",
+    "refmap": "scguns.refmap.json",
+    "plugin": "top.ribs.scguns.mixin.MixinPlugin",
+    "mixins": [
+        "common.EndPortalBlockMixin",
+        "common.LivingEntityMixin",
+        "common.SittingPhaseMixin"
+    ],
+    "client": [
+        "client.GameRendererMixin",
+        "client.ItemInHandLayerMixin",
+        "client.LevelRendererMixin",
+        "client.MinecraftMixin",
+        "client.MouseHandlerMixin",
+        "client.PlayerModelMixin"
+    ],
+    "injectors": {
+        "defaultRequire": 1
+    }
+}

@@ -1,0 +1,183 @@
+{
+  "spawnWithItemChance": 0.75,
+  "items": [
+    {
+      "item": "minecraft:stick",
+      "spawnChance": 0.5,
+      "dropChance": 0.2
+    },
+    {
+      "item": "minecraft:wooden_sword",
+      "spawnChance": 0.5,
+      "dropChance": 0.2,
+      "minDurability": 0.5,
+      "maxDurability": 1.0
+    },
+    {
+      "item": "minecraft:wooden_pickaxe",
+      "spawnChance": 0.5,
+      "dropChance": 0.2,
+      "minDurability": 0.5,
+      "maxDurability": 1.0
+    },
+    {
+      "item": "minecraft:wooden_axe",
+      "spawnChance": 0.5,
+      "dropChance": 0.2,
+      "minDurability": 0.5,
+      "maxDurability": 1.0
+    },
+    {
+      "item": "minecraft:wooden_shovel",
+      "spawnChance": 0.5,
+      "dropChance": 0.2,
+      "minDurability": 0.5,
+      "maxDurability": 1.0
+    },
+    {
+      "item": "minecraft:wooden_hoe",
+      "spawnChance": 0.5,
+      "dropChance": 0.2,
+      "minDurability": 0.5,
+      "maxDurability": 1.0
+    },{
+      "item": "minecraft:stone_sword",
+      "spawnChance": 0.4,
+      "dropChance": 0.2,
+      "minDurability": 0.3,
+      "maxDurability": 0.8
+    },
+    {
+      "item": "minecraft:stone_pickaxe",
+      "spawnChance": 0.4,
+      "dropChance": 0.2,
+      "minDurability": 0.3,
+      "maxDurability": 0.8
+    },
+    {
+      "item": "minecraft:stone_axe",
+      "spawnChance": 0.4,
+      "dropChance": 0.2,
+      "minDurability": 0.3,
+      "maxDurability": 0.8
+    },
+    {
+      "item": "minecraft:stone_shovel",
+      "spawnChance": 0.4,
+      "dropChance": 0.2,
+      "minDurability": 0.3,
+      "maxDurability": 0.8
+    },
+    {
+      "item": "minecraft:stone_hoe",
+      "spawnChance": 0.4,
+      "dropChance": 0.2,
+      "minDurability": 0.3,
+      "maxDurability": 0.8
+    },{
+      "item": "minecraft:iron_sword",
+      "spawnChance": 0.3,
+      "dropChance": 0.2,
+      "minDurability": 0.2,
+      "maxDurability": 0.6
+    },
+    {
+      "item": "minecraft:iron_pickaxe",
+      "spawnChance": 0.3,
+      "dropChance": 0.2,
+      "minDurability": 0.2,
+      "maxDurability": 0.6
+    },
+    {
+      "item": "minecraft:iron_axe",
+      "spawnChance": 0.3,
+      "dropChance": 0.2,
+      "minDurability": 0.2,
+      "maxDurability": 0.6
+    },
+    {
+      "item": "minecraft:iron_shovel",
+      "spawnChance": 0.3,
+      "dropChance": 0.2,
+      "minDurability": 0.2,
+      "maxDurability": 0.6
+    },
+    {
+      "item": "minecraft:iron_hoe",
+      "spawnChance": 0.3,
+      "dropChance": 0.2,
+      "minDurability": 0.2,
+        "maxDurability": 0.6
+    },
+    {
+      "item": "minecraft:golden_sword",
+      "spawnChance": 0.2,
+      "dropChance": 0.2,
+      "minDurability": 0.1,
+      "maxDurability": 0.4
+    },
+    {
+      "item": "minecraft:golden_pickaxe",
+      "spawnChance": 0.2,
+      "dropChance": 0.2,
+      "minDurability": 0.1,
+      "maxDurability": 0.4
+    },
+    {
+      "item": "minecraft:golden_axe",
+      "spawnChance": 0.2,
+      "dropChance": 0.2,
+      "minDurability": 0.1,
+      "maxDurability": 0.4
+    },
+    {
+      "item": "minecraft:golden_shovel",
+      "spawnChance": 0.2,
+      "dropChance": 0.2,
+      "minDurability": 0.1,
+      "maxDurability": 0.4
+    },
+    {
+      "item": "minecraft:golden_hoe",
+      "spawnChance": 0.2,
+      "dropChance": 0.2,
+      "minDurability": 0.1,
+      "maxDurability": 0.4
+    },
+    {
+      "item": "minecraft:diamond_sword",
+      "spawnChance": 0.05,
+      "dropChance": 0.2,
+      "minDurability": 0.05,
+      "maxDurability": 0.2
+    },
+    {
+      "item": "minecraft:diamond_pickaxe",
+      "spawnChance": 0.05,
+      "dropChance": 0.2,
+      "minDurability": 0.05,
+      "maxDurability": 0.2
+    },
+    {
+      "item": "minecraft:diamond_axe",
+      "spawnChance": 0.05,
+      "dropChance": 0.2,
+      "minDurability": 0.05,
+      "maxDurability": 0.2
+    },
+    {
+      "item": "minecraft:diamond_shovel",
+      "spawnChance": 0.05,
+      "dropChance": 0.2,
+      "minDurability": 0.05,
+      "maxDurability": 0.2
+    },
+    {
+      "item": "minecraft:diamond_hoe",
+      "spawnChance": 0.05,
+      "dropChance": 0.2,
+      "minDurability": 0.05,
+      "maxDurability": 0.2
+    }
+  ]
+}

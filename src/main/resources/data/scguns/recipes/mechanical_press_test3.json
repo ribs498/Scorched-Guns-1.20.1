@@ -1,0 +1,16 @@
+{
+  "type": "scguns:mechanical_pressing",
+  "processingTime": 50,
+  "ingredients": [
+    {
+      "item": "minecraft:copper_ingot"
+    }
+  ],
+  "mold": {
+    "item": "minecraft:iron_shovel"
+  },
+  "result": {
+    "item": "minecraft:diamond",
+    "count": 1
+  }
+}

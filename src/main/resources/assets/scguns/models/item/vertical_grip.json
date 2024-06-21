@@ -1,0 +1,116 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"3": "scguns:item/carabine_grips",
+		"particle": "scguns:item/carabine_grips"
+	},
+	"elements": [
+		{
+			"from": [7.37, 8.9325, 7.38625],
+			"to": [8.63, 9.4725, 8.91625],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.145, 7.5825, 7.16125]},
+			"faces": {
+				"north": {"uv": [10, 5, 11.5, 5.5], "texture": "#3"},
+				"east": {"uv": [6, 10, 7.5, 10.5], "texture": "#3"},
+				"south": {"uv": [10, 6, 11.5, 6.5], "texture": "#3"},
+				"west": {"uv": [10, 7, 11.5, 7.5], "texture": "#3"},
+				"up": {"uv": [7.5, 2.5, 6, 1], "texture": "#3"},
+				"down": {"uv": [4.5, 6, 3, 7.5], "texture": "#3"}
+			}
+		},
+		{
+			"from": [7.325, 7.455, 7.38625],
+			"to": [8.675, 8.505, 8.91625],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.1, 7.58, 7.16125]},
+			"faces": {
+				"north": {"uv": [8, 10, 9.5, 11], "texture": "#3"},
+				"east": {"uv": [10, 9, 11.5, 10], "texture": "#3"},
+				"south": {"uv": [10, 10, 11.5, 11], "texture": "#3"},
+				"west": {"uv": [0, 11, 1.5, 12], "texture": "#3"},
+				"up": {"uv": [7.5, 4.5, 6, 3], "texture": "#3"},
+				"down": {"uv": [6.5, 6, 5, 7.5], "texture": "#3"}
+			}
+		},
+		{
+			"from": [7.4375, 8.055, 7.90375],
+			"to": [8.5625, 8.955, 8.39875],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6.9875, 7.38, 7.16125]},
+			"faces": {
+				"north": {"uv": [5, 8, 6.5, 9], "texture": "#3"},
+				"east": {"uv": [11, 3, 11.5, 4], "texture": "#3"},
+				"south": {"uv": [8, 5, 9.5, 6], "texture": "#3"},
+				"west": {"uv": [4, 11, 4.5, 12], "texture": "#3"},
+				"up": {"uv": [12.5, 1.5, 11, 1], "texture": "#3"},
+				"down": {"uv": [3.5, 11, 2, 11.5], "texture": "#3"}
+			}
+		},
+		{
+			"from": [7.55, 5.5225, 7.72375],
+			"to": [8.45, 7.5225, 8.62375],
+			"rotation": {"angle": -45, "axis": "y", "origin": [8, 5.91, 8.17375]},
+			"faces": {
+				"north": {"uv": [0, 7, 1, 9], "texture": "#3"},
+				"east": {"uv": [1, 7, 2, 9], "texture": "#3"},
+				"south": {"uv": [2, 7, 3, 9], "texture": "#3"},
+				"west": {"uv": [7, 5, 8, 7], "texture": "#3"},
+				"up": {"uv": [7, 6, 6, 5], "texture": "#3"},
+				"down": {"uv": [1, 9, 0, 10], "texture": "#3"}
+			}
+		},
+		{
+			"from": [7.46, 5.0725, 7.63375],
+			"to": [8.54, 5.5225, 8.71375],
+			"rotation": {"angle": -45, "axis": "y", "origin": [8, 5.91, 8.17375]},
+			"faces": {
+				"north": {"uv": [11, 4, 12, 4.5], "texture": "#3"},
+				"east": {"uv": [5, 11, 6, 11.5], "texture": "#3"},
+				"south": {"uv": [6, 11, 7, 11.5], "texture": "#3"},
+				"west": {"uv": [7, 11, 8, 11.5], "texture": "#3"},
+				"up": {"uv": [10, 1, 9, 0], "texture": "#3"},
+				"down": {"uv": [2, 9, 1, 10], "texture": "#3"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [22.75, 0, 0],
+			"translation": [0, 2, 0.5],
+			"scale": [2, 2, 2]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [22.75, 0, 0],
+			"translation": [0, 2, 0.5],
+			"scale": [2, 2, 2]
+		},
+		"firstperson_righthand": {
+			"translation": [2.25, 3.75, -2],
+			"scale": [2, 2, 2]
+		},
+		"firstperson_lefthand": {
+			"translation": [2.25, 3.75, -2],
+			"scale": [2, 2, 2]
+		},
+		"ground": {
+			"translation": [0, 3.25, -0.05],
+			"scale": [2, 2, 2]
+		},
+		"gui": {
+			"rotation": [-162.75, -45, 180],
+			"translation": [0, 1.25, 0],
+			"scale": [2, 2, 2]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [-0.25, 1.75, -1.75],
+			"scale": [2, 2, 2]
+		}
+	},
+	"groups": [
+		{
+			"name": "TactGrip",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4]
+		}
+	]
+}

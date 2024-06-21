@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "scguns:block/gun_bench", "y": 0 },
+        "facing=south": { "model": "scguns:block/gun_bench", "y": 180 },
+        "facing=west": { "model": "scguns:block/gun_bench", "y": 270 },
+        "facing=east": { "model": "scguns:block/gun_bench", "y": 90 }
+    }
+}

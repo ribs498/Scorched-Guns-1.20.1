@@ -1,0 +1,99 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"4": "scguns:item/musket_grips",
+		"particle": "scguns:item/musket_bayonets"
+	},
+	"elements": [
+		{
+			"from": [7.25, 2, 6.5],
+			"to": [8.75, 2.75, 9.75],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.25, 0, 7]},
+			"faces": {
+				"north": {"uv": [1, 8, 2.5, 9], "texture": "#4"},
+				"east": {"uv": [4, 6, 7.5, 7], "texture": "#4"},
+				"south": {"uv": [3, 8, 4.5, 9], "texture": "#4"},
+				"west": {"uv": [0, 7, 3.5, 8], "texture": "#4"},
+				"up": {"uv": [1.5, 3.5, 0, 0], "texture": "#4"},
+				"down": {"uv": [3.5, 0, 2, 3.5], "texture": "#4"}
+			}
+		},
+		{
+			"from": [7.375, 1.75, 6.5],
+			"to": [8.625, 2, 7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.375, 0, 7]},
+			"faces": {
+				"north": {"uv": [8, 8, 9.5, 8.5], "texture": "#4"},
+				"east": {"uv": [11, 0, 11.5, 0.5], "texture": "#4"},
+				"south": {"uv": [9, 0, 10.5, 0.5], "texture": "#4"},
+				"west": {"uv": [1, 11, 1.5, 11.5], "texture": "#4"},
+				"up": {"uv": [2.5, 9.5, 1, 9], "texture": "#4"},
+				"down": {"uv": [10.5, 1, 9, 1.5], "texture": "#4"}
+			}
+		},
+		{
+			"from": [7.375, 1.85, 7],
+			"to": [8.625, 1.85, 9.25],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.375, 0, 7]},
+			"faces": {
+				"north": {"uv": [0, 0, 1.5, 0], "texture": "#4"},
+				"east": {"uv": [0, 0, 2.5, 0], "texture": "#4"},
+				"south": {"uv": [0, 0, 1.5, 0], "texture": "#4"},
+				"west": {"uv": [0, 0, 2.5, 0], "texture": "#4"},
+				"up": {"uv": [1.5, 6.5, 0, 4], "texture": "#4"},
+				"down": {"uv": [5.5, 0, 4, 2.5], "texture": "#4"}
+			}
+		},
+		{
+			"from": [7.375, 1.75, 9.25],
+			"to": [8.625, 2, 9.75],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.375, 0, 7]},
+			"faces": {
+				"north": {"uv": [9, 2, 10.5, 2.5], "texture": "#4"},
+				"east": {"uv": [11, 1, 11.5, 1.5], "texture": "#4"},
+				"south": {"uv": [3, 9, 4.5, 9.5], "texture": "#4"},
+				"west": {"uv": [2, 11, 2.5, 11.5], "texture": "#4"},
+				"up": {"uv": [10.5, 5.5, 9, 5], "texture": "#4"},
+				"down": {"uv": [10.5, 6, 9, 6.5], "texture": "#4"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 7, -7.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 7, -7.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-4.5, 9.75, -1.25]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4.5, 9.75, -1.25]
+		},
+		"ground": {
+			"translation": [0, 7.5, -5.5],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1.5, 5.75, 0]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [2.25, 8, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "LightGrip",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
+}

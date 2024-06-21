@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "X": {
+      "item": "minecraft:glass_bottle"
+    },
+    "Q": {
+      "item": "minecraft:glowstone_dust"
+    }
+  },
+  "pattern": [
+    "  ",
+    "QXQ",
+    " # "
+  ],
+  "result": {
+    "item": "scguns:stun_grenade"
+  }
+}

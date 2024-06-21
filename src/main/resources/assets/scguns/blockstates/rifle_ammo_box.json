@@ -1,0 +1,22 @@
+{
+  "variants": {
+    "facing=north,ammo_count=0": { "model": "scguns:item/rifle_ammo_box_0" },
+    "facing=north,ammo_count=1": { "model": "scguns:item/rifle_ammo_box_1" },
+    "facing=north,ammo_count=2": { "model": "scguns:item/rifle_ammo_box_2" },
+    "facing=north,ammo_count=3": { "model": "scguns:item/rifle_ammo_box_3" },
+    "facing=south,ammo_count=0": { "model": "scguns:item/rifle_ammo_box_0" },
+    "facing=south,ammo_count=1": { "model": "scguns:item/rifle_ammo_box_1" },
+    "facing=south,ammo_count=2": { "model": "scguns:item/rifle_ammo_box_2" },
+    "facing=south,ammo_count=3": { "model": "scguns:item/rifle_ammo_box_3" },
+    "facing=east,ammo_count=0": { "model": "scguns:item/rifle_ammo_box_0" },
+    "facing=east,ammo_count=1": { "model": "scguns:item/rifle_ammo_box_1" },
+    "facing=east,ammo_count=2": { "model": "scguns:item/rifle_ammo_box_2" },
+    "facing=east,ammo_count=3": { "model": "scguns:item/rifle_ammo_box_3" },
+    "facing=west,ammo_count=0": { "model": "scguns:item/rifle_ammo_box_0" },
+    "facing=west,ammo_count=1": { "model": "scguns:item/rifle_ammo_box_1" },
+    "facing=west,ammo_count=2": { "model": "scguns:item/rifle_ammo_box_2" },
+    "facing=west,ammo_count=3": { "model": "scguns:item/rifle_ammo_box_3" }
+  }
+}
+
+

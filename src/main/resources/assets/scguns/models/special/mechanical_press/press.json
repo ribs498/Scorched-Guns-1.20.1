@@ -1,0 +1,78 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"3": "scguns:block/mechanical_press_off",
+		"particle": "scguns:block/mechanical_press_off"
+	},
+	"elements": [
+		{
+			"from": [6.305, 12.7775, 6.325],
+			"to": [9.605, 22.6775, 9.625],
+			"rotation": {"angle": 0, "axis": "y", "origin": [4.105, 14.9775, 5.225]},
+			"faces": {
+				"north": {"uv": [9, 10.25, 9.75, 12.5], "texture": "#3"},
+				"east": {"uv": [9.75, 10.25, 10.5, 12.5], "texture": "#3"},
+				"south": {"uv": [10.5, 10.25, 11.25, 12.5], "texture": "#3"},
+				"west": {"uv": [2, 10.75, 2.75, 13], "texture": "#3"},
+				"up": {"uv": [12, 11.5, 11.25, 10.75], "texture": "#3"},
+				"down": {"uv": [0.75, 11.5, 0, 12.25], "texture": "#3"}
+			}
+		},
+		{
+			"from": [5.205, 10.5775, 5.225],
+			"to": [10.705, 12.7775, 10.725],
+			"rotation": {"angle": 0, "axis": "y", "origin": [3.005, 12.7775, 5.225]},
+			"faces": {
+				"north": {"uv": [2, 9.25, 3.25, 9.75], "texture": "#3"},
+				"east": {"uv": [11, 8, 12.25, 8.5], "texture": "#3"},
+				"south": {"uv": [11, 8.5, 12.25, 9], "texture": "#3"},
+				"west": {"uv": [11.25, 10.25, 12.5, 10.75], "texture": "#3"},
+				"up": {"uv": [4, 12, 2.75, 10.75], "texture": "#3"},
+				"down": {"uv": [5.25, 10.75, 4, 12], "texture": "#3"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [75, 45, 0],
+			"translation": [0, 2.5, 0],
+			"scale": [0.375, 0.375, 0.375]
+		},
+		"firstperson_righthand": {
+			"rotation": [0, 45, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"firstperson_lefthand": {
+			"rotation": [0, 225, 0],
+			"scale": [0.4, 0.4, 0.4]
+		},
+		"ground": {
+			"translation": [0, 3, 0],
+			"scale": [0.25, 0.25, 0.25]
+		},
+		"gui": {
+			"rotation": [30, 225, 0],
+			"scale": [0.625, 0.625, 0.625]
+		},
+		"head": {
+			"translation": [0, -0.25, 0]
+		},
+		"fixed": {
+			"scale": [0.5, 0.5, 0.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "Press",
+			"origin": [3.5, 10, 5.5],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

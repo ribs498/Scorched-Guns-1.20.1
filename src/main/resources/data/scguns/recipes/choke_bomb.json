@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "throwable",
+  "key": {
+    "#": {
+      "item": "minecraft:stick"
+    },
+    "X": {
+      "item": "minecraft:glass_bottle"
+    },
+    "Q": {
+      "item": "minecraft:snowball"
+    }
+  },
+  "pattern": [
+    "   ",
+    "QXQ",
+    " # "
+  ],
+  "result": {
+    "item": "scguns:choke_bomb"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "variants": {
+    "vent_type=base,waterlogged=true": { "model": "scguns:block/geothermal_vent" },
+    "vent_type=base,waterlogged=false": { "model": "scguns:block/geothermal_vent" },
+    "vent_type=middle,waterlogged=true": { "model": "scguns:block/geothermal_vent_middle" },
+    "vent_type=middle,waterlogged=false": { "model": "scguns:block/geothermal_vent_middle" },
+    "vent_type=top,waterlogged=true": { "model": "scguns:block/geothermal_vent_top" },
+    "vent_type=top,waterlogged=false": { "model": "scguns:block/geothermal_vent_top" }
+  }
+}
+

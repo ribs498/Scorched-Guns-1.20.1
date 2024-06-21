@@ -1,0 +1,18 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:powder_and_ball",
+    "scguns:compact_copper_round",
+    "scguns:standard_copper_round",
+    "scguns:compact_advanced_round",
+    "scguns:advanced_round",
+    "scguns:heavy_round",
+    "scguns:beowulf_round",
+    "scguns:shotgun_shell",
+    "scguns:bearpack_shell",
+    "scguns:microjet",
+    "scguns:rocket",
+    "scguns:osborne_slug",
+    "scguns:casull_round"
+  ]
+}

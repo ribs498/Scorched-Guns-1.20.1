@@ -1,0 +1,22 @@
+{
+  "type": "scguns:macerating",
+  "processingTime": 100,
+  "ingredients": [
+    {
+      "item": "scguns:sulfur_chunk"
+    },
+    {
+      "item": "minecraft:charcoal"
+    },
+    {
+      "item": "minecraft:charcoal"
+    },
+    {
+      "item": "scguns:niter_dust"
+    }
+  ],
+  "result": {
+    "item": "minecraft:gunpowder",
+    "count": 6
+  }
+}

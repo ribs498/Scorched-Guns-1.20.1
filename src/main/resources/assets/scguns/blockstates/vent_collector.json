@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "facing=north,waterlogged=false,attached=false": { "model": "scguns:block/vent_collector" },
+    "facing=south,waterlogged=false,attached=false": { "model": "scguns:block/vent_collector", "y": 180 },
+    "facing=west,waterlogged=false,attached=false": { "model": "scguns:block/vent_collector", "y": 270 },
+    "facing=east,waterlogged=false,attached=false": { "model": "scguns:block/vent_collector", "y": 90 },
+    "facing=north,waterlogged=true,attached=false": { "model": "scguns:block/vent_collector" },
+    "facing=south,waterlogged=true,attached=false": { "model": "scguns:block/vent_collector", "y": 180 },
+    "facing=west,waterlogged=true,attached=false": { "model": "scguns:block/vent_collector", "y": 270 },
+    "facing=east,waterlogged=true,attached=false": { "model": "scguns:block/vent_collector", "y": 90 },
+    "facing=north,waterlogged=false,attached=true": { "model": "scguns:block/vent_collector_hose_out" },
+    "facing=south,waterlogged=false,attached=true": { "model": "scguns:block/vent_collector_hose_out", "y": 180 },
+    "facing=west,waterlogged=false,attached=true": { "model": "scguns:block/vent_collector_hose_out", "y": 270 },
+    "facing=east,waterlogged=false,attached=true": { "model": "scguns:block/vent_collector_hose_out", "y": 90 },
+    "facing=north,waterlogged=true,attached=true": { "model": "scguns:block/vent_collector_hose_out" },
+    "facing=south,waterlogged=true,attached=true": { "model": "scguns:block/vent_collector_hose_out", "y": 180 },
+    "facing=west,waterlogged=true,attached=true": { "model": "scguns:block/vent_collector_hose_out", "y": 270 },
+    "facing=east,waterlogged=true,attached=true": { "model": "scguns:block/vent_collector_hose_out", "y": 90 }
+  }
+}
+

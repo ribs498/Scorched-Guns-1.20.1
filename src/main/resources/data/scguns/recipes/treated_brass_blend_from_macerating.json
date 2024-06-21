@@ -1,0 +1,22 @@
+{
+  "type": "scguns:macerating",
+  "processingTime": 200,
+  "ingredients": [
+    {
+      "item": "scguns:ancient_brass"
+    },
+    {
+      "item": "minecraft:redstone_dust"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:quartz"
+    }
+  ],
+  "result": {
+    "item": "scguns:treated_brass_blend",
+    "count": 1
+  }
+}

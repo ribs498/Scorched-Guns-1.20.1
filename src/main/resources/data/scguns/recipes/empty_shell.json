@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "#": {
+      "item": "scguns:small_copper_casing"
+    },
+    "Q": {
+      "item": "minecraft:paper"
+    }
+  },
+  "pattern": [
+    "Q",
+    "Q",
+    "#"
+  ],
+  "result": {
+    "item": "scguns:empty_shell"
+  }
+}

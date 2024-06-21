@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:macerator",
+    "scguns:mechanical_press",
+    "scguns:gun_bench",
+    "scguns:geothermal_vent",
+    "scguns:vent_collector",
+    "scguns:sulfur_ore",
+    "scguns:deepslate_sulfur_ore",
+    "scguns:nether_sulfur_ore",
+    "scguns:sulfur_block"
+  ]
+}

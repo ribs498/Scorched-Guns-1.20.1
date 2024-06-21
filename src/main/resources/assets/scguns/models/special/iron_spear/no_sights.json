@@ -1,0 +1,87 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"9": "scguns:item/iron_spear",
+		"particle": "scguns:item/carabine_grips"
+	},
+	"elements": [
+		{
+			"from": [7.52803, 6.19767, 10.10233],
+			"to": [8.45303, 6.44767, 15.60233],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.62803, 2.47267, 8.07733]},
+			"faces": {
+				"north": {"uv": [10.5, 12, 11, 12.25], "texture": "#9"},
+				"east": {"uv": [6, 12, 8.75, 12.25], "texture": "#9"},
+				"south": {"uv": [12, 10.5, 12.5, 10.75], "texture": "#9"},
+				"west": {"uv": [12, 8.5, 14.75, 8.75], "texture": "#9"},
+				"up": {"uv": [6, 14.75, 5.5, 12], "texture": "#9"},
+				"down": {"uv": [12.5, 5.5, 12, 8.25], "texture": "#9"}
+			}
+		},
+		{
+			"from": [7.6625, 5.94767, 10.67733],
+			"to": [8.3375, 6.19767, 12.17733],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.5125, 2.47267, 8.07733]},
+			"faces": {
+				"north": {"uv": [11, 12, 11.25, 12.25], "texture": "#9"},
+				"east": {"uv": [9, 12, 9.75, 12.25], "texture": "#9"},
+				"south": {"uv": [12, 11, 12.25, 11.25], "texture": "#9"},
+				"west": {"uv": [12, 9, 12.75, 9.25], "texture": "#9"},
+				"up": {"uv": [12.25, 10.25, 12, 9.5], "texture": "#9"},
+				"down": {"uv": [10.25, 12, 10, 12.75], "texture": "#9"}
+			}
+		},
+		{
+			"from": [7.65303, 5.59767, 12.17733],
+			"to": [8.32803, 5.84767, 14.55233],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.75303, 2.47267, 8.07733]},
+			"faces": {
+				"north": {"uv": [8, 10.5, 8.5, 10.75], "texture": "#9"},
+				"east": {"uv": [9.5, 5.5, 10.75, 5.75], "texture": "#9"},
+				"south": {"uv": [8.5, 10.5, 9, 10.75], "texture": "#9"},
+				"west": {"uv": [6, 9.5, 7.25, 9.75], "texture": "#9"},
+				"up": {"uv": [0.5, 9.75, 0, 8.5], "texture": "#9"},
+				"down": {"uv": [1, 8.5, 0.5, 9.75], "texture": "#9"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.25, -6.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.25, -6.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 9.25, 0]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.25, 9.25, 0]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-2, 3.5, 0],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [4, 6, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "NoSights",
+			"origin": [7.5125, 2.47267, 8.07733],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}
