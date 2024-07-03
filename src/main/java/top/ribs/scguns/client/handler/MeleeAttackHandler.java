@@ -21,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
+import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.event.GunEventBus;
 import top.ribs.scguns.init.ModEnchantments;
 import top.ribs.scguns.item.BayonetItem;
@@ -43,6 +44,7 @@ public class MeleeAttackHandler {
     public static boolean isBanzaiActive() {
         return isBanzai;
     }
+    private static ItemStack banzaiActiveItem = ItemStack.EMPTY;
 
     public static void startBanzai(ServerPlayer player) {
         ItemStack heldItem = player.getItemInHand(InteractionHand.MAIN_HAND);
@@ -54,10 +56,12 @@ public class MeleeAttackHandler {
             return;
         }
         isBanzai = true;
+        banzaiActiveItem = heldItem.copy();
     }
 
     public static void stopBanzai() {
         isBanzai = false;
+        banzaiActiveItem = ItemStack.EMPTY;
     }
 
     public static void performMeleeAttack(ServerPlayer player) {
@@ -98,7 +102,6 @@ public class MeleeAttackHandler {
 //        }
 //        GunRenderingHandler.get().startThirdPersonMeleeAnimation();
     }
-
     private static void performMeleeAttackOnTarget(ServerPlayer player, LivingEntity target, boolean isBanzaiAttack) {
         ItemStack heldItem = player.getItemInHand(InteractionHand.MAIN_HAND);
         if (!(heldItem.getItem() instanceof GunItem gunItem)) {
@@ -111,12 +114,17 @@ public class MeleeAttackHandler {
         float additionalDamage = GunModifierHelper.getAdditionalDamage(heldItem);
         float enchantmentDamage = getEnchantmentDamageFromBayonet(heldItem, target, gunItem);
 
-        float attackDamage = baseDamage + additionalDamage + enchantmentDamage;
+        // Use melee damage from the gun
+        Gun modifiedGun = gunItem.getModifiedGun(heldItem);
+        float meleeDamage = modifiedGun.getGeneral().getMeleeDamage();
+        meleeDamage += gunItem.getBayonetAdditionalDamage(heldItem);
+
+        float attackDamage = baseDamage + additionalDamage + enchantmentDamage + meleeDamage;
         if (isBanzaiAttack) {
             float speedDamageMultiplier = getBanzaiDamageMultiplier(player, heldItem);
             attackDamage *= speedDamageMultiplier;
             attackDamage = (float) (Math.round(attackDamage * 100.0) / 100.0);
-            logPlayerSpeed(player, speedDamageMultiplier, baseDamage + additionalDamage + enchantmentDamage, attackDamage, heldItem);
+            logPlayerSpeed(player, speedDamageMultiplier, baseDamage + additionalDamage + enchantmentDamage + meleeDamage, attackDamage, heldItem);
         }
         DamageSource damageSource = player.serverLevel().damageSources().playerAttack(player);
         if (target.hurt(damageSource, attackDamage)) {
@@ -129,6 +137,7 @@ public class MeleeAttackHandler {
             }
         }
     }
+
     private static void applySpecialEnchantmentsFromBayonet(ItemStack gunStack, LivingEntity target, Player player, GunItem gunItem) {
         for (IAttachment.Type type : IAttachment.Type.values()) {
             ItemStack attachmentStack = gunItem.getAttachment(gunStack, type);
@@ -173,11 +182,15 @@ public class MeleeAttackHandler {
         if (!isBanzai) {
             return;
         }
+        ItemStack currentHeldItem = player.getItemInHand(InteractionHand.MAIN_HAND);
+        if (!ItemStack.matches(currentHeldItem, banzaiActiveItem)) {
+            stopBanzai();
+            return;
+        }
         if (!player.isSprinting()) {
             stopBanzai();
             return;
         }
-
         List<LivingEntity> targets = findTargetsWithinReach(player);
         for (LivingEntity target : targets) {
             if (target != player) {
@@ -185,6 +198,7 @@ public class MeleeAttackHandler {
             }
         }
     }
+
     private static float getBanzaiDamageMultiplier(ServerPlayer player, ItemStack heldItem) {
         double speed = player.getDeltaMovement().length();
         int banzaiLevel = ((GunItem) heldItem.getItem()).getBayonetBanzaiLevel(heldItem);

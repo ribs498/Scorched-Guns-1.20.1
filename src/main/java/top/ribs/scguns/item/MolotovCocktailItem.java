@@ -79,7 +79,7 @@ public class MolotovCocktailItem extends AmmoItem
         if(!worldIn.isClientSide())
         {
             int duration = this.getUseDuration(stack) - timeLeft;
-            if(duration >= 10)
+            if(duration >= 5)
             {
                 if(!(entityLiving instanceof Player) || !((Player) entityLiving).isCreative())
                     stack.shrink(1);

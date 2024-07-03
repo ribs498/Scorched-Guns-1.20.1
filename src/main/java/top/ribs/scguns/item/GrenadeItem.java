@@ -58,7 +58,6 @@ public class GrenadeItem extends AmmoItem
             if (playerIn instanceof Player) {
                 Player player = (Player) playerIn;
                 if (player.isUnderWater()) {
-//                    player.getInventory().add(new ItemStack(ModItems.WATER_BOMB.get()));
                     player.awardStat(Stats.ITEM_USED.get(this));
                     stack.shrink(1);
                 }

@@ -147,7 +147,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         private float restingSpread = 0F;
         @Optional
         private float spreadAdsReduction = 0.5F;
+        @Optional
         private boolean infiniteAmmo;
+        @Optional
+        private float meleeDamage = 0.0F;
 
         @Override
         public CompoundTag serializeNBT()
@@ -166,6 +169,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             tag.putBoolean("AlwaysSpread", this.alwaysSpread);
             tag.putFloat("Spread", this.spread);
             tag.putFloat("RestingSpread", this.restingSpread);
+            tag.putFloat("MeleeDamage", this.meleeDamage);
             return tag;
         }
 
@@ -228,6 +232,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             {
                 this.spreadAdsReduction = tag.getFloat("SpreadAdsReduction");
             }
+            if(tag.contains("MeleeDamage", Tag.TAG_ANY_NUMERIC))
+            {
+                this.meleeDamage = tag.getFloat("MeleeDamage");
+            }
         }
 
         public JsonObject toJsonObject()
@@ -241,8 +249,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             Preconditions.checkArgument(this.spread >= 0.0F, "Spread must be more than or equal to zero");
             Preconditions.checkArgument(this.restingSpread >= 0.0F, "Spread must be more than or equal to zero");
             Preconditions.checkArgument(this.spreadAdsReduction >= 0.0F && this.spreadAdsReduction <= 1.0F, "Spread ADS reduction must be between 0.0 and 1.0");
+
             JsonObject object = new JsonObject();
-            if(this.infiniteAmmo) object.addProperty("infiniteAmmo", this.infiniteAmmo);
+            if(this.infiniteAmmo) object.addProperty("infiniteAmmo", true);
             object.addProperty("fireMode", this.fireMode.getId().toString());
             if(this.burstAmount != 0) object.addProperty("burstAmount", this.burstAmount);
             object.addProperty("rate", this.rate);
@@ -257,6 +266,8 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             if(this.spread != 0.0F) object.addProperty("spread", this.spread);
             if(this.restingSpread != 0.0F) object.addProperty("restingSpread", this.spread);
             if(this.spreadAdsReduction != 0.5F) object.addProperty("spreadAdsReduction", this.spread);
+            if(this.meleeDamage != 0.0F) object.addProperty("meleeDamage", this.meleeDamage);
+
             return object;
         }
 
@@ -280,9 +291,17 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             general.spread = this.spread;
             general.restingSpread = this.restingSpread;
             general.spreadAdsReduction = this.spreadAdsReduction;
+            general.infiniteAmmo = this.infiniteAmmo;
+            general.meleeDamage = this.meleeDamage;
             return general;
         }
+        public float getMeleeDamage() {
+            return this.meleeDamage;
+        }
 
+        public void setMeleeDamage(float meleeDamage) {
+            this.meleeDamage = meleeDamage;
+        }
         /**
          * @return The type of grip this weapon uses
          */
@@ -291,13 +310,6 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             return this.fireMode;
         }
 
-        /**
-         * @return The projectile amount in a burst
-         */
-        public int getBurstAmount()
-        {
-            return this.burstAmount;
-        }
 
         /**
          * @return The fire rate of this weapon in ticks
@@ -1663,10 +1675,15 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         return object;
     }
 
-    public static Gun create(CompoundTag tag)
-    {
+    public static Gun create(CompoundTag tag) {
         Gun gun = new Gun();
         gun.deserializeNBT(tag);
+
+        // Ensure melee damage is set properly from the JSON
+        if (tag.contains("MeleeDamage", Tag.TAG_ANY_NUMERIC)) {
+            gun.getGeneral().setMeleeDamage(tag.getFloat("MeleeDamage"));
+        }
+
         return gun;
     }
 

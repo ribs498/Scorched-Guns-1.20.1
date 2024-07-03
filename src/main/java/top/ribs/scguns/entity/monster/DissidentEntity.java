@@ -29,7 +29,6 @@ public class DissidentEntity extends Monster {
 
     public DissidentEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        this.setCanPickUpLoot(true);
     }
 
     public final AnimationState idleAnimationState = new AnimationState();
@@ -39,14 +38,14 @@ public class DissidentEntity extends Monster {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 60D)
+                .add(Attributes.MAX_HEALTH, 40D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
-                .add(Attributes.MOVEMENT_SPEED, 0.25D)
+                .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.ARMOR_TOUGHNESS, 0.5f)
                 .add(Attributes.ARMOR, 2f)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5f)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.8f)
-                .add(Attributes.ATTACK_DAMAGE, 2f);
+                .add(Attributes.ATTACK_DAMAGE, 5f);
     }
 
     @Override
@@ -57,10 +56,6 @@ public class DissidentEntity extends Monster {
             setupAnimationStates();
         }
     }
-    @Override
-    public boolean wantsToPickUp(ItemStack pStack) {
-        return this.canHoldItem(pStack);
-    }
     private void setupAnimationStates() {
         if (this.idleAnimationTimeout <= 0) {
             this.idleAnimationTimeout = this.random.nextInt(40) + 80;
@@ -70,7 +65,7 @@ public class DissidentEntity extends Monster {
         }
         if (this.isAttacking()) {
             if (attackAnimationTimeout <= 0) {
-                attackAnimationTimeout = 20;
+                attackAnimationTimeout = 12;
                 attackAnimationState.start(this.tickCount);
             }
             --attackAnimationTimeout;
@@ -100,16 +95,11 @@ public class DissidentEntity extends Monster {
         this.walkAnimation.update(f, 0.2f);
     }
     @Override
-    protected Vec3i getPickupReach() {
-        return new Vec3i(3, 3, 3);
-    }
-
-    @Override
     protected void pickUpItem(ItemEntity pItemEntity) {
         super.pickUpItem(pItemEntity);
     }
     protected void registerGoals() {
-        this.goalSelector.addGoal(2, new CogMinionAttackGoal(this, 1.2, true));
+        this.goalSelector.addGoal(2, new DissidentAttackGoal(this, 1.2, true));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers(DissidentEntity.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
@@ -117,47 +107,36 @@ public class DissidentEntity extends Monster {
         this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(4, new RandomStrollGoal(this, 1.0));
     }
-    @Override
-    public boolean canHoldItem(ItemStack stack) {
-        return true;
-    }
-
-    @Override
-    public HumanoidArm getMainArm() {
-        return HumanoidArm.RIGHT;
-    }
-
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.IRON_GOLEM_STEP;
+        return SoundEvents.ZOMBIE_HORSE_AMBIENT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.IRON_GOLEM_HURT;
+        return SoundEvents.ZOMBIE_HORSE_HURT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.IRON_GOLEM_DEATH;
+        return SoundEvents.ZOMBIE_HORSE_DEATH;
     }
 
     public float getAttackSoundVolume() {
-        float attackSoundVolume = 1.0F;
-        return attackSoundVolume;
+        return 1.0F;
     }
 
 
-    public static class CogMinionAttackGoal extends MeleeAttackGoal {
+    public static class DissidentAttackGoal extends MeleeAttackGoal {
         private final DissidentEntity entity;
         private int attackDelay = 10;
         private int ticksUntilNextAttack = 10;
         private boolean shouldCountTillNextAttack = false;
 
-        public CogMinionAttackGoal(PathfinderMob pMob, double pSpeedModifier, boolean pFollowingTargetEvenIfNotSeen) {
+        public DissidentAttackGoal(PathfinderMob pMob, double pSpeedModifier, boolean pFollowingTargetEvenIfNotSeen) {
             super(pMob, pSpeedModifier, pFollowingTargetEvenIfNotSeen);
             entity = ((DissidentEntity) pMob);
         }
@@ -191,7 +170,7 @@ public class DissidentEntity extends Monster {
         }
 
         private boolean isEnemyWithinAttackDistance(LivingEntity pEnemy, double pDistToEnemySqr) {
-            double adjustedAttackDistance = this.getAttackReachSqr(pEnemy) * 1.1; // Increase attack distance by 10%
+            double adjustedAttackDistance = this.getAttackReachSqr(pEnemy) * 1.1; 
             return pDistToEnemySqr <= adjustedAttackDistance;
         }
 
@@ -217,11 +196,10 @@ public class DissidentEntity extends Monster {
             this.resetAttackCooldown();
             this.mob.swing(InteractionHand.MAIN_HAND);
             this.mob.doHurtTarget(pEnemy);
-            if (this.mob instanceof DissidentEntity) {
-                DissidentEntity cogMinion = (DissidentEntity) this.mob;
-                this.mob.level().playSound(null, cogMinion.getX(), cogMinion.getY(), cogMinion.getZ(),
-                        SoundEvents.PISTON_EXTEND, SoundSource.HOSTILE,
-                        cogMinion.getAttackSoundVolume(), 1.0F);
+            if (this.mob instanceof DissidentEntity dissident) {
+                this.mob.level().playSound(null, dissident.getX(), dissident.getY(), dissident.getZ(),
+                        SoundEvents.HOGLIN_ATTACK, SoundSource.HOSTILE,
+                        dissident.getAttackSoundVolume(), 1.0F);
             }
         }
 
@@ -233,7 +211,6 @@ public class DissidentEntity extends Monster {
                 if (shouldCountTillNextAttack) {
                     this.ticksUntilNextAttack = Math.max(this.ticksUntilNextAttack - 1, 0);
                 }
-
                 if (!isEnemyWithinAttackDistance(target, distanceToTarget)) {
                     this.mob.getNavigation().moveTo(target, 1.2);
                     resetAttackCooldown();
@@ -243,14 +220,10 @@ public class DissidentEntity extends Monster {
                 }
             }
         }
-
         @Override
         public void stop() {
             entity.setAttacking(false);
             super.stop();
         }
     }
-
-
-
 }

@@ -36,6 +36,7 @@ import top.ribs.scguns.block.MechanicalPressBlock;
 import top.ribs.scguns.client.screen.MechanicalPressMenu;
 import top.ribs.scguns.client.screen.MechanicalPressRecipe;
 import top.ribs.scguns.init.ModBlockEntities;
+import top.ribs.scguns.item.MoldItem;
 
 import java.util.Optional;
 
@@ -55,14 +56,18 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
                 }
             }
         }
+
         @Override
         public @NotNull ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            if (slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT) {
-                ItemStack existingStack = itemHandler.getStackInSlot(slot);
-                if (!existingStack.isEmpty() && !ItemStack.isSameItem(existingStack, stack)) {
-                    return stack;
+            // Handle mold items insertion
+            if (stack.getItem() instanceof MoldItem) {
+                ItemStack moldStack = itemHandler.getStackInSlot(MOLD_SLOT);
+                if (moldStack.isEmpty() || (moldStack.isDamageableItem() && moldStack.getDamageValue() < moldStack.getMaxDamage())) {
+                    return super.insertItem(MOLD_SLOT, stack, simulate);
                 }
             }
+
+            // Proceed with usual insertion logic
             return super.insertItem(slot, stack, simulate);
         }
     };
@@ -152,7 +157,7 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
             } else if (side == Direction.DOWN) {
                 return LazyOptional.of(() -> new OutputItemHandler(itemHandler)).cast();
             } else if (side == Direction.UP) {
-                return LazyOptional.of(() -> new InputItemHandler(itemHandler)).cast();
+                return LazyOptional.of(() -> new TopItemHandler(itemHandler)).cast();
             } else {
                 return LazyOptional.of(() -> new FuelItemHandler(itemHandler)).cast();
             }
@@ -188,7 +193,6 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
     public @NotNull CompoundTag getUpdateTag() {
         return saveWithoutMetadata();
     }
-
     public static void tick(Level level, BlockPos pos, BlockState state, MechanicalPressBlockEntity blockEntity) {
         boolean wasLit = state.getValue(MechanicalPressBlock.LIT);
         boolean isLit = false;
@@ -208,6 +212,7 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
                     blockEntity.resetProgress();
                 }
             }
+
             if (hasValidRecipe && blockEntity.hasFuel() && canOutput) {
                 blockEntity.progress++;
                 if (blockEntity.progress >= blockEntity.maxProgress) {
@@ -263,7 +268,7 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
             if (pressPosition <= endPosition) {
                 movingDown = false;
                 if (level != null) {
-                    level.playSound(null, worldPosition, SoundEvents.ANVIL_LAND, SoundSource.BLOCKS, 0.5f, 0.60f);
+                    level.playSound(null, worldPosition, SoundEvents.ANVIL_LAND, SoundSource.BLOCKS, 0.2f, 0.60f);
                 }
             }
         } else {
@@ -283,7 +288,13 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
         assert level != null;
         Optional<MechanicalPressRecipe> match = level.getRecipeManager()
                 .getRecipeFor(MechanicalPressRecipe.Type.INSTANCE, inventory, level);
-        return match.isPresent();
+
+        if (match.isPresent()) {
+            MechanicalPressRecipe recipe = match.get();
+            this.maxProgress = recipe.getProcessingTime();
+            return true;
+        }
+        return false;
     }
     private void craftItem() {
         SimpleContainer inventory = new SimpleContainer(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 2); // Add one for the mold slot
@@ -382,12 +393,9 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
             }
         }
     }
-
     private boolean hasFuel() {
         return this.burnTime > 0;
     }
-
-
     public void drops() {
         SimpleContainer inventory = new SimpleContainer(itemHandler.getSlots());
         for (int i = 0; i < itemHandler.getSlots(); i++) {
@@ -397,143 +405,120 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
 
-
     /////CAPABILITIES
-    private class InputItemHandler implements IItemHandlerModifiable {
-        private final ItemStackHandler itemHandler;
+        private record FuelItemHandler(ItemStackHandler itemHandler) implements IItemHandlerModifiable {
 
-        public InputItemHandler(ItemStackHandler itemHandler) {
-            this.itemHandler = itemHandler;
+        @Override
+            public void setStackInSlot(int slot, ItemStack stack) {
+                itemHandler.setStackInSlot(slot, stack);
+            }
+
+            @Override
+            public int getSlots() {
+                return itemHandler.getSlots();
+            }
+
+            @Override
+            public ItemStack getStackInSlot(int slot) {
+                return itemHandler.getStackInSlot(slot);
+            }
+
+            @Override
+            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+                if (slot == FUEL_SLOT && ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0) {
+                    return itemHandler.insertItem(slot, stack, simulate);
+                }
+                return stack;
+            }
+
+            @Override
+            public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+                return ItemStack.EMPTY;
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return itemHandler.getSlotLimit(slot);
+            }
+
+            @Override
+            public boolean isItemValid(int slot, ItemStack stack) {
+                return slot == FUEL_SLOT && ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0;
+            }
         }
 
+    private record OutputItemHandler(ItemStackHandler itemHandler) implements IItemHandlerModifiable {
+
+        @Override
+            public void setStackInSlot(int slot, ItemStack stack) {
+                itemHandler.setStackInSlot(slot, stack);
+            }
+            @Override
+            public int getSlots() {
+                return itemHandler.getSlots();
+            }
+            @Override
+            public @NotNull ItemStack getStackInSlot(int i) {
+                return itemHandler.getStackInSlot(i);
+            }
+            @Override
+            public @NotNull ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+                return stack;
+            }
+            @Override
+            public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+                if (slot == OUTPUT_SLOT) {
+                    return itemHandler.extractItem(slot, amount, simulate);
+                }
+                return ItemStack.EMPTY;
+            }
+            @Override
+            public int getSlotLimit(int slot) {
+                return itemHandler.getSlotLimit(slot);
+            }
+            @Override
+            public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+                return false;
+            }
+        }
+    private class TopItemHandler implements IItemHandlerModifiable {
+        private final ItemStackHandler itemHandler;
+        public TopItemHandler(ItemStackHandler itemHandler) {
+            this.itemHandler = itemHandler;
+        }
         @Override
         public void setStackInSlot(int slot, ItemStack stack) {
             itemHandler.setStackInSlot(slot, stack);
         }
-
         @Override
         public int getSlots() {
             return itemHandler.getSlots();
         }
-
         @Override
         public ItemStack getStackInSlot(int slot) {
             return itemHandler.getStackInSlot(slot);
         }
-
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            if (slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT) {
-                return itemHandler.insertItem(slot, stack, simulate);
+            if (stack.getItem() instanceof MoldItem) {
+                ItemStack moldStack = itemHandler.getStackInSlot(MOLD_SLOT);
+                if (moldStack.isEmpty() || (moldStack.isDamageableItem() && moldStack.getDamageValue() < moldStack.getMaxDamage())) {
+                    return itemHandler.insertItem(MOLD_SLOT, stack, simulate);
+                }
             }
-            return stack; // Prevent insertion into non-input slots
+            return itemHandler.insertItem(slot, stack, simulate);
         }
-
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return ItemStack.EMPTY; // Prevent extraction from input slots
-        }
-
-        @Override
-        public int getSlotLimit(int slot) {
-            return itemHandler.getSlotLimit(slot);
-        }
-
-        @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
-            return slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT; // Only input slots are valid
-        }
-    }
-
-    private class FuelItemHandler implements IItemHandlerModifiable {
-        private final ItemStackHandler itemHandler;
-
-        public FuelItemHandler(ItemStackHandler itemHandler) {
-            this.itemHandler = itemHandler;
-        }
-
-        @Override
-        public void setStackInSlot(int slot, ItemStack stack) {
-            itemHandler.setStackInSlot(slot, stack);
-        }
-
-        @Override
-        public int getSlots() {
-            return itemHandler.getSlots();
-        }
-
-        @Override
-        public ItemStack getStackInSlot(int slot) {
-            return itemHandler.getStackInSlot(slot);
-        }
-
-        @Override
-        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            if (slot == FUEL_SLOT && ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0) {
-                return itemHandler.insertItem(slot, stack, simulate);
-            }
-            return stack;
-        }
-
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
             return ItemStack.EMPTY;
         }
-
         @Override
         public int getSlotLimit(int slot) {
             return itemHandler.getSlotLimit(slot);
         }
-
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
-            return slot == FUEL_SLOT && ForgeHooks.getBurnTime(stack, RecipeType.SMELTING) > 0;
-        }
-    }
-
-    private class OutputItemHandler implements IItemHandlerModifiable {
-        private final ItemStackHandler itemHandler;
-
-        public OutputItemHandler(ItemStackHandler itemHandler) {
-            this.itemHandler = itemHandler;
-        }
-
-        @Override
-        public void setStackInSlot(int slot, ItemStack stack) {
-            itemHandler.setStackInSlot(slot, stack);
-        }
-
-        @Override
-        public int getSlots() {
-            return itemHandler.getSlots();
-        }
-
-        @Override
-        public @NotNull ItemStack getStackInSlot(int i) {
-            return itemHandler.getStackInSlot(i);
-        }
-
-        @Override
-        public @NotNull ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            return stack;
-        }
-
-        @Override
-        public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if (slot == OUTPUT_SLOT) {
-                return itemHandler.extractItem(slot, amount, simulate);
-            }
-            return ItemStack.EMPTY;
-        }
-
-        @Override
-        public int getSlotLimit(int slot) {
-            return itemHandler.getSlotLimit(slot);
-        }
-
-        @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return false;
+            return slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT;
         }
     }
 }

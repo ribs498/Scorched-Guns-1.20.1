@@ -34,7 +34,6 @@ import java.util.function.Consumer;
 
 public class GunItem extends Item implements IColored, IMeta {
     private final WeakHashMap<CompoundTag, Gun> modifiedGunCache = new WeakHashMap<>();
-
     private Gun gun = new Gun();
 
     public GunItem(Item.Properties properties) {
@@ -48,7 +47,6 @@ public class GunItem extends Item implements IColored, IMeta {
     public Gun getGun() {
         return this.gun;
     }
-
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flag) {
         Gun modifiedGun = this.getModifiedGun(stack);
@@ -85,7 +83,9 @@ public class GunItem extends Item implements IColored, IMeta {
         ResourceLocation advantage = modifiedGun.getProjectile().getAdvantage();
         damage = GunModifierHelper.getModifiedProjectileDamage(stack, damage);
         damage = GunEnchantmentHelper.getAcceleratorDamage(stack, damage);
-        tooltip.add(Component.translatable("info.scguns.damage", ChatFormatting.WHITE + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(damage) + additionalDamageText).withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("info.scguns.damage")
+                .append(": ").withStyle(ChatFormatting.GRAY)
+                .append(Component.literal(ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(damage) + additionalDamageText).withStyle(ChatFormatting.WHITE)));
 
         if (!advantage.equals(ModTags.Entities.NONE.location())) {
             tooltip.add(Component.translatable("info.scguns.advantage").withStyle(ChatFormatting.GRAY)
@@ -97,13 +97,44 @@ public class GunItem extends Item implements IColored, IMeta {
                 tooltip.add(Component.translatable("info.scguns.ignore_ammo").withStyle(ChatFormatting.AQUA));
             } else {
                 int ammoCount = tagCompound.getInt("AmmoCount");
-                tooltip.add(Component.translatable("info.scguns.ammo", ChatFormatting.WHITE.toString() + ammoCount + "/" + GunModifierHelper.getModifiedAmmoCapacity(stack, modifiedGun)).withStyle(ChatFormatting.GRAY));
+                tooltip.add(Component.translatable("info.scguns.ammo")
+                        .append(": ").withStyle(ChatFormatting.GRAY)
+                        .append(Component.literal(ammoCount + "/" + GunModifierHelper.getModifiedAmmoCapacity(stack, modifiedGun)).withStyle(ChatFormatting.WHITE)));
             }
         }
 
-        tooltip.add(Component.translatable("info.scguns.attachment_help", KeyBinds.KEY_ATTACHMENTS.getTranslatedKeyMessage().getString().toUpperCase(Locale.ENGLISH)).withStyle(ChatFormatting.YELLOW));
+        // Add total melee damage to tooltip
+        float totalMeleeDamage = getTotalMeleeDamage(stack);
+        if (totalMeleeDamage > 0) {
+            String meleeDamageText = (totalMeleeDamage % 1.0 == 0) ? String.format("%d", (int) totalMeleeDamage) : String.format("%.1f", totalMeleeDamage);
+            tooltip.add(Component.translatable("info.scguns.melee_damage")
+                    .append(": ").withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(meleeDamageText).withStyle(ChatFormatting.WHITE)));
+        }
 
+        tooltip.add(Component.translatable("info.scguns.attachment_help", KeyBinds.KEY_ATTACHMENTS.getTranslatedKeyMessage().getString().toUpperCase(Locale.ENGLISH)).withStyle(ChatFormatting.YELLOW));
     }
+
+
+    public float getBayonetAdditionalDamage(ItemStack gunStack) {
+        float additionalDamage = 0.0F;
+        for (IAttachment.Type type : IAttachment.Type.values()) {
+            ItemStack attachmentStack = Gun.getAttachment(type, gunStack);
+            if (attachmentStack != null && attachmentStack.getItem() instanceof BayonetItem) {
+                System.out.println("Bayonet Found: " + attachmentStack.getItem()); // Debug statement
+                additionalDamage += ((BayonetItem) attachmentStack.getItem()).getAdditionalDamage();
+            }
+        }
+        return additionalDamage;
+    }
+
+    public float getTotalMeleeDamage(ItemStack stack) {
+        Gun gun = this.getModifiedGun(stack);
+        float baseMeleeDamage = gun.getGeneral().getMeleeDamage();
+        float bayonetDamage = getBayonetAdditionalDamage(stack);
+        return baseMeleeDamage + bayonetDamage;
+    }
+
     @Override
     public boolean onEntitySwing(ItemStack stack, LivingEntity entity) {
         return true;
@@ -155,9 +186,6 @@ public class GunItem extends Item implements IColored, IMeta {
                 }
             });
         }
-        if (ScorchedGuns.isDebugging()) {
-            return Debug.getGun(this);
-        }
         return this.gun;
     }
 
@@ -190,29 +218,34 @@ public class GunItem extends Item implements IColored, IMeta {
         });
     }
 
+    @Override
     public boolean isFoil(ItemStack stack) {
         return false;
     }
 
+    @Override
     public boolean isValidRepairItem(ItemStack pToRepair, ItemStack pRepair) {
         return pRepair.is(ModItems.REPAIR_KIT.get());
     }
+
     public ItemStack getAttachment(ItemStack heldItem, IAttachment.Type type) {
         return Gun.getAttachment(type, heldItem);
     }
+
     public boolean hasBayonet(ItemStack gunStack) {
         for (IAttachment.Type type : IAttachment.Type.values()) {
             ItemStack attachmentStack = Gun.getAttachment(type, gunStack);
-            if (attachmentStack.getItem() instanceof BayonetItem) {
+            if (attachmentStack != null && attachmentStack.getItem() instanceof BayonetItem) {
                 return true;
             }
         }
         return false;
     }
+
     public int getBayonetBanzaiLevel(ItemStack gunStack) {
         for (IAttachment.Type type : IAttachment.Type.values()) {
             ItemStack attachmentStack = Gun.getAttachment(type, gunStack);
-            if (attachmentStack.getItem() instanceof BayonetItem) {
+            if (attachmentStack != null && attachmentStack.getItem() instanceof BayonetItem) {
                 Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(attachmentStack);
                 if (enchantments.containsKey(ModEnchantments.BANZAI.get())) {
                     return enchantments.get(ModEnchantments.BANZAI.get());

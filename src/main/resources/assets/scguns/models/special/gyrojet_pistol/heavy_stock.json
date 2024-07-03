@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [4, 4],
 	"textures": {
-		"2": "scguns:item/steyr_stocks",
+		"2": "scguns:item/greaser_smg_stocks",
 		"particle": "scguns:item/gyrojet_pistol"
 	},
 	"elements": [

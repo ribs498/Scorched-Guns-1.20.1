@@ -28,17 +28,17 @@ import static top.ribs.scguns.entity.projectile.MicroJetEntity.EXPLOSION_DAMAGE_
 
 public class CustomExplosion extends Explosion
 {
-    private final CustomBlockInteraction customBlockInteraction;
-    private final Level level;
+    final CustomBlockInteraction customBlockInteraction;
+    final Level level;
     private final Entity source;
-    private final double x;
-    private final double y;
-    private final double z;
+    final double x;
+    final double y;
+    final double z;
     private final float radius;
 
     public CustomExplosion(Level pLevel, @Nullable Entity pSource, double pToBlowX, double pToBlowY, double pToBlowZ, float pRadius, boolean pFire, CustomBlockInteraction customBlockInteraction)
     {
-        super(pLevel, pSource, pToBlowX, pToBlowY, pToBlowZ, pRadius, pFire, BlockInteraction.KEEP);  // Use KEEP as default
+        super(pLevel, pSource, pToBlowX, pToBlowY, pToBlowZ, pRadius, pFire, BlockInteraction.KEEP);
         this.customBlockInteraction = customBlockInteraction;
         this.level = pLevel;
         this.source = pSource;
@@ -53,10 +53,9 @@ public class CustomExplosion extends Explosion
     {
         if (this.customBlockInteraction == CustomBlockInteraction.NONE)
         {
-            // Custom explosion logic without block destruction
             this.level.gameEvent(this.source, GameEvent.EXPLODE, new Vec3(this.x, this.y, this.z));
             Set<BlockPos> set = Sets.newHashSet();
-            float f2 = this.radius * 2.0F;  // Increased damage radius
+            float f2 = this.radius * 2.0F;
             int k = Mth.floor(this.x - (double)f2 - 1.0);
             int l = Mth.floor(this.x + (double)f2 + 1.0);
             int i2 = Mth.floor(this.y - (double)f2 - 1.0);
@@ -85,8 +84,7 @@ public class CustomExplosion extends Explosion
                             d9 /= d13;
                             double d14 = getSeenPercent(vec3, entity);
                             double d10 = (1.0 - d12) * d14;
-                            float explosionDamage = (float) ((d10 * d10 + d10) / 2.0 * 4.0 * (double)f2 + 1.0) * EXPLOSION_DAMAGE_MULTIPLIER; // Adjust the damage multiplier
-                            // Apply explosion damage using custom bullet damage type
+                            float explosionDamage = (float) ((d10 * d10 + d10) / 2.0 * 4.0 * (double)f2 + 1.0) * EXPLOSION_DAMAGE_MULTIPLIER;
                             entity.hurt(ModDamageTypes.Sources.projectile(this.level.registryAccess(), (ProjectileEntity)this.source, (LivingEntity)((ProjectileEntity)this.source).getOwner()), explosionDamage);
                             double d11;
                             if (entity instanceof LivingEntity)
@@ -133,7 +131,6 @@ public class CustomExplosion extends Explosion
         }
         else
         {
-            // Reduced particle effects for the mini explosion
             this.level.addParticle(ParticleTypes.EXPLOSION, this.x, this.y, this.z, 0.5, 0.0, 0.0);
             this.level.playLocalSound(this.x, this.y, this.z, SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 2.0F, 1.0F, false);
         }

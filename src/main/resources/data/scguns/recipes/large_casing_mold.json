@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "scguns:blank_mold"
+    },
+    "#": {
+      "item": "scguns:treated_brass_ingot"
+    }
+  },
+  "pattern": [
+    "   ",
+    "#Q#",
+    "   "
+  ],
+  "result": {
+    "item": "scguns:large_casing_mold"
+  }
+}

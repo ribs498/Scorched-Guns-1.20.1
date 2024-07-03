@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "minecraft:paper"
+    },
+    "R": {
+      "item": "minecraft:white_dye"
+    },
+    "N": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "QQQ",
+    "QRQ",
+    "QNQ"
+  ],
+  "result": {
+    "item": "scguns:rifle_ammo_box"
+  }
+}

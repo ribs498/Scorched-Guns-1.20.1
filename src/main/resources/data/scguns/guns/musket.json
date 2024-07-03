@@ -1,0 +1,63 @@
+{
+  "display": {
+    "flash": {
+      "size": 1.2,
+      "yOffset": 3.5,
+      "zOffset": -7.2
+    },
+    "muzzleFlashType": "flash_type_2"
+  },
+  "general": {
+    "alwaysSpread": true,
+    "fireMode": "scguns:semi_automatic",
+    "gripType": "scguns:two_handed",
+    "rate": 3,
+    "recoilAngle": 4.0,
+    "recoilKick": 0.4,
+    "spread": 1.0
+  },
+  "modules": {
+    "attachments": {
+      "scope": {
+        "yOffset": 4.7,
+        "zOffset": 4.5
+      },
+      "stock": {
+        "scale": 0.0
+      },
+      "underBarrel": {
+        "yOffset": 1.0,
+        "zOffset": 1.0
+      }
+    },
+    "zoom": {
+      "fovModifier": 0.6,
+      "yOffset": 4.8,
+      "zOffset": 0.75
+    }
+  },
+  "projectile": {
+    "advantage": "scguns:none",
+    "damage": 6.0,
+    "ejectsCasing": false,
+    "gravity": false,
+    "item": "scguns:powder_and_ball",
+    "life": 60,
+    "size": 1.0,
+    "speed": 7.0,
+    "trailLengthMultiplier": 2.0
+  },
+  "reloads": {
+    "emptyMagTimer": 50,
+    "maxAmmo": 1,
+    "reloadItem": "scguns:powder_and_ball",
+    "reloadTimer": 50,
+    "reloadType": "scguns:mag_fed"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.blackpowder.fire",
+    "fire": "scguns:item.blackpowder.fire",
+    "reload": "scguns:item.pistol.reload"
+  }
+}

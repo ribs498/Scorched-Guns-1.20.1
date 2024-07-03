@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": {
+    "type": "forge:any"
+  },
+  "spawners": {
+    "type": "scguns:cog_knight",
+    "weight": 8,
+    "minCount": 1,
+    "maxCount": 1
+  }
+}

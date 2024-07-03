@@ -7,5 +7,6 @@
   "ingredient": {
     "item": "scguns:sulfur_ore"
   },
-  "result": "scguns:sulfur_chunk"
+  "result": "scguns:sulfur_chunk",
+  "count": 2
 }

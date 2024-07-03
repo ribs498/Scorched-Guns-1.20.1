@@ -77,7 +77,7 @@ public class OneHandedPose implements IHeldAnimation {
         boolean slim = Minecraft.getInstance().player.getModelName().equals("slim");
         float armWidth = slim ? 3.0F : 4.0F;
 
-        poseStack.scale(0.55F, 0.55F, 0.5F);
+        poseStack.scale(0.55F, 0.55F, 0.55F);
         poseStack.translate(-4.0 * 0.0625 * side, 0, 0);
         poseStack.translate(-(armWidth / 2.0) * 0.0625 * side, 0, 0.1);
 

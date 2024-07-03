@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "E": {
+      "item": "minecraft:gunpowder"
+    },
+    "W": {
+      "item": "scguns:sulfur_chunk"
+    },
+    "Q": {
+      "item": "scguns:niter_dust"
+    },
+    "#": {
+      "item": "scguns:netherite_scrap_chunk"
+    }
+  },
+  "pattern": [
+    "###",
+    "###",
+    "EWQ"
+  ],
+  "result": {
+    "item": "scguns:nitro_powder",
+    "count": 8
+  }
+}

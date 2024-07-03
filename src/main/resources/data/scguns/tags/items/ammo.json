@@ -6,13 +6,16 @@
     "scguns:standard_copper_round",
     "scguns:compact_advanced_round",
     "scguns:advanced_round",
-    "scguns:heavy_round",
+    "scguns:krahg_round",
     "scguns:beowulf_round",
     "scguns:shotgun_shell",
     "scguns:bearpack_shell",
     "scguns:microjet",
     "scguns:rocket",
     "scguns:osborne_slug",
-    "scguns:casull_round"
+    "scguns:ramrod_round",
+    "scguns:energy_cell",
+    "scguns:grapeshot",
+    "scguns:fuel"
   ]
 }

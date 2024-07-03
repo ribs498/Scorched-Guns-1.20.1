@@ -1,0 +1,18 @@
+{
+	"parent": "minecraft:item/generated",
+	"loader": "forge:separate_transforms",
+	"base": {
+		"parent": "scguns:item/brass_mask_3d"
+	},
+	"perspectives": {
+		"gui": {
+			"parent": "scguns:item/brass_mask_2d"
+		},
+		"ground": {
+			"parent": "scguns:item/brass_mask_2d"
+		},
+		"fixed": {
+			"parent": "scguns:item/brass_mask_2d"
+		}
+	}
+}

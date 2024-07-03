@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "minecraft:iron_nugget"
+    },
+    "Q": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "  Q",
+    " # ",
+    "Q  "
+  ],
+  "result": {
+    "item": "scguns:muzzle_brake"
+  }
+}

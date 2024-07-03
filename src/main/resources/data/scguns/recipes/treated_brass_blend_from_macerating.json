@@ -3,10 +3,10 @@
   "processingTime": 200,
   "ingredients": [
     {
-      "item": "scguns:ancient_brass"
+      "tag": "forge:ingots/brass"
     },
     {
-      "item": "minecraft:redstone_dust"
+      "item": "minecraft:redstone"
     },
     {
       "item": "minecraft:blaze_powder"
@@ -17,6 +17,6 @@
   ],
   "result": {
     "item": "scguns:treated_brass_blend",
-    "count": 1
+    "count": 2
   }
 }

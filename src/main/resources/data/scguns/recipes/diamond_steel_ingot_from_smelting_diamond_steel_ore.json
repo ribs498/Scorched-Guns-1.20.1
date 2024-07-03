@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "group": "diamond_steel_ingot",
+  "experience": 0.7,
+  "ingredient": {
+    "item": "scguns:diamond_steel_blend"
+  },
+  "result": "scguns:diamond_steel_ingot"
+}

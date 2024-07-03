@@ -24,15 +24,15 @@ public class ModPlacedFeatures {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
 
         register(context, ANTHRALITE_ORE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.ANTHRALITE_ORE_KEY),
-                ModOrePlacement.commonOrePlacement(15, // Veins per chunk
+                ModOrePlacement.commonOrePlacement(15,
                         HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(-64), VerticalAnchor.absolute(128))));
 
         register(context, SULFUR_ORE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.SULFUR_ORE_KEY),
-                ModOrePlacement.commonOrePlacement(30, // Veins per chunk
+                ModOrePlacement.commonOrePlacement(30,
                         HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(-64), VerticalAnchor.absolute(64))));
 
         register(context, NETHER_SULFUR_ORE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.NETHER_SULFUR_ORE_KEY),
-                ModOrePlacement.commonOrePlacement(30, // Veins per chunk
+                ModOrePlacement.commonOrePlacement(30,
                         HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(10), VerticalAnchor.belowTop(10))));
     }
 

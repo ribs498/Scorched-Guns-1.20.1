@@ -1,6 +1,9 @@
 {
   "replace": false,
   "entries": [
-
+    "scguns:add_loot_ruined_portal",
+    "scguns:add_loot_dungeon",
+    "scguns:add_loot_mineshaft",
+    "scguns:pebbles_from_gravel"
   ]
 }

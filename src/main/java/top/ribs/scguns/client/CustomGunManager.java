@@ -46,7 +46,7 @@ public class CustomGunManager
         {
             customGunMap.forEach((id, gun) ->
             {
-                ItemStack stack = new ItemStack(ModItems.IRON_CARABINE.get());
+                ItemStack stack = new ItemStack(ModItems.M3_CARABINE.get());
                 stack.setHoverName(Component.translatable("item." + id.getNamespace() + "." + id.getPath() + ".name"));
                 CompoundTag tag = stack.getOrCreateTag();
                 tag.put("Model", gun.getModel().save(new CompoundTag()));

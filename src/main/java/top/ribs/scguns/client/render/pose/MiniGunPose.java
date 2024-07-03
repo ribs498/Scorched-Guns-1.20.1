@@ -168,19 +168,17 @@ public class MiniGunPose extends WeaponPose
             poseStack.translate(reloadProgress * 0.5, -reloadProgress, -reloadProgress * 0.5);
 
             poseStack.scale(0.5F, 0.5F, 0.5F);
-            poseStack.translate(4.0 * 0.0625 * side, 0, 0);
+            poseStack.translate(4.0 * 0.0625 * side, 0.65, 0);
             poseStack.translate((armWidth / 2.0) * 0.0625 * side, 0, 0);
-            poseStack.translate(-0.3125 * side, -0.1, -0.4375);
+            poseStack.translate(-0.55 * side, -0.1, -1.25);
 
-            poseStack.mulPose(Axis.XP.rotationDegrees(80F));
-            poseStack.mulPose(Axis.YP.rotationDegrees(15F * -side));
-            poseStack.mulPose(Axis.ZP.rotationDegrees(15F * -side));
+            poseStack.mulPose(Axis.XP.rotationDegrees(110F));
+            poseStack.mulPose(Axis.YP.rotationDegrees(25f * -side));
+            poseStack.mulPose(Axis.ZP.rotationDegrees(25f * -side));
             poseStack.mulPose(Axis.XP.rotationDegrees(-35F));
-
             RenderUtil.renderFirstPersonArm((LocalPlayer) player, hand.getOpposite(), poseStack, buffer, light);
         }
         poseStack.popPose();
-
         // Back arm holding the handle
         poseStack.pushPose();
         {

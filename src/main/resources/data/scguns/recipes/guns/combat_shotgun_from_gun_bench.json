@@ -1,0 +1,36 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:combat_shotgun",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:iron_blueprint"
+    },
+    "gun_internal_1": {
+      "tag": "minecraft:planks"
+    },
+    "gun_internal_2": {
+      "item": "scguns:firing_unit"
+    },
+    "gun_top_internal_1": {
+      "item": "minecraft:iron_ingot"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:iron_gun_frame"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "gun_grip": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:gun_parts"
+    },
+    "gun_magazine": {
+      "item": "scguns:gun_magazine"
+    }
+  }
+}

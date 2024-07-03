@@ -726,7 +726,7 @@ public class GunRenderingHandler {
     }
 
     private void applyShieldTransforms(PoseStack poseStack, LocalPlayer player, Gun modifiedGun, float partialTick) {
-        if(player.isUsingItem() && player.getOffhandItem().getItem() == Items.SHIELD && (modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED || modifiedGun.getGeneral().getGripType() == GripType.TWO_HANDED_ONE_HANDED)){
+        if(player.isUsingItem() && player.getOffhandItem().getItem() == Items.SHIELD && (modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED || modifiedGun.getGeneral().getGripType() == GripType.TWO_HANDED_ONE_HANDED|| modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED_2)){
             double time = Mth.clamp((player.getTicksUsingItem() + partialTick), 0.0, 4.0) / 4.0;
             poseStack.translate(0, 0.35 * time, 0);
             poseStack.mulPose(Axis.XP.rotationDegrees(45F * (float) time));
@@ -791,6 +791,7 @@ public class GunRenderingHandler {
                     ModItems.VERTICAL_GRIP.get(),
                     ModItems.LIGHT_GRIP.get(),
                     ModItems.IRON_BAYONET.get(),
+                    ModItems.ANTHRALITE_BAYONET.get(),
                     ModItems.DIAMOND_BAYONET.get(),
                     ModItems.NETHERITE_BAYONET.get()
             );
@@ -834,7 +835,6 @@ public class GunRenderingHandler {
         Gun modifiedGun = ((GunItem) weapon.getItem()).getModifiedGun(weapon);
         if (modifiedGun.getDisplay().getFlash() == null) return;
 
-        // Ensure the muzzle flash is not rendered for non-player entities
         if (!(entity instanceof Player)) return;
 
         if (display != ItemDisplayContext.FIRST_PERSON_RIGHT_HAND && display != ItemDisplayContext.THIRD_PERSON_RIGHT_HAND && display != ItemDisplayContext.FIRST_PERSON_LEFT_HAND && display != ItemDisplayContext.THIRD_PERSON_LEFT_HAND) return;
@@ -852,21 +852,21 @@ public class GunRenderingHandler {
             spawnSmokeParticles(entity);
         }
     }
-
     private void spawnSmokeParticles(LivingEntity entity) {
         ClientLevel world = (ClientLevel) entity.level();
         double posX = entity.getX();
         double posY = entity.getY() + entity.getEyeHeight();
-        double posZ = entity.getZ();
+        double posZ = entity.getZ() + 0.2;
         RandomSource random = entity.getRandom();
 
-        for (int i = 0; i < 5; i++) { // Adjust the number of particles as needed
+        for (int i = 0; i < 5; i++) {
             double offsetX = random.nextGaussian() * 0.1;
             double offsetY = random.nextGaussian() * 0.1;
             double offsetZ = random.nextGaussian() * 0.1;
             world.addParticle(ParticleTypes.SMOKE, posX, posY, posZ, offsetX, offsetY, offsetZ);
         }
     }
+
     private ResourceLocation getFlashTexture(String flashType) {
         if (flashType == null) {
             return new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_1.png");
@@ -877,7 +877,6 @@ public class GunRenderingHandler {
             default -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_1.png");
         };
     }
-
     private void drawMuzzleFlash(ItemStack weapon, Gun modifiedGun, float random, boolean flip, PoseStack poseStack, MultiBufferSource buffer, float partialTicks, ResourceLocation flashTexture) {
         if (!PropertyHelper.hasMuzzleFlash(weapon, modifiedGun))
             return;
@@ -914,6 +913,36 @@ public class GunRenderingHandler {
         float maxU = weapon.isEnchanted() ? 1.0F : 0.5F;
         Matrix4f matrix = poseStack.last().pose();
         VertexConsumer builder = buffer.getBuffer(GunRenderType.getMuzzleFlash(flashTexture));
+        builder.vertex(matrix, 0, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(maxU, 1.0F).uv2(15728880).endVertex();
+        builder.vertex(matrix, 1, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(minU, 1.0F).uv2(15728880).endVertex();
+        builder.vertex(matrix, 1, 1, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(minU, 0).uv2(15728880).endVertex();
+        builder.vertex(matrix, 0, 1, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(maxU, 0).uv2(15728880).endVertex();
+
+        poseStack.popPose();
+
+        // Render the second plane rotated by 90 degrees around the Y-axis
+        poseStack.pushPose();
+
+        poseStack.translate(weaponOrigin.x * 0.0625, weaponOrigin.y * 0.0625, weaponOrigin.z * 0.0625);
+        poseStack.translate(flashPosition.x * 0.0625, flashPosition.y * 0.0625, flashPosition.z * 0.0625);
+        poseStack.translate(-0.5, -0.5, -0.5);
+
+        if (!barrelStack.isEmpty() && barrelStack.getItem() instanceof IBarrel barrel && !PropertyHelper.isUsingBarrelMuzzleFlash(barrelStack)) {
+            Vec3 scale = PropertyHelper.getAttachmentScale(weapon, modifiedGun, IAttachment.Type.BARREL);
+            double length = barrel.getProperties().getLength();
+            poseStack.translate(0, 0, -length * 0.0625 * scale.z);
+        }
+
+        poseStack.mulPose(Axis.ZP.rotationDegrees(360F * random));
+        poseStack.mulPose(Axis.XP.rotationDegrees(flip ? 180F : 0F));
+        poseStack.mulPose(Axis.YP.rotationDegrees(90F));
+
+        poseStack.scale(scaleX, scaleY, 1.0F);
+        poseStack.scale(scaleModifier, scaleModifier, 1.0F);
+        poseStack.translate(-0.5, -0.5, 0);
+
+        matrix = poseStack.last().pose();
+        builder = buffer.getBuffer(GunRenderType.getMuzzleFlash(flashTexture));
         builder.vertex(matrix, 0, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(maxU, 1.0F).uv2(15728880).endVertex();
         builder.vertex(matrix, 1, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(minU, 1.0F).uv2(15728880).endVertex();
         builder.vertex(matrix, 1, 1, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(minU, 0).uv2(15728880).endVertex();

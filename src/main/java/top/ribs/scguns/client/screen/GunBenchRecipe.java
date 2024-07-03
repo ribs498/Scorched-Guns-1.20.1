@@ -1,6 +1,5 @@
 package top.ribs.scguns.client.screen;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
@@ -15,29 +14,46 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import org.jetbrains.annotations.NotNull;
-
 public class GunBenchRecipe implements Recipe<Container> {
     private final ResourceLocation id;
     private final ItemStack output;
     private final NonNullList<Ingredient> recipeItems;
+    private final Ingredient blueprint;
 
-    public GunBenchRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItems) {
+    public GunBenchRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItems, Ingredient blueprint) {
         this.id = id;
         this.output = output;
         this.recipeItems = recipeItems;
+        this.blueprint = blueprint;
     }
-
     @Override
     public boolean matches(Container container, Level level) {
+        // Check if the blueprint matches
+        ItemStack blueprintStack = container.getItem(GunBenchMenu.SLOT_BLUEPRINT);
+        if (!blueprint.test(blueprintStack)) {
+            System.out.println("Blueprint mismatch: " + blueprintStack);
+            return false;
+        }
+
+        // Check if all ingredients match
         for (int i = 0; i < recipeItems.size(); i++) {
             ItemStack stackInSlot = container.getItem(i);
             Ingredient requiredIngredient = recipeItems.get(i);
+
+            // Check if required ingredient matches the slot, or if the slot is intended to be empty
             if (!requiredIngredient.isEmpty() && !requiredIngredient.test(stackInSlot)) {
+                System.out.println("Ingredient mismatch at slot " + i + ": " + stackInSlot);
                 return false;
+            } else if (requiredIngredient.isEmpty() && !stackInSlot.isEmpty()) {
+                System.out.println("Slot " + i + " should be empty but has: " + stackInSlot);
+                return false; // Slot should be empty but has an item
             }
         }
+
+        System.out.println("Recipe matches successfully.");
         return true;
     }
+
 
     @Override
     public ItemStack assemble(Container container, RegistryAccess registryAccess) {
@@ -73,6 +89,10 @@ public class GunBenchRecipe implements Recipe<Container> {
         return recipeItems;
     }
 
+    public Ingredient getBlueprint() {
+        return blueprint;
+    }
+
     public static class Type implements RecipeType<GunBenchRecipe> {
         public static final Type INSTANCE = new Type();
         public static final String ID = "gun_bench";
@@ -82,7 +102,6 @@ public class GunBenchRecipe implements Recipe<Container> {
         public static final Serializer INSTANCE = new Serializer();
         public static final ResourceLocation ID = new ResourceLocation("scguns", "gun_bench");
 
-        @Override
         public GunBenchRecipe fromJson(ResourceLocation recipeId, JsonObject json) {
             ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(json, "result"));
             JsonObject ingredients = GsonHelper.getAsJsonObject(json, "ingredients");
@@ -109,8 +128,14 @@ public class GunBenchRecipe implements Recipe<Container> {
             if (ingredients.has("gun_magazine"))
                 inputs.set(9, Ingredient.fromJson(GsonHelper.getAsJsonObject(ingredients, "gun_magazine")));
 
-            return new GunBenchRecipe(recipeId, output, inputs);
+            Ingredient blueprint = Ingredient.EMPTY;
+            if (ingredients.has("blueprint")) {
+                blueprint = Ingredient.fromJson(GsonHelper.getAsJsonObject(ingredients, "blueprint"));
+            }
+
+            return new GunBenchRecipe(recipeId, output, inputs, blueprint);
         }
+
 
         @Override
         public GunBenchRecipe fromNetwork(ResourceLocation recipeId, FriendlyByteBuf buffer) {
@@ -120,9 +145,10 @@ public class GunBenchRecipe implements Recipe<Container> {
                 inputs.set(i, Ingredient.fromNetwork(buffer));
             }
 
+            Ingredient blueprint = Ingredient.fromNetwork(buffer);
             ItemStack output = buffer.readItem();
 
-            return new GunBenchRecipe(recipeId, output, inputs);
+            return new GunBenchRecipe(recipeId, output, inputs, blueprint);
         }
 
         @Override
@@ -130,6 +156,7 @@ public class GunBenchRecipe implements Recipe<Container> {
             for (Ingredient ing : recipe.getIngredients()) {
                 ing.toNetwork(buffer);
             }
+            recipe.blueprint.toNetwork(buffer);
             buffer.writeItemStack(recipe.getResultItem(), false);
         }
     }
@@ -138,4 +165,3 @@ public class GunBenchRecipe implements Recipe<Container> {
         return output;
     }
 }
-

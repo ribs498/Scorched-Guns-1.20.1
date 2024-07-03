@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "W": {
+      "item": "scguns:anthralite_nugget"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "X": {
+      "tag": "forge:glass"
+    }
+  },
+  "pattern": [
+    "   ",
+    "XRX",
+    "WQW"
+  ],
+  "result": {
+    "item": "scguns:long_scope"
+  }
+}

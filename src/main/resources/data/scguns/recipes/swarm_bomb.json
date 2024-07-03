@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "throwable",
+  "key": {
+    "X": {
+      "item": "minecraft:rotten_flesh"
+    },
+    "Q": {
+      "tag": "forge:glass"
+    }
+  },
+  "pattern": [
+    "   ",
+    "QXQ",
+    " Q "
+  ],
+  "result": {
+    "item": "scguns:swarm_bomb"
+  }
+}

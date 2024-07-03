@@ -44,7 +44,12 @@ public class GunModifiers
             return 2.0F;
         }
     };
-
+    public static final IGunModifier ANTHRALITE_BAYONET_DAMAGE = new IGunModifier() {
+        @Override
+        public float additionalDamage() {
+            return 3.0F;
+        }
+    };
     public static final IGunModifier DIAMOND_BAYONET_DAMAGE = new IGunModifier() {
         @Override
         public float additionalDamage() {
@@ -105,7 +110,7 @@ public class GunModifiers
         @Override
         public float recoilModifier()
         {
-            return 0.6F;
+            return 0.85F;
         }
 
         @Override
@@ -132,7 +137,7 @@ public class GunModifiers
         @Override
         public float kickModifier()
         {
-            return 0.6F;
+            return 0.8F;
         }
 
         @Override
@@ -153,13 +158,13 @@ public class GunModifiers
         @Override
         public float recoilModifier()
         {
-            return 0.6F;
+            return 0.75F;
         }
 
         @Override
         public float kickModifier()
         {
-            return 0.5F;
+            return 0.75F;
         }
 
         @Override
@@ -213,13 +218,13 @@ public class GunModifiers
         @Override
         public float recoilModifier()
         {
-            return 0.75F;
+            return 0.8F;
         }
 
         @Override
         public float kickModifier()
         {
-            return 0.75F;
+            return 0.8F;
         }
 
         @Override

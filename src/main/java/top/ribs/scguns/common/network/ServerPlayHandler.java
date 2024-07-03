@@ -34,7 +34,6 @@ import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.common.*;
 import top.ribs.scguns.common.container.AttachmentContainer;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
-import top.ribs.scguns.event.BurstFireEvent;
 import top.ribs.scguns.event.GunFireEvent;
 import top.ribs.scguns.init.ModEnchantments;
 import top.ribs.scguns.init.ModSyncedDataKeys;
@@ -49,6 +48,9 @@ import top.ribs.scguns.network.message.S2CMessageGunSound;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 /**
@@ -56,6 +58,7 @@ import java.util.function.Predicate;
  */
 public class ServerPlayHandler
 {
+    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
     private static final Predicate<LivingEntity> HOSTILE_ENTITIES = entity -> entity.getSoundSource() == SoundSource.HOSTILE && !(entity instanceof NeutralMob) && !Config.COMMON.aggroMobs.exemptEntities.get().contains(EntityType.getKey(entity.getType()).toString());
 
     /**
@@ -95,11 +98,13 @@ public class ServerPlayHandler
                     SpreadTracker.get(player).update(player, item);
                 }
 
-                if (modifiedGun.getGeneral().getFireMode() != FireMode.PULSE) {
+
                     int count = modifiedGun.getGeneral().getProjectileAmount();
                     Gun.Projectile projectileProps = modifiedGun.getProjectile();
                     ProjectileEntity[] spawnedProjectiles = new ProjectileEntity[count];
-                    for (int i = 0; i < count; i++) {
+                    for(int i = 0; i < count; i++)
+                    {
+
                         IProjectileFactory factory = ProjectileManager.getInstance().getFactory(ForgeRegistries.ITEMS.getKey(projectileProps.getItem()));
                         ProjectileEntity projectileEntity = factory.create(world, player, heldItem, item, modifiedGun);
                         projectileEntity.setWeapon(heldItem);
@@ -108,7 +113,8 @@ public class ServerPlayHandler
                         spawnedProjectiles[i] = projectileEntity;
                         projectileEntity.tick();
                     }
-                    if (!projectileProps.isVisible()) {
+                    if(!projectileProps.isVisible())
+                    {
                         double spawnX = player.getX();
                         double spawnY = player.getY() + 1.0;
                         double spawnZ = player.getZ();
@@ -161,9 +167,7 @@ public class ServerPlayHandler
                         }
                     }
                 }
-
                 player.awardStat(Stats.ITEM_USED.get(item));
-            }
         } else {
             world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, 0.8F);
         }
@@ -190,22 +194,6 @@ public class ServerPlayHandler
             }
         }
     }
-
-    public static void handleBurst(ServerPlayer player) {
-
-        ItemStack heldItem = player.getMainHandItem();
-        if(heldItem.getItem() instanceof GunItem gunItem)
-        {
-
-            Gun gun = gunItem.getModifiedGun(heldItem);
-            if (gun.getGeneral().getFireMode() == FireMode.BURST)
-            {
-                BurstFireEvent.resetBurst(heldItem);
-            }
-
-        }
-    }
-
     private static ResourceLocation getFireSound(ItemStack stack, Gun modifiedGun)
     {
         ResourceLocation fireSound = null;

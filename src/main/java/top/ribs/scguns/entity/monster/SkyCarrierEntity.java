@@ -301,7 +301,7 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
                 double dz = target.getZ() - spawnZ;
                 brassBolt.shoot(dx, dy, dz, 1.5f, 6.0f);
                 this.skyCarrier.level().addFreshEntity(brassBolt);
-                this.skyCarrier.level().playSound(null, this.skyCarrier.getX(), this.skyCarrier.getY(), this.skyCarrier.getZ(), ModSounds.COPPER_MAGNUM_SILENCED_FIRE.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
+                this.skyCarrier.level().playSound(null, this.skyCarrier.getX(), this.skyCarrier.getY(), this.skyCarrier.getZ(), ModSounds.BRUISER_SILENCED_FIRE.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
             }
         }
     }

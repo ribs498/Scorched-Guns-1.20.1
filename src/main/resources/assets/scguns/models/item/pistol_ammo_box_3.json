@@ -153,8 +153,9 @@
 			"scale": [1.5, 1.5, 1.5]
 		},
 		"fixed": {
-			"translation": [0, 7.25, -1.5],
-			"scale": [1.5, 1.5, 1.5]
+			"rotation": [-90, 0, 0],
+			"translation": [0, -0.75, -15.25],
+			"scale": [2, 2, 2]
 		}
 	},
 	"groups": [

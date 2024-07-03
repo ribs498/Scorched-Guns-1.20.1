@@ -24,8 +24,8 @@ import top.ribs.scguns.item.GunItem;
  */
 public class MicroJetEntity extends ProjectileEntity
 {
-    private static final float BASE_DAMAGE = 10.0F; // Adjust the base damage as needed
-    public static final float EXPLOSION_DAMAGE_MULTIPLIER = 2.0F; // Adjust the explosion damage multiplier as needed
+    private static final float BASE_DAMAGE = 10.0F;
+    public static final float EXPLOSION_DAMAGE_MULTIPLIER = 2.0F;
 
     public MicroJetEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn)
     {

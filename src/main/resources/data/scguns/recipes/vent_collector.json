@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "X": {
+      "item": "minecraft:iron_ingot"
+    },
+    "M": {
+      "item": "minecraft:hopper"
+    }
+  },
+  "pattern": [
+    " QQ",
+    "XM ",
+    "QQ "
+  ],
+  "result": {
+    "item": "scguns:vent_collector"
+  }
+}

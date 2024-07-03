@@ -8,7 +8,6 @@ import top.ribs.scguns.Reference;
 import top.ribs.scguns.client.particle.*;
 import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.client.particle.CasingParticle;
-import top.ribs.scguns.client.particle.ScrapParticle;
 
 /**
  * Author: MrCrayfish
@@ -27,8 +26,11 @@ public class ParticleFactoryRegistry
         event.registerSpriteSet(ModParticleTypes.BRASS_CASING_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.SHELL_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.BEARPACK_PARTICLE.get(), CasingParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.GREEN_FLAME.get(), GreenFlameParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.PLASMA_RING.get(), PlasmaRingParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.RAMROD_IMPACT.get(), RamrodImpactParticle.Provider::new);
 
 
-        event.registerSpriteSet(ModParticleTypes.TYPHOONEE_BEAM.get(), TyphooneeBeamParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.PLASMA_EXPLOSION.get(), PlasmaExplosionParticle.Provider::new);
     }
 }

@@ -1,0 +1,132 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "scguns:item/scrap_sidearm",
+		"particle": "scguns:item/scrap_sidearm"
+	},
+	"elements": [
+		{
+			"name": "Bolt",
+			"from": [8.8, 4.4, 12.425],
+			"to": [9.3, 4.9, 12.425],
+			"rotation": {"angle": -45, "axis": "x", "origin": [9.05, 4.65, 12.425]},
+			"faces": {
+				"north": {"uv": [0, 9, 0.25, 9.25], "texture": "#0"},
+				"east": {"uv": [0, 0, 0, 0.25], "texture": "#0"},
+				"south": {"uv": [9, 0, 9.25, 0.25], "texture": "#0", "cullface": "south"},
+				"west": {"uv": [0, 0, 0, 0.25], "texture": "#0"},
+				"up": {"uv": [0.25, 0, 0, 0], "texture": "#0"},
+				"down": {"uv": [0.25, 0, 0, 0], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Bolt",
+			"from": [8.8, 4.65, 12.175],
+			"to": [9.3, 4.65, 12.675],
+			"rotation": {"angle": -45, "axis": "x", "origin": [9.05, 4.65, 12.425]},
+			"faces": {
+				"north": {"uv": [0, 0, 0.25, 0], "texture": "#0"},
+				"east": {"uv": [0, 0, 0.25, 0], "texture": "#0"},
+				"south": {"uv": [0, 0, 0.25, 0], "texture": "#0"},
+				"west": {"uv": [0, 0, 0.25, 0], "texture": "#0"},
+				"up": {"uv": [0.75, 9.25, 0.5, 9], "texture": "#0", "cullface": "south"},
+				"down": {"uv": [9.25, 0.5, 9, 0.75], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Bolt",
+			"from": [9.3, 4.4, 12.175],
+			"to": [9.8, 4.9, 12.675],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2, 0.85, -3.075]},
+			"faces": {
+				"north": {"uv": [1, 9, 1.25, 9.25], "texture": "#0"},
+				"east": {"uv": [9, 1, 9.25, 1.25], "texture": "#0"},
+				"south": {"uv": [1.5, 9, 1.75, 9.25], "texture": "#0", "cullface": "south"},
+				"west": {"uv": [9, 1.5, 9.25, 1.75], "texture": "#0"},
+				"up": {"uv": [2.25, 9.25, 2, 9], "texture": "#0"},
+				"down": {"uv": [9.25, 2, 9, 2.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Bolt",
+			"from": [6.7, 4.4, 12.425],
+			"to": [7.2, 4.9, 12.425],
+			"rotation": {"angle": -45, "axis": "x", "origin": [6.95, 4.65, 12.425]},
+			"faces": {
+				"north": {"uv": [0.25, 9, 0, 9.25], "texture": "#0"},
+				"east": {"uv": [0, 0, 0, 0.25], "texture": "#0"},
+				"south": {"uv": [9.25, 0, 9, 0.25], "texture": "#0", "cullface": "south"},
+				"west": {"uv": [0, 0, 0, 0.25], "texture": "#0"},
+				"up": {"uv": [0, 0, 0.25, 0], "texture": "#0"},
+				"down": {"uv": [0, 0, 0.25, 0], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Bolt",
+			"from": [6.7, 4.65, 12.175],
+			"to": [7.2, 4.65, 12.675],
+			"rotation": {"angle": -45, "axis": "x", "origin": [6.95, 4.65, 12.425]},
+			"faces": {
+				"north": {"uv": [0.25, 0, 0, 0], "texture": "#0"},
+				"east": {"uv": [0.25, 0, 0, 0], "texture": "#0"},
+				"south": {"uv": [0.25, 0, 0, 0], "texture": "#0"},
+				"west": {"uv": [0.25, 0, 0, 0], "texture": "#0"},
+				"up": {"uv": [0.5, 9.25, 0.75, 9], "texture": "#0", "cullface": "south"},
+				"down": {"uv": [9, 0.5, 9.25, 0.75], "texture": "#0"}
+			}
+		},
+		{
+			"name": "Bolt",
+			"from": [6.2, 4.4, 12.175],
+			"to": [6.7, 4.9, 12.675],
+			"rotation": {"angle": 0, "axis": "y", "origin": [14, 0.85, -3.075]},
+			"faces": {
+				"north": {"uv": [1.25, 9, 1, 9.25], "texture": "#0"},
+				"east": {"uv": [9.25, 1.5, 9, 1.75], "texture": "#0"},
+				"south": {"uv": [1.75, 9, 1.5, 9.25], "texture": "#0", "cullface": "south"},
+				"west": {"uv": [9.25, 1, 9, 1.25], "texture": "#0"},
+				"up": {"uv": [2, 9.25, 2.25, 9], "texture": "#0"},
+				"down": {"uv": [9, 2, 9.25, 2.25], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.25, -6.25],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.25, -6.25],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-4.75, 8.75, -1.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4.75, 8.75, -1.5]
+		},
+		"ground": {
+			"translation": [0, 9.5, -5.75],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [1, 8.75, 0],
+			"scale": [1.5, 1.5, 1.5]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [-0.75, 9.75, 0],
+			"scale": [1.6, 1.6, 1.6]
+		}
+	},
+	"groups": [
+		{
+			"name": "Bolt",
+			"origin": [1.5, -0.15, -1.625],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5]
+		}
+	]
+}

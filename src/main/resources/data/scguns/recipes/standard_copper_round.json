@@ -1,0 +1,19 @@
+{
+  "type": "scguns:mechanical_pressing",
+  "processingTime": 20,
+  "ingredients": [
+    {
+      "item": "scguns:medium_copper_casing"
+    },
+    {
+      "item": "scguns:gunpowder_dust"
+    },
+    {
+      "item": "minecraft:iron_nugget"
+    }
+  ],
+  "result": {
+    "item": "scguns:standard_copper_round",
+    "count": 1
+  }
+}

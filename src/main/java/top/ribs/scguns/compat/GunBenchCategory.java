@@ -58,8 +58,8 @@ public class GunBenchCategory implements IRecipeCategory<GunBenchRecipe> {
 
     @Override
     public void setRecipe(IRecipeLayoutBuilder builder, GunBenchRecipe recipe, IFocusGroup focuses) {
-        int[] slotX = {26, 44, 62, 80, 26, 44, 62, 80, 26, 62};
-        int[] slotY = {17, 17, 17, 17, 35, 35, 35, 35, 53, 53};
+        int[] slotX = {26, 44, 62, 80, 26, 44, 62, 80, 26, 62, 116};
+        int[] slotY = {17, 17, 17, 17, 35, 35, 35, 35, 53, 53, 17}; // Add the position for the blueprint slot
 
         NonNullList<Ingredient> ingredients = recipe.getIngredients();
         for (int i = 0; i < ingredients.size(); i++) {
@@ -68,6 +68,14 @@ public class GunBenchCategory implements IRecipeCategory<GunBenchRecipe> {
                         .addIngredients(ingredients.get(i));
             }
         }
+
+        // Add blueprint slot
+        Ingredient blueprint = recipe.getBlueprint();
+        if (!blueprint.isEmpty()) {
+            builder.addSlot(RecipeIngredientRole.INPUT, slotX[10] + slotOffsetX, slotY[10] + slotOffsetY)
+                    .addIngredients(blueprint);
+        }
+
         builder.addSlot(RecipeIngredientRole.OUTPUT, 140 + slotOffsetX, 44 + slotOffsetY)
                 .addItemStack(recipe.getResultItem(null));
     }

@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "tag": "minecraft:wool"
+    },
+    "Q": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "  Q",
+    " # ",
+    "Q  "
+  ],
+  "result": {
+    "item": "scguns:silencer"
+  }
+}

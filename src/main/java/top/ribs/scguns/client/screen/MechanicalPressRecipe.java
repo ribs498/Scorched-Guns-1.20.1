@@ -54,7 +54,6 @@ public class MechanicalPressRecipe implements Recipe<SimpleContainer> {
                         break;
                     }
                 }
-                // If the item is not part of the required ingredients, it acts as a placeholder
                 if (!matched) {
                     continue;
                 }
@@ -82,7 +81,6 @@ public class MechanicalPressRecipe implements Recipe<SimpleContainer> {
     public int getProcessingTime() {
         return processingTime;
     }
-
     @Override
     public ResourceLocation getId() {
         return id;

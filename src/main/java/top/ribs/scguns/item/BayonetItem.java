@@ -16,22 +16,30 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import top.ribs.scguns.enchantment.EnchantmentTypes;
+import top.ribs.scguns.interfaces.IGunModifier;
 import top.ribs.scguns.item.attachment.impl.UnderBarrel;
 
 public class BayonetItem extends UnderBarrelItem {
     private final float attackDamage;
     private final float attackSpeed;
+    private final IGunModifier modifier;
 
     public BayonetItem(UnderBarrel underBarrel, Properties properties, float attackDamage, float attackSpeed) {
         super(underBarrel, properties);
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
+        this.modifier = underBarrel.getModifier(); // Assuming UnderBarrel has a getModifier method
     }
 
     public BayonetItem(UnderBarrel underBarrel, Properties properties, boolean colored, float attackDamage, float attackSpeed) {
         super(underBarrel, properties, colored);
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
+        this.modifier = underBarrel.getModifier(); // Assuming UnderBarrel has a getModifier method
+    }
+
+    public float getAdditionalDamage() {
+        return this.modifier.additionalDamage();
     }
 
     @Override
@@ -86,7 +94,6 @@ public class BayonetItem extends UnderBarrelItem {
         return super.getDefaultAttributeModifiers(equipmentSlot);
     }
 
-
     public float getDamage() {
         return this.attackDamage;
     }
@@ -101,4 +108,5 @@ public class BayonetItem extends UnderBarrelItem {
         return block.is(Blocks.COBWEB);
     }
 }
+
 

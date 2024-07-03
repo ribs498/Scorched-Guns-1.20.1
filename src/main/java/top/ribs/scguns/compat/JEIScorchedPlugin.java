@@ -2,6 +2,7 @@ package top.ribs.scguns.compat;
 
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.JeiPlugin;
+import mezz.jei.api.constants.VanillaTypes;
 import mezz.jei.api.helpers.IGuiHelper;
 import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.registration.*;
@@ -15,6 +16,7 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.client.screen.*;
 import top.ribs.scguns.init.ModBlocks;
+import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
@@ -35,10 +37,22 @@ public class JEIScorchedPlugin implements IModPlugin {
         registration.addRecipeCategories(new MaceratorCategory(guiHelper));
         registration.addRecipeCategories(new MechanicalPressCategory(guiHelper));
     }
-
+    public static MutableComponent getTranslation(String key, Object... args) {
+        return Component.translatable("scguns." + key, args);
+    }
     @Override
     public void registerRecipes(IRecipeRegistration registration) {
+        assert Minecraft.getInstance().level != null;
         RecipeManager recipeManager = Minecraft.getInstance().level.getRecipeManager();
+        registration.addIngredientInfo(new ItemStack(ModItems.REPAIR_KIT.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.repair_kit"));
+        registration.addIngredientInfo(new ItemStack(ModItems.COPPER_BLUEPRINT.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.copper_blueprint"));
+        registration.addIngredientInfo(new ItemStack(ModItems.IRON_BLUEPRINT.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.iron_blueprint"));
+
+
+
+
+        registration.addIngredientInfo(new ItemStack(ModItems.BLASPHEMY.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.blasphemy"));
+
         List<GunBenchRecipe> gunBenchRecipes = recipeManager.getAllRecipesFor(GunBenchRecipe.Type.INSTANCE);
         List<MaceratorRecipe> maceratorRecipes = recipeManager.getAllRecipesFor(MaceratorRecipe.Type.INSTANCE);
         List<MechanicalPressRecipe> mechanicalPressRecipes = recipeManager.getAllRecipesFor(MechanicalPressRecipe.Type.INSTANCE);

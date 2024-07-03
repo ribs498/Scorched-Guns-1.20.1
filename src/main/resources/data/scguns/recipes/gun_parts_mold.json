@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "Q": {
+      "item": "scguns:blank_mold"
+    },
+    "#": {
+      "item": "minecraft:copper_ingot"
+    },
+    "Z": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "   ",
+    "#QZ",
+    "   "
+  ],
+  "result": {
+    "item": "scguns:gun_parts_mold"
+  }
+}

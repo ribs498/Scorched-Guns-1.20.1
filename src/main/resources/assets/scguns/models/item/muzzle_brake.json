@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"2": "scguns:item/steyr_barrels",
-		"particle": "scguns:item/steyr_barrels"
+		"2": "scguns:item/greaser_smg_barrels",
+		"particle": "scguns:item/greaser_smg_barrels"
 	},
 	"elements": [
 		{

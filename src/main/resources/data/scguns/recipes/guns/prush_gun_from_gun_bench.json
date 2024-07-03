@@ -1,0 +1,36 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:prush_gun",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:diamond_steel_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "scguns:rapid_firing_unit"
+    },
+    "gun_internal_2": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "gun_top_internal_1": {
+      "item": "scguns:diamond_steel_ingot"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:diamond_steel_gun_frame"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_grip": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_barrel_1": {
+      "tag": "minecraft:planks"
+    },
+    "gun_magazine": {
+      "item": "scguns:gun_magazine"
+    }
+  }
+}

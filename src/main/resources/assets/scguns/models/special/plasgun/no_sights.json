@@ -1,0 +1,73 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"4": "scguns:item/plasgun",
+		"particle": "scguns:item/plasgun"
+	},
+	"elements": [
+		{
+			"from": [7.24, 5.61414, 9.46021],
+			"to": [8.76, 6.11414, 11.46021],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.98, 4.11414, 12.08521]},
+			"faces": {
+				"north": {"uv": [5, 9.75, 5.375, 9.875], "texture": "#4"},
+				"east": {"uv": [2.75, 9.5, 3.25, 9.625], "texture": "#4"},
+				"south": {"uv": [9.75, 5, 10.125, 5.125], "texture": "#4"},
+				"west": {"uv": [9.5, 2.75, 10, 2.875], "texture": "#4"},
+				"up": {"uv": [8.375, 2.25, 8, 1.75], "texture": "#4"},
+				"down": {"uv": [8.375, 2.25, 8, 2.75], "texture": "#4"}
+			}
+		},
+		{
+			"from": [7.365, 5.36414, 9.96021],
+			"to": [8.635, 5.61414, 10.46021],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.605, 3.86414, 14.58521]},
+			"faces": {
+				"north": {"uv": [9.75, 5.25, 10.125, 5.375], "texture": "#4"},
+				"east": {"uv": [10.25, 0.75, 10.375, 0.875], "texture": "#4"},
+				"south": {"uv": [9.75, 5.5, 10.125, 5.625], "texture": "#4"},
+				"west": {"uv": [1, 10.25, 1.125, 10.375], "texture": "#4"},
+				"up": {"uv": [6.125, 9.875, 5.75, 9.75], "texture": "#4"},
+				"down": {"uv": [10.125, 5.75, 9.75, 5.875], "texture": "#4"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6, -6],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6, -6],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"firstperson_righthand": {
+			"translation": [-4.5, 9, -1]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4.5, 9, -0.25]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1.25, 4.5, 0]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [1.5, 8.5, -0.75],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "NoSights",
+			"origin": [7.605, 3.86414, 12.08521],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
+}

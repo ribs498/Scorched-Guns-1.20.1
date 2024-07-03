@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "scguns:blank_mold"
+    },
+    "#": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "   ",
+    "#Q#",
+    "   "
+  ],
+  "result": {
+    "item": "scguns:medium_casing_mold"
+  }
+}

@@ -27,7 +27,6 @@ public class BearPackShellProjectileEntity extends ProjectileEntity {
             for(int i = 0; i < 5; i++) {
                 this.level().addParticle(ParticleTypes.FLAME, true, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             }
-
         }
     }
 

@@ -25,23 +25,27 @@ public class DefenderPistolModel implements IOverrideModel {
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
 
         //Renders the static parts of the model.
-        RenderUtil.renderModel(SpecialModels.IRON_DEFENDER_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
+        RenderUtil.renderModel(SpecialModels.DEFENDER_PISTOL_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
-                RenderUtil.renderModel(SpecialModels.IRON_DEFENDER_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+                RenderUtil.renderModel(SpecialModels.DEFENDER_PISTOL_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
-                RenderUtil.renderModel(SpecialModels.IRON_DEFENDER_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
+                RenderUtil.renderModel(SpecialModels.DEFENDER_PISTOL_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
-                RenderUtil.renderModel(SpecialModels.IRON_DEFENDER_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+                RenderUtil.renderModel(SpecialModels.DEFENDER_PISTOL_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
         }
         if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.MAGAZINE)))
         {
             if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.EXTENDED_MAG.get())
-                RenderUtil.renderModel(SpecialModels.IRON_DEFENDER_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+                RenderUtil.renderModel(SpecialModels.DEFENDER_PISTOL_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.SPEED_MAG.get())
+                RenderUtil.renderModel(SpecialModels.DEFENDER_PISTOL_STANDARD_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.PLUS_P_MAG.get())
+                RenderUtil.renderModel(SpecialModels.DEFENDER_PISTOL_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
 
         }
         else
-            RenderUtil.renderModel(SpecialModels.IRON_DEFENDER_STANDARD_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+            RenderUtil.renderModel(SpecialModels.DEFENDER_PISTOL_STANDARD_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
 
         if (entity.equals(Minecraft.getInstance().player)) {
 
@@ -61,7 +65,7 @@ public class DefenderPistolModel implements IOverrideModel {
             matrixStack.translate(0, 0, cooldown / 8);
             matrixStack.translate(0, 5.8 * 0.0625, 0);
             //Renders the moving part of the gun.
-            RenderUtil.renderModel(SpecialModels.IRON_DEFENDER_RECEIVER.getModel(), stack, matrixStack, buffer, light, overlay);
+            RenderUtil.renderModel(SpecialModels.DEFENDER_PISTOL_RECEIVER.getModel(), stack, matrixStack, buffer, light, overlay);
             //Always pop
             matrixStack.popPose();
         }

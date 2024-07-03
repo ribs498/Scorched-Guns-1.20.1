@@ -59,6 +59,8 @@ public class CombatShotgunModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.COMBAT_SHOTGUN_GRIP_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.IRON_BAYONET.get())
                 RenderUtil.renderModel(SpecialModels.COMBAT_SHOTGUN_IRON_BAYONET.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.ANTHRALITE_BAYONET.get())
+                RenderUtil.renderModel(SpecialModels.COMBAT_SHOTGUN_ANTHRALITE_BAYONET.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.DIAMOND_BAYONET.get())
                 RenderUtil.renderModel(SpecialModels.COMBAT_SHOTGUN_DIAMOND_BAYONET.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.NETHERITE_BAYONET.get())
@@ -68,7 +70,10 @@ public class CombatShotgunModel implements IOverrideModel {
         {
             if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.EXTENDED_MAG.get())
                 RenderUtil.renderModel(SpecialModels.COMBAT_SHOTGUN_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
-
+            if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.SPEED_MAG.get())
+                RenderUtil.renderModel(SpecialModels.COMBAT_SHOTGUN_SPEED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.PLUS_P_MAG.get())
+                RenderUtil.renderModel(SpecialModels.COMBAT_SHOTGUN_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
         }
         else
             RenderUtil.renderModel(SpecialModels.COMBAT_SHOTGUN_STANDARD_MAG.getModel(), stack, matrixStack, buffer, light, overlay);

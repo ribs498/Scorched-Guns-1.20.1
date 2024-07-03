@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "X": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "QQ ",
+    "XX "
+  ],
+  "result": {
+    "item": "scguns:gun_bench"
+  }
+}

@@ -7,6 +7,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
@@ -42,6 +43,11 @@ public class ThrowableStunGrenadeEntity extends ThrowableGrenadeEntity
         super(entityType, world);
     }
 
+    public ThrowableStunGrenadeEntity(EntityType<? extends ThrowableGrenadeEntity> entityType, Level world, LivingEntity player)
+    {
+        super(entityType, world, player);
+        this.setItem(new ItemStack(ModItems.STUN_GRENADE.get()));
+    }
 
     public ThrowableStunGrenadeEntity(Level world, LivingEntity player, int maxCookTime)
     {
@@ -49,6 +55,7 @@ public class ThrowableStunGrenadeEntity extends ThrowableGrenadeEntity
         this.setItem(new ItemStack(ModItems.STUN_GRENADE.get()));
         this.setMaxLife(maxCookTime);
         this.setShouldBounce(false);
+
     }
 
     @SubscribeEvent
@@ -120,7 +127,7 @@ public class ThrowableStunGrenadeEntity extends ThrowableGrenadeEntity
                 int durationBlinded = (int) Math.round(criteria.durationMax.get() - (criteria.durationMax.get() - criteria.durationMin.get()) * (distance / criteria.radius.get()));
 
                 // Duration further attenuated by angle
-                durationBlinded *= (int) (1 - (angle * (1 - criteria.angleAttenuationMax.get())) / angleMax);
+                durationBlinded *= 1 - (angle * (1 - criteria.angleAttenuationMax.get())) / angleMax;
 
                 entity.addEffect(new MobEffectInstance(effect, durationBlinded, 0, false, false));
 

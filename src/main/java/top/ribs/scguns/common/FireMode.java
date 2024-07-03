@@ -21,21 +21,11 @@ public class FireMode
      */
     public static final FireMode AUTOMATIC = new FireMode(new ResourceLocation(Reference.MOD_ID, "automatic"));
 
-    /**
-     * A fire mode that shoots in bursts
-     */
-    public static final FireMode BURST = new FireMode(new ResourceLocation(Reference.MOD_ID, "burst"));
 
     /**
      * A fire mode that shoots once per cooldown
      */
     public static final FireMode PULSE = new FireMode(new ResourceLocation(Reference.MOD_ID, "pulse"));
-    /**
-     * A fire mode that sprays
-     */
-
-    public static final FireMode SPRAY = new FireMode(new ResourceLocation(Reference.MOD_ID, "spray"));
-
 
 
     /**
@@ -48,9 +38,7 @@ public class FireMode
         /* Registers the standard fire modes when the class is loaded */
         registerType(SEMI_AUTO);
         registerType(AUTOMATIC);
-        registerType(BURST);
         registerType(PULSE);
-        registerType(SPRAY);
     }
 
     /**

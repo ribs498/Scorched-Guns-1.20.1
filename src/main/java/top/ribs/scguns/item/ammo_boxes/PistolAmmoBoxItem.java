@@ -29,33 +29,4 @@ public class PistolAmmoBoxItem extends AmmoBoxItem {
         return PISTOL_BAR_COLOR;
     }
 
-//    @Override
-//    public InteractionResult useOn(UseOnContext context) {
-//        Level level = context.getLevel();
-//        BlockPos pos = context.getClickedPos().relative(context.getClickedFace());
-//        ItemStack stack = context.getItemInHand();
-//        Player player = context.getPlayer();
-//
-//        if (player != null && !player.mayUseItemAt(pos, context.getClickedFace(), stack)) {
-//            return InteractionResult.FAIL;
-//        }
-//
-//        BlockState state = ModBlocks.PISTOL_AMMO_BOX.get().defaultBlockState();
-//        level.setBlock(pos, state, 3);
-//
-//        BlockEntity blockEntity = level.getBlockEntity(pos);
-//        if (blockEntity instanceof PistolAmmoBoxBlockEntity) {
-//            CompoundTag tag = stack.getTag();
-//            if (tag != null) {
-//                ((PistolAmmoBoxBlockEntity) blockEntity).load(tag);
-//            }
-//            level.updateNeighbourForOutputSignal(pos, state.getBlock());
-//        }
-//
-//        if (player == null || !player.getAbilities().instabuild) {
-//            stack.shrink(1);
-//        }
-//
-//        return InteractionResult.SUCCESS;
-//    }
 }

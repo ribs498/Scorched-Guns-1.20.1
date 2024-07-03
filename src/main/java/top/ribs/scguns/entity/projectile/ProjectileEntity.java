@@ -14,6 +14,8 @@ import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -895,31 +897,61 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         explosion.finalizeExplosion(true);
 
     }
-    public static void createChokeExplosion(Entity entity, float radius)
+    public static void createFireHit(Entity entity, float radius)
     {
         Level world = entity.level();
         if(world.isClientSide())
             return;
 
+
+    }
+
+
+
+
+    public static void createChokeExplosion(Entity entity, float radius) {
+        Level world = entity.level();
+        if (world.isClientSide()) {
+            return;
+        }
+
         BlockPos centerPos = entity.blockPosition();
         int radiusInt = (int) Math.ceil(radius);
         int radiusSquared = radiusInt * radiusInt;
-
-        for (int x = -radiusInt; x <= radiusInt; x++)
-        {
-            for (int y = -radiusInt; y <= radiusInt; y++)
-            {
-                for (int z = -radiusInt; z <= radiusInt; z++)
-                {
+        for (int x = -radiusInt; x <= radiusInt; x++) {
+            for (int y = -radiusInt; y <= radiusInt; y++) {
+                for (int z = -radiusInt; z <= radiusInt; z++) {
                     BlockPos pos = centerPos.offset(x, y, z);
-                    if (centerPos.distSqr(pos) <= radiusSquared)
-                    {
-                        if (world.getBlockState(pos).getBlock() == Blocks.FIRE)
-                        {
+                    if (centerPos.distSqr(pos) <= radiusSquared) {
+                        if (world.getBlockState(pos).getBlock() == Blocks.FIRE) {
                             world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+                            world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F, false);
                         }
                     }
                 }
+            }
+        }
+        AABB effectArea = new AABB(centerPos).inflate(radius);
+        List<LivingEntity> affectedEntities = world.getEntitiesOfClass(LivingEntity.class, effectArea);
+        for (LivingEntity affectedEntity : affectedEntities) {
+            if (affectedEntity.isOnFire()) {
+                affectedEntity.clearFire();
+            }
+        }
+        if (!world.isClientSide()) {
+            ServerLevel serverLevel = (ServerLevel) world;
+            for (int i = 0; i < 200; i++) {
+                double offsetX = (serverLevel.random.nextDouble() - 0.5) * 2.0 * radius;
+                double offsetY = (serverLevel.random.nextDouble() - 0.5) * 0.2;
+                double offsetZ = (serverLevel.random.nextDouble() - 0.5) * 2.0 * radius;
+                double posX = centerPos.getX() + offsetX;
+                double posY = centerPos.getY() + offsetY;
+                double posZ = centerPos.getZ() + offsetZ;
+                double speedX = (serverLevel.random.nextDouble() - 0.5) * 0.1;
+                double speedY = (serverLevel.random.nextDouble() - 0.5) * 0.1;
+                double speedZ = (serverLevel.random.nextDouble() - 0.5) * 0.1;
+                serverLevel.sendParticles(ParticleTypes.WHITE_ASH, posX, posY, posZ, 1, speedX, speedY, speedZ, 0.1);
+                serverLevel.sendParticles(ParticleTypes.SNOWFLAKE, posX, posY, posZ, 1, speedX, speedY, speedZ, 0.1);
             }
         }
     }

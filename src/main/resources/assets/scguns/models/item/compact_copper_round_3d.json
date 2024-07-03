@@ -1,0 +1,28 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [8, 8],
+	"textures": {
+		"1": "scguns:item/compact_copper_round_3d",
+		"particle": "scguns:item/compact_copper_round_3d"
+	},
+	"elements": [
+		{
+			"from": [7.25, 0, 7.25],
+			"to": [8.75, 3, 8.75],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6.75, 1, 6.75]},
+			"faces": {
+				"north": {"uv": [0, 0, 3, 6], "texture": "#1"},
+				"east": {"uv": [4, 0, 7, 6], "texture": "#1"},
+				"south": {"uv": [0, 6, 3, 12], "texture": "#1"},
+				"west": {"uv": [4, 6, 7, 12], "texture": "#1"},
+				"up": {"uv": [11, 3, 8, 0], "texture": "#1"},
+				"down": {"uv": [11, 4, 8, 7], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"ground": {
+			"translation": [0, 4.5, 0]
+		}
+	}
+}

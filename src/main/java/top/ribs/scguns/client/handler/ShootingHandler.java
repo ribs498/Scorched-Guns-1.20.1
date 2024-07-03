@@ -20,7 +20,6 @@ import top.ribs.scguns.compat.PlayerReviveHelper;
 import top.ribs.scguns.event.GunFireEvent;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.network.PacketHandler;
-import top.ribs.scguns.network.message.C2SMessageBurst;
 import top.ribs.scguns.network.message.C2SMessagePreFireSound;
 import top.ribs.scguns.network.message.C2SMessageShoot;
 import top.ribs.scguns.network.message.C2SMessageShooting;
@@ -94,7 +93,7 @@ public class ShootingHandler
                     if(player.getOffhandItem().getItem() == Items.SHIELD)
                     {
                         Gun modifiedGun = gunItem.getModifiedGun(heldItem);
-                        if(modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED)
+                        if(modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED || modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED_2 ||modifiedGun.getGeneral().getGripType() == GripType.TWO_HANDED_ONE_HANDED)
                         {
                             return;
                         }
@@ -111,7 +110,6 @@ public class ShootingHandler
             }
         }
     }
-
     @SubscribeEvent
     public void onHandleShooting(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.START)
@@ -133,13 +131,8 @@ public class ShootingHandler
                     if (!this.shooting) {
                         this.shooting = true;
                         Gun gun = gunItem.getModifiedGun(heldItem);
-                        if (gun.getGeneral().getFireMode() == FireMode.PULSE) {
-                            ChargeHandler.setChargeTime(0);
-                        }
-                        if (gun.getGeneral().getFireMode() == FireMode.BURST) {
-                            PacketHandler.getPlayChannel().sendToServer(new C2SMessageBurst());
-                        }
                         PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(true));
+
                     }
                 } else if (this.shooting) {
                     this.shooting = false;
@@ -155,7 +148,6 @@ public class ShootingHandler
             this.shooting = false;
         }
     }
-
 
     // Props to Moon-404 for the double-tap fix!
     @SubscribeEvent

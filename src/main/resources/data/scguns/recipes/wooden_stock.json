@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "W": {
+      "tag": "minecraft:planks"
+    },
+    "R": {
+      "item": "scguns:anthralite_ingot"
+    }
+  },
+  "pattern": [
+    "   ",
+    "WWR",
+    "WW "
+  ],
+  "result": {
+    "item": "scguns:wooden_stock"
+  }
+}

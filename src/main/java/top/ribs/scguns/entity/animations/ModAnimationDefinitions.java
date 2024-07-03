@@ -128,6 +128,7 @@ public class ModAnimationDefinitions {
 
 
     ///SWARM
+
     public static final AnimationDefinition SWARM_IDLE = AnimationDefinition.Builder.withLength(1f).looping()
             .addAnimation("Fly",
                     new AnimationChannel(AnimationChannel.Targets.POSITION,
@@ -171,7 +172,7 @@ public class ModAnimationDefinitions {
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(0.20834334f, KeyframeAnimations.posVec(0f, -2.67f, 1.33f),
                                     AnimationChannel.Interpolations.CATMULLROM),
-                            new Keyframe(0.4167667f, KeyframeAnimations.posVec(0f, -4f, -4f),
+                            new Keyframe(0.4167667f, KeyframeAnimations.posVec(16f, -1f, -4f),
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(0.75f, KeyframeAnimations.posVec(0f, 1f, -4f),
                                     AnimationChannel.Interpolations.CATMULLROM),
@@ -182,6 +183,8 @@ public class ModAnimationDefinitions {
                             new Keyframe(0f, KeyframeAnimations.posVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(0.2916767f, KeyframeAnimations.posVec(-1.91f, -5.91f, 0f),
+                                    AnimationChannel.Interpolations.CATMULLROM),
+                            new Keyframe(0.375f, KeyframeAnimations.posVec(-4.58f, -5.18f, -11.48f),
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(0.4583433f, KeyframeAnimations.posVec(-3f, -3f, 3f),
                                     AnimationChannel.Interpolations.CATMULLROM),
@@ -194,6 +197,8 @@ public class ModAnimationDefinitions {
                             new Keyframe(0f, KeyframeAnimations.posVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(0.2916767f, KeyframeAnimations.posVec(0f, 2.13f, -3.73f),
+                                    AnimationChannel.Interpolations.CATMULLROM),
+                            new Keyframe(0.375f, KeyframeAnimations.posVec(-8f, 0.56f, -11.43f),
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(0.5416766f, KeyframeAnimations.posVec(0f, -4f, -8f),
                                     AnimationChannel.Interpolations.CATMULLROM),
@@ -231,7 +236,7 @@ public class ModAnimationDefinitions {
                     new AnimationChannel(AnimationChannel.Targets.POSITION,
                             new Keyframe(0f, KeyframeAnimations.posVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM),
-                            new Keyframe(0.20834334f, KeyframeAnimations.posVec(1.67f, -5.67f, 0f),
+                            new Keyframe(0.16766666f, KeyframeAnimations.posVec(1.28f, -4.88f, 7.05f),
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(0.375f, KeyframeAnimations.posVec(4f, -4f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM),
@@ -243,11 +248,11 @@ public class ModAnimationDefinitions {
                                     AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("Fly10",
                     new AnimationChannel(AnimationChannel.Targets.POSITION,
-                            new Keyframe(0f, KeyframeAnimations.posVec(0f, 0f, 0f),
+                            new Keyframe(0f, KeyframeAnimations.posVec(-5f, 0f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(0.16766666f, KeyframeAnimations.posVec(-2.29f, -6.88f, 3f),
                                     AnimationChannel.Interpolations.CATMULLROM),
-                            new Keyframe(0.3433333f, KeyframeAnimations.posVec(-3f, -9f, 0f),
+                            new Keyframe(0.3433333f, KeyframeAnimations.posVec(4f, -9f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(0.7916766f, KeyframeAnimations.posVec(-0.94f, -2.81f, -2f),
                                     AnimationChannel.Interpolations.CATMULLROM),
@@ -259,7 +264,7 @@ public class ModAnimationDefinitions {
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(0.25f, KeyframeAnimations.posVec(4f, -4.5f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM),
-                            new Keyframe(0.5f, KeyframeAnimations.posVec(8f, -3f, 0f),
+                            new Keyframe(0.5f, KeyframeAnimations.posVec(8f, -11f, -9f),
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(0.75f, KeyframeAnimations.posVec(4f, 2.5f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM),
@@ -274,6 +279,8 @@ public class ModAnimationDefinitions {
                             new Keyframe(0.4583433f, KeyframeAnimations.posVec(7f, -6f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(0.6766666f, KeyframeAnimations.posVec(4.31f, -3.69f, 7f),
+                                    AnimationChannel.Interpolations.CATMULLROM),
+                            new Keyframe(0.75f, KeyframeAnimations.posVec(12.23f, -4.63f, -3.03f),
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(1f, KeyframeAnimations.posVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM))).build();

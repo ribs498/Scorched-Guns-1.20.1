@@ -1,0 +1,12 @@
+{
+  "type": "forge:add_spawns",
+  "biomes": {
+    "type": "forge:any"
+  },
+  "spawners": {
+    "type": "scguns:supply_scamp",
+    "weight": 5,
+    "minCount": 1,
+    "maxCount": 2
+  }
+}

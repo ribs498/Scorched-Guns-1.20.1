@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "X": {
+      "item": "minecraft:iron_ingot"
+    },
+    "Q": {
+      "item": "minecraft:iron_nugget"
+    },
+    "M": {
+      "item": "scguns:anthralite_nugget"
+    }
+  },
+  "pattern": [
+    "  Q",
+    " #M",
+    "XM "
+  ],
+  "result": {
+    "item": "scguns:rapid_firing_unit"
+  }
+}

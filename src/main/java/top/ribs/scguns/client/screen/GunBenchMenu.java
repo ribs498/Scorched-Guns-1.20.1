@@ -1,5 +1,6 @@
 package top.ribs.scguns.client.screen;
 
+import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -9,6 +10,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import org.jetbrains.annotations.NotNull;
+import top.ribs.scguns.item.BlueprintItem;
 
 import java.util.Optional;
 
@@ -16,48 +20,51 @@ public class GunBenchMenu extends AbstractContainerMenu {
     private final Container container;
     private final ContainerLevelAccess containerAccess;
 
-    public static final int SLOT_GRIP = 0;
-    public static final int SLOT_MAGAZINE = 1;
-    public static final int SLOT_BARREL_1 = 2;
-    public static final int SLOT_BARREL_2 = 3;
+    public static final int SLOT_GRIP = 8;
+    public static final int SLOT_MAGAZINE = 9;
+    public static final int SLOT_BARREL_1 = 6;
+    public static final int SLOT_BARREL_2 = 7;
     public static final int SLOT_INTERNAL_1 = 4;
     public static final int SLOT_INTERNAL_2 = 5;
-    public static final int SLOT_TOP_INTERNAL_1 = 6;
-    public static final int SLOT_TOP_INTERNAL_2 = 7;
-    public static final int SLOT_TOP_BARREL_1 = 8;
-    public static final int SLOT_TOP_BARREL_2 = 9;
+    public static final int SLOT_TOP_INTERNAL_1 = 0;
+    public static final int SLOT_TOP_INTERNAL_2 = 1;
+    public static final int SLOT_TOP_BARREL_1 = 2;
+    public static final int SLOT_TOP_BARREL_2 = 3;
     public static final int SLOT_OUTPUT = 10;
+    public static final int SLOT_BLUEPRINT = 11;
 
     public GunBenchMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
-        this(id, playerInventory, new SimpleContainer(11), ContainerLevelAccess.NULL);
+        this(id, playerInventory, new SimpleContainer(12), ContainerLevelAccess.NULL);
     }
 
     public GunBenchMenu(int id, Inventory playerInventory, ContainerLevelAccess containerAccess) {
-        this(id, playerInventory, new SimpleContainer(11), containerAccess);
+        this(id, playerInventory, new SimpleContainer(12), containerAccess);
     }
 
     public GunBenchMenu(int id, Inventory playerInventory, Container container, ContainerLevelAccess containerAccess) {
         super(ModMenuTypes.GUN_BENCH.get(), id);
-        checkContainerSize(container, 11);
+        checkContainerSize(container, 12);
         this.container = container;
         this.containerAccess = containerAccess;
         container.startOpen(playerInventory.player);
 
-        // Add top custom slots
-        this.addSlot(new Slot(container, SLOT_TOP_INTERNAL_1, 26, 17)); // Top-left
-        this.addSlot(new Slot(container, SLOT_TOP_INTERNAL_2, 44, 17)); // Top-middle-left
-        this.addSlot(new Slot(container, SLOT_TOP_BARREL_1, 62, 17)); // Top-middle-right
-        this.addSlot(new Slot(container, SLOT_TOP_BARREL_2, 80, 17)); // Top-right
-
-        // Add existing custom slots
-        this.addSlot(new Slot(container, SLOT_INTERNAL_1, 26, 35)); // Middle-left
-        this.addSlot(new Slot(container, SLOT_INTERNAL_2, 44, 35)); // Middle-middle-left
-        this.addSlot(new Slot(container, SLOT_BARREL_1, 62, 35)); // Middle-middle-right
-        this.addSlot(new Slot(container, SLOT_BARREL_2, 80, 35)); // Middle-right
-        this.addSlot(new Slot(container, SLOT_GRIP, 26, 53)); // Bottom-left
-        this.addSlot(new Slot(container, SLOT_MAGAZINE, 62, 53)); // Bottom-right
-
-        // Add output slot
+        // Add custom slots with correct indexes
+        this.addSlot(new Slot(container, SLOT_TOP_INTERNAL_1, 26, 17));
+        this.addSlot(new Slot(container, SLOT_TOP_INTERNAL_2, 44, 17));
+        this.addSlot(new Slot(container, SLOT_TOP_BARREL_1, 62, 17));
+        this.addSlot(new Slot(container, SLOT_TOP_BARREL_2, 80, 17));
+        this.addSlot(new Slot(container, SLOT_INTERNAL_1, 26, 35));
+        this.addSlot(new Slot(container, SLOT_INTERNAL_2, 44, 35));
+        this.addSlot(new Slot(container, SLOT_BARREL_1, 62, 35));
+        this.addSlot(new Slot(container, SLOT_BARREL_2, 80, 35));
+        this.addSlot(new Slot(container, SLOT_GRIP, 26, 53));
+        this.addSlot(new Slot(container, SLOT_MAGAZINE, 62, 53));
+        this.addSlot(new Slot(container, SLOT_BLUEPRINT, 116, 17) {
+            @Override
+            public boolean mayPlace(@NotNull ItemStack stack) {
+                return stack.getItem() instanceof BlueprintItem;
+            }
+        });
         this.addSlot(new Slot(container, SLOT_OUTPUT, 140, 44) {
             @Override
             public boolean mayPlace(ItemStack stack) {
@@ -90,8 +97,8 @@ public class GunBenchMenu extends AbstractContainerMenu {
     public void slotsChanged(Container container) {
         containerAccess.execute((level, pos) -> {
             if (!level.isClientSide) {
-                SimpleContainer craftingContainer = new SimpleContainer(10);
-                for (int i = 0; i < 10; i++) {
+                SimpleContainer craftingContainer = new SimpleContainer(12);
+                for (int i = 0; i < 12; i++) {
                     craftingContainer.setItem(i, container.getItem(i));
                 }
 
@@ -108,13 +115,30 @@ public class GunBenchMenu extends AbstractContainerMenu {
     }
 
     private void consumeIngredients() {
-        for (int i = 0; i < 10; i++) {
-            ItemStack stackInSlot = container.getItem(i);
-            if (!stackInSlot.isEmpty()) {
-                stackInSlot.shrink(1);
-                container.setItem(i, stackInSlot);
+        containerAccess.execute((level, pos) -> {
+            if (!level.isClientSide) {
+                SimpleContainer craftingContainer = new SimpleContainer(12);
+                for (int i = 0; i < 12; i++) {
+                    craftingContainer.setItem(i, container.getItem(i));
+                }
+
+                Optional<GunBenchRecipe> recipeOptional = level.getRecipeManager().getRecipeFor(GunBenchRecipe.Type.INSTANCE, craftingContainer, level);
+                if (recipeOptional.isPresent()) {
+                    GunBenchRecipe recipe = recipeOptional.get();
+                    NonNullList<Ingredient> ingredients = recipe.getIngredients();
+
+                    for (int i = 0; i < ingredients.size(); i++) {
+                        Ingredient requiredIngredient = ingredients.get(i);
+                        ItemStack stackInSlot = container.getItem(i);
+
+                        if (!requiredIngredient.isEmpty() && !stackInSlot.isEmpty()) {
+                            stackInSlot.shrink(1);
+                            container.setItem(i, stackInSlot);
+                        }
+                    }
+                }
             }
-        }
+        });
     }
 
     @Override

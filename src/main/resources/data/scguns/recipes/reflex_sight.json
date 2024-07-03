@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "scguns:anthralite_nugget"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "X": {
+      "tag": "forge:glass_panes"
+    }
+  },
+  "pattern": [
+    "   ",
+    "XR ",
+    "QQ "
+  ],
+  "result": {
+    "item": "scguns:reflex_sight"
+  }
+}

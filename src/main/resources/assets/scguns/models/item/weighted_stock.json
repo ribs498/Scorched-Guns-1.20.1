@@ -1,7 +1,7 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "scguns:item/steyr_stocks"
+		"1": "scguns:item/greaser_smg_stocks"
 	},
 	"elements": [
 		{

@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:iron_nugget"
+    }
+  },
+  "pattern": [
+    "RRR",
+    "Q Q",
+    "QQQ"
+  ],
+  "result": {
+    "item": "scguns:rocket_ammo_box"
+  }
+}

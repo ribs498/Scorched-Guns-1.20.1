@@ -1,8 +1,24 @@
 {
   "variants": {
-    "": {
-      "model": "scguns:block/pistol_ammo_box"
-    }
+    "facing=north,ammo_level=0": { "model": "scguns:item/pistol_ammo_box_0" },
+    "facing=east,ammo_level=0":  { "model": "scguns:item/pistol_ammo_box_0", "y": 90 },
+    "facing=south,ammo_level=0": { "model": "scguns:item/pistol_ammo_box_0", "y": 180 },
+    "facing=west,ammo_level=0":  { "model": "scguns:item/pistol_ammo_box_0", "y": 270 },
+
+    "facing=north,ammo_level=1": { "model": "scguns:item/pistol_ammo_box_1" },
+    "facing=east,ammo_level=1":  { "model": "scguns:item/pistol_ammo_box_1", "y": 90 },
+    "facing=south,ammo_level=1": { "model": "scguns:item/pistol_ammo_box_1", "y": 180 },
+    "facing=west,ammo_level=1":  { "model": "scguns:item/pistol_ammo_box_1", "y": 270 },
+
+    "facing=north,ammo_level=2": { "model": "scguns:item/pistol_ammo_box_2" },
+    "facing=east,ammo_level=2":  { "model": "scguns:item/pistol_ammo_box_2", "y": 90 },
+    "facing=south,ammo_level=2": { "model": "scguns:item/pistol_ammo_box_2", "y": 180 },
+    "facing=west,ammo_level=2":  { "model": "scguns:item/pistol_ammo_box_2", "y": 270 },
+
+    "facing=north,ammo_level=3": { "model": "scguns:item/pistol_ammo_box_3" },
+    "facing=east,ammo_level=3":  { "model": "scguns:item/pistol_ammo_box_3", "y": 90 },
+    "facing=south,ammo_level=3": { "model": "scguns:item/pistol_ammo_box_3", "y": 180 },
+    "facing=west,ammo_level=3":  { "model": "scguns:item/pistol_ammo_box_3", "y": 270 }
   }
 }
 

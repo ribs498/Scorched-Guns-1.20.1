@@ -1,0 +1,64 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"9": "scguns:item/jackhammer"
+	},
+	"elements": [
+		{
+			"from": [7.5, 0.79277, 14.70423],
+			"to": [8.5, 4.79277, 16.70423],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 1.09348, 16.77726]},
+			"faces": {
+				"north": {"uv": [0, 7, 0.25, 8], "texture": "#9"},
+				"east": {"uv": [4.75, 2.25, 5.25, 3.25], "texture": "#9"},
+				"south": {"uv": [0.25, 7, 0.5, 8], "texture": "#9"},
+				"west": {"uv": [3.25, 5, 3.75, 6], "texture": "#9"},
+				"up": {"uv": [6, 6.75, 5.75, 6.25], "texture": "#9"},
+				"down": {"uv": [2.25, 8, 2, 8.5], "texture": "#9"}
+			}
+		},
+		{
+			"from": [7.625, 0.29277, 14.70423],
+			"to": [8.375, 0.79277, 16.70423],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [7.875, 1.09348, 16.77726]},
+			"faces": {
+				"north": {"uv": [3.25, 10, 3.5, 10.125], "texture": "#9"},
+				"east": {"uv": [7.5, 9.5, 8, 9.625], "texture": "#9"},
+				"south": {"uv": [10, 3.25, 10.25, 3.375], "texture": "#9"},
+				"west": {"uv": [9.5, 7.5, 10, 7.625], "texture": "#9"},
+				"up": {"uv": [8.75, 5.25, 8.5, 4.75], "texture": "#9"},
+				"down": {"uv": [5.25, 8.5, 5, 9], "texture": "#9"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0.25, 5.25, -6.25],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0.25, 5.25, -6.25],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"firstperson_righthand": {
+			"translation": [-3.75, 8.5, 0.25]
+		},
+		"firstperson_lefthand": {
+			"translation": [-3.75, 8.5, 0.25]
+		},
+		"ground": {
+			"translation": [0, 9.5, -1.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-2.25, 3.75, 0]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [2.75, 6.5, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	}
+}

@@ -15,6 +15,7 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.init.ModEntities;
 
@@ -23,14 +24,16 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class HiveEntity extends Monster {
-    public HiveEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
-    }
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
     private int swarmSummonCooldown = 0;
 
     static final List<SwarmEntity> summonedSwarm = new ArrayList<>();
+
+    public HiveEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
+        super(pEntityType, pLevel);
+    }
+
     public Level getEntityLevel() {
         return this.level();
     }
@@ -45,6 +48,7 @@ public class HiveEntity extends Monster {
         if (swarmSummonCooldown > 0) {
             --swarmSummonCooldown;
         }
+        summonedSwarm.removeIf(swarm -> !swarm.isAlive());
     }
     private void setupAnimationStates() {
         if (this.idleAnimationTimeout <= 0) {
@@ -62,9 +66,9 @@ public class HiveEntity extends Monster {
         } else {
             f = 0f;
         }
-
         this.walkAnimation.update(f, 0.2f);
     }
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(0, new FloatGoal(this));
@@ -74,8 +78,9 @@ public class HiveEntity extends Monster {
         this.goalSelector.addGoal(3, new RandomLookAroundGoal(this));
         this.goalSelector.addGoal(4, new HiveSummonGoal(this));
     }
+
     @Override
-    public void die(DamageSource cause) {
+    public void die(@NotNull DamageSource cause) {
         super.die(cause);
         for (SwarmEntity swarm : summonedSwarm) {
             if (swarm != null) {
@@ -84,6 +89,7 @@ public class HiveEntity extends Monster {
         }
         summonedSwarm.clear();
     }
+
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
                 .add(Attributes.MAX_HEALTH, 20D)
@@ -93,10 +99,11 @@ public class HiveEntity extends Monster {
                 .add(Attributes.ATTACK_KNOCKBACK, 0.5f)
                 .add(Attributes.ATTACK_DAMAGE, 2f);
     }
+
     @Override
-    public boolean hurt(DamageSource source, float amount) {
+    public boolean hurt(@NotNull DamageSource source, float amount) {
         boolean isHurt = super.hurt(source, amount);
-        if (isHurt && swarmSummonCooldown > 0 && canSummonSwarm()) {
+        if (isHurt && swarmSummonCooldown <= 0) {
             summonSwarm();
         }
         return isHurt;
@@ -105,6 +112,7 @@ public class HiveEntity extends Monster {
     private boolean canSummonSwarm() {
         return summonedSwarm.isEmpty() || summonedSwarm.stream().noneMatch(SwarmEntity::isActive);
     }
+
     private void summonSwarm() {
         if (canSummonSwarm()) {
             SwarmEntity swarm = ModEntities.SWARM.get().create(this.level());
@@ -117,39 +125,46 @@ public class HiveEntity extends Monster {
             }
         }
     }
+
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
         playAdditionalSound(SoundEvents.BEE_LOOP, 1.5F, getVoicePitch());
         return SoundEvents.ZOMBIE_AMBIENT;
     }
+
     @Nullable
     @Override
-    protected SoundEvent getHurtSound(DamageSource pDamageSource) {
+    protected SoundEvent getHurtSound(@NotNull DamageSource pDamageSource) {
         playAdditionalSound(SoundEvents.BEE_HURT, 1.5F, getVoicePitch());
         return SoundEvents.ZOMBIE_HURT;
     }
+
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
         playAdditionalSound(SoundEvents.BEE_DEATH, 1.5F, getVoicePitch());
         return SoundEvents.ZOMBIE_DEATH;
     }
+
     private void playAdditionalSound(SoundEvent soundEvent, float volume, float pitch) {
         if (this.level().isClientSide()) {
             this.level().playSound(null, this.blockPosition(), soundEvent, SoundSource.HOSTILE, volume, pitch);
         }
     }
+
     private void playSwarmSummonedSound() {
         if (!this.level().isClientSide()) {
             SoundEvent soundEvent = SoundEvents.BEEHIVE_EXIT;
             this.level().playSound(null, this.blockPosition(), soundEvent, SoundSource.NEUTRAL, 1.0F, 1.0F);
         }
     }
+
     @Override
     public float getVoicePitch() {
         return super.getVoicePitch() * 1.3F;
     }
+
     ///GOALS
 
     public static class HiveSummonGoal extends Goal {
@@ -159,30 +174,23 @@ public class HiveEntity extends Monster {
             this.hiveEntity = hiveEntity;
             this.setFlags(EnumSet.of(Flag.MOVE));
         }
+
         @Override
         public boolean canUse() {
-            return hiveEntity.getTarget() != null && hiveEntity.canSummonSwarm();
+            return hiveEntity.getTarget() != null && hiveEntity.swarmSummonCooldown <= 0;
         }
+
         @Override
         public void start() {
             hiveEntity.summonSwarm();
         }
+
         @Override
         public void tick() {
-            if (summonedSwarm.isEmpty() || summonedSwarm.stream().noneMatch(SwarmEntity::isActive)) {
-                summonSwarm();
-            }
-        }
-        private void summonSwarm() {
-            if (!hiveEntity.getEntityLevel().isClientSide() && hiveEntity.swarmSummonCooldown <= 0) {
-                SwarmEntity swarm = ModEntities.SWARM.get().create(hiveEntity.getEntityLevel());
-                if (swarm != null) {
-                    summonedSwarm.add(swarm);
-                    swarm.moveTo(hiveEntity.getX(), hiveEntity.getY(), hiveEntity.getZ(), hiveEntity.getYRot(), 0.0F);
-                    hiveEntity.getEntityLevel().addFreshEntity(swarm);
-                    hiveEntity.swarmSummonCooldown = 60;
-                }
+            if (hiveEntity.swarmSummonCooldown <= 0 && hiveEntity.canSummonSwarm()) {
+                hiveEntity.summonSwarm();
             }
         }
     }
 }
+

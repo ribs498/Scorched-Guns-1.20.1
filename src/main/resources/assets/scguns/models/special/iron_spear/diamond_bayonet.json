@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"7": "scguns:item/copper_rifle_bayonets",
+		"7": "scguns:item/makeshift_rifle_bayonets",
 		"particle": "scguns:item/carabine_grips"
 	},
 	"elements": [

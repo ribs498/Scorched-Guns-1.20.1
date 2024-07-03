@@ -27,7 +27,6 @@ public class ThrowableMolotovCocktailEntity extends ThrowableGrenadeEntity
     {
         super(ModEntities.THROWABLE_MOLOTOV_COCKTAIL.get(), world, entity);
         this.setShouldBounce(false);
-        this.setGravityVelocity(0.05F);
         this.setItem(new ItemStack(ModItems.MOLOTOV_COCKTAIL.get()));
         this.setMaxLife(20 * 3);
     }

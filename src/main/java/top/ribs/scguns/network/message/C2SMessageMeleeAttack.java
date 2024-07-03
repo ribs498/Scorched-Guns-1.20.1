@@ -70,8 +70,4 @@ public class C2SMessageMeleeAttack extends PlayMessage<C2SMessageMeleeAttack> {
 		});
 		context.setHandled(true);
 	}
-
-
-
-
 }

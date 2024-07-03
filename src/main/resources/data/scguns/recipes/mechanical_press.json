@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "minecraft:cobblestone"
+    },
+    "I": {
+      "item": "minecraft:furnace"
+    },
+    "M": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "QMQ",
+    "MIM",
+    "QQQ"
+  ],
+  "result": {
+    "item": "scguns:mechanical_press"
+  }
+}

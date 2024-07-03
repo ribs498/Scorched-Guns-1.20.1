@@ -40,8 +40,8 @@ public class ScGunsWeapon implements IWeapon {
             this.gunStack = stack;
             this.gun = g.getModifiedGun(stack);
         } else {
-            this.gunStack = ModItems.COPPER_PISTOL.get().getDefaultInstance();
-            this.gun = ModItems.COPPER_PISTOL.get().getGun();
+            this.gunStack = ModItems.SCRAP_SIDEARM.get().getDefaultInstance();
+            this.gun = ModItems.SCRAP_SIDEARM.get().getGun();
         }
     }
 

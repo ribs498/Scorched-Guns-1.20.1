@@ -25,4 +25,8 @@ public class UnderBarrel extends Attachment
     {
         return new UnderBarrel(modifier);
     }
+
+    public IGunModifier getModifier() {
+        return this.modifiers[0];
+    }
 }

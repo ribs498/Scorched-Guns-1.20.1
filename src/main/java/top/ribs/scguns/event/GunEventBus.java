@@ -23,6 +23,7 @@ import top.ribs.scguns.common.FireMode;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.*;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.NonUnderwaterGunItem;
 import top.ribs.scguns.item.UnderwaterFirearmItem;
 import top.ribs.scguns.item.attachment.IAttachment;
 import java.util.Objects;
@@ -39,8 +40,8 @@ public class GunEventBus {
 
         if (heldItem.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(heldItem);
-            if (!(heldItem.getItem() instanceof UnderwaterFirearmItem) && player.isUnderWater()) {
-                //event.setCanceled(true);
+            if ((heldItem.getItem() instanceof NonUnderwaterGunItem) && player.isUnderWater()) {
+                event.setCanceled(true);
             }
 
             ItemCooldowns tracker = player.getCooldowns();
@@ -229,9 +230,10 @@ public class GunEventBus {
 
         ResourceLocation compactCopperRound = ForgeRegistries.ITEMS.getKey(ModItems.COMPACT_COPPER_ROUND.get());
         ResourceLocation standardCopperRound = ForgeRegistries.ITEMS.getKey(ModItems.STANDARD_COPPER_ROUND.get());
+        ResourceLocation ramrodRound = ForgeRegistries.ITEMS.getKey(ModItems.RAMROD_ROUND.get());
         ResourceLocation compactAdvancedRound = ForgeRegistries.ITEMS.getKey(ModItems.COMPACT_ADVANCED_ROUND.get());
         ResourceLocation advancedRound = ForgeRegistries.ITEMS.getKey(ModItems.ADVANCED_ROUND.get());
-        ResourceLocation heavyRound = ForgeRegistries.ITEMS.getKey(ModItems.HEAVY_ROUND.get());
+        ResourceLocation heavyRound = ForgeRegistries.ITEMS.getKey(ModItems.KRAHG_ROUND.get());
         ResourceLocation beowulfRound = ForgeRegistries.ITEMS.getKey(ModItems.BEOWULF_ROUND.get());
         ResourceLocation shotgunShellLocation = ForgeRegistries.ITEMS.getKey(ModItems.SHOTGUN_SHELL.get());
         ResourceLocation bearpackShellLocation = ForgeRegistries.ITEMS.getKey(ModItems.BEARPACK_SHELL.get());
@@ -242,7 +244,7 @@ public class GunEventBus {
         if (projectileLocation != null) {
             if (projectileLocation.equals(compactCopperRound) || projectileLocation.equals(standardCopperRound)) {
                 casingType = ModParticleTypes.COPPER_CASING_PARTICLE.get();
-            } else if (projectileLocation.equals(compactAdvancedRound) || projectileLocation.equals(advancedRound) || projectileLocation.equals(heavyRound) || projectileLocation.equals(beowulfRound)) {
+            } else if (projectileLocation.equals(compactAdvancedRound) || projectileLocation.equals(advancedRound) || projectileLocation.equals(heavyRound) || projectileLocation.equals(beowulfRound)|| projectileLocation.equals(ramrodRound)) {
                 casingType = ModParticleTypes.BRASS_CASING_PARTICLE.get();
             } else if (projectileLocation.equals(shotgunShellLocation)) {
                 casingType = ModParticleTypes.SHELL_PARTICLE.get();

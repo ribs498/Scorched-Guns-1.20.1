@@ -62,13 +62,13 @@ public class GyrojetPistolModel implements IOverrideModel {
         // We are moving whatever part is moving.
         // X, Y, Z, use Z for moving back and forth.
         // The higher the number, the shorter the distance.
-        matrixStack.translate(cooldown / -14, 0, 0);
+        matrixStack.translate(cooldown / -26, 0, 0);
         matrixStack.translate(0, 5.8 * 0.0625, 0);
 
         if (isLeft) {
             RenderUtil.renderModel(SpecialModels.GYROJET_PISTOL_FLAME_LEFT.getModel(), stack, matrixStack, buffer, light, overlay);
         } else {
-            matrixStack.translate(-cooldown / -7, 0, 0); // mirror transform for right flame
+            matrixStack.translate(-cooldown / -13, 0, 0); // mirror transform for right flame
             RenderUtil.renderModel(SpecialModels.GYROJET_PISTOL_FLAME_RIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
         }
 

@@ -9,7 +9,7 @@
       "item": "minecraft:diamond"
     },
     {
-      "item": "minecraft:redstone_dust"
+      "item": "minecraft:redstone"
     },
     {
       "item": "minecraft:lapis_lazuli"
@@ -17,6 +17,6 @@
   ],
   "result": {
     "item": "scguns:diamond_steel_blend",
-    "count": 1
+    "count": 2
   }
 }

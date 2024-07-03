@@ -1,0 +1,62 @@
+{
+  "display": {
+    "flash": {
+      "size": 1.0,
+      "yOffset": 4.1,
+      "zOffset": -5.0
+    },
+    "muzzleFlashType": "flash_type_1"
+  },
+  "general": {
+    "fireMode": "scguns:pulse",
+    "fireTimer": 20,
+    "gripType": "scguns:one_handed_two_handed",
+    "rate": 32,
+    "recoilAngle": 8.0,
+    "recoilKick": 0.5
+  },
+  "modules": {
+    "attachments": {
+      "barrel": {
+        "yOffset": 4.3,
+        "zOffset": -6.0
+      },
+      "scope": {
+        "size": 0.7,
+        "yOffset": 5.8,
+        "zOffset": 4.6
+      }
+    },
+    "zoom": {
+      "fovModifier": 0.6,
+      "yOffset": 6.0,
+      "zOffset": 0.45
+    }
+  },
+  "projectile": {
+    "advantage": "scguns:none",
+    "damage": 6.0,
+    "ejectsCasing": true,
+    "gravity": true,
+    "item": "scguns:ramrod_round",
+    "casingType": "scguns:medium_copper_casing",
+    "life": 60,
+    "size": 0.05,
+    "speed": 5.0,
+    "trailLengthMultiplier": 2.0
+  },
+  "reloads": {
+    "emptyMagTimer": 10,
+    "maxAmmo": 3,
+    "reloadItem": "scguns:casull_round",
+    "reloadTimer": 30,
+    "reloadType": "scguns:manual"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.flamethrower.fire_2",
+    "fire": "scguns:item.flamethrower.fire_2",
+    "preFire": "scguns:item.flamethrower.pre_fire",
+    "reload": "scguns:item.flamethrower.reload"
+  }
+}
