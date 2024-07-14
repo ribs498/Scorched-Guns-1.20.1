@@ -25,17 +25,17 @@ public class PyroclasticFlowModel implements IOverrideModel {
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
 
         RenderUtil.renderModel(SpecialModels.PYROCLASTIC_FLOW_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
-        if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)))
-        {
+        if ((Gun.getScope(stack) == null))
+            RenderUtil.renderModel(SpecialModels.PYROCLASTIC_FLOW_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
+        else
+            RenderUtil.renderModel(SpecialModels.PYROCLASTIC_FLOW_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
+
+        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.PYROCLASTIC_FLOW_HEAVY_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
-                RenderUtil.renderModel(SpecialModels.PYROCLASTIC_FLOW_WOODEN_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.get())
+            if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.PYROCLASTIC_FLOW_LIGHT_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
-
+            if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.PYROCLASTIC_FLOW_WOODEN_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
         }
-       
-        }
-    }
-    
+    }}

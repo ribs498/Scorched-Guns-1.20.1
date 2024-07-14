@@ -39,7 +39,7 @@ public class DefenderPistolModel implements IOverrideModel {
             if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.EXTENDED_MAG.get())
                 RenderUtil.renderModel(SpecialModels.DEFENDER_PISTOL_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
             if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.SPEED_MAG.get())
-                RenderUtil.renderModel(SpecialModels.DEFENDER_PISTOL_STANDARD_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+                RenderUtil.renderModel(SpecialModels.DEFENDER_PISTOL_SPEED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
             if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.PLUS_P_MAG.get())
                 RenderUtil.renderModel(SpecialModels.DEFENDER_PISTOL_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
 

@@ -3,7 +3,7 @@
   "processingTime": 200,
   "ingredients": [
     {
-      "item": "scguns:anthralite_ingot"
+      "item": "scguns:raw_anthralite"
     },
     {
       "item": "minecraft:diamond"
@@ -17,6 +17,6 @@
   ],
   "result": {
     "item": "scguns:diamond_steel_blend",
-    "count": 2
+    "count": 3
   }
 }

@@ -7,9 +7,8 @@
     "minecraft:magma_cube",
     "minecraft:piglin",
     "minecraft:piglin_brute",
+    "scguns:hornlin",
     "minecraft:strider",
-    "minecraft:wither",
-    "minecraft:wither_skeleton",
-    "minecraft:enderman"
+    "minecraft:wither_skeleton"
   ]
 }

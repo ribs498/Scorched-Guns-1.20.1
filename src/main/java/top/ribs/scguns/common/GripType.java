@@ -46,6 +46,8 @@ public class GripType
      */
     public static final GripType MINI_GUN_2 = new GripType(new ResourceLocation(Reference.MOD_ID, "mini_gun_2"), new MiniGun2Pose());
 
+
+    public static final GripType MINI_GUN_3 = new GripType(new ResourceLocation(Reference.MOD_ID, "mini_gun_3"), new MiniGun3Pose());
     /**
      * A custom grip type designed for the bazooka.
      */
@@ -103,6 +105,7 @@ public class GripType
         registerType(TWO_HANDED_ONE_HANDED);
         registerType(MINI_GUN);
         registerType(MINI_GUN_2);
+        registerType(MINI_GUN_3);
         registerType(BAZOOKA);
     }
 

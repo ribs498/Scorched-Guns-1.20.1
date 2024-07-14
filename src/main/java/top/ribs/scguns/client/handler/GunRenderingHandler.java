@@ -21,6 +21,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -438,16 +439,28 @@ public class GunRenderingHandler {
             }
         }
     }
-    public void startMeleeAnimation() {
+    public void startMeleeAnimation(ItemStack heldItem) {
         long currentTime = System.currentTimeMillis();
+        LocalPlayer player = Minecraft.getInstance().player;
+
+        if (heldItem.getItem() instanceof GunItem gunItem) {
+            if (MeleeAttackHandler.isMeleeOnCooldown(player, heldItem)) {
+                return;
+            }
+        }
+
         if (currentTime - meleeStartTime >= MELEE_DURATION) {
             this.isMeleeAttacking = true;
             this.meleeStartTime = currentTime;
             this.meleeProgress = 0;
             this.prevMeleeProgress = 0;
-            ModSyncedDataKeys.MELEE.setValue(Minecraft.getInstance().player, true);
+            ModSyncedDataKeys.MELEE.setValue(player, true);
         }
     }
+
+
+
+
     @SubscribeEvent
     public void onRenderOverlay(RenderHandEvent event) {
         PoseStack poseStack = event.getPoseStack();
@@ -726,7 +739,7 @@ public class GunRenderingHandler {
     }
 
     private void applyShieldTransforms(PoseStack poseStack, LocalPlayer player, Gun modifiedGun, float partialTick) {
-        if(player.isUsingItem() && player.getOffhandItem().getItem() == Items.SHIELD && (modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED || modifiedGun.getGeneral().getGripType() == GripType.TWO_HANDED_ONE_HANDED|| modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED_2)){
+        if(player.isUsingItem() && player.getOffhandItem().getItem() == Items.SHIELD && (modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED ||  modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED_2)){
             double time = Mth.clamp((player.getTicksUsingItem() + partialTick), 0.0, 4.0) / 4.0;
             poseStack.translate(0, 0.35 * time, 0);
             poseStack.mulPose(Axis.XP.rotationDegrees(45F * (float) time));

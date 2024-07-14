@@ -2,7 +2,7 @@ plugins {
     id 'eclipse'
     id 'maven-publish'
     id 'net.minecraftforge.gradle' version '5.1.+'
-    id 'org.spongepowered.mixin' version '0.7.+'
+    id 'org.spongepowered.mixin' version '0.8.+'
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
@@ -20,9 +20,9 @@ mixin {
 }
 
 minecraft {
-    //mappings channel: 'official', version: '1.20.1'
     mappings channel: 'parchment', version: '2023.09.03-1.20.1'
     accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg')
+
 
     runs {
         client {
@@ -94,7 +94,6 @@ repositories {
         }
     }
     maven {
-        // location of the maven that hosts JEI files since January 2023
         name = "Jared's maven"
         url = "https://maven.blamejared.com/"
     }
@@ -105,16 +104,18 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.20.1-47.3.3'
-    implementation fg.deobf('curse.maven:framework-549225:4718251')
-    implementation fg.deobf('curse.maven:backpacked-352835:4725669')
+    minecraft 'net.minecraftforge:forge:1.20.1-47.3.5'
+    implementation fg.deobf("curse.maven:framework-549225:5388226")
+    implementation fg.deobf("curse.maven:backpacked-352835:5401965")
     compileOnly fg.deobf('curse.maven:controllable-317269:4598985')
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
-    implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5455954")
-    implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
+  //  implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5455954")
+  //  implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
+    implementation fg.deobf("curse.maven:curios-309927:5367944")
+   // implementation fg.deobf("curse.maven:effortless-building-302113:4979130")
 }
 
 jar {

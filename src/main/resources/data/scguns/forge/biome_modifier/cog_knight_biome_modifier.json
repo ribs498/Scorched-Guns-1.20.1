@@ -1,11 +1,9 @@
 {
   "type": "forge:add_spawns",
-  "biomes": {
-    "type": "forge:any"
-  },
+  "biomes": "#minecraft:is_overworld",
   "spawners": {
     "type": "scguns:cog_knight",
-    "weight": 8,
+    "weight": 20,
     "minCount": 1,
     "maxCount": 1
   }

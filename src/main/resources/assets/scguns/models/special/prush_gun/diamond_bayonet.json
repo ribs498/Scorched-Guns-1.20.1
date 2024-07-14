@@ -60,13 +60,5 @@
 			"translation": [1.5, 8.5, -0.75],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	},
-	"groups": [
-		{
-			"name": "DiamondBayonet",
-			"origin": [8, 8, 8],
-			"color": 0,
-			"children": [0, 1]
-		}
-	]
+	}
 }

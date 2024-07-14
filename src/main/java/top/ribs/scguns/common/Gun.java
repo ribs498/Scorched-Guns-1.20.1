@@ -31,6 +31,7 @@ import top.ribs.scguns.debug.client.screen.widget.DebugSlider;
 import top.ribs.scguns.debug.client.screen.widget.DebugToggle;
 import top.ribs.scguns.item.AmmoBoxItem;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.LaserSightItem;
 import top.ribs.scguns.item.ScopeItem;
 import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.item.attachment.impl.Scope;
@@ -67,6 +68,11 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
     public static boolean hasAmmo(ItemStack heldItem) {
         return getAmmoCount(heldItem) > 0;
     }
+
+    public static boolean hasUnlimitedReloads(ItemStack heldItem) {
+        return ((GunItem) heldItem.getItem()).getModifiedGun(heldItem).getReloads().getInfiniteAmmo();
+    }
+
 
     public General getGeneral() { return this.general; }
 
@@ -151,6 +157,8 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         private boolean infiniteAmmo;
         @Optional
         private float meleeDamage = 0.0F;
+        @Optional
+        public int meleeCooldownTicks = 15;
 
         @Override
         public CompoundTag serializeNBT()
@@ -170,6 +178,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             tag.putFloat("Spread", this.spread);
             tag.putFloat("RestingSpread", this.restingSpread);
             tag.putFloat("MeleeDamage", this.meleeDamage);
+            tag.putFloat("MeleeCooldownTicks", this.meleeCooldownTicks);
+            tag.putBoolean("InfiniteAmmo", this.infiniteAmmo);
+
             return tag;
         }
 
@@ -236,6 +247,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             {
                 this.meleeDamage = tag.getFloat("MeleeDamage");
             }
+            if(tag.contains("MeleeCooldownTicks", Tag.TAG_ANY_NUMERIC))
+            {
+                this.meleeCooldownTicks = tag.getInt("MeleeCooldownTicks");
+            }
         }
 
         public JsonObject toJsonObject()
@@ -267,7 +282,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             if(this.restingSpread != 0.0F) object.addProperty("restingSpread", this.spread);
             if(this.spreadAdsReduction != 0.5F) object.addProperty("spreadAdsReduction", this.spread);
             if(this.meleeDamage != 0.0F) object.addProperty("meleeDamage", this.meleeDamage);
-
+            if (this.meleeCooldownTicks != 15) object.addProperty("meleeCooldownTicks", this.meleeCooldownTicks);
             return object;
         }
 
@@ -293,10 +308,15 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             general.spreadAdsReduction = this.spreadAdsReduction;
             general.infiniteAmmo = this.infiniteAmmo;
             general.meleeDamage = this.meleeDamage;
+            general.meleeCooldownTicks = this.meleeCooldownTicks;
             return general;
         }
         public float getMeleeDamage() {
             return this.meleeDamage;
+        }
+
+        public  int getMeleeCooldownTicks() {
+            return this.meleeCooldownTicks;
         }
 
         public void setMeleeDamage(float meleeDamage) {
@@ -1815,6 +1835,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         }
         return null;
     }
+    public static boolean hasLaserSight(ItemStack gun) {
+        return hasAttachmentEquipped(gun, IAttachment.Type.SCOPE) && getAttachment(IAttachment.Type.SCOPE, gun).getItem() instanceof LaserSightItem;
+    }
 
     public static void removeAttachment(ItemStack gun, String attachmentStack)
     {
@@ -1955,8 +1978,39 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         }
         return ammoStacks.toArray(new ItemStack[0]);
     }
+    public static int getReserveAmmoCount(Player player, Item item) {
+        int ammoCount = 0;
 
+        // Check player's main inventory
+        for (int i = 0; i < player.getInventory().getContainerSize(); ++i) {
+            ItemStack stack = player.getInventory().getItem(i);
+            if (isAmmo(stack, item)) {
+                ammoCount += stack.getCount();
+            }
+        }
 
+        // Check ammo pouches in the player's inventory
+        for (ItemStack itemStack : player.getInventory().items) {
+            if (itemStack.getItem() instanceof AmmoBoxItem pouch) {
+                List<ItemStack> contents = AmmoBoxItem.getContents(itemStack).toList();
+                for (ItemStack ammoStack : contents) {
+                    if (isAmmo(ammoStack, item)) {
+                        ammoCount += ammoStack.getCount();
+                    }
+                }
+            }
+        }
+
+        // Check backpack if mod is loaded
+        if (ScorchedGuns.backpackedLoaded) {
+            ItemStack backpackAmmo = BackpackHelper.findAmmo(player, item).stack();
+            if (!backpackAmmo.isEmpty()) {
+                ammoCount += backpackAmmo.getCount();
+            }
+        }
+
+        return ammoCount;
+    }
     public static float getFovModifier(ItemStack stack, Gun modifiedGun)
     {
         float modifier = 0.0F;

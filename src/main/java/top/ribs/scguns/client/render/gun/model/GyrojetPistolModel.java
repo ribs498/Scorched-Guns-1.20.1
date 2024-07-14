@@ -35,6 +35,17 @@ public class GyrojetPistolModel implements IOverrideModel {
             else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.GYROJET_PISTOL_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
         }
+        if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.MAGAZINE)))
+        {
+            if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.EXTENDED_MAG.get())
+                RenderUtil.renderModel(SpecialModels.GYROJET_PISTOL_EXT_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.PLUS_P_MAG.get())
+                RenderUtil.renderModel(SpecialModels.GYROJET_PISTOL_EXT_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.SPEED_MAG.get())
+                RenderUtil.renderModel(SpecialModels.GYROJET_PISTOL_SPEED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
+        else
+            RenderUtil.renderModel(SpecialModels.GYROJET_PISTOL_STAN_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
 
         if (entity.equals(Minecraft.getInstance().player)) {
             // Render the left flame

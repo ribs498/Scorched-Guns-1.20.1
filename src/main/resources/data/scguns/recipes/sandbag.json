@@ -1,0 +1,20 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "minecraft:paper"
+    },
+    "X": {
+      "tag": "minecraft:sand"
+    }
+  },
+  "pattern": [
+    " Q ",
+    "QXQ",
+    " Q "
+  ],
+  "result": {
+    "item": "scguns:sandbag",
+    "count": 3
+  }
+}

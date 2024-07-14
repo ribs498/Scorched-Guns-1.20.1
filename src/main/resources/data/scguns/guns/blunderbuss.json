@@ -15,7 +15,9 @@
     "rate": 3,
     "recoilAngle": 9.0,
     "recoilKick": 2.0,
-    "spread": 13.0
+    "spread": 13.0,
+    "meleeDamage": 3.0,
+    "meleeCooldownTicks": 20
   },
   "modules": {
     "attachments": {
@@ -36,11 +38,11 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 6.0,
+    "damage": 15.0,
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:grapeshot",
-    "life": 60,
+    "life": 10,
     "size": 1.0,
     "speed": 6.0,
     "trailLengthMultiplier": 2.0

@@ -14,19 +14,12 @@ import top.ribs.scguns.Reference;
  */
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public enum SpecialModels {
-    MACERATOR_BASE("macerator/macerator"),
     MACERATOR_WHEEL_1("macerator/macerator_wheel_1"),
     MACERATOR_WHEEL_2("macerator/macerator_wheel_2"),
     MACERATOR_WHEEL_3("macerator/macerator_wheel_3"),
     MACERATOR_WHEEL_4("macerator/macerator_wheel_4"),
-
-
     MECHANICAL_PRESS_PRESS("mechanical_press/press"),
-
-
-
 ///FLINTLOCK
-    FLINTLOCK_PISTOL("gun/flintlock_pistol"),
     FLINTLOCK_PISTOL_MAIN("flintlock_pistol/main"),
     FLINTLOCK_PISTOL_HAMMER("flintlock_pistol/hammer"),
     FLINTLOCK_PISTOL_STOCK_WEIGHTED("flintlock_pistol/heavy_stock"),
@@ -55,6 +48,14 @@ public enum SpecialModels {
     BLUNDERBUSS_NETHERITE_BAYONET("blunderbuss/netherite_bayonet"),
     BLUNDERBUSS_LIGHT_GRIP("blunderbuss/light_grip"),
     BLUNDERBUSS_VERTICAL_GRIP("blunderbuss/vert_grip"),
+    ///FLOUNDERGAT
+    FLOUNDERGAT_MAIN("floundergat/main"),
+    FLOUNDERGAT_IRON_BAYONET("floundergat/iron_bayonet"),
+    FLOUNDERGAT_ANTHRALITE_BAYONET("floundergat/anthralite_bayonet"),
+    FLOUNDERGAT_DIAMOND_BAYONET("floundergat/diamond_bayonet"),
+    FLOUNDERGAT_NETHERITE_BAYONET("floundergat/netherite_bayonet"),
+    FLOUNDERGAT_LIGHT_GRIP("floundergat/light_grip"),
+    FLOUNDERGAT_VERTICAL_GRIP("floundergat/vert_grip"),
 ///REPEATINGMUSKET
     REPEATING_MUSKET_MAIN("repeating_musket/main"),
     REPEATING_MUSKET_HAMMER("repeating_musket/hammer"),
@@ -67,7 +68,7 @@ public enum SpecialModels {
     REPEATING_MUSKET_VERTICAL_GRIP("repeating_musket/grip_vert"),
 
     ///LASER_MUSKET
- LASER_MUSKET_MAIN("laser_musket/main"),
+    LASER_MUSKET_MAIN("laser_musket/main"),
 
     ///COPPERMAGNUM
     BRUISER_MAIN("bruiser/main"),
@@ -75,18 +76,17 @@ public enum SpecialModels {
     BRUISER_SILENCER("bruiser/silencer"),
     BRUISER_ADVANCED_SILENCER("bruiser/advanced_silencer"),
     BRUISER_MUZZLE_BRAKE("bruiser/muzzle_brake"),
-    ///SCRAP_SIDEARM
-    SCRAP_SIDEARM("gun/scrap_sidearm"),
-    SCRAP_SIDEARM_MAIN("scrap_sidearm/main"),
-    SCRAP_SIDEARM_BOLT("scrap_sidearm/bolt"),
-    SCRAP_SIDEARM_MAGAZINE("scrap_sidearm/magazine"),
+    ///SCRAPPER
+    SCRAPPER_MAIN("scrapper/main"),
+    SCRAPPER_BOLT("scrapper/bolt"),
+    SCRAPPER_MAGAZINE("scrapper/magazine"),
 
-    SCRAP_SIDEARM_SILENCER("scrap_sidearm/silencer"),
-    SCRAP_SIDEARM_MUZZLE_BRAKE("scrap_sidearm/muzzle_brake"),
-    SCRAP_SIDEARM_ADVANCED_SILENCER("scrap_sidearm/advanced_silencer"),
-    SCRAP_SIDEARM_STOCK_LIGHT("scrap_sidearm/stock_light"),
-    SCRAP_SIDEARM_STOCK_HEAVY("scrap_sidearm/stock_weighted"),
-    SCRAP_SIDEARM_STOCK_WOODEN("scrap_sidearm/stock_wooden"),
+    SCRAPPER_SILENCER("scrapper/silencer"),
+    SCRAPPER_MUZZLE_BRAKE("scrapper/muzzle_brake"),
+    SCRAPPER_ADVANCED_SILENCER("scrapper/advanced_silencer"),
+    SCRAPPER_STOCK_LIGHT("scrapper/stock_light"),
+    SCRAPPER_STOCK_HEAVY("scrapper/stock_weighted"),
+    SCRAPPER_STOCK_WOODEN("scrapper/stock_wooden"),
 
     ///BOOMSTICK
     BOOMSTICK_MAIN("boomstick/main"),
@@ -156,7 +156,23 @@ public enum SpecialModels {
     M3_CARABINE_EXTENDED_MAG("m3_carabine/ext_mag"),
     M3_CARABINE_PLUS_P_MAG("m3_carabine/plus_mag"),
     M3_CARABINE_SPEED_MAG("m3_carabine/speed_mag"),
-
+    ///MARLIN
+    MARLIN_MAIN("marlin/main"),
+    MARLIN_BOLT("marlin/bolt"),
+    MARLIN_SIGHTS("marlin/sights"),
+    MARLIN_NO_SIGHTS("marlin/no_sights"),
+    MARLIN_STOCK_WEIGHTED("marlin/heavy_stock"),
+    MARLIN_STOCK_LIGHT("marlin/light_stock"),
+    MARLIN_STOCK_WOODEN("marlin/wooden_stock"),
+    MARLIN_IRON_BAYONET("marlin/iron_bayonet"),
+    MARLIN_ANTHRALITE_BAYONET("marlin/anthralite_bayonet"),
+    MARLIN_DIAMOND_BAYONET("marlin/diamond_bayonet"),
+    MARLIN_NETHERITE_BAYONET("marlin/netherite_bayonet"),
+    MARLIN_LIGHT_GRIP("marlin/light_grip"),
+    MARLIN_VERTICAL_GRIP("marlin/vert_grip"),
+    MARLIN_SILENCER("marlin/silencer"),
+    MARLIN_MUZZLE_BRAKE("marlin/muzzle_brake"),
+    MARLIN_ADVANCED_SILENCER("marlin/advanced_silencer"),
     GREASER_SMG_MAIN("greaser_smg/main"),
     GREASER_SMG_SIGHTS("greaser_smg/sights"),
     GREASER_SMG_NO_SIGHTS("greaser_smg/no_sights"),
@@ -178,6 +194,7 @@ public enum SpecialModels {
     DEFENDER_PISTOL_MUZZLE_BRAKE("defender_pistol/muzzle_brake"),
     DEFENDER_PISTOL_EXTENDED_MAG("defender_pistol/ext_mag"),
     DEFENDER_PISTOL_STANDARD_MAG("defender_pistol/stan_mag"),
+    DEFENDER_PISTOL_SPEED_MAG("defender_pistol/speed_mag"),
     ///AUVTOMAG
     AUVTOMAG_MAIN("auvtomag/main"),
     AUVTOMAG_RECEIVER("auvtomag/receiver"),
@@ -186,6 +203,7 @@ public enum SpecialModels {
     AUVTOMAG_MUZZLE_BRAKE("auvtomag/muzzle_brake"),
     AUVTOMAG_EXTENDED_MAG("auvtomag/ext_mag"),
     AUVTOMAG_STANDARD_MAG("auvtomag/stan_mag"),
+    AUVTOMAG_SPEED_MAG("auvtomag/speed_mag"),
     AUVTOMAG_SIGHTS("auvtomag/sights"),
     AUVTOMAG_NO_SIGHTS("auvtomag/no_sights"),
 
@@ -236,6 +254,9 @@ public enum SpecialModels {
     GYROJET_PISTOL_STOCK_WOODEN("gyrojet_pistol/wooden_stock"),
     GYROJET_PISTOL_FLAME_RIGHT("gyrojet_pistol/flame_right"),
     GYROJET_PISTOL_FLAME_LEFT("gyrojet_pistol/flame_left"),
+    GYROJET_PISTOL_STAN_MAG("gyrojet_pistol/stan_mag"),
+    GYROJET_PISTOL_EXT_MAG("gyrojet_pistol/ext_mag"),
+    GYROJET_PISTOL_SPEED_MAG("gyrojet_pistol/speed_mag"),
     ///ROCKETRIFLE
     ROCKET_RIFLE_MAIN("rocket_rifle/main"),
     ROCKET_RIFLE_STOCK_HEAVY("rocket_rifle/heavy_stock"),
@@ -264,6 +285,9 @@ public enum SpecialModels {
     ///CYCLONE
     CYCLONE_MAIN("cyclone/main"),
     CYCLONE_BARREL("cyclone/barrel"),
+    ///BOMB_LANCE
+    BOMB_LANCE_MAIN("bomb_lance/main"),
+  BOMB_LANCE_BARREL("bomb_lance/barrel"),
     ///GATTALER
     GATTALER_MAIN("gattaler/main"),
     GATTALER_BARREL("gattaler/barrels"),
@@ -295,6 +319,7 @@ public enum SpecialModels {
     KRAUSER_MUZZLE_BRAKE("krauser/muzzle_brake"),
     KRAUSER_EXTENDED_MAG("krauser/ext_mag"),
     KRAUSER_STANDARD_MAG("krauser/stan_mag"),
+    KRAUSER_SPEED_MAG("krauser/speed_mag"),
     KRAUSER_STOCK_LIGHT("krauser/light_stock"),
     KRAUSER_STOCK_HEAVY("krauser/heavy_stock"),
     KRAUSER_STOCK_WOODEN("krauser/wooden_stock"),
@@ -384,11 +409,10 @@ COGLOADER_MAIN("cogloader/main"),
     OSGOOD_50_SILENCER("osgood_50/silencer"),
     OSGOOD_50_MUZZLE_BRAKE("osgood_50/muzzle_brake"),
     OSGOOD_50_ADVANCED_SILENCER("osgood_50/advanced_silencer"),
-    OSGOOD_50_STOCK_LIGHT("osgood_50/stock_light"),
-    OSGOOD_50_STOCK_HEAVY("osgood_50/stock_weighted"),
-    OSGOOD_50_STOCK_WOODEN("osgood_50/stock_wooden"),
+    OSGOOD_50_STOCK_LIGHT("osgood_50/light_stock"),
+    OSGOOD_50_STOCK_HEAVY("osgood_50/heavy_stock"),
+    OSGOOD_50_STOCK_WOODEN("osgood_50/wooden_stock"),
     ///DOZIER
-    DOZIER_RL("gun/dozier_rl"),
     DOZIER_RL_MAIN("dozier_rl/main"),
     DOZIER_RL_DRUM("dozier_rl/drum"),
     DOZIER_RL_SIGHTS("dozier_rl/sights"),
@@ -399,6 +423,7 @@ COGLOADER_MAIN("cogloader/main"),
     DOZIER_RL_ANTHRALITE_BAYONET("dozier_rl/anthralite_bayonet"),
     DOZIER_RL_DIAMOND_BAYONET("dozier_rl/diamond_bayonet"),
     DOZIER_RL_NETHERITE_BAYONET("dozier_rl/netherite_bayonet"),
+    DOZIER_RL_FIRE("dozier_rl/fire"),
 
     ///JACKHAMMER
     JACKHAMMER_MAIN("jackhammer/main"),
@@ -421,6 +446,8 @@ COGLOADER_MAIN("cogloader/main"),
     JACKHAMMER_SPEED_MAG("jackhammer/speed_mag"),
     ///MAS_55
     MAS_55_MAIN("mas_55/main"),
+    MAS_55_SIGHTS("mas_55/sights"),
+    MAS_55_NO_SIGHTS("mas_55/no_sights"),
     MAS_55_BOLT("mas_55/bolt"),
     MAS_55_STOCK_LIGHT("mas_55/light_stock"),
     MAS_55_STOCK_HEAVY("mas_55/heavy_stock"),
@@ -444,7 +471,6 @@ COGLOADER_MAIN("cogloader/main"),
     HOWLER_STOCK_LIGHT("howler/light_stock"),
     HOWLER_STOCK_HEAVY("howler/heavy_stock"),
     HOWLER_STOCK_WOODEN("howler/wooden_stock"),
-    HOWLER_STANDARD_GRIP("howler/stan_grip"),
     HOWLER_SILENCER("howler/silencer"),
     HOWLER_ADVANCED_SILENCER("howler/advanced_silencer"),
     HOWLER_MUZZLE_BRAKE("howler/muzzle_brake"),
@@ -472,6 +498,8 @@ COGLOADER_MAIN("cogloader/main"),
     PYROCLASTIC_FLOW_WOODEN_STOCK("pyroclastic_flow/wooden_stock"),
     PYROCLASTIC_FLOW_HEAVY_STOCK("pyroclastic_flow/heavy_stock"),
     PYROCLASTIC_FLOW_LIGHT_STOCK("pyroclastic_flow/light_stock"),
+    PYROCLASTIC_FLOW_SIGHTS("pyroclastic_flow/sights"),
+    PYROCLASTIC_FLOW_NO_SIGHTS("pyroclastic_flow/no_sights"),
     ///FREYR
     FREYR_MAIN("freyr/main"),
     FREYR_STOCK_LIGHT("freyr/light_stock"),
@@ -487,6 +515,31 @@ COGLOADER_MAIN("cogloader/main"),
     FREYR_STANDARD_MAG("freyr/stan_mag"),
     FREYR_EXTENDED_MAG("freyr/ext_mag"),
     FREYR_SPEED_MAG("freyr/speed_mag"),
+    FREYR_SIGHTS("freyr/sights"),
+    FREYR_NO_SIGHTS("freyr/no_sights"),
+    FREYR_SILENCER("freyr/silencer"),
+    FREYR_ADVANCED_SILENCER("freyr/advanced_silencer"),
+    FREYR_MUZZLE_BRAKE("freyr/muzzle_brake"),
+    ///VULCANIC_REPEATER
+    VULCANIC_REPEATER_MAIN("vulcanic_repeater/main"),
+    VULCANIC_REPEATER_STOCK_LIGHT("vulcanic_repeater/light_stock"),
+    VULCANIC_REPEATER_STOCK_HEAVY("vulcanic_repeater/heavy_stock"),
+    VULCANIC_REPEATER_STOCK_WOODEN("vulcanic_repeater/wooden_stock"),
+    VULCANIC_REPEATER_STANDARD_GRIP("vulcanic_repeater/stan_grip"),
+    VULCANIC_REPEATER_GRIP_LIGHT("vulcanic_repeater/light_grip"),
+    VULCANIC_REPEATER_GRIP_VERTICAL("vulcanic_repeater/tact_grip"),
+    VULCANIC_REPEATER_IRON_BAYONET("vulcanic_repeater/iron_bayonet"),
+    VULCANIC_REPEATER_ANTHRALITE_BAYONET("vulcanic_repeater/anthralite_bayonet"),
+    VULCANIC_REPEATER_DIAMOND_BAYONET("vulcanic_repeater/diamond_bayonet"),
+    VULCANIC_REPEATER_NETHERITE_BAYONET("vulcanic_repeater/netherite_bayonet"),
+    VULCANIC_REPEATER_STANDARD_MAG("vulcanic_repeater/stan_mag"),
+    VULCANIC_REPEATER_EXTENDED_MAG("vulcanic_repeater/ext_mag"),
+    VULCANIC_REPEATER_SPEED_MAG("vulcanic_repeater/speed_mag"),
+    VULCANIC_REPEATER_SIGHTS("vulcanic_repeater/sights"),
+    VULCANIC_REPEATER_NO_SIGHTS("vulcanic_repeater/no_sights"),
+    VULCANIC_REPEATER_SILENCER("vulcanic_repeater/silencer"),
+    VULCANIC_REPEATER_ADVANCED_SILENCER("vulcanic_repeater/advanced_silencer"),
+    VULCANIC_REPEATER_MUZZLE_BRAKE("vulcanic_repeater/muzzle_brake"),
 
     ///RAYGUN
     RAYGUN_MAIN("raygun/main"),

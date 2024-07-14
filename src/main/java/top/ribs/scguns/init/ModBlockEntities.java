@@ -24,7 +24,7 @@ public class ModBlockEntities {
 
 
     public static final RegistryObject<BlockEntityType<VentCollectorBlockEntity>> VENT_COLLECTOR = BLOCK_ENTITIES.register("vent_collector",
-            () -> BlockEntityType.Builder.of((pos, state) -> new VentCollectorBlockEntity(pos, state, 25.0F), ModBlocks.VENT_COLLECTOR.get()).build(null)); // Set desired production speed here
+            () -> BlockEntityType.Builder.of(VentCollectorBlockEntity::new, ModBlocks.VENT_COLLECTOR.get()).build(null));
 
 
     public static void register(IEventBus eventBus) {

@@ -16,7 +16,7 @@ public abstract class ScGunsGunAttackGoal<T extends Mob> extends Goal {
     protected final double speedModifier;
     protected int seeTime;
     protected State state;
-    protected ScGunsWeapon weapon = new ScGunsWeapon(ModItems.SCRAP_SIDEARM.get().getDefaultInstance());
+    protected ScGunsWeapon weapon = new ScGunsWeapon(ModItems.SCRAPPER.get().getDefaultInstance());
     protected boolean isWeaponInHand = isWeaponInHand();
     protected ItemStack stackCache;
     protected int weaponLoadTime;

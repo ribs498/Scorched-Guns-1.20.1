@@ -3,7 +3,7 @@
   "processingTime": 50,
   "ingredients": [
     {
-      "item": "scguns:treated_brass_ingot"
+      "tag": "forge:brass"
     }
   ],
   "mold": {

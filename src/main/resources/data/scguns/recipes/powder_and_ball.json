@@ -3,7 +3,7 @@
   "category": "ammo",
   "ingredients": [
     {
-      "item": "minecraft:gunpowder"
+      "tag": "forge:gunpowder"
     },
     {
       "item": "scguns:pebbles"

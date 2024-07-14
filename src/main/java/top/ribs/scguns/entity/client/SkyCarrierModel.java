@@ -8,19 +8,20 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.Entity;
 import top.ribs.scguns.entity.animations.ModAnimationDefinitions;
+import top.ribs.scguns.entity.monster.RedcoatEntity;
 import top.ribs.scguns.entity.monster.SkyCarrierEntity;
 
 public class SkyCarrierModel<T extends Entity> extends HierarchicalModel<T> {
     private final ModelPart SkyCarrier;
     private final ModelPart head;
+    private final ModelPart Flash;
 
     public SkyCarrierModel(ModelPart root) {
 
         this.SkyCarrier = root.getChild("SkyCarrier");
         this.head = this.SkyCarrier.getChild("Full").getChild("Gun");
+        this.Flash = this.SkyCarrier.getChild("Full").getChild("Gun").getChild("Flash");
     }
-
-
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
         PartDefinition partdefinition = meshdefinition.getRoot();
@@ -107,6 +108,8 @@ public class SkyCarrierModel<T extends Entity> extends HierarchicalModel<T> {
                 .texOffs(52, 7).addBox(-0.5F, -26.25F, -2.5F, 1.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
                 .texOffs(0, 58).addBox(-1.0F, -25.75F, -2.5F, 2.0F, 3.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.55F, 22.95F, 0.0F, 0.0F, -1.5708F, 0.0F));
 
+        PartDefinition Flash = Gun.addOrReplaceChild("Flash", CubeListBuilder.create().texOffs(0, 77).addBox(6.0F, -6.0F, -4.0F, 0.0F, 8.0F, 8.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+
         PartDefinition body = Full.addOrReplaceChild("body", CubeListBuilder.create(), PartPose.offset(0.0F, 3.75F, 0.0F));
 
         PartDefinition body_r11 = body.addOrReplaceChild("body_r11", CubeListBuilder.create().texOffs(48, 40).addBox(-5.0F, -18.5F, -9.0F, 10.0F, 10.0F, 9.0F, new CubeDeformation(0.0F))
@@ -157,12 +160,17 @@ public class SkyCarrierModel<T extends Entity> extends HierarchicalModel<T> {
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+
+        SkyCarrierEntity skyCarrier = (SkyCarrierEntity) entity;
         this.root().getAllParts().forEach(ModelPart::resetPose);
         this.animateWalk(ModAnimationDefinitions.SKY_CARRIER_WALK, limbSwing, limbSwingAmount, 1.7f, 2.5f);
         this.animate(((SkyCarrierEntity) entity).idleAnimationState, ModAnimationDefinitions.SKY_CARRIER_IDLE, ageInTicks, 2f);
 
         this.head.yRot = netHeadYaw * ((float)Math.PI / 180F);
         this.head.xRot = headPitch * ((float)Math.PI / 180F);
+
+        boolean muzzleFlashVisible = skyCarrier.isMuzzleFlashVisible();
+        this.Flash.visible = muzzleFlashVisible;
     }
 
 

@@ -1,0 +1,49 @@
+{
+  "variants": {
+    "facing=north,type=single": {
+      "model": "scguns:block/sandbag_single"
+    },
+    "facing=south,type=single": {
+      "model": "scguns:block/sandbag_single",
+      "y": 180
+    },
+    "facing=west,type=single": {
+      "model": "scguns:block/sandbag_single",
+      "y": 270
+    },
+    "facing=east,type=single": {
+      "model": "scguns:block/sandbag_single",
+      "y": 90
+    },
+    "facing=north,type=double": {
+      "model": "scguns:block/sandbag_double"
+    },
+    "facing=south,type=double": {
+      "model": "scguns:block/sandbag_double",
+      "y": 180
+    },
+    "facing=west,type=double": {
+      "model": "scguns:block/sandbag_double",
+      "y": 270
+    },
+    "facing=east,type=double": {
+      "model": "scguns:block/sandbag_double",
+      "y": 90
+    },
+    "facing=north,type=triple": {
+      "model": "scguns:block/sandbag_triple"
+    },
+    "facing=south,type=triple": {
+      "model": "scguns:block/sandbag_triple",
+      "y": 180
+    },
+    "facing=west,type=triple": {
+      "model": "scguns:block/sandbag_triple",
+      "y": 270
+    },
+    "facing=east,type=triple": {
+      "model": "scguns:block/sandbag_triple",
+      "y": 90
+    }
+  }
+}

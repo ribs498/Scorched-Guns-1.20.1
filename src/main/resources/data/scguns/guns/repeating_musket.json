@@ -11,10 +11,12 @@
     "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
-    "rate": 4,
+    "rate": 7,
     "recoilAngle": 10.0,
     "recoilKick": 3.0,
-    "spread": 4.0
+    "spread": 4.0,
+    "meleeDamage": 2.5,
+    "meleeCooldownTicks": 20
   },
   "modules": {
     "attachments": {
@@ -32,17 +34,17 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 5.5,
+      "yOffset": 5.4,
       "zOffset": 0.75
     }
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 4.0,
+    "damage": 8.5,
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:powder_and_ball",
-    "life": 60,
+    "life": 30,
     "size": 1.0,
     "speed": 7.0,
     "trailLengthMultiplier": 2.0

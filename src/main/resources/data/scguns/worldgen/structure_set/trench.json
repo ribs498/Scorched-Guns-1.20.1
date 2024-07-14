@@ -1,0 +1,15 @@
+{
+  "structures": [
+    {
+      "structure": "scguns:trench",
+      "weight": 1
+    }
+  ],
+  "placement": {
+    "type": "minecraft:random_spread",
+    "salt": 109344445,
+    "locate_offset": [-3, -3, -3],
+    "spacing": 90,
+    "separation": 50
+  }
+}

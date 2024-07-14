@@ -46,27 +46,26 @@ public class ReloadHandler {
     }
 
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event)
-    {
-        if(event.phase != TickEvent.Phase.END)
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END)
             return;
 
         this.prevReloadTimer = this.reloadTimer;
 
         Player player = Minecraft.getInstance().player;
-        if(player != null)
-        {
+        if (player != null) {
             PacketHandler.getPlayChannel().sendToServer(new C2SMessageLeftOverAmmo());
 
-            if(ModSyncedDataKeys.RELOADING.getValue(player))
-            {
-                if(this.reloadingSlot != player.getInventory().selected)
-                {
+            if (ModSyncedDataKeys.RELOADING.getValue(player)) {
+                if (this.reloadingSlot != player.getInventory().selected) {
                     this.setReloading(false);
                 }
             }
 
             this.updateReloadTimer(player);
+            if (this.reloadTimer == 0) {
+                HUDRenderHandler.updateReserveAmmo(player);
+            }
         }
     }
 
@@ -78,10 +77,14 @@ public class ReloadHandler {
 
         if (KeyBinds.KEY_RELOAD.isDown() && event.getAction() == GLFW.GLFW_PRESS) {
             this.setReloading(!ModSyncedDataKeys.RELOADING.getValue(player));
+            if (player.getMainHandItem().getItem() instanceof GunItem)
+                HUDRenderHandler.updateReserveAmmo(player);
         }
         if (KeyBinds.KEY_UNLOAD.consumeClick() && event.getAction() == GLFW.GLFW_PRESS) {
             this.setReloading(false);
             PacketHandler.getPlayChannel().sendToServer(new C2SMessageUnload());
+            if (player.getMainHandItem().getItem() instanceof GunItem)
+                HUDRenderHandler.stageReserveAmmoUpdate();
         }
         if (KeyBinds.KEY_MELEE.consumeClick() && event.getAction() == GLFW.GLFW_PRESS) {
             PacketHandler.getPlayChannel().sendToServer(new C2SMessageMeleeAttack());
@@ -97,7 +100,7 @@ public class ReloadHandler {
                     CompoundTag tag = stack.getTag();
                     if (tag != null && !tag.contains("IgnoreAmmo", Tag.TAG_BYTE)) {
                         Gun gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
-                        if(tag.getInt("AmmoCount") >= GunModifierHelper.getModifiedAmmoCapacity(stack, gun))
+                        if (tag.getInt("AmmoCount") >= GunModifierHelper.getModifiedAmmoCapacity(stack, gun))
                             return;
                         if (MinecraftForge.EVENT_BUS.post(new GunReloadEvent.Pre(player, stack)))
                             return;
@@ -105,6 +108,7 @@ public class ReloadHandler {
                         PacketHandler.getPlayChannel().sendToServer(new C2SMessageReload(true));
                         this.reloadingSlot = player.getInventory().selected;
                         MinecraftForge.EVENT_BUS.post(new GunReloadEvent.Post(player, stack));
+                        HUDRenderHandler.updateReserveAmmo(player); // Update reserve ammo when reloading starts
                     }
                 }
             } else {
@@ -145,3 +149,4 @@ public class ReloadHandler {
         return (this.prevReloadTimer + (this.reloadTimer - this.prevReloadTimer) * partialTicks) / 5F;
     }
 }
+

@@ -26,13 +26,6 @@ public class PrushGunModel implements IOverrideModel {
 
         //Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.PRUSH_GUN_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
-
-        //Renders the iron sights if no scope is attached.
-        if ((Gun.getScope(stack) == null))
-            RenderUtil.renderModel(SpecialModels.PRUSH_GUN_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
-        else
-            RenderUtil.renderModel(SpecialModels.PRUSH_GUN_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
-
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
 
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())

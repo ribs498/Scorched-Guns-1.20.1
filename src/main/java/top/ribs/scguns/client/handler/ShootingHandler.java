@@ -93,7 +93,7 @@ public class ShootingHandler
                     if(player.getOffhandItem().getItem() == Items.SHIELD)
                     {
                         Gun modifiedGun = gunItem.getModifiedGun(heldItem);
-                        if(modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED || modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED_2 ||modifiedGun.getGeneral().getGripType() == GripType.TWO_HANDED_ONE_HANDED)
+                        if(modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED ||modifiedGun.getGeneral().getGripType() == GripType.ONE_HANDED_2)
                         {
                             return;
                         }

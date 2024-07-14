@@ -24,7 +24,7 @@ import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.*;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.item.NonUnderwaterGunItem;
-import top.ribs.scguns.item.UnderwaterFirearmItem;
+import top.ribs.scguns.item.UnderwaterGunItem;
 import top.ribs.scguns.item.attachment.IAttachment;
 import java.util.Objects;
 
@@ -113,10 +113,9 @@ public class GunEventBus {
                     level.playSound(player, player.blockPosition(), ModSounds.COPPER_GUN_JAM.get(), SoundSource.PLAYERS, 1.0F, 1.0f);
                 }
             }
-
-            // Underwater firearm specific logic
         }
     }
+
 
     public static void broken(ItemStack stack, Level level, Player player) {
         int maxDamage = stack.getMaxDamage();
@@ -131,16 +130,26 @@ public class GunEventBus {
             if (stack.isDamageableItem()) {
                 int maxDamage = stack.getMaxDamage();
                 int currentDamage = stack.getDamageValue();
-                if (currentDamage >= (maxDamage - 1)) {
-                    if (currentDamage >= (maxDamage - 2)) {
+                boolean isUnderwater = player.isUnderWater();
+                boolean isUnderwaterGun = stack.getItem() instanceof UnderwaterGunItem;
+
+                int damageAmount = 1;
+                if (isUnderwater && !isUnderwaterGun) {
+                    damageAmount = 2;
+                }
+
+                if (currentDamage >= (maxDamage - damageAmount)) {
+                    if (currentDamage >= (maxDamage - damageAmount - 1)) {
                         level.playSound(player, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
                     }
                 } else {
-                    stack.hurtAndBreak(1, player, null);
+                    stack.hurtAndBreak(damageAmount, player, null);
                 }
             }
         }
     }
+
+
 
     public static void damageAttachments(ItemStack stack, Level level, Player player) {
         if (!player.getAbilities().instabuild) {
@@ -231,9 +240,12 @@ public class GunEventBus {
         ResourceLocation compactCopperRound = ForgeRegistries.ITEMS.getKey(ModItems.COMPACT_COPPER_ROUND.get());
         ResourceLocation standardCopperRound = ForgeRegistries.ITEMS.getKey(ModItems.STANDARD_COPPER_ROUND.get());
         ResourceLocation ramrodRound = ForgeRegistries.ITEMS.getKey(ModItems.RAMROD_ROUND.get());
+        ResourceLocation hogRound = ForgeRegistries.ITEMS.getKey(ModItems.HOG_ROUND.get());
         ResourceLocation compactAdvancedRound = ForgeRegistries.ITEMS.getKey(ModItems.COMPACT_ADVANCED_ROUND.get());
         ResourceLocation advancedRound = ForgeRegistries.ITEMS.getKey(ModItems.ADVANCED_ROUND.get());
         ResourceLocation heavyRound = ForgeRegistries.ITEMS.getKey(ModItems.KRAHG_ROUND.get());
+        ResourceLocation energyCell = ForgeRegistries.ITEMS.getKey(ModItems.ENERGY_CELL.get());
+        ResourceLocation blazeFuel = ForgeRegistries.ITEMS.getKey(ModItems.BLAZE_FUEL.get());
         ResourceLocation beowulfRound = ForgeRegistries.ITEMS.getKey(ModItems.BEOWULF_ROUND.get());
         ResourceLocation shotgunShellLocation = ForgeRegistries.ITEMS.getKey(ModItems.SHOTGUN_SHELL.get());
         ResourceLocation bearpackShellLocation = ForgeRegistries.ITEMS.getKey(ModItems.BEARPACK_SHELL.get());
@@ -244,13 +256,19 @@ public class GunEventBus {
         if (projectileLocation != null) {
             if (projectileLocation.equals(compactCopperRound) || projectileLocation.equals(standardCopperRound)) {
                 casingType = ModParticleTypes.COPPER_CASING_PARTICLE.get();
-            } else if (projectileLocation.equals(compactAdvancedRound) || projectileLocation.equals(advancedRound) || projectileLocation.equals(heavyRound) || projectileLocation.equals(beowulfRound)|| projectileLocation.equals(ramrodRound)) {
+            }
+            if (projectileLocation.equals(hogRound) || projectileLocation.equals(ramrodRound)|| projectileLocation.equals(blazeFuel)) {
+                casingType = ModParticleTypes.IRON_CASING_PARTICLE.get();
+            } if (projectileLocation.equals(energyCell) || projectileLocation.equals(beowulfRound)) {
+                casingType = ModParticleTypes.DIAMOND_STEEL_CASING_PARTICLE.get();
+            }else if (projectileLocation.equals(compactAdvancedRound) || projectileLocation.equals(advancedRound) || projectileLocation.equals(heavyRound)) {
                 casingType = ModParticleTypes.BRASS_CASING_PARTICLE.get();
             } else if (projectileLocation.equals(shotgunShellLocation)) {
                 casingType = ModParticleTypes.SHELL_PARTICLE.get();
             } else if (projectileLocation.equals(bearpackShellLocation)) {
                 casingType = ModParticleTypes.BEARPACK_PARTICLE.get();
             }
+
         }
 
         if (level instanceof ServerLevel serverLevel) {

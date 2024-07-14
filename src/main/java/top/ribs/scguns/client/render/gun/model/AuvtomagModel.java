@@ -44,7 +44,7 @@ public class AuvtomagModel implements IOverrideModel {
             if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.EXTENDED_MAG.get())
                 RenderUtil.renderModel(SpecialModels.AUVTOMAG_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.SPEED_MAG.get())
-                RenderUtil.renderModel(SpecialModels.AUVTOMAG_STANDARD_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+                RenderUtil.renderModel(SpecialModels.AUVTOMAG_SPEED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.PLUS_P_MAG.get())
                 RenderUtil.renderModel(SpecialModels.AUVTOMAG_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
 

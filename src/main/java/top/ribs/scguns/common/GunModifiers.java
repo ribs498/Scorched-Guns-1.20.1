@@ -91,7 +91,14 @@ public class GunModifiers
             return 1.05F;
         }
     };
-
+    public static final IGunModifier NORMAL_ADS = new IGunModifier()
+    {
+        @Override
+        public double modifyAimDownSightSpeed(double speed)
+        {
+            return speed * 1.2F;
+        }
+    };
     public static final IGunModifier SLOWEST_ADS = new IGunModifier()
     {
         @Override

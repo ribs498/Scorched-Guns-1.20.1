@@ -1,0 +1,27 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2.0,
+                "max": 8.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:energy_cell"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:end_blueprint"
+        }
+      ]
+    }
+  ]
+}

@@ -121,7 +121,7 @@ public class GunItem extends Item implements IColored, IMeta {
         for (IAttachment.Type type : IAttachment.Type.values()) {
             ItemStack attachmentStack = Gun.getAttachment(type, gunStack);
             if (attachmentStack != null && attachmentStack.getItem() instanceof BayonetItem) {
-                System.out.println("Bayonet Found: " + attachmentStack.getItem()); // Debug statement
+                //System.out.println("Bayonet Found: " + attachmentStack.getItem()); // Debug statement
                 additionalDamage += ((BayonetItem) attachmentStack.getItem()).getAdditionalDamage();
             }
         }

@@ -60,13 +60,5 @@
 			"translation": [1.5, 8.5, -0.75],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	},
-	"groups": [
-		{
-			"name": "AdvancedSilencer",
-			"origin": [8.0625, 3.375, 12.775],
-			"color": 0,
-			"children": [0, 1]
-		}
-	]
+	}
 }

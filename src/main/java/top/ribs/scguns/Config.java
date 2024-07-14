@@ -2,10 +2,12 @@ package top.ribs.scguns;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 import org.apache.commons.lang3.tuple.Pair;
+import top.ribs.scguns.cache.ObjectCache;
 import top.ribs.scguns.client.SwayType;
 import top.ribs.scguns.client.render.crosshair.Crosshair;
 import top.ribs.scguns.client.screen.ButtonAlignment;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -82,6 +84,7 @@ public class Config
         public final ForgeConfigSpec.BooleanValue restrictCameraRollToWeapons;
         public final ForgeConfigSpec.BooleanValue sprintAnimation;
         public final ForgeConfigSpec.DoubleValue bobbingIntensity;
+
 
         public Display(ForgeConfigSpec.Builder builder)
         {
@@ -164,10 +167,12 @@ public class Config
         public final Gameplay gameplay;
         public final Network network;
         public final AggroMobs aggroMobs;
+        public final FleeingMobs fleeingMobs;
         public final Rockets rockets;
         public final Grenades grenades;
         public final StunGrenades stunGrenades;
         public final ProjectileSpread projectileSpread;
+        public final Gunsmith Gunsmith;
 
         public Common(ForgeConfigSpec.Builder builder)
         {
@@ -176,10 +181,12 @@ public class Config
                 this.gameplay = new Gameplay(builder);
                 this.network = new Network(builder);
                 this.aggroMobs = new AggroMobs(builder);
+                this.fleeingMobs = new FleeingMobs(builder);
                 this.rockets = new Rockets(builder);
                 this.grenades = new Grenades(builder);
                 this.stunGrenades = new StunGrenades(builder);
                 this.projectileSpread = new ProjectileSpread(builder);
+                this.Gunsmith = new Gunsmith(builder);
             }
             builder.pop();
         }
@@ -282,6 +289,26 @@ public class Config
             builder.pop();
         }
     }
+    public static class FleeingMobs
+    {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.DoubleValue silencedRange;
+        public final ForgeConfigSpec.DoubleValue unsilencedRange;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> fleeingEntities;
+
+        public FleeingMobs(ForgeConfigSpec.Builder builder)
+        {
+            builder.comment("Properties relating to mob fleeing").push("fleeing_mobs");
+            {
+                this.enabled = builder.comment("If true, nearby mobs will flee from the firing of guns.").define("enabled", true);
+                this.unsilencedRange = builder.comment("Any mobs within a sphere of this radius will flee from the shooter of an unsilenced gun.").defineInRange("unsilencedRange", 20.0, 0.0, Double.MAX_VALUE);
+                this.silencedRange = builder.comment("Any mobs within a sphere of this radius will flee from the shooter of a silenced gun.").defineInRange("silencedRange", 20.0, 0.0, Double.MAX_VALUE);
+                this.fleeingEntities = builder.comment("Any mobs listed here will flee from shooters").defineList("fleeingEntities", Arrays.asList(
+                        "minecraft:cow", "minecraft:sheep", "minecraft:pig", "minecraft:chicken", "minecraft:rabbit", "minecraft:horse", "minecraft:villager"), o -> o instanceof String);
+            }
+            builder.pop();
+        }
+    }
 
     /**
      * Missile related config options
@@ -316,7 +343,19 @@ public class Config
             builder.pop();
         }
     }
+    /**
+     * Gunsmith related config options
+     */
+    public static class Gunsmith
+    {
+        public Gunsmith(ForgeConfigSpec.Builder builder) {
+            builder.comment("Properties relating to gunsmith").push("gunsmith");
+            {
 
+            }
+            builder.pop();
+        }
+    }
     /**
      * Stun Grenade related config options
      */

@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/stairs",
+  "textures": {
+    "bottom": "scguns:block/asgharian_bricks",
+    "side": "scguns:block/asgharian_bricks",
+    "top": "scguns:block/asgharian_bricks"
+  }
+}

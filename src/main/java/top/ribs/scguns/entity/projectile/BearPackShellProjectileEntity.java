@@ -20,14 +20,24 @@ public class BearPackShellProjectileEntity extends ProjectileEntity {
     }
 
     @Override
-    protected void onProjectileTick()
-    {
-        if(this.level().isClientSide && (this.tickCount > 2 && this.tickCount < this.life)) {
+    protected void onProjectileTick() {
+        if (this.level().isClientSide && (this.tickCount > 2 && this.tickCount < this.life)) {
 
-            for(int i = 0; i < 5; i++) {
-                this.level().addParticle(ParticleTypes.FLAME, true, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            for (int i = 0; i < 5; i++) {
+                double offsetX = (this.random.nextDouble() - 0.5) * 0.2;
+                double offsetY = (this.random.nextDouble() - 0.5) * 0.2;
+                double offsetZ = (this.random.nextDouble() - 0.5) * 0.2;
+                double velocityX = (this.random.nextDouble() - 0.5) * 0.1;
+                double velocityY = (this.random.nextDouble() - 0.5) * 0.1;
+                double velocityZ = (this.random.nextDouble() - 0.5) * 0.1;
+                this.level().addParticle(ParticleTypes.SMALL_FLAME, true,
+                        this.getX() + offsetX,
+                        this.getY() + offsetY,
+                        this.getZ() + offsetZ,
+                        velocityX,
+                        velocityY,
+                        velocityZ);
             }
         }
     }
-
 }

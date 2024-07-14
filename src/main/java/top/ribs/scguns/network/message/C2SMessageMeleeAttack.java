@@ -28,6 +28,7 @@ public class C2SMessageMeleeAttack extends PlayMessage<C2SMessageMeleeAttack> {
 	public C2SMessageMeleeAttack decode(FriendlyByteBuf buffer) {
 		return new C2SMessageMeleeAttack();
 	}
+
 	@Override
 	public void handle(C2SMessageMeleeAttack message, MessageContext context) {
 		context.execute(() -> {
@@ -40,7 +41,7 @@ public class C2SMessageMeleeAttack extends PlayMessage<C2SMessageMeleeAttack> {
 					if (!(heldItem.getItem() instanceof GunItem gunItem)) {
 						return;
 					}
-                    if (gunItem.hasBayonet(heldItem)) {
+					if (gunItem.hasBayonet(heldItem)) {
 						MeleeAttackHandler.startBanzai(player);
 						scheduler.scheduleAtFixedRate(() -> {
 							if (MeleeAttackHandler.isBanzaiActive() && player.isSprinting()) {
@@ -58,13 +59,12 @@ public class C2SMessageMeleeAttack extends PlayMessage<C2SMessageMeleeAttack> {
 					}
 					ModSyncedDataKeys.MELEE.setValue(player, true);
 					MeleeAttackHandler.performMeleeAttack(player);
-					GunRenderingHandler.get().startMeleeAnimation();
+					GunRenderingHandler.get().startMeleeAnimation(player.getItemInHand(InteractionHand.MAIN_HAND));
 					GunRenderingHandler.get().startThirdPersonMeleeAnimation();
 
 					scheduler.schedule(() -> {
 						ModSyncedDataKeys.MELEE.setValue(player, false);
-					},
-							(long) GunRenderingHandler.MELEE_DURATION, TimeUnit.MILLISECONDS);
+					}, (long) GunRenderingHandler.MELEE_DURATION, TimeUnit.MILLISECONDS);
 				}
 			}
 		});

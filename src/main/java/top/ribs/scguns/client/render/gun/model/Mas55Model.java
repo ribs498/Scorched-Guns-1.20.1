@@ -26,6 +26,11 @@ public class Mas55Model implements IOverrideModel {
 
         //Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.MAS_55_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
+        if (Gun.getScope(stack) == null) {
+            RenderUtil.renderModel(SpecialModels.MAS_55_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
+        } else {
+            RenderUtil.renderModel(SpecialModels.MAS_55_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
         if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)))
         {
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())

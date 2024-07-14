@@ -1,10 +1,10 @@
 {
     "scguns:model": {
-        "origin": [8.0, 8.0, 8.0]
+        "origin": [8.0, 8.0, 4.4]
     },
     "scguns:barrel": {
         "muzzleFlash": {
-            "translation": [8.0, 8.0, 5.9]
+            "translation": [8.0, 8.0, 3.5]
         }
     }
 }

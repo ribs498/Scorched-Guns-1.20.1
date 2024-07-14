@@ -45,6 +45,7 @@ public class ReloadTracker {
     private final ItemStack stack;
     private final Gun gun;
     private int currentBulletReloadTick = 0;
+    private boolean initialReload = true;
     private ReloadTracker(Player player) {
         this.startTick = player.tickCount;
         this.slot = player.getInventory().selected;
@@ -56,8 +57,7 @@ public class ReloadTracker {
         return !this.stack.isEmpty() && player.getInventory().selected == this.slot && player.getInventory().getSelected() == this.stack;
     }
 
-    private boolean isWeaponFull()
-    {
+    private boolean isWeaponFull() {
         CompoundTag tag = this.stack.getOrCreateTag();
         return tag.getInt("AmmoCount") >= GunModifierHelper.getModifiedAmmoCapacity(this.stack, this.gun);
     }
@@ -77,12 +77,16 @@ public class ReloadTracker {
     private boolean canReload(Player player) {
         int deltaTicks = player.tickCount - this.startTick;
         if (gun.getReloads().getReloadType() == ReloadType.MANUAL) {
-            if (currentBulletReloadTick <= 0) { // Check if it's time to reload the next bullet
-                currentBulletReloadTick = GunEnchantmentHelper.getReloadInterval(this.stack); // Set reload time for one bullet
-                return true; // Allow reloading of the next bullet
+            if (this.initialReload) {
+                this.initialReload = false;
+                this.currentBulletReloadTick = GunEnchantmentHelper.getReloadInterval(this.stack);
+                return false;
+            } else if (currentBulletReloadTick <= 0) {
+                currentBulletReloadTick = GunEnchantmentHelper.getReloadInterval(this.stack);
+                return true;
             } else {
-                currentBulletReloadTick--; // Decrement the reload tick for continuous reloading
-                return false; // Not yet time to reload the next bullet
+                currentBulletReloadTick--;
+                return false;
             }
         } else {
             int interval = (gun.getReloads().getReloadType() == ReloadType.MAG_FED) ?

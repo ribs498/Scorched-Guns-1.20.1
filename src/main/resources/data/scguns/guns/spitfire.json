@@ -1,19 +1,23 @@
 {
   "display": {
     "flash": {
-      "size": 0.8,
-      "yOffset": 3.4,
-      "zOffset": -2
+      "size": 1.0,
+      "yOffset": 3.6,
+      "zOffset": -9.5
     },
     "muzzleFlashType": "flash_type_1"
   },
   "general": {
+    "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:mini_gun",
+    "projectileAmount": 5,
     "rate": 3,
-    "recoilAngle": 4.0,
-    "recoilKick": 0.33,
-    "spread": 3.0
+    "recoilAngle": 3.0,
+    "recoilKick": 0.5,
+    "spread": 10.0,
+    "meleeDamage": 3.5,
+    "meleeCooldownTicks": 20
   },
   "modules": {
     "attachments": {
@@ -24,29 +28,26 @@
       "stock": {
         "scale": 0.0
       }
-    },
-    "zoom": {
-      "fovModifier": 0.6,
-      "yOffset": 5.5,
-      "zOffset": 0.75
     }
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 10.0,
-    "gravity": false,
-    "item": "scguns:fuel",
-    "life": 40,
-    "size": 0.05,
+    "damage": 7.0,
+    "gravity": true,
+    "ejectsCasing": false,
+    "item": "scguns:blaze_fuel",
+    "casingType": "scguns:large_iron_casing",
+    "life": 3,
+    "size": 0.1,
     "speed": 3.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 8,
-    "reloadItem": "scguns:scrap",
+    "maxAmmo": 20,
+    "reloadItem": "scguns:fuel",
     "reloadTimer": 30,
-    "reloadType": "scguns:manual"
+    "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",

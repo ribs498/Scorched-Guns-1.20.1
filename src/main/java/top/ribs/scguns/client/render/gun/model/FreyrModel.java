@@ -26,6 +26,14 @@ public class FreyrModel implements IOverrideModel {
 
         //Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.FREYR_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
+        //Renders the iron sights if no scope is attached.
+        if ((Gun.getScope(stack) == null))
+            RenderUtil.renderModel(SpecialModels.FREYR_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
+        else
+            RenderUtil.renderModel(SpecialModels.FREYR_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
+
+
+
         if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)))
         {
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
@@ -63,5 +71,21 @@ public class FreyrModel implements IOverrideModel {
         }
         else
             RenderUtil.renderModel(SpecialModels.FREYR_STANDARD_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+        if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)))
+        {
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
+                RenderUtil.renderModel(SpecialModels.FREYR_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
+                RenderUtil.renderModel(SpecialModels.FREYR_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
+                RenderUtil.renderModel(SpecialModels.FREYR_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
+
+
+
     }
+
+
+
+
 }

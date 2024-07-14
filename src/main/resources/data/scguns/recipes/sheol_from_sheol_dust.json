@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "ammo",
+  "ingredients": [
+    {
+      "item": "scguns:sheol_dust"
+    },  {
+      "item": "scguns:sheol_dust"
+    },  {
+      "item": "scguns:sheol_dust"
+    },  {
+      "item": "scguns:sheol_dust"
+    },  {
+      "item": "scguns:sheol_dust"
+    },  {
+      "item": "scguns:sheol_dust"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "scguns:sheol"
+  }
+}

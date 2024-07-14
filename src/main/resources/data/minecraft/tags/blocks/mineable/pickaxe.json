@@ -13,6 +13,15 @@
     "scguns:sulfur_ore",
     "scguns:deepslate_sulfur_ore",
     "scguns:nether_sulfur_ore",
-    "scguns:sulfur_block"
+    "scguns:sulfur_block",
+    "scguns:vehement_coal_ore",
+    "scguns:ancient_brass_block",
+    "scguns:asgharian_bricks",
+    "scguns:asgharian_brick_stairs",
+    "scguns:asgharian_brick_slab",
+    "scguns:asgharian_brick_wall",
+    "scguns:asgharian_pillar",
+    "scguns:cracked_asgharian_bricks"
+
   ]
 }

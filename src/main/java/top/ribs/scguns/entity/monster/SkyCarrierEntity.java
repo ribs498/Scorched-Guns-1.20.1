@@ -1,6 +1,8 @@
 package top.ribs.scguns.entity.monster;
 
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
@@ -8,6 +10,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
@@ -19,8 +23,9 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
 import net.minecraft.world.entity.monster.Enemy;
+import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.*;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.entity.projectile.BrassBoltEntity;
@@ -30,6 +35,7 @@ import java.util.EnumSet;
 
 public class SkyCarrierEntity extends FlyingMob implements Enemy {
     private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(SkyCarrierEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> MUZZLE_FLASH_TIMER = SynchedEntityData.defineId(SkyCarrierEntity.class, EntityDataSerializers.INT);
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
 
@@ -37,7 +43,6 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
         super(pEntityType, pLevel);
         this.moveControl = new SkyCarrierMoveControl(this, 5.0, 8.0, 1.5, 0.5, 0.2);
     }
-
 
     @Override
     public boolean shouldDespawnInPeaceful() {
@@ -49,8 +54,35 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
         super.tick();
         if (this.level().isClientSide()) {
             setupAnimationStates();
+            spawnSmokeParticles();
+        }
+
+        int currentTimer = this.entityData.get(MUZZLE_FLASH_TIMER);
+        if (currentTimer > 0) {
+            this.entityData.set(MUZZLE_FLASH_TIMER, currentTimer - 1);
         }
     }
+
+    private void spawnSmokeParticles() {
+        if (this.isMuzzleFlashVisible()) {
+            double offsetX = 0.0;
+            double offsetY = this.getEyeHeight() - 0.5;
+            double offsetZ = 0.0;
+
+            double posX = this.getX() + offsetX;
+            double posY = this.getY() + offsetY;
+            double posZ = this.getZ() + offsetZ;
+            RandomSource random = this.getRandom();
+
+            for (int i = 0; i < 3; i++) {
+                double particleOffsetX = random.nextGaussian() * 0.1;
+                double particleOffsetY = random.nextGaussian() * 0.1;
+                double particleOffsetZ = random.nextGaussian() * 0.1;
+                this.level().addParticle(ParticleTypes.SMOKE, posX, posY, posZ, particleOffsetX, particleOffsetY, particleOffsetZ);
+            }
+        }
+    }
+
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new RandomFloatAroundGoal(this, 100));
@@ -77,6 +109,7 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
             --idleAnimationTimeout;
         }
     }
+
     @Override
     protected void updateWalkAnimation(float pPartialTick) {
         float f;
@@ -87,22 +120,49 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
         }
         this.walkAnimation.update(f, 0.2f);
     }
+
     @Override
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(DATA_IS_CHARGING, false);
+        this.entityData.define(MUZZLE_FLASH_TIMER, 0);
     }
+
     @Override
     protected SoundEvent getAmbientSound() {
         return SoundEvents.BEACON_AMBIENT;
     }
+
     @Override
     protected SoundEvent getHurtSound(@NotNull DamageSource pDamageSource) {
         return SoundEvents.IRON_GOLEM_HURT;
     }
+
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.IRON_GOLEM_DEATH;
+    }
+
+    public void triggerMuzzleFlash() {
+        this.entityData.set(MUZZLE_FLASH_TIMER, 10);
+    }
+
+    public boolean isMuzzleFlashVisible() {
+        return this.entityData.get(MUZZLE_FLASH_TIMER) > 0;
+    }
+
+    @Override
+    public boolean checkSpawnRules(LevelAccessor pLevel, MobSpawnType pSpawnReason) {
+        return pLevel.getBrightness(LightLayer.SKY, this.blockPosition()) < 8 && super.checkSpawnRules(pLevel, pSpawnReason);
+    }
+
+    @Override
+    public boolean checkSpawnObstruction(LevelReader pLevel) {
+        return pLevel.getBrightness(LightLayer.SKY, this.blockPosition()) < 8 && super.checkSpawnObstruction(pLevel);
+    }
+
+    public static boolean checkMonsterSpawnRules(EntityType<SkyCarrierEntity> skyCarrierEntityEntityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
+        return serverLevelAccessor.getDifficulty() != Difficulty.PEACEFUL && serverLevelAccessor.getRawBrightness(blockPos, 0) < 8;
     }
 
     ///MOVE CONTROL
@@ -187,7 +247,6 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
         }
     }
 
-
     ////FLOAT
     public static class RandomFloatAroundGoal extends Goal {
         private final SkyCarrierEntity skyCarrier;
@@ -214,10 +273,12 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
             this.skyCarrier.getMoveControl().setWantedPosition(x, y, z, 1.0);
         }
     }
+
     @Override
     protected @NotNull PathNavigation createNavigation(Level level) {
         return new FlyingPathNavigation(this, level);
     }
+
     ///LOOK
     private static class SkyCarrierFaceAndBackAwayFromTargetGoal extends Goal {
         private final SkyCarrierEntity skyCarrier;
@@ -248,6 +309,7 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
             }
         }
     }
+
     public static class ShootProjectileGoal extends Goal {
         private final SkyCarrierEntity skyCarrier;
         private int cooldown;
@@ -302,9 +364,8 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
                 brassBolt.shoot(dx, dy, dz, 1.5f, 6.0f);
                 this.skyCarrier.level().addFreshEntity(brassBolt);
                 this.skyCarrier.level().playSound(null, this.skyCarrier.getX(), this.skyCarrier.getY(), this.skyCarrier.getZ(), ModSounds.BRUISER_SILENCED_FIRE.get(), SoundSource.HOSTILE, 1.0F, 1.0F);
+                this.skyCarrier.triggerMuzzleFlash();
             }
         }
     }
-
 }
-

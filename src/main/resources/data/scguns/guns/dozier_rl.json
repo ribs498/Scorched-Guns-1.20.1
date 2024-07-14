@@ -2,8 +2,8 @@
   "display": {
     "flash": {
       "size": 1.2,
-      "yOffset": 5.0,
-      "zOffset": -14.5
+      "yOffset": 6.0,
+      "zOffset": -13.5
     },
     "muzzleFlashType": "flash_type_1"
   },
@@ -14,7 +14,9 @@
     "rate": 7,
     "recoilAngle": 6.7,
     "recoilKick": 2.22,
-    "spread": 4.0
+    "spread": 4.0,
+    "meleeDamage": 3.5,
+    "meleeCooldownTicks": 25
   },
   "modules": {
     "attachments": {
@@ -39,11 +41,11 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 6.0,
+    "damage": 18.0,
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:rocket",
-    "life": 60,
+    "life": 30,
     "size": 0.05,
     "speed": 5.0,
     "trailLengthMultiplier": 2.0

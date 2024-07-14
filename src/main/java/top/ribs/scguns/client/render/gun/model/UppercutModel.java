@@ -24,6 +24,12 @@ public class UppercutModel implements IOverrideModel {
     @Override
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
 
+
+        if ((Gun.getScope(stack) == null))
+            RenderUtil.renderModel(SpecialModels.UPPERCUT_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
+        else
+            RenderUtil.renderModel(SpecialModels.UPPERCUT_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
+
         //Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.UPPERCUT_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
@@ -36,11 +42,11 @@ public class UppercutModel implements IOverrideModel {
         }
         if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)))
         {
-            if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
+            if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.UPPERCUT_HEAVY_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.WOODEN_STOCK.get())
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.UPPERCUT_WOODEN_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.LIGHT_STOCK.get())
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.UPPERCUT_LIGHT_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
 
         }

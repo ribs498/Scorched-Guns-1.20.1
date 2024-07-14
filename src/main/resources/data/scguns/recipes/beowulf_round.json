@@ -3,10 +3,10 @@
   "processingTime": 20,
   "ingredients": [
     {
-      "item": "scguns:small_brass_casing"
+      "item": "scguns:small_diamond_steel_casing"
     },
     {
-      "item": "minecraft:gunpowder"
+      "item": "scguns:sheol"
     },
     {
       "item": "scguns:netherite_scrap_chunk"

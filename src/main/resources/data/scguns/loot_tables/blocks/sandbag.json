@@ -1,0 +1,56 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "name": "sandbag_drop",
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "scguns:sandbag",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "scguns:sandbag",
+                  "properties": {
+                    "type": "single"
+                  }
+                }
+              ],
+              "count": 1
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "scguns:sandbag",
+                  "properties": {
+                    "type": "double"
+                  }
+                }
+              ],
+              "count": 2
+            },
+            {
+              "function": "minecraft:set_count",
+              "conditions": [
+                {
+                  "condition": "minecraft:block_state_property",
+                  "block": "scguns:sandbag",
+                  "properties": {
+                    "type": "triple"
+                  }
+                }
+              ],
+              "count": 3
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

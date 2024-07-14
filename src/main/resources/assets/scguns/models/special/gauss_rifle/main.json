@@ -1,7 +1,8 @@
 {
 	"credit": "Made with Blockbench",
-	"texture_size": [64, 64],
+	"texture_size": [8, 8],
 	"textures": {
+		"1": "scguns:item/gauss_rifle_animated",
 		"8": "scguns:item/gauss_rifle",
 		"particle": "scguns:item/gauss_rifle"
 	},
@@ -232,12 +233,12 @@
 			"to": [6.75, 6, 13.125],
 			"rotation": {"angle": 22.5, "axis": "y", "origin": [6, 5.25, 12.95]},
 			"faces": {
-				"north": {"uv": [6, 3.75, 6.375, 4.125], "texture": "#8"},
-				"east": {"uv": [5.75, 7.25, 5.875, 7.625], "texture": "#8"},
-				"south": {"uv": [4.25, 6, 4.625, 6.375], "texture": "#8", "cullface": "south"},
-				"west": {"uv": [7.25, 5.75, 7.375, 6.125], "texture": "#8"},
-				"up": {"uv": [7.625, 6.375, 7.25, 6.25], "texture": "#8"},
-				"down": {"uv": [7.625, 6.5, 7.25, 6.625], "texture": "#8"}
+				"north": {"uv": [0, 0, 3, 3], "texture": "#1"},
+				"east": {"uv": [4, 0, 5, 3], "texture": "#1"},
+				"south": {"uv": [0, 4, 3, 7], "texture": "#1", "cullface": "south"},
+				"west": {"uv": [4, 4, 5, 7], "texture": "#1"},
+				"up": {"uv": [9, 1, 6, 0], "texture": "#1"},
+				"down": {"uv": [9, 2, 6, 3], "texture": "#1"}
 			}
 		},
 		{
@@ -437,7 +438,7 @@
 		},
 		{
 			"from": [7.95, 6.25, 1.1],
-			"to": [8.05, 6.75, 1.35],
+			"to": [8.05, 6.55, 1.35],
 			"rotation": {"angle": 0, "axis": "z", "origin": [7.05, 6, -5.525]},
 			"faces": {
 				"north": {"uv": [1.75, 8, 1.875, 8.125], "texture": "#8"},

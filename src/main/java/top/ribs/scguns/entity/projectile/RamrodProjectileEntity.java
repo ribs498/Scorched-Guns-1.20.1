@@ -33,7 +33,16 @@ public class RamrodProjectileEntity extends ProjectileEntity {
                 double offsetX = (this.random.nextDouble() - 0.5) * 0.5;
                 double offsetY = (this.random.nextDouble() - 0.5) * 0.5;
                 double offsetZ = (this.random.nextDouble() - 0.5) * 0.5;
-                this.level().addParticle(ParticleTypes.SOUL_FIRE_FLAME, true, this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ, 0, 0, 0);
+                double velocityX = (this.random.nextDouble() - 0.5) * 0.1;
+                double velocityY = (this.random.nextDouble() - 0.5) * 0.1;
+                double velocityZ = (this.random.nextDouble() - 0.5) * 0.1;
+                this.level().addParticle(ParticleTypes.ENCHANTED_HIT, true,
+                        this.getX() + offsetX,
+                        this.getY() + offsetY,
+                        this.getZ() + offsetZ,
+                        velocityX,
+                        velocityY,
+                        velocityZ);
             }
         }
     }
@@ -42,33 +51,22 @@ public class RamrodProjectileEntity extends ProjectileEntity {
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
         float damage = this.getDamage();
         entity.hurt(ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner()), damage);
-        createPlasmaExplosion(this, 1.0f);
         spawnExplosionParticles(hitVec);
     }
 
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
-        createPlasmaExplosion(this, 1.0f);
         spawnExplosionParticles(new Vec3(x, y + 0.1, z));
     }
 
     @Override
     public void onExpired() {
-        createPlasmaExplosion(this, 1.0f);
         spawnExplosionParticles(new Vec3(this.getX(), this.getY() + 0.1, this.getZ()));
-    }
-
-    public static void createPlasmaExplosion(Entity entity, float radius) {
-        if (!entity.level().isClientSide) {
-            PlasmaExplosion explosion = new PlasmaExplosion((ServerLevel) entity.level(), entity, entity.getX(), entity.getY(), entity.getZ(), radius, false, null);
-            explosion.explode();
-        }
     }
 
     private void spawnExplosionParticles(Vec3 position) {
         if (!this.level().isClientSide) {
             ServerLevel serverLevel = (ServerLevel) this.level();
-            // Reduce particle count for optimization
             int particleCount = 5; // Adjust the number of particles
             serverLevel.sendParticles(ModParticleTypes.RAMROD_IMPACT.get(), position.x, position.y, position.z, particleCount, 0, 0, 0, 0.1);
             for (int i = 0; i < particleCount; i++) {

@@ -3,7 +3,7 @@
   "processingTime": 20,
   "ingredients": [
     {
-      "item": "scguns:medium_brass_casing"
+      "item": "scguns:small_diamond_steel_casing"
     },
     {
       "item": "minecraft:redstone"

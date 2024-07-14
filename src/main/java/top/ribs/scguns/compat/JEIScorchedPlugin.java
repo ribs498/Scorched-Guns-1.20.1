@@ -47,11 +47,16 @@ public class JEIScorchedPlugin implements IModPlugin {
         registration.addIngredientInfo(new ItemStack(ModItems.REPAIR_KIT.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.repair_kit"));
         registration.addIngredientInfo(new ItemStack(ModItems.COPPER_BLUEPRINT.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.copper_blueprint"));
         registration.addIngredientInfo(new ItemStack(ModItems.IRON_BLUEPRINT.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.iron_blueprint"));
-
-
-
-
+        registration.addIngredientInfo(new ItemStack(ModItems.DIAMOND_STEEL_BLUEPRINT.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.diamond_steel_blueprint"));
+        registration.addIngredientInfo(new ItemStack(ModItems.TREATED_BRASS_BLUEPRINT.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.treated_brass_blueprint"));
+        registration.addIngredientInfo(new ItemStack(ModItems.OCEAN_BLUEPRINT.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.ocean_blueprint"));
+        registration.addIngredientInfo(new ItemStack(ModItems.PIGLIN_BLUEPRINT.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.piglin_blueprint"));
+        registration.addIngredientInfo(new ItemStack(ModItems.DEEP_DARK_BLUEPRINT.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.deep_dark_blueprint"));
+        registration.addIngredientInfo(new ItemStack(ModItems.END_BLUEPRINT.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.end_blueprint"));
+        registration.addIngredientInfo(new ItemStack(ModBlocks.VENT_COLLECTOR.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.vent_collector"));
+        registration.addIngredientInfo(new ItemStack(ModBlocks.NITER_GLASS.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.niter_glass"));
         registration.addIngredientInfo(new ItemStack(ModItems.BLASPHEMY.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.blasphemy"));
+
 
         List<GunBenchRecipe> gunBenchRecipes = recipeManager.getAllRecipesFor(GunBenchRecipe.Type.INSTANCE);
         List<MaceratorRecipe> maceratorRecipes = recipeManager.getAllRecipesFor(MaceratorRecipe.Type.INSTANCE);

@@ -6,7 +6,7 @@
       "item": "scguns:small_copper_casing"
     },
     {
-      "item": "scguns:gunpowder_dust"
+      "tag": "scguns:gunpowder_dust"
     },
     {
       "item": "minecraft:iron_nugget"

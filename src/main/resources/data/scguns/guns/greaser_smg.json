@@ -8,19 +8,22 @@
     "muzzleFlashType": "flash_type_1"
   },
   "general": {
-    "alwaysSpread": true,
+    "alwaysSpread": false,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
-    "rate": 3,
-    "recoilAngle": 2.7,
-    "recoilKick": 0.22,
-    "spread": 4.0
+    "rate": 4,
+    "recoilAngle": 4.0,
+    "recoilKick": 1.5,
+    "spread": 4.0,
+    "meleeDamage": 2.5,
+    "meleeCooldownTicks": 15
+
   },
   "modules": {
     "attachments": {
       "barrel": {
         "yOffset": 5.4,
-        "zOffset": -5.5
+        "zOffset": -5.8
       },
       "stock": {
         "scale": 0.0
@@ -37,21 +40,21 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 6.0,
+    "damage": 6.5,
     "ejectsCasing": true,
     "item": "scguns:compact_advanced_round",
     "casingType": "scguns:small_brass_casing",
-    "life": 60,
+    "life": 20,
     "size": 0.05,
     "speed": 4.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 30,
-    "maxAmmo": 30,
+    "maxAmmo": 18,
     "reloadItem": "scguns:compact_advanced_round",
-    "reloadTimer": 10,
-    "reloadType": "scguns:manual"
+    "reloadTimer": 30,
+    "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",

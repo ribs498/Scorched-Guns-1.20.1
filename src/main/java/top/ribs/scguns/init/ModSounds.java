@@ -11,30 +11,28 @@ public class ModSounds {
     public static final DeferredRegister<SoundEvent> REGISTER = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, Reference.MOD_ID);
 
     public static final RegistryObject<SoundEvent> COPPER_GUN_JAM = register("item.rusty_gnat.copper_jam");
+    public static final RegistryObject<SoundEvent> BLACKPOWDER_FIRE = register("item.blackpowder.fire");
+    public static final RegistryObject<SoundEvent> BRUISER_SILENCED_FIRE = register("item.bruiser.silenced_fire");
+    public static final RegistryObject<SoundEvent> MAKESHIFT_RIFLE_FIRE = register("item.makeshift_rifle.fire");
     public static final RegistryObject<SoundEvent> RUSTY_GNAT_FIRE = register("item.rusty_gnat.fire");
     public static final RegistryObject<SoundEvent> RUSTY_GNAT_SILENCED_FIRE = register("item.rusty_gnat.silenced_fire");
-    public static final RegistryObject<SoundEvent> RUSTY_GNAT_ENCHANTED_FIRE = register("item.rusty_gnat.enchanted_fire");
+    public static final RegistryObject<SoundEvent> BRASS_SHOTGUN_FIRE = register("item.brass_shotgun.fire");
     public static final RegistryObject<SoundEvent> BOOMSTICK_FIRE = register("item.boomstick.fire");
     public static final RegistryObject<SoundEvent> BOOMSTICK_SILENCED_FIRE = register("item.boomstick.silenced_fire");
     public static final RegistryObject<SoundEvent> COMBAT_SHOTGUN_FIRE = register("item.combat_shotgun.fire");
     public static final RegistryObject<SoundEvent> COMBAT_SHOTGUN_SILENCED_FIRE = register("item.combat_shotgun.silenced_fire");
-    public static final RegistryObject<SoundEvent> BOOMSTICK_ENCHANTED_FIRE = register("item.copper_shotgun.enchanted_fire");
     public static final RegistryObject<SoundEvent> BRUISER_FIRE = register("item.bruiser.fire");
-    public static final RegistryObject<SoundEvent> BRUISER_SILENCED_FIRE = register("item.bruiser.silenced_fire");
-    public static final RegistryObject<SoundEvent> MAKESHIFT_RIFLE_FIRE = register("item.makeshift_rifle.fire");
+
     public static final RegistryObject<SoundEvent> MAKESHIFT_RIFLE_SILENCED_FIRE = register("item.makeshift_rifle.silenced_fire");
-    public static final RegistryObject<SoundEvent> MAKESHIFT_RIFLE_ENCHANTED_FIRE = register("item.makeshift_rifle.enchanted_fire");
     public static final RegistryObject<SoundEvent> MAKESHIFT_RIFLE_COCK = register("item.makeshift_rifle.cock");
-    public static final RegistryObject<SoundEvent> SCRAP_SIDEARM_FIRE = register("item.scrap_sidearm.fire");
+    public static final RegistryObject<SoundEvent> SCRAPPER_FIRE = register("item.scrapper.fire");
     public static final RegistryObject<SoundEvent> GREASER_SMG_FIRE = register("item.greaser_smg.fire");
     public static final RegistryObject<SoundEvent> GYROJET_FIRE = register("item.gyrojet.fire");
     public static final RegistryObject<SoundEvent> IRON_RIFLE_FIRE = register("item.iron_rifle.fire");
-    public static final RegistryObject<SoundEvent> IRON_RIFLE_ENCHANTED_FIRE = register("item.iron_rifle.enchanted_fire");
-    public static final RegistryObject<SoundEvent> BLACKPOWDER_FIRE = register("item.blackpowder.fire");
+
     public static final RegistryObject<SoundEvent> HEAVY_RIFLE_FIRE = register("item.heavy_rifle.fire");
     public static final RegistryObject<SoundEvent> BRASS_PISTOL_FIRE = register("item.brass_pistol.fire");
     public static final RegistryObject<SoundEvent> PLASMA_FIRE = register("item.plasma.fire");
-    public static final RegistryObject<SoundEvent> PLASMA_RELOAD = register("item.plasma.reload");
     public static final RegistryObject<SoundEvent> GAUSS_FIRE = register("item.gauss.fire");
     public static final RegistryObject<SoundEvent> ROCKET_FIRE = register("item.rocket.fire");
     public static final RegistryObject<SoundEvent> ROCKET_RIFLE_FIRE = register("item.rocket_rifle.fire");

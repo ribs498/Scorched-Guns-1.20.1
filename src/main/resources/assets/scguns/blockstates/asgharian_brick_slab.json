@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "scguns:block/asgharian_brick_slab"
+    },
+    "type=double": {
+      "model": "scguns:block/asgharian_bricks"
+    },
+    "type=top": {
+      "model": "scguns:block/asgharian_brick_slab_top"
+    }
+  }
+}

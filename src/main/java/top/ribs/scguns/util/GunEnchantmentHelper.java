@@ -85,7 +85,7 @@ public class GunEnchantmentHelper
         int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.TRIGGER_FINGER.get(), weapon);
         if(level > 0)
         {
-            float newRate = rate * (0.25F * level);
+            float newRate = rate * (0.1F * level);
             rate -= Mth.clamp(newRate, 0, rate);
         }
         return rate;

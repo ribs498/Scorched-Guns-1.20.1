@@ -19,8 +19,10 @@ import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -29,10 +31,9 @@ import top.ribs.scguns.init.ModSounds;
 
 import java.util.EnumSet;
 
-public class RedcoatEntity extends Monster {
+public class RedcoatEntity extends Monster implements RangedAttackMob {
     private static final EntityDataAccessor<Boolean> ATTACKING = SynchedEntityData.defineId(RedcoatEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> MUZZLE_FLASH_TIMER = SynchedEntityData.defineId(RedcoatEntity.class, EntityDataSerializers.INT);
-
 
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState attackAnimationState = new AnimationState();
@@ -40,13 +41,14 @@ public class RedcoatEntity extends Monster {
     public int attackAnimationTimeout = 0;
     private int idleAnimationTimeout = 0;
 
+    private int attackTime = -1;
 
     public RedcoatEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
-        return Animal.createLivingAttributes()
+        return Monster.createMonsterAttributes()
                 .add(Attributes.MAX_HEALTH, 20D)
                 .add(Attributes.FOLLOW_RANGE, 26D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
@@ -65,7 +67,6 @@ public class RedcoatEntity extends Monster {
         return this.entityData.get(MUZZLE_FLASH_TIMER) > 0;
     }
 
-
     @Override
     public void tick() {
         super.tick();
@@ -77,6 +78,16 @@ public class RedcoatEntity extends Monster {
         int currentTimer = this.entityData.get(MUZZLE_FLASH_TIMER);
         if (currentTimer > 0) {
             this.entityData.set(MUZZLE_FLASH_TIMER, currentTimer - 1);
+        }
+
+        if (this.isAttacking()) {
+            if (--this.attackTime <= 0) {
+                this.attackTime = 40; // Cooldown between shots
+                LivingEntity target = this.getTarget();
+                if (target != null) {
+                    this.performRangedAttack(target, 1.0F);
+                }
+            }
         }
     }
 
@@ -140,14 +151,28 @@ public class RedcoatEntity extends Monster {
         this.walkAnimation.update(f, 0.2f);
     }
 
+    @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(2, new RestrictSunGoal(this));
         this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0));
-        this.goalSelector.addGoal(5, new WaterAvoidingRandomStrollGoal(this, 1.0));
-        this.goalSelector.addGoal(6, new LookAtPlayerGoal(this, Player.class, 8.0F));
+        this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0));
+        this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
+        this.goalSelector.addGoal(7, new RangedAttackGoal(this, 1.0, 40, 15.0F) {
+            @Override
+            public void stop() {
+                super.stop();
+                RedcoatEntity.this.setAttacking(false);
+            }
+
+            @Override
+            public void start() {
+                super.start();
+                RedcoatEntity.this.setAttacking(true);
+            }
+        });
+        this.goalSelector.addGoal(8, new MeleeAttackGoal(this, 1.2, false));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new RangedMusketAttackGoal(this, 1.0, 40, 6.0F));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
@@ -172,87 +197,10 @@ public class RedcoatEntity extends Monster {
         return SoundEvents.ZOMBIE_DEATH;
     }
 
-    public static class RangedMusketAttackGoal extends Goal {
-        private final RedcoatEntity redcoat;
-        private final double speedModifier;
-        private final int attackInterval;
-        private final float attackRadius;
-        private int attackTime = -1;
-
-        public RangedMusketAttackGoal(RedcoatEntity redcoat, double speedModifier, int attackInterval, float attackRadius) {
-            this.redcoat = redcoat;
-            this.speedModifier = speedModifier;
-            this.attackInterval = attackInterval;
-            this.attackRadius = attackRadius;
-            this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
-        }
-
-        @Override
-        public boolean canUse() {
-            return this.redcoat.getTarget() != null && this.isHoldingUsableItem();
-        }
-
-        protected boolean isHoldingUsableItem() {
-            return true;
-        }
-
-        @Override
-        public boolean canContinueToUse() {
-            return (this.canUse() || !this.redcoat.getNavigation().isDone()) && this.redcoat.isTargetInRange(this.attackRadius);
-        }
-
-        @Override
-        public void stop() {
-            this.redcoat.setAggressive(false);
-            this.redcoat.setTarget(null);
-            this.attackTime = -1;
-        }
-
-        @Override
-        public void tick() {
-            LivingEntity target = this.redcoat.getTarget();
-            if (target != null) {
-                double distance = this.redcoat.distanceToSqr(target.getX(), target.getY(), target.getZ());
-
-                if (distance <= this.attackRadius * this.attackRadius) {
-                    this.redcoat.getNavigation().stop();
-                } else {
-                    this.redcoat.getNavigation().moveTo(target, this.speedModifier);
-                }
-
-                this.redcoat.getLookControl().setLookAt(target, 30.0F, 30.0F);
-                this.faceTarget(target);
-
-                if (--this.attackTime <= 0) {
-                    this.attackTime = this.attackInterval;
-                    if (distance <= this.attackRadius * this.attackRadius) {
-                        this.redcoat.performRangedAttack(target);
-                    }
-                }
-            }
-        }
-
-        private void faceTarget(LivingEntity target) {
-            double dx = target.getX() - this.redcoat.getX();
-            double dz = target.getZ() - this.redcoat.getZ();
-            float targetYaw = (float) (Mth.atan2(dz, dx) * (180F / Math.PI)) - 90.0F;
-            this.redcoat.setYRot(targetYaw);
-            this.redcoat.yHeadRot = this.redcoat.getYRot();
-        }
-    }
-
-    private boolean isTargetInRange(float attackRadius) {
-        LivingEntity target = this.getTarget();
-        if (target == null) {
-            return false;
-        } else {
-            return this.distanceToSqr(target) <= (double) (attackRadius * attackRadius);
-        }
-    }
-
-    public void performRangedAttack(LivingEntity target) {
+    @Override
+    public void performRangedAttack(@NotNull LivingEntity target, float distanceFactor) {
         BrassBoltEntity projectile = new BrassBoltEntity(this.level(), this);
-        double offsetX = -0.0;
+        double offsetX = 0.0;
         double offsetY = this.getEyeHeight() - 0.5;
         double offsetZ = -0.5;
         double d0 = target.getX() - (this.getX() + offsetX);
@@ -265,4 +213,31 @@ public class RedcoatEntity extends Monster {
         this.triggerMuzzleFlash();
     }
 
+    public void setAttacking(boolean attacking) {
+        this.entityData.set(ATTACKING, attacking);
+    }
+
+    @Override
+    public void aiStep() {
+        super.aiStep();
+        if (this.isAlive() && this.isSunSensitive() && this.isSunBurnTick()) {
+            ItemStack itemstack = this.getItemBySlot(EquipmentSlot.HEAD);
+            if (!itemstack.isEmpty()) {
+                if (itemstack.isDamageableItem()) {
+                    itemstack.setDamageValue(itemstack.getDamageValue() + this.random.nextInt(2));
+                    if (itemstack.getDamageValue() >= itemstack.getMaxDamage()) {
+                        this.broadcastBreakEvent(EquipmentSlot.HEAD);
+                        this.setItemSlot(EquipmentSlot.HEAD, ItemStack.EMPTY);
+                    }
+                }
+            } else {
+                this.setSecondsOnFire(8);
+            }
+        }
+    }
+
+    private boolean isSunSensitive() {
+        return true;
+    }
 }
+

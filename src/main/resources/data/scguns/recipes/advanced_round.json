@@ -6,7 +6,7 @@
       "item": "scguns:medium_brass_casing"
     },
     {
-      "item": "scguns:gunpowder_dust"
+      "tag": "scguns:gunpowder_dust"
     },
     {
       "item": "scguns:anthralite_nugget"

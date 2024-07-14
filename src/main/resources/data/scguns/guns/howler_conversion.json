@@ -2,8 +2,8 @@
   "display": {
     "flash": {
       "size": 1.0,
-      "yOffset": 4.6,
-      "zOffset": -14.5
+      "yOffset": 4.5,
+      "zOffset": -14.0
     },
     "muzzleFlashType": "flash_type_1"
   },
@@ -12,20 +12,22 @@
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
     "rate": 3,
-    "recoilAngle": 2.7,
-    "recoilKick": 0.22,
-    "spread": 4.0
+    "recoilAngle": 11.0,
+    "recoilKick": 3.5,
+    "spread": 4.2,
+    "meleeDamage": 2.5,
+    "meleeCooldownTicks": 20
   },
   "modules": {
     "attachments": {
       "barrel": {
-        "yOffset": 4.6,
-        "zOffset": -12.0
+        "yOffset": 4.5,
+        "zOffset": -16.0
       },
       "scope": {
         "size": 0.7,
-        "yOffset": 6.3,
-        "zOffset": 5.2
+        "yOffset": 6.5,
+        "zOffset": 6.0
       },
       "stock": {
         "scale": 0.0
@@ -33,32 +35,33 @@
       "underBarrel": {
         "yOffset": 5.5,
         "zOffset": -2.5
-      },"magazine": {
+      },
+      "magazine": {
         "scale": 0.0
       }
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 6.25,
-      "zOffset": 0.75
+      "yOffset": 6.9,
+      "zOffset": -1.0
     }
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 6.0,
+    "damage": 20.0,
     "ejectsCasing": true,
-    "gravity": true,
+    "gravity": false  ,
     "item": "scguns:krahg_round",
-    "casingType": "scguns:medium_brass_casing",
-    "life": 60,
-    "size": 0.05,
-    "speed": 8.0,
-    "trailLengthMultiplier": 4.0
+    "casingType": "scguns:large_brass_casing",
+    "life": 50,
+    "size": 0.1,
+    "speed": 13.0,
+    "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 30,
-    "reloadItem": "scguns:advanced_round",
+    "maxAmmo": 6  ,
+    "reloadItem": "scguns:krahg_round",
     "reloadTimer": 30,
     "reloadType": "scguns:mag_fed"
   },

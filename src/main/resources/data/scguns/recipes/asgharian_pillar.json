@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "scguns:asgharian_bricks"
+    }
+  },
+  "pattern": [
+    " # ",
+    " # "
+  ],
+  "result": {
+    "count": 2,
+    "item": "scguns:asgharian_pillar"
+  }
+}

@@ -1,9 +1,9 @@
 {
   "display": {
     "flash": {
-      "size": 1.0,
+      "size": 1.5,
       "yOffset": 3.8,
-      "zOffset": -3.5
+      "zOffset": -14.0
     },
     "muzzleFlashType": "flash_type_1"
   },
@@ -11,11 +11,13 @@
     "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
-    "projectileAmount": 22,
+    "projectileAmount": 15,
     "rate": 3,
     "recoilAngle": 10.0,
-    "recoilKick": 0.5,
-    "spread": 10.0
+    "recoilKick": 2.0,
+    "spread": 19.0,
+    "meleeDamage": 6.0,
+    "meleeCooldownTicks": 20
   },
   "modules": {
     "attachments": {
@@ -23,25 +25,25 @@
     },
     "zoom": {
       "fovModifier": 0.7,
-      "yOffset": 4.6,
+      "yOffset": 6.5,
       "zOffset": 0.6
     }
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 32.0,
+    "damage": 15.0,
     "item": "scguns:shotgun_shell",
-    "casingType": "scguns:empty_shell",
+    "casingType": "scguns:small_copper_casing",
     "life": 6,
     "size": 0.05,
-    "speed": 6.0,
+    "speed": 4.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 15,
     "maxAmmo": 2,
     "reloadItem": "scguns:shotgun_shell",
-    "reloadTimer": 5,
+    "reloadTimer": 25,
     "reloadType": "scguns:manual"
   },
   "sounds": {

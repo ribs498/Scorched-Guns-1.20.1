@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "transparent=false": {
+      "model": "scguns:block/light_blue_niter_glass_opaque"
+    },
+    "transparent=true": {
+      "model": "minecraft:block/light_blue_stained_glass"
+    }
+  }
+}

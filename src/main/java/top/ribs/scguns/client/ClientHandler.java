@@ -6,7 +6,6 @@ import net.minecraft.client.gui.components.OptionsList;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.MouseSettingsScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.model.Model;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
@@ -69,6 +68,21 @@ public class ClientHandler {
         BlockEntityRenderers.register(ModBlockEntities.MECHANICAL_PRESS.get(), MechanicalPressRenderer::new);
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.NITER_GLASS.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.WHITE_NITER_GLASS.get(), RenderType.translucent());;
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.RED_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.GREEN_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.BLUE_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.YELLOW_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.ORANGE_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PURPLE_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.BLACK_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PINK_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.BROWN_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.CYAN_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIGHT_BLUE_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIME_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.MAGENTA_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.GRAY_NITER_GLASS.get(), RenderType.translucent());
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIGHT_GRAY_NITER_GLASS.get(), RenderType.translucent());
         registerAmmoCountProperty(ModItems.PISTOL_AMMO_BOX.get());
         registerAmmoCountProperty(ModItems.RIFLE_AMMO_BOX.get());
         registerAmmoCountProperty(ModItems.SHOTGUN_AMMO_BOX.get());
@@ -77,6 +91,7 @@ public class ClientHandler {
         registerAmmoCountProperty(ModItems.SPECIAL_AMMO_BOX.get());
         MinecraftForge.EVENT_BUS.register(new PlayerModelHandler());
         MenuScreens.register(ModMenuTypes.MACERATOR_MENU.get(), MaceratorScreen::new);
+        MenuScreens.register(ModMenuTypes.SUPPLY_SCAMP_MENU.get(), SupplyScampScreen::new);
         MenuScreens.register(ModMenuTypes.MECHANICAL_PRESS_MENU.get(), MechanicalPressScreen::new);
         MenuScreens.register(ModMenuTypes.GUN_BENCH.get(), GunBenchScreen::new);
         EntityRenderers.register(ModEntities.COG_MINION.get(), CogMinionRenderer::new);
@@ -87,6 +102,8 @@ public class ClientHandler {
         EntityRenderers.register(ModEntities.HIVE.get(), HiveRenderer::new);
         EntityRenderers.register(ModEntities.SWARM.get(), SwarmRenderer::new);
         EntityRenderers.register(ModEntities.DISSIDENT.get(), DissidentRenderer::new);
+        EntityRenderers.register(ModEntities.HORNLIN.get(), HornlinRenderer::new);
+        EntityRenderers.register(ModEntities.BLUNDERER.get(), BlundererRenderer::new);
         EntityRenderers.register(ModEntities.BRASS_BOLT.get(), BrassBoltRenderer::new);
 
         event.enqueueWork(ClientHandler::setup);
@@ -122,11 +139,13 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.BLUNDERBUSS.get(), new BlunderbussModel());
         ModelOverrides.register(ModItems.REPEATING_MUSKET.get(), new RepeatingMusketModel());
         ModelOverrides.register(ModItems.LASER_MUSKET.get(), new LaserMusketModel());
-        ModelOverrides.register(ModItems.SCRAP_SIDEARM.get(), new ScrapSidearmModel());
+        ModelOverrides.register(ModItems.FLOUNDERGAT.get(), new FloundergatModel());
+        ModelOverrides.register(ModItems.SCRAPPER.get(), new ScrapperModel());
         ModelOverrides.register(ModItems.MAKESHIFT_RIFLE.get(), new MakeshiftRifleModel());
         ModelOverrides.register(ModItems.BOOMSTICK.get(), new BoomstickModel());
         ModelOverrides.register(ModItems.RUSTY_GNAT.get(), new RustyGnatModel());
         ModelOverrides.register(ModItems.BRUISER.get(), new BruisedMagnumModel());
+        ModelOverrides.register(ModItems.MARLIN.get(), new MarlinModel());
         ModelOverrides.register(ModItems.IRON_SPEAR.get(), new IronSpearModel());
         ModelOverrides.register(ModItems.M3_CARABINE.get(), new M3CarabineModel());
         ModelOverrides.register(ModItems.GREASER_SMG.get(), new GreaserSmgModel());
@@ -158,6 +177,8 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.RAYGUN.get(), new RaygunModel());
         ModelOverrides.register(ModItems.SUPER_SHOTGUN.get(), new SuperShotgunModel());
         ModelOverrides.register(ModItems.FREYR.get(), new FreyrModel());
+        ModelOverrides.register(ModItems.VULCANIC_REPEATER.get(), new VulcanicRepeaterModel());
+        ModelOverrides.register(ModItems.BOMB_LANCE.get(), new BombLanceModel());
     }
 
 
@@ -199,7 +220,7 @@ public class ClientHandler {
     }
 
     public static void registerAdditional(ModelEvent.RegisterAdditional event) {
-        event.register(new ResourceLocation(Reference.MOD_ID, "special/test"));
+        //event.register(new ResourceLocation(Reference.MOD_ID, "special/test"));
     }
 
 //    public static void onRegisterCreativeTab(IEventBus bus) {

@@ -38,7 +38,7 @@ public class BruisedMagnumModel implements IOverrideModel {
             float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
             cooldown = (float) ease(cooldown);
             // Apply transformations to the barrel and attached components
-            matrixStack.translate(0, 0, cooldown / 4);
+            matrixStack.translate(0, 0, cooldown / 6);
             matrixStack.translate(0, 5.8 * 0.0625, 0);
             // Render the barrel and its attachments
             renderBarrelAndAttachments(stack, matrixStack, buffer, light, overlay);

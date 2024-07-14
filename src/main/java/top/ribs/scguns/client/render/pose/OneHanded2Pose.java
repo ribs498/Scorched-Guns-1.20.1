@@ -36,7 +36,7 @@ public class OneHanded2Pose implements IHeldAnimation {
             applySimplifiedMeleePose(player, arm, renderingHandler.getThirdPersonMeleeProgress());
         } else {
             IHeldAnimation.copyModelAngles(head, arm);
-            arm.xRot += (float) Math.toRadians(-70F);
+            arm.xRot += (float) Math.toRadians(-90F);
 
             if (player.getUseItem().getItem() == Items.SHIELD) {
                 arm.xRot = (float) Math.toRadians(-30F);

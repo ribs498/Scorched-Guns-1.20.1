@@ -7,15 +7,6 @@
       }
     ]
   },
-  "block.macerator_run": {
-    "subtitle": "subtitle.block.macerator_run",
-    "sounds": [
-      {
-        "name": "scguns:block/macerator_run"
-      }
-    ]
-  },
-
   "item.rusty_gnat.copper_jam": {
     "subtitle": "subtitle.scguns.jam",
     "sounds": [
@@ -40,14 +31,7 @@
       }
     ]
   },
-  "item.rusty_gnat.enchanted_fire": {
-    "subtitle": "subtitle.scguns.enchanted_fire",
-    "sounds": [
-      {
-        "name": "scguns:item/rusty_gnat/enchanted_fire"
-      }
-    ]
-  },
+
   "item.boomstick.fire": {
     "subtitle": "subtitle.scguns.fire",
     "sounds": [
@@ -64,14 +48,7 @@
       }
     ]
   },
-  "item.boomstick.enchanted_fire": {
-    "subtitle": "subtitle.scguns.enchanted_fire",
-    "sounds": [
-      {
-        "name": "scguns:item/boomstick/enchanted_fire"
-      }
-    ]
-  },
+
   "item.makeshift_rifle.fire": {
     "subtitle": "subtitle.scguns.fire",
     "sounds": [
@@ -88,14 +65,7 @@
       }
     ]
   },
-  "item.makeshift_rifle.enchanted_fire": {
-    "subtitle": "subtitle.scguns.enchanted_fire",
-    "sounds": [
-      {
-        "name": "scguns:item/makeshift_rifle/enchanted_fire"
-      }
-    ]
-  },
+
 
   "item.makeshift_rifle.cock": {
     "subtitle": "subtitle.scguns.cock",
@@ -153,11 +123,11 @@
       }
     ]
   },
-  "item.scrap_sidearm.fire": {
+  "item.scrapper.fire": {
     "subtitle": "subtitle.scguns.fire",
     "sounds": [
       {
-        "name": "scguns:item/scrap_sidearm/fire"
+        "name": "scguns:item/scrapper/fire"
       }
     ]
   },
@@ -185,14 +155,7 @@
       }
     ]
   },
-  "item.iron_rifle.enchanted_fire": {
-    "subtitle": "subtitle.scguns.enchanted_fire",
-    "sounds": [
-      {
-        "name": "scguns:item/iron_rifle/enchanted_fire"
-      }
-    ]
-  },
+
   "item.blackpowder.fire": {
     "subtitle": "subtitle.scguns.fire",
     "sounds": [
@@ -201,14 +164,7 @@
       }
     ]
   },
-  "item.plasma.reload": {
-    "subtitle": "subtitle.scguns.reload",
-    "sounds": [
-      {
-        "name": "scguns:item/plasma/reload"
-      }
-    ]
-  },
+
   "item.plasma.fire": {
     "subtitle": "subtitle.scguns.fire",
     "sounds": [
@@ -274,6 +230,14 @@
       }
     ]
   },
+  "item.brass_shotgun.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/brass_shotgun/fire"
+      }
+    ]
+  },
   "item.gauss.reload": {
     "subtitle": "subtitle.scguns.reload",
     "sounds": [
@@ -327,22 +291,6 @@
     "sounds": [
       {
         "name": "scguns:item/combat_shotgun/silenced_fire"
-      }
-    ]
-  },
-  "item.typhoonee.fire": {
-    "subtitle": "subtitle.scguns.typhoonee_fire",
-    "sounds": [
-      {
-        "name": "scguns:item/typhoonee/fire"
-      }
-    ]
-  },
-  "item.typhoonee.prefire": {
-    "subtitle": "subtitle.scguns.typhoonee_prefire",
-    "sounds": [
-      {
-        "name": "scguns:item/typhoonee/prefire"
       }
     ]
   },

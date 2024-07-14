@@ -75,7 +75,9 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
     public int getTicksUntilNextAttack() {
         return this.ticksUntilNextAttack;
     }
-
+    public boolean canBreatheUnderwater() {
+        return true;
+    }
     public int getAttackCooldown() {
         ItemStack mainHandItem = this.getMainHandItem();
         if (mainHandItem.getItem() instanceof GunItem) {

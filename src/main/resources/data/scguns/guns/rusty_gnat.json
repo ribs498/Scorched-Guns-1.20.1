@@ -8,19 +8,21 @@
     "muzzleFlashType": "flash_type_1"
   },
   "general": {
-    "alwaysSpread": true,
+    "alwaysSpread": false,
     "fireMode": "scguns:automatic",
-    "gripType": "scguns:two_handed",
+    "gripType": "scguns:one_handed",
     "rate": 4,
-    "recoilAngle": 4.0,
+    "recoilAngle": 6.0,
     "recoilKick": 1.0,
-    "spread": 4.0
+    "spread": 4.0,
+    "meleeDamage": 2.5,
+    "meleeCooldownTicks": 15
   },
   "modules": {
     "attachments": {
       "barrel": {
         "yOffset": 3.4,
-        "zOffset": -4.9
+        "zOffset": -2.5
       },
       "scope": {
         "size": 0.7,
@@ -42,26 +44,25 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 2.5,
+    "damage": 4.5,
     "ejectsCasing": true,
-    "gravity": true,
     "item": "scguns:compact_copper_round",
     "casingType": "scguns:small_copper_casing",
-    "life": 60,
+    "life": 20,
     "size": 0.05,
-    "speed": 12.0,
+    "speed": 5.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 24,
+    "maxAmmo": 14,
     "reloadItem": "scguns:compact_copper_round",
-    "reloadTimer": 30,
+    "reloadTimer": 35,
     "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",
-    "enchantedFire": "scguns:item.rusty_gnat.enchanted_fire",
+    "enchantedFire": "scguns:item.rusty_gnat.fire",
     "fire": "scguns:item.rusty_gnat.fire",
     "reload": "scguns:item.pistol.reload",
     "silencedFire": "scguns:item.rusty_gnat.silenced_fire"

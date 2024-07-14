@@ -19,6 +19,8 @@ public class ModPlacedFeatures {
     public static final ResourceKey<PlacedFeature> ANTHRALITE_ORE_PLACED_KEY = createKey("anthralite_ore_placed");
     public static final ResourceKey<PlacedFeature> SULFUR_ORE_PLACED_KEY = createKey("sulfur_ore_placed");
     public static final ResourceKey<PlacedFeature> NETHER_SULFUR_ORE_PLACED_KEY = createKey("nether_sulfur_ore_placed");
+    public static final ResourceKey<PlacedFeature> GEOTHERMAL_VENT_PLACED_KEY = createKey("geothermal_vent_placed");
+    public static final ResourceKey<PlacedFeature> VEHEMENT_COAL_ORE_PLACED_KEY = createKey("vehement_coal_ore_placed");
 
     public static void bootstrap(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
@@ -34,6 +36,16 @@ public class ModPlacedFeatures {
         register(context, NETHER_SULFUR_ORE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.NETHER_SULFUR_ORE_KEY),
                 ModOrePlacement.commonOrePlacement(30,
                         HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(10), VerticalAnchor.belowTop(10))));
+
+        // Vehement Coal Ore Placement
+        register(context, VEHEMENT_COAL_ORE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.VEHEMENT_COAL_ORE_KEY),
+                ModOrePlacement.commonOrePlacement(5,
+                        HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(10), VerticalAnchor.belowTop(10))));
+
+        // Geothermal Vent Placement
+        register(context, GEOTHERMAL_VENT_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.GEOTHERMAL_VENT_KEY),
+                ModOrePlacement.commonOrePlacement(10,
+                        HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(0), VerticalAnchor.absolute(64))));
     }
 
     private static ResourceKey<PlacedFeature> createKey(String name) {

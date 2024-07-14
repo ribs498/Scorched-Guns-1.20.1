@@ -4,7 +4,7 @@
       "model": "scguns:block/niter_glass_opaque"
     },
     "transparent=true": {
-      "model": "scguns:block/niter_glass_clear"
+      "model": "minecraft:block/glass"
     }
   }
 }

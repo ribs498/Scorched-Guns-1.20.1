@@ -1,0 +1,17 @@
+{
+    "replace": false,
+    "values": [
+        "minecraft:forest",
+        "minecraft:birch_forest",
+        "minecraft:dark_forest",
+        "minecraft:flower_forest",
+        "minecraft:old_growth_birch_forest",
+        "minecraft:windswept_forest",
+        "minecraft:windswept_hills",
+        "minecraft:savanna",
+        "minecraft:plains",
+        "minecraft:jungle",
+        "minecraft:swamp"
+
+    ]
+}

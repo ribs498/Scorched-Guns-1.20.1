@@ -17,7 +17,7 @@ public class BackpackHelper
 {
     public static AmmoContext findAmmo(Player player, Item id)
     {
-        BackpackInventory inventory = ((BackpackedInventoryAccess) player).getBackpackedInventory();
+        BackpackInventory inventory = ((BackpackedInventoryAccess) player).backpacked$GetBackpackInventory();
 
         if(inventory == null)
             return AmmoContext.NONE;

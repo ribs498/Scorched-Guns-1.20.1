@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "group": "scorched_ingot",
+  "cookingtime": 100,
+  "experience": 0.7,
+  "ingredient": {
+    "item": "scguns:scorched_blend"
+  },
+  "result": "scguns:scorched_ingot"
+}

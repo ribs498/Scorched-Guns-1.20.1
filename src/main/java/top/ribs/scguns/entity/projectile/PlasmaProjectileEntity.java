@@ -13,6 +13,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.common.Gun;
+import top.ribs.scguns.effect.CustomExplosion;
 import top.ribs.scguns.effect.PlasmaExplosion;
 import top.ribs.scguns.init.ModDamageTypes;
 import top.ribs.scguns.init.ModParticleTypes;
@@ -67,7 +68,7 @@ public class PlasmaProjectileEntity extends ProjectileEntity {
 
     public static void createPlasmaExplosion(Entity entity, float radius) {
         if (!entity.level().isClientSide) {
-            PlasmaExplosion explosion = new PlasmaExplosion((ServerLevel) entity.level(), entity, entity.getX(), entity.getY(), entity.getZ(), radius, false, null);
+            PlasmaExplosion explosion = new PlasmaExplosion((ServerLevel) entity.level(), entity, entity.getX(), entity.getY(), entity.getZ(), radius, false, CustomExplosion.CustomBlockInteraction.NONE);
             explosion.explode();
         }
     }
@@ -85,12 +86,7 @@ public class PlasmaProjectileEntity extends ProjectileEntity {
                 double speedZ = (this.random.nextDouble() - 0.5) * 0.5;
                 serverLevel.sendParticles(ParticleTypes.SOUL_FIRE_FLAME, position.x + offsetX, position.y + offsetY, position.z + offsetZ, 1, speedX, speedY, speedZ, 0.1);
                 serverLevel.sendParticles(ModParticleTypes.GREEN_FLAME.get(), position.x + offsetX, position.y + offsetY, position.z + offsetZ, 1, speedX, speedY, speedZ, 0.1);
-
             }
         }
-
     }
-
 }
-
-

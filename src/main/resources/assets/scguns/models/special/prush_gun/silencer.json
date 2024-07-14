@@ -2,8 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"3": "scguns:item/greaser_smg_barrels",
-		"particle": "scguns:item/prush_gun"
+		"3": "scguns:item/greaser_smg_barrels"
 	},
 	"elements": [
 		{
@@ -61,18 +60,18 @@
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"translation": [0, 5.75, -8],
+			"translation": [0, 5.75, -5.75],
 			"scale": [1.2, 1.2, 1.2]
 		},
 		"thirdperson_lefthand": {
-			"translation": [0, 5.75, -8],
+			"translation": [0, 5.75, -5.75],
 			"scale": [1.2, 1.2, 1.2]
 		},
 		"firstperson_righthand": {
-			"translation": [-4.5, 9, -1.25]
+			"translation": [-4.5, 9, -0.25]
 		},
 		"firstperson_lefthand": {
-			"translation": [-4.5, 9, -1.25]
+			"translation": [-4.5, 9, -0.25]
 		},
 		"ground": {
 			"translation": [0, 9.5, -3.75],
@@ -80,20 +79,12 @@
 		},
 		"gui": {
 			"rotation": [74.02, -53.34, 70.48],
-			"translation": [-1.25, 5, 0]
+			"translation": [-1.5, 4.75, 0]
 		},
 		"fixed": {
 			"rotation": [90, 55, -90],
 			"translation": [1.5, 8.5, -0.75],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	},
-	"groups": [
-		{
-			"name": "Silencer",
-			"origin": [8.05303, 3.375, 5.725],
-			"color": 0,
-			"children": [0, 1, 2, 3]
-		}
-	]
+	}
 }

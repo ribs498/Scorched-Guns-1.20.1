@@ -22,13 +22,18 @@ public class ParticleFactoryRegistry
         event.registerSpecial(ModParticleTypes.BULLET_HOLE.get(), (typeIn, worldIn, x, y, z, xSpeed, ySpeed, zSpeed) -> new BulletHoleParticle(worldIn, x, y, z, typeIn.getDirection(), typeIn.getPos()));
         event.registerSpriteSet(ModParticleTypes.BLOOD.get(), BloodParticle.Factory::new);
         event.registerSpriteSet(ModParticleTypes.TRAIL.get(), TrailParticle.Factory::new);
+        event.registerSpriteSet(ModParticleTypes.ROCKET_TRAIL.get(), RocketTrailParticle.Factory::new);
         event.registerSpriteSet(ModParticleTypes.COPPER_CASING_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.BRASS_CASING_PARTICLE.get(), CasingParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.IRON_CASING_PARTICLE.get(), CasingParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.DIAMOND_STEEL_CASING_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.SHELL_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.BEARPACK_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.GREEN_FLAME.get(), GreenFlameParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.PLASMA_RING.get(), PlasmaRingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.RAMROD_IMPACT.get(), RamrodImpactParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.BEOWULF_IMPACT.get(), BeowulfImpactParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.LASER.get(), LaserParticle.Provider::new);
 
 
         event.registerSpriteSet(ModParticleTypes.PLASMA_EXPLOSION.get(), PlasmaExplosionParticle.Provider::new);

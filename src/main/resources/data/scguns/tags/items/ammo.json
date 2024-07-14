@@ -16,6 +16,7 @@
     "scguns:ramrod_round",
     "scguns:energy_cell",
     "scguns:grapeshot",
-    "scguns:fuel"
+    "scguns:blaze_fuel",
+    "scguns:hog_round"
   ]
 }

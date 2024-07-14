@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "X": {
+      "item": "scguns:diamond_steel_blend"
+    },
+    "Q": {
+      "item": "minecraft:stone_bricks"
+    }
+  },
+  "pattern": [
+    "QQQ",
+    "QXQ",
+    "QQQ"
+  ],
+  "result": {
+    "item": "scguns:asgharian_bricks",
+    "count": 8
+  }
+}

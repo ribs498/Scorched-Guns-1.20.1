@@ -20,13 +20,29 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
+import top.ribs.scguns.init.ModEntities;
 
+import java.util.Arrays;
 import java.util.EnumSet;
+import java.util.List;
 
 public class SwarmEntity extends FlyingMob implements Enemy {
     private static final int LIFESPAN_TICKS = 1200;
     private int lifespan;
 
+
+    private static final List<EntityType<?>> NON_TARGETABLE_MOBS = Arrays.asList(
+            ModEntities.HIVE.get(),
+            EntityType.SKELETON,
+            ModEntities.SWARM.get(),
+            ModEntities.COG_KNIGHT.get(),
+            ModEntities.COG_MINION.get(),
+            ModEntities.SKY_CARRIER.get(),
+            ModEntities.SUPPLY_SCAMP.get(),
+            EntityType.WITHER_SKELETON,
+            EntityType.STRAY
+            // Add other non-targetable entity types here
+    );
     public SwarmEntity(EntityType<? extends SwarmEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.moveControl = new SwarmMoveGoal(this, 0.5f, 0.7f);
@@ -41,6 +57,7 @@ public class SwarmEntity extends FlyingMob implements Enemy {
     public boolean isAlive() {
         return !this.isDeadOrDying() && super.isAlive();
     }
+
     private boolean isActive = true;
 
     @Override
@@ -52,14 +69,22 @@ public class SwarmEntity extends FlyingMob implements Enemy {
     public boolean isActive() {
         return this.isActive;
     }
+    @Override
+    public boolean isAffectedByPotions() {
+        return true;
+    }
 
+    @Override
+    public boolean canBeAffected(MobEffectInstance effect) {
+        if (effect.getEffect() == MobEffects.POISON) {
+            return false;
+        }
+        return super.canBeAffected(effect);
+    }
     @Override
     public void tick() {
         super.tick();
         if (!this.level().isClientSide()) {
-            if (Math.abs(this.getDeltaMovement().y) < 0.01D && this.getTarget() != null) {
-                this.setDeltaMovement(this.getDeltaMovement().add(0.0D, 0.4D, 0.0D));
-            }
             if (--this.lifespan <= 0) {
                 this.discard();
             }
@@ -91,11 +116,12 @@ public class SwarmEntity extends FlyingMob implements Enemy {
 
     @Override
     protected void registerGoals() {
+        this.goalSelector.addGoal(0, new FollowHiveGoal(this, 1.0D, 10.0F)); // Follow the hive when idle
         this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Monster.class, true) {
             @Override
             public boolean canUse() {
-                return super.canUse() && !(this.target instanceof SwarmEntity);
+                return super.canUse() && isValidTarget(this.target);
             }
         });
 
@@ -127,6 +153,14 @@ public class SwarmEntity extends FlyingMob implements Enemy {
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.BEE_DEATH;
+    }
+
+    // Method to check if a target is valid
+    private boolean isValidTarget(LivingEntity target) {
+        if (target == null) {
+            return false;
+        }
+        return !NON_TARGETABLE_MOBS.contains(target.getType());
     }
 
     public static class SwarmLookGoal extends LookControl {
@@ -195,7 +229,7 @@ public class SwarmEntity extends FlyingMob implements Enemy {
         @Override
         public boolean canUse() {
             LivingEntity target = this.swarm.getTarget();
-            return target != null && target.isAlive();
+            return target != null && target.isAlive() && isValidTarget(target);
         }
 
         @Override
@@ -212,7 +246,63 @@ public class SwarmEntity extends FlyingMob implements Enemy {
             }
             this.swarm.getMoveControl().setWantedPosition(target.getX(), target.getY(), target.getZ(), this.speedTowardsTarget);
         }
+
+        private boolean isValidTarget(LivingEntity target) {
+            return !NON_TARGETABLE_MOBS.contains(target.getType());
+        }
+    }
+
+    public class FollowHiveGoal extends Goal {
+        private final SwarmEntity swarm;
+        private final double followSpeed;
+        private final float maxDist;
+        private HiveEntity nearestHive;
+
+        public FollowHiveGoal(SwarmEntity swarm, double followSpeed, float maxDist) {
+            this.swarm = swarm;
+            this.followSpeed = followSpeed;
+            this.maxDist = maxDist;
+            this.setFlags(EnumSet.of(Flag.MOVE));
+        }
+
+        @Override
+        public boolean canUse() {
+            return this.swarm.getTarget() == null && this.findNearestHive();
+        }
+
+        @Override
+        public boolean canContinueToUse() {
+            return this.swarm.getTarget() == null && this.nearestHive != null && this.nearestHive.isAlive() && this.swarm.distanceToSqr(this.nearestHive) > (double)(this.maxDist * this.maxDist);
+        }
+
+        @Override
+        public void start() {
+            this.swarm.getNavigation().moveTo(this.nearestHive, this.followSpeed);
+        }
+
+        @Override
+        public void stop() {
+            this.nearestHive = null;
+            this.swarm.getNavigation().stop();
+        }
+
+        @Override
+        public void tick() {
+            if (this.swarm.distanceToSqr(this.nearestHive) > (double)(this.maxDist * this.maxDist)) {
+                this.swarm.getNavigation().moveTo(this.nearestHive, this.followSpeed);
+            } else {
+                this.swarm.getNavigation().stop();
+            }
+        }
+
+        private boolean findNearestHive() {
+            List<HiveEntity> hiveList = this.swarm.level().getEntitiesOfClass(HiveEntity.class, this.swarm.getBoundingBox().inflate(this.maxDist));
+            if (hiveList.isEmpty()) {
+                return false;
+            } else {
+                this.nearestHive = hiveList.get(0);
+                return true;
+            }
+        }
     }
 }
-
-

@@ -1,9 +1,12 @@
 {
   "replace": false,
   "entries": [
-    "scguns:add_loot_ruined_portal",
     "scguns:add_loot_dungeon",
     "scguns:add_loot_mineshaft",
+    "scguns:add_loot_end_city_treasure",
+    "scguns:add_loot_bastion_treasure",
+    "scguns:add_loot_buried_treasure",
+    "scguns:add_loot_ancient_city",
     "scguns:pebbles_from_gravel"
   ]
 }

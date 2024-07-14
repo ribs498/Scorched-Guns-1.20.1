@@ -1,11 +1,9 @@
 {
   "type": "forge:add_spawns",
-  "biomes": {
-    "type": "forge:any"
-  },
+  "biomes": "#minecraft:is_overworld",
   "spawners": {
     "type": "scguns:redcoat",
-    "weight": 12,
+    "weight": 30,
     "minCount": 1,
     "maxCount": 1
   }

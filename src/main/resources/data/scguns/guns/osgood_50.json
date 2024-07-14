@@ -2,50 +2,58 @@
   "display": {
     "flash": {
       "size": 0.8,
-      "yOffset": 4.8,
-      "zOffset": -4
+      "yOffset": 5.2,
+      "zOffset": -6.0
     },
     "muzzleFlashType": "flash_type_1"
   },
   "general": {
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed_one_handed",
-    "rate": 3,
-    "recoilAngle": 4.0,
-    "recoilKick": 0.33,
-    "spread": 3.0
+    "rate": 7,
+    "recoilAngle": 4.5,
+    "recoilKick": 3.5,
+    "spread": 1.0,
+    "meleeDamage": 2.5,
+    "meleeCooldownTicks": 10
   },
   "modules": {
     "attachments": {
       "barrel": {
-        "yOffset": 3.0,
-        "zOffset": -1.6
+        "yOffset": 5.2,
+        "zOffset": -8.0
       },
       "stock": {
         "scale": 0.0
+      },
+      "scope": {
+        "size": 0.7,
+        "yOffset": 6.3,
+        "zOffset": 4.0
       }
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 5.5,
+      "yOffset": 6.6,
       "zOffset": 0.75
     }
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 10.0,
+    "damage": 21.5,
     "gravity": false,
     "item": "scguns:beowulf_round",
-    "life": 40,
-    "size": 0.05,
-    "speed": 3.0,
+    "casingType": "scguns:small_diamond_steel_casing",
+    "life": 35,
+    "size": 0.1,
+    "speed": 5.5,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 8,
-    "reloadItem": "scguns:scrap",
-    "reloadTimer": 30,
+    "maxAmmo": 6,
+    "reloadItem": "scguns:beowulf_round",
+    "reloadTimer": 15,
     "reloadType": "scguns:manual"
   },
   "sounds": {

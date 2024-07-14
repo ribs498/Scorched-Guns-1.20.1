@@ -27,12 +27,22 @@ public class ModTags
 
     public static class Entities
     {
+
+        public static final TagKey<EntityType<?>> RED_BLOOD = tag("red_blood");
+        public static final TagKey<EntityType<?>> WHITE_BLOOD = tag("white_blood");
+        public static final TagKey<EntityType<?>> GREEN_BLOOD = tag("green_blood");
+        public static final TagKey<EntityType<?>> BLUE_BLOOD = tag("blue_blood");
+        public static final TagKey<EntityType<?>> YELLOW_BLOOD = tag("yellow_blood");
+        public static final TagKey<EntityType<?>> PURPLE_BLOOD = tag("purple_blood");
+        public static final TagKey<EntityType<?>> BLACK_BLOOD = tag("black_blood");
+
         public static final TagKey<EntityType<?>> NONE = tag("none");
         public static final TagKey<EntityType<?>> HEAVY = tag("heavy");
         public static final TagKey<EntityType<?>> VERY_HEAVY = tag("very_heavy");
         public static final TagKey<EntityType<?>> UNDEAD = tag("undead");
         public static final TagKey<EntityType<?>> GHOST = tag("ghost");
         public static final TagKey<EntityType<?>> FIRE = tag("fire");
+        public static final TagKey<EntityType<?>> ILLAGER = tag("illager");
 
         public static TagKey<EntityType<?>> tag(String name)
         {

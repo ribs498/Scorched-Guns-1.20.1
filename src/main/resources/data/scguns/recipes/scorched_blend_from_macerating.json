@@ -1,0 +1,22 @@
+{
+  "type": "scguns:macerating",
+  "processingTime": 200,
+  "ingredients": [
+    {
+      "item": "scguns:nether_star_fragment"
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "item": "minecraft:dragon_breath"
+    },
+    {
+      "item": "scguns:vehement_coal"
+    }
+  ],
+  "result": {
+    "item": "scguns:scorched_blend",
+    "count": 3
+  }
+}

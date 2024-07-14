@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:gift",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "scguns:musket"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:boomstick"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:scrapper"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:flintlock_pistol"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "scguns:gameplay/hero_of_the_village/gunsmith_gift"
+}

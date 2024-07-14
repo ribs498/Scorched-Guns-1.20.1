@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "X": {
+      "item": "scguns:niter_block"
+    },
+    "Q": {
+      "item": "minecraft:brown_stained_glass"
+    }
+  },
+  "pattern": [
+    "QQQ",
+    "QXQ",
+    "QQQ"
+  ],
+  "result": {
+    "item": "scguns:brown_niter_glass",
+    "count": 8
+  }
+}

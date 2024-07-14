@@ -34,17 +34,20 @@ import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.init.ModBlocks;
 
 import javax.annotation.Nullable;
+import java.util.Random;
 
 public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock {
     public static final EnumProperty<GeothermalVentType> VENT_TYPE = EnumProperty.create("vent_type", GeothermalVentType.class);
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
-    private final float growthSpeed;
     private static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
 
-    public GeothermalVentBlock(Properties properties, float growthSpeed) {
-        super(properties.strength(0.5F).sound(SoundType.SAND).randomTicks());
-        this.growthSpeed = growthSpeed;
+    private static final int BASE_TICK_INTERVAL = 60;
+    private static final int TICK_WIGGLE_ROOM = 60;
+    private final Random random = new Random();
+
+    public GeothermalVentBlock(Properties properties) {
+        super(properties);
         this.registerDefaultState(this.stateDefinition.any().setValue(VENT_TYPE, GeothermalVentType.BASE).setValue(WATERLOGGED, false).setValue(ACTIVE, false));
     }
 
@@ -69,18 +72,22 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
-        boolean isActive = isActive((Level) level, pos);
+
+        if (level instanceof Level) {
+            boolean isActive = isActive((Level) level, pos);
+            return this.updateState(level.getBlockState(pos.below()), level.getBlockState(pos.above()))
+                    .setValue(WATERLOGGED, state.getValue(WATERLOGGED))
+                    .setValue(ACTIVE, isActive);
+        }
+
         return this.updateState(level.getBlockState(pos.below()), level.getBlockState(pos.above()))
-                .setValue(WATERLOGGED, state.getValue(WATERLOGGED))
-                .setValue(ACTIVE, isActive);
+                .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
     }
 
     private BlockState updateState(BlockState belowState, BlockState aboveState) {
         if (belowState.getBlock() instanceof GeothermalVentBlock) {
             if (aboveState.getBlock() instanceof GeothermalVentBlock) {
                 return this.defaultBlockState().setValue(VENT_TYPE, GeothermalVentType.MIDDLE);
-            } else if (aboveState.getBlock() instanceof VentCollectorBlock) {
-                return this.defaultBlockState().setValue(VENT_TYPE, GeothermalVentType.TOP);
             } else {
                 return this.defaultBlockState().setValue(VENT_TYPE, GeothermalVentType.TOP);
             }
@@ -95,17 +102,32 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
     }
 
     @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        if (state.getValue(WATERLOGGED)) {
+            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
+        }
+        level.scheduleTick(pos, this, calculateNextTickInterval());
+    }
+
+    @Override
     public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        super.tick(state, world, pos, random);
         if (!world.isClientSide) {
-            if (random.nextFloat() < calculateGrowthProbability()) {
-                this.checkAndGrowNiterLayer(world, pos, random);
+            int growthAttempts = Math.max(1, Math.round(40.0F / 10.0F)); // Up to 10 attempts at 100 speed
+            for (int i = 0; i < growthAttempts; i++) {
+                if (!hasVentCollectorAbove(world, pos) && random.nextFloat() < calculateGrowthProbability()) {
+                    this.growNiterLayer(world, pos, random);
+                }
             }
+            world.scheduleTick(pos, this, calculateNextTickInterval());
         }
     }
 
+    private int calculateNextTickInterval() {
+        return BASE_TICK_INTERVAL + random.nextInt(TICK_WIGGLE_ROOM);
+    }
+
     private float calculateGrowthProbability() {
-        return Math.min(1.0F, growthSpeed / 100.0F);
+        return 40.0F / 100.0F; // Direct conversion of growth speed to probability
     }
 
     private boolean hasWaterAround(LevelReader world, BlockPos pos) {
@@ -120,44 +142,56 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
         return false;
     }
 
-    private void checkAndGrowNiterLayer(ServerLevel world, BlockPos pos, RandomSource random) {
+    private void growNiterLayer(ServerLevel world, BlockPos pos, RandomSource random) {
+        if (hasVentCollectorAbove(world, pos)) {
+            return;
+        }
         boolean isWaterNearby = hasWaterAround(world, pos);
         if (isWaterNearby) {
-            for (int i = 0; i < 2; i++) {
-                BlockPos randomPos = pos.offset(random.nextInt(7) - 3, random.nextInt(3) - 1, random.nextInt(7) - 3);
+            int radius = 3;
+
+            int x = random.nextInt(radius * 2 + 1) - radius;
+            int z = random.nextInt(radius * 2 + 1) - radius;
+            int y = random.nextInt(3) - 1;
+
+            if (x * x + z * z <= radius * radius) {
+                BlockPos randomPos = pos.offset(x, y, z);
                 if (canPlaceNiterLayer(world, randomPos)) {
-                    BlockState aboveState = world.getBlockState(randomPos.above());
-                    if (aboveState.is(ModBlocks.NITER_LAYER.get())) {
-                        int layers = aboveState.getValue(NiterLayerBlock.LAYERS);
-                        if (layers < NiterLayerBlock.MAX_HEIGHT) {
-                            world.setBlock(randomPos.above(), aboveState.setValue(NiterLayerBlock.LAYERS, layers + 1), 3);
-                        }
-                    } else {
-                        world.setBlock(randomPos.above(), ModBlocks.NITER_LAYER.get().defaultBlockState().setValue(NiterLayerBlock.LAYERS, 1), 3);
+                    BlockPos abovePos = randomPos.above();
+                    BlockState currentState = world.getBlockState(abovePos);
+                    if (currentState.isAir() || currentState.getFluidState().is(FluidTags.WATER)) {
+                        world.setBlock(abovePos, ModBlocks.NITER_LAYER.get().defaultBlockState().setValue(NiterLayerBlock.LAYERS, 1), 3);
                     }
                 }
             }
         }
     }
 
+    private boolean hasVentCollectorAbove(LevelReader world, BlockPos pos) {
+        BlockPos topPos = getTopPos(world, pos);
+        return world.getBlockState(topPos.above()).getBlock() instanceof VentCollectorBlock;
+    }
+
+    private BlockPos getTopPos(LevelReader world, BlockPos pos) {
+        while (world.getBlockState(pos.above()).getBlock() instanceof GeothermalVentBlock) {
+            pos = pos.above();
+        }
+        return pos;
+    }
+
     private boolean canPlaceNiterLayer(ServerLevel world, BlockPos pos) {
         BlockState state = world.getBlockState(pos);
         BlockState aboveState = world.getBlockState(pos.above());
-        boolean canPlace = state.isFaceSturdy(world, pos, Direction.UP) && (aboveState.isAir() || aboveState.getFluidState().is(FluidTags.WATER));
+        boolean canPlace = state.isFaceSturdy(world, pos, Direction.UP)
+                && (aboveState.isAir() || aboveState.getFluidState().is(FluidTags.WATER))
+                && !(state.getBlock() instanceof GeothermalVentBlock)
+                && !(aboveState.getBlock() instanceof GeothermalVentBlock);
         return canPlace;
     }
 
     @Override
     public FluidState getFluidState(BlockState state) {
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
-    }
-
-    @Override
-    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
-        if (state.getValue(WATERLOGGED)) {
-            level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
-        }
-        level.setBlock(pos, state.setValue(ACTIVE, isActive(level, pos)), 3);
     }
 
     @Override
@@ -177,14 +211,11 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
             if (random.nextInt(20) == 0) {
                 level.playLocalSound((double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5, SoundEvents.CAMPFIRE_CRACKLE, SoundSource.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.6F, false);
             }
-
-            // Check if there's a VentCollectorBlock on top
             BlockPos abovePos = pos.above();
             BlockState aboveState = level.getBlockState(abovePos);
             if (aboveState.getBlock() instanceof VentCollectorBlock) {
-                return; // Stop particle emission if VentCollectorBlock is on top
+                return;
             }
-
             // Emit eruption particles
             for (int i = 0; i < random.nextInt(2) + 2; ++i) {
                 double offsetX = random.nextDouble() * 0.05 - 0.025;
@@ -192,7 +223,6 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
                 double offsetZ = random.nextDouble() * 0.05 - 0.025;
                 level.addParticle(ParticleTypes.LARGE_SMOKE, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, offsetX, offsetY, offsetZ);
             }
-
             // Emit smoke particles
             for (int i = 0; i < random.nextInt(2) + 2; ++i) {
                 double offsetX = random.nextDouble() * 0.2 - 0.1;
@@ -200,7 +230,6 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
                 double offsetZ = random.nextDouble() * 0.2 - 0.1;
                 level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, offsetX, offsetY, offsetZ);
             }
-
             // Emit bubble particles
             for (int i = 0; i < random.nextInt(2) + 2; ++i) {
                 double offsetX = random.nextDouble() * 0.2 - 0.1;
@@ -208,7 +237,6 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
                 double offsetZ = random.nextDouble() * 0.2 - 0.1;
                 level.addParticle(ParticleTypes.BUBBLE, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, offsetX, offsetY, offsetZ);
             }
-
             // Emit campfire signal smoke particles
             for (int i = 0; i < random.nextInt(2) + 1; ++i) {
                 double offsetX = random.nextDouble() * 0.05 - 0.025;
@@ -224,12 +252,12 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
         return level.getBlockState(abovePos).getBlock() instanceof GeothermalVentBlock;
     }
 
-    private boolean isActive(Level level, BlockPos pos) {
+    private boolean isActive(LevelAccessor level, BlockPos pos) {
         BlockPos basePos = getBasePos(level, pos);
         return level.getBlockState(basePos.below()).is(Blocks.MAGMA_BLOCK) && level.getFluidState(basePos).is(FluidTags.WATER);
     }
 
-    private BlockPos getBasePos(Level level, BlockPos pos) {
+    private BlockPos getBasePos(LevelAccessor level, BlockPos pos) {
         while (level.getBlockState(pos.below()).getBlock() instanceof GeothermalVentBlock) {
             pos = pos.below();
         }
@@ -258,5 +286,4 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
         }
     }
 }
-
 

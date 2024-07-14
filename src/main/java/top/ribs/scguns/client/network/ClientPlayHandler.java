@@ -14,6 +14,8 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -25,6 +27,8 @@ import top.ribs.scguns.client.CustomGunManager;
 import top.ribs.scguns.client.audio.GunShotSound;
 import top.ribs.scguns.client.handler.BulletTrailRenderingHandler;
 import top.ribs.scguns.client.handler.GunRenderingHandler;
+import top.ribs.scguns.client.handler.HUDRenderHandler;
+import top.ribs.scguns.client.particle.BloodParticle;
 import top.ribs.scguns.common.NetworkGunManager;
 import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.network.message.*;
@@ -61,19 +65,30 @@ public class ClientPlayHandler
 
     public static void handleMessageBlood(S2CMessageBlood message)
     {
-        if(!Config.CLIENT.particle.enableBlood.get())
+        if (!Config.CLIENT.particle.enableBlood.get())
         {
             return;
         }
         Level world = Minecraft.getInstance().level;
-        if(world != null)
+        if (world != null)
         {
-            for(int i = 0; i < 10; i++)
+            EntityType<?> entityType = message.getEntityType();
+            for (int i = 0; i < 10; i++)
             {
-                world.addParticle(ModParticleTypes.BLOOD.get(), true, message.getX(), message.getY(), message.getZ(), 0.5, 0, 0.5);
+                Particle particle = Minecraft.getInstance().particleEngine.createParticle(ModParticleTypes.BLOOD.get(), message.getX(), message.getY(), message.getZ(), 0.5, 0, 0.5);
+                if (particle instanceof BloodParticle)
+                {
+                    ((BloodParticle) particle).setColorBasedOnEntity(entityType);
+                }
             }
         }
     }
+
+
+
+
+
+
 
     public static void handleMessageBulletTrail(S2CMessageBulletTrail message)
     {
@@ -168,6 +183,7 @@ public class ClientPlayHandler
         if(world == null)
             return;
 
+        HUDRenderHandler.playHitMarker(message.isCritical() || message.isHeadshot());
         SoundEvent event = getHitSound(message.isCritical(), message.isHeadshot(), message.isPlayer());
         if(event == null)
             return;

@@ -12,10 +12,12 @@
     "fireMode": "scguns:pulse",
     "gripType": "scguns:two_handed",
     "fireTimer": 10,
-    "rate": 3,
+    "rate": 5,
     "recoilAngle": 4.0,
     "recoilKick": 0.4,
-    "spread": 0.0
+    "spread": 0.4,
+    "meleeDamage": 2.5,
+    "meleeCooldownTicks": 20
   },
   "modules": {
     "attachments": {
@@ -39,11 +41,11 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 9.0,
+    "damage": 19.0,
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:energy_cell",
-    "life": 60,
+    "life": 40,
     "size": 1.0,
     "speed": 7.0,
     "trailLengthMultiplier": 2.0
@@ -60,6 +62,6 @@
     "enchantedFire": "scguns:item.plasma.fire",
     "preFire": "scguns:item.gauss.pre_fire",
     "fire": "scguns:item.plasma.fire",
-    "reload": "scguns:item.plasma.reload"
+    "reload": "scguns:item.pistol.reload"
   }
 }

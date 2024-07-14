@@ -268,7 +268,7 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
             if (pressPosition <= endPosition) {
                 movingDown = false;
                 if (level != null) {
-                    level.playSound(null, worldPosition, SoundEvents.ANVIL_LAND, SoundSource.BLOCKS, 0.2f, 0.60f);
+                    level.playSound(null, worldPosition, SoundEvents.ANVIL_LAND, SoundSource.BLOCKS, 0.05f, 0.60f);
                 }
             }
         } else {

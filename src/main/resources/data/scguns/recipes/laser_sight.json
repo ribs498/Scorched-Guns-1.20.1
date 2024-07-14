@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "X": {
+      "item": "scguns:anthralite_nugget"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "   ",
+    "XRX",
+    "   "
+  ],
+  "result": {
+    "item": "scguns:laser_sight"
+  }
+}

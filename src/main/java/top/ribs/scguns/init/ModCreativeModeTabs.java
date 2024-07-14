@@ -25,8 +25,9 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BLUNDERBUSS.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.REPEATING_MUSKET.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.LASER_MUSKET.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.FLOUNDERGAT.get());
 
-                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SCRAP_SIDEARM.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SCRAPPER.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.RUSTY_GNAT.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.MAKESHIFT_RIFLE.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BOOMSTICK.get());
@@ -40,6 +41,8 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.AUVTOMAG.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.GYROJET_PISTOL.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.ROCKET_RIFLE.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.MARLIN.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BOMB_LANCE.get());
 
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.KRAUSER.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.UPPERCUT.get());
@@ -63,8 +66,14 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BLASPHEMY.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.PYROCLASTIC_FLOW.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.FREYR.get());
-                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.RAYGUN.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.VULCANIC_REPEATER.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SUPER_SHOTGUN.get());
+
+
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.RAYGUN.get());
+
+
+
 
                         pOutput.accept(ModItems.ANTHRALITE_PICKAXE.get());
                         pOutput.accept(ModItems.ANTHRALITE_AXE.get());
@@ -76,14 +85,20 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.ANTHRALITE_LEGGINGS.get());
                         pOutput.accept(ModItems.ANTHRALITE_BOOTS.get());
                         pOutput.accept(ModItems.BRASS_MASK.get());
-
+                        pOutput.accept(ModItems.REPAIR_KIT.get());
 
 
                         pOutput.accept(ModItems.PEBBLES.get());
                         pOutput.accept(ModItems.SULFUR_CHUNK.get());
                         pOutput.accept(ModItems.NITER_DUST.get());
                         pOutput.accept(ModItems.GUNPOWDER_DUST.get());
+                        pOutput.accept(ModItems.SHEOL.get());
+                        pOutput.accept(ModItems.SHEOL_DUST.get());
                         pOutput.accept(ModItems.BUCKSHOT.get());
+                        pOutput.accept(ModItems.VEHEMENT_COAL.get());
+                        pOutput.accept(ModItems.NITRO_POWDER.get());
+                        pOutput.accept(ModItems.SCORCHED_BLEND.get());
+                        pOutput.accept(ModItems.SCORCHED_INGOT.get());
                         pOutput.accept(ModItems.RAW_ANTHRALITE.get());
                         pOutput.accept(ModItems.ANTHRALITE_INGOT.get());
                         pOutput.accept(ModItems.ANTHRALITE_NUGGET.get());
@@ -94,9 +109,6 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.DIAMOND_STEEL_INGOT.get());
                         pOutput.accept(ModItems.NETHERITE_SCRAP_CHUNK.get());
                         pOutput.accept(ModItems.NETHER_STAR_FRAGMENT.get());
-                        pOutput.accept(ModItems.NITRO_POWDER.get());
-                        pOutput.accept(ModItems.SCORCHED_INGOT.get());
-
 
                         pOutput.accept(ModItems.BLANK_MOLD.get());
                         pOutput.accept(ModItems.SMALL_CASING_MOLD.get());
@@ -107,6 +119,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.IRON_BLUEPRINT.get());
                         pOutput.accept(ModItems.TREATED_BRASS_BLUEPRINT.get());
                         pOutput.accept(ModItems.DIAMOND_STEEL_BLUEPRINT.get());
+                        pOutput.accept(ModItems.OCEAN_BLUEPRINT.get());
                         pOutput.accept(ModItems.PIGLIN_BLUEPRINT.get());
                         pOutput.accept(ModItems.DEEP_DARK_BLUEPRINT.get());
                         pOutput.accept(ModItems.END_BLUEPRINT.get());
@@ -115,6 +128,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.MEDIUM_COPPER_CASING.get());
                         pOutput.accept(ModItems.SMALL_IRON_CASING.get());
                         pOutput.accept(ModItems.LARGE_IRON_CASING.get());
+                        pOutput.accept(ModItems.SMALL_DIAMOND_STEEL_CASING.get());
                         pOutput.accept(ModItems.SMALL_BRASS_CASING.get());
                         pOutput.accept(ModItems.MEDIUM_BRASS_CASING.get());
                         pOutput.accept(ModItems.LARGE_BRASS_CASING.get());
@@ -124,12 +138,13 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.COMPACT_COPPER_ROUND.get());
                         pOutput.accept(ModItems.STANDARD_COPPER_ROUND.get());
                         pOutput.accept(ModItems.RAMROD_ROUND.get());
+                        pOutput.accept(ModItems.HOG_ROUND.get());
                         pOutput.accept(ModItems.COMPACT_ADVANCED_ROUND.get());
                         pOutput.accept(ModItems.ADVANCED_ROUND.get());
                         pOutput.accept(ModItems.KRAHG_ROUND.get());
                         pOutput.accept(ModItems.BEOWULF_ROUND.get());
                         pOutput.accept(ModItems.SHOTGUN_SHELL.get());
-                        pOutput.accept(ModItems.FUEL.get());
+                        pOutput.accept(ModItems.BLAZE_FUEL.get());
                         pOutput.accept(ModItems.BEARPACK_SHELL.get());
                         pOutput.accept(ModItems.ENERGY_CELL.get());
                         pOutput.accept(ModItems.MICROJET.get());
@@ -167,9 +182,15 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.MOLOTOV_COCKTAIL.get());
                         pOutput.accept(ModItems.CHOKE_BOMB.get());
                         pOutput.accept(ModItems.SWARM_BOMB.get());
+
+                        pOutput.accept(ModItems.BASIC_POULTICE.get());
+                        pOutput.accept(ModItems.HONEY_SULFUR_POULTICE.get());
+                        pOutput.accept(ModItems.ENCHANTED_BANDAGE.get());
+                        pOutput.accept(ModItems.DRAGON_SALVE.get());
                         pOutput.accept(ModItems.COLD_PACK.get());
 
                         pOutput.accept(ModItems.REFLEX_SIGHT.get());
+                        pOutput.accept(ModItems.LASER_SIGHT.get());
                         pOutput.accept(ModItems.MEDIUM_SCOPE.get());
                         pOutput.accept(ModItems.LONG_SCOPE.get());
                         pOutput.accept(ModItems.LIGHT_STOCK.get());
@@ -196,10 +217,40 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.SULFUR_ORE.get());
                         pOutput.accept(ModBlocks.DEEPSLATE_SULFUR_ORE.get());
                         pOutput.accept(ModBlocks.NETHER_SULFUR_ORE.get());
+                        pOutput.accept(ModBlocks.VEHEMENT_COAL_ORE.get());
                         pOutput.accept(ModBlocks.SULFUR_BLOCK.get());
+                        pOutput.accept(ModBlocks.ANCIENT_BRASS_BLOCK.get());
                         pOutput.accept(ModBlocks.NITER_BLOCK.get());
                         pOutput.accept(ModBlocks.NITER_GLASS.get());
+
                         pOutput.accept(ModBlocks.WHITE_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.LIGHT_GRAY_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.GRAY_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.BLACK_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.BROWN_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.RED_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.ORANGE_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.YELLOW_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.LIME_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.GREEN_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.CYAN_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.LIGHT_BLUE_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.BLUE_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.PURPLE_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.MAGENTA_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.PINK_NITER_GLASS.get());
+                        pOutput.accept(ModBlocks.ASGHARIAN_BRICKS.get());
+                        pOutput.accept(ModBlocks.ASGHARIAN_BRICK_STAIRS.get());
+                        pOutput.accept(ModBlocks.ASGHARIAN_BRICK_SLAB.get());
+                        pOutput.accept(ModBlocks.ASGHARIAN_BRICK_WALL.get());
+                        pOutput.accept(ModBlocks.ASGHARIAN_PILLAR.get());
+                        pOutput.accept(ModBlocks.CRACKED_ASGHARIAN_BRICKS.get());
+                        pOutput.accept(ModBlocks.SANDBAG.get());
+                        pOutput.accept(ModBlocks.SUPPLY_CRATE.get());
+
+
+
+
                         pOutput.accept(ModBlocks.GEOTHERMAL_VENT.get());
                         pOutput.accept(ModBlocks.VENT_COLLECTOR.get());
                         pOutput.accept(ModBlocks.GUN_BENCH.get());
@@ -210,13 +261,15 @@ public class ModCreativeModeTabs {
 
 
 
-                        pOutput.accept(ModItems.REPAIR_KIT.get());
+
                         pOutput.accept(ModItems.COG_KNIGHT_SPAWN_EGG.get());
                         pOutput.accept(ModItems.COG_MINION_SPAWN_EGG.get());
                         pOutput.accept(ModItems.SKY_CARRIER_SPAWN_EGG.get());
                         pOutput.accept(ModItems.SUPPLY_SCAMP_SPAWN_EGG.get());
                         pOutput.accept(ModItems.DISSIDENT_SPAWN_EGG.get());
                         pOutput.accept(ModItems.REDCOAT_SPAWN_EGG.get());
+                        pOutput.accept(ModItems.BLUNDERER_SPAWN_EGG.get());
+                        pOutput.accept(ModItems.HORNLIN_SPAWN_EGG.get());
                         pOutput.accept(ModItems.HIVE_SPAWN_EGG.get());
                         pOutput.accept(ModItems.SWARM_SPAWN_EGG.get());
 

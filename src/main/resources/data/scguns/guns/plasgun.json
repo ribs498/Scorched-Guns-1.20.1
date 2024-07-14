@@ -2,25 +2,27 @@
   "display": {
     "flash": {
       "size": 1.0,
-      "yOffset": 4.5,
-      "zOffset": -9.2
+      "yOffset": 4.6,
+      "zOffset": -9.0
     },
     "muzzleFlashType": "flash_type_3"
   },
   "general": {
-    "alwaysSpread": true,
+    "alwaysSpread": false,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
-    "rate": 4,
-    "recoilAngle": 2.7,
-    "recoilKick": 0.22,
-    "spread": 4.0
+    "rate": 9,
+    "recoilAngle": 2.5,
+    "recoilKick": 0.5,
+    "spread": 4.0,
+    "meleeDamage": 2.5,
+    "meleeCooldownTicks": 20
   },
   "modules": {
     "attachments": {
       "scope": {
         "size": 0.8,
-        "yOffset": 5.7,
+        "yOffset": 6.0,
         "zOffset": 5.2
       },
       "stock": {
@@ -42,26 +44,27 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 6.0,
-    "ejectsCasing": false,
+    "damage": 17.0,
+    "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:energy_cell",
-    "life": 60,
-    "size": 100.0,
-    "speed": 2.5,
-    "trailLengthMultiplier": 0.2
+    "casingType": "scguns:small_diamond_steel_casing",
+    "life": 20,
+    "size": 6.0,
+    "speed": 2.0,
+    "trailLengthMultiplier": 1.0
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 10,
+    "maxAmmo": 15,
     "reloadItem": "scguns:energy_cell",
-    "reloadTimer": 30,
+    "reloadTimer": 35,
     "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.plasma.fire",
     "fire": "scguns:item.plasma.fire",
-    "reload": "scguns:item.plasma.reload"
+    "reload": "scguns:item.pistol.reload"
   }
 }

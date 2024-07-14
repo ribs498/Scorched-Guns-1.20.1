@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:wither_skeleton",
+    "scguns:cog_minion",
+    "scguns:supply_scamp",
+    "scguns:sky_carrier",
+    "scguns:cog_knight",
+    "minecraft:wither",
+    "minecraft:iron_golem"
+  ]
+}

@@ -2,41 +2,37 @@ package top.ribs.scguns.client.handler;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
+import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.client.render.crosshair.Crosshair;
+import top.ribs.scguns.client.render.crosshair.SpecialHitMarker;
 import top.ribs.scguns.client.render.crosshair.TechCrosshair;
 import top.ribs.scguns.client.render.crosshair.TexturedCrosshair;
+import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.event.GunFireEvent;
 import top.ribs.scguns.item.GunItem;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-/**
- * Author: MrCrayfish
- */
-public class CrosshairHandler
-{
+public class CrosshairHandler {
     private static CrosshairHandler instance;
 
-    public static CrosshairHandler get()
-    {
-        if(instance == null)
-        {
+    public static CrosshairHandler get() {
+        if (instance == null) {
             instance = new CrosshairHandler();
         }
         return instance;
@@ -46,8 +42,7 @@ public class CrosshairHandler
     private final List<Crosshair> registeredCrosshairs = new ArrayList<>();
     private Crosshair currentCrosshair = null;
 
-    private CrosshairHandler()
-    {
+    private CrosshairHandler() {
         this.register(new TexturedCrosshair(new ResourceLocation(Reference.MOD_ID, "better_default")));
         this.register(new TexturedCrosshair(new ResourceLocation(Reference.MOD_ID, "circle")));
         this.register(new TexturedCrosshair(new ResourceLocation(Reference.MOD_ID, "filled_circle"), false));
@@ -66,10 +61,8 @@ public class CrosshairHandler
     /**
      * Registers a new crosshair. If the crosshair has already been registered, it will be ignored.
      */
-    public void register(Crosshair crosshair)
-    {
-        if(!this.idToCrosshair.containsKey(crosshair.getLocation()))
-        {
+    public void register(Crosshair crosshair) {
+        if (!this.idToCrosshair.containsKey(crosshair.getLocation())) {
             this.idToCrosshair.put(crosshair.getLocation(), crosshair);
             this.registeredCrosshairs.add(crosshair);
         }
@@ -81,8 +74,7 @@ public class CrosshairHandler
      *
      * @param id the id of the crosshair
      */
-    public void setCrosshair(ResourceLocation id)
-    {
+    public void setCrosshair(ResourceLocation id) {
         this.currentCrosshair = this.idToCrosshair.getOrDefault(id, Crosshair.DEFAULT);
     }
 
@@ -90,10 +82,8 @@ public class CrosshairHandler
      * Gets the current crosshair
      */
     @Nullable
-    public Crosshair getCurrentCrosshair()
-    {
-        if(this.currentCrosshair == null && this.registeredCrosshairs.size() > 0)
-        {
+    public Crosshair getCurrentCrosshair() {
+        if (this.currentCrosshair == null && this.registeredCrosshairs.size() > 0) {
             ResourceLocation id = ResourceLocation.tryParse(Config.CLIENT.display.crosshair.get());
             this.currentCrosshair = id != null ? this.idToCrosshair.getOrDefault(id, Crosshair.DEFAULT) : Crosshair.DEFAULT;
         }
@@ -103,87 +93,84 @@ public class CrosshairHandler
     /**
      * Gets a list of registered crosshairs. Please note that this list is immutable.
      */
-    public List<Crosshair> getRegisteredCrosshairs()
-    {
+    public List<Crosshair> getRegisteredCrosshairs() {
         return ImmutableList.copyOf(this.registeredCrosshairs);
     }
 
     @SubscribeEvent
-    public void onRenderOverlay(RenderGuiOverlayEvent.Pre event)
-    {
-        if(event.getOverlay() != VanillaGuiOverlay.CROSSHAIR.type())
-            return;
-
-        Crosshair crosshair = this.getCurrentCrosshair();
-        if(AimingHandler.get().getNormalisedAdsProgress() > 0.5)
-        {
-            event.setCanceled(true);
-            return;
-        }
-
-        if(crosshair == null || crosshair.isDefault())
-        {
-            return;
-        }
-
+    public void onRenderOverlay(RenderGuiOverlayEvent.Pre event) {
         Minecraft mc = Minecraft.getInstance();
-        if(mc.player == null)
+        if (mc.player == null)
+            return;
+
+        if (event.getOverlay() != VanillaGuiOverlay.CROSSHAIR.type())
             return;
 
         ItemStack heldItem = mc.player.getMainHandItem();
-        if(!(heldItem.getItem() instanceof GunItem))
-            return;
-
-        event.setCanceled(true);
-
-        if(!mc.options.getCameraType().isFirstPerson())
-            return;
-
-        if(mc.player.getUseItem().getItem() == Items.SHIELD)
+        if (!(heldItem.getItem() instanceof GunItem))
             return;
 
         PoseStack stack = event.getGuiGraphics().pose();
         stack.pushPose();
         int scaledWidth = event.getWindow().getGuiScaledWidth();
         int scaledHeight = event.getWindow().getGuiScaledHeight();
+
+        // Render the special hit marker if applicable
+        if (HUDRenderHandler.isRenderingHitMarker()) {
+            Crosshair hitMarker = new SpecialHitMarker();
+            hitMarker.render(mc, stack, scaledWidth, scaledHeight, event.getPartialTick());
+        }
+
+        Crosshair crosshair = this.getCurrentCrosshair();
+        if (AimingHandler.get().getNormalisedAdsProgress() > 0.5 && mc.options.getCameraType().isFirstPerson()) {
+            event.setCanceled(true);
+            return;
+        }
+
+        if (crosshair == null || crosshair.isDefault()) {
+            return;
+        }
+
+        event.setCanceled(true);
+
+        if (mc.player.getUseItem().getItem() == Items.SHIELD)
+            return;
+
         crosshair.render(mc, stack, scaledWidth, scaledHeight, event.getPartialTick());
         stack.popPose();
     }
 
+
     @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent event)
-    {
-        if(event.phase != TickEvent.Phase.END)
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.END)
             return;
 
         Crosshair crosshair = this.getCurrentCrosshair();
-        if(crosshair == null || crosshair.isDefault())
+        if (crosshair == null || crosshair.isDefault())
             return;
 
         crosshair.tick();
     }
 
     @SubscribeEvent
-    public void onGunFired(GunFireEvent.Post event)
-    {
+    public void onGunFired(GunFireEvent.Post event) {
         Crosshair crosshair = this.getCurrentCrosshair();
-        if(crosshair == null || crosshair.isDefault())
+        if (crosshair == null || crosshair.isDefault())
             return;
 
         crosshair.onGunFired();
     }
 
     /* Updates the crosshair if the config is reloaded. */
-    public static void onConfigReload(ModConfigEvent.Reloading event)
-    {
+    public static void onConfigReload(ModConfigEvent.Reloading event) {
         ModConfig config = event.getConfig();
-        if(config.getType() == ModConfig.Type.CLIENT && config.getModId().equals(Reference.MOD_ID))
-        {
+        if (config.getType() == ModConfig.Type.CLIENT && config.getModId().equals(Reference.MOD_ID)) {
             ResourceLocation id = ResourceLocation.tryParse(Config.CLIENT.display.crosshair.get());
-            if(id != null)
-            {
+            if (id != null) {
                 CrosshairHandler.get().setCrosshair(id);
             }
         }
     }
 }
+
