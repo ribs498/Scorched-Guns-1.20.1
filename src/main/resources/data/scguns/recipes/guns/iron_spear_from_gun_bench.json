@@ -1,0 +1,39 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:iron_spear",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:iron_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "scguns:firing_unit"
+    },
+    "gun_internal_2": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "gun_top_internal_1": {
+      "item": "minecraft:iron_ingot"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:iron_gun_frame"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_grip": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_top_barrel_1": {
+      "tag": "minecraft:planks"
+    },
+    "gun_magazine": {
+      "tag": "minecraft:planks"
+    }
+  }
+}

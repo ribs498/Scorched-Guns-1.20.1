@@ -1,0 +1,40 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:freyr",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:piglin_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "scguns:vehement_coal"
+    },
+    "gun_top_internal_1": {
+      "item": "scguns:rapid_firing_unit"
+    },
+    "gun_internal_2": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:anthralite_ingot"
+    },
+
+    "gun_barrel_1": {
+      "item": "minecraft:crimson_planks"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_top_barrel_1": {
+      "item": "scguns:gun_magazine"
+    },
+    "gun_grip": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_magazine": {
+      "item": "minecraft:crimson_planks"
+    }
+  }
+}

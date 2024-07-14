@@ -1,0 +1,39 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "minecraft:diamond",
+    "count": 1
+  },
+  "ingredients": {
+    "gun_top_internal_1": {
+      "item": "minecraft:cobblestone"
+    },
+    "gun_top_internal_2": {
+      "item": "minecraft:coal"
+    },
+    "gun_top_barrel_1": {
+      "item": "minecraft:stick"
+    },
+    "gun_top_barrel_2": {
+      "item": "minecraft:gold_ingot"
+    },
+    "gun_internal_1": {
+      "item": "minecraft:netherite_ingot"
+    },
+    "gun_internal_2": {
+      "item": "minecraft:iron_ingot"
+    },
+    "gun_barrel_1": {
+      "item": "minecraft:copper_ingot"
+    },
+    "gun_barrel_2": {
+      "item": "minecraft:redstone"
+    },
+    "gun_grip": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "gun_magazine": {
+      "item": "minecraft:emerald"
+    }
+  }
+}

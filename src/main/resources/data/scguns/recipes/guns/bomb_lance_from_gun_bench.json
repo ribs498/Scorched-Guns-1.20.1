@@ -1,0 +1,39 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:bomb_lance",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:ocean_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "scguns:iron_gun_frame"
+    },
+    "gun_internal_2": {
+      "tag": "minecraft:planks"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:iron_gun_frame"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_grip": {
+      "tag": "minecraft:planks"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:firing_unit"
+    },
+    "gun_top_barrel_1": {
+      "item": "scguns:iron_bayonet"
+    },
+    "gun_top_barrel_2": {
+      "item": "scguns:iron_bayonet"
+    },
+    "gun_magazine": {
+      "item": "scguns:iron_bayonet"
+    }
+  }
+}
