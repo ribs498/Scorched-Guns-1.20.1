@@ -31,7 +31,13 @@ public class RarityUtils {
 
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "raygun"), Constants.ENDISH);
 
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "scorched_blueprint"), Constants.SCORCHED);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "scorched_ingot"), Constants.SCORCHED);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "earths_corpse"), Constants.SCORCHED);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "rat_king_and_queen"), Constants.SCORCHED);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "locust"), Constants.SCORCHED);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "newborn_cyst"), Constants.SCORCHED);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "astella"), Constants.SCORCHED);
 
     }
 

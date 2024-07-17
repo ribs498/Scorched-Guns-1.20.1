@@ -11,9 +11,9 @@
     "fireMode": "scguns:automatic",
     "gripType": "scguns:mini_gun",
     "rate": 2,
-    "recoilAngle": 4.5,
+    "recoilAngle": 3.0,
     "recoilKick": 0.5,
-    "spread": 3.0,
+    "spread": 5.0,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20
   },
@@ -23,7 +23,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 4.5,
+    "damage": 4.0,
     "gravity": false,
     "item": "scguns:compact_advanced_round",
     "ejectsCasing": true,

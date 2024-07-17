@@ -134,11 +134,6 @@ public class TwoHandedOneHandedPose implements IHeldAnimation {
     }
 
     @Override
-    public boolean canRenderOffhandItem() {
-        return true;
-    }
-
-    @Override
     public double getFallSwayZOffset() {
         return 0.5;
     }

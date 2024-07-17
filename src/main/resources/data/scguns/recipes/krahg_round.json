@@ -6,7 +6,7 @@
       "item": "scguns:large_brass_casing"
     },
     {
-      "item": "minecraft:gunpowder"
+      "tag": "forge:gunpowder"
     },
     {
       "item": "scguns:anthralite_nugget"

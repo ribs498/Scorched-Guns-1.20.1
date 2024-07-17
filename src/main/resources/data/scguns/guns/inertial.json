@@ -63,7 +63,7 @@
     "emptyMagTimer": 10,
     "maxAmmo": 6,
     "reloadItem": "scguns:bearpack_shell",
-    "reloadTimer": 6,
+    "reloadTimer": 30,
     "reloadType": "scguns:mag_fed"
   },
   "sounds": {

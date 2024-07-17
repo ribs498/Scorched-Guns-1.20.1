@@ -50,7 +50,7 @@
     "casingType": "scguns:small_brass_casing",
     "life": 30,
     "size": 0.05,
-    "speed": 10.0,
+    "speed": 7.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {

@@ -23,6 +23,22 @@
       }
     ]
   },
+  "item.scorched_sniper.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/scorched_sniper/fire"
+      }
+    ]
+  },
+    "item.scorched_rifle.fire": {
+        "subtitle": "subtitle.scguns.fire",
+        "sounds": [
+        {
+            "name": "scguns:item/scorched_rifle/fire"
+        }
+        ]
+    },
   "item.rusty_gnat.silenced_fire": {
     "subtitle": "subtitle.scguns.fire",
     "sounds": [

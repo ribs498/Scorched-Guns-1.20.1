@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "scguns:medium_brass_casing"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "scguns:bearpack_shell"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:medium_brass_casing"
+        },
+        [
+          {
+            "item": "minecraft:paper"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:medium_brass_casing"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:medium_brass_casing"
+        },
+        [
+          {
+            "item": "scguns:nitro_powder"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:medium_brass_casing"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "scguns:medium_brass_casing"
+        }
+      ],
+      "results": [
+        {
+          "item": "scguns:medium_brass_casing"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "scguns:medium_brass_casing"
+  }
+}

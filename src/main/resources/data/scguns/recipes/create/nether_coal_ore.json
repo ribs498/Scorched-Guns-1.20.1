@@ -1,0 +1,26 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:nether_sulfur_ore"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "item": "scguns:sulfur_chunk"
+    },
+    {
+      "chance": 0.75,
+      "item": "scguns:sulfur_chunk"
+    },
+    {
+      "chance": 0.75,
+      "item": "create:experience_nugget"
+    },
+    {
+      "chance": 0.125,
+      "item": "minecraft:netherrack"
+    }
+  ]
+}

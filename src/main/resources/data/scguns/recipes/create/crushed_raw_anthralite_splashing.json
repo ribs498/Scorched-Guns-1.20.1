@@ -1,0 +1,18 @@
+{
+  "type": "create:splashing",
+  "ingredients": [
+    {
+      "item": "scguns:crushed_raw_anthralite"
+    }
+  ],
+  "results": [
+    {
+      "count": 9,
+      "item": "scguns:anthralite_nugget"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:niter_dust"
+    }
+  ]
+}

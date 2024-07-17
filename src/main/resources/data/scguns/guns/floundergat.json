@@ -36,7 +36,7 @@
     }
   },
   "projectile": {
-    "advantage": "scguns:none",
+    "advantage": "scguns:fire",
     "damage": 16.0,
     "item": "scguns:grapeshot",
     "life": 6,

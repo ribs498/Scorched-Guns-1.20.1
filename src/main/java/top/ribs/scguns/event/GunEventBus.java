@@ -19,9 +19,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.ribs.scguns.Reference;
+import top.ribs.scguns.client.render.gun.model.RatKingAndQueenModel;
 import top.ribs.scguns.common.FireMode;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.*;
+import top.ribs.scguns.item.DualWieldGunItem;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.item.NonUnderwaterGunItem;
 import top.ribs.scguns.item.UnderwaterGunItem;
@@ -74,7 +76,6 @@ public class GunEventBus {
             }
         }
     }
-
     @SubscribeEvent
     public static void postShoot(GunFireEvent.Post event) {
         Player player = event.getEntity();
@@ -85,10 +86,14 @@ public class GunEventBus {
         if (heldItem.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(heldItem);
 
+            // Get shot count and determine mirroring
+            int shotCount = RatKingAndQueenModel.GunFireEventRatHandler.getShotCount();
+            boolean mirror = (heldItem.getItem() instanceof DualWieldGunItem && (shotCount % 2 == 1));
+
             // Eject casing particles
             if (gun.getProjectile().ejectsCasing() && tag != null) {
                 if (tag.getInt("AmmoCount") >= 1 || player.getAbilities().instabuild) {
-                    ejectCasing(level, player);
+                    ejectCasing(level, player, mirror);
                 }
             }
 
@@ -115,7 +120,6 @@ public class GunEventBus {
             }
         }
     }
-
 
     public static void broken(ItemStack stack, Level level, Player player) {
         int maxDamage = stack.getMaxDamage();
@@ -222,7 +226,7 @@ public class GunEventBus {
         }
     }
 
-    public static void ejectCasing(Level level, LivingEntity livingEntity) {
+    public static void ejectCasing(Level level, LivingEntity livingEntity, boolean mirror) {
         Player playerEntity = (Player) livingEntity;
         ItemStack heldItem = playerEntity.getMainHandItem();
         Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
@@ -231,9 +235,10 @@ public class GunEventBus {
         Vec3 rightVec = new Vec3(-lookVec.z, 0, lookVec.x).normalize();
         Vec3 forwardVec = new Vec3(lookVec.x, 0, lookVec.z).normalize();
 
-        double offsetX = rightVec.x * 0.5 + forwardVec.x * 0.5;
+        // Adjust offset based on mirroring
+        double offsetX = (mirror ? -rightVec.x : rightVec.x) * 0.5 + forwardVec.x * 0.5;
         double offsetY = playerEntity.getEyeHeight() - 0.4;
-        double offsetZ = rightVec.z * 0.5 + forwardVec.z * 0.5;
+        double offsetZ = (mirror ? -rightVec.z : rightVec.z) * 0.5 + forwardVec.z * 0.5;
 
         Vec3 particlePos = playerEntity.getPosition(1).add(offsetX, offsetY, offsetZ);
 
@@ -247,6 +252,7 @@ public class GunEventBus {
         ResourceLocation energyCell = ForgeRegistries.ITEMS.getKey(ModItems.ENERGY_CELL.get());
         ResourceLocation blazeFuel = ForgeRegistries.ITEMS.getKey(ModItems.BLAZE_FUEL.get());
         ResourceLocation beowulfRound = ForgeRegistries.ITEMS.getKey(ModItems.BEOWULF_ROUND.get());
+        ResourceLocation gibbsRound = ForgeRegistries.ITEMS.getKey(ModItems.GIBBS_ROUND.get());
         ResourceLocation shotgunShellLocation = ForgeRegistries.ITEMS.getKey(ModItems.SHOTGUN_SHELL.get());
         ResourceLocation bearpackShellLocation = ForgeRegistries.ITEMS.getKey(ModItems.BEARPACK_SHELL.get());
         ResourceLocation projectileLocation = ForgeRegistries.ITEMS.getKey(gun.getProjectile().getItem());
@@ -259,7 +265,7 @@ public class GunEventBus {
             }
             if (projectileLocation.equals(hogRound) || projectileLocation.equals(ramrodRound)|| projectileLocation.equals(blazeFuel)) {
                 casingType = ModParticleTypes.IRON_CASING_PARTICLE.get();
-            } if (projectileLocation.equals(energyCell) || projectileLocation.equals(beowulfRound)) {
+            } if (projectileLocation.equals(energyCell) || projectileLocation.equals(gibbsRound) ||projectileLocation.equals(beowulfRound)) {
                 casingType = ModParticleTypes.DIAMOND_STEEL_CASING_PARTICLE.get();
             }else if (projectileLocation.equals(compactAdvancedRound) || projectileLocation.equals(advancedRound) || projectileLocation.equals(heavyRound)) {
                 casingType = ModParticleTypes.BRASS_CASING_PARTICLE.get();
@@ -276,6 +282,7 @@ public class GunEventBus {
                     particlePos.x, particlePos.y, particlePos.z, 1, 0, 0, 0, 0);
         }
     }
+
 
 
     private static void spawnCasingInWorld(Level level, Player player, ItemStack casingStack) {

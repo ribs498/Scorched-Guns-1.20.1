@@ -1,0 +1,20 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "minecraft:netherite_scrap"
+    }
+  ],
+  "processingTime": 100,
+  "results": [
+    {
+      "count": 6,
+      "item": "scguns:netherite_scrap_chunk"
+    },
+    {
+      "chance": 0.15,
+      "count": 1,
+      "item": "scguns:netherite_scrap_chunk"
+    }
+  ]
+}

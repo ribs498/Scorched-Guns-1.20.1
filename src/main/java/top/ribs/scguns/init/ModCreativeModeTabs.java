@@ -32,6 +32,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.MAKESHIFT_RIFLE.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BOOMSTICK.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BRUISER.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.LLR_DIRECTOR.get());
 
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.DEFENDER_PISTOL.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.GREASER_SMG.get());
@@ -47,6 +48,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.KRAUSER.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.UPPERCUT.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.PRUSH_GUN.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.LOCKEWOOD.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.INERTIAL.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.MAS_55.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.PLASGUN.get());
@@ -72,14 +74,20 @@ public class ModCreativeModeTabs {
 
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.RAYGUN.get());
 
-
-
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.RAT_KING_AND_QUEEN.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.LOCUST.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.NEWBORN_CYST.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.EARTHS_CORPSE.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.ASTELLA.get());
 
                         pOutput.accept(ModItems.ANTHRALITE_PICKAXE.get());
                         pOutput.accept(ModItems.ANTHRALITE_AXE.get());
                         pOutput.accept(ModItems.ANTHRALITE_SHOVEL.get());
                         pOutput.accept(ModItems.ANTHRALITE_HOE.get());
                         pOutput.accept(ModItems.ANTHRALITE_SWORD.get());
+                        if (ModCompat.isFarmersDelightLoaded()) {
+                            pOutput.accept(ModItems.ANTHRALITE_KNIFE.get());
+                        }
                         pOutput.accept(ModItems.ANTHRALITE_HELMET.get());
                         pOutput.accept(ModItems.ANTHRALITE_CHESTPLATE.get());
                         pOutput.accept(ModItems.ANTHRALITE_LEGGINGS.get());
@@ -100,6 +108,12 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.SCORCHED_BLEND.get());
                         pOutput.accept(ModItems.SCORCHED_INGOT.get());
                         pOutput.accept(ModItems.RAW_ANTHRALITE.get());
+                        if (ModCompat.isCreateLoaded()) {
+                            pOutput.accept(ModItems.CRUSHED_RAW_ANTHRALITE.get());
+                        }
+                        if (ModCompat.isIELoaded()) {
+                            pOutput.accept(ModItems.ANTHRALITE_DUST.get());
+                        }
                         pOutput.accept(ModItems.ANTHRALITE_INGOT.get());
                         pOutput.accept(ModItems.ANTHRALITE_NUGGET.get());
                         pOutput.accept(ModItems.ANCIENT_BRASS.get());
@@ -123,12 +137,14 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.PIGLIN_BLUEPRINT.get());
                         pOutput.accept(ModItems.DEEP_DARK_BLUEPRINT.get());
                         pOutput.accept(ModItems.END_BLUEPRINT.get());
+                        pOutput.accept(ModItems.SCORCHED_BLUEPRINT.get());
 
                         pOutput.accept(ModItems.SMALL_COPPER_CASING.get());
                         pOutput.accept(ModItems.MEDIUM_COPPER_CASING.get());
                         pOutput.accept(ModItems.SMALL_IRON_CASING.get());
                         pOutput.accept(ModItems.LARGE_IRON_CASING.get());
                         pOutput.accept(ModItems.SMALL_DIAMOND_STEEL_CASING.get());
+                        pOutput.accept(ModItems.MEDIUM_DIAMOND_STEEL_CASING.get());
                         pOutput.accept(ModItems.SMALL_BRASS_CASING.get());
                         pOutput.accept(ModItems.MEDIUM_BRASS_CASING.get());
                         pOutput.accept(ModItems.LARGE_BRASS_CASING.get());
@@ -143,13 +159,14 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.ADVANCED_ROUND.get());
                         pOutput.accept(ModItems.KRAHG_ROUND.get());
                         pOutput.accept(ModItems.BEOWULF_ROUND.get());
+                        pOutput.accept(ModItems.GIBBS_ROUND.get());
                         pOutput.accept(ModItems.SHOTGUN_SHELL.get());
                         pOutput.accept(ModItems.BLAZE_FUEL.get());
                         pOutput.accept(ModItems.BEARPACK_SHELL.get());
                         pOutput.accept(ModItems.ENERGY_CELL.get());
                         pOutput.accept(ModItems.MICROJET.get());
                         pOutput.accept(ModItems.ROCKET.get());
-                        pOutput.accept(ModItems.OSBORNE_SLUG.get());;
+                        //pOutput.accept(ModItems.OSBORNE_SLUG.get());;
 
 
                         pOutput.accept(ModItems.PISTOL_AMMO_BOX.get());
@@ -165,6 +182,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.IRON_GUN_FRAME.get());
                         pOutput.accept(ModItems.TREATED_BRASS_GUN_FRAME.get());
                         pOutput.accept(ModItems.DIAMOND_STEEL_GUN_FRAME.get());
+                        pOutput.accept(ModItems.SCORCHED_GUN_FRAME.get());
                         pOutput.accept(ModItems.GUN_PARTS.get());
                         pOutput.accept(ModItems.HEAVY_GUN_PARTS.get());
                         pOutput.accept(ModItems.FIRING_UNIT.get());

@@ -1,0 +1,16 @@
+{
+  "type": "scguns:mechanical_pressing",
+  "processingTime": 50,
+  "ingredients": [
+    {
+      "item": "scguns:diamond_steel_ingot"
+    }
+  ],
+  "mold": {
+    "item": "scguns:medium_casing_mold"
+  },
+  "result": {
+    "item": "scguns:medium_diamond_steel_casing",
+    "count": 8
+  }
+}

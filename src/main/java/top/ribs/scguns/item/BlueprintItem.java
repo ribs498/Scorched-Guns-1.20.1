@@ -6,4 +6,5 @@ public class BlueprintItem  extends Item {
     public BlueprintItem(Properties pProperties) {
         super(pProperties);
     }
+
 }

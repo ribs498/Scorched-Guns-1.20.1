@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "scguns:anthralite_ingot"
+  },
+  "base": {
+    "item": "farmersdelight:iron_knife"
+  },
+  "result": {
+    "item": "scguns:anthralite_knife"
+  },
+  "template": {
+    "item": "minecraft:leather"
+  }
+}

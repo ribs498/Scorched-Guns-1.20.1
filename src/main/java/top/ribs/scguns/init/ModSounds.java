@@ -14,6 +14,8 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> BLACKPOWDER_FIRE = register("item.blackpowder.fire");
     public static final RegistryObject<SoundEvent> BRUISER_SILENCED_FIRE = register("item.bruiser.silenced_fire");
     public static final RegistryObject<SoundEvent> MAKESHIFT_RIFLE_FIRE = register("item.makeshift_rifle.fire");
+    public static final RegistryObject<SoundEvent> SCORCHED_SNIPER_FIRE = register("item.scorched_sniper.fire");
+    public static final RegistryObject<SoundEvent> SCORCHED_RIFLE_FIRE = register("item.scorched_rifle.fire");
     public static final RegistryObject<SoundEvent> RUSTY_GNAT_FIRE = register("item.rusty_gnat.fire");
     public static final RegistryObject<SoundEvent> RUSTY_GNAT_SILENCED_FIRE = register("item.rusty_gnat.silenced_fire");
     public static final RegistryObject<SoundEvent> BRASS_SHOTGUN_FIRE = register("item.brass_shotgun.fire");

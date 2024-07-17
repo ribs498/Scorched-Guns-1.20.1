@@ -1,0 +1,26 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:vehement_coal_ore"
+    }
+  ],
+  "processingTime": 150,
+  "results": [
+    {
+      "item": "scguns:vehement_coal"
+    },
+    {
+      "chance": 0.10,
+      "item": "scguns:vehement_coal"
+    },
+    {
+      "chance": 0.75,
+      "item": "create:experience_nugget"
+    },
+    {
+      "chance": 0.125,
+      "item": "minecraft:netherrack"
+    }
+  ]
+}

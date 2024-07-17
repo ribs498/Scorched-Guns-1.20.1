@@ -3,17 +3,17 @@
   "processingTime": 20,
   "ingredients": [
     {
-      "item": "scguns:large_iron_casing"
+      "item": "scguns:medium_diamond_steel_casing"
     },
     {
-      "item": "minecraft:gunpowder"
+      "tag": "scguns:gunpowder_dust"
     },
     {
-      "item": "scguns:bearpack_shell"
+      "item": "scguns:anthralite_nugget"
     }
   ],
   "result": {
-    "item": "scguns:osborne_slug",
+    "item": "scguns:gibbs_round",
     "count": 1
   }
 }

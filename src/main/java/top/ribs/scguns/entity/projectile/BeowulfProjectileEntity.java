@@ -50,28 +50,19 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
         float damage = this.getDamage();
         entity.hurt(ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner()), damage);
-        createPlasmaExplosion(this, 1.0f);
         spawnExplosionParticles(hitVec);
     }
 
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
-        createPlasmaExplosion(this, 1.0f);
         spawnExplosionParticles(new Vec3(x, y + 0.1, z));
     }
 
     @Override
     public void onExpired() {
-        createPlasmaExplosion(this, 1.0f);
         spawnExplosionParticles(new Vec3(this.getX(), this.getY() + 0.1, this.getZ()));
     }
 
-    public static void createPlasmaExplosion(Entity entity, float radius) {
-        if (!entity.level().isClientSide) {
-            PlasmaExplosion explosion = new PlasmaExplosion((ServerLevel) entity.level(), entity, entity.getX(), entity.getY(), entity.getZ(), radius, false, null);
-            explosion.explode();
-        }
-    }
 
     private void spawnExplosionParticles(Vec3 position) {
         if (!this.level().isClientSide) {

@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "scguns:small_brass_casing"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "scguns:compact_advanced_round"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:small_brass_casing"
+        },
+        [
+          {
+            "tag": "scguns:gunpowder_dust"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:small_brass_casing"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:small_brass_casing"
+        },
+        [
+          {
+            "item": "scguns:anthralite_nugget"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:small_brass_casing"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "scguns:small_brass_casing"
+        }
+      ],
+      "results": [
+        {
+          "item": "scguns:small_brass_casing"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "scguns:small_brass_casing"
+  }
+}

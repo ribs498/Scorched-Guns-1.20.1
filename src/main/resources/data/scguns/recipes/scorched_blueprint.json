@@ -1,0 +1,40 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "scguns:copper_blueprint"
+    },
+    "B": {
+      "item": "scguns:iron_blueprint"
+    },
+    "C": {
+      "item": "scguns:diamond_steel_blueprint"
+    },
+    "D": {
+      "item": "scguns:treated_brass_blueprint"
+    },
+    "E": {
+      "item": "scguns:scorched_ingot"
+    },
+    "F": {
+      "item": "scguns:ocean_blueprint"
+    },
+    "G": {
+      "item": "scguns:piglin_blueprint"
+    },
+    "H": {
+      "item": "scguns:deep_dark_blueprint"
+    },
+    "I": {
+      "item": "scguns:end_blueprint"
+    }
+  },
+  "pattern": [
+    "ABC",
+    "DEF",
+    "GHI"
+  ],
+  "result": {
+    "item": "scguns:scorched_blueprint"
+  }
+}

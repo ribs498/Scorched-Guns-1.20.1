@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "scguns:large_iron_casing"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "scguns:rocket"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:large_iron_casing"
+        },
+        [
+          {
+            "item": "scguns:sheol"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:large_iron_casing"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:large_iron_casing"
+        },
+        [
+          {
+            "item": "scguns:anthralite_nugget"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:large_iron_casing"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "scguns:large_iron_casing"
+        }
+      ],
+      "results": [
+        {
+          "item": "scguns:large_iron_casing"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "scguns:large_iron_casing"
+  }
+}

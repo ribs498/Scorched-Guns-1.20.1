@@ -33,7 +33,7 @@ public class GripType
      * A grip type designed for pistols that are held with two hands, like a magnum
      */
     public static final GripType TWO_HANDED_ONE_HANDED = new GripType(new ResourceLocation(Reference.MOD_ID, "two_handed_one_handed"), new TwoHandedOneHandedPose());
-
+    public static final GripType DUAL_WIELD = new GripType(new ResourceLocation(Reference.MOD_ID, "dual_wield"), new DualWieldPose());
     /**
      * A custom grip type designed for the mini gun simply due it's nature of being a completely
      * unique way to hold the weapon
@@ -48,6 +48,9 @@ public class GripType
 
 
     public static final GripType MINI_GUN_3 = new GripType(new ResourceLocation(Reference.MOD_ID, "mini_gun_3"), new MiniGun3Pose());
+    public static final GripType MINI_GUN_4 = new GripType(new ResourceLocation(Reference.MOD_ID, "mini_gun_4"), new MiniGun4Pose());
+
+
     /**
      * A custom grip type designed for the bazooka.
      */
@@ -103,9 +106,11 @@ public class GripType
         registerType(ONE_HANDED_2);
         registerType(TWO_HANDED);
         registerType(TWO_HANDED_ONE_HANDED);
+        registerType(DUAL_WIELD);
         registerType(MINI_GUN);
         registerType(MINI_GUN_2);
         registerType(MINI_GUN_3);
+        registerType(MINI_GUN_4);
         registerType(BAZOOKA);
     }
 

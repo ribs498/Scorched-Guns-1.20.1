@@ -26,6 +26,9 @@
 		},
 		"ground": {
 			"parent": "scguns:item/advanced_round_2d"
+		},
+		"frame": {
+			"parent": "scguns:item/advanced_round_2d"
 		}
 	}
 }

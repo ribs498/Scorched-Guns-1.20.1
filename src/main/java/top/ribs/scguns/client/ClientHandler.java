@@ -145,13 +145,19 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.BOOMSTICK.get(), new BoomstickModel());
         ModelOverrides.register(ModItems.RUSTY_GNAT.get(), new RustyGnatModel());
         ModelOverrides.register(ModItems.BRUISER.get(), new BruisedMagnumModel());
+        ModelOverrides.register(ModItems.LLR_DIRECTOR.get(), new LlrDirectorModel());
         ModelOverrides.register(ModItems.MARLIN.get(), new MarlinModel());
         ModelOverrides.register(ModItems.IRON_SPEAR.get(), new IronSpearModel());
         ModelOverrides.register(ModItems.M3_CARABINE.get(), new M3CarabineModel());
+        ModelOverrides.register(ModItems.LOCKEWOOD.get(), new LockewoodModel());
         ModelOverrides.register(ModItems.GREASER_SMG.get(), new GreaserSmgModel());
         ModelOverrides.register(ModItems.DEFENDER_PISTOL.get(), new DefenderPistolModel());
         ModelOverrides.register(ModItems.COMBAT_SHOTGUN.get(), new CombatShotgunModel());
         ModelOverrides.register(ModItems.AUVTOMAG.get(), new AuvtomagModel());
+        ModelOverrides.register(ModItems.EARTHS_CORPSE.get(), new EarthsCorpseModel());
+        ModelOverrides.register(ModItems.ASTELLA.get(), new AstellaModel());
+        ModelOverrides.register(ModItems.RAT_KING_AND_QUEEN.get(), new RatKingAndQueenModel());
+        ModelOverrides.register(ModItems.LOCUST.get(), new LocustModel());
         ModelOverrides.register(ModItems.GYROJET_PISTOL.get(), new GyrojetPistolModel());
         ModelOverrides.register(ModItems.ROCKET_RIFLE.get(), new RocketRifleModel());
         ModelOverrides.register(ModItems.PRUSH_GUN.get(), new PrushGunModel());
@@ -160,6 +166,7 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.PLASGUN.get(), new PlasgunModel());
         ModelOverrides.register(ModItems.GAUSS_RIFLE.get(), new GaussRifleModel());
         ModelOverrides.register(ModItems.OSGOOD_50.get(), new Osgood50Model());
+        ModelOverrides.register(ModItems.NEWBORN_CYST.get(), new NewbornCystModel());
 
         ModelOverrides.register(ModItems.JACKHAMMER.get(), new JackhammerModel());
         ModelOverrides.register(ModItems.GATTALER.get(), new GattalerModel());

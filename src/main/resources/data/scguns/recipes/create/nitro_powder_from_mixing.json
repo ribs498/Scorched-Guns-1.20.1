@@ -1,0 +1,38 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "scguns:sulfur_chunk"
+    },
+    {
+      "item": "scguns:sheol"
+    },
+    {
+      "item": "scguns:netherite_scrap_chunk"
+    },
+    {
+      "item": "scguns:netherite_scrap_chunk"
+    },
+    {
+      "item": "scguns:netherite_scrap_chunk"
+    },
+    {
+      "item": "scguns:netherite_scrap_chunk"
+    },
+    {
+      "item": "scguns:netherite_scrap_chunk"
+    },
+    {
+      "item": "scguns:netherite_scrap_chunk"
+    }
+  ],
+  "results": [
+    {
+      "count": 10,
+      "item": "scguns:nitro_powder"
+    }
+  ]
+}

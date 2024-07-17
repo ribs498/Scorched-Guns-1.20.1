@@ -4,6 +4,7 @@ import com.mrcrayfish.framework.api.FrameworkAPI;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
@@ -19,6 +20,9 @@ import top.ribs.scguns.client.screen.*;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.NetworkGunManager;
 import top.ribs.scguns.common.ProjectileManager;
+import top.ribs.scguns.compat.CreateModCondition;
+import top.ribs.scguns.compat.FarmersDelightModCondition;
+import top.ribs.scguns.compat.IEModCondition;
 import top.ribs.scguns.entity.config.ConfigLoader;
 import top.ribs.scguns.entity.projectile.*;
 import top.ribs.scguns.entity.throwable.GrenadeEntity;
@@ -41,6 +45,9 @@ public class ScorchedGuns {
     public static boolean backpackedLoaded;
     public static boolean controllableLoaded;
     public static boolean playerReviveLoaded;
+    public static boolean createLoaded;
+    public static boolean farmersDelightLoaded;
+    public static boolean ieLoaded;
 
     public ScorchedGuns() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.clientSpec);
@@ -81,6 +88,14 @@ public class ScorchedGuns {
         controllableLoaded = ModList.get().isLoaded("controllable");
         backpackedLoaded = ModList.get().isLoaded("backpacked");
         playerReviveLoaded = ModList.get().isLoaded("playerrevive");
+        createLoaded = ModList.get().isLoaded("create");
+        farmersDelightLoaded = ModList.get().isLoaded("farmersdelight");
+        ieLoaded = ModList.get().isLoaded("immersiveengineering");
+        ModItems.registerItems();
+
+        CraftingHelper.register(CreateModCondition.Serializer.INSTANCE);
+        CraftingHelper.register(FarmersDelightModCondition.Serializer.INSTANCE);
+        CraftingHelper.register(IEModCondition.Serializer.INSTANCE);
     }
     private void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
@@ -104,6 +119,7 @@ public class ScorchedGuns {
             ProjectileManager.getInstance().registerFactory(ModItems.ADVANCED_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new ProjectileEntity(ModEntities.PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.KRAHG_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new ProjectileEntity(ModEntities.PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.BEOWULF_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new BeowulfProjectileEntity(ModEntities.BEOWULF_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
+            ProjectileManager.getInstance().registerFactory(ModItems.GIBBS_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new ProjectileEntity(ModEntities.PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.SHOTGUN_SHELL.get(), (worldIn, entity, weapon, item, modifiedGun) -> new ProjectileEntity(ModEntities.PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.BEARPACK_SHELL.get(), (worldIn, entity, weapon, item, modifiedGun) -> new BearPackShellProjectileEntity(ModEntities.BEARPACK_SHELL_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.BLAZE_FUEL.get(), (worldIn, entity, weapon, item, modifiedGun) -> new FireRoundEntity(ModEntities.FIRE_ROUND_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));

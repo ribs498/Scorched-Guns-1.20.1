@@ -1,0 +1,1 @@
+{"type":"immersiveengineering:crusher","energy":6000,"input":{"item":"scguns:deepslate_anthralite_ore"},"result":{"base_ingredient":{"item":"scguns:anthralite_dust"},"count":2},"secondaries":[{"chance":0.1,"conditions":[{"type":"forge:not","value":{"type":"forge:tag_empty","tag":"forge:dusts/nickel"}}],"output":{"tag":"forge:dusts/nickel"}}]}

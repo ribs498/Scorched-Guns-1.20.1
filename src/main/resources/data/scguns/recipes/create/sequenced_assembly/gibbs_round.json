@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "scguns:medium_diamond_steel_casing"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "scguns:gibbs_round"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:medium_diamond_steel_casing"
+        },
+        [
+          {
+            "tag": "scguns:gunpowder_dust"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:medium_diamond_steel_casing"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:medium_diamond_steel_casing"
+        },
+        [
+          {
+            "item": "scguns:anthralite_nugget"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:medium_diamond_steel_casing"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "scguns:medium_diamond_steel_casing"
+        }
+      ],
+      "results": [
+        {
+          "item": "scguns:medium_diamond_steel_casing"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "scguns:medium_diamond_steel_casing"
+  }
+}

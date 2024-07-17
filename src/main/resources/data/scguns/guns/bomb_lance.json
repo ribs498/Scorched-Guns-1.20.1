@@ -28,7 +28,7 @@
     }
   },
   "projectile": {
-    "advantage": "scguns:none",
+    "advantage": "scguns:fire",
     "damage": 16.5,
     "ejectsCasing": true,
     "gravity": false,

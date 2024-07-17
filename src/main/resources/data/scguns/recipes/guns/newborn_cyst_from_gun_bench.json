@@ -1,0 +1,33 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:newborn_cyst",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:scorched_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "scguns:firing_unit"
+    },
+    "gun_internal_2": {
+      "item": "scguns:gun_magazine"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:scorched_ingot"
+    },
+    "gun_top_internal_1": {
+      "item": "scguns:scorched_gun_frame"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "gun_grip": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_magazine": {
+      "item": "scguns:heavy_gun_parts"
+    }
+  }
+}

@@ -29,7 +29,7 @@ public class Mas55Model implements IOverrideModel {
         if (Gun.getScope(stack) == null) {
             RenderUtil.renderModel(SpecialModels.MAS_55_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         } else {
-            RenderUtil.renderModel(SpecialModels.MAS_55_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
+            RenderUtil.renderModel(SpecialModels.MAS_55_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         }
         if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)))
         {

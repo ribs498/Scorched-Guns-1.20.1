@@ -21,7 +21,6 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -40,7 +39,6 @@ import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Matrix4f;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
@@ -50,29 +48,27 @@ import top.ribs.scguns.client.render.gun.IOverrideModel;
 import top.ribs.scguns.client.render.gun.ModelOverrides;
 import top.ribs.scguns.client.util.PropertyHelper;
 import top.ribs.scguns.client.util.RenderUtil;
-import top.ribs.scguns.common.FireMode;
 import top.ribs.scguns.common.GripType;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.common.properties.SightAnimation;
 import top.ribs.scguns.event.GunFireEvent;
 import top.ribs.scguns.init.ModItems;
-import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GrenadeItem;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.item.attachment.IAttachment;
-import top.ribs.scguns.item.attachment.IBarrel;
 import top.ribs.scguns.item.attachment.impl.Scope;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.util.*;
 
 public class GunRenderingHandler {
     protected static final ResourceLocation GUI_ICONS_LOCATION = new ResourceLocation("textures/gui/icons.png");
+    private final Map<Integer, Integer> entityShotCount = new HashMap<>();
+
 
     private static GunRenderingHandler instance;
 
@@ -119,6 +115,8 @@ public class GunRenderingHandler {
     private boolean isThirdPersonMeleeAttacking;
     private long thirdPersonMeleeStartTime;
     public static final float THIRD_PERSON_MELEE_DURATION = 400.0f;
+    private static final long PARTICLE_COOLDOWN_MS = 100; // 100 milliseconds cooldown between particle spawns
+    private long lastParticleSpawnTime = 0;
     @Nullable
     private ItemStack renderingWeapon;
 
@@ -609,13 +607,18 @@ public class GunRenderingHandler {
         GunItem gunItem = (GunItem) heldItem.getItem();
         Gun modifiedGun = gunItem.getModifiedGun(heldItem);
 
-        // Ensure the shooter is a player
         if (event.getShooter() instanceof Player) {
             if (modifiedGun.getDisplay().getFlash() != null) {
-                this.showMuzzleFlashForPlayer(event.getShooter().getId());
+                int entityId = event.getShooter().getId();
+                this.showMuzzleFlashForPlayer(entityId);
+
+                // Update shot count
+                this.entityShotCount.put(entityId, this.entityShotCount.getOrDefault(entityId, 0) + 1);
             }
         }
     }
+
+
 
     public void showMuzzleFlashForPlayer(int entityId) {
         this.entityIdForMuzzleFlash.add(entityId);
@@ -698,13 +701,13 @@ public class GunRenderingHandler {
             float bobPitch = Mth.rotLerp(partialTicks, player.xBobO, player.xBob);
             float headPitch = Mth.rotLerp(partialTicks, player.xRotO, player.getXRot());
             float swayPitch = headPitch - bobPitch;
-            swayPitch *= 1.0 - 0.5 * AimingHandler.get().getNormalisedAdsProgress();
+            swayPitch *= (float) (1.0 - 0.5 * AimingHandler.get().getNormalisedAdsProgress());
             poseStack.mulPose(Config.CLIENT.display.swayType.get().getPitchRotation().rotationDegrees(swayPitch * Config.CLIENT.display.swaySensitivity.get().floatValue()));
 
             float bobYaw = Mth.rotLerp(partialTicks, player.yBobO, player.yBob);
             float headYaw = Mth.rotLerp(partialTicks, player.yHeadRotO, player.yHeadRot);
             float swayYaw = headYaw - bobYaw;
-            swayYaw *= 1.0 - 0.5 * AimingHandler.get().getNormalisedAdsProgress();
+            swayYaw *= (float) (1.0 - 0.5 * AimingHandler.get().getNormalisedAdsProgress());
             poseStack.mulPose(Config.CLIENT.display.swayType.get().getYawRotation().rotationDegrees(swayYaw * Config.CLIENT.display.swaySensitivity.get().floatValue()));
 
             poseStack.translate(-x, -y, -z);
@@ -756,7 +759,7 @@ public class GunRenderingHandler {
         }
     }
 
-    public boolean renderWeapon(@Nullable LivingEntity entity, ItemStack stack, ItemDisplayContext display, PoseStack poseStack, MultiBufferSource renderTypeBuffer, int light, float partialTicks) {
+    public void renderWeapon(@Nullable LivingEntity entity, ItemStack stack, ItemDisplayContext display, PoseStack poseStack, MultiBufferSource renderTypeBuffer, int light, float partialTicks) {
         if (stack.getItem() instanceof GunItem) {
             poseStack.pushPose();
 
@@ -773,9 +776,7 @@ public class GunRenderingHandler {
             this.renderingWeapon = null;
             renderMuzzleFlash(entity, poseStack, renderTypeBuffer, stack, display, partialTicks);
             poseStack.popPose();
-            return true;
         }
-        return false;
     }
 
     private void renderGun(@Nullable LivingEntity entity, ItemDisplayContext display, ItemStack stack, PoseStack poseStack, MultiBufferSource renderTypeBuffer, int light, float partialTicks) {
@@ -852,17 +853,48 @@ public class GunRenderingHandler {
 
         if (display != ItemDisplayContext.FIRST_PERSON_RIGHT_HAND && display != ItemDisplayContext.THIRD_PERSON_RIGHT_HAND && display != ItemDisplayContext.FIRST_PERSON_LEFT_HAND && display != ItemDisplayContext.THIRD_PERSON_LEFT_HAND) return;
 
-        if (entity == null || !this.entityIdForMuzzleFlash.contains(entity.getId())) return;
+        if (!this.entityIdForMuzzleFlash.contains(entity.getId())) return;
 
         float randomValue = this.entityIdToRandomValue.get(entity.getId());
         String flashType = modifiedGun.getDisplay().getMuzzleFlashType();
         ResourceLocation flashTexture = getFlashTexture(flashType);
 
-        this.drawMuzzleFlash(weapon, modifiedGun, randomValue, randomValue >= 0.5F, poseStack, buffer, partialTicks, flashTexture);
+        // Get shot count and determine mirroring for flash type 4
+        boolean mirror = false;
+        if ("flash_type_4".equals(flashType)) {
+            int shotCount = this.entityShotCount.getOrDefault(entity.getId(), 0);
+            mirror = (shotCount % 2 == 1);
+        }
 
-        // Spawn smoke particles for black powder weapons
+        this.drawMuzzleFlash(weapon, modifiedGun, randomValue, mirror, poseStack, buffer, partialTicks, flashTexture);
+
         if ("flash_type_2".equals(flashType)) {
             spawnSmokeParticles(entity);
+        } else if ("flash_type_4".equals(flashType) || "flash_type_5".equals(flashType)) {
+            spawnFlameParticles(entity);
+        }
+    }
+    private void spawnFlameParticles(LivingEntity entity) {
+        ClientLevel world = (ClientLevel) entity.level();
+        double posX = entity.getX();
+        double posY = entity.getY() + entity.getEyeHeight();
+        double posZ = entity.getZ();
+        RandomSource random = entity.getRandom();
+        long currentTime = System.currentTimeMillis();
+
+        // Check if enough time has passed since the last particle spawn
+        if (currentTime - lastParticleSpawnTime >= PARTICLE_COOLDOWN_MS) {
+            lastParticleSpawnTime = currentTime;
+
+            for (int i = 0; i < 2; i++) { // Spawn fewer particles
+                double offsetX = (random.nextDouble() - 0.5) * 3; // Random X offset
+                double offsetY = (random.nextDouble() - 0.5) * 1.5; // Random Y offset
+                double offsetZ = (random.nextDouble() - 0.5) * 3; // Random Z offset
+                double motionX = (random.nextDouble() - 0.5) * 0.1; // Random motion in X direction
+                double motionY = (random.nextDouble() - 0.5) * 0.1; // Random motion in Y direction
+                double motionZ = (random.nextDouble() - 0.5) * 0.1; // Random motion in Z direction
+                world.addParticle(ParticleTypes.SMALL_FLAME, posX + offsetX, posY + offsetY, posZ + offsetZ, motionX, motionY, motionZ);
+            }
         }
     }
     private void spawnSmokeParticles(LivingEntity entity) {
@@ -887,10 +919,12 @@ public class GunRenderingHandler {
         return switch (flashType) {
             case "flash_type_2" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_2.png");
             case "flash_type_3" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_3.png");
+            case "flash_type_4" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_4.png");
+            case "flash_type_5" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_5.png");
             default -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_1.png");
         };
     }
-    private void drawMuzzleFlash(ItemStack weapon, Gun modifiedGun, float random, boolean flip, PoseStack poseStack, MultiBufferSource buffer, float partialTicks, ResourceLocation flashTexture) {
+    private void drawMuzzleFlash(ItemStack weapon, Gun modifiedGun, float random, boolean mirror, PoseStack poseStack, MultiBufferSource buffer, float partialTicks, ResourceLocation flashTexture) {
         if (!PropertyHelper.hasMuzzleFlash(weapon, modifiedGun))
             return;
 
@@ -902,15 +936,13 @@ public class GunRenderingHandler {
         poseStack.translate(flashPosition.x * 0.0625, flashPosition.y * 0.0625, flashPosition.z * 0.0625);
         poseStack.translate(-0.5, -0.5, -0.5);
 
-        ItemStack barrelStack = Gun.getAttachment(IAttachment.Type.BARREL, weapon);
-        if (!barrelStack.isEmpty() && barrelStack.getItem() instanceof IBarrel barrel && !PropertyHelper.isUsingBarrelMuzzleFlash(barrelStack)) {
-            Vec3 scale = PropertyHelper.getAttachmentScale(weapon, modifiedGun, IAttachment.Type.BARREL);
-            double length = barrel.getProperties().getLength();
-            poseStack.translate(0, 0, -length * 0.0625 * scale.z);
+        if (mirror) {
+            poseStack.translate(-0.55, 0.0, 0.0); //mirror position
+            poseStack.scale(-1, 1, 1);
         }
 
         poseStack.mulPose(Axis.ZP.rotationDegrees(360F * random));
-        poseStack.mulPose(Axis.XP.rotationDegrees(flip ? 180F : 0F));
+        poseStack.mulPose(Axis.XP.rotationDegrees(0F));
 
         Vec3 flashScale = PropertyHelper.getMuzzleFlashScale(weapon, modifiedGun);
         float scaleX = ((float) flashScale.x / 2F) - ((float) flashScale.x / 2F) * (1.0F - partialTicks);
@@ -930,24 +962,17 @@ public class GunRenderingHandler {
         builder.vertex(matrix, 1, 0, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(minU, 1.0F).uv2(15728880).endVertex();
         builder.vertex(matrix, 1, 1, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(minU, 0).uv2(15728880).endVertex();
         builder.vertex(matrix, 0, 1, 0).color(1.0F, 1.0F, 1.0F, 1.0F).uv(maxU, 0).uv2(15728880).endVertex();
-
         poseStack.popPose();
-
-        // Render the second plane rotated by 90 degrees around the Y-axis
         poseStack.pushPose();
-
         poseStack.translate(weaponOrigin.x * 0.0625, weaponOrigin.y * 0.0625, weaponOrigin.z * 0.0625);
         poseStack.translate(flashPosition.x * 0.0625, flashPosition.y * 0.0625, flashPosition.z * 0.0625);
         poseStack.translate(-0.5, -0.5, -0.5);
-
-        if (!barrelStack.isEmpty() && barrelStack.getItem() instanceof IBarrel barrel && !PropertyHelper.isUsingBarrelMuzzleFlash(barrelStack)) {
-            Vec3 scale = PropertyHelper.getAttachmentScale(weapon, modifiedGun, IAttachment.Type.BARREL);
-            double length = barrel.getProperties().getLength();
-            poseStack.translate(0, 0, -length * 0.0625 * scale.z);
+        if (mirror) {
+            poseStack.translate(-0.55, 0.0, 0.0); //mirror position
+            poseStack.scale(-1, 1, 1);
         }
-
         poseStack.mulPose(Axis.ZP.rotationDegrees(360F * random));
-        poseStack.mulPose(Axis.XP.rotationDegrees(flip ? 180F : 0F));
+        poseStack.mulPose(Axis.XP.rotationDegrees(0F));
         poseStack.mulPose(Axis.YP.rotationDegrees(90F));
 
         poseStack.scale(scaleX, scaleY, 1.0F);
@@ -963,7 +988,6 @@ public class GunRenderingHandler {
 
         poseStack.popPose();
     }
-
     private void renderReloadArm(PoseStack poseStack, MultiBufferSource buffer, int light, Gun modifiedGun, ItemStack stack, HumanoidArm hand, float translateX) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.player.tickCount < ReloadHandler.get().getStartReloadTick() || ReloadHandler.get().getReloadTimer() != 5)

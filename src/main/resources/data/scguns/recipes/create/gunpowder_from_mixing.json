@@ -1,0 +1,23 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "scguns:sulfur_chunk"
+    },
+    {
+      "item": "scguns:niter_dust"
+    },
+    {
+      "item": "minecraft:flint"
+    },
+    {
+      "item": "minecraft:charcoal"
+    }
+  ],
+  "results": [
+    {
+      "count": 8,
+      "item": "minecraft:gunpowder"
+    }
+  ]
+}
