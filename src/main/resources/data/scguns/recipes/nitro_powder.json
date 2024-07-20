@@ -5,7 +5,7 @@
       "item": "minecraft:gunpowder"
     },
     "W": {
-      "item": "scguns:sulfur_chunk"
+      "item": "scguns:peal"
     },
     "Q": {
       "item": "scguns:sheol"
@@ -16,11 +16,11 @@
   },
   "pattern": [
     "###",
-    "###",
-    "EWQ"
+    "E#Q",
+    " W "
   ],
   "result": {
     "item": "scguns:nitro_powder",
-    "count": 8
+    "count": 6
   }
 }

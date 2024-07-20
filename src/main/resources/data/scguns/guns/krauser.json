@@ -57,8 +57,8 @@
     "emptyMagTimer": 10,
     "maxAmmo": 10,
     "reloadItem": "scguns:compact_copper_round",
-    "reloadTimer": 10,
-    "reloadType": "scguns:manual"
+    "reloadTimer": 20,
+    "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",

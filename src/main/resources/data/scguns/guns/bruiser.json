@@ -45,13 +45,12 @@
     "casingType": "scguns:small_iron_casing",
     "life": 20,
     "size": 0.1,
-    "speed": 5.0,
+    "speed": 5.5,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 10,
     "maxAmmo": 3,
-    "reloadItem": "scguns:casull_round",
     "reloadTimer": 20,
     "reloadType": "scguns:manual"
   },

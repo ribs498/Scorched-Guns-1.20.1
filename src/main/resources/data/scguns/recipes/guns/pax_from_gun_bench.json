@@ -1,0 +1,30 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:pax",
+    "count": 1
+  },
+  "ingredients": {
+    "gun_internal_1": {
+      "item": "scguns:firing_unit"
+    },
+    "gun_internal_2": {
+      "item": "scguns:gun_magazine"
+    },
+    "gun_top_internal_2": {
+      "item": "minecraft:iron_ingot"
+    },
+    "gun_top_internal_1": {
+      "item": "minecraft:iron_ingot"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_grip": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_magazine": {
+      "item": "scguns:gun_parts"
+    }
+  }
+}

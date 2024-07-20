@@ -11,7 +11,7 @@
     "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
-    "rate": 3,
+    "rate": 6,
     "recoilAngle": 4.0,
     "recoilKick": 0.4,
     "spread": 1.0,
@@ -34,7 +34,7 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 4.8,
+      "yOffset": 5.0,
       "zOffset": 0.75
     }
   },

@@ -26,6 +26,14 @@ public enum SpecialModels {
     FLINTLOCK_PISTOL_STOCK_LIGHT("flintlock_pistol/light_stock"),
     FLINTLOCK_PISTOL_STOCK_WOODEN("flintlock_pistol/wooden_stock"),
     HANDCANNON_MAIN("handcannon/main"),
+    /// PAX
+    PAX_MAIN("pax/main"),
+    PAX_HAMMER("pax/hammer"),
+    PAX_STOCK_WEIGHTED("pax/heavy_stock"),
+    PAX_STOCK_LIGHT("pax/light_stock"),
+    PAX_STOCK_WOODEN("pax/wooden_stock"),
+    PAX_DRUM("pax/drum"),
+
 ///MUSKET
     MUSKET_MAIN("musket/main"),
     MUSKET_HAMMER("musket/hammer"),
@@ -606,6 +614,31 @@ COGLOADER_MAIN("cogloader/main"),
     VULCANIC_REPEATER_SILENCER("vulcanic_repeater/silencer"),
     VULCANIC_REPEATER_ADVANCED_SILENCER("vulcanic_repeater/advanced_silencer"),
     VULCANIC_REPEATER_MUZZLE_BRAKE("vulcanic_repeater/muzzle_brake"),
+    ///WHISPERS
+    WHISPERS_MAIN("whispers/main"),
+    WHISPERS_STANDARD_MAG("whispers/stan_mag"),
+    WHISPERS_EXTENDED_MAG("whispers/ext_mag"),
+    WHISPERS_SPEED_MAG("whispers/speed_mag"),
+    WHISPERS_SIGHTS("whispers/sights"),
+    WHISPERS_NO_SIGHTS("whispers/no_sights"),
+    ///SCULK_RESONATOR
+    SCULK_RESONATOR_MAIN("sculk_resonator/main"),
+    SCULK_RESONATOR_STOCK_LIGHT("sculk_resonator/light_stock"),
+    SCULK_RESONATOR_STOCK_HEAVY("sculk_resonator/heavy_stock"),
+    SCULK_RESONATOR_STOCK_WOODEN("sculk_resonator/wooden_stock"),
+    SCULK_RESONATOR_SIGHTS("sculk_resonator/sights"),
+    SCULK_RESONATOR_NO_SIGHTS("sculk_resonator/no_sights"),
+
+
+    ////ECHOES_2
+    ECHOES_2_MAIN("echoes_2/main"),
+    ECHOES_2_BARRELS("echoes_2/barrels"),
+    ECHOES_2_SIGHTS("echoes_2/sights"),
+    ECHOES_2_NO_SIGHTS("echoes_2/no_sights"),
+    ECHOES_2_GRIP_LIGHT("echoes_2/light_grip"),
+    ECHOES_2_GRIP_VERTICAL("echoes_2/tact_grip"),
+
+
     ///EARTHS_CORPSE
     EARTHS_CORPSE_MAIN("earths_corpse/main"),
     EARTHS_CORPSE_STOCK_LIGHT("earths_corpse/light_stock"),

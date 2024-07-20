@@ -44,6 +44,7 @@ import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.interfaces.IProjectileFactory;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.item.IColored;
+import top.ribs.scguns.item.SilencedFirearm;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.C2SMessagePreFireSound;
 import top.ribs.scguns.network.message.C2SMessageShoot;
@@ -99,10 +100,10 @@ public class ServerPlayHandler {
                 }
                 tracker.putCooldown(heldItem, item, modifiedGun);
 
-                if (ModSyncedDataKeys.RELOADING.getValue(player)) {
+               if(ModSyncedDataKeys.RELOADING.getValue(player))
+                {
                     ModSyncedDataKeys.RELOADING.setValue(player, false);
                 }
-
                 if (!modifiedGun.getGeneral().isAlwaysSpread() && modifiedGun.getGeneral().getSpread() > 0.0F) {
                     SpreadTracker.get(player).update(player, item);
                 }
@@ -138,7 +139,7 @@ public class ServerPlayHandler {
                 double fleeRadius = GunModifierHelper.getModifiedFireSoundRadius(heldItem, Config.COMMON.fleeingMobs.unsilencedRange.get());
 
                 // Check if the weapon is silenced
-                boolean isSilenced = GunModifierHelper.isSilencedFire(heldItem);
+                boolean isSilenced = heldItem.getItem() instanceof SilencedFirearm || GunModifierHelper.isSilencedFire(heldItem);
 
                 AABB aggroBox = new AABB(x - aggroRadius, y - aggroRadius, z - aggroRadius, x + aggroRadius, y + aggroRadius, z + aggroRadius);
                 AABB fleeBox = new AABB(x - fleeRadius, y - fleeRadius, z - fleeRadius, x + fleeRadius, y + fleeRadius, z + fleeRadius);
@@ -147,15 +148,8 @@ public class ServerPlayHandler {
 
                 // Aggro hostile entities only if the weapon is not silenced
                 if (Config.COMMON.aggroMobs.enabled.get() && !isSilenced) {
-                    ScorchedGuns.LOGGER.info("Checking for hostile entities within radius: " + aggroRadius);
                     List<LivingEntity> allEntities = world.getEntitiesOfClass(LivingEntity.class, aggroBox);
-                    ScorchedGuns.LOGGER.info("All Entities found: " + allEntities.size());
-                    for (LivingEntity entity : allEntities) {
-                        ScorchedGuns.LOGGER.info("Entity: " + entity.getName().getString() + ", Type: " + EntityType.getKey(entity.getType()).toString());
-                    }
-
                     List<LivingEntity> hostileEntities = allEntities.stream().filter(HOSTILE_ENTITIES).toList();
-                    ScorchedGuns.LOGGER.info("Hostile Entities found: " + hostileEntities.size());
                     for (LivingEntity entity : hostileEntities) {
                         dx = x - entity.getX();
                         dy = y - entity.getY();
@@ -165,25 +159,17 @@ public class ServerPlayHandler {
                             if (entity instanceof ZombifiedPiglin zombifiedPiglin) {
                                 zombifiedPiglin.setPersistentAngerTarget(player.getUUID());
                                 zombifiedPiglin.setRemainingPersistentAngerTime(400 + world.random.nextInt(400));
-                                ScorchedGuns.LOGGER.info("Zombified Piglin aggroed: " + entity.getName().getString());
                             } else if (entity instanceof Piglin piglin) {
                                 piglin.setTarget(player);
                                 piglin.setAggressive(true);
-                                ScorchedGuns.LOGGER.info("Piglin aggroed: " + entity.getName().getString());
                             } else if (entity instanceof EnderMan enderman) {
                                 enderman.setTarget(player);
-                                ScorchedGuns.LOGGER.info("Enderman aggroed: " + entity.getName().getString());
                             } else {
-                                entity.setLastHurtByMob(player);
-                                ScorchedGuns.LOGGER.info("Entity aggroed: " + entity.getName().getString() + ", Type: " + EntityType.getKey(entity.getType()).toString());
-                            }
+                                entity.setLastHurtByMob(player);}
                         }
                     }
                 }
-
-                // Fleeing entities only if the weapon is not silenced
                 if (Config.COMMON.fleeingMobs.enabled.get() && !isSilenced) {
-                    ScorchedGuns.LOGGER.info("Checking for fleeing entities within radius: " + fleeRadius);
                     List<LivingEntity> allEntities = world.getEntitiesOfClass(LivingEntity.class, fleeBox);
                     List<LivingEntity> fleeingEntities = allEntities.stream().filter(FLEEING_ENTITIES).toList();
                     for (LivingEntity entity : fleeingEntities) {
@@ -192,18 +178,16 @@ public class ServerPlayHandler {
                         dz = z - entity.getZ();
                         double distanceSquared = dx * dx + dy * dy + dz * dz;
                         if (distanceSquared <= fleeRadius) {
-                            // Utilize PanicGoal to make entity flee
                             if (entity instanceof Mob mob) {
                                 mob.getBrain().eraseMemory(MemoryModuleType.HURT_BY);
                                 mob.getBrain().eraseMemory(MemoryModuleType.HURT_BY_ENTITY);
                                 mob.getNavigation().stop();
                                 mob.goalSelector.getRunningGoals().forEach(WrappedGoal::stop);
-                                double speedMultiplier = (entity.getType() == EntityType.VILLAGER) ? 1.0 : 1.2;
+                                double speedMultiplier = (entity.getType() == EntityType.VILLAGER) ? 1.3 : 1.0;
                                 PanicGoal panicGoal = new PanicGoal((PathfinderMob) mob, speedMultiplier);
                                 mob.goalSelector.addGoal(1, panicGoal);
                                 panicGoal.start();
                                 mob.goalSelector.removeGoal(panicGoal);
-                                ScorchedGuns.LOGGER.info("Fleeing Entity scared: " + entity.getName().getString());
                             }
                         }
                     }
@@ -237,6 +221,7 @@ public class ServerPlayHandler {
             world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, 0.8F);
         }
     }
+
 
 
 

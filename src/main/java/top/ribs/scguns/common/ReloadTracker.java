@@ -13,6 +13,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -46,6 +47,7 @@ public class ReloadTracker {
     private final Gun gun;
     private int currentBulletReloadTick = 0;
     private boolean initialReload = true;
+
     private ReloadTracker(Player player) {
         this.startTick = player.tickCount;
         this.slot = player.getInventory().selected;
@@ -95,6 +97,7 @@ public class ReloadTracker {
             return deltaTicks >= interval;
         }
     }
+
     public static int ammoInInventory(ItemStack[] ammoStack) {
         int result = 0;
         for (ItemStack x : ammoStack) {
@@ -102,6 +105,7 @@ public class ReloadTracker {
         }
         return result;
     }
+
     private void shrinkFromAmmoPool(ItemStack[] ammoStack, Player player, int shrinkAmount) {
         int shrinkAmt = shrinkAmount;
         for (ItemStack itemStack : player.getInventory().items) {
@@ -132,6 +136,7 @@ public class ReloadTracker {
             }
         }
     }
+
     private void updateAmmoPouchContents(ItemStack ammoPouch, List<ItemStack> contents) {
         ListTag listTag = new ListTag();
         for (ItemStack stack : contents) {
@@ -141,6 +146,7 @@ public class ReloadTracker {
         }
         ammoPouch.getOrCreateTag().put(AmmoBoxItem.TAG_ITEMS, listTag);
     }
+
     private void increaseMagAmmo(Player player) {
         ItemStack[] ammoStack = Gun.findAmmoStack(player, this.gun.getProjectile().getItem());
         if (ammoStack.length > 0) {
@@ -161,6 +167,7 @@ public class ReloadTracker {
 
         playReloadSound(player);
     }
+
     private void reloadItem(Player player) {
         AmmoContext context = Gun.findAmmo(player, this.gun.getReloads().getReloadItem());
         ItemStack ammo = context.stack();
@@ -181,6 +188,7 @@ public class ReloadTracker {
 
         playReloadSound(player);
     }
+
     private void increaseAmmo(Player player) {
         AmmoContext context = Gun.findAmmo(player, this.gun.getProjectile().getItem());
         ItemStack ammo = context.stack();
@@ -197,6 +205,7 @@ public class ReloadTracker {
 
         playReloadSound(player);
     }
+
     private void playReloadSound(Player player) {
         ResourceLocation reloadSound = this.gun.getSounds().getReload();
         if (reloadSound != null) {
@@ -208,10 +217,12 @@ public class ReloadTracker {
             PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(player.level(), soundX, soundY, soundZ, radius), message);
         }
     }
+
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         if (event.phase == TickEvent.Phase.START && !event.player.level().isClientSide) {
             Player player = event.player;
+
             if (ModSyncedDataKeys.RELOADING.getValue(player)) {
                 if (!RELOAD_TRACKER_MAP.containsKey(player)) {
                     if (!(player.getInventory().getSelected().getItem() instanceof GunItem)) {
@@ -224,6 +235,7 @@ public class ReloadTracker {
                 if (!tracker.isSameWeapon(player) || tracker.isWeaponFull() || tracker.hasNoAmmo(player)) {
                     RELOAD_TRACKER_MAP.remove(player);
                     ModSyncedDataKeys.RELOADING.setValue(player, false);
+                    //System.out.println("Reload stopped for player " + player.getName().getString() + " with gun " + tracker.stack.getItem().getDescriptionId());
                     return;
                 }
                 if (tracker.canReload(player)) {
@@ -231,8 +243,6 @@ public class ReloadTracker {
                     final Gun gun = tracker.gun;
                     if (gun.getReloads().getReloadType() == ReloadType.MAG_FED) {
                         tracker.increaseMagAmmo(player);
-                    } else if (gun.getReloads().getReloadType() == ReloadType.SINGLE_ITEM) {
-                        tracker.reloadItem(player);
                     } else if (gun.getReloads().getReloadType() == ReloadType.MANUAL) {
                         tracker.increaseAmmo(player);
                     }
@@ -250,10 +260,13 @@ public class ReloadTracker {
                                 S2CMessageGunSound messageSound = new S2CMessageGunSound(cockSound, SoundSource.PLAYERS, (float) soundX, (float) soundY, (float) soundZ, 1.0F, 1.0F, finalPlayer.getId(), false, true);
                                 PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(finalPlayer.level(), soundX, soundY, soundZ, radius), messageSound);
                             }
+                           // System.out.println("Reload completed for player " + finalPlayer.getName().getString() + " with gun " + tracker.stack.getItem().getDescriptionId());
                         });
                     }
                 }
-            } else RELOAD_TRACKER_MAP.remove(player);
+            } else {
+                RELOAD_TRACKER_MAP.remove(player);
+            }
         }
     }
 
@@ -262,6 +275,17 @@ public class ReloadTracker {
         MinecraftServer server = event.getEntity().getServer();
         if (server != null) {
             server.execute(() -> RELOAD_TRACKER_MAP.remove(event.getEntity()));
+            //System.out.println("Player " + event.getEntity().getName().getString() + " logged out, removing reload tracker.");
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerDeath(LivingDeathEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            RELOAD_TRACKER_MAP.remove(player);
+            ModSyncedDataKeys.RELOADING.setValue(player, false);
+            //System.out.println("Player " + player.getName().getString() + " died, resetting reload state.");
         }
     }
 }

@@ -1,0 +1,48 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"1": "scguns:item/sculk_cell_3d"
+	},
+	"elements": [
+		{
+			"from": [5.39, 0.39, 5.39],
+			"to": [10.61, 5.61, 10.61],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2.78, 3.87, 2.78]},
+			"faces": {
+				"north": {"uv": [0, 8, 3, 11], "texture": "#1"},
+				"east": {"uv": [8, 0, 11, 3], "texture": "#1"},
+				"south": {"uv": [3, 8, 6, 11], "texture": "#1"},
+				"west": {"uv": [8, 3, 11, 6], "texture": "#1"},
+				"up": {"uv": [9, 11, 6, 8], "texture": "#1"},
+				"down": {"uv": [12, 6, 9, 9], "texture": "#1"}
+			}
+		},
+		{
+			"from": [4.52, -0.48, 8],
+			"to": [11.48, 6.48, 8],
+			"rotation": {"angle": 0, "axis": "y", "origin": [2.78, 3.87, 2.78]},
+			"faces": {
+				"north": {"uv": [0, 0, 4, 4], "texture": "#1"},
+				"east": {"uv": [0, 0, 0, 4], "texture": "#1"},
+				"south": {"uv": [0, 4, 4, 8], "texture": "#1"},
+				"west": {"uv": [0, 0, 0, 4], "texture": "#1"},
+				"up": {"uv": [4, 0, 0, 0], "texture": "#1"},
+				"down": {"uv": [4, 0, 0, 0], "texture": "#1"}
+			}
+		},
+		{
+			"from": [8, -0.48, 4.52],
+			"to": [8, 6.48, 11.48],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 3, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 4], "texture": "#1"},
+				"east": {"uv": [4, 0, 8, 4], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 4], "texture": "#1"},
+				"west": {"uv": [4, 4, 8, 8], "texture": "#1"},
+				"up": {"uv": [0, 4, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 4], "texture": "#1"}
+			}
+		}
+	]
+}

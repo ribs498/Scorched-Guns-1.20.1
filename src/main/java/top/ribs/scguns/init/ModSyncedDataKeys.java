@@ -36,10 +36,6 @@ public class ModSyncedDataKeys
             .resetOnDeath()
             .build();
 
-    public static final SyncedDataKey<Player, Boolean> UNJAMMING = SyncedDataKey.builder(SyncedClassKey.PLAYER, Serializers.BOOLEAN)
-            .id(new ResourceLocation(Reference.MOD_ID, "unjamming"))
-            .defaultValueSupplier(() -> false)
-            .resetOnDeath()
-            .build();
+
 
 }

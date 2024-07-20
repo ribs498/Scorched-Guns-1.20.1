@@ -14,7 +14,7 @@
     "projectileAmount": 22,
     "rate": 15,
     "recoilAngle": 10.0,
-    "recoilKick": 0.5,
+    "recoilKick": 2.5,
     "spread": 25.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20
@@ -46,8 +46,8 @@
     "item": "scguns:shotgun_shell",
     "casingType": "scguns:small_copper_casing",
     "life": 12,
-    "size": 0.05,
-    "speed": 6.0,
+    "size": 0.5,
+    "speed": 5.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {

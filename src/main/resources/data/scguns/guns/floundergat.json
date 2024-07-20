@@ -39,9 +39,9 @@
     "advantage": "scguns:fire",
     "damage": 16.0,
     "item": "scguns:grapeshot",
-    "life": 6,
+    "life": 8,
     "size": 0.05,
-    "speed": 6.0,
+    "speed": 5.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {

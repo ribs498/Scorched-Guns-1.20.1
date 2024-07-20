@@ -1,0 +1,36 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:sculk_resonator",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:deep_dark_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "scguns:plasma_core"
+    },
+    "gun_internal_2": {
+      "item": "minecraft:sculk_sensor"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:diamond_steel_gun_frame"
+    },
+    "gun_top_internal_1": {
+      "item": "minecraft:echo_shard"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_grip": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_magazine": {
+      "tag": "minecraft:planks"
+    }
+  }
+}

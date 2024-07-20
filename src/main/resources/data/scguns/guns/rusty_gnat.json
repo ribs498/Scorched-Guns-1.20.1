@@ -3,14 +3,14 @@
     "flash": {
       "size": 1.0,
       "yOffset": 3.4,
-      "zOffset": 0.0
+      "zOffset": -2.0
     },
     "muzzleFlashType": "flash_type_1"
   },
   "general": {
     "alwaysSpread": false,
     "fireMode": "scguns:automatic",
-    "gripType": "scguns:one_handed",
+    "gripType": "scguns:one_handed_two_handed",
     "rate": 4,
     "recoilAngle": 6.0,
     "recoilKick": 1.0,

@@ -23,6 +23,7 @@ public class ParticleFactoryRegistry
         event.registerSpriteSet(ModParticleTypes.BLOOD.get(), BloodParticle.Factory::new);
         event.registerSpriteSet(ModParticleTypes.TRAIL.get(), TrailParticle.Factory::new);
         event.registerSpriteSet(ModParticleTypes.ROCKET_TRAIL.get(), RocketTrailParticle.Factory::new);
+        event.registerSpriteSet(ModParticleTypes.SONIC_BLAST.get(), SonicBlastParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.COPPER_CASING_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.BRASS_CASING_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.IRON_CASING_PARTICLE.get(), CasingParticle.Provider::new);

@@ -138,7 +138,26 @@ public class GunModifiers
             return speed * 0.97F;
         }
     };
+  public static final IGunModifier SLIGHTLY_STABILISED = new IGunModifier()
+    {
+        @Override
+        public float kickModifier()
+        {
+            return 0.95F;
+        }
 
+        @Override
+        public float modifyProjectileSpread(float spread)
+        {
+            return spread * 0.85F;
+        }
+
+        @Override
+        public double modifyAimDownSightSpeed(double speed)
+        {
+            return speed * 0.98F;
+        }
+    };
     public static final IGunModifier STABILISED = new IGunModifier()
     {
         @Override
@@ -249,7 +268,7 @@ public class GunModifiers
     public static final IGunModifier SLOW_RELOAD = new IGunModifier() {
         @Override
         public double modifyReloadSpeed(double reloadSpeed) {
-            return reloadSpeed * 1.3;
+            return reloadSpeed * 1.4;
         }
     };
 
@@ -262,7 +281,7 @@ public class GunModifiers
     public static final IGunModifier EXTENDED_MAG = new IGunModifier() {
         @Override
         public int modifyAmmoCapacity(int baseCapacity) {
-            return (int) (baseCapacity * 1.5);
+            return (int) (baseCapacity * 1.75);
         }
     };
 

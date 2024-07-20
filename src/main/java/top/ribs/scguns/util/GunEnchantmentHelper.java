@@ -24,19 +24,6 @@ import java.util.Map;
  */
 public class GunEnchantmentHelper
 {
-    public static ParticleOptions getParticle(ItemStack weapon)
-    {
-        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(weapon);
-        /*if(enchantments.containsKey(ModEnchantments.FIRE_STARTER.get()))
-        {
-            return ParticleTypes.LAVA;
-        }
-        else */if(enchantments.containsKey(ModEnchantments.PUNCTURING.get()))
-    {
-        return ParticleTypes.ENCHANTED_HIT;
-    }
-        return new TrailData(weapon.isEnchanted());
-    }
 
     public static int getRealReloadSpeed(ItemStack weapon)
     {
@@ -49,10 +36,8 @@ public class GunEnchantmentHelper
     public static int getReloadInterval(ItemStack weapon) {
         Gun modifiedGun = ((GunItem) weapon.getItem()).getModifiedGun(weapon);
         ReloadType reloadType = modifiedGun.getReloads().getReloadType();
-
         int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.QUICK_HANDS.get(), weapon);
         double decreaseFactor = 1 - (0.25 * level);
-
         if (reloadType == ReloadType.MANUAL) {
             int bulletReloadTime = modifiedGun.getReloads().getReloadTimer();
             double interval = bulletReloadTime * decreaseFactor;
@@ -65,8 +50,6 @@ public class GunEnchantmentHelper
             return Math.max((int) Math.round(interval), 1);
         }
     }
-
-
     public static int getMagReloadSpeed(ItemStack weapon) {
         Gun modifiedGun = ((GunItem) weapon.getItem()).getModifiedGun(weapon);
         int baseSpeed = modifiedGun.getReloads().getEmptyMagTimer() + modifiedGun.getReloads().getReloadTimer();
@@ -76,8 +59,6 @@ public class GunEnchantmentHelper
         speed = GunModifierHelper.getModifiedReloadSpeed(weapon, speed);
         return Math.max((int) Math.round(speed), 4);
     }
-
-
 
     public static int getRate(ItemStack weapon, Gun modifiedGun)
     {
@@ -96,17 +77,6 @@ public class GunEnchantmentHelper
         int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.LIGHTWEIGHT.get(), weapon);
         return level > 0 ? 1.5 : 1.0;
     }
-
-    /*public static int getAmmoCapacity(ItemStack weapon, Gun modifiedGun)
-    {
-        int capacity = modifiedGun.getReloads().getMaxAmmo();
-        int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.OVER_CAPACITY.get(), weapon);
-        if(level > 0)
-        {
-            capacity += Math.max(level, (capacity / 2) * level);
-        }
-        return capacity;
-    }*/
 
     public static double getProjectileSpeedModifier(ItemStack weapon)
     {
@@ -133,4 +103,18 @@ public class GunEnchantmentHelper
         int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.PUNCTURING.get(), weapon);
         return level * 0.05F;
     }
+    public static ParticleOptions getParticle(ItemStack weapon)
+    {
+        Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(weapon);
+        /*if(enchantments.containsKey(ModEnchantments.FIRE_STARTER.get()))
+        {
+            return ParticleTypes.LAVA;
+        }
+        else */if(enchantments.containsKey(ModEnchantments.PUNCTURING.get()))
+    {
+        return ParticleTypes.ENCHANTED_HIT;
+    }
+        return new TrailData(weapon.isEnchanted());
+    }
+
 }

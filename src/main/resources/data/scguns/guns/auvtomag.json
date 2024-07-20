@@ -48,7 +48,7 @@
     "casingType": "scguns:small_iron_casing",
     "life": 20,
     "size": 0.1,
-    "speed": 5.0,
+    "speed": 6.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {

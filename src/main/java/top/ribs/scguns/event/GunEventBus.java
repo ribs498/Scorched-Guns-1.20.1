@@ -250,6 +250,7 @@ public class GunEventBus {
         ResourceLocation advancedRound = ForgeRegistries.ITEMS.getKey(ModItems.ADVANCED_ROUND.get());
         ResourceLocation heavyRound = ForgeRegistries.ITEMS.getKey(ModItems.KRAHG_ROUND.get());
         ResourceLocation energyCell = ForgeRegistries.ITEMS.getKey(ModItems.ENERGY_CELL.get());
+        ResourceLocation sculkCell = ForgeRegistries.ITEMS.getKey(ModItems.SCULK_CELL.get());
         ResourceLocation blazeFuel = ForgeRegistries.ITEMS.getKey(ModItems.BLAZE_FUEL.get());
         ResourceLocation beowulfRound = ForgeRegistries.ITEMS.getKey(ModItems.BEOWULF_ROUND.get());
         ResourceLocation gibbsRound = ForgeRegistries.ITEMS.getKey(ModItems.GIBBS_ROUND.get());
@@ -263,7 +264,7 @@ public class GunEventBus {
             if (projectileLocation.equals(compactCopperRound) || projectileLocation.equals(standardCopperRound)) {
                 casingType = ModParticleTypes.COPPER_CASING_PARTICLE.get();
             }
-            if (projectileLocation.equals(hogRound) || projectileLocation.equals(ramrodRound)|| projectileLocation.equals(blazeFuel)) {
+            if (projectileLocation.equals(hogRound) || projectileLocation.equals(ramrodRound)|| projectileLocation.equals(blazeFuel)|| projectileLocation.equals(sculkCell)) {
                 casingType = ModParticleTypes.IRON_CASING_PARTICLE.get();
             } if (projectileLocation.equals(energyCell) || projectileLocation.equals(gibbsRound) ||projectileLocation.equals(beowulfRound)) {
                 casingType = ModParticleTypes.DIAMOND_STEEL_CASING_PARTICLE.get();

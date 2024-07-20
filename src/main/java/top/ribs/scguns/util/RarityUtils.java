@@ -26,6 +26,10 @@ public class RarityUtils {
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "vulcanic_repeater"), Constants.PIGLISH);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "piglin_blueprint"), Constants.PIGLISH);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "freyr"), Constants.PIGLISH);
+
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "whispers"), Constants.DEEP_DARK);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "echoes_2"), Constants.DEEP_DARK);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "sculk_resonator"), Constants.DEEP_DARK);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "deep_dark_blueprint"), Constants.DEEP_DARK);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "end_blueprint"), Constants.ENDISH);
 

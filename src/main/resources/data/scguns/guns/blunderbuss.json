@@ -12,7 +12,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "projectileAmount": 10,
-    "rate": 3,
+    "rate": 6,
     "recoilAngle": 9.0,
     "recoilKick": 2.0,
     "spread": 13.0,
@@ -44,7 +44,7 @@
     "item": "scguns:grapeshot",
     "life": 10,
     "size": 1.0,
-    "speed": 6.0,
+    "speed": 5.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {

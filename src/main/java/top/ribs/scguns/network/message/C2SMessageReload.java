@@ -34,28 +34,31 @@ public class C2SMessageReload extends PlayMessage<C2SMessageReload>
     {
         return new C2SMessageReload(buffer.readBoolean());
     }
-
     @Override
-    public void handle(C2SMessageReload message, MessageContext context)
-    {
-        context.execute(() ->
-        {
+    public void handle(C2SMessageReload message, MessageContext context) {
+        context.execute(() -> {
             ServerPlayer player = context.getPlayer();
-            if(player != null && !player.isSpectator())
-            {
-                ModSyncedDataKeys.RELOADING.setValue(player, message.reload); // This has to be set in order to verify the packet is sent if the event is cancelled
-                if(!message.reload)
-                    return;
+            if (player != null && !player.isSpectator()) {
+                System.out.println("Handling C2SMessageReload: " + message.reload);
+                ModSyncedDataKeys.RELOADING.setValue(player, message.reload);
 
-                ItemStack gun = player.getMainHandItem();
-                if(MinecraftForge.EVENT_BUS.post(new GunReloadEvent.Pre(player, gun)))
-                {
-                    ModSyncedDataKeys.RELOADING.setValue(player, false);
+                if (!message.reload) {
+                    System.out.println("Stopping reload for player: " + player.getName().getString());
                     return;
                 }
+
+                ItemStack gun = player.getMainHandItem();
+                if (MinecraftForge.EVENT_BUS.post(new GunReloadEvent.Pre(player, gun))) {
+                    ModSyncedDataKeys.RELOADING.setValue(player, false);
+                    System.out.println("Reload event canceled for player: " + player.getName().getString());
+                    return;
+                }
+
                 MinecraftForge.EVENT_BUS.post(new GunReloadEvent.Post(player, gun));
+                System.out.println("Reload event processed for player: " + player.getName().getString());
             }
         });
         context.setHandled(true);
     }
+
 }

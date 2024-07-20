@@ -15,6 +15,14 @@
       }
     ]
   },
+  "item.sculk.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/sculk/fire"
+      }
+    ]
+  },
   "item.rusty_gnat.fire": {
     "subtitle": "subtitle.scguns.fire",
     "sounds": [

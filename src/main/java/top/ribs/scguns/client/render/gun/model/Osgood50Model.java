@@ -21,7 +21,7 @@ import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.item.attachment.IAttachment;
 
 public class Osgood50Model implements IOverrideModel {
-    private static final int TOTAL_SHOTS = 6;
+    private static final int TOTAL_SHOTS = 7;
     private static final float ROTATION_INCREMENT = 360.0f / TOTAL_SHOTS;
     private float currentRotation = 0.0f;
     private float targetRotation = 0.0f;

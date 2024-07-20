@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "ammo",
+  "ingredients": [
+    {
+      "item": "scguns:peal"
+    }
+  ],
+  "result": {
+    "count": 6,
+    "item": "scguns:peal_dust"
+  }
+}

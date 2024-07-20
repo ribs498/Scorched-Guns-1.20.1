@@ -31,6 +31,8 @@ import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
 
+import java.util.Objects;
+
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class HUDRenderHandler {
     private static final ResourceLocation CHARGE_BAR = new ResourceLocation(Reference.MOD_ID, "textures/gui/charging_bar.png");
@@ -130,14 +132,17 @@ public class HUDRenderHandler {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
             Player player = mc.player;
             if (ModSyncedDataKeys.RELOADING.getValue(player)) {
-                guiGraphics.drawString(mc.font, "Reloading...", ammoPosX, ammoPosY - 10, 0xFFFF55);
+                assert player != null;
+                if (player.isAlive()) {
+                    guiGraphics.drawString(mc.font, "Reloading...", ammoPosX, ammoPosY - 10, 0xFFFF55);
+                }
             }
 
             guiGraphics.drawString(mc.font, ammoCountValue, ammoPosX, ammoPosY, (currentAmmo > 0 || Gun.hasInfiniteAmmo(heldItem) ? 0xFFFFFF : 0xFF5555));
             int reserveAmmoPosY = ammoPosY + 10;
             MutableComponent reserveAmmoValue = Component.literal(String.valueOf(reserveAmmo)).withStyle(ChatFormatting.BOLD);
             guiGraphics.drawString(mc.font, reserveAmmoValue, ammoPosX, reserveAmmoPosY, (reserveAmmo <= 0 && !Gun.hasUnlimitedReloads(heldItem) ? 0x555555 : 0xAAAAAA));
-            ItemStack ammoItemStack = new ItemStack(gun.getProjectile().getItem());
+            ItemStack ammoItemStack = new ItemStack(Objects.requireNonNull(gun.getProjectile().getItem()));
             renderAmmoTypeTexture(ammoItemStack, ammoPosX - 20, ammoPosY, guiGraphics, mc);
 
             RenderSystem.disableBlend();
@@ -167,7 +172,7 @@ public class HUDRenderHandler {
             return;  // Do not display the charge bar until firing starts
         }
 
-        float chargeRatio = (chargeTime > 0) ? (float) chargeTime / maxChargeTime : 0;
+        float chargeRatio = (float) chargeTime / maxChargeTime;
 
         int barWidth = 16;
         int barHeight = 16;
@@ -277,6 +282,8 @@ public class HUDRenderHandler {
     public static boolean getHitMarkerCrit() {
         return hitMarkerCrit;
     }
+
+
 }
 
 

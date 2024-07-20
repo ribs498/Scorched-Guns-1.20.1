@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "scguns:gunpowder_dust",
-    "scguns:sheol_dust"
+    "scguns:sheol_dust",
+    "scguns:peal_dust"
   ]
 }

@@ -18,7 +18,7 @@ import top.ribs.scguns.item.attachment.IAttachment;
  * Since we want to have an animation for the charging handle, we will be overriding the standard model rendering.
  * This also allows us to replace the model for the different stocks.
  */
-public class BruisedMagnumModel implements IOverrideModel {
+public class BruiserModel implements IOverrideModel {
 
     @SuppressWarnings("resource")
     @Override

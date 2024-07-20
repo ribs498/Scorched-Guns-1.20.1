@@ -104,18 +104,18 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.20.1-47.3.5'
-    implementation fg.deobf("curse.maven:framework-549225:5388226")
-    implementation fg.deobf("curse.maven:backpacked-352835:5401965")
+    minecraft 'net.minecraftforge:forge:1.20.1-47.2.0'
+    implementation fg.deobf('curse.maven:framework-549225:4718251')
+    implementation fg.deobf('curse.maven:backpacked-352835:4725669')
     compileOnly fg.deobf('curse.maven:controllable-317269:4598985')
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
-    implementation fg.deobf("curse.maven:create-328085:4835191")
+   implementation fg.deobf("curse.maven:create-328085:4835191")
    implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5455954")
     implementation fg.deobf("curse.maven:farmers-delight-398521:5051242")
-    implementation fg.deobf("curse.maven:immersive-engineering-231951:5224387")
+   // implementation fg.deobf("curse.maven:immersive-engineering-231951:5224387")
   //  implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
     implementation fg.deobf("curse.maven:curios-309927:5367944")
    // implementation fg.deobf("curse.maven:effortless-building-302113:4979130")

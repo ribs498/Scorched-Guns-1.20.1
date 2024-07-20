@@ -144,7 +144,8 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.MAKESHIFT_RIFLE.get(), new MakeshiftRifleModel());
         ModelOverrides.register(ModItems.BOOMSTICK.get(), new BoomstickModel());
         ModelOverrides.register(ModItems.RUSTY_GNAT.get(), new RustyGnatModel());
-        ModelOverrides.register(ModItems.BRUISER.get(), new BruisedMagnumModel());
+        ModelOverrides.register(ModItems.PAX.get(), new PaxModel());
+        ModelOverrides.register(ModItems.BRUISER.get(), new BruiserModel());
         ModelOverrides.register(ModItems.LLR_DIRECTOR.get(), new LlrDirectorModel());
         ModelOverrides.register(ModItems.MARLIN.get(), new MarlinModel());
         ModelOverrides.register(ModItems.IRON_SPEAR.get(), new IronSpearModel());
@@ -167,6 +168,9 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.GAUSS_RIFLE.get(), new GaussRifleModel());
         ModelOverrides.register(ModItems.OSGOOD_50.get(), new Osgood50Model());
         ModelOverrides.register(ModItems.NEWBORN_CYST.get(), new NewbornCystModel());
+        ModelOverrides.register(ModItems.WHISPERS.get(), new WhispersModel());
+        ModelOverrides.register(ModItems.ECHOES_2.get(), new Echoes2Model());
+        ModelOverrides.register(ModItems.SCULK_RESONATOR.get(), new SculkResonatorModel());
 
         ModelOverrides.register(ModItems.JACKHAMMER.get(), new JackhammerModel());
         ModelOverrides.register(ModItems.GATTALER.get(), new GattalerModel());

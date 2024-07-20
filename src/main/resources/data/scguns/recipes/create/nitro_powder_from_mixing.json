@@ -5,16 +5,10 @@
       "item": "minecraft:gunpowder"
     },
     {
-      "item": "scguns:sulfur_chunk"
+      "item": "scguns:peal"
     },
     {
       "item": "scguns:sheol"
-    },
-    {
-      "item": "scguns:netherite_scrap_chunk"
-    },
-    {
-      "item": "scguns:netherite_scrap_chunk"
     },
     {
       "item": "scguns:netherite_scrap_chunk"
@@ -31,7 +25,7 @@
   ],
   "results": [
     {
-      "count": 10,
+      "count": 7,
       "item": "scguns:nitro_powder"
     }
   ]
