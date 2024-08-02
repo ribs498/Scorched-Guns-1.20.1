@@ -8,8 +8,8 @@
 	"elements": [
 		{
 			"name": "Wheel3",
-			"from": [9, 9.51, 9.01],
-			"to": [17, 13.51, 17.01],
+			"from": [9, 9.53, 9.04],
+			"to": [17, 13.53, 17.04],
 			"rotation": {"angle": 0, "axis": "y", "origin": [13, 11.5, 13]},
 			"faces": {
 				"north": {"uv": [2, 8, 4, 9], "texture": "#2"},

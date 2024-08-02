@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:energy_cell",
+    "scguns:blaze_fuel",
+    "scguns:shock_cell",
+    "scguns:sculk_cell"
+  ]
+}

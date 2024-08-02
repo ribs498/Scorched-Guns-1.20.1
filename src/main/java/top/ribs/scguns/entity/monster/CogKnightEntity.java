@@ -35,14 +35,14 @@ public class CogKnightEntity extends Monster {
     public int attackAnimationTimeout = 0;
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 30D)
+                .add(Attributes.MAX_HEALTH, 34D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.ARMOR_TOUGHNESS, 0.5f)
                 .add(Attributes.ARMOR, 2f)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5f)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.8f)
-                .add(Attributes.ATTACK_DAMAGE, 2f);
+                .add(Attributes.ATTACK_DAMAGE, 6f);
     }
     @Override
     public void tick() {
@@ -150,16 +150,16 @@ public class CogKnightEntity extends Monster {
             this.ticksUntilNextAttack = attackDelay;
             this.damageDealtDuringAnimation = false;
         }
+        private double calculateAttackRangeSqr() {
+            final double baseReach = 2.0;
+            return baseReach * baseReach;
+        }
+
         @Override
         protected void checkAndPerformAttack(@NotNull LivingEntity pEnemy, double pDistToEnemySqr) {
-            double followRangeSqr = Objects.requireNonNull(this.entity.getAttribute(Attributes.FOLLOW_RANGE)).getValue();
-            followRangeSqr *= followRangeSqr;
             double attackRangeSqr = calculateAttackRangeSqr();
 
-            if (pDistToEnemySqr > followRangeSqr) {
-                this.entity.setAttacking(false);
-                this.entity.getNavigation().moveTo(pEnemy, 1.2);
-            } else if (pDistToEnemySqr <= attackRangeSqr) {
+            if (pDistToEnemySqr <= attackRangeSqr && this.mob.hasLineOfSight(pEnemy)) {
                 this.entity.setAttacking(true);
                 this.mob.getLookControl().setLookAt(pEnemy.getX(), pEnemy.getEyeY(), pEnemy.getZ());
                 if (this.ticksUntilNextAttack <= 0 && !damageDealtDuringAnimation) {
@@ -170,11 +170,6 @@ public class CogKnightEntity extends Monster {
                 this.entity.setAttacking(false);
                 resetAttackCooldown();
             }
-        }
-        private double calculateAttackRangeSqr() {
-            final double baseReach = 1.2;
-            double adjustedAttackDistance = baseReach * Objects.requireNonNull(this.entity.getAttribute(Attributes.ATTACK_DAMAGE)).getValue();
-            return adjustedAttackDistance * adjustedAttackDistance;
         }
         @Override
         public void tick() {

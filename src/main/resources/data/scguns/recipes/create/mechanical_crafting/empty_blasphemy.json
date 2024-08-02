@@ -1,0 +1,31 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:piglin_blueprint"
+    },
+    "L": {
+      "tag": "minecraft:wool"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:gun_barrel"
+    },
+    "X": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "P": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    " XPQ",
+    "LRXS"
+  ],
+  "result": {
+    "item": "scguns:empty_blasphemy"
+  }
+}

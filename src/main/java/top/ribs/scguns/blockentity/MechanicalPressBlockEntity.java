@@ -483,42 +483,54 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
         }
     private class TopItemHandler implements IItemHandlerModifiable {
         private final ItemStackHandler itemHandler;
+
         public TopItemHandler(ItemStackHandler itemHandler) {
             this.itemHandler = itemHandler;
         }
+
         @Override
         public void setStackInSlot(int slot, ItemStack stack) {
             itemHandler.setStackInSlot(slot, stack);
         }
+
         @Override
         public int getSlots() {
             return itemHandler.getSlots();
         }
+
         @Override
         public ItemStack getStackInSlot(int slot) {
             return itemHandler.getStackInSlot(slot);
         }
+
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            if (stack.getItem() instanceof MoldItem) {
-                ItemStack moldStack = itemHandler.getStackInSlot(MOLD_SLOT);
-                if (moldStack.isEmpty() || (moldStack.isDamageableItem() && moldStack.getDamageValue() < moldStack.getMaxDamage())) {
-                    return itemHandler.insertItem(MOLD_SLOT, stack, simulate);
-                }
+            if (isItemValid(slot, stack)) {
+                return itemHandler.insertItem(slot, stack, simulate);
             }
-            return itemHandler.insertItem(slot, stack, simulate);
+            return stack;
         }
+
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return ItemStack.EMPTY;
+            return ItemStack.EMPTY; // Disable extraction from the top
         }
+
         @Override
         public int getSlotLimit(int slot) {
             return itemHandler.getSlotLimit(slot);
         }
+
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
+            // Ensure items are only inserted into input and mold slots
+            if (stack.getItem() instanceof MoldItem) {
+                return slot == MOLD_SLOT && (itemHandler.getStackInSlot(MOLD_SLOT).isEmpty() ||
+                        (itemHandler.getStackInSlot(MOLD_SLOT).isDamageableItem() &&
+                                itemHandler.getStackInSlot(MOLD_SLOT).getDamageValue() < itemHandler.getStackInSlot(MOLD_SLOT).getMaxDamage()));
+            }
             return slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT;
         }
     }
+
 }

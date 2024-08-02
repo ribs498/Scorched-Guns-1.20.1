@@ -1,7 +1,7 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "scguns:large_iron_casing"
+    "item": "scguns:sheol"
   },
   "loops": 1,
   "results": [
@@ -14,17 +14,17 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:large_iron_casing"
+          "item": "scguns:unfinished_rocket"
         },
         [
           {
-            "item": "scguns:sheol"
+            "item": "scguns:large_iron_casing"
           }
         ]
       ],
       "results": [
         {
-          "item": "scguns:large_iron_casing"
+          "item": "scguns:unfinished_rocket"
         }
       ]
     },
@@ -32,17 +32,17 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:large_iron_casing"
+          "item": "scguns:unfinished_rocket"
         },
         [
           {
-            "item": "scguns:anthralite_nugget"
+            "tag": "scguns:advanced_bullet_tips"
           }
         ]
       ],
       "results": [
         {
-          "item": "scguns:large_iron_casing"
+          "item": "scguns:unfinished_rocket"
         }
       ]
     },
@@ -50,17 +50,17 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "scguns:large_iron_casing"
+          "item": "scguns:unfinished_rocket"
         }
       ],
       "results": [
         {
-          "item": "scguns:large_iron_casing"
+          "item": "scguns:unfinished_rocket"
         }
       ]
     }
   ],
   "transitionalItem": {
-    "item": "scguns:large_iron_casing"
+    "item": "scguns:unfinished_rocket"
   }
 }

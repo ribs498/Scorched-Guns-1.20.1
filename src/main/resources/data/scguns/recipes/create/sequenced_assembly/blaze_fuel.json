@@ -14,7 +14,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:large_iron_casing"
+          "item": "scguns:unfinished_blaze_fuel"
         },
         [
           {
@@ -24,7 +24,7 @@
       ],
       "results": [
         {
-          "item": "scguns:large_iron_casing"
+          "item": "scguns:unfinished_blaze_fuel"
         }
       ]
     },
@@ -32,17 +32,17 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:large_iron_casing"
+          "item": "scguns:unfinished_blaze_fuel"
         },
         [
           {
-            "item": "minecraft:iron_nugget"
+            "tag": "scguns:stan_bullet_tips"
           }
         ]
       ],
       "results": [
         {
-          "item": "scguns:large_iron_casing"
+          "item": "scguns:unfinished_blaze_fuel"
         }
       ]
     },
@@ -50,17 +50,17 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "scguns:large_iron_casing"
+          "item": "scguns:unfinished_blaze_fuel"
         }
       ],
       "results": [
         {
-          "item": "scguns:large_iron_casing"
+          "item": "scguns:unfinished_blaze_fuel"
         }
       ]
     }
   ],
   "transitionalItem": {
-    "item": "scguns:large_iron_casing"
+    "item": "scguns:unfinished_blaze_fuel"
   }
 }

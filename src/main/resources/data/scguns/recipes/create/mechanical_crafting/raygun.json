@@ -1,0 +1,32 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "L": {
+      "item": "scguns:plasma_core"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:gun_barrel"
+    },
+    "M": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "X": {
+      "item": "scguns:end_blueprint"
+    }
+  },
+  "pattern": [
+    "XM ",
+    "LRS",
+    "Q  "
+  ],
+  "result": {
+    "item": "scguns:raygun"
+  }
+}

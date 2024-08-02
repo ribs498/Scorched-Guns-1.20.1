@@ -1,0 +1,17 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 20,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "tag": "forge:ingots/brass"
+    }
+  ],
+  "mold": {
+    "item": "scguns:large_casing_mold"
+  },
+  "result": {
+    "item": "scguns:large_brass_casing",
+    "count": 4
+  }
+}

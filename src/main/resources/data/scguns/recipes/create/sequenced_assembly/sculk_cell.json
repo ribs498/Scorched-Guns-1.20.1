@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "scguns:peal"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "scguns:sculk_cell"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_sculk_cell"
+        },
+        [
+          {
+            "item": "scguns:empty_cell"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_sculk_cell"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_sculk_cell"
+        },
+        [
+          {
+            "tag": "scguns:stan_bullet_tips"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_sculk_cell"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_sculk_cell"
+        }
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_sculk_cell"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "scguns:unfinished_sculk_cell"
+  }
+}

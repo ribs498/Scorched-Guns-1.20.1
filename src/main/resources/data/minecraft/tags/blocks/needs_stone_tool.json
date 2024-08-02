@@ -16,7 +16,10 @@
     "scguns:asgharian_brick_slab",
     "scguns:asgharian_brick_wall",
     "scguns:asgharian_pillar",
-    "scguns:cracked_asgharian_bricks"
-
+    "scguns:cracked_asgharian_bricks",
+    "scguns:polar_generator",
+    "scguns:powered_mechanical_press",
+    "scguns:powered_macerator",
+    "scguns:lightning_rod_connector"
   ]
 }

@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "textures": {
+    "down": "scguns:block/lightning_battery",
+    "east": "scguns:block/lightning_battery_side",
+    "north": "scguns:block/lightning_battery_side",
+    "particle": "scguns:block/lightning_battery_side",
+    "south": "scguns:block/lightning_battery_side",
+    "up": "scguns:block/lightning_battery",
+    "west": "scguns:block/lightning_battery_side"
+  }
+}

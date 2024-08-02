@@ -1,7 +1,7 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "scguns:small_iron_casing"
+    "tag": "scguns:stan_bullet_tips"
   },
   "loops": 1,
   "results": [
@@ -14,7 +14,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:small_iron_casing"
+          "item": "scguns:unfinished_microjet"
         },
         [
           {
@@ -24,7 +24,7 @@
       ],
       "results": [
         {
-          "item": "scguns:small_iron_casing"
+          "item": "scguns:unfinished_microjet"
         }
       ]
     },
@@ -32,17 +32,17 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:small_iron_casing"
+          "item": "scguns:unfinished_microjet"
         },
         [
           {
-            "item": "minecraft:iron_nugget"
+            "item": "scguns:small_iron_casing"
           }
         ]
       ],
       "results": [
         {
-          "item": "scguns:small_iron_casing"
+          "item": "scguns:unfinished_microjet"
         }
       ]
     },
@@ -50,17 +50,17 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "scguns:small_iron_casing"
+          "item": "scguns:unfinished_microjet"
         }
       ],
       "results": [
         {
-          "item": "scguns:small_iron_casing"
+          "item": "scguns:unfinished_microjet"
         }
       ]
     }
   ],
   "transitionalItem": {
-    "item": "scguns:small_iron_casing"
+    "item": "scguns:unfinished_microjet"
   }
 }

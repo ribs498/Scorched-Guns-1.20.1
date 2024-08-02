@@ -1,0 +1,39 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:dark_matter",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:end_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "scguns:rapid_firing_unit"
+    },
+    "gun_internal_2": {
+      "item": "minecraft:dragon_egg"
+    },
+    "gun_top_internal_1": {
+      "item": "minecraft:shulker_shell"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:diamond_steel_gun_frame"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_grip": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_top_barrel_1": {
+      "tag": "minecraft:planks"
+    },
+    "gun_magazine": {
+      "item": "minecraft:shulker_shell"
+    }
+  }
+}

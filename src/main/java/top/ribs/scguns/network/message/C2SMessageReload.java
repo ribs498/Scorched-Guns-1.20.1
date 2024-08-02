@@ -39,23 +39,23 @@ public class C2SMessageReload extends PlayMessage<C2SMessageReload>
         context.execute(() -> {
             ServerPlayer player = context.getPlayer();
             if (player != null && !player.isSpectator()) {
-                System.out.println("Handling C2SMessageReload: " + message.reload);
+               // System.out.println("Handling C2SMessageReload: " + message.reload);
                 ModSyncedDataKeys.RELOADING.setValue(player, message.reload);
 
                 if (!message.reload) {
-                    System.out.println("Stopping reload for player: " + player.getName().getString());
+                   // System.out.println("Stopping reload for player: " + player.getName().getString());
                     return;
                 }
 
                 ItemStack gun = player.getMainHandItem();
                 if (MinecraftForge.EVENT_BUS.post(new GunReloadEvent.Pre(player, gun))) {
                     ModSyncedDataKeys.RELOADING.setValue(player, false);
-                    System.out.println("Reload event canceled for player: " + player.getName().getString());
+                   // System.out.println("Reload event canceled for player: " + player.getName().getString());
                     return;
                 }
 
                 MinecraftForge.EVENT_BUS.post(new GunReloadEvent.Post(player, gun));
-                System.out.println("Reload event processed for player: " + player.getName().getString());
+               // System.out.println("Reload event processed for player: " + player.getName().getString());
             }
         });
         context.setHandled(true);

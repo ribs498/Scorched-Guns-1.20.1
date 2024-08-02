@@ -1,5 +1,6 @@
 package top.ribs.scguns.entity.projectile;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
@@ -19,7 +20,7 @@ import top.ribs.scguns.init.ModEntities;
 public class BrassBoltEntity extends AbstractArrow {
     public BrassBoltEntity(EntityType<? extends AbstractArrow> type, Level world) {
         super(type, world);
-        this.setBaseDamage(5.0);
+        this.setBaseDamage(1.0);
     }
 
     public BrassBoltEntity(Level world, LivingEntity shooter) {
@@ -28,7 +29,7 @@ public class BrassBoltEntity extends AbstractArrow {
 
     public BrassBoltEntity(EntityType<BrassBoltEntity> type, Level world, LivingEntity shooter) {
         super(type, shooter, world);
-        this.setBaseDamage(5.0);
+        this.setBaseDamage(1.5);
     }
 
     @Override
@@ -87,16 +88,22 @@ public class BrassBoltEntity extends AbstractArrow {
 
     @Override
     protected SoundEvent getDefaultHitGroundSoundEvent() {
-        return null; // Return null to prevent default sound
+        return null;
     }
 
     @Override
     public void playSound(SoundEvent soundEvent, float volume, float pitch) {
-        // Override to prevent sound from playing
+
     }
 
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
     }
+
+    @Override
+    public void handleInsidePortal(BlockPos pos) {
+        this.discard();
+    }
 }
+

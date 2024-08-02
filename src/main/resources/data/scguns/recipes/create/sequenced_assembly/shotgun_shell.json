@@ -1,7 +1,7 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "scguns:small_copper_casing"
+    "item": "minecraft:paper"
   },
   "loops": 1,
   "results": [
@@ -14,17 +14,17 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:small_copper_casing"
+          "item": "scguns:unfinished_shotgun_shell"
         },
         [
           {
-            "item": "minecraft:paper"
+            "item": "scguns:small_copper_casing"
           }
         ]
       ],
       "results": [
         {
-          "item": "scguns:small_copper_casing"
+          "item": "scguns:unfinished_shotgun_shell"
         }
       ]
     },
@@ -32,7 +32,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:small_copper_casing"
+          "item": "scguns:unfinished_shotgun_shell"
         },
         [
           {
@@ -42,7 +42,7 @@
       ],
       "results": [
         {
-          "item": "scguns:small_copper_casing"
+          "item": "scguns:unfinished_shotgun_shell"
         }
       ]
     },
@@ -50,17 +50,17 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "scguns:small_copper_casing"
+          "item": "scguns:unfinished_shotgun_shell"
         }
       ],
       "results": [
         {
-          "item": "scguns:small_copper_casing"
+          "item": "scguns:unfinished_shotgun_shell"
         }
       ]
     }
   ],
   "transitionalItem": {
-    "item": "scguns:small_copper_casing"
+    "item": "scguns:unfinished_shotgun_shell"
   }
 }

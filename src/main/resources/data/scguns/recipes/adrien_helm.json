@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": {
+      "item": "minecraft:iron_ingot"
+    },"S": {
+      "item": "minecraft:leather"
+    },
+    "M": {
+      "item": "scguns:anthralite_nugget"
+    }
+  },
+  "pattern": [
+    "XXX",
+    "S S",
+    "M M"
+  ],
+  "result": {
+    "item": "scguns:adrien_helm"
+  }
+}

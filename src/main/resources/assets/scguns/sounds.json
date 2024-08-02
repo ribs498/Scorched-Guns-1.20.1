@@ -15,11 +15,27 @@
       }
     ]
   },
+  "item.cowboy.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/cowboy/fire"
+      }
+    ]
+  },
   "item.sculk.fire": {
     "subtitle": "subtitle.scguns.fire",
     "sounds": [
       {
         "name": "scguns:item/sculk/fire"
+      }
+    ]
+  },
+  "item.shulker.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/shulker/fire"
       }
     ]
   },
@@ -36,6 +52,14 @@
     "sounds": [
       {
         "name": "scguns:item/scorched_sniper/fire"
+      }
+    ]
+  },
+  "item.shock.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/shock/fire"
       }
     ]
   },

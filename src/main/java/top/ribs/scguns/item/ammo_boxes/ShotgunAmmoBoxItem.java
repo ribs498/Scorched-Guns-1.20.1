@@ -6,8 +6,8 @@ import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.item.AmmoBoxItem;
 
 public class ShotgunAmmoBoxItem extends AmmoBoxItem {
-    private static final int SHOTUGN_MAX_ITEM_COUNT = 256;
-    private static final int SHOTUGN_BAR_COLOR = Mth.color(0.4F, 0.4F, 0.7F);
+    private static final int SHOTGUN_MAX_ITEM_COUNT = 768;
+    private static final int SHOTGUN_BAR_COLOR = Mth.color(0.4F, 0.4F, 0.7F);
 
     public ShotgunAmmoBoxItem(Properties properties) {
         super(properties);
@@ -19,12 +19,12 @@ public class ShotgunAmmoBoxItem extends AmmoBoxItem {
 
     @Override
     protected int getMaxItemCount() {
-        return SHOTUGN_MAX_ITEM_COUNT;
+        return SHOTGUN_MAX_ITEM_COUNT;
     }
 
     @Override
     public int getBarColor(ItemStack stack) {
-        return SHOTUGN_BAR_COLOR;
+        return SHOTGUN_BAR_COLOR;
     }
 
 }

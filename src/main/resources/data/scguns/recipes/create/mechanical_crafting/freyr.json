@@ -1,0 +1,41 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "P": {
+      "item": "scguns:vehement_coal"
+    },
+    "S": {
+      "item": "scguns:gun_barrel"
+    },
+    "G": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "C": {
+      "item": "scguns:gun_magazine"
+    },
+    "I": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "B": {
+      "item": "minecraft:crimson_planks"
+    },
+    "A": {
+      "item": "scguns:piglin_blueprint"
+    },
+    "J": {
+      "item": "scguns:rapid_firing_unit"
+    }
+  },
+  "pattern": [
+    "JICA",
+    "PGBS",
+    "Q B "
+  ],
+  "result": {
+    "item": "scguns:freyr"
+  }
+}

@@ -12,6 +12,9 @@
       "item": "minecraft:heart_of_the_sea"
     },
     "gun_internal_2": {
+      "item": "scguns:gun_parts"
+    },
+    "gun_top_internal_2": {
       "item": "scguns:anthralite_ingot"
     },
     "gun_top_barrel_1": {

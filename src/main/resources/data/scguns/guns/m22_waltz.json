@@ -11,7 +11,7 @@
     "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed_one_handed",
-    "rate": 5,
+    "rate": 6,
     "recoilAngle": 5.7,
     "recoilKick": 1.22,
     "spread": 2.0,

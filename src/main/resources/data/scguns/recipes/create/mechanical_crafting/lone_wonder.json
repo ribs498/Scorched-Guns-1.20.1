@@ -1,0 +1,41 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "C": {
+      "item": "scguns:treated_brass_gun_frame"
+    },
+    "L": {
+      "item": "scguns:rapid_firing_unit"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "X": {
+      "tag": "minecraft:planks"
+    },
+    "P": {
+      "item": "scguns:end_blueprint"
+    },
+"I": {
+  "item": "minecraft:redstone"
+},
+"B": {
+    "item": "scguns:anthralite_ingot"
+}
+  },
+  "pattern": [
+    "CCIP ",
+    "LRSB ",
+    "Q X  "
+  ],
+  "result": {
+    "item": "scguns:lone_wonder"
+  }
+}

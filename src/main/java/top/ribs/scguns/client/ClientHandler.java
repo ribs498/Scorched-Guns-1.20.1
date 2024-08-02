@@ -29,8 +29,8 @@ import org.lwjgl.glfw.GLFW;
 import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.client.handler.*;
-import top.ribs.scguns.client.render.block.MaceratorRenderer;
-import top.ribs.scguns.client.render.block.MechanicalPressRenderer;
+import top.ribs.scguns.client.render.block.*;
+import top.ribs.scguns.client.render.curios.AmmoBoxRenderer;
 import top.ribs.scguns.client.render.gun.ModelOverrides;
 import top.ribs.scguns.client.render.gun.model.*;
 import top.ribs.scguns.client.screen.*;
@@ -40,8 +40,11 @@ import top.ribs.scguns.debug.client.screen.EditorScreen;
 import top.ribs.scguns.entity.client.*;
 import top.ribs.scguns.init.*;
 import top.ribs.scguns.item.AmmoBoxItem;
+import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.C2SMessageAttachments;
+import top.ribs.scguns.network.message.C2SMessageMeleeAttack;
+import top.theillusivec4.curios.api.client.CuriosRendererRegistry;
 
 import java.lang.reflect.Field;
 
@@ -65,7 +68,10 @@ public class ClientHandler {
 
     private static void onClientSetup(FMLClientSetupEvent event) {
         BlockEntityRenderers.register(ModBlockEntities.MACERATOR.get(), MaceratorRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.POWERED_MACERATOR.get(), PoweredMaceratorRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.MECHANICAL_PRESS.get(), MechanicalPressRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.POWERED_MECHANICAL_PRESS.get(), PoweredMechanicalPressRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.POLAR_GENERATOR.get(), PolarGeneratorRenderer::new);
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.NITER_GLASS.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.WHITE_NITER_GLASS.get(), RenderType.translucent());;
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.RED_NITER_GLASS.get(), RenderType.translucent());
@@ -87,12 +93,18 @@ public class ClientHandler {
         registerAmmoCountProperty(ModItems.RIFLE_AMMO_BOX.get());
         registerAmmoCountProperty(ModItems.SHOTGUN_AMMO_BOX.get());
         registerAmmoCountProperty(ModItems.MAGNUM_AMMO_BOX.get());
+        registerAmmoCountProperty(ModItems.ENERGY_AMMO_BOX.get());
         registerAmmoCountProperty(ModItems.ROCKET_AMMO_BOX.get());
         registerAmmoCountProperty(ModItems.SPECIAL_AMMO_BOX.get());
+        registerAmmoCountProperty(ModItems.EMPTY_CASING_POUCH.get());
         MinecraftForge.EVENT_BUS.register(new PlayerModelHandler());
         MenuScreens.register(ModMenuTypes.MACERATOR_MENU.get(), MaceratorScreen::new);
+        MenuScreens.register(ModMenuTypes.POWERED_MACERATOR_MENU.get(), PoweredMaceratorScreen::new);
+        MenuScreens.register(ModMenuTypes.LIGHTING_BATTERY_MENU.get(), LightningBatteryScreen::new);
         MenuScreens.register(ModMenuTypes.SUPPLY_SCAMP_MENU.get(), SupplyScampScreen::new);
         MenuScreens.register(ModMenuTypes.MECHANICAL_PRESS_MENU.get(), MechanicalPressScreen::new);
+        MenuScreens.register(ModMenuTypes.POWERED_MECHANICAL_PRESS_MENU.get(), PoweredMechanicalPressScreen::new);
+        MenuScreens.register(ModMenuTypes.POLAR_GENERATOR_MENU.get(), PolarGeneratorScreen::new);
         MenuScreens.register(ModMenuTypes.GUN_BENCH.get(), GunBenchScreen::new);
         EntityRenderers.register(ModEntities.COG_MINION.get(), CogMinionRenderer::new);
         EntityRenderers.register(ModEntities.COG_KNIGHT.get(), CogKnightRenderer::new);
@@ -105,6 +117,15 @@ public class ClientHandler {
         EntityRenderers.register(ModEntities.HORNLIN.get(), HornlinRenderer::new);
         EntityRenderers.register(ModEntities.BLUNDERER.get(), BlundererRenderer::new);
         EntityRenderers.register(ModEntities.BRASS_BOLT.get(), BrassBoltRenderer::new);
+        // Register the AmmoBoxRenderer for each ammo box item
+        CuriosRendererRegistry.register(ModItems.PISTOL_AMMO_BOX.get(), AmmoBoxRenderer::new);
+        CuriosRendererRegistry.register(ModItems.RIFLE_AMMO_BOX.get(), AmmoBoxRenderer::new);
+        CuriosRendererRegistry.register(ModItems.SHOTGUN_AMMO_BOX.get(), AmmoBoxRenderer::new);
+        CuriosRendererRegistry.register(ModItems.MAGNUM_AMMO_BOX.get(), AmmoBoxRenderer::new);
+        CuriosRendererRegistry.register(ModItems.ENERGY_AMMO_BOX.get(), AmmoBoxRenderer::new);
+        CuriosRendererRegistry.register(ModItems.ROCKET_AMMO_BOX.get(), AmmoBoxRenderer::new);
+        CuriosRendererRegistry.register(ModItems.SPECIAL_AMMO_BOX.get(), AmmoBoxRenderer::new);
+        CuriosRendererRegistry.register(ModItems.EMPTY_CASING_POUCH.get(), AmmoBoxRenderer::new);
 
         event.enqueueWork(ClientHandler::setup);
     }
@@ -139,7 +160,11 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.BLUNDERBUSS.get(), new BlunderbussModel());
         ModelOverrides.register(ModItems.REPEATING_MUSKET.get(), new RepeatingMusketModel());
         ModelOverrides.register(ModItems.LASER_MUSKET.get(), new LaserMusketModel());
+        ModelOverrides.register(ModItems.ARC_WORKER.get(), new ArcWorkerModel());
         ModelOverrides.register(ModItems.FLOUNDERGAT.get(), new FloundergatModel());
+        ModelOverrides.register(ModItems.SAKETINI.get(), new SaketiniModel());
+        ModelOverrides.register(ModItems.CALLWELL.get(), new CallwellModel());
+        ModelOverrides.register(ModItems.WINNIE.get(), new WinnieModel());
         ModelOverrides.register(ModItems.SCRAPPER.get(), new ScrapperModel());
         ModelOverrides.register(ModItems.MAKESHIFT_RIFLE.get(), new MakeshiftRifleModel());
         ModelOverrides.register(ModItems.BOOMSTICK.get(), new BoomstickModel());
@@ -149,12 +174,14 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.LLR_DIRECTOR.get(), new LlrDirectorModel());
         ModelOverrides.register(ModItems.MARLIN.get(), new MarlinModel());
         ModelOverrides.register(ModItems.IRON_SPEAR.get(), new IronSpearModel());
+        ModelOverrides.register(ModItems.IRON_JAVELIN.get(), new IronJavelinModel());
         ModelOverrides.register(ModItems.M3_CARABINE.get(), new M3CarabineModel());
         ModelOverrides.register(ModItems.LOCKEWOOD.get(), new LockewoodModel());
         ModelOverrides.register(ModItems.GREASER_SMG.get(), new GreaserSmgModel());
         ModelOverrides.register(ModItems.DEFENDER_PISTOL.get(), new DefenderPistolModel());
         ModelOverrides.register(ModItems.COMBAT_SHOTGUN.get(), new CombatShotgunModel());
         ModelOverrides.register(ModItems.AUVTOMAG.get(), new AuvtomagModel());
+        ModelOverrides.register(ModItems.PULSAR.get(), new PulsarModel());
         ModelOverrides.register(ModItems.EARTHS_CORPSE.get(), new EarthsCorpseModel());
         ModelOverrides.register(ModItems.ASTELLA.get(), new AstellaModel());
         ModelOverrides.register(ModItems.RAT_KING_AND_QUEEN.get(), new RatKingAndQueenModel());
@@ -171,9 +198,13 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.WHISPERS.get(), new WhispersModel());
         ModelOverrides.register(ModItems.ECHOES_2.get(), new Echoes2Model());
         ModelOverrides.register(ModItems.SCULK_RESONATOR.get(), new SculkResonatorModel());
+        ModelOverrides.register(ModItems.CARAPICE.get(), new CarapiceModel());
+        ModelOverrides.register(ModItems.SHELLURKER.get(), new ShellurkerModel());
+        ModelOverrides.register(ModItems.DARK_MATTER.get(), new DarkMatterModel());
 
         ModelOverrides.register(ModItems.JACKHAMMER.get(), new JackhammerModel());
         ModelOverrides.register(ModItems.GATTALER.get(), new GattalerModel());
+        ModelOverrides.register(ModItems.THUNDERHEAD.get(), new ThunderheadModel());
         ModelOverrides.register(ModItems.KRAUSER.get(), new KrauserModel());
         ModelOverrides.register(ModItems.HOWLER.get(), new HowlerModel());
         ModelOverrides.register(ModItems.HOWLER_CONVERSION.get(), new HowlerConversionModel());
@@ -183,8 +214,11 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.DOZIER_RL.get(), new DozierRLModel());
         ModelOverrides.register(ModItems.SPITFIRE.get(), new SpitfireModel());
         ModelOverrides.register(ModItems.CYCLONE.get(), new CycloneModel());
+        ModelOverrides.register(ModItems.SOUL_DRUMMER.get(), new SoulDrummerModel());
         ModelOverrides.register(ModItems.BLASPHEMY.get(), new BlasphemyModel());
         ModelOverrides.register(ModItems.PYROCLASTIC_FLOW.get(), new PyroclasticFlowModel());
+        ModelOverrides.register(ModItems.SEQUOIA.get(), new SequoiaModel());
+        ModelOverrides.register(ModItems.LONE_WONDER.get(), new LoneWonderModel());
         ModelOverrides.register(ModItems.RAYGUN.get(), new RaygunModel());
         ModelOverrides.register(ModItems.SUPER_SHOTGUN.get(), new SuperShotgunModel());
         ModelOverrides.register(ModItems.FREYR.get(), new FreyrModel());
@@ -222,6 +256,12 @@ public class ClientHandler {
                 PacketHandler.getPlayChannel().sendToServer(new C2SMessageAttachments());
             }
         }
+        if (KeyBinds.KEY_MELEE.consumeClick() && event.getAction() == GLFW.GLFW_PRESS) {
+            if (mc.player.getMainHandItem().getItem() instanceof GunItem gunItem) {
+                PacketHandler.getPlayChannel().sendToServer(new C2SMessageMeleeAttack());
+
+            }
+        }
     }
 
     public static void onRegisterReloadListener(RegisterClientReloadListenersEvent event) {
@@ -234,35 +274,6 @@ public class ClientHandler {
         //event.register(new ResourceLocation(Reference.MOD_ID, "special/test"));
     }
 
-//    public static void onRegisterCreativeTab(IEventBus bus) {
-//        DeferredRegister<CreativeModeTab> register = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Reference.MOD_ID);
-//        CreativeModeTab.Builder builder = CreativeModeTab.builder();
-//        builder.title(Component.translatable("itemGroup." + Reference.MOD_ID));
-//        builder.icon(() -> {
-//            ItemStack stack = new ItemStack(ModItems.M3_CARABINE.get());
-//            stack.getOrCreateTag().putBoolean("IgnoreAmmo", true);
-//            return stack;
-//        });
-//        builder.displayItems((flags, output) -> {
-//            ModItems.REGISTER.getEntries().forEach(registryObject -> {
-//                if (registryObject.get() instanceof GunItem item) {
-//                    ItemStack stack = new ItemStack(item);
-//                    stack.getOrCreateTag().putInt("AmmoCount", item.getGun().getReloads().getMaxAmmo());
-//                    output.accept(stack);
-//                    return;
-//                }
-//                output.accept(registryObject.get());
-//            });
-//            CustomGunManager.fill(output);
-//            for (Enchantment enchantment : ForgeRegistries.ENCHANTMENTS) {
-//                if (enchantment.category == EnchantmentTypes.GUN || enchantment.category == EnchantmentTypes.SEMI_AUTO_GUN) {
-//                    output.accept(EnchantedBookItem.createForEnchantment(new EnchantmentInstance(enchantment, enchantment.getMaxLevel())), CreativeModeTab.TabVisibility.PARENT_TAB_ONLY);
-//                }
-//            }
-//        });
-//        register.register("creative_tab", builder::build);
-//        register.register(bus);
-//    }
 
     public static Screen createEditorScreen(IEditorMenu menu) {
         return new EditorScreen(Minecraft.getInstance().screen, menu);

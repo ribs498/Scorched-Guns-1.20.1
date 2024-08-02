@@ -42,9 +42,10 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 19.0,
-    "ejectsCasing": false,
+    "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:energy_cell",
+    "casingType": "scguns:empty_cell",
     "life": 40,
     "size": 1.0,
     "speed": 7.0,

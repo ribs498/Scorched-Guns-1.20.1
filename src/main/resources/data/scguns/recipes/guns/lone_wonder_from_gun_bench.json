@@ -1,0 +1,39 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:lone_wonder",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:end_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "scguns:rapid_firing_unit"
+    },
+    "gun_internal_2": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "gun_top_internal_1": {
+      "item": "scguns:treated_brass_gun_frame"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:treated_brass_gun_frame"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "gun_grip": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "gun_top_barrel_1": {
+      "item": "minecraft:redstone"
+    },
+    "gun_magazine": {
+      "tag": "minecraft:planks"
+    }
+  }
+}

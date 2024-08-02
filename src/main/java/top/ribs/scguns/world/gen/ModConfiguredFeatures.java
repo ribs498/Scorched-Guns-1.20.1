@@ -53,7 +53,7 @@ public class ModConfiguredFeatures {
         register(context, ANTHRALITE_ORE_KEY, Feature.ORE, new OreConfiguration(overworldAnthraliteOres, 10));
         register(context, SULFUR_ORE_KEY, Feature.ORE, new OreConfiguration(overworldSulfurOres, 9));
         register(context, NETHER_SULFUR_ORE_KEY, Feature.ORE, new OreConfiguration(netherSulfurOres, 12));
-        register(context, VEHEMENT_COAL_ORE_KEY, Feature.ORE, new OreConfiguration(netherVehementCoalOres, 6)); // Reduced vein size for rarity
+        register(context, VEHEMENT_COAL_ORE_KEY, Feature.ORE, new OreConfiguration(netherVehementCoalOres, 6));
 
         // Geothermal Vent Configuration
         register(context, GEOTHERMAL_VENT_KEY, ModFeatures.GEOTHERMAL_VENT_FEATURE.get(), NoneFeatureConfiguration.INSTANCE);

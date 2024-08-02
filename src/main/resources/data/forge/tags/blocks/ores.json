@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:anthralite_ore",
+    "scguns:sulfur_ore",
+    "scguns:deepslate_sulfur_ore",
+    "scguns:deepslate_anthralite_ore",
+    "scguns:nether_sulfur_ore",
+    "scguns:vehement_coal_ore"
+  ]
+}

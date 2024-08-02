@@ -1,0 +1,20 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 20,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "item": "scguns:large_iron_casing"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "tag": "scguns:stan_bullet_tips"
+    }
+  ],
+  "result": {
+    "item": "scguns:blaze_fuel",
+    "count": 1
+  }
+}

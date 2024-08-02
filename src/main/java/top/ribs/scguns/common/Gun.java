@@ -15,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.commons.lang3.tuple.Pair;
 import top.ribs.scguns.ScorchedGuns;
@@ -22,7 +23,6 @@ import top.ribs.scguns.Reference;
 import top.ribs.scguns.annotation.Ignored;
 import top.ribs.scguns.annotation.Optional;
 import top.ribs.scguns.client.ClientHandler;
-import top.ribs.scguns.compat.BackpackHelper;
 import top.ribs.scguns.debug.Debug;
 import top.ribs.scguns.debug.IDebugWidget;
 import top.ribs.scguns.debug.IEditorMenu;
@@ -37,11 +37,17 @@ import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.item.attachment.impl.Scope;
 import top.ribs.scguns.util.GunJsonUtil;
 import top.ribs.scguns.util.SuperBuilder;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.SlotResult;
+import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
@@ -1925,19 +1931,20 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         CompoundTag tag = gunStack.getOrCreateTag();
         return tag.getFloat("AdditionalDamage");
     }
-
-
     public static AmmoContext findAmmo(Player player, Item item) {
         if (player.isCreative()) {
             ItemStack ammo = new ItemStack(item, Integer.MAX_VALUE);
             return new AmmoContext(ammo, null);
         }
+
+        // Check player's main inventory
         for (int i = 0; i < player.getInventory().getContainerSize(); ++i) {
             ItemStack stack = player.getInventory().getItem(i);
             if (isAmmo(stack, item)) {
                 return new AmmoContext(stack, player.getInventory());
             }
         }
+
         // Check ammo pouches in the player's inventory
         for (ItemStack itemStack : player.getInventory().items) {
             if (itemStack.getItem() instanceof AmmoBoxItem pouch) {
@@ -1949,17 +1956,38 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
                 }
             }
         }
-        if (ScorchedGuns.backpackedLoaded) {
-            return BackpackHelper.findAmmo(player, item);
-        }
-        return AmmoContext.NONE;
+
+        // Check Curios slots
+        AtomicReference<AmmoContext> ammoContextRef = new AtomicReference<>(AmmoContext.NONE);
+        CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
+            IItemHandlerModifiable curios = handler.getEquippedCurios();
+            for (int i = 0; i < curios.getSlots(); i++) {
+                ItemStack stack = curios.getStackInSlot(i);
+                if (stack.getItem() instanceof AmmoBoxItem pouch) {
+                    List<ItemStack> contents = AmmoBoxItem.getContents(stack).toList();
+                    for (ItemStack ammoStack : contents) {
+                        if (isAmmo(ammoStack, item)) {
+                            ammoContextRef.set(new AmmoContext(ammoStack, null));
+                            return;
+                        }
+                    }
+                }
+            }
+        });
+
+        return ammoContextRef.get();
     }
+
 
     public static boolean isAmmo(ItemStack stack, Item item) {
         return stack != null && stack.getItem() == item;
     }
 
     public static ItemStack[] findAmmoStack(Player player, Item item) {
+        if (player.isCreative()) {
+            return new ItemStack[]{new ItemStack(item, Integer.MAX_VALUE)};
+        }
+
         List<ItemStack> ammoStacks = new ArrayList<>();
         for (ItemStack stack : player.getInventory().items) {
             if (stack.getItem() == item) {
@@ -1976,16 +2004,38 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
                 }
             }
         }
+
+        // Check Curios slots
+        CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
+            IItemHandlerModifiable curios = handler.getEquippedCurios();
+            for (int i = 0; i < curios.getSlots(); i++) {
+                ItemStack stack = curios.getStackInSlot(i);
+                if (stack.getItem() instanceof AmmoBoxItem pouch) {
+                    List<ItemStack> contents = AmmoBoxItem.getContents(stack).toList();
+                    for (ItemStack ammoStack : contents) {
+                        if (ammoStack.getItem() == item) {
+                            ammoStacks.add(ammoStack);
+                        }
+                    }
+                }
+            }
+        });
+
         return ammoStacks.toArray(new ItemStack[0]);
     }
+
     public static int getReserveAmmoCount(Player player, Item item) {
-        int ammoCount = 0;
+        if (player.isCreative()) {
+            return Integer.MAX_VALUE;
+        }
+
+        AtomicInteger ammoCount = new AtomicInteger();
 
         // Check player's main inventory
         for (int i = 0; i < player.getInventory().getContainerSize(); ++i) {
             ItemStack stack = player.getInventory().getItem(i);
             if (isAmmo(stack, item)) {
-                ammoCount += stack.getCount();
+                ammoCount.addAndGet(stack.getCount());
             }
         }
 
@@ -1995,22 +2045,32 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
                 List<ItemStack> contents = AmmoBoxItem.getContents(itemStack).toList();
                 for (ItemStack ammoStack : contents) {
                     if (isAmmo(ammoStack, item)) {
-                        ammoCount += ammoStack.getCount();
+                        ammoCount.addAndGet(ammoStack.getCount());
                     }
                 }
             }
         }
 
-        // Check backpack if mod is loaded
-        if (ScorchedGuns.backpackedLoaded) {
-            ItemStack backpackAmmo = BackpackHelper.findAmmo(player, item).stack();
-            if (!backpackAmmo.isEmpty()) {
-                ammoCount += backpackAmmo.getCount();
+        // Check Curios slots
+        CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
+            IItemHandlerModifiable curios = handler.getEquippedCurios();
+            for (int i = 0; i < curios.getSlots(); i++) {
+                ItemStack stack = curios.getStackInSlot(i);
+                if (stack.getItem() instanceof AmmoBoxItem pouch) {
+                    List<ItemStack> contents = AmmoBoxItem.getContents(stack).toList();
+                    for (ItemStack ammoStack : contents) {
+                        if (isAmmo(ammoStack, item)) {
+                            ammoCount.addAndGet(ammoStack.getCount());
+                        }
+                    }
+                }
             }
-        }
+        });
 
-        return ammoCount;
+        return ammoCount.get();
     }
+
+
     public static float getFovModifier(ItemStack stack, Gun modifiedGun)
     {
         float modifier = 0.0F;

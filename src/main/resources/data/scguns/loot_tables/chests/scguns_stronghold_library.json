@@ -1,0 +1,21 @@
+{
+  "pools": [
+    {
+      "rolls": 1,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "scguns:diamond_steel_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:treated_brass_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:iron_blueprint"
+        }
+      ]
+    }
+  ]
+}

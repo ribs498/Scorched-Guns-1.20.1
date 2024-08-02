@@ -15,7 +15,7 @@
     "recoilAngle": 5.0,
     "recoilKick": 2.0,
     "spread": 1.0,
-    "meleeDamage": 7.0,
+    "meleeDamage": 9.5,
     "meleeCooldownTicks": 20
   },
   "modules": {

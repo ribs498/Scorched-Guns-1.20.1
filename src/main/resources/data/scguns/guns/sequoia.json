@@ -1,0 +1,63 @@
+{
+  "display": {
+    "flash": {
+      "size": 1.0,
+      "yOffset": 3.9,
+      "zOffset": -7.0
+    },
+    "muzzleFlashType": "flash_type_1"
+  },
+  "general": {
+    "alwaysSpread": false,
+    "fireMode": "scguns:semi_automatic",
+    "gripType": "scguns:two_handed_one_handed",
+    "rate": 12,
+    "recoilAngle": 8.0,
+    "recoilKick": 2.5,
+    "spread": 3.0,
+    "meleeDamage": 2.0,
+    "meleeCooldownTicks": 10
+  },
+  "modules": {
+    "attachments": {
+      "scope": {
+        "size": 0.8,
+        "yOffset": 5.3,
+        "zOffset": 3.5
+      },
+      "stock": {
+        "scale": 0.0
+      }
+    },
+    "zoom": {
+      "fovModifier": 0.6,
+      "yOffset": 5.4,
+      "zOffset": 0.75
+    }
+  },
+  "projectile": {
+    "advantage": "scguns:none",
+    "damage": 18.0,
+    "ejectsCasing": false,
+    "gravity": false,
+    "item": "scguns:beowulf_round",
+    "casingType": "scguns:small_diamond_steel_casing",
+    "life": 20,
+    "size": 0.1,
+    "speed": 7.0,
+    "trailLengthMultiplier": 2.0
+  },
+  "reloads": {
+    "emptyMagTimer": 45,
+    "maxAmmo": 6,
+    "reloadItem": "scguns:beowulf_round",
+    "reloadTimer": 20,
+    "reloadType": "scguns:manual"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.brass_revolver.fire",
+    "fire": "scguns:item.brass_revolver.fire",
+    "reload": "scguns:item.pistol.reload"
+  }
+}

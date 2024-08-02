@@ -1,0 +1,35 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "C": {
+      "tag": "minecraft:planks"
+    },
+    "L": {
+      "item": "minecraft:heart_of_the_sea"
+    },
+    "R": {
+      "item": "scguns:gun_parts"
+    },
+    "S": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "X": {
+      "item": "scguns:ocean_blueprint"
+    },
+    "E": {
+      "item": "scguns:anthralite_ingot"
+    }
+  },
+  "pattern": [
+    "XESS ",
+    "LRSS ",
+    "Q C  "
+  ],
+  "result": {
+    "item": "scguns:floundergat"
+  }
+}

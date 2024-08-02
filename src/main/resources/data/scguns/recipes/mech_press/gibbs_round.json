@@ -1,0 +1,19 @@
+{
+  "type": "scguns:mechanical_pressing",
+  "processingTime": 20,
+  "ingredients": [
+    {
+      "item": "scguns:medium_diamond_steel_casing"
+    },
+    {
+      "tag": "scguns:gunpowder_dust"
+    },
+    {
+      "tag": "scguns:advanced_bullet_tips"
+    }
+  ],
+  "result": {
+    "item": "scguns:gibbs_round",
+    "count": 1
+  }
+}

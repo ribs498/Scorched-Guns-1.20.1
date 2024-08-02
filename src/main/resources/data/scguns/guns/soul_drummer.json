@@ -1,0 +1,71 @@
+{
+  "display": {
+    "flash": {
+      "size": 1.0,
+      "yOffset": 5.1,
+      "zOffset": -3.0
+    },
+    "muzzleFlashType": "flash_type_1"
+  },
+  "general": {
+    "alwaysSpread": true,
+    "fireMode": "scguns:automatic",
+    "gripType": "scguns:one_handed",
+    "rate": 2,
+    "recoilAngle": 4.0,
+    "recoilKick": 1.5,
+    "spread": 6.0,
+    "meleeDamage": 3.0,
+    "meleeCooldownTicks": 10
+  },
+  "modules": {
+    "attachments": {
+      "barrel": {
+        "yOffset": 5.1,
+        "zOffset": -4.8
+      },
+      "scope": {
+        "size": 0.7,
+        "yOffset": 6.0,
+        "zOffset": 3.5
+      },
+      "magazine": {
+        "scale": 0.0
+      },
+      "stock": {
+        "scale": 0.0
+      }
+    },
+    "zoom": {
+      "fovModifier": 0.6,
+      "yOffset": 6.3,
+      "zOffset": -1.25
+    }
+  },
+  "projectile": {
+    "advantage": "scguns:none",
+    "damage": 3.5,
+    "gravity": false,
+    "item": "scguns:compact_advanced_round",
+    "ejectsCasing": true,
+    "casingType": "scguns:small_brass_casing",
+    "life": 30,
+    "size": 0.05,
+    "speed": 7.0,
+    "trailLengthMultiplier": 2.0
+  },
+  "reloads": {
+    "emptyMagTimer": 10,
+    "maxAmmo": 25,
+    "reloadItem": "scguns:compact_copper_round",
+    "reloadTimer": 20,
+    "reloadType": "scguns:mag_fed"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.brass_pistol.fire",
+    "fire": "scguns:item.brass_pistol.fire",
+    "reload": "scguns:item.pistol.reload",
+    "silencedFire": "scguns:item.bruiser.silenced_fire"
+  }
+}

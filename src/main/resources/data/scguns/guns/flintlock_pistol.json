@@ -13,7 +13,7 @@
     "gripType": "scguns:one_handed",
     "rate": 6,
     "recoilAngle": 5.0,
-    "recoilKick": 0.8,
+    "recoilKick": 2.0,
     "spread": 3.0,
     "meleeDamage": 2.0,
     "meleeCooldownTicks": 10

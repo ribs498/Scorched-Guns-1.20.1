@@ -1,0 +1,18 @@
+{
+	"parent": "minecraft:item/generated",
+	"loader": "forge:separate_transforms",
+	"base": {
+		"parent": "scguns:item/adrien_helm_3d"
+	},
+	"perspectives": {
+		"gui": {
+			"parent": "scguns:item/adrien_helm_2d"
+		},
+		"ground": {
+			"parent": "scguns:item/adrien_helm_2d"
+		},
+		"fixed": {
+			"parent": "scguns:item/adrien_helm_2d"
+		}
+	}
+}

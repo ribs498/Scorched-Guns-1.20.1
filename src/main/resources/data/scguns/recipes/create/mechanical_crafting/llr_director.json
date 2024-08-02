@@ -1,0 +1,38 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "C": {
+      "item": "minecraft:copper_ingot"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "scguns:gun_parts"
+    },
+    "S": {
+      "item": "scguns:gun_barrel"
+    },
+    "V": {
+      "item": "scguns:copper_gun_frame"
+    },
+    "P": {
+      "item": "scguns:copper_blueprint"
+    },
+    "K": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "CVKP ",
+    "LRKSS",
+    "Q K  "
+  ],
+  "result": {
+    "item": "scguns:llr_director"
+  }
+}

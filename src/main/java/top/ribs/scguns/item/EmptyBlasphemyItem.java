@@ -17,7 +17,10 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.init.ModItems;
+
+import java.util.Objects;
 
 public class EmptyBlasphemyItem extends Item {
     public EmptyBlasphemyItem(Properties properties) {
@@ -39,32 +42,29 @@ public class EmptyBlasphemyItem extends Item {
         }
         return super.useOn(context);
     }
-    @Override
-    public InteractionResult interactLivingEntity(ItemStack stack, Player player, LivingEntity target, InteractionHand hand) {
-        if (target.getType() == EntityType.BLAZE) {
-            InteractionResult result = captureBlaze(player.level(), target.blockPosition(), player, stack, hand);
-            target.discard();
-            return result;
-        }
-        return super.interactLivingEntity(stack, player, target, hand);
-    }
+
     private boolean isBlazeSpawner(BaseSpawner spawner, Level level, BlockPos pos) {
         RandomSource random = level.random;
         return spawner.getOrCreateDisplayEntity(level, random, pos) != null &&
                 spawner.getOrCreateDisplayEntity(level, random, pos).getType() == EntityType.BLAZE;
     }
+
     private InteractionResult captureBlaze(Level level, BlockPos pos, Player player, ItemStack stack, InteractionHand hand) {
         if (!level.isClientSide) {
             level.playSound(null, pos, SoundEvents.BLAZE_HURT, SoundSource.HOSTILE, 1.0F, 1.0F);
             level.playSound(null, pos, SoundEvents.FIRE_EXTINGUISH, SoundSource.HOSTILE, 1.0F, 1.0F);
             ItemStack blasphemyItem = new ItemStack(ModItems.BLASPHEMY.get());
+
             if (!player.isCreative()) {
                 stack.shrink(1);
             }
+
             if (stack.isEmpty()) {
                 player.setItemInHand(hand, blasphemyItem);
             } else {
-                player.getInventory().placeItemBackInInventory(blasphemyItem);
+                if (!player.getInventory().add(blasphemyItem)) {
+                    player.drop(blasphemyItem, false);
+                }
             }
         }
         return InteractionResult.SUCCESS;

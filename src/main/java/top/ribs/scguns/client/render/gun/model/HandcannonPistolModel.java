@@ -37,13 +37,13 @@ public class HandcannonPistolModel implements IOverrideModel {
 
         if (entity.equals(Minecraft.getInstance().player)) {
             matrixStack.pushPose();
-            matrixStack.translate(0, -0.5, 0.25);
+            matrixStack.translate(0, -0.5, 0.23);
             ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
             float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
             cooldown = (float) ease(cooldown);
             float rotationAngle = -cooldown * 45;
             matrixStack.mulPose(Axis.XP.rotationDegrees(rotationAngle));
-            matrixStack.translate(0, 0.5, -0.25);
+            matrixStack.translate(0, 0.5, -0.23);
             RenderUtil.renderModel(SpecialModels.FLINTLOCK_PISTOL_HAMMER.getModel(), stack, matrixStack, buffer, light, overlay);
             matrixStack.popPose();
             if (cooldown >= 0.9f) {
@@ -53,7 +53,7 @@ public class HandcannonPistolModel implements IOverrideModel {
 
         if (flashTimer > 0) {
             matrixStack.pushPose();
-            matrixStack.translate(0, -0.0, -0.25);
+            matrixStack.translate(0, -0.0, -0.23);
             RenderUtil.renderModel(SpecialModels.MUSKET_FLASH.getModel(), stack, matrixStack, buffer, light, overlay);
             matrixStack.popPose();
             flashTimer--;

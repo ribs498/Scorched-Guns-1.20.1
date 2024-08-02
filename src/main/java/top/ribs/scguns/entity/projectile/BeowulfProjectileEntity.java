@@ -17,7 +17,7 @@ import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.item.GunItem;
 
 public class BeowulfProjectileEntity extends ProjectileEntity {
-
+    private static final int ARMOR_BYPASS_AMOUNT = 2;
     public BeowulfProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
     }
@@ -46,13 +46,20 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
             }
         }
     }
-    @Override
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
         float damage = this.getDamage();
+        if (entity instanceof LivingEntity livingEntity) {
+            damage = applyArmorBypass(livingEntity, damage);
+        }
         entity.hurt(ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner()), damage);
         spawnExplosionParticles(hitVec);
     }
-
+    private float applyArmorBypass(LivingEntity entity, float damage) {
+        int armorValue = entity.getArmorValue();
+        int effectiveArmorValue = Math.max(0, armorValue - ARMOR_BYPASS_AMOUNT);
+        float damageMultiplier = 1.0f - (effectiveArmorValue * 0.04f);
+        return damage * damageMultiplier;
+    }
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
         spawnExplosionParticles(new Vec3(x, y + 0.1, z));

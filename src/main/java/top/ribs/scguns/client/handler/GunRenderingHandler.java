@@ -278,16 +278,20 @@ public class GunRenderingHandler {
         float direction = down ? -0.6F : 0.6F;
         this.offhandTranslate = Mth.clamp(this.offhandTranslate + direction, -1.0F, 1.0F);
     }
-
     private void updateImmersiveCamera() {
         this.prevImmersiveRoll = this.immersiveRoll;
         this.prevFallSway = this.fallSway;
 
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null)
+        if (mc.player == null) {
             return;
+        }
 
         ItemStack heldItem = mc.player.getMainHandItem();
+        if (heldItem.isEmpty()) {
+            return;
+        }
+
         float targetAngle = heldItem.getItem() instanceof GunItem || !Config.CLIENT.display.restrictCameraRollToWeapons.get() ? mc.player.input.leftImpulse : 0F;
         float speed = mc.player.input.leftImpulse != 0 ? 0.1F : 0.15F;
         this.immersiveRoll = Mth.lerp(speed, this.immersiveRoll, targetAngle);
@@ -300,6 +304,8 @@ public class GunRenderingHandler {
         float intensity = mc.player.isSprinting() ? 0.75F : 1.0F;
         this.sprintIntensity = Mth.approach(this.sprintIntensity, intensity, 0.1F);
     }
+
+
 
     private void updateMelee() {
         float prevBanzaiProgress = banzaiProgress;
@@ -398,13 +404,34 @@ public class GunRenderingHandler {
     public boolean isThirdPersonMeleeAttacking() {
         return this.isThirdPersonMeleeAttacking;
     }
+
+    public void startMeleeAnimation(ItemStack heldItem) {
+        long currentTime = System.currentTimeMillis();
+        LocalPlayer player = Minecraft.getInstance().player;
+
+        if (heldItem.getItem() instanceof GunItem gunItem) {
+            assert player != null;
+            if (MeleeAttackHandler.isMeleeOnCooldown(player, heldItem)) {
+
+                return;
+            }
+            MeleeAttackHandler.setMeleeCooldown(player, heldItem, gunItem);
+        }
+        if (currentTime - meleeStartTime >= MELEE_DURATION) {
+            this.isMeleeAttacking = true;
+            this.meleeStartTime = currentTime;
+            this.meleeProgress = 0;
+            this.prevMeleeProgress = 0;
+            ModSyncedDataKeys.MELEE.setValue(player, true);
+        }
+    }
+
     private void applyMeleeTransforms(PoseStack poseStack, float partialTicks) {
         if (isMeleeAttacking) {
             float progress = Mth.lerp(partialTicks, prevMeleeProgress, meleeProgress);
             assert Minecraft.getInstance().player != null;
             ItemStack heldItem = Minecraft.getInstance().player.getMainHandItem();
             boolean isBayonetEquipped = heldItem.getItem() instanceof GunItem && ((GunItem) heldItem.getItem()).hasBayonet(heldItem);
-
             if (isBayonetEquipped) {
                 if (progress < 0.4f) {
                     // Quicker stab part
@@ -435,24 +462,6 @@ public class GunRenderingHandler {
                     poseStack.mulPose(Axis.XP.rotationDegrees(-35F * (1 - returnProgress)));
                 }
             }
-        }
-    }
-    public void startMeleeAnimation(ItemStack heldItem) {
-        long currentTime = System.currentTimeMillis();
-        LocalPlayer player = Minecraft.getInstance().player;
-
-        if (heldItem.getItem() instanceof GunItem gunItem) {
-            if (MeleeAttackHandler.isMeleeOnCooldown(player, heldItem)) {
-                return;
-            }
-        }
-
-        if (currentTime - meleeStartTime >= MELEE_DURATION) {
-            this.isMeleeAttacking = true;
-            this.meleeStartTime = currentTime;
-            this.meleeProgress = 0;
-            this.prevMeleeProgress = 0;
-            ModSyncedDataKeys.MELEE.setValue(player, true);
         }
     }
 
@@ -922,6 +931,7 @@ public class GunRenderingHandler {
             case "flash_type_4" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_4.png");
             case "flash_type_5" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_5.png");
             case "flash_type_6" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_6.png");
+            case "flash_type_7" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_7.png");
             default -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_1.png");
         };
     }

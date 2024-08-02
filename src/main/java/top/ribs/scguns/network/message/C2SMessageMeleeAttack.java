@@ -5,6 +5,9 @@ import com.mrcrayfish.framework.api.network.message.PlayMessage;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
+import net.minecraftforge.network.PacketDistributor;
 import top.ribs.scguns.client.handler.GunRenderingHandler;
 import top.ribs.scguns.client.handler.MeleeAttackHandler;
 import top.ribs.scguns.init.ModSyncedDataKeys;
@@ -15,6 +18,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import net.minecraft.world.item.ItemStack;
 
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.network.PacketHandler;
 
 public class C2SMessageMeleeAttack extends PlayMessage<C2SMessageMeleeAttack> {
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -59,8 +63,10 @@ public class C2SMessageMeleeAttack extends PlayMessage<C2SMessageMeleeAttack> {
 					}
 					ModSyncedDataKeys.MELEE.setValue(player, true);
 					MeleeAttackHandler.performMeleeAttack(player);
-					GunRenderingHandler.get().startMeleeAnimation(player.getItemInHand(InteractionHand.MAIN_HAND));
-					GunRenderingHandler.get().startThirdPersonMeleeAnimation();
+
+					// Send S2CMessageMeleeAttack to the client
+					//System.out.println("Sending S2CMessageMeleeAttack to client.");
+					PacketHandler.getPlayChannel().sendToPlayer(() -> player, new S2CMessageMeleeAttack(player.getItemInHand(InteractionHand.MAIN_HAND)));
 
 					scheduler.schedule(() -> {
 						ModSyncedDataKeys.MELEE.setValue(player, false);

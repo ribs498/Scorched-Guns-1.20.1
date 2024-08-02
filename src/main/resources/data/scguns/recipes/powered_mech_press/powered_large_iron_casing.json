@@ -1,0 +1,17 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 20,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "item": "minecraft:iron_ingot"
+    }
+  ],
+  "mold": {
+    "item": "scguns:large_casing_mold"
+  },
+  "result": {
+    "item": "scguns:large_iron_casing",
+    "count": 4
+  }
+}

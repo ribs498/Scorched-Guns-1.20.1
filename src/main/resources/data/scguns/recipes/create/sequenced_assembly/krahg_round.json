@@ -14,17 +14,17 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:large_brass_casing"
+          "item": "scguns:unfinished_krahg_round"
         },
         [
           {
-            "tag": "forge:gunpowder"
+            "item": "scguns:nitro_powder_dust"
           }
         ]
       ],
       "results": [
         {
-          "item": "scguns:large_brass_casing"
+          "item": "scguns:unfinished_krahg_round"
         }
       ]
     },
@@ -32,7 +32,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:large_brass_casing"
+          "item": "scguns:unfinished_krahg_round"
         },
         [
           {
@@ -42,7 +42,7 @@
       ],
       "results": [
         {
-          "item": "scguns:large_brass_casing"
+          "item": "scguns:unfinished_krahg_round"
         }
       ]
     },
@@ -50,17 +50,17 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "scguns:large_brass_casing"
+          "item": "scguns:unfinished_krahg_round"
         }
       ],
       "results": [
         {
-          "item": "scguns:large_brass_casing"
+          "item": "scguns:unfinished_krahg_round"
         }
       ]
     }
   ],
   "transitionalItem": {
-    "item": "scguns:large_brass_casing"
+    "item": "scguns:unfinished_krahg_round"
   }
 }

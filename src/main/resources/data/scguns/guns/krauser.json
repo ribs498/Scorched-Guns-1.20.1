@@ -10,7 +10,7 @@
   "general": {
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
-    "rate": 4,
+    "rate": 6,
     "recoilAngle": 2.5,
     "recoilKick": 1.4,
     "spread": 2.0,

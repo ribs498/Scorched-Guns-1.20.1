@@ -67,8 +67,8 @@
   },
   "sounds": {
     "cock": "scguns:item.makeshift_rifle.cock",
-    "enchantedFire": "scguns:item.heavy_rifle.fire",
-    "fire": "scguns:item.heavy_rifle.fire",
+    "enchantedFire": "scguns:item.iron_rifle.fire",
+    "fire": "scguns:item.iron_rifle.fire",
     "reload": "scguns:item.pistol.reload",
     "silencedFire": "scguns:item.makeshift_rifle.silenced_fire"
   }

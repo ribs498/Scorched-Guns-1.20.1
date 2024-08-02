@@ -1,0 +1,20 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 20,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "item": "scguns:small_iron_casing"
+    },
+    {
+      "item": "scguns:sheol"
+    },
+    {
+      "tag": "scguns:advanced_bullet_tips"
+    }
+  ],
+  "result": {
+    "item": "scguns:ramrod_round",
+    "count": 1
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:small_iron_casing",
+    "scguns:empty_cell",
+    "scguns:large_iron_casing",
+    "scguns:small_copper_casing",
+    "scguns:medium_copper_casing",
+    "scguns:small_brass_casing",
+    "scguns:medium_brass_casing",
+    "scguns:large_brass_casing",
+    "scguns:small_diamond_steel_casing",
+    "scguns:medium_diamond_steel_casing"
+  ]
+}

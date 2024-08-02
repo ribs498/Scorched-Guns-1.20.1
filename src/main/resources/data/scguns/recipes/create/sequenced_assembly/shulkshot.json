@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "scguns:shulker_casing"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "scguns:shulkshot"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_shulkshot"
+        },
+        [
+          {
+            "tag": "scguns:gunpowder_dust"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_shulkshot"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_shulkshot"
+        },
+        [
+          {
+            "tag": "scguns:advanced_bullet_tips"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_shulkshot"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_shulkshot"
+        }
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_shulkshot"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "scguns:unfinished_shulkshot"
+  }
+}

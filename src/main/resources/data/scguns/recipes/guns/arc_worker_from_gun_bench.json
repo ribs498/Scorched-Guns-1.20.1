@@ -1,0 +1,39 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:arc_worker",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:copper_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "scguns:firing_unit"
+    },
+    "gun_internal_2": {
+      "item": "scguns:gun_parts"
+    },
+    "gun_top_internal_1": {
+      "item": "scguns:treated_brass_gun_frame"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:copper_gun_frame"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "gun_grip": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_top_barrel_1": {
+      "item": "minecraft:redstone"
+    },
+    "gun_magazine": {
+      "item": "scguns:treated_brass_ingot"
+    }
+  }
+}

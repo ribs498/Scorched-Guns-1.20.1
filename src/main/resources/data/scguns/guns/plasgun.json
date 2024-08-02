@@ -48,7 +48,7 @@
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:energy_cell",
-    "casingType": "scguns:small_diamond_steel_casing",
+    "casingType": "scguns:empty_cell",
     "life": 20,
     "size": 6.0,
     "speed": 2.0,

@@ -17,11 +17,19 @@ public class ModMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENUS =
             DeferredRegister.create(ForgeRegistries.MENU_TYPES, Reference.MOD_ID);
 
+    public static final RegistryObject<MenuType<PolarGeneratorMenu>> POLAR_GENERATOR_MENU =
+            MENUS.register("polar_generator_menu", () -> IForgeMenuType.create(PolarGeneratorMenu::new));
     public static final RegistryObject<MenuType<MaceratorMenu>> MACERATOR_MENU =
             MENUS.register("macerator_menu", () -> IForgeMenuType.create(MaceratorMenu::new));
+    public static final RegistryObject<MenuType<PoweredMaceratorMenu>> POWERED_MACERATOR_MENU =
+            MENUS.register("powered_macerator_menu", () -> IForgeMenuType.create(PoweredMaceratorMenu::new));
 
+    public static final RegistryObject<MenuType<LightningBatteryMenu>> LIGHTING_BATTERY_MENU =
+            MENUS.register("lightning_battery_menu", () -> IForgeMenuType.create(LightningBatteryMenu::new));
     public static final RegistryObject<MenuType<MechanicalPressMenu>> MECHANICAL_PRESS_MENU =
             MENUS.register("mechanical_press_menu", () -> IForgeMenuType.create(MechanicalPressMenu::new));
+    public static final RegistryObject<MenuType<PoweredMechanicalPressMenu>> POWERED_MECHANICAL_PRESS_MENU =
+            MENUS.register("powered_mechanical_press_menu", () -> IForgeMenuType.create(PoweredMechanicalPressMenu::new));
     public static final RegistryObject<MenuType<GunBenchMenu>> GUN_BENCH
             = registerMenuType("gun_bench", GunBenchMenu::new);
 

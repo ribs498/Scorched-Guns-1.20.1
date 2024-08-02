@@ -8,12 +8,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import org.lwjgl.glfw.GLFW;
-import top.ribs.scguns.Reference;
 import top.ribs.scguns.client.KeyBinds;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.event.GunReloadEvent;
@@ -21,7 +17,6 @@ import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.C2SMessageLeftOverAmmo;
-import top.ribs.scguns.network.message.C2SMessageMeleeAttack;
 import top.ribs.scguns.network.message.C2SMessageReload;
 import top.ribs.scguns.network.message.C2SMessageUnload;
 import top.ribs.scguns.util.GunModifierHelper;
@@ -29,7 +24,7 @@ import top.ribs.scguns.util.GunModifierHelper;
 /**
  * Author: MrCrayfish
  */
-@Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
+
 public class ReloadHandler {
     private static ReloadHandler instance;
 
@@ -46,7 +41,6 @@ public class ReloadHandler {
     private int reloadingSlot;
 
     private ReloadHandler() {
-        resetReloadState();
     }
 
     @SubscribeEvent
@@ -76,47 +70,25 @@ public class ReloadHandler {
         }
     }
 
-    @SubscribeEvent
-    public void onKeyPressed(InputEvent.Key event) {
-        Player player = Minecraft.getInstance().player;
-        if (player == null)
-            return;
+        @SubscribeEvent
+        public void onKeyPressed(InputEvent.Key event) {
+            Player player = Minecraft.getInstance().player;
+            if (player == null)
+                return;
 
-        if (KeyBinds.KEY_RELOAD.isDown() && event.getAction() == GLFW.GLFW_PRESS) {
-            this.setReloading(!ModSyncedDataKeys.RELOADING.getValue(player));
-            if (player.getMainHandItem().getItem() instanceof GunItem)
-                HUDRenderHandler.updateReserveAmmo(player);
-        }
-        if (KeyBinds.KEY_UNLOAD.consumeClick() && event.getAction() == GLFW.GLFW_PRESS) {
-            this.setReloading(false);
-            PacketHandler.getPlayChannel().sendToServer(new C2SMessageUnload());
-            if (player.getMainHandItem().getItem() instanceof GunItem)
-                HUDRenderHandler.stageReserveAmmoUpdate();
-        }
-        if (KeyBinds.KEY_MELEE.consumeClick() && event.getAction() == GLFW.GLFW_PRESS) {
-            PacketHandler.getPlayChannel().sendToServer(new C2SMessageMeleeAttack());
-        }
-    }
+            if (KeyBinds.KEY_RELOAD.isDown() && event.getAction() == GLFW.GLFW_PRESS) {
+                this.setReloading(!ModSyncedDataKeys.RELOADING.getValue(player));
+                if (player.getMainHandItem().getItem() instanceof GunItem)
+                    HUDRenderHandler.updateReserveAmmo(player);
+            }
+            if (KeyBinds.KEY_UNLOAD.consumeClick() && event.getAction() == GLFW.GLFW_PRESS) {
+                this.setReloading(false);
+                PacketHandler.getPlayChannel().sendToServer(new C2SMessageUnload());
+                if (player.getMainHandItem().getItem() instanceof GunItem)
+                    HUDRenderHandler.stageReserveAmmoUpdate();
+            }
 
-    @SubscribeEvent
-    public static void onPlayerDeath(LivingDeathEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            ReloadHandler handler = ReloadHandler.get();
-            handler.setReloading(false);
-            handler.resetReloadState();
-            //System.out.println("Player " + player.getName().getString() + " died, resetting reload state.");
         }
-    }
-
-    @SubscribeEvent
-    public static void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
-        Player player = event.getEntity();
-        ReloadHandler handler = ReloadHandler.get();
-        handler.resetReloadState();
-        //System.out.println("Player " + player.getName().getString() + " respawned, reset reload state.");
-    }
-
     public void setReloading(boolean reloading) {
         Player player = Minecraft.getInstance().player;
         if (player != null) {
@@ -135,15 +107,13 @@ public class ReloadHandler {
                         this.reloadingSlot = player.getInventory().selected;
                         MinecraftForge.EVENT_BUS.post(new GunReloadEvent.Post(player, stack));
                         HUDRenderHandler.updateReserveAmmo(player);
-                        //System.out.println("Reloading started for player: " + player.getName().getString());
                     }
                 }
             } else {
                 ModSyncedDataKeys.RELOADING.setValue(player, false);
                 PacketHandler.getPlayChannel().sendToServer(new C2SMessageReload(false));
                 this.reloadingSlot = -1;
-                resetReloadState();
-                //System.out.println("Reloading stopped for player: " + player.getName().getString());
+
             }
         }
     }
@@ -164,15 +134,6 @@ public class ReloadHandler {
                 this.reloadTimer--;
             }
         }
-        //System.out.println("Reload timer updated for player: " + player.getName().getString() + ", Timer: " + this.reloadTimer);
-    }
-
-    public void resetReloadState() {
-        this.startReloadTick = -1;
-        this.reloadTimer = 0;
-        this.prevReloadTimer = 0;
-        this.reloadingSlot = -1;
-        //System.out.println("Reload state reset.");
     }
 
     public int getStartReloadTick() {

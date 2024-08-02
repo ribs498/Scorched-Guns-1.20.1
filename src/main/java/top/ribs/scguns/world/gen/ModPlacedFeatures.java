@@ -39,7 +39,7 @@ public class ModPlacedFeatures {
 
         // Vehement Coal Ore Placement
         register(context, VEHEMENT_COAL_ORE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.VEHEMENT_COAL_ORE_KEY),
-                ModOrePlacement.commonOrePlacement(5,
+                ModOrePlacement.commonOrePlacement(10,
                         HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(10), VerticalAnchor.belowTop(10))));
 
         // Geothermal Vent Placement

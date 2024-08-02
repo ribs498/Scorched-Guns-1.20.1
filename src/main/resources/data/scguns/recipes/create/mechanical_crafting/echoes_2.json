@@ -1,0 +1,41 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "minecraft:sculk_sensor"
+    },
+    "J": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "N": {
+      "item": "scguns:gun_barrel"
+    },
+    "M": {
+      "item": "minecraft:echo_shard"
+    },
+    "X": {
+      "item": "scguns:deep_dark_blueprint"
+    },
+    "K": {
+      "item": "scguns:diamond_steel_gun_frame"
+    },
+    "A": {
+      "item": "scguns:gun_magazine"
+    }
+  },
+  "pattern": [
+    "MKJN",
+    "LRJN",
+    "Q AX"
+  ],
+  "result": {
+    "item": "scguns:echoes_2"
+  }
+}

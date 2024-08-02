@@ -1,0 +1,18 @@
+{
+	"parent": "minecraft:item/generated",
+	"loader": "forge:separate_transforms",
+	"base": {
+		"parent": "scguns:item/ridgetop_3d"
+	},
+	"perspectives": {
+		"gui": {
+			"parent": "scguns:item/ridgetop_2d"
+		},
+		"ground": {
+			"parent": "scguns:item/ridgetop_2d"
+		},
+		"fixed": {
+			"parent": "scguns:item/ridgetop_2d"
+		}
+	}
+}

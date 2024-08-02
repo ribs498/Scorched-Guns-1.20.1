@@ -4,20 +4,14 @@ import com.mrcrayfish.framework.api.network.LevelLocation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.init.ModSyncedDataKeys;
@@ -27,6 +21,7 @@ import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageGunSound;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
+import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.List;
 import java.util.Map;
@@ -107,16 +102,41 @@ public class ReloadTracker {
     }
 
     private void shrinkFromAmmoPool(ItemStack[] ammoStack, Player player, int shrinkAmount) {
-        int shrinkAmt = shrinkAmount;
+        final int[] shrinkAmt = {shrinkAmount};
+
+        // Shrink from Curios slots
+        CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
+            IItemHandlerModifiable curios = handler.getEquippedCurios();
+            for (int i = 0; i < curios.getSlots(); i++) {
+                ItemStack stack = curios.getStackInSlot(i);
+                if (stack.getItem() instanceof AmmoBoxItem) {
+                    List<ItemStack> contents = AmmoBoxItem.getContents(stack).collect(Collectors.toList());
+                    for (ItemStack pouchAmmoStack : contents) {
+                        if (!pouchAmmoStack.isEmpty() && pouchAmmoStack.getItem() == gun.getProjectile().getItem()) {
+                            int max = Math.min(shrinkAmt[0], pouchAmmoStack.getCount());
+                            pouchAmmoStack.shrink(max);
+                            shrinkAmt[0] -= max;
+                            if (shrinkAmt[0] == 0) {
+                                updateAmmoPouchContents(stack, contents);
+                                return;
+                            }
+                        }
+                    }
+                    updateAmmoPouchContents(stack, contents);
+                }
+            }
+        });
+
+        // Shrink from inventory
         for (ItemStack itemStack : player.getInventory().items) {
             if (itemStack.getItem() instanceof AmmoBoxItem) {
                 List<ItemStack> contents = AmmoBoxItem.getContents(itemStack).collect(Collectors.toList());
                 for (ItemStack pouchAmmoStack : contents) {
                     if (!pouchAmmoStack.isEmpty() && pouchAmmoStack.getItem() == gun.getProjectile().getItem()) {
-                        int max = Math.min(shrinkAmt, pouchAmmoStack.getCount());
+                        int max = Math.min(shrinkAmt[0], pouchAmmoStack.getCount());
                         pouchAmmoStack.shrink(max);
-                        shrinkAmt -= max;
-                        if (shrinkAmt == 0) {
+                        shrinkAmt[0] -= max;
+                        if (shrinkAmt[0] == 0) {
                             updateAmmoPouchContents(itemStack, contents);
                             return;
                         }
@@ -125,12 +145,14 @@ public class ReloadTracker {
                 updateAmmoPouchContents(itemStack, contents);
             }
         }
+
+        // Shrink from direct ammo stacks
         for (ItemStack x : ammoStack) {
             if (!x.isEmpty()) {
-                int max = Math.min(shrinkAmt, x.getCount());
+                int max = Math.min(shrinkAmt[0], x.getCount());
                 x.shrink(max);
-                shrinkAmt -= max;
-                if (shrinkAmt == 0) {
+                shrinkAmt[0] -= max;
+                if (shrinkAmt[0] == 0) {
                     return;
                 }
             }
@@ -270,22 +292,4 @@ public class ReloadTracker {
         }
     }
 
-    @SubscribeEvent
-    public static void onPlayerTick(PlayerEvent.PlayerLoggedOutEvent event) {
-        MinecraftServer server = event.getEntity().getServer();
-        if (server != null) {
-            server.execute(() -> RELOAD_TRACKER_MAP.remove(event.getEntity()));
-            //System.out.println("Player " + event.getEntity().getName().getString() + " logged out, removing reload tracker.");
-        }
-    }
-
-    @SubscribeEvent
-    public static void onPlayerDeath(LivingDeathEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            RELOAD_TRACKER_MAP.remove(player);
-            ModSyncedDataKeys.RELOADING.setValue(player, false);
-            //System.out.println("Player " + player.getName().getString() + " died, resetting reload state.");
-        }
-    }
 }

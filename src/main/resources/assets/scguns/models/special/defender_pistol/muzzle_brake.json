@@ -2,7 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"4": "scguns:item/greaser_smg_barrels"
+		"4": "scguns:item/greaser_smg_barrels",
+		"particle": "scguns:item/defender_pistol"
 	},
 	"elements": [
 		{

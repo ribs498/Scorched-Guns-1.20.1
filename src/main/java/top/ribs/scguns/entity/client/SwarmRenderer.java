@@ -21,7 +21,7 @@ public class SwarmRenderer extends MobRenderer<SwarmEntity, SwarmModel<SwarmEnti
     @Override
     public void render(SwarmEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack,
                        MultiBufferSource pBuffer, int pPackedLight) {
-            pMatrixStack.scale(0.95f, 0.95f, 0.95f);
+            pMatrixStack.scale(1.5f, 1.0f, 1.5f);
 
 
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);

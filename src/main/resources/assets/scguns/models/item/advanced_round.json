@@ -21,6 +21,7 @@
 		"thirdperson_lefthand": {
 			"parent": "scguns:item/advanced_round_2d"
 		},
+
 		"gui": {
 			"parent": "scguns:item/advanced_round_2d"
 		},

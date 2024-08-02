@@ -9,10 +9,13 @@
     },
     "M": {
       "item": "minecraft:iron_ingot"
+    },
+    "X": {
+      "item": "minecraft:iron_block"
     }
   },
   "pattern": [
-    "QMQ",
+    "QXQ",
     "MIM",
     "QQQ"
   ],

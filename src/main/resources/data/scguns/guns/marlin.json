@@ -39,13 +39,13 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 4.65,
+      "yOffset": 4.7,
       "zOffset": 1.2
     }
   },
   "projectile": {
     "advantage": "scguns:fire",
-    "damage": 10.0,
+    "damage": 13.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:advanced_round",

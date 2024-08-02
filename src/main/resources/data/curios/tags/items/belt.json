@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:pistol_ammo_box",
+    "scguns:rifle_ammo_box",
+    "scguns:shotgun_ammo_box",
+    "scguns:rocket_ammo_box",
+    "scguns:energy_ammo_box",
+    "scguns:special_ammo_box",
+    "scguns:magnum_ammo_box",
+    "scguns:empty_casing_pouch"
+  ]
+}

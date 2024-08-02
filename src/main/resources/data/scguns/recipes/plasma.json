@@ -1,0 +1,14 @@
+{
+  "type": "scguns:lightning_battery",
+  "processingTime": 50,
+  "requiredEnergy": 6400,
+  "ingredients": [
+    {
+      "item": "minecraft:redstone"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "scguns:plasma"
+  }
+}

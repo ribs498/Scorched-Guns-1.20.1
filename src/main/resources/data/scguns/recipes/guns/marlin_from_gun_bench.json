@@ -15,7 +15,7 @@
       "item": "minecraft:heart_of_the_sea"
     },
     "gun_top_internal_1": {
-      "item": "minecraft:gold_ingot"
+      "item": "scguns:treated_brass_ingot"
     },
     "gun_top_internal_2": {
       "item": "scguns:iron_gun_frame"

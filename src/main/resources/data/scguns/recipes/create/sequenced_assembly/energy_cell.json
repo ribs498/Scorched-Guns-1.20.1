@@ -1,7 +1,7 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "scguns:small_diamond_steel_casing"
+    "item": "scguns:plasma"
   },
   "loops": 1,
   "results": [
@@ -14,17 +14,17 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:small_diamond_steel_casing"
+          "item": "scguns:unfinished_energy_cell"
         },
         [
           {
-            "item": "minecraft:redstone"
+            "item": "scguns:empty_cell"
           }
         ]
       ],
       "results": [
         {
-          "item": "scguns:small_diamond_steel_casing"
+          "item": "scguns:unfinished_energy_cell"
         }
       ]
     },
@@ -32,17 +32,17 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:small_diamond_steel_casing"
+          "item": "scguns:unfinished_energy_cell"
         },
         [
           {
-            "item": "minecraft:iron_nugget"
+            "tag": "scguns:stan_bullet_tips"
           }
         ]
       ],
       "results": [
         {
-          "item": "scguns:small_diamond_steel_casing"
+          "item": "scguns:unfinished_energy_cell"
         }
       ]
     },
@@ -50,17 +50,17 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "scguns:small_diamond_steel_casing"
+          "item": "scguns:unfinished_energy_cell"
         }
       ],
       "results": [
         {
-          "item": "scguns:small_diamond_steel_casing"
+          "item": "scguns:unfinished_energy_cell"
         }
       ]
     }
   ],
   "transitionalItem": {
-    "item": "scguns:small_diamond_steel_casing"
+    "item": "scguns:unfinished_energy_cell"
   }
 }

@@ -26,13 +26,41 @@ public class ModBlocks {
 
     public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Reference.MOD_ID);
 
+    public static final RegistryObject<Block> POLAR_GENERATOR = register("polar_generator",
+            () -> new PolarGeneratorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .requiresCorrectToolForDrops()
+                    .strength(3.0F)
+                    .noOcclusion()));
+
+    public static final RegistryObject<Block> LIGHTNING_ROD_CONNECTOR = register("lightning_rod_connector",
+            () -> new LightningRodConnectorBlock(BlockBehaviour.Properties.copy(Blocks.LIGHTNING_ROD)
+                    .requiresCorrectToolForDrops()
+                    .strength(2.0F)
+                    .noOcclusion()));
+    public static final RegistryObject<Block> LIGHTNING_BATTERY = register("lightning_battery",
+            () -> new LightningBattery(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(3.0F)
+                    .noOcclusion()
+                    .lightLevel((state) -> state.getValue(LightningBattery.CHARGED) ? 15 : 0)));
+
 public static final RegistryObject<Block> MACERATOR = register("macerator",
         () -> new MaceratorBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
                 .requiresCorrectToolForDrops()
                 .strength(3.0F)
                 .noOcclusion()));
+    public static final RegistryObject<Block> POWERED_MACERATOR = register("powered_macerator",
+            () -> new PoweredMaceratorBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(3.0F)
+                    .noOcclusion()));
     public static final RegistryObject<Block> MECHANICAL_PRESS = register("mechanical_press",
             () -> new MechanicalPressBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(3.0F)
+                    .noOcclusion()));
+    public static final RegistryObject<Block> POWERED_MECHANICAL_PRESS = register("powered_mechanical_press",
+            () -> new PoweredMechanicalPressBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
                     .requiresCorrectToolForDrops()
                     .strength(3.0F)
                     .noOcclusion()));

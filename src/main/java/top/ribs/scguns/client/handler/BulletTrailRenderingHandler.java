@@ -21,6 +21,7 @@ import org.joml.Matrix4f;
 import top.ribs.scguns.client.BulletTrail;
 import top.ribs.scguns.client.GunRenderType;
 import top.ribs.scguns.client.util.RenderUtil;
+import top.ribs.scguns.entity.projectile.ShulkshotProjectileEntity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -50,16 +51,15 @@ public class BulletTrailRenderingHandler
      *
      * @param trail the bullet trail get
      */
-    public void add(BulletTrail trail)
-    {
-        // Prevents trails being added when not in a world
+    public void add(BulletTrail trail) {
         Level world = Minecraft.getInstance().level;
-        if(world != null)
-        {
-            this.bullets.put(trail.getEntityId(), trail);
+        if (world != null) {
+            // Check if the entity is not a ShulkshotProjectileEntity before adding the trail
+            if (!(world.getEntity(trail.getEntityId()) instanceof ShulkshotProjectileEntity)) {
+                this.bullets.put(trail.getEntityId(), trail);
+            }
         }
     }
-
     /**
      * Removes the bullet for the given entity id.
      *

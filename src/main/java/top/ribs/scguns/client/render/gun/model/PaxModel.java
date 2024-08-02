@@ -47,13 +47,13 @@ public class PaxModel implements IOverrideModel {
 
         if (entity.equals(Minecraft.getInstance().player)) {
             matrixStack.pushPose();
-            matrixStack.translate(0, -0.335, 0.244);
+            matrixStack.translate(0, -0.30, 0.33);
             ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
             float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
             cooldown = (float) ease(cooldown);
             float rotationAngle = -cooldown * 38;
             matrixStack.mulPose(Axis.XP.rotationDegrees(rotationAngle));
-            matrixStack.translate(0, 0.335, -0.244);
+            matrixStack.translate(0, 0.30, -0.33);
             RenderUtil.renderModel(SpecialModels.PAX_HAMMER.getModel(), stack, matrixStack, buffer, light, overlay);
             matrixStack.popPose();
 
@@ -69,9 +69,9 @@ public class PaxModel implements IOverrideModel {
         targetRotation = shotCount * ROTATION_INCREMENT;
         currentRotation = currentRotation + (targetRotation - currentRotation) * partialTicks;
         matrixStack.pushPose();
-        matrixStack.translate(0, -0.3, 0);
+        matrixStack.translate(0, -0.26, 0);
         matrixStack.mulPose(Axis.ZP.rotationDegrees(currentRotation));
-        matrixStack.translate(-0, 0.3, -0);
+        matrixStack.translate(-0, 0.26, -0);
         RenderUtil.renderModel(SpecialModels.PAX_DRUM.getModel(), stack, matrixStack, buffer, light, overlay);
         matrixStack.popPose();
     }

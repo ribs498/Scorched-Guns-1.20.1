@@ -1,0 +1,49 @@
+{
+  "display": {
+    "flash": {
+      "size": 1.7,
+      "yOffset": 7.5,
+      "zOffset": -13.5
+    },
+    "muzzleFlashType": "flash_type_1"
+  },
+  "general": {
+    "fireMode": "scguns:automatic",
+    "gripType": "scguns:mini_gun",
+    "rate": 5,
+    "recoilAngle": 6.0,
+    "recoilKick": 2.0,
+    "spread": 5.0,
+    "meleeDamage": 3.5,
+    "meleeCooldownTicks": 20
+  },
+  "modules": {
+    "attachments": {
+    }
+  },
+  "projectile": {
+    "advantage": "scguns:heavy",
+    "damage": 21.0,
+    "gravity": false,
+    "item": "scguns:krahg_round",
+    "ejectsCasing": true,
+    "casingType": "scguns:large_brass_casing",
+    "life": 20,
+    "size": 0.1,
+    "speed": 5.0,
+    "trailLengthMultiplier": 2.0
+  },
+  "reloads": {
+    "emptyMagTimer": 10,
+    "maxAmmo": 32,
+    "reloadItem": "scguns:krahg_round",
+    "reloadTimer": 60,
+    "reloadType": "scguns:mag_fed"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.heavy_rifle.fire",
+    "fire": "scguns:item.heavy_rifle.fire",
+    "reload": "scguns:item.pistol.reload"
+  }
+}

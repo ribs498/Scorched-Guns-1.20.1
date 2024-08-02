@@ -1,0 +1,56 @@
+{
+  "variants": {
+    "facing=down,powered=false": {
+      "model": "scguns:block/lightning_rod_connector",
+      "x": 180
+    },
+    "facing=down,powered=true": {
+      "model": "scguns:block/lightning_rod_connector_on",
+      "x": 180
+    },
+    "facing=east,powered=false": {
+      "model": "scguns:block/lightning_rod_connector",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,powered=true": {
+      "model": "scguns:block/lightning_rod_connector_on",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north,powered=false": {
+      "model": "scguns:block/lightning_rod_connector",
+      "x": 90
+    },
+    "facing=north,powered=true": {
+      "model": "scguns:block/lightning_rod_connector_on",
+      "x": 90
+    },
+    "facing=south,powered=false": {
+      "model": "scguns:block/lightning_rod_connector",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,powered=true": {
+      "model": "scguns:block/lightning_rod_connector_on",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up,powered=false": {
+      "model": "scguns:block/lightning_rod_connector"
+    },
+    "facing=up,powered=true": {
+      "model": "scguns:block/lightning_rod_connector_on"
+    },
+    "facing=west,powered=false": {
+      "model": "scguns:block/lightning_rod_connector",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,powered=true": {
+      "model": "scguns:block/lightning_rod_connector_on",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

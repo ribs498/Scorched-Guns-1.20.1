@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+   "S": {
+      "item": "minecraft:leather"
+    },
+    "X": {
+      "item": "minecraft:iron_ingot"
+    }
+  },
+  "pattern": [
+    "SXS",
+    "SSS"
+  ],
+  "result": {
+    "item": "scguns:ridgetop"
+  }
+}

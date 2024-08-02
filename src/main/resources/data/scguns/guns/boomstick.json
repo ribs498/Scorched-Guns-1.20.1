@@ -3,7 +3,7 @@
     "flash": {
       "size": 1.5,
       "yOffset": 3.8,
-      "zOffset": -3.5
+      "zOffset": -4.0
     },
     "muzzleFlashType": "flash_type_1"
   },
@@ -11,12 +11,12 @@
     "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
-    "projectileAmount": 22,
-    "rate": 15,
+    "projectileAmount": 18,
+    "rate": 12,
     "recoilAngle": 10.0,
     "recoilKick": 2.5,
-    "spread": 25.0,
-    "meleeDamage": 3.0,
+    "spread": 19.0,
+    "meleeDamage": 2.5,
     "meleeCooldownTicks": 20
   },
   "modules": {
@@ -54,7 +54,7 @@
     "emptyMagTimer": 0,
     "maxAmmo": 2,
     "reloadItem": "scguns:shotgun_shell",
-    "reloadTimer": 30,
+    "reloadTimer": 20,
     "reloadType": "scguns:manual"
   },
   "sounds": {

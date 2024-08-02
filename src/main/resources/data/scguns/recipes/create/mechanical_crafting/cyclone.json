@@ -1,0 +1,32 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "L": {
+      "item": "scguns:rapid_firing_unit"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "X": {
+      "item": "scguns:diamond_steel_blueprint"
+    },
+    "K": {
+      "item": "scguns:diamond_steel_gun_frame"
+    }
+  },
+  "pattern": [
+    "QKX ",
+    "LRSS",
+    "K K "
+  ],
+  "result": {
+    "item": "scguns:cyclone"
+  }
+}

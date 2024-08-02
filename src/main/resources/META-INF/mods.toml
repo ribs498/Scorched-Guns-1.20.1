@@ -40,3 +40,9 @@ description="SCORCHED GUNSSSSS"
     versionRange="[2.1.9,)"
     ordering="AFTER"
     side="CLIENT"
+[[dependencies.scguns]]
+modId="curios"
+mandatory=true
+versionRange="[5.9.1,)"
+ordering="AFTER"
+side="CLIENT"

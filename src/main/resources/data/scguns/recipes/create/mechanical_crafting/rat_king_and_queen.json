@@ -1,0 +1,38 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "C": {
+      "item": "scguns:gun_magazine"
+    },
+    "L": {
+      "item": "scguns:rapid_firing_unit"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:gun_barrel"
+    },
+    "M": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "X": {
+      "item": "scguns:scorched_blueprint"
+    },
+    "H": {
+      "item": "scguns:scorched_gun_frame"
+    }
+  },
+  "pattern": [
+    "XHM  ",
+    "LRS  ",
+    "Q C  "
+  ],
+  "result": {
+    "item": "scguns:rat_king_and_queen"
+  }
+}

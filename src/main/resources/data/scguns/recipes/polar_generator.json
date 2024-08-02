@@ -1,0 +1,28 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "minecraft:smooth_stone"
+    },
+    "I": {
+      "item": "minecraft:blast_furnace"
+    },
+    "X": {
+      "item": "minecraft:copper_block"
+    },
+    "M": {
+      "item": "minecraft:iron_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+  "pattern": [
+    "MRM",
+    "MXM",
+    "QIQ"
+  ],
+  "result": {
+    "item": "scguns:polar_generator"
+  }
+}

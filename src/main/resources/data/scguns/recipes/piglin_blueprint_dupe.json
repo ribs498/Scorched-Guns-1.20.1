@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "item": "minecraft:gold_ingot"
+    },
+    "Q": {
+      "item": "scguns:piglin_blueprint"
+    },
+    "Z": {
+      "item": "minecraft:paper"
+    }
+  },
+  "pattern": [
+    "HZH",
+    "ZQZ",
+    "HZH"
+  ],
+  "result": {
+    "item": "scguns:piglin_blueprint",
+    "count": 1
+  }
+}

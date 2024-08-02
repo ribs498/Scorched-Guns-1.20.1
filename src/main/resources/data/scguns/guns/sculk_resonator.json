@@ -42,7 +42,7 @@
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:sculk_cell",
-    "casingType": "scguns:small_iron_casing",
+    "casingType": "scguns:empty_cell",
     "life": 35,
     "size": 2.0,
     "speed": 11.0,

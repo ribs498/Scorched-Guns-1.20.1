@@ -14,7 +14,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:medium_copper_casing"
+          "item": "scguns:unfinished_standard_copper_round"
         },
         [
           {
@@ -24,7 +24,7 @@
       ],
       "results": [
         {
-          "item": "scguns:medium_copper_casing"
+          "item": "scguns:unfinished_standard_copper_round"
         }
       ]
     },
@@ -32,17 +32,17 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:medium_copper_casing"
+          "item": "scguns:unfinished_standard_copper_round"
         },
         [
           {
-            "item": "minecraft:iron_nugget"
+            "tag": "scguns:stan_bullet_tips"
           }
         ]
       ],
       "results": [
         {
-          "item": "scguns:medium_copper_casing"
+          "item": "scguns:unfinished_standard_copper_round"
         }
       ]
     },
@@ -50,17 +50,17 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "scguns:medium_copper_casing"
+          "item": "scguns:unfinished_standard_copper_round"
         }
       ],
       "results": [
         {
-          "item": "scguns:medium_copper_casing"
+          "item": "scguns:unfinished_standard_copper_round"
         }
       ]
     }
   ],
   "transitionalItem": {
-    "item": "scguns:medium_copper_casing"
+    "item": "scguns:unfinished_standard_copper_round"
   }
 }

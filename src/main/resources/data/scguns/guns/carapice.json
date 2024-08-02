@@ -1,0 +1,64 @@
+{
+  "display": {
+    "flash": {
+      "size": 1.2,
+      "yOffset": 5.1,
+      "zOffset": -4.0
+    },
+    "muzzleFlashType": "flash_type_1"
+  },
+  "general": {
+    "alwaysSpread": false,
+    "fireMode": "scguns:automatic",
+    "gripType": "scguns:one_handed",
+    "projectileAmount": 1,
+    "rate": 7,
+    "recoilAngle": 3.0,
+    "recoilKick": 2.0,
+    "spread": 1.0,
+    "meleeDamage": 3.5,
+    "meleeCooldownTicks": 20
+  },
+  "modules": {
+    "attachments": {
+      "scope": {
+        "size": 0.7,
+        "yOffset": 6.6,
+        "zOffset": 4.5
+      },
+      "stock": {
+        "scale": 0.0
+      }
+    },
+    "zoom": {
+      "fovModifier": 0.6,
+      "yOffset": 7.0,
+      "zOffset": 1.75
+    }
+  },
+  "projectile": {
+    "advantage": "scguns:none",
+    "damage": 12.0,
+    "ejectsCasing": true,
+    "gravity": false,
+    "item": "scguns:shulkshot",
+    "casingType": "scguns:shulker_casing",
+    "life": 120,
+    "size": 0.00001,
+    "speed":  0.5,
+    "trailLengthMultiplier": 100.0
+  },
+  "reloads": {
+    "emptyMagTimer": 10,
+    "maxAmmo": 20,
+    "reloadItem": "scguns:shulkshot",
+    "reloadTimer": 30,
+    "reloadType": "scguns:mag_fed"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.shulker.fire",
+    "fire": "scguns:item.shulker.fire",
+    "reload": "scguns:item.pistol.reload"
+  }
+}

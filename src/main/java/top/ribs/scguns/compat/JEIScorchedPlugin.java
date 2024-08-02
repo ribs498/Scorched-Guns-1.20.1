@@ -35,7 +35,11 @@ public class JEIScorchedPlugin implements IModPlugin {
         IGuiHelper guiHelper = registration.getJeiHelpers().getGuiHelper();
         registration.addRecipeCategories(new GunBenchCategory(guiHelper));
         registration.addRecipeCategories(new MaceratorCategory(guiHelper));
+        registration.addRecipeCategories(new PoweredMaceratorCategory(guiHelper));
         registration.addRecipeCategories(new MechanicalPressCategory(guiHelper));
+        registration.addRecipeCategories(new PoweredMechanicalPressCategory(guiHelper));
+        registration.addRecipeCategories(new LightningBatteryCategory(guiHelper));
+
     }
     public static MutableComponent getTranslation(String key, Object... args) {
         return Component.translatable("scguns." + key, args);
@@ -56,14 +60,29 @@ public class JEIScorchedPlugin implements IModPlugin {
         registration.addIngredientInfo(new ItemStack(ModBlocks.VENT_COLLECTOR.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.vent_collector"));
         registration.addIngredientInfo(new ItemStack(ModBlocks.NITER_GLASS.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.niter_glass"));
         registration.addIngredientInfo(new ItemStack(ModItems.BLASPHEMY.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.blasphemy"));
-
-
+        registration.addIngredientInfo(new ItemStack(ModBlocks.LIGHTNING_BATTERY.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.lightning_battery"));
+        registration.addIngredientInfo(new ItemStack(ModBlocks.LIGHTNING_ROD_CONNECTOR.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.lightning_rod_connector"));
+        registration.addIngredientInfo(new ItemStack(ModItems.PISTOL_AMMO_BOX.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.pistol_ammo_box"));
+        registration.addIngredientInfo(new ItemStack(ModItems.RIFLE_AMMO_BOX.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.rifle_ammo_box"));
+        registration.addIngredientInfo(new ItemStack(ModItems.SHOTGUN_AMMO_BOX.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.shotgun_ammo_box"));
+        registration.addIngredientInfo(new ItemStack(ModItems.MAGNUM_AMMO_BOX.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.magnum_ammo_box"));
+        registration.addIngredientInfo(new ItemStack(ModItems.ENERGY_AMMO_BOX.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.energy_ammo_box"));
+        registration.addIngredientInfo(new ItemStack(ModItems.ROCKET_AMMO_BOX.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.rocket_ammo_box"));
+        registration.addIngredientInfo(new ItemStack(ModItems.SPECIAL_AMMO_BOX.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.special_ammo_box"));
+        registration.addIngredientInfo(new ItemStack(ModItems.EMPTY_CASING_POUCH.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.empty_casing_pouch"));
         List<GunBenchRecipe> gunBenchRecipes = recipeManager.getAllRecipesFor(GunBenchRecipe.Type.INSTANCE);
         List<MaceratorRecipe> maceratorRecipes = recipeManager.getAllRecipesFor(MaceratorRecipe.Type.INSTANCE);
+        List<PoweredMaceratorRecipe> poweredMaceratorRecipes = recipeManager.getAllRecipesFor(PoweredMaceratorRecipe.Type.INSTANCE);
         List<MechanicalPressRecipe> mechanicalPressRecipes = recipeManager.getAllRecipesFor(MechanicalPressRecipe.Type.INSTANCE);
+
+        List<PoweredMechanicalPressRecipe> poweredMechanicalPressRecipes = recipeManager.getAllRecipesFor(PoweredMechanicalPressRecipe.Type.INSTANCE);
         registration.addRecipes(GunBenchCategory.GUN_BENCH_TYPE, gunBenchRecipes);
         registration.addRecipes(MaceratorCategory.MACERATING_TYPE, maceratorRecipes);
+        registration.addRecipes(PoweredMaceratorCategory.POWERED_MACERATING_TYPE, poweredMaceratorRecipes);
         registration.addRecipes(MechanicalPressCategory.MECHANICAL_PRESS_TYPE, mechanicalPressRecipes);
+        registration.addRecipes(PoweredMechanicalPressCategory.POWERED_MECHANICAL_PRESS_TYPE, poweredMechanicalPressRecipes);
+        registration.addRecipes(LightningBatteryCategory.LIGHTNING_BATTERY_TYPE, recipeManager.getAllRecipesFor(LightningBatteryRecipe.Type.INSTANCE));
+
 
     }
 
@@ -71,14 +90,20 @@ public class JEIScorchedPlugin implements IModPlugin {
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(GunBenchScreen.class, 100, 47, 30, 20, GunBenchCategory.GUN_BENCH_TYPE);
         registration.addRecipeClickArea(MaceratorScreen.class, 90, 25, 30, 20, MaceratorCategory.MACERATING_TYPE);
+        registration.addRecipeClickArea(PoweredMaceratorScreen.class, 80, 25, 25, 20, PoweredMaceratorCategory.POWERED_MACERATING_TYPE);
         registration.addRecipeClickArea(MechanicalPressScreen.class, 80, 25, 25, 20, MechanicalPressCategory.MECHANICAL_PRESS_TYPE);
+        registration.addRecipeClickArea(PoweredMechanicalPressScreen.class, 80, 25, 25, 20, PoweredMechanicalPressCategory.POWERED_MECHANICAL_PRESS_TYPE);
+        registration.addRecipeClickArea(LightningBatteryScreen.class, 80, 32, 25, 20, LightningBatteryCategory.LIGHTNING_BATTERY_TYPE);
     }
 
     @Override
     public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.GUN_BENCH.get()), GunBenchCategory.GUN_BENCH_TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.MACERATOR.get()), MaceratorCategory.MACERATING_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.POWERED_MACERATOR.get()), PoweredMaceratorCategory.POWERED_MACERATING_TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.MECHANICAL_PRESS.get()), MechanicalPressCategory.MECHANICAL_PRESS_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.POWERED_MECHANICAL_PRESS.get()), PoweredMechanicalPressCategory.POWERED_MECHANICAL_PRESS_TYPE);
+        registration.addRecipeCatalyst(new ItemStack(ModBlocks.LIGHTNING_BATTERY.get()), LightningBatteryCategory.LIGHTNING_BATTERY_TYPE);
     }
 }
 

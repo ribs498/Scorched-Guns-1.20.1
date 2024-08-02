@@ -26,15 +26,19 @@ public class PrushGunModel implements IOverrideModel {
 
         //Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.PRUSH_GUN_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
-        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
 
-            if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
-                RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.get())
-                RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
-                RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
-        }
+            if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)))
+            {
+                if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
+                    RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
+                else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.get())
+                    RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
+                else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
+                    RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
+            else
+                RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STAN_GRIP.getModel(), stack, matrixStack, buffer, light, overlay);
+
 
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())

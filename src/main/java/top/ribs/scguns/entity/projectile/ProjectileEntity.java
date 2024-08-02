@@ -37,6 +37,8 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.valkyrienskies.mod.common.world.RaycastUtilsKt;
+import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.common.Gun.Projectile;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.BoundingBoxManager;
@@ -74,7 +76,7 @@ import java.util.function.Predicate;
 
 public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnData
 {
-    private static final Predicate<Entity> PROJECTILE_TARGETS = input -> input != null && input.isPickable() && !input.isSpectator();
+    static final Predicate<Entity> PROJECTILE_TARGETS = input -> input != null && input.isPickable() && !input.isSpectator();
     private static final Predicate<BlockState> IGNORE_LEAVES = input -> input != null && Config.COMMON.gameplay.ignoreLeaves.get() && input.getBlock() instanceof LeavesBlock;
 
     protected int shooterId;
@@ -585,10 +587,24 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         /* Send blood particle to tracking clients. */
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
     }
-    protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z)
-    {
+    protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
         PacketHandler.getPlayChannel().sendToTrackingChunk(() -> this.level().getChunkAt(pos), new S2CMessageProjectileHitBlock(x, y, z, pos, face));
+        Block block = state.getBlock();
+        if (block instanceof DoorBlock) {
+            boolean isOpen = state.getValue(DoorBlock.OPEN);
+            if (!isOpen) {
+                this.level().setBlock(pos, state.setValue(DoorBlock.OPEN, true), 10);
+                this.level().playSound(null, pos, SoundEvents.WOODEN_DOOR_OPEN, SoundSource.BLOCKS, 1.0F, 1.0F);
+            }
+        }
+        if (!state.canBeReplaced()) {
+            this.remove(RemovalReason.KILLED);
+        }
+        if (block instanceof IDamageable) {
+            ((IDamageable) block).onBlockDamaged(this.level(), state, pos, this, this.getDamage(), (int) Math.ceil(this.getDamage() / 2.0) + 1);
+        }
     }
+
 
     @Override
     protected void readAdditionalSaveData(CompoundTag compound)
@@ -736,6 +752,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     private static BlockHitResult rayTraceBlocks(Level world, ClipContext context, Predicate<BlockState> ignorePredicate)
     {
         return performRayTrace(context, (rayTraceContext, blockPos) -> {
+            if (ScorchedGuns.valkyrienSkiesLoaded) return RaycastUtilsKt.clipIncludeShips(world, context); ///Thanks Miga!
             BlockState blockState = world.getBlockState(blockPos);
             if(ignorePredicate.test(blockState)) return null;
             FluidState fluidState = world.getFluidState(blockPos);

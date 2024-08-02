@@ -1,0 +1,17 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 20,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "item": "minecraft:copper_ingot"
+    }
+  ],
+  "mold": {
+    "item": "scguns:medium_casing_mold"
+  },
+  "result": {
+    "item": "scguns:medium_copper_casing",
+    "count": 8
+  }
+}
