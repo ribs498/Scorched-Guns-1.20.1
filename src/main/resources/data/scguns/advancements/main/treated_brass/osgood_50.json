@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/treated_brass/m22_waltz",
+  "criteria": {
+    "osgood_50": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:osgood_50"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.osgood_50.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:osgood_50"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.osgood_50"
+    }
+  },
+  "requirements": [
+    [
+      "osgood_50"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

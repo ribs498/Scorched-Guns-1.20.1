@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/iron/auvtomag",
+  "criteria": {
+    "pulsar": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:pulsar"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.pulsar.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:pulsar"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.pulsar"
+    }
+  },
+  "requirements": [
+    [
+      "pulsar"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

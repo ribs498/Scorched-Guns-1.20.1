@@ -1,0 +1,15 @@
+{
+  "type": "createoreexcavation:drilling",
+  "drill": {
+    "tag": "createoreexcavation:drills"
+  },
+  "output": [
+    {
+      "item": "scguns:sulfur_chunk"
+    }
+  ],
+  "priority": 0,
+  "stress": 256,
+  "ticks": 200,
+  "vein_id": "createoreexcavation:ore_vein_type/sulfur"
+}

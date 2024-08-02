@@ -10,7 +10,7 @@ import top.ribs.scguns.init.ModItems;
 import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
-        ANTHRALITE("anthralite", 26, new int[]{ 4, 5, 5, 4 }, 10,
+        ANTHRALITE("anthralite", 32, new int[]{ 4, 5, 5, 4 }, 10,
                 SoundEvents.ARMOR_EQUIP_GOLD, 0.5f, 0f, () -> Ingredient.of(ModItems.ANTHRALITE_INGOT.get()));
         private final String name;
         private final int durabilityMultiplier;

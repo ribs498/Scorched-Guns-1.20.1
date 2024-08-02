@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "minecraft:smooth_stone"
+    },
+    "X": {
+      "item": "minecraft:smooth_stone_slab"
+    },
+    "I": {
+      "item": "minecraft:blast_furnace"
+    },
+    "M": {
+      "item": "scguns:lightning_battery"
+    }
+  },
+  "pattern": [
+    "X X",
+    "XIX",
+    "QMQ"
+  ],
+  "result": {
+    "item": "scguns:powered_macerator"
+  }
+}

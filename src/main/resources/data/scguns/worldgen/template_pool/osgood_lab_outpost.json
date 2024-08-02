@@ -9,7 +9,7 @@
                 "processors": "minecraft:empty",
                 "location": "scguns:osgood_lab_outpost"
             },
-            "weight": 1
+            "weight": 3
         }
     ]
 }

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/deep_dark_blueprint",
+  "criteria": {
+    "end_blueprint": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:end_blueprint"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.end_blueprint.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:end_blueprint"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.end_blueprint"
+    }
+  },
+  "requirements": [
+    [
+      "end_blueprint"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

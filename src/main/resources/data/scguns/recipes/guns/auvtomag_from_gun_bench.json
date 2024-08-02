@@ -15,10 +15,10 @@
       "item": "scguns:heavy_gun_parts"
     },
     "gun_top_internal_2": {
-      "item": "minecraft:iron_ingot"
+      "item": "scguns:treated_iron_ingot"
     },
     "gun_barrel_1": {
-      "item": "scguns:gun_barrel"
+      "item": "scguns:heavy_gun_barrel"
     },
     "gun_top_barrel_1": {
       "item": "minecraft:iron_ingot"

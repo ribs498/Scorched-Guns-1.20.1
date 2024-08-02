@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/copper/rusty_gnat",
+  "criteria": {
+    "makeshift_rifle": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:makeshift_rifle"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.makeshift_rifle.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:makeshift_rifle"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.makeshift_rifle"
+    }
+  },
+  "requirements": [
+    [
+      "makeshift_rifle"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

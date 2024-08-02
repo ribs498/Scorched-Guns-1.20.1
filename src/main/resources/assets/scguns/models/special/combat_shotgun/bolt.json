@@ -1,52 +1,77 @@
 {
 	"credit": "Made with Blockbench",
-	"texture_size": [32, 32],
+	"texture_size": [64, 64],
 	"textures": {
-		"6": "scguns:item/combat_shotgun",
-		"particle": "scguns:item/carabine_grips"
+		"3": "scguns:item/combat_shotgun"
 	},
 	"elements": [
 		{
-			"from": [8.65, 4.7, 10.32733],
-			"to": [9.65, 5.2, 10.82733],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.9, 2.54767, 5.30233]},
+			"from": [8.65, 4.7, 11.32733],
+			"to": [9.65, 5.2, 11.82733],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.9, 2.54767, 6.30233]},
 			"faces": {
-				"north": {"uv": [5, 12, 5.5, 12.25], "texture": "#6"},
-				"east": {"uv": [12.5, 7.5, 12.75, 7.75], "texture": "#6"},
-				"south": {"uv": [12, 5.5, 12.5, 5.75], "texture": "#6"},
-				"west": {"uv": [8, 12.5, 8.25, 12.75], "texture": "#6"},
-				"up": {"uv": [12.5, 6.25, 12, 6], "texture": "#6"},
-				"down": {"uv": [12.5, 6.5, 12, 6.75], "texture": "#6"}
+				"north": {"uv": [10.5, 6.75, 10.75, 6.875], "texture": "#3"},
+				"east": {"uv": [0.75, 11, 0.875, 11.125], "texture": "#3"},
+				"south": {"uv": [10.5, 7, 10.75, 7.125], "texture": "#3"},
+				"west": {"uv": [11, 0.75, 11.125, 0.875], "texture": "#3"},
+				"up": {"uv": [7.5, 10.625, 7.25, 10.5], "texture": "#3"},
+				"down": {"uv": [7.75, 10.5, 7.5, 10.625], "texture": "#3"}
 			}
 		},
 		{
-			"from": [9.65, 4.7, 10.32733],
-			"to": [9.9, 5.2, 11.07733],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.9, 2.54767, 5.30233]},
+			"from": [9.65, 4.7, 11.32733],
+			"to": [9.9, 5.2, 12.07733],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.9, 2.54767, 6.30233]},
 			"faces": {
-				"north": {"uv": [12.5, 8, 12.75, 8.25], "texture": "#6"},
-				"east": {"uv": [7, 12, 7.5, 12.25], "texture": "#6"},
-				"south": {"uv": [8.5, 12.5, 8.75, 12.75], "texture": "#6"},
-				"west": {"uv": [12, 7, 12.5, 7.25], "texture": "#6"},
-				"up": {"uv": [7.75, 12.5, 7.5, 12], "texture": "#6"},
-				"down": {"uv": [12.25, 7.5, 12, 8], "texture": "#6"}
+				"north": {"uv": [1, 11, 1.125, 11.125], "texture": "#3"},
+				"east": {"uv": [10.5, 7.5, 10.75, 7.625], "texture": "#3"},
+				"south": {"uv": [11, 1, 11.125, 1.125], "texture": "#3"},
+				"west": {"uv": [7.75, 10.5, 8, 10.625], "texture": "#3"},
+				"up": {"uv": [10.625, 8, 10.5, 7.75], "texture": "#3"},
+				"down": {"uv": [8.125, 10.5, 8, 10.75], "texture": "#3"}
+			}
+		},
+		{
+			"from": [7.5, 2.74767, 5.15233],
+			"to": [8.5, 3.74767, 8.15233],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.95, -1.52733, 8.05233]},
+			"faces": {
+				"north": {"uv": [2, 9.5, 2.25, 9.75], "texture": "#3"},
+				"east": {"uv": [4, 7.5, 4.75, 7.75], "texture": "#3"},
+				"south": {"uv": [2.25, 9.5, 2.5, 9.75], "texture": "#3"},
+				"west": {"uv": [7.5, 4.5, 8.25, 4.75], "texture": "#3"},
+				"up": {"uv": [5, 8.25, 4.75, 7.5], "texture": "#3"},
+				"down": {"uv": [7.75, 4.75, 7.5, 5.5], "texture": "#3"}
+			}
+		},
+		{
+			"from": [7.375, 3.74767, 5.10233],
+			"to": [8.625, 4.24767, 8.20233],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.825, -0.52733, 8.00233]},
+			"faces": {
+				"north": {"uv": [9.75, 7.5, 10.125, 7.625], "texture": "#3"},
+				"east": {"uv": [9, 8.25, 9.75, 8.375], "texture": "#3"},
+				"south": {"uv": [7.75, 9.75, 8.125, 9.875], "texture": "#3"},
+				"west": {"uv": [0.5, 9.25, 1.25, 9.375], "texture": "#3"},
+				"up": {"uv": [6.875, 3.25, 6.5, 2.5], "texture": "#3"},
+				"down": {"uv": [6.875, 3.25, 6.5, 4], "texture": "#3"}
 			}
 		}
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"translation": [0, 6.75, -7],
+			"translation": [0, 6, -7.75],
 			"scale": [1.3, 1.3, 1.3]
 		},
 		"thirdperson_lefthand": {
-			"translation": [0, 6.75, -7],
+			"translation": [0, 6, -7.75],
 			"scale": [1.3, 1.3, 1.3]
 		},
 		"firstperson_righthand": {
-			"translation": [-4.5, 9.5, -1]
+			"translation": [-4.5, 9.25, -0.75]
 		},
 		"firstperson_lefthand": {
-			"translation": [-4.5, 9.5, -1]
+			"translation": [-4.5, 9.25, -0.75]
 		},
 		"ground": {
 			"translation": [0, 9.5, -3.75],
@@ -54,21 +79,13 @@
 		},
 		"gui": {
 			"rotation": [74.02, -53.34, 70.48],
-			"translation": [-1, 6.25, 0],
-			"scale": [1.1, 1.1, 1.1]
+			"translation": [-0.5, 7, 0],
+			"scale": [1.2, 1.2, 1.2]
 		},
 		"fixed": {
 			"rotation": [90, 55, -90],
 			"translation": [1.5, 8.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	},
-	"groups": [
-		{
-			"name": "Bolt",
-			"origin": [8, 2.39767, 8.90233],
-			"color": 0,
-			"children": [0, 1]
-		}
-	]
+	}
 }

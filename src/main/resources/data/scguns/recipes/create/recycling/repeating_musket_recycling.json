@@ -1,0 +1,31 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:repeating_musket"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "minecraft:flint_and_steel"
+    },
+    {
+      "chance": 0.3,
+      "item": "minecraft:smooth_stone"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:stone_gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_parts"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:rapid_firing_unit"
+    }
+  ]
+}

@@ -31,6 +31,19 @@ public class RatKingAndQueenModel implements IOverrideModel {
         // Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
 
+        // Render barrel attachments
+        renderBarrelAttachments(matrixStack, buffer, stack, light, overlay);
+
+        // Render magazine attachments
+        renderMagazineAttachments(matrixStack, buffer, stack, light, overlay);
+
+        // Handle the rendering of receivers based on shot count and cooldown
+        if (entity.equals(Minecraft.getInstance().player)) {
+            renderReceivers(matrixStack, buffer, stack, light, overlay);
+        }
+    }
+
+    private void renderBarrelAttachments(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
                 RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
@@ -38,49 +51,55 @@ public class RatKingAndQueenModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
                 RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get())
+                RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+        } else {
+            RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
         }
+    }
 
+    private void renderMagazineAttachments(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.MAGAZINE)) {
             if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.EXTENDED_MAG.get())
                 RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
-            if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.SPEED_MAG.get())
+            else if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.SPEED_MAG.get())
                 RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_SPEED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
-            if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.PLUS_P_MAG.get())
+            else if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.PLUS_P_MAG.get())
                 RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
         } else {
             RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_STANDARD_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
         }
+    }
 
-        if (entity.equals(Minecraft.getInstance().player)) {
-            matrixStack.pushPose();
-            matrixStack.translate(0, -5.8 * 0.0625, 0);
+    private void renderReceivers(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
+        matrixStack.pushPose();
+        matrixStack.translate(0, -5.8 * 0.0625, 0);
 
-            ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
-            float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
-            cooldown = (float) ease(cooldown);
+        ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
+        float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
+        cooldown = (float) ease(cooldown);
 
-            int shotCount = GunFireEventRatHandler.getShotCount();
+        int shotCount = GunFireEventRatHandler.getShotCount();
 
-            // Render Receiver 1
-            matrixStack.pushPose();
-            if (shotCount % 2 == 0 && cooldown > 0) {
-                matrixStack.translate(0, 0, cooldown / 8);
-            }
-            matrixStack.translate(0, 5.8 * 0.0625, 0);
-            RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_RECEIVER_1.getModel(), stack, matrixStack, buffer, light, overlay);
-            matrixStack.popPose();
-
-            // Render Receiver 2
-            matrixStack.pushPose();
-            if (shotCount % 2 == 1 && cooldown > 0) {
-                matrixStack.translate(0, 0, cooldown / 8);
-            }
-            matrixStack.translate(0, 5.8 * 0.0625, 0);
-            RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_RECEIVER_2.getModel(), stack, matrixStack, buffer, light, overlay);
-            matrixStack.popPose();
-
-            matrixStack.popPose();
+        // Render Receiver 1
+        matrixStack.pushPose();
+        if (shotCount % 2 == 0 && cooldown > 0) {
+            matrixStack.translate(0, 0, cooldown / 8);
         }
+        matrixStack.translate(0, 5.8 * 0.0625, 0);
+        RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_RECEIVER_1.getModel(), stack, matrixStack, buffer, light, overlay);
+        matrixStack.popPose();
+
+        // Render Receiver 2
+        matrixStack.pushPose();
+        if (shotCount % 2 == 1 && cooldown > 0) {
+            matrixStack.translate(0, 0, cooldown / 8);
+        }
+        matrixStack.translate(0, 5.8 * 0.0625, 0);
+        RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_RECEIVER_2.getModel(), stack, matrixStack, buffer, light, overlay);
+        matrixStack.popPose();
+
+        matrixStack.popPose();
     }
 
     private double ease(double x) {

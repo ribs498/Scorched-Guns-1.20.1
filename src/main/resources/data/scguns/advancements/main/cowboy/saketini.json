@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/cowboy/callwell",
+  "criteria": {
+    "saketini": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:saketini"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.saketini.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:saketini"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.saketini"
+    }
+  },
+  "requirements": [
+    [
+      "saketini"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

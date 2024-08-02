@@ -1,0 +1,28 @@
+{
+  "type": "create:mixing",
+  "heatRequirement": "superheated",
+  "ingredients": [
+    {
+      "item": "scguns:nether_star_fragment"
+    },
+    {
+      "item": "minecraft:netherite_ingot"
+    },
+    {
+      "item": "minecraft:dragon_breath"
+    },
+    {
+      "item": "scguns:vehement_coal"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:scorched_blend",
+      "count": 3
+    },
+    {
+      "chance": 0.1,
+      "item": "scguns:scorched_blend"
+    }
+  ]
+}

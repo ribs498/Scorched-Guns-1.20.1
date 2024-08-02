@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/root",
+  "criteria": {
+    "gun_bench": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:gun_bench"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.craft_gun_bench.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:gun_bench"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.craft_gun_bench"
+    }
+  },
+  "requirements": [
+    [
+      "gun_bench"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

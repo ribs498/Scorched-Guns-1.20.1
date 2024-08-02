@@ -1,0 +1,10 @@
+{"type":"mekanism:enriching","input":{
+  "ingredient":[
+  {
+    "item": "scguns:anthralite_ore"
+  },
+  {
+    "item": "scguns:deepslate_anthralite_ore"
+  }
+]},
+  "output":{"count":2,"item":"scguns:anthralite_dust"}}

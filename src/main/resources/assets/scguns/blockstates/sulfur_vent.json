@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "vent_type=base": { "model": "scguns:block/sulfur_vent" },
+    "vent_type=middle": { "model": "scguns:block/sulfur_vent_middle" },
+    "vent_type=top": { "model": "scguns:block/sulfur_vent_top" }
+  }
+}
+

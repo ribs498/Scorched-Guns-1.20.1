@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/treated_brass/thunderhead",
+  "criteria": {
+    "dozier_rl": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:dozier_rl"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.dozier_rl.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:dozier_rl"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.dozier_rl"
+    }
+  },
+  "requirements": [
+    [
+      "dozier_rl"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

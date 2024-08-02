@@ -11,7 +11,7 @@
     "alwaysSpread": false,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:one_handed_two_handed",
-    "rate": 4,
+    "rate": 3,
     "recoilAngle": 6.0,
     "recoilKick": 1.0,
     "spread": 4.0,
@@ -22,7 +22,7 @@
     "attachments": {
       "barrel": {
         "yOffset": 3.4,
-        "zOffset": -2.5
+        "zOffset": -3.0
       },
       "scope": {
         "size": 0.7,
@@ -44,11 +44,11 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 4.5,
+    "damage": 5.0,
     "ejectsCasing": true,
     "item": "scguns:compact_copper_round",
     "casingType": "scguns:small_copper_casing",
-    "life": 20,
+    "life": 35,
     "size": 0.05,
     "speed": 5.0,
     "trailLengthMultiplier": 2.0
@@ -64,7 +64,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.rusty_gnat.fire",
     "fire": "scguns:item.rusty_gnat.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.rusty_gnat.silenced_fire"
   }
 }

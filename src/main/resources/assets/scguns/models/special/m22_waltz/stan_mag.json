@@ -2,8 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"6": "scguns:item/m22_waltz",
-		"particle": "scguns:item/m22_waltz"
+		"3": "scguns:item/m22_waltz"
 	},
 	"elements": [
 		{
@@ -12,12 +11,12 @@
 			"to": [8.35, 0.5, 16.75],
 			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 0.65, 15.8]},
 			"faces": {
-				"north": {"uv": [10.5, 8.5, 10.75, 8.75], "texture": "#6"},
-				"east": {"uv": [2.5, 9.5, 3.5, 9.75], "texture": "#6"},
-				"south": {"uv": [9, 10.5, 9.25, 10.75], "texture": "#6"},
-				"west": {"uv": [3.5, 9.5, 4.5, 9.75], "texture": "#6"},
-				"up": {"uv": [1.25, 10.5, 1, 9.5], "texture": "#6"},
-				"down": {"uv": [4.75, 9.5, 4.5, 10.5], "texture": "#6"}
+				"north": {"uv": [13.5, 7.5, 13.75, 7.75], "texture": "#3"},
+				"east": {"uv": [11, 6.5, 12, 6.75], "texture": "#3"},
+				"south": {"uv": [8, 13.5, 8.25, 13.75], "texture": "#3"},
+				"west": {"uv": [11.5, 0, 12.5, 0.25], "texture": "#3"},
+				"up": {"uv": [11.75, 1.5, 11.5, 0.5], "texture": "#3"},
+				"down": {"uv": [1.25, 11.5, 1, 12.5], "texture": "#3"}
 			}
 		}
 	],

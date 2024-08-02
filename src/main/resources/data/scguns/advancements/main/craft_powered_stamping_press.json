@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/craft_polar_generator",
+  "criteria": {
+    "powered_stamping_press": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:powered_mechanical_press"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.craft_powered_stamping_press.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:powered_mechanical_press"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.craft_powered_stamping_press"
+    }
+  },
+  "requirements": [
+    [
+      "powered_stamping_press"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "X": {
+      "item": "scguns:combat_shotgun"
+    },
+    "L": {
+      "item": "scguns:treated_iron_ingot"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "M": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "Q": {
+      "item": "minecraft:redstone_block"
+    }
+  },
+  "pattern": [
+    " X ",
+    "LRL",
+    "MQM"
+  ],
+  "result": {
+    "item": "scguns:shotgun_turret",
+    "count": 1
+  }
+}

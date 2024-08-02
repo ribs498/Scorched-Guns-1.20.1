@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/piglin/freyr",
+  "criteria": {
+    "vulcanic_repeater": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:vulcanic_repeater"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.vulcanic_repeater.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:vulcanic_repeater"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.vulcanic_repeater"
+    }
+  },
+  "requirements": [
+    [
+      "vulcanic_repeater"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

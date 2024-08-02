@@ -28,19 +28,19 @@ public class HornlinModel<T extends Entity> extends HierarchicalModel<T> {
 
 		PartDefinition Hornlin = partdefinition.addOrReplaceChild("Hornlin", CubeListBuilder.create(), PartPose.offset(0.0F, 25.25F, 0.0F));
 
-		PartDefinition head = Hornlin.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 19).addBox(-4.913F, -4.5681F, -0.457F, 10.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-				.texOffs(17, 35).addBox(-1.913F, -0.5681F, -1.457F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(28, 22).addBox(2.087F, 1.4319F, -1.457F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(28, 19).addBox(-2.913F, 1.4319F, -1.457F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.087F, -27.4658F, -3.5691F));
+		PartDefinition head = Hornlin.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 19).addBox(-4.913F, -4.5681F, -4.207F, 10.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
+				.texOffs(17, 35).addBox(-1.913F, -0.5681F, -5.207F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(28, 22).addBox(2.087F, 1.4319F, -5.207F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+				.texOffs(28, 19).addBox(-2.913F, 1.4319F, -5.207F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.087F, -27.4658F, 0.1809F));
 
-		PartDefinition head_r1 = head.addOrReplaceChild("head_r1", CubeListBuilder.create().texOffs(0, 19).addBox(-1.0F, -1.25F, -1.25F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.8862F, -1.5367F, -0.2401F, 1.1249F, 0.1704F, -0.0665F));
+		PartDefinition head_r1 = head.addOrReplaceChild("head_r1", CubeListBuilder.create().texOffs(0, 19).addBox(-1.0F, -1.25F, -1.25F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.8862F, -1.5367F, -3.9901F, 1.1249F, 0.1704F, -0.0665F));
 
-		PartDefinition head_r2 = head.addOrReplaceChild("head_r2", CubeListBuilder.create().texOffs(0, 23).addBox(1.5F, -1.9F, -4.75F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.087F, -5.5681F, 3.543F, 0.5672F, 0.0F, 0.0F));
+		PartDefinition head_r2 = head.addOrReplaceChild("head_r2", CubeListBuilder.create().texOffs(0, 23).addBox(1.5F, -1.9F, -4.75F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.087F, -5.5681F, -0.207F, 0.5672F, 0.0F, 0.0F));
 
 		PartDefinition left_ear = head.addOrReplaceChild("left_ear", CubeListBuilder.create().texOffs(36, 25).addBox(-3.5933F, 7.5607F, -0.6526F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 57).addBox(-2.8433F, 4.0607F, -2.6526F, 1.0F, 5.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.587F, -7.5253F, 4.1956F, 0.0F, 0.0F, -0.6109F));
+				.texOffs(0, 57).addBox(-2.8433F, 4.0607F, -2.6526F, 1.0F, 5.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.587F, -7.5253F, 0.4456F, 0.0F, 0.0F, -0.6109F));
 
-		PartDefinition right_ear = head.addOrReplaceChild("right_ear", CubeListBuilder.create().texOffs(56, 8).addBox(1.8433F, 4.0607F, -2.6526F, 1.0F, 5.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.413F, -7.5253F, 4.1956F, 0.0F, 0.0F, 0.6109F));
+		PartDefinition right_ear = head.addOrReplaceChild("right_ear", CubeListBuilder.create().texOffs(56, 8).addBox(1.8433F, 4.0607F, -2.6526F, 1.0F, 5.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.413F, -7.5253F, 0.4456F, 0.0F, 0.0F, 0.6109F));
 
 		PartDefinition left_arm = Hornlin.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(17, 52).addBox(-5.0F, 5.25F, -2.0F, 4.0F, 7.0F, 5.0F, new CubeDeformation(0.0F))
 				.texOffs(40, 0).addBox(-5.0F, -0.75F, -3.0F, 4.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.5F, -21.1888F, 2.1585F, -1.5265F, -0.1744F, -0.0077F));
@@ -82,10 +82,10 @@ public class HornlinModel<T extends Entity> extends HierarchicalModel<T> {
 		this.root().getAllParts().forEach(ModelPart::resetPose);
 
 		if (entity instanceof HornlinEntity) {
-			HornlinEntity redcoat = (HornlinEntity) entity;
+			HornlinEntity hornlin = (HornlinEntity) entity;
 			this.animateWalk(ModAnimationDefinitions.HORNLIN_WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
-			this.animate(redcoat.idleAnimationState, ModAnimationDefinitions.HORNLIN_IDLE, ageInTicks, 1f);
-			this.animate(redcoat.attackAnimationState, ModAnimationDefinitions.HORNLIN_IDLE, ageInTicks, 1f);
+			this.animate(hornlin.idleAnimationState, ModAnimationDefinitions.HORNLIN_IDLE, ageInTicks, 1f);
+			this.animate(hornlin.attackAnimationState, ModAnimationDefinitions.HORNLIN_IDLE, ageInTicks, 1f);
 
 			float clampedYaw = Mth.clamp(netHeadYaw, -45.0F, 45.0F);
 			float clampedPitch = Mth.clamp(headPitch, -20.0F, 20.0F);
@@ -93,7 +93,7 @@ public class HornlinModel<T extends Entity> extends HierarchicalModel<T> {
 			this.head.yRot = clampedYaw * ((float)Math.PI / 180F);
 			this.head.xRot = clampedPitch * ((float)Math.PI / 180F);
 
-			boolean muzzleFlashVisible = redcoat.isMuzzleFlashVisible();
+			boolean muzzleFlashVisible = hornlin.isMuzzleFlashVisible();
 			this.Flash.visible = muzzleFlashVisible;
 		}
 	}

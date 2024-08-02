@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/diamond_steel/plasgun",
+  "criteria": {
+    "cyclone": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:cyclone"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.cyclone.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:cyclone"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.cyclone"
+    }
+  },
+  "requirements": [
+    [
+      "cyclone"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

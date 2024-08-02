@@ -13,6 +13,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.headshot.*;
+import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.interfaces.IHeadshotBox;
 
 import javax.annotation.Nullable;
@@ -52,6 +53,7 @@ public class BoundingBoxManager
         registerHeadshotBox(EntityType.ZOMBIFIED_PIGLIN, new ChildHeadshotBox<>(8.0, 24.0, 0.75, 0.5));
         registerHeadshotBox(EntityType.HUSK, new ChildHeadshotBox<>(8.0, 24.0, 0.75, 0.5));
         registerHeadshotBox(EntityType.SKELETON, new BasicHeadshotBox<>(8.0, 24.0));
+        registerHeadshotBox(EntityType.WITHER_SKELETON, new BasicHeadshotBox<>(8.0, 26.0));
         registerHeadshotBox(EntityType.STRAY, new BasicHeadshotBox<>(8.0, 24.0));
         registerHeadshotBox(EntityType.CREEPER, new BasicHeadshotBox<>(8.0, 18.0));
         registerHeadshotBox(EntityType.SPIDER, new RotatedHeadshotBox<>(8.0, 5.0, 7.0, false, true));
@@ -83,6 +85,15 @@ public class BoundingBoxManager
         registerHeadshotBox(EntityType.HOGLIN, new RotatedHeadshotBox<>(14.0, 16.0, 7.0, 19.0, false, true));
         registerHeadshotBox(EntityType.ZOGLIN, new RotatedHeadshotBox<>(14.0, 16.0, 7.0, 19.0, false, true));
         registerHeadshotBox(EntityType.PIGLIN, new ChildHeadshotBox<>(8.0, 24.0, 0.75, 0.5));
+        registerHeadshotBox(ModEntities.HORNLIN.get(), new BasicHeadshotBox<>(8.0, 24.0));
+        registerHeadshotBox(ModEntities.ZOMBIFIED_HORNLIN.get(), new BasicHeadshotBox<>(8.0, 24.0));
+        registerHeadshotBox(ModEntities.COG_MINION.get(), new BasicHeadshotBox<>(8.0, 24.0));
+        registerHeadshotBox(ModEntities.COG_KNIGHT.get(), new BasicHeadshotBox<>(8.0, 24.0));
+        registerHeadshotBox(ModEntities.REDCOAT.get(), new BasicHeadshotBox<>(8.0, 24.0));
+        registerHeadshotBox(ModEntities.BLUNDERER.get(), new BasicHeadshotBox<>(8.0, 24.0));
+        registerHeadshotBox(ModEntities.HIVE.get(), new BasicHeadshotBox<>(8.0, 18.0));
+        registerHeadshotBox(ModEntities.DISSIDENT.get(), new BasicHeadshotBox<>(8.0, 18.0));
+
     }
 
     /**

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/cowboy/pax",
+  "criteria": {
+    "winnie": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:winnie"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.winnie.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:winnie"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.winnie"
+    }
+  },
+  "requirements": [
+    [
+      "winnie"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -27,6 +27,7 @@ public class RustyGnatModel implements IOverrideModel {
         // Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
 
+        // Render stock attachments
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
@@ -35,50 +36,54 @@ public class RustyGnatModel implements IOverrideModel {
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
         }
-        if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.MAGAZINE)))
-        {
+
+        // Render magazine attachments
+        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.MAGAZINE)) {
             if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.EXTENDED_MAG.get())
                 RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
             if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.SPEED_MAG.get())
                 RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_SPEED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
             if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.PLUS_P_MAG.get())
                 RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
-
-
-        }
-        else
+        } else {
             RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_STANDARD_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
 
-
+        // Render barrel and its attachments, considering entity interaction
         if (entity.equals(Minecraft.getInstance().player)) {
             matrixStack.pushPose();
-            // Don't touch this, it's better to use the display options in Blockbench.
             matrixStack.translate(0, -5.8 * 0.0625, 0);
-            // Gets the cooldown tracker for the item. Items like swords and enderpearls also have this.
             ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
             float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
             cooldown = (float) ease(cooldown);
-            // Apply transformations to the barrel and attached components
             matrixStack.translate(0, 0, cooldown / 12);
             matrixStack.translate(0, 5.8 * 0.0625, 0);
-            // Render the barrel and its attachments
             renderBarrelAndAttachments(stack, matrixStack, buffer, light, overlay);
-            // Always pop
             matrixStack.popPose();
         }
     }
 
     private void renderBarrelAndAttachments(ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
-        RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
-        RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_BOLT.getModel(), stack, matrixStack, buffer, light, overlay);
+        // Check if the extended barrel is equipped and render accordingly
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get()) {
+                RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+            } else {
+                RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
+
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
                 RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
                 RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
                 RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+        } else {
+            RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
         }
+
+        // Render the bolt regardless of barrel attachment
+        RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_BOLT.getModel(), stack, matrixStack, buffer, light, overlay);
     }
 
     private double ease(double x) {

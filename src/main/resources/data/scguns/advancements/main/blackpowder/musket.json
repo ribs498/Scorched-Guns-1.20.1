@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/blackpowder/musket",
+  "criteria": {
+    "blunderbuss": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:blunderbuss"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.blunderbuss.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:blunderbuss"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.blunderbuss"
+    }
+  },
+  "requirements": [
+    [
+      "blunderbuss"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

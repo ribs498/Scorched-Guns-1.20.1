@@ -1,0 +1,28 @@
+{
+  "type": "scguns:powered_macerating",
+  "processingTime": 100,
+  "energyUse": 1000,
+  "ingredients": [
+    [
+      {
+        "item": "scguns:sulfur_chunk"
+      },
+      {
+        "tag": "forge:dusts/sulfur"
+      }
+    ],
+    {
+      "item": "scguns:phosphor_dust"
+    },
+    {
+      "item": "minecraft:charcoal"
+    },
+    {
+      "item": "scguns:niter_dust"
+    }
+  ],
+  "result": {
+    "item": "minecraft:gunpowder",
+    "count": 9
+  }
+}

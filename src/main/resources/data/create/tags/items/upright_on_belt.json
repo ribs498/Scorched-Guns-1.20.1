@@ -1,0 +1,24 @@
+{
+  "values": [
+    "scguns:powder_and_ball",
+    "scguns:compact_copper_round",
+    "scguns:standard_copper_round",
+    "scguns:compact_advanced_round",
+    "scguns:advanced_round",
+    "scguns:krahg_round",
+    "scguns:beowulf_round",
+    "scguns:shotgun_shell",
+    "scguns:bearpack_shell",
+    "scguns:microjet",
+    "scguns:rocket",
+    "scguns:ramrod_round",
+    "scguns:energy_cell",
+    "scguns:grapeshot",
+    "scguns:blaze_fuel",
+    "scguns:hog_round",
+    "scguns:gibbs_round",
+    "scguns:shock_cell",
+    "scguns:sculk_cell",
+    "scguns:shulkshot"
+  ]
+}

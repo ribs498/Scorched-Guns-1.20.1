@@ -1,0 +1,32 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "tag": "minecraft:planks"
+    },
+    "X": {
+      "item": "scguns:iron_gun_frame"
+    },
+    "R": {
+      "item": "scguns:iron_bayonet"
+    },
+    "P": {
+      "item": "scguns:ocean_blueprint"
+    },
+    "K": {
+      "item": "scguns:gun_barrel"
+    },
+    "O": {
+      "item": "scguns:firing_unit"
+    }
+  },
+  "pattern": [
+    "PXRR",
+    "XQOK",
+    "Q R "
+  ],
+  "result": {
+    "item": "scguns:bomb_lance"
+  }
+}

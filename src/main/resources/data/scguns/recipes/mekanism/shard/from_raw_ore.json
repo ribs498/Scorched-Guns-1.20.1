@@ -1,0 +1,1 @@
+{"type":"mekanism:injecting","chemicalInput":{"amount":1,"gas":"mekanism:hydrogen_chloride"},"itemInput":{"amount":3,"ingredient":{"item":"scguns:raw_anthralite"}},"output":{"count":8,"item":"scguns:shard_anthralite"}}

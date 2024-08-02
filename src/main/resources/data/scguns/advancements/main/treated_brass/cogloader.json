@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/treated_brass/osgood_50",
+  "criteria": {
+    "cogloader": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:cogloader"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.cogloader.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:cogloader"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.cogloader"
+    }
+  },
+  "requirements": [
+    [
+      "cogloader"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

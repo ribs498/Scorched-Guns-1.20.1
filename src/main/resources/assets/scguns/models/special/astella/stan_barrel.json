@@ -1,0 +1,100 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"1": "scguns:item/astella",
+		"particle": "scguns:item/astella_animated"
+	},
+	"elements": [
+		{
+			"from": [7.43787, 4.44767, -7.64767],
+			"to": [8.43787, 5.44767, 10.35233],
+			"rotation": {"angle": -45, "axis": "z", "origin": [7.78787, 4.79767, -7.89767]},
+			"faces": {
+				"north": {"uv": [5.75, 9, 6, 9.25], "texture": "#1"},
+				"east": {"uv": [0, 0, 4.5, 0.25], "texture": "#1"},
+				"south": {"uv": [7.75, 9, 8, 9.25], "texture": "#1"},
+				"west": {"uv": [0, 0.25, 4.5, 0.5], "texture": "#1"},
+				"up": {"uv": [0.25, 5, 0, 0.5], "texture": "#1"},
+				"down": {"uv": [0.5, 0.5, 0.25, 5], "texture": "#1"}
+			}
+		},
+		{
+			"from": [7.21893, 4.12892, -11.06642],
+			"to": [8.71893, 5.62892, -7.61642],
+			"rotation": {"angle": -45, "axis": "z", "origin": [7.89393, 4.80392, -7.14142]},
+			"faces": {
+				"north": {"uv": [0, 9, 0.375, 9.375], "texture": "#1"},
+				"east": {"uv": [7, 5.25, 7.875, 5.625], "texture": "#1"},
+				"south": {"uv": [0.5, 9, 0.875, 9.375], "texture": "#1"},
+				"west": {"uv": [7, 5.75, 7.875, 6.125], "texture": "#1"},
+				"up": {"uv": [4.375, 7.875, 4, 7], "texture": "#1"},
+				"down": {"uv": [7.375, 6.25, 7, 7.125], "texture": "#1"}
+			}
+		},
+		{
+			"from": [8.25, 4.30392, -10.56642],
+			"to": [9.25, 5.30392, -8.11642],
+			"rotation": {"angle": 0, "axis": "z", "origin": [8, 4.80392, -9.34142]},
+			"faces": {
+				"north": {"uv": [2.75, 9.25, 3, 9.5], "texture": "#1"},
+				"east": {"uv": [8.75, 2.5, 9.375, 2.75], "texture": "#1"},
+				"south": {"uv": [1, 10.25, 1.25, 10.5], "texture": "#1"},
+				"west": {"uv": [8.75, 2.75, 9.375, 3], "texture": "#1"},
+				"up": {"uv": [6.25, 9.375, 6, 8.75], "texture": "#1"},
+				"down": {"uv": [6.5, 8.75, 6.25, 9.375], "texture": "#1"}
+			}
+		},
+		{
+			"from": [6.75, 4.30392, -10.56642],
+			"to": [7.75, 5.30392, -8.11642],
+			"rotation": {"angle": 0, "axis": "z", "origin": [8, 4.80392, -9.34142]},
+			"faces": {
+				"north": {"uv": [10.25, 1, 10.5, 1.25], "texture": "#1"},
+				"east": {"uv": [8.75, 3, 9.375, 3.25], "texture": "#1"},
+				"south": {"uv": [1.25, 10.25, 1.5, 10.5], "texture": "#1"},
+				"west": {"uv": [8.75, 6.5, 9.375, 6.75], "texture": "#1"},
+				"up": {"uv": [6.75, 9.375, 6.5, 8.75], "texture": "#1"},
+				"down": {"uv": [7.25, 8.75, 7, 9.375], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.75, -7.5],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.75, -7.5],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 9, -0.25]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.25, 9, -0.25]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-4.25, 0.5, 0],
+			"scale": [0.7, 0.7, 0.7]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [5.5, 4.5, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "StanBarrel",
+			"origin": [8, 4.80392, -9.34142],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
+}

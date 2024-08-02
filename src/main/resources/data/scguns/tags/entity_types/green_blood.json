@@ -6,6 +6,7 @@
     "minecraft:phantom",
     "scguns:hive",
     "scguns:swarm",
-    "minecraft:zombified_piglin"
+    "minecraft:zombified_piglin",
+    "scguns:zombified_hornlin"
   ]
 }

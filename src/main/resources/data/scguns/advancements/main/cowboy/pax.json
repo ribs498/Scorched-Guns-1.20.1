@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/craft_gun_bench",
+  "criteria": {
+    "pax": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:pax"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.pax.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:pax"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.pax"
+    }
+  },
+  "requirements": [
+    [
+      "pax"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

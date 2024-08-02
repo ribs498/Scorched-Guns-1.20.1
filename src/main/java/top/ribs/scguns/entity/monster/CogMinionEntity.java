@@ -121,7 +121,7 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
                 .add(Attributes.ARMOR, 2.0D)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 0.5D)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.8D)
-                .add(Attributes.ATTACK_DAMAGE, 2.0D);
+                .add(Attributes.ATTACK_DAMAGE, 4.0D);
     }
 
     @Override

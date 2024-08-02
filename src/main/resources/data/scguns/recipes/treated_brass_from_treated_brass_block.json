@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "treated_brass",
+  "ingredients": [
+    {
+      "item": "scguns:treated_brass_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "scguns:treated_brass_ingot"
+  }
+}

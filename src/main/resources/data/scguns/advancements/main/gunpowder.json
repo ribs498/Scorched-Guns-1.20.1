@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/craft_macerator",
+  "criteria": {
+    "gunpowder": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "minecraft:gunpowder"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.gunpowder.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item":  "minecraft:gunpowder"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.gunpowder"
+    }
+  },
+  "requirements": [
+    [
+      "gunpowder"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -44,6 +44,7 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
         this.moveControl = new SkyCarrierMoveControl(this, 5.0, 8.0, 1.5, 0.5, 0.2);
     }
 
+
     @Override
     public boolean shouldDespawnInPeaceful() {
         return true;
@@ -151,19 +152,21 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
         return this.entityData.get(MUZZLE_FLASH_TIMER) > 0;
     }
 
-    @Override
-    public boolean checkSpawnRules(LevelAccessor pLevel, MobSpawnType pSpawnReason) {
-        return pLevel.getBrightness(LightLayer.SKY, this.blockPosition()) < 8 && super.checkSpawnRules(pLevel, pSpawnReason);
+
+    public static boolean checkMonsterSpawnRules(EntityType<SkyCarrierEntity> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+        if (level.getDifficulty() == Difficulty.PEACEFUL) {
+            return false;
+        }
+        if (level.getBrightness(LightLayer.SKY, pos) > 0) {
+            return false;
+        }
+        int lightLevel = level.getLightEmission(pos);
+        if (lightLevel > 7) {
+            return false;
+        }
+        return level.getBlockState(pos.below()).isValidSpawn(level, pos.below(), entityType);
     }
 
-    @Override
-    public boolean checkSpawnObstruction(LevelReader pLevel) {
-        return pLevel.getBrightness(LightLayer.SKY, this.blockPosition()) < 8 && super.checkSpawnObstruction(pLevel);
-    }
-
-    public static boolean checkMonsterSpawnRules(EntityType<SkyCarrierEntity> skyCarrierEntityEntityType, ServerLevelAccessor serverLevelAccessor, MobSpawnType mobSpawnType, BlockPos blockPos, RandomSource randomSource) {
-        return serverLevelAccessor.getDifficulty() != Difficulty.PEACEFUL && serverLevelAccessor.getRawBrightness(blockPos, 0) < 8;
-    }
 
     ///MOVE CONTROL
     private static class SkyCarrierMoveControl extends MoveControl {

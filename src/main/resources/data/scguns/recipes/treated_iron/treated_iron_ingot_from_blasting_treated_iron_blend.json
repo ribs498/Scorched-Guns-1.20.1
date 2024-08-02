@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "group": "iron_ingot",
+  "cookingtime": 100,
+  "experience": 0.7,
+  "ingredient": {
+    "item": "scguns:treated_iron_blend"
+  },
+  "result": "scguns:treated_iron_ingot"
+}

@@ -48,12 +48,12 @@
   },
   "projectile": {
     "advantage": "scguns:heavy",
-    "damage": 21.0,
+    "damage": 24.0,
     "ejectsCasing": true,
     "gravity": false  ,
     "item": "scguns:krahg_round",
     "casingType": "scguns:large_brass_casing",
-    "life": 50,
+    "life": 70,
     "size": 0.1,
     "speed": 13.0,
     "trailLengthMultiplier": 2.0
@@ -69,7 +69,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.heavier_rifle.fire",
     "fire": "scguns:item.heavier_rifle.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.bruiser.silenced_fire"
   }
 }

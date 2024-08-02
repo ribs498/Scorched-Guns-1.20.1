@@ -1,0 +1,16 @@
+{
+  "type": "scguns:mechanical_pressing",
+  "processingTime": 50,
+  "ingredients": [
+    {
+      "tag": "scguns:advanced_bullet_material"
+    }
+  ],
+  "mold": {
+    "item": "scguns:bullet_mold"
+  },
+  "result": {
+    "item": "scguns:hardened_bullet",
+    "count": 12
+  }
+}

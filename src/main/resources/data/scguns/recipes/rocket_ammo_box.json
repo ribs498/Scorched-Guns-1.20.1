@@ -1,9 +1,14 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "Q": {
-      "item": "minecraft:iron_ingot"
-    },
+    "Q":     [
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      {
+        "item": "scguns:treated_iron_ingot"
+      }
+    ],
     "R": {
       "item": "minecraft:iron_nugget"
     }

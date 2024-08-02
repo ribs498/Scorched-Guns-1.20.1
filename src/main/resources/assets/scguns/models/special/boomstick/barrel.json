@@ -1,76 +1,68 @@
 {
 	"credit": "Made with Blockbench",
-	"texture_size": [32, 32],
+	"texture_size": [64, 64],
 	"textures": {
-		"2": "scguns:item/boomstick",
-		"particle": "scguns:item/makeshift_rifle"
+		"1": "scguns:item/boomstick",
+		"particle": "scguns:item/boomstick"
 	},
 	"elements": [
 		{
 			"name": "Barrel",
-			"from": [6.575, 2.6, 3.225],
-			"to": [9.425, 4.2, 11.125],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8.825, 3.4, 13.2375]},
+			"from": [6, 3.175, 1.90625],
+			"to": [10, 5.175, 11.90625],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.8125, 4.175, 14.42188]},
 			"faces": {
-				"north": {"uv": [1.5, 6.5, 3, 7.25], "texture": "#2"},
-				"east": {"uv": [3, 0, 7, 0.75], "texture": "#2"},
-				"south": {"uv": [6.5, 2, 8, 2.75], "texture": "#2", "cullface": "south"},
-				"west": {"uv": [3, 1, 7, 1.75], "texture": "#2"},
-				"up": {"uv": [1.5, 4, 0, 0], "texture": "#2"},
-				"down": {"uv": [3, 0, 1.5, 4], "texture": "#2"}
+				"north": {"uv": [7, 3.5, 8, 4], "texture": "#1"},
+				"east": {"uv": [4.25, 1, 6.75, 1.5], "texture": "#1"},
+				"south": {"uv": [7, 5.5, 8, 6], "texture": "#1", "cullface": "south"},
+				"west": {"uv": [4.25, 1.5, 6.75, 2], "texture": "#1"},
+				"up": {"uv": [3, 2.5, 2, 0], "texture": "#1"},
+				"down": {"uv": [3, 2.5, 2, 5], "texture": "#1"}
 			}
 		},
 		{
 			"name": "Barrel",
-			"from": [6.7, 2.85, 10.9],
-			"to": [9.3, 3.725, 11.55],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8.95, 3.4, 20.9125]},
+			"from": [6.5, 3.375, 11.88125],
+			"to": [9.5, 4.625, 12.38125],
+			"rotation": {"angle": 0, "axis": "y", "origin": [9.3125, 3.9625, 24.39687]},
 			"faces": {
-				"north": {"uv": [3, 2, 4.25, 2.5], "texture": "#2"},
-				"east": {"uv": [0, 4, 0.25, 4.5], "texture": "#2"},
-				"south": {"uv": [3, 2.5, 4.25, 3], "texture": "#2", "cullface": "south"},
-				"west": {"uv": [0.5, 4, 0.75, 4.5], "texture": "#2"},
-				"up": {"uv": [4.25, 3.25, 3, 3], "texture": "#2"},
-				"down": {"uv": [4, 3.5, 3, 3.75], "texture": "#2"}
+				"north": {"uv": [8.75, 8.25, 9.5, 8.5], "texture": "#1"},
+				"east": {"uv": [5, 10.5, 5.125, 10.75], "texture": "#1"},
+				"south": {"uv": [8, 9, 8.75, 9.25], "texture": "#1", "cullface": "south"},
+				"west": {"uv": [10.5, 5, 10.625, 5.25], "texture": "#1"},
+				"up": {"uv": [10.75, 1.625, 10, 1.5], "texture": "#1"},
+				"down": {"uv": [10.75, 1.75, 10, 1.875], "texture": "#1"}
 			}
 		}
 	],
 	"display": {
 		"thirdperson_righthand": {
-			"translation": [0, 7, -5.25],
-			"scale": [1.3, 1.3, 1.3]
+			"translation": [0.25, 6, -6.25],
+			"scale": [1.2, 1.2, 1.2]
 		},
 		"thirdperson_lefthand": {
-			"translation": [0, 7, -5.25],
-			"scale": [1.3, 1.3, 1.3]
+			"translation": [0.25, 6, -6.25],
+			"scale": [1.2, 1.2, 1.2]
 		},
 		"firstperson_righthand": {
-			"translation": [-4.5, 9.75, -0.25]
+			"translation": [-4.25, 9, -2]
 		},
 		"firstperson_lefthand": {
-			"translation": [-4.5, 9.75, -0.25]
+			"translation": [-4.25, 9, -2]
 		},
 		"ground": {
-			"translation": [0, 9.5, -2.75],
+			"translation": [0, 9.5, -1.75],
 			"scale": [1.3, 1.3, 1.3]
 		},
 		"gui": {
 			"rotation": [74.02, -53.34, 70.48],
-			"translation": [-2.75, 7.5, 0],
-			"scale": [1.4, 1.4, 1.4]
+			"translation": [-1.75, 5, 0],
+			"scale": [1.1, 1.1, 1.1]
 		},
 		"fixed": {
-			"rotation": [90, 55, -90],
-			"translation": [1.5, 8.5, 0],
-			"scale": [1.5, 1.5, 1.5]
+			"rotation": [-90, 90, 90],
+			"translation": [-3, 10.25, -1.5],
+			"scale": [2, 2, 2]
 		}
-	},
-	"groups": [
-		{
-			"name": "Barrel",
-			"origin": [8.95, 3.4, 15.2375],
-			"color": 0,
-			"children": [0, 1]
-		}
-	]
+	}
 }

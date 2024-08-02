@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/craft_blank_mold",
+  "criteria": {
+    "disc_mold": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:disc_mold"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.craft_disc_mold.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:disc_mold"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.craft_disc_mold"
+    }
+  },
+  "requirements": [
+    [
+      "disc_mold"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

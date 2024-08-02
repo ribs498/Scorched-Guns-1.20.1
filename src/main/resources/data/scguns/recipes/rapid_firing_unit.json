@@ -5,9 +5,14 @@
     "#": {
       "item": "scguns:anthralite_ingot"
     },
-    "X": {
-      "item": "minecraft:iron_ingot"
-    },
+    "X":     [
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      {
+        "item": "scguns:treated_iron_ingot"
+      }
+    ],
     "Q": {
       "item": "minecraft:iron_nugget"
     },

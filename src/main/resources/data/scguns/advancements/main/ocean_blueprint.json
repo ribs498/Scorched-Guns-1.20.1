@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/copper_blueprint",
+  "criteria": {
+    "ocean_blueprint": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:ocean_blueprint"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.ocean_blueprint.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:ocean_blueprint"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.ocean_blueprint"
+    }
+  },
+  "requirements": [
+    [
+      "ocean_blueprint"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

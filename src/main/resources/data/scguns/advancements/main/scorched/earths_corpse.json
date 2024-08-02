@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/scorched/newborn_cyst",
+  "criteria": {
+    "earths_corpse": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:earths_corpse"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.earths_corpse.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:earths_corpse"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.earths_corpse"
+    }
+  },
+  "requirements": [
+    [
+      "earths_corpse"
+    ]
+  ],
+  "sscorcheds_telemetry_event": true
+}

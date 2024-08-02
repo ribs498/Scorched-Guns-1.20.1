@@ -268,7 +268,7 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
             if (pressPosition <= endPosition) {
                 movingDown = false;
                 if (level != null) {
-                    level.playSound(null, worldPosition, SoundEvents.ANVIL_LAND, SoundSource.BLOCKS, 0.05f, 0.60f);
+                    level.playSound(null, worldPosition, SoundEvents.SMITHING_TABLE_USE, SoundSource.BLOCKS, 0.05f, 0.60f);
                 }
             }
         } else {
@@ -320,16 +320,18 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
                     }
                 }
 
-                // Reduce mold durability
-                ItemStack moldStack = itemHandler.getStackInSlot(MOLD_SLOT);
-                if (!moldStack.isEmpty() && moldStack.isDamageableItem()) {
-                    int newDamage = moldStack.getDamageValue() + 1;
-                    if (newDamage >= moldStack.getMaxDamage()) {
-                        moldStack.shrink(1); // Remove the item if it reaches max damage
-                    } else {
-                        moldStack.setDamageValue(newDamage); // Otherwise, set the new damage value
+                // Reduce mold durability only if the recipe requires a mold
+                if (recipe.requiresMold()) {
+                    ItemStack moldStack = itemHandler.getStackInSlot(MOLD_SLOT);
+                    if (!moldStack.isEmpty() && moldStack.isDamageableItem()) {
+                        int newDamage = moldStack.getDamageValue() + 1;
+                        if (newDamage >= moldStack.getMaxDamage()) {
+                            moldStack.shrink(1);
+                        } else {
+                            moldStack.setDamageValue(newDamage);
+                        }
+                        itemHandler.setStackInSlot(MOLD_SLOT, moldStack);
                     }
-                    itemHandler.setStackInSlot(MOLD_SLOT, moldStack);
                 }
 
                 if (outputStack.isEmpty()) {
@@ -341,17 +343,16 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
         }
     }
 
-
     private void resetProgress() {
         this.progress = 0;
     }
 
     private boolean isRecipeValid() {
-        SimpleContainer inventory = new SimpleContainer(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 2); // Add one for the mold slot
+        SimpleContainer inventory = new SimpleContainer(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 2);
         for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
             inventory.setItem(i - FIRST_INPUT_SLOT, itemHandler.getStackInSlot(i));
         }
-        inventory.setItem(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 1, itemHandler.getStackInSlot(MOLD_SLOT)); // Add mold slot
+        inventory.setItem(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 1, itemHandler.getStackInSlot(MOLD_SLOT));
 
         Optional<MechanicalPressRecipe> currentRecipe = getCurrentRecipe();
         if (currentRecipe.isPresent()) {
@@ -483,42 +484,54 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
         }
     private class TopItemHandler implements IItemHandlerModifiable {
         private final ItemStackHandler itemHandler;
+
         public TopItemHandler(ItemStackHandler itemHandler) {
             this.itemHandler = itemHandler;
         }
+
         @Override
         public void setStackInSlot(int slot, ItemStack stack) {
             itemHandler.setStackInSlot(slot, stack);
         }
+
         @Override
         public int getSlots() {
             return itemHandler.getSlots();
         }
+
         @Override
         public ItemStack getStackInSlot(int slot) {
             return itemHandler.getStackInSlot(slot);
         }
+
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            if (stack.getItem() instanceof MoldItem) {
-                ItemStack moldStack = itemHandler.getStackInSlot(MOLD_SLOT);
-                if (moldStack.isEmpty() || (moldStack.isDamageableItem() && moldStack.getDamageValue() < moldStack.getMaxDamage())) {
-                    return itemHandler.insertItem(MOLD_SLOT, stack, simulate);
-                }
+            if (isItemValid(slot, stack)) {
+                return itemHandler.insertItem(slot, stack, simulate);
             }
-            return itemHandler.insertItem(slot, stack, simulate);
+            return stack;
         }
+
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return ItemStack.EMPTY;
+            return ItemStack.EMPTY; // Disable extraction from the top
         }
+
         @Override
         public int getSlotLimit(int slot) {
             return itemHandler.getSlotLimit(slot);
         }
+
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
+            // Ensure items are only inserted into input and mold slots
+            if (stack.getItem() instanceof MoldItem) {
+                return slot == MOLD_SLOT && (itemHandler.getStackInSlot(MOLD_SLOT).isEmpty() ||
+                        (itemHandler.getStackInSlot(MOLD_SLOT).isDamageableItem() &&
+                                itemHandler.getStackInSlot(MOLD_SLOT).getDamageValue() < itemHandler.getStackInSlot(MOLD_SLOT).getMaxDamage()));
+            }
             return slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT;
         }
     }
+
 }

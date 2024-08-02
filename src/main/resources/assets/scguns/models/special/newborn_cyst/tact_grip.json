@@ -74,5 +74,13 @@
 			"translation": [1.5, 8.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "TactGrip",
+			"origin": [8, 0.66, 4.67375],
+			"color": 0,
+			"children": [0, 1, 2]
+		}
+	]
 }

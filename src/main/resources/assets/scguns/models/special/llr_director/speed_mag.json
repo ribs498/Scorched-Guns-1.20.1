@@ -2,32 +2,33 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"2": "scguns:item/llr_director"
+		"1": "scguns:item/llr_director",
+		"particle": "scguns:item/llr_director"
 	},
 	"elements": [
 		{
-			"from": [7.5, 2.29767, 9.86483],
-			"to": [8.5, 2.79767, 12.36483],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0.18407, 10.66423]},
+			"from": [6.3636, 4.18407, 10.86483],
+			"to": [6.8636, 5.18407, 13.36483],
+			"rotation": {"angle": 0, "axis": "z", "origin": [4.25, 4.68407, 11.66423]},
 			"faces": {
-				"north": {"uv": [6.25, 10.25, 6.5, 10.375], "texture": "#2"},
-				"east": {"uv": [9, 5.75, 9.625, 5.875], "texture": "#2"},
-				"south": {"uv": [10.25, 6.25, 10.5, 6.375], "texture": "#2", "cullface": "south"},
-				"west": {"uv": [9, 6, 9.625, 6.125], "texture": "#2"},
-				"up": {"uv": [7.75, 2.875, 7.5, 2.25], "texture": "#2"},
-				"down": {"uv": [2.75, 7.5, 2.5, 8.125], "texture": "#2"}
+				"north": {"uv": [5.5, 10.25, 5.625, 10.5], "texture": "#1"},
+				"east": {"uv": [7.5, 1.25, 8.125, 1.5], "texture": "#1"},
+				"south": {"uv": [10.25, 5.5, 10.375, 5.75], "texture": "#1", "cullface": "south"},
+				"west": {"uv": [7.5, 1.75, 8.125, 2], "texture": "#1"},
+				"up": {"uv": [6.375, 9.625, 6.25, 9], "texture": "#1"},
+				"down": {"uv": [6.625, 9, 6.5, 9.625], "texture": "#1"}
 			}
 		},
 		{
-			"from": [8, 1.29767, 9.86483],
-			"to": [8, 2.29767, 12.36483],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, -0.31593, 10.66423]},
+			"from": [5.3636, 4.68407, 10.86483],
+			"to": [6.3636, 4.68407, 13.36483],
+			"rotation": {"angle": 0, "axis": "z", "origin": [3.75, 4.68407, 11.66423]},
 			"faces": {
-				"north": {"uv": [0, 0, 0, 0.25], "texture": "#2"},
-				"east": {"uv": [2.75, 7.5, 3.375, 7.75], "texture": "#2"},
-				"south": {"uv": [0, 0, 0, 0.25], "texture": "#2", "cullface": "south"},
-				"up": {"uv": [0, 0.625, 0, 0], "texture": "#2"},
-				"down": {"uv": [0, 0, 0, 0.625], "texture": "#2"}
+				"north": {"uv": [0, 0, 0.25, 0], "texture": "#1"},
+				"east": {"uv": [0, 0, 0.625, 0], "texture": "#1"},
+				"south": {"uv": [0, 0, 0.25, 0], "texture": "#1", "cullface": "south"},
+				"west": {"uv": [0, 0, 0.625, 0], "texture": "#1"},
+				"down": {"uv": [2, 7.5, 1.75, 8.125], "texture": "#1"}
 			}
 		}
 	],
@@ -59,5 +60,13 @@
 			"translation": [4, 6, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "SpeedMag",
+			"origin": [3.75, 4.68407, 11.66423],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
 }

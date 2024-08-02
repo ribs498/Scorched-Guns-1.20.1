@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/iron/m3_carabine",
+  "criteria": {
+    "combat_shotgun": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:combat_shotgun"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.combat_shotgun.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:combat_shotgun"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.combat_shotgun"
+    }
+  },
+  "requirements": [
+    [
+      "combat_shotgun"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

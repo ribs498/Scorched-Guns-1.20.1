@@ -23,33 +23,37 @@ public class M3CarabineModel implements IOverrideModel {
     @SuppressWarnings("resource")
     @Override
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
-
-        //Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.M3_CARABINE_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
-
-        //Renders the iron sights if no scope is attached.
         if ((Gun.getScope(stack) == null))
             RenderUtil.renderModel(SpecialModels.M3_CARABINE_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         else
             RenderUtil.renderModel(SpecialModels.M3_CARABINE_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
+        boolean extendedBarrelAttached = false;
+
+        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get()) {
+                RenderUtil.renderModel(SpecialModels.M3_CARABINE_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+                extendedBarrelAttached = true;
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
+                RenderUtil.renderModel(SpecialModels.M3_CARABINE_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
+                RenderUtil.renderModel(SpecialModels.M3_CARABINE_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
+                RenderUtil.renderModel(SpecialModels.M3_CARABINE_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
+
+        // Render the standard barrel if no extended barrel is attached
+        if (!extendedBarrelAttached) {
+            RenderUtil.renderModel(SpecialModels.M3_CARABINE_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
 
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
-
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.M3_CARABINE_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.M3_CARABINE_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.M3_CARABINE_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
-        }
-
-        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
-                RenderUtil.renderModel(SpecialModels.M3_CARABINE_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
-                RenderUtil.renderModel(SpecialModels.M3_CARABINE_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
-                RenderUtil.renderModel(SpecialModels.M3_CARABINE_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
         }
 
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.UNDER_BARREL)) {
@@ -66,6 +70,7 @@ public class M3CarabineModel implements IOverrideModel {
             else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.NETHERITE_BAYONET.get())
                 RenderUtil.renderModel(SpecialModels.M3_CARABINE_NETHERITE_BAYONET.getModel(), stack, matrixStack, buffer, light, overlay);
         }
+
         if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.MAGAZINE)))
         {
             if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.EXTENDED_MAG.get())
@@ -78,9 +83,7 @@ public class M3CarabineModel implements IOverrideModel {
         else
             RenderUtil.renderModel(SpecialModels.M3_CARABINE_STANDARD_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
 
-
         if (entity.equals(Minecraft.getInstance().player)) {
-
             //Always push.
             matrixStack.pushPose();
             //Don't touch this, it's better to use the display options in Blockbench.
@@ -100,15 +103,10 @@ public class M3CarabineModel implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.M3_CARABINE_BOLT.getModel(), stack, matrixStack, buffer, light, overlay);
             //Always pop
             matrixStack.popPose();
-
         }
-
     }
 
     private double ease(double x) {
-
         return 1 - Math.pow(1 - (2 * x), 4);
-
     }
-
 }

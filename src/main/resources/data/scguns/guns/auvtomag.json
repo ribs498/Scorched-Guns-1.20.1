@@ -2,7 +2,7 @@
   "display": {
     "flash": {
       "size": 1.0,
-      "yOffset": 4.1,
+      "yOffset": 3.8,
       "zOffset": -3.2
     },
     "muzzleFlashType": "flash_type_1"
@@ -21,12 +21,12 @@
   "modules": {
     "attachments": {
       "barrel": {
-        "yOffset": 4.3,
+        "yOffset": 3.8,
         "zOffset": -4.8
       },
       "scope": {
         "size": 0.7,
-        "yOffset": 6.0,
+        "yOffset": 5.5,
         "zOffset": 4.6
       },
       "magazine": {
@@ -35,8 +35,8 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 6.0,
-      "zOffset": 0.45
+      "yOffset": 5.5,
+      "zOffset": -0.45
     }
   },
   "projectile": {
@@ -46,7 +46,7 @@
     "gravity": false,
     "item": "scguns:ramrod_round",
     "casingType": "scguns:small_iron_casing",
-    "life": 20,
+    "life":50,
     "size": 0.1,
     "speed": 6.0,
     "trailLengthMultiplier": 2.0
@@ -62,7 +62,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.bruiser.fire",
     "fire": "scguns:item.bruiser.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.bruiser.silenced_fire"
   }
 }

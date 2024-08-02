@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.entity.monster.BlundererEntity;
+import top.ribs.scguns.entity.monster.HiveEntity;
 
 public class BlundererRenderer extends MobRenderer<BlundererEntity, BlundererModel<BlundererEntity>> {
     public BlundererRenderer(EntityRendererProvider.Context pContext) {
@@ -19,8 +20,10 @@ public class BlundererRenderer extends MobRenderer<BlundererEntity, BlundererMod
     }
 
     @Override
-    public void render(BlundererEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffer, int packedLight) {
-        super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
+    public void render(BlundererEntity pEntity, float pEntityYaw, float pPartialTicks, PoseStack pMatrixStack,
+                       MultiBufferSource pBuffer, int pPackedLight) {
+        pMatrixStack.scale(0.9f, 0.9f, 0.9f);
+        super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
     }
 }
 

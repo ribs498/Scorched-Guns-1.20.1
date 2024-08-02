@@ -1,0 +1,26 @@
+{
+	"parent": "scguns:item/empty_casing_pouch_0",
+	"textures": {
+		"layer0": "scguns:item/empty_casing_pouch"
+	},
+	"overrides": [
+		{
+			"predicate": {
+				"ammo_count": 0.33
+			},
+			"model": "scguns:item/empty_casing_pouch_0"
+		},
+		{
+			"predicate": {
+				"ammo_count": 0.66
+			},
+			"model": "scguns:item/empty_casing_pouch_0"
+		},
+		{
+			"predicate": {
+				"ammo_count": 1.0
+			},
+			"model": "scguns:item/empty_casing_pouch_0"
+		}
+	]
+}

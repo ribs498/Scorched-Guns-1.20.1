@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/treated_brass/gauss_rifle",
+  "criteria": {
+    "spitfire": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:spitfire"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.spitfire.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:spitfire"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.spitfire"
+    }
+  },
+  "requirements": [
+    [
+      "spitfire"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

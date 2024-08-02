@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:sulfur_ore",
+    "scguns:deepslate_sulfur_ore",
+    "scguns:nether_sulfur_ore"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/geothermal_vent",
+  "criteria": {
+    "niter_dust": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:niter_dust"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.niter_dust.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:niter_dust"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.niter_dust"
+    }
+  },
+  "requirements": [
+    [
+      "niter_dust"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

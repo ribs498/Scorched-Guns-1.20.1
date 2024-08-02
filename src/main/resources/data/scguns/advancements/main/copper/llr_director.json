@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/copper/bruiser",
+  "criteria": {
+    "llr_director": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:llr_director"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.llr_director.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:llr_director"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.llr_director"
+    }
+  },
+  "requirements": [
+    [
+      "llr_director"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,19 +1,8 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "Q": {
-      "item": "scguns:blank_mold"
-    },
-    "#": {
-      "item": "minecraft:iron_ingot"
-    }
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "scguns:blank_mold"
   },
-  "pattern": [
-    "   ",
-    "#Q#",
-    "   "
-  ],
-  "result": {
-    "item": "scguns:medium_casing_mold"
-  }
+  "result": "scguns:medium_casing_mold"
 }

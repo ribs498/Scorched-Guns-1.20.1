@@ -1,5 +1,9 @@
 {
 	"parent": "builtin/entity",
+	"textures": {
+		"1": "scguns:item/treated_brass_ingot",
+		"particle": "scguns:item/treated_brass_ingot"
+	},
 	"display": {
 		"thirdperson_righthand": {
 			"translation": [0, 6.75, -6.75],
@@ -25,9 +29,9 @@
 			"scale": [0.8, 0.8, 0.8]
 		},
 		"fixed": {
-			"rotation": [90, 55, -90],
-			"translation": [5.5, 4.5, 0],
-			"scale": [1.5, 1.5, 1.5]
+			"rotation": [-90, 90, 90],
+			"translation": [1.5, 8.5, 0],
+			"scale": [2.0, 2.0, 2.0]
 		}
 	}
 }

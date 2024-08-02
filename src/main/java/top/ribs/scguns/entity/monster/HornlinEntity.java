@@ -1,38 +1,39 @@
 package top.ribs.scguns.entity.monster;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.AnimationState;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Pose;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterials;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.entity.projectile.BrassBoltEntity;
+import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModSounds;
-
-import java.util.EnumSet;
-import java.util.Objects;
 
 public class HornlinEntity extends Monster implements RangedAttackMob {
     private static final EntityDataAccessor<Boolean> ATTACKING = SynchedEntityData.defineId(HornlinEntity.class, EntityDataSerializers.BOOLEAN);
@@ -47,14 +48,14 @@ public class HornlinEntity extends Monster implements RangedAttackMob {
     private int shotsFired = 0;
     private int burstCooldown = 0;
     private int attackTime = -1;
-
+    private int conversionTime = -1;
     public HornlinEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 20D)
+                .add(Attributes.MAX_HEALTH, 30D)
                 .add(Attributes.FOLLOW_RANGE, 26D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.ARMOR_TOUGHNESS, 0.5f)
@@ -85,19 +86,21 @@ public class HornlinEntity extends Monster implements RangedAttackMob {
             this.entityData.set(MUZZLE_FLASH_TIMER, currentTimer - 1);
         }
 
-        // Handle burst shooting and cooldown
+        if (!this.level().isClientSide) {
+            this.checkForConversion();
+        }
         if (this.isAttacking()) {
             if (this.burstCooldown > 0) {
                 this.burstCooldown--;
             } else {
                 if (--this.attackTime <= 0) {
-                    this.attackTime = 5; // Time between each shot in a burst
+                    this.attackTime = 8; // Time between each shot in a burst
                     LivingEntity target = this.getTarget();
-                    if (target != null) { // Ensure target is not null
+                    if (target != null) {
                         this.performRangedAttack(target, 1.0F);
                         this.shotsFired++;
 
-                        if (this.shotsFired >= 3 + this.random.nextInt(3)) { // Random burst length between 3 and 5
+                        if (this.shotsFired >= 1 + this.random.nextInt(3)) { // Random burst length between 3 and 5
                             this.burstCooldown = 20 + this.random.nextInt(20); // Cooldown between bursts
                             this.shotsFired = 0;
                         }
@@ -105,6 +108,46 @@ public class HornlinEntity extends Monster implements RangedAttackMob {
                 }
             }
         }
+    }
+    private void checkForConversion() {
+        if (this.level().dimension() == Level.OVERWORLD && !this.isConverting()) {
+            this.startConversion();
+        }
+
+        if (this.isConverting()) {
+            this.conversionTime--;
+
+            // Rapid shaking effect during conversion
+            // Apply shake every 2 ticks for rapid effect
+            double shakeIntensity = 0.01;
+            this.setPosRaw(this.getX() + (this.random.nextDouble() - 0.5) * shakeIntensity,
+                    this.getY(),
+                    this.getZ() + (this.random.nextDouble() - 0.5) * shakeIntensity);
+
+            if (this.conversionTime <= 0) {
+                this.convertToZombifiedHornlin();
+            }
+        }
+    }
+
+    private boolean isConverting() {
+        return this.conversionTime > -1;
+    }
+
+    private void startConversion() {
+        this.conversionTime = 200;
+    }
+
+    private void convertToZombifiedHornlin() {
+        ZombifiedHornlinEntity zombifiedHornlin = this.convertTo(ModEntities.ZOMBIFIED_HORNLIN.get(), true);
+        if (zombifiedHornlin != null) {
+            zombifiedHornlin.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 200, 0));
+            this.playConvertedSound();
+        }
+    }
+
+    protected void playConvertedSound() {
+        this.playSound(SoundEvents.PIGLIN_CONVERTED_TO_ZOMBIFIED, 1.0F, 1.0F);
     }
 
     private void spawnSmokeParticles() {
@@ -168,7 +211,7 @@ public class HornlinEntity extends Monster implements RangedAttackMob {
     }
 
     @Override
-    protected void registerGoals() {
+    public void registerGoals() {
         this.goalSelector.addGoal(2, new RestrictSunGoal(this));
         this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0));
@@ -183,17 +226,30 @@ public class HornlinEntity extends Monster implements RangedAttackMob {
 
             @Override
             public void start() {
-                super.start();
-                HornlinEntity.this.setAttacking(true);
+                Player targetPlayer = HornlinEntity.this.level().getNearestPlayer(HornlinEntity.this, 26.0D);
+                if (targetPlayer != null && !isWearingGold(targetPlayer)) {
+                    super.start();
+                    HornlinEntity.this.setAttacking(true);
+                }
             }
         });
         this.goalSelector.addGoal(8, new MeleeAttackGoal(this, 1.2, false));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
-        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
+        this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true, player -> !isWearingGold((Player) player)));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, AbstractVillager.class, false));
         this.targetSelector.addGoal(3, new NearestAttackableTargetGoal<>(this, IronGolem.class, true));
         this.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(this, Turtle.class, 10, true, false, Turtle.BABY_ON_LAND_SELECTOR));
     }
+
+    private boolean isWearingGold(Player player) {
+        for (ItemStack itemStack : player.getArmorSlots()) {
+            if (itemStack.getItem() instanceof ArmorItem armorItem && armorItem.getMaterial() == ArmorMaterials.GOLD) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     @Nullable
     @Override
@@ -223,11 +279,15 @@ public class HornlinEntity extends Monster implements RangedAttackMob {
         double d1 = target.getEyeY() - (this.getY() + offsetY);
         double d2 = target.getZ() - (this.getZ() + offsetZ);
         projectile.setPos(this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ);
-        projectile.shoot(d0, d1, d2, 2.6F, 0.0F);
+
+        float inaccuracy = 0.15F;
+        projectile.shoot(d0, d1, d2, 1.7F, inaccuracy);
+
         this.level().addFreshEntity(projectile);
-        this.playSound(ModSounds.MAKESHIFT_RIFLE_FIRE.get(), 1.0F, 1.0F);
+        this.playSound(ModSounds.GREASER_SMG_FIRE.get(), 1.0F, 1.0F);
         this.triggerMuzzleFlash();
     }
+
 
     public void setAttacking(boolean attacking) {
         this.entityData.set(ATTACKING, attacking);

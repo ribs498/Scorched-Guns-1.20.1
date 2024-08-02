@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/treated_brass/howler",
+  "criteria": {
+    "howler_conversion": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:howler_conversion"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.howler_conversion.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:howler_conversion"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.howler_conversion"
+    }
+  },
+  "requirements": [
+    [
+      "howler_conversion"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

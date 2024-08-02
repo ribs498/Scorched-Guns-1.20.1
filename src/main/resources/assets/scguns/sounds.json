@@ -15,11 +15,59 @@
       }
     ]
   },
+  "item.airgun.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/airgun/fire"
+      }
+    ]
+  },
+  "item.cowboy.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/cowboy/fire"
+      }
+    ]
+  },
+  "mass_production": {
+    "sounds": [
+      {
+        "name": "scguns:mass_production",
+        "stream": true
+      }
+    ]
+  },
+  "mass_destruction": {
+    "sounds": [
+      {
+        "name": "scguns:mass_destruction",
+        "stream": true
+      }
+    ]
+  },
+  "mass_destruction_extended": {
+    "sounds": [
+      {
+        "name": "scguns:mass_destruction_extended",
+        "stream": true
+      }
+    ]
+  },
   "item.sculk.fire": {
     "subtitle": "subtitle.scguns.fire",
     "sounds": [
       {
         "name": "scguns:item/sculk/fire"
+      }
+    ]
+  },
+  "item.shulker.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/shulker/fire"
       }
     ]
   },
@@ -36,6 +84,14 @@
     "sounds": [
       {
         "name": "scguns:item/scorched_sniper/fire"
+      }
+    ]
+  },
+  "item.shock.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/shock/fire"
       }
     ]
   },

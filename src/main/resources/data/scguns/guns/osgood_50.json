@@ -40,11 +40,11 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 21.5,
+    "damage": 22.0,
     "gravity": false,
     "item": "scguns:beowulf_round",
     "casingType": "scguns:small_diamond_steel_casing",
-    "life": 35,
+    "life": 60,
     "size": 0.1,
     "speed": 5.5,
     "trailLengthMultiplier": 2.0
@@ -53,14 +53,14 @@
     "emptyMagTimer": 10,
     "maxAmmo": 6,
     "reloadItem": "scguns:beowulf_round",
-    "reloadTimer": 15,
+    "reloadTimer": 10,
     "reloadType": "scguns:manual"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.brass_revolver.fire",
     "fire": "scguns:item.brass_revolver.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.bruiser.silenced_fire"
   }
 }

@@ -6,7 +6,7 @@ plugins {
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
-version = "0.0.1-1.20.1"
+version = "0.2.7-1.20.1"
 group = "top.ribs"
 archivesBaseName = "ScorchedGuns"
 
@@ -105,20 +105,30 @@ repositories {
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.20.1-47.2.0'
-    implementation fg.deobf('curse.maven:framework-549225:4718251')
-    implementation fg.deobf('curse.maven:backpacked-352835:4725669')
+    implementation fg.deobf("curse.maven:framework-549225:5692398")
+    //implementation fg.deobf("curse.maven:backpacked-352835:4725669")
     compileOnly fg.deobf('curse.maven:controllable-317269:4598985')
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
-   implementation fg.deobf("curse.maven:create-328085:4835191")
-   implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5455954")
+    implementation fg.deobf("curse.maven:create-328085:4835191")
+ //implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5455954")
     implementation fg.deobf("curse.maven:farmers-delight-398521:5051242")
-   // implementation fg.deobf("curse.maven:immersive-engineering-231951:5224387")
-  //  implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
+ // implementation fg.deobf("curse.maven:immersive-engineering-231951:5224387")
+    implementation fg.deobf("curse.maven:kotlin-for-forge-351264:5402061")
+    implementation fg.deobf("curse.maven:valkyrien-skies-258371:5212232")
+// implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
     implementation fg.deobf("curse.maven:curios-309927:5367944")
-   // implementation fg.deobf("curse.maven:effortless-building-302113:4979130")
+  //  implementation fg.deobf("curse.maven:effortless-building-302113:4979130")
+ // implementation fg.deobf("curse.maven:leawind-third-person-930880:5611288")
+    implementation fg.deobf("curse.maven:jade-324717:5493390")
+  //  implementation fg.deobf("curse.maven:architectury-api-419699:5137938")
+    implementation fg.deobf("curse.maven:create-ore-excavation-649832:5517194")
+  //  implementation fg.deobf("curse.maven:mekanism-268560:5662583")
+    implementation fg.deobf("curse.maven:mmmmmmmmmmmm-225738:5594972")
+    implementation fg.deobf("curse.maven:selene-499980:5619074")
+    implementation fg.deobf("curse.maven:world-stripper-250603:4578579")
 }
 
 jar {

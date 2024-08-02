@@ -1,0 +1,31 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:boomstick"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "minecraft:copper_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "minecraft:copper_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:firing_unit"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_parts"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_barrel"
+    }
+  ]
+}

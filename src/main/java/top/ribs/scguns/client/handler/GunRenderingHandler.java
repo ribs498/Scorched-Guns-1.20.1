@@ -278,17 +278,22 @@ public class GunRenderingHandler {
         float direction = down ? -0.6F : 0.6F;
         this.offhandTranslate = Mth.clamp(this.offhandTranslate + direction, -1.0F, 1.0F);
     }
-
     private void updateImmersiveCamera() {
         this.prevImmersiveRoll = this.immersiveRoll;
         this.prevFallSway = this.fallSway;
 
         Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null)
+        if (mc.player == null) {
             return;
+        }
 
         ItemStack heldItem = mc.player.getMainHandItem();
-        float targetAngle = heldItem.getItem() instanceof GunItem || !Config.CLIENT.display.restrictCameraRollToWeapons.get() ? mc.player.input.leftImpulse : 0F;
+        if (heldItem.isEmpty() || !(heldItem.getItem() instanceof GunItem)) {
+            this.immersiveRoll = 0.0F;
+            return;
+        }
+
+        float targetAngle = mc.player.input.leftImpulse;
         float speed = mc.player.input.leftImpulse != 0 ? 0.1F : 0.15F;
         this.immersiveRoll = Mth.lerp(speed, this.immersiveRoll, targetAngle);
 
@@ -398,13 +403,34 @@ public class GunRenderingHandler {
     public boolean isThirdPersonMeleeAttacking() {
         return this.isThirdPersonMeleeAttacking;
     }
+
+    public void startMeleeAnimation(ItemStack heldItem) {
+        long currentTime = System.currentTimeMillis();
+        LocalPlayer player = Minecraft.getInstance().player;
+
+        if (heldItem.getItem() instanceof GunItem gunItem) {
+            assert player != null;
+            if (MeleeAttackHandler.isMeleeOnCooldown(player, heldItem)) {
+
+                return;
+            }
+            MeleeAttackHandler.setMeleeCooldown(player, heldItem, gunItem);
+        }
+        if (currentTime - meleeStartTime >= MELEE_DURATION) {
+            this.isMeleeAttacking = true;
+            this.meleeStartTime = currentTime;
+            this.meleeProgress = 0;
+            this.prevMeleeProgress = 0;
+            ModSyncedDataKeys.MELEE.setValue(player, true);
+        }
+    }
+
     private void applyMeleeTransforms(PoseStack poseStack, float partialTicks) {
         if (isMeleeAttacking) {
             float progress = Mth.lerp(partialTicks, prevMeleeProgress, meleeProgress);
             assert Minecraft.getInstance().player != null;
             ItemStack heldItem = Minecraft.getInstance().player.getMainHandItem();
             boolean isBayonetEquipped = heldItem.getItem() instanceof GunItem && ((GunItem) heldItem.getItem()).hasBayonet(heldItem);
-
             if (isBayonetEquipped) {
                 if (progress < 0.4f) {
                     // Quicker stab part
@@ -435,24 +461,6 @@ public class GunRenderingHandler {
                     poseStack.mulPose(Axis.XP.rotationDegrees(-35F * (1 - returnProgress)));
                 }
             }
-        }
-    }
-    public void startMeleeAnimation(ItemStack heldItem) {
-        long currentTime = System.currentTimeMillis();
-        LocalPlayer player = Minecraft.getInstance().player;
-
-        if (heldItem.getItem() instanceof GunItem gunItem) {
-            if (MeleeAttackHandler.isMeleeOnCooldown(player, heldItem)) {
-                return;
-            }
-        }
-
-        if (currentTime - meleeStartTime >= MELEE_DURATION) {
-            this.isMeleeAttacking = true;
-            this.meleeStartTime = currentTime;
-            this.meleeProgress = 0;
-            this.prevMeleeProgress = 0;
-            ModSyncedDataKeys.MELEE.setValue(player, true);
         }
     }
 
@@ -763,18 +771,17 @@ public class GunRenderingHandler {
         if (stack.getItem() instanceof GunItem) {
             poseStack.pushPose();
 
-            ItemStack model = ItemStack.EMPTY;
-            if (stack.getTag() != null && stack.getTag().contains("Model", Tag.TAG_COMPOUND)) {
-                model = ItemStack.of(stack.getTag().getCompound("Model"));
-            }
-
             RenderUtil.applyTransformType(stack, poseStack, display, entity);
 
-            this.renderingWeapon = stack;
-            this.renderGun(entity, display, model.isEmpty() ? stack : model, poseStack, renderTypeBuffer, light, partialTicks);
-            this.renderAttachments(entity, display, stack, poseStack, renderTypeBuffer, light, partialTicks);
-            this.renderingWeapon = null;
+            // Render the gun
+            renderGun(entity, display, stack, poseStack, renderTypeBuffer, light, partialTicks);
+
+            // Render the attachments
+            renderAttachments(entity, display, stack, poseStack, renderTypeBuffer, light, partialTicks);
+
+            // Render muzzle flash if applicable
             renderMuzzleFlash(entity, poseStack, renderTypeBuffer, stack, display, partialTicks);
+
             poseStack.popPose();
         }
     }
@@ -807,7 +814,8 @@ public class GunRenderingHandler {
                     ModItems.IRON_BAYONET.get(),
                     ModItems.ANTHRALITE_BAYONET.get(),
                     ModItems.DIAMOND_BAYONET.get(),
-                    ModItems.NETHERITE_BAYONET.get()
+                    ModItems.NETHERITE_BAYONET.get(),
+                    ModItems.EXTENDED_BARREL.get()
             );
 
             for (String tagKey : attachments.getAllKeys()) {
@@ -922,6 +930,7 @@ public class GunRenderingHandler {
             case "flash_type_4" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_4.png");
             case "flash_type_5" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_5.png");
             case "flash_type_6" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_6.png");
+            case "flash_type_7" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_7.png");
             default -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_1.png");
         };
     }

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/root",
+  "criteria": {
+    "lightning_battery": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:lightning_battery"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.craft_lightning_battery.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:lightning_battery"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.craft_lightning_battery"
+    }
+  },
+  "requirements": [
+    [
+      "lightning_battery"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

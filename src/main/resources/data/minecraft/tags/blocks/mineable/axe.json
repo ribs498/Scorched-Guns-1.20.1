@@ -1,6 +1,9 @@
 {
   "replace": false,
   "values": [
-    "scguns:supply_crate"
+    "scguns:supply_crate",
+    "scguns:advanced_composter",
+    "scguns:powder_keg",
+    "scguns:nitro_keg"
   ]
 }

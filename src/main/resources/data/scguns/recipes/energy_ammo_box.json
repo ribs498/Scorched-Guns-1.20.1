@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "scguns:anthralite_nugget"
+    },
+    "R": {
+      "item": "minecraft:iron_ingot"
+    },
+    "X": {
+      "item": "minecraft:copper_ingot"
+    }
+  },
+  "pattern": [
+    "QRQ",
+    "RXR",
+    "QRQ"
+  ],
+  "result": {
+    "item": "scguns:energy_ammo_box"
+  }
+}

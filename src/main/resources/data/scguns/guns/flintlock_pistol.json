@@ -13,7 +13,7 @@
     "gripType": "scguns:one_handed",
     "rate": 6,
     "recoilAngle": 5.0,
-    "recoilKick": 0.8,
+    "recoilKick": 2.0,
     "spread": 3.0,
     "meleeDamage": 2.0,
     "meleeCooldownTicks": 10
@@ -36,7 +36,7 @@
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:powder_and_ball",
-    "life": 20,
+    "life": 50,
     "size": 1.0,
     "speed": 4.0,
     "trailLengthMultiplier": 2.0
@@ -52,6 +52,6 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.blackpowder.fire",
     "fire": "scguns:item.blackpowder.fire",
-    "reload": "scguns:item.pistol.reload"
+    "reload": "scguns:item.gauss.reload"
   }
 }

@@ -10,7 +10,7 @@
   "general": {
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
-    "rate": 4,
+    "rate": 6,
     "recoilAngle": 2.5,
     "recoilKick": 1.4,
     "spread": 2.0,
@@ -48,14 +48,14 @@
     "item": "scguns:compact_advanced_round",
     "ejectsCasing": true,
     "casingType": "scguns:small_brass_casing",
-    "life": 30,
+    "life": 40,
     "size": 0.05,
     "speed": 7.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 10,
+    "maxAmmo": 12,
     "reloadItem": "scguns:compact_copper_round",
     "reloadTimer": 20,
     "reloadType": "scguns:mag_fed"
@@ -64,7 +64,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.brass_pistol.fire",
     "fire": "scguns:item.brass_pistol.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.bruiser.silenced_fire"
   }
 }

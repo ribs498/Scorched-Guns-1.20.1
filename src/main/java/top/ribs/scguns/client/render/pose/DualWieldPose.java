@@ -129,7 +129,7 @@ public class DualWieldPose implements IHeldAnimation {
 
     @Override
     public boolean canRenderOffhandItem() {
-        return true;
+        return false;
     }
 
     @Override

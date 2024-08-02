@@ -10,7 +10,7 @@
   "general": {
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
-    "gripType": "scguns:two_handed",
+    "gripType": "scguns:two_handed_shotgun",
     "rate": 11,
     "recoilAngle": 3.5,
     "recoilKick": 2.0,
@@ -53,23 +53,23 @@
     "gravity": false,
     "item": "scguns:standard_copper_round",
     "casingType": "scguns:medium_copper_casing",
-    "life": 20,
+    "life": 50,
     "size": 0.05,
     "speed": 10.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 5,
-    "maxAmmo": 5,
+    "maxAmmo": 6,
     "reloadItem": "scguns:standard_copper_round",
     "reloadTimer": 40,
     "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.makeshift_rifle.cock",
-    "enchantedFire": "scguns:item.heavy_rifle.fire",
-    "fire": "scguns:item.heavy_rifle.fire",
-    "reload": "scguns:item.pistol.reload",
+    "enchantedFire": "scguns:item.iron_rifle.fire",
+    "fire": "scguns:item.iron_rifle.fire",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.makeshift_rifle.silenced_fire"
   }
 }

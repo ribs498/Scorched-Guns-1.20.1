@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/copper/umax_pistol",
+  "criteria": {
+    "arc_worker": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:arc_worker"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.arc_worker.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:arc_worker"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.arc_worker"
+    }
+  },
+  "requirements": [
+    [
+      "arc_worker"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

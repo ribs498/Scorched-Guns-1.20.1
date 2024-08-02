@@ -14,7 +14,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:small_brass_casing"
+          "item": "scguns:unfinished_compact_advanced_round"
         },
         [
           {
@@ -24,7 +24,7 @@
       ],
       "results": [
         {
-          "item": "scguns:small_brass_casing"
+          "item": "scguns:unfinished_compact_advanced_round"
         }
       ]
     },
@@ -32,17 +32,17 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:small_brass_casing"
+          "item": "scguns:unfinished_compact_advanced_round"
         },
         [
           {
-            "item": "scguns:anthralite_nugget"
+            "tag": "scguns:advanced_bullet_tips"
           }
         ]
       ],
       "results": [
         {
-          "item": "scguns:small_brass_casing"
+          "item": "scguns:unfinished_compact_advanced_round"
         }
       ]
     },
@@ -50,17 +50,17 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "scguns:small_brass_casing"
+          "item": "scguns:unfinished_compact_advanced_round"
         }
       ],
       "results": [
         {
-          "item": "scguns:small_brass_casing"
+          "item": "scguns:unfinished_compact_advanced_round"
         }
       ]
     }
   ],
   "transitionalItem": {
-    "item": "scguns:small_brass_casing"
+    "item": "scguns:unfinished_compact_advanced_round"
   }
 }

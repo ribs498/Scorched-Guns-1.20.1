@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/craft_blank_mold",
+  "criteria": {
+    "gun_parts_mold": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:gun_parts_mold"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.craft_gun_parts_mold.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:gun_parts_mold"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.craft_gun_parts_mold"
+    }
+  },
+  "requirements": [
+    [
+      "gun_parts_mold"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

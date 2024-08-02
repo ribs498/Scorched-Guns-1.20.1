@@ -1,0 +1,68 @@
+{
+  "variants": {
+    "level=0,facing=north":  { "model": "scguns:block/advanced_composter", "y": 0, "uvlock": false },
+    "level=0,facing=south":  { "model": "scguns:block/advanced_composter", "y": 180, "uvlock": false },
+    "level=0,facing=west":   { "model": "scguns:block/advanced_composter", "y": 270, "uvlock": false },
+    "level=0,facing=east":   { "model": "scguns:block/advanced_composter", "y": 90, "uvlock": false },
+
+    "level=1,facing=north":  { "model": "scguns:block/advanced_composter_contents1", "y": 0, "uvlock": false },
+    "level=1,facing=south":  { "model": "scguns:block/advanced_composter_contents1", "y": 180, "uvlock": false },
+    "level=1,facing=west":   { "model": "scguns:block/advanced_composter_contents1", "y": 270, "uvlock": false },
+    "level=1,facing=east":   { "model": "scguns:block/advanced_composter_contents1", "y": 90, "uvlock": false },
+
+    "level=2,facing=north":  { "model": "scguns:block/advanced_composter_contents2", "y": 0, "uvlock": false },
+    "level=2,facing=south":  { "model": "scguns:block/advanced_composter_contents2", "y": 180, "uvlock": false },
+    "level=2,facing=west":   { "model": "scguns:block/advanced_composter_contents2", "y": 270, "uvlock": false },
+    "level=2,facing=east":   { "model": "scguns:block/advanced_composter_contents2", "y": 90, "uvlock": false },
+
+    "level=3,facing=north":  { "model": "scguns:block/advanced_composter_contents3", "y": 0, "uvlock": false },
+    "level=3,facing=south":  { "model": "scguns:block/advanced_composter_contents3", "y": 180, "uvlock": false },
+    "level=3,facing=west":   { "model": "scguns:block/advanced_composter_contents3", "y": 270, "uvlock": false },
+    "level=3,facing=east":   { "model": "scguns:block/advanced_composter_contents3", "y": 90, "uvlock": false },
+
+    "level=4,facing=north":  { "model": "scguns:block/advanced_composter_contents4", "y": 0, "uvlock": false },
+    "level=4,facing=south":  { "model": "scguns:block/advanced_composter_contents4", "y": 180, "uvlock": false },
+    "level=4,facing=west":   { "model": "scguns:block/advanced_composter_contents4", "y": 270, "uvlock": false },
+    "level=4,facing=east":   { "model": "scguns:block/advanced_composter_contents4", "y": 90, "uvlock": false },
+
+    "level=5,facing=north":  { "model": "scguns:block/advanced_composter_contents5", "y": 0, "uvlock": false },
+    "level=5,facing=south":  { "model": "scguns:block/advanced_composter_contents5", "y": 180, "uvlock": false },
+    "level=5,facing=west":   { "model": "scguns:block/advanced_composter_contents5", "y": 270, "uvlock": false },
+    "level=5,facing=east":   { "model": "scguns:block/advanced_composter_contents5", "y": 90, "uvlock": false },
+
+    "level=6,facing=north":  { "model": "scguns:block/advanced_composter_contents6", "y": 0, "uvlock": false },
+    "level=6,facing=south":  { "model": "scguns:block/advanced_composter_contents6", "y": 180, "uvlock": false },
+    "level=6,facing=west":   { "model": "scguns:block/advanced_composter_contents6", "y": 270, "uvlock": false },
+    "level=6,facing=east":   { "model": "scguns:block/advanced_composter_contents6", "y": 90, "uvlock": false },
+
+    "level=7,facing=north":  { "model": "scguns:block/advanced_composter_contents7", "y": 0, "uvlock": false },
+    "level=7,facing=south":  { "model": "scguns:block/advanced_composter_contents7", "y": 180, "uvlock": false },
+    "level=7,facing=west":   { "model": "scguns:block/advanced_composter_contents7", "y": 270, "uvlock": false },
+    "level=7,facing=east":   { "model": "scguns:block/advanced_composter_contents7", "y": 90, "uvlock": false },
+
+    "level=8,facing=north":  { "model": "scguns:block/advanced_composter_contents_ready", "y": 0, "uvlock": false },
+    "level=8,facing=south":  { "model": "scguns:block/advanced_composter_contents_ready", "y": 180, "uvlock": false },
+    "level=8,facing=west":   { "model": "scguns:block/advanced_composter_contents_ready", "y": 270, "uvlock": false },
+    "level=8,facing=east":   { "model": "scguns:block/advanced_composter_contents_ready", "y": 90, "uvlock": false },
+
+    "level=8,facing=north,ready=true": { "model": "scguns:block/advanced_composter_contents_ready", "y": 0, "uvlock": false },
+    "level=8,facing=south,ready=true": { "model": "scguns:block/advanced_composter_contents_ready", "y": 180, "uvlock": false },
+    "level=8,facing=west,ready=true":  { "model": "scguns:block/advanced_composter_contents_ready", "y": 270, "uvlock": false },
+    "level=8,facing=east,ready=true":  { "model": "scguns:block/advanced_composter_contents_ready", "y": 90, "uvlock": false },
+
+    "level=9,facing=north":  { "model": "scguns:block/advanced_composter_contents6", "y": 0, "uvlock": false },
+    "level=9,facing=south":  { "model": "scguns:block/advanced_composter_contents6", "y": 180, "uvlock": false },
+    "level=9,facing=west":   { "model": "scguns:block/advanced_composter_contents6", "y": 270, "uvlock": false },
+    "level=9,facing=east":   { "model": "scguns:block/advanced_composter_contents6", "y": 90, "uvlock": false },
+
+    "level=10,facing=north":  { "model": "scguns:block/advanced_composter_contents4", "y": 0, "uvlock": false },
+    "level=10,facing=south":  { "model": "scguns:block/advanced_composter_contents4", "y": 180, "uvlock": false },
+    "level=10,facing=west":   { "model": "scguns:block/advanced_composter_contents4", "y": 270, "uvlock": false },
+    "level=10,facing=east":   { "model": "scguns:block/advanced_composter_contents4", "y": 90, "uvlock": false },
+
+    "level=11,facing=north":  { "model": "scguns:block/advanced_composter_contents1", "y": 0, "uvlock": false },
+    "level=11,facing=south":  { "model": "scguns:block/advanced_composter_contents1", "y": 180, "uvlock": false },
+    "level=11,facing=west":   { "model": "scguns:block/advanced_composter_contents1", "y": 270, "uvlock": false },
+    "level=11,facing=east":   { "model": "scguns:block/advanced_composter_contents1", "y": 90, "uvlock": false }
+  }
+}

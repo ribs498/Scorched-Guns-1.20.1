@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/anthralite",
+  "criteria": {
+    "treated_brass_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:treated_brass_ingot"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.treated_brass.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:treated_brass_ingot"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.treated_brass"
+    }
+  },
+  "requirements": [
+    [
+      "treated_brass_ingot"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

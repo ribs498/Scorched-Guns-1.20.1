@@ -1,19 +1,23 @@
 {
 	"parent": "builtin/entity",
+	"textures": {
+		"1": "minecraft:block/stone",
+		"particle": "minecraft:block/stone"
+	},
 	"display": {
 		"thirdperson_righthand": {
-			"translation": [0, 8.25, -5.5],
+			"translation": [0, 7, -6.5],
 			"scale": [1.3, 1.3, 1.3]
 		},
 		"thirdperson_lefthand": {
-			"translation": [0, 8.25, -5.5],
+			"translation": [0, 7, -6.5],
 			"scale": [1.3, 1.3, 1.3]
 		},
 		"firstperson_righthand": {
-			"translation": [-4.5, 9.75, -0.5]
+			"translation": [-4, 9.65, -2.5]
 		},
 		"firstperson_lefthand": {
-			"translation": [-4.5, 9.75, -0.5]
+			"translation": [-4, 9.65, -2.5]
 		},
 		"ground": {
 			"translation": [0, 9, -1],
@@ -21,13 +25,13 @@
 		},
 		"gui": {
 			"rotation": [74.02, -53.34, 70.48],
-			"translation": [-2.5, 6.75, 0],
+			"translation": [-1.5, 6.75, 0],
 			"scale": [1.25, 1.25, 1.25]
 		},
 		"fixed": {
-			"rotation": [90, 55, -90],
-			"translation": [3.75, 9.25, 0],
-			"scale": [1.7, 1.7, 1.7]
+			"rotation": [-90, 90, 90],
+			"translation": [-3.75, 9.5, 0],
+			"scale": [1.75, 1.75, 1.75]
 		}
 	}
 }

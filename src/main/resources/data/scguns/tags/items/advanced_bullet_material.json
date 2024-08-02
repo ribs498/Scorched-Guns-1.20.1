@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:anthralite_ingot",
+    "scguns:treated_iron_ingot",
+    {"id":"immersiveengineering:ingot_steel",  "required":false},
+    {"id":"magistuarmory:steel_ingot",  "required":false},
+    {"id": "tfmg:steel_ingot",  "required":false}
+
+  ]
+}

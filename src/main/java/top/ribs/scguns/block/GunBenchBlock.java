@@ -11,18 +11,17 @@ import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.Mirror;
-import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.level.block.state.BlockBehaviour;
+import top.ribs.scguns.blockentity.GunBenchBlockEntity;
 import top.ribs.scguns.client.screen.GunBenchMenu;
 
-public class GunBenchBlock extends HorizontalDirectionalBlock {
+public class GunBenchBlock  extends Block implements EntityBlock {
     private static final Component CONTAINER_TITLE = Component.translatable("container.gun_bench");
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
 
@@ -62,9 +61,28 @@ public class GunBenchBlock extends HorizontalDirectionalBlock {
     }
 
     @Override
-    public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
-        return new SimpleMenuProvider((id, playerInventory, player) -> {
-            return new GunBenchMenu(id, playerInventory, ContainerLevelAccess.create(level, pos));
-        }, CONTAINER_TITLE);
+    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+        return new GunBenchBlockEntity(pos, state);
     }
+
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof GunBenchBlockEntity) {
+                ((GunBenchBlockEntity) blockEntity).dropContents(null);
+                level.updateNeighbourForOutputSignal(pos, this);
+            }
+
+            super.onRemove(state, level, pos, newState, isMoving);
+        }
+    }
+
+
+    @Override
+    public MenuProvider getMenuProvider(BlockState state, Level level, BlockPos pos) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        return blockEntity instanceof GunBenchBlockEntity ? (GunBenchBlockEntity) blockEntity : null;
+    }
+
 }

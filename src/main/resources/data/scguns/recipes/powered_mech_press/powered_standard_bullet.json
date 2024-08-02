@@ -1,0 +1,17 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 15,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "tag": "scguns:standard_bullet_material"
+    }
+  ],
+  "mold": {
+    "item": "scguns:bullet_mold"
+  },
+  "result": {
+    "item": "scguns:standard_bullet",
+    "count": 12
+  }
+}

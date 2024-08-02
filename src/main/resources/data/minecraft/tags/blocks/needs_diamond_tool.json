@@ -1,6 +1,8 @@
 {
   "replace": false,
   "values": [
-    "scguns:vehement_coal_ore"
+    "scguns:vehement_coal_ore",
+    "scguns:vehement_coal_block",
+    "scguns:sulfur_vent"
   ]
 }

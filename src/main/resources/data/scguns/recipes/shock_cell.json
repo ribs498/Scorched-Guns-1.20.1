@@ -1,0 +1,14 @@
+{
+  "type": "scguns:lightning_battery",
+  "processingTime": 50,
+  "requiredEnergy": 1600,
+  "ingredients": [
+    {
+      "item": "scguns:empty_cell"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "scguns:shock_cell"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/root",
+  "criteria": {
+    "geothermal_vent": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:geothermal_vent"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.geothermal_vent.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:geothermal_vent"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.geothermal_vent"
+    }
+  },
+  "requirements": [
+    [
+      "geothermal_vent"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

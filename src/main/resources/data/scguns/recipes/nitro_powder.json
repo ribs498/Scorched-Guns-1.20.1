@@ -12,15 +12,21 @@
     },
     "#": {
       "item": "scguns:netherite_scrap_chunk"
+    },
+    "M": {
+      "item": "scguns:niter_dust"
+    },
+    "L": {
+      "item": "scguns:phosphor_dust"
     }
   },
   "pattern": [
     "###",
     "E#Q",
-    " W "
+    "LWM"
   ],
   "result": {
     "item": "scguns:nitro_powder",
-    "count": 6
+    "count": 7
   }
 }

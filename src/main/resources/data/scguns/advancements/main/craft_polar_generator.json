@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/root",
+  "criteria": {
+    "polar_generator": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:polar_generator"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.craft_polar_generator.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:polar_generator"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.craft_polar_generator"
+    }
+  },
+  "requirements": [
+    [
+      "polar_generator"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

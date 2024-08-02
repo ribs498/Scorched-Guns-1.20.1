@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/root",
+  "criteria": {
+    "sulfur_chunk": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:sulfur_chunk"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.sulfur_chunk.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:sulfur_chunk"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.sulfur_chunk"
+    }
+  },
+  "requirements": [
+    [
+      "sulfur_chunk"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

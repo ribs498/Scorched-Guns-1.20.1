@@ -1,0 +1,71 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "minecraft:iron_block"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "scguns:gun_parts",
+        "count": 2
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:cutting",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_gun_parts"
+        }
+      ],
+      "processingTime": 50,
+      "results": [
+        {
+          "item": "scguns:unfinished_gun_parts"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_gun_parts"
+        }
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_gun_parts"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_gun_parts"
+        }
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_gun_parts"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_gun_parts"
+        }
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_gun_parts"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "scguns:unfinished_gun_parts"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "H": {
+      "tag": "minecraft:wool"
+    },
+    "Q": {
+      "item": "minecraft:charcoal"
+    },
+    "Z": {
+      "tag": "forge:dusts/sulfur"
+    }
+  },
+  "pattern": [
+    " Q ",
+    " H ",
+    " Z "
+  ],
+  "result": {
+    "item": "scguns:composite_filter",
+    "count": 3
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/diamond_steel_blueprint",
+  "criteria": {
+    "krauser": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:krauser"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.krauser.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:krauser"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.krauser"
+    }
+  },
+  "requirements": [
+    [
+      "krauser"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

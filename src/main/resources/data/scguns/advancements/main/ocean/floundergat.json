@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/ocean_blueprint",
+  "criteria": {
+    "floundergat": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:floundergat"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.floundergat.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:floundergat"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.floundergat"
+    }
+  },
+  "requirements": [
+    [
+      "floundergat"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

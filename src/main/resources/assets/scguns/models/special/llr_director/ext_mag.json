@@ -2,20 +2,21 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-		"2": "scguns:item/llr_director"
+		"1": "scguns:item/llr_director",
+		"particle": "scguns:item/llr_director"
 	},
 	"elements": [
 		{
-			"from": [7.5, 1.79767, 9.86483],
-			"to": [8.5, 2.79767, 12.36483],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0.18407, 10.66423]},
+			"from": [5.7636, 4.18407, 10.86483],
+			"to": [6.7636, 5.18407, 13.36483],
+			"rotation": {"angle": 0, "axis": "z", "origin": [4.15, 4.68407, 11.66423]},
 			"faces": {
-				"north": {"uv": [4.75, 9.25, 5, 9.5], "texture": "#2"},
-				"east": {"uv": [7.25, 4.25, 7.875, 4.5], "texture": "#2"},
-				"south": {"uv": [5, 9.25, 5.25, 9.5], "texture": "#2", "cullface": "south"},
-				"west": {"uv": [7.25, 4.5, 7.875, 4.75], "texture": "#2"},
-				"up": {"uv": [1, 8.125, 0.75, 7.5], "texture": "#2"},
-				"down": {"uv": [1.75, 7.5, 1.5, 8.125], "texture": "#2"}
+				"north": {"uv": [9.25, 5.75, 9.5, 6], "texture": "#1"},
+				"east": {"uv": [7.25, 6.5, 7.875, 6.75], "texture": "#1"},
+				"south": {"uv": [9.25, 6, 9.5, 6.25], "texture": "#1", "cullface": "south"},
+				"west": {"uv": [7.5, 0, 8.125, 0.25], "texture": "#1"},
+				"up": {"uv": [7.75, 0.875, 7.5, 0.25], "texture": "#1"},
+				"down": {"uv": [0.75, 7.5, 0.5, 8.125], "texture": "#1"}
 			}
 		}
 	],
@@ -47,5 +48,13 @@
 			"translation": [4, 6, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "ExtMag",
+			"origin": [4.15, 4.68407, 11.66423],
+			"color": 0,
+			"children": [0]
+		}
+	]
 }

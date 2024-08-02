@@ -49,5 +49,13 @@
 			"translation": [0, 8.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "Sights",
+			"origin": [6.9625, 5.5, 7.425],
+			"color": 0,
+			"children": [0]
+		}
+	]
 }

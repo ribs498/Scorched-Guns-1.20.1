@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/diamond_steel/lockewood",
+  "criteria": {
+    "inertial": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:inertial"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.inertial.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:inertial"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.inertial"
+    }
+  },
+  "requirements": [
+    [
+      "inertial"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

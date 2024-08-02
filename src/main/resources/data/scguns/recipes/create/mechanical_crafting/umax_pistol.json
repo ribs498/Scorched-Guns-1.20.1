@@ -1,0 +1,35 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "C": {
+      "item": "minecraft:copper_ingot"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "scguns:gun_parts"
+    },
+    "S": {
+      "item": "scguns:gun_barrel"
+    },
+    "X": {
+      "item": "scguns:large_iron_casing"
+    },
+    "P": {
+      "item": "scguns:copper_blueprint"
+    }
+  },
+  "pattern": [
+    "CCP  ",
+    "LRS  ",
+    "Q X  "
+  ],
+  "result": {
+    "item": "scguns:umax_pistol"
+  }
+}

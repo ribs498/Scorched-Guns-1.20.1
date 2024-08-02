@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/end/dark_matter",
+  "criteria": {
+    "lone_wonder": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:lone_wonder"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.lone_wonder.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:lone_wonder"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.lone_wonder"
+    }
+  },
+  "requirements": [
+    [
+      "lone_wonder"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

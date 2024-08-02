@@ -166,5 +166,13 @@
 			"translation": [0, 8.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "HeavyStock",
+			"origin": [7.125, 0.9, 20.25],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+		}
+	]
 }

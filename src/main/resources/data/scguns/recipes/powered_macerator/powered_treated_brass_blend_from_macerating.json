@@ -1,0 +1,23 @@
+{
+  "type": "scguns:powered_macerating",
+  "processingTime": 100,
+  "energyUse": 1000,
+  "ingredients": [
+    {
+      "tag": "forge:ingots/brass"
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:quartz"
+    }
+  ],
+  "result": {
+    "item": "scguns:treated_brass_blend",
+    "count": 3
+  }
+}

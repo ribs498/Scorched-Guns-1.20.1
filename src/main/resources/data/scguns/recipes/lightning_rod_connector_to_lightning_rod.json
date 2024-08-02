@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "ammo",
+  "ingredients": [
+    {
+      "item": "scguns:lightning_rod_connector"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "minecraft:lightning_rod"
+  }
+}

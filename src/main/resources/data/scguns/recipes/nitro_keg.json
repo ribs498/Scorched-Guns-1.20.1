@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "scguns:powder_keg"
+    },
+    {
+      "item": "scguns:powder_keg"
+    },
+    {
+      "item": "scguns:nitro_powder"
+    }
+  ],
+  "result": {
+    "count": 2,
+    "item": "scguns:nitro_keg"
+  }
+}

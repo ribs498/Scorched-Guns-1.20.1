@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/treated_brass_blueprint",
+  "criteria": {
+    "piglin_blueprint": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:piglin_blueprint"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.piglin_blueprint.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:piglin_blueprint"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.piglin_blueprint"
+    }
+  },
+  "requirements": [
+    [
+      "piglin_blueprint"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,42 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:melon",
+    "minecraft:pumpkin",
+    "minecraft:sugar_cane",
+    "minecraft:cactus",
+    "minecraft:chorus_fruit",
+    "minecraft:chorus_plant",
+    "minecraft:moss_block",
+    "minecraft:warped_fungus",
+    "minecraft:crimson_fungus",
+    "minecraft:crimson_roots",
+    "minecraft:warped_roots",
+    "minecraft:nether_wart",
+    "minecraft:brown_mushroom",
+    "minecraft:red_mushroom",
+    "minecraft:twisting_vines",
+    "minecraft:weeping_vines",
+    "minecraft:glow_lichen",
+    "minecraft:glow_berries",
+    "minecraft:sweet_berries",
+    "minecraft:torchflower_seeds",
+    "minecraft:poisonous_potato",
+    "minecraft:sea_pickle",
+    "minecraft:egg",
+    "minecraft:cocoa_beans",
+    "minecraft:apple",
+    {"id":"vintagedelight:pickle",    "required":false},
+    {"id":"vintagedelight:pickled_onion",    "required":false},
+    {"id":"vintagedelight:pickled_pepper",    "required":false},
+    {"id":"vintagedelight:pickled_beetroot",    "required":false},
+    {"id":"vintagedelight:pickled_egg",    "required":false},
+    {"id":"vintagedelight:gearo_berry",  "required":false},
+    {"id":"upgrade_aquatic:mulberry",  "required":false},
+    {"id":"aether_redux:zanberry",  "required":false},
+    {"id":"twilightforest:torch",    "required":false},
+    {"id":"farmersdelight:rotten_tomato",  "required":false}
+
+
+  ]
+}

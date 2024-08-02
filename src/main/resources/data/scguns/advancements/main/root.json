@@ -1,0 +1,30 @@
+{
+  "criteria": {
+    "gun": {
+      "conditions": {},
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "background": "scguns:textures/block/raw_anthralite_block.png",
+    "description": {
+      "translate": "scguns.advancement.root.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:m3_carabine"
+    },
+    "show_toast": false,
+    "title": {
+      "translate": "scguns.advancement.root"
+    }
+  },
+  "requirements": [
+    [
+      "gun"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

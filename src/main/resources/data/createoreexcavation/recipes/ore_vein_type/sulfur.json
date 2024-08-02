@@ -1,0 +1,16 @@
+{
+  "type": "createoreexcavation:vein",
+  "amountMax": 40.0,
+  "amountMin": 15.0,
+  "biomeWhitelist": "minecraft:is_overworld",
+  "icon": {
+    "item": "scguns:sulfur_chunk"
+  },
+  "name": "{\"translate\":\"item.scguns.sulfur_chunk\"}",
+  "placement": {
+    "salt": 1043879205,
+    "separation": 8,
+    "spacing": 128
+  },
+  "priority": 0
+}

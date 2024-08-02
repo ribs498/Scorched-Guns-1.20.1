@@ -126,5 +126,13 @@
 			"translation": [1.5, 8.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "WoodenStock",
+			"origin": [8.125, -0.8, 21.5],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5, 6]
+		}
+	]
 }

@@ -1,0 +1,19 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 200,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "item": "scguns:music_disc_mass_destruction"
+    },
+    {
+      "item": "scguns:netherite_scrap_chunk"
+    }
+
+  ],
+  "result": {
+    "item": "scguns:music_disc_mass_destruction_extended",
+    "count": 1
+  }
+}
+

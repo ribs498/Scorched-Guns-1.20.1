@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "scguns:block/penetrator",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "scguns:block/penetrator",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "scguns:block/penetrator",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "scguns:block/penetrator",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "scguns:block/penetrator"
+    },
+    "facing=west": {
+      "model": "scguns:block/penetrator",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

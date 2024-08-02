@@ -1,0 +1,14 @@
+{
+  "type": "scguns:powered_macerating",
+  "processingTime": 100,
+  "energyUse": 1000,
+  "ingredients": [
+    {
+      "item": "minecraft:nether_star"
+    }
+  ],
+  "result": {
+    "item": "scguns:nether_star_fragment",
+    "count": 3
+  }
+}

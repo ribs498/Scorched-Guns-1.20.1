@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/craft_polar_generator",
+  "criteria": {
+    "powered_macerator": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:powered_macerator"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.craft_powered_macerator.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:powered_macerator"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.craft_powered_macerator"
+    }
+  },
+  "requirements": [
+    [
+      "powered_macerator"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

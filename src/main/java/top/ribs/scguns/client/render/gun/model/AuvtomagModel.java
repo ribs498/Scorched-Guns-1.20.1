@@ -31,14 +31,27 @@ public class AuvtomagModel implements IOverrideModel {
 
         //Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.AUVTOMAG_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
+
+        // Render the standard barrel by default
+        boolean extendedBarrelAttached = false;
+
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get()) {
+                RenderUtil.renderModel(SpecialModels.AUVTOMAG_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+                extendedBarrelAttached = true;
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
                 RenderUtil.renderModel(SpecialModels.AUVTOMAG_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
                 RenderUtil.renderModel(SpecialModels.AUVTOMAG_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
                 RenderUtil.renderModel(SpecialModels.AUVTOMAG_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
         }
+
+        // Render the standard barrel if no extended barrel is attached
+        if (!extendedBarrelAttached) {
+            RenderUtil.renderModel(SpecialModels.AUVTOMAG_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
+
         if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.MAGAZINE)))
         {
             if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.EXTENDED_MAG.get())
@@ -47,13 +60,11 @@ public class AuvtomagModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.AUVTOMAG_SPEED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.PLUS_P_MAG.get())
                 RenderUtil.renderModel(SpecialModels.AUVTOMAG_EXTENDED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
-
         }
         else
             RenderUtil.renderModel(SpecialModels.AUVTOMAG_STANDARD_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
 
         if (entity.equals(Minecraft.getInstance().player)) {
-
             //Always push.
             matrixStack.pushPose();
             //Don't touch this, it's better to use the display options in Blockbench.
@@ -75,9 +86,8 @@ public class AuvtomagModel implements IOverrideModel {
             matrixStack.popPose();
         }
     }
+
     private double ease(double x) {
-
         return 1 - Math.pow(1 - (2 * x), 4);
-
     }
 }

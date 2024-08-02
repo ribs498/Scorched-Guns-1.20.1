@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/ocean/floundergat",
+  "criteria": {
+    "marlin": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:marlin"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.marlin.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:marlin"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.marlin"
+    }
+  },
+  "requirements": [
+    [
+      "marlin"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

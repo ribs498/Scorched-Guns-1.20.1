@@ -11,10 +11,10 @@
     "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
-    "rate": 7,
+    "rate": 13,
     "recoilAngle": 10.0,
     "recoilKick": 3.0,
-    "spread": 4.0,
+    "spread": 7.0,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20
   },
@@ -34,13 +34,13 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 5.3,
+      "yOffset": 5.5,
       "zOffset": 0.75
     }
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 8.5,
+    "damage": 6.5,
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:powder_and_ball",
@@ -51,15 +51,15 @@
   },
   "reloads": {
     "emptyMagTimer": 40,
-    "maxAmmo": 6,
+    "maxAmmo": 5,
     "reloadItem": "scguns:powder_and_ball",
-    "reloadTimer": 40,
+    "reloadTimer": 45,
     "reloadType": "scguns:manual"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.blackpowder.fire",
     "fire": "scguns:item.blackpowder.fire",
-    "reload": "scguns:item.pistol.reload"
+    "reload": "scguns:item.gauss.reload"
   }
 }

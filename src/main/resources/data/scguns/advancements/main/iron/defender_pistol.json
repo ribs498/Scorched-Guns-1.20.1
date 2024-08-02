@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/iron_blueprint",
+  "criteria": {
+    "defender_pistol": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:defender_pistol"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.defender_pistol.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:defender_pistol"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.defender_pistol"
+    }
+  },
+  "requirements": [
+    [
+      "defender_pistol"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

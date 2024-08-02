@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/ocean/bomb_lance",
+  "criteria": {
+    "sequoia": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:sequoia"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.sequoia.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:sequoia"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.sequoia"
+    }
+  },
+  "requirements": [
+    [
+      "sequoia"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

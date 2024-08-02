@@ -1,0 +1,33 @@
+{
+  "type": "create:mixing",
+  "heatRequirement": "heated",
+  "ingredients": [
+    [
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      {
+        "item": "minecraft:raw_iron"
+      }
+    ],
+    {
+      "item": "scguns:niter_dust"
+    },
+    {
+      "item": "minecraft:charcoal"
+    },
+    {
+      "item": "minecraft:flint"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:treated_iron_blend",
+      "count": 3
+    },
+    {
+      "chance": 0.1,
+      "item": "scguns:treated_iron_blend"
+    }
+  ]
+}

@@ -22,12 +22,16 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.fml.DistExecutor;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.event.GunEventBus;
 import top.ribs.scguns.init.ModEnchantments;
 import top.ribs.scguns.item.BayonetItem;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.item.attachment.IAttachment;
+import top.ribs.scguns.network.PacketHandler;
+import top.ribs.scguns.network.message.S2CMessageMeleeAttack;
 import top.ribs.scguns.util.GunModifierHelper;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -37,7 +41,8 @@ public class MeleeAttackHandler {
     private static final double REACH_DISTANCE = 2.5f;
     private static final float ENCHANTMENT_DAMAGE_SCALING_FACTOR = 0.70f;
     private static final float BASE_SPEED_DAMAGE_SCALING_FACTOR = 2.0f;
-    private static final float[] BANZAI_SCALING_FACTORS = {10.0f, 15.0f, 25.0f};
+    private static final float[] BANZAI_SCALING_FACTORS = {5.0f, 7.5f, 10.0f};
+
     private static final String MELEE_COOLDOWN_TAG = "MeleeCooldown";
     private static boolean isBanzai = false;
 
@@ -68,30 +73,23 @@ public class MeleeAttackHandler {
         if (player == null) {
             return;
         }
-
         ItemStack heldItem = player.getItemInHand(InteractionHand.MAIN_HAND);
         if (!(heldItem.getItem() instanceof GunItem gunItem)) {
             return;
         }
-
         if (isMeleeOnCooldown(player, heldItem)) {
             return;
         }
-
-        startMeleeAnimation(gunItem, heldItem);
-
+        PacketHandler.getPlayChannel().sendToPlayer(() -> player, new S2CMessageMeleeAttack(heldItem));
         LivingEntity target = findTargetWithinReach(player);
         if (target != null && target != player) {
             performMeleeAttackOnTarget(player, target, false);
-            damageGunAndAttachments(heldItem, player);  // Apply damage only if a valid target is hit
+            damageGunAndAttachments(heldItem, player);
         }
-        setMeleeCooldown(player, heldItem, gunItem);  // Apply cooldown even if no target is hit
-
-        // Set melee cooldown UI values
-        HUDRenderHandler.isMeleeCooldownActive = true;
-        HUDRenderHandler.maxMeleeCooldown = gunItem.getModifiedGun(heldItem).getGeneral().getMeleeCooldownTicks();
-        HUDRenderHandler.meleeCooldown = HUDRenderHandler.maxMeleeCooldown;
+        setMeleeCooldown(player, heldItem, gunItem);
     }
+
+
 
     public static boolean isMeleeOnCooldown(Player player, ItemStack heldItem) {
         CompoundTag tag = heldItem.getOrCreateTag();
@@ -99,27 +97,18 @@ public class MeleeAttackHandler {
         return tag.contains(MELEE_COOLDOWN_TAG) && currentTime < tag.getLong(MELEE_COOLDOWN_TAG);
     }
 
-    private static void startMeleeAnimation(GunItem gunItem, ItemStack heldItem) {
-        if (Minecraft.getInstance().player != null && isMeleeOnCooldown(Minecraft.getInstance().player, heldItem)) {
-            return;
-        }
-
-        GunRenderingHandler.get().startMeleeAnimation(heldItem);
-        if (gunItem.hasBayonet(heldItem)) {
-            GunRenderingHandler.get().startBayonetStabAnimation();
-        } else {
-            GunRenderingHandler.get().startMeleeAnimation(heldItem);
-        }
-        GunRenderingHandler.get().startThirdPersonMeleeAnimation();
+    public static void setMeleeCooldown(Player player, ItemStack heldItem, GunItem gunItem) {
+        CompoundTag tag = heldItem.getOrCreateTag();
+        long currentTime = player.level().getGameTime();
+        int cooldownTicks = gunItem.getModifiedGun(heldItem).getGeneral().getMeleeCooldownTicks();
+        tag.putLong(MELEE_COOLDOWN_TAG, currentTime + cooldownTicks);
+        heldItem.setTag(tag);
     }
-
     private static void performMeleeAttackOnTarget(ServerPlayer player, LivingEntity target, boolean isBanzaiAttack) {
         ItemStack heldItem = player.getItemInHand(InteractionHand.MAIN_HAND);
         if (!(heldItem.getItem() instanceof GunItem gunItem)) {
             return;
         }
-
-        player.swing(InteractionHand.MAIN_HAND);
 
         float baseDamage = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE);
         float additionalDamage = GunModifierHelper.getAdditionalDamage(heldItem);
@@ -135,17 +124,37 @@ public class MeleeAttackHandler {
             float speedDamageMultiplier = getBanzaiDamageMultiplier(player, heldItem);
             attackDamage *= speedDamageMultiplier;
             attackDamage = (float) (Math.round(attackDamage * 100.0) / 100.0);
-            logPlayerSpeed(player, speedDamageMultiplier, baseDamage + additionalDamage + enchantmentDamage + meleeDamage, attackDamage, heldItem);
         }
         DamageSource damageSource = player.serverLevel().damageSources().playerAttack(player);
-        if (target.hurt(damageSource, attackDamage)) {
-            applyKnockback(player, target, heldItem);
-            applySpecialEnchantmentsFromBayonet(heldItem, target, player, gunItem);
-            triggerBanzaiImpactIfNecessary(heldItem);
-            if (player.level().isClientSide) {
-                ClientLevel clientLevel = (ClientLevel) player.level();
-                spawnHitParticles(clientLevel, target);
+
+        if (isBanzaiAttack) {
+            List<LivingEntity> targets = findTargetsInArea(player, 3.0); // Example radius
+            for (LivingEntity aoeTarget : targets) {
+                if (aoeTarget.hurt(damageSource, attackDamage)) {
+                    applyKnockback(player, aoeTarget, heldItem);
+                    applySpecialEnchantmentsFromBayonet(heldItem, aoeTarget, player, gunItem);
+                    triggerBanzaiImpactIfNecessary(heldItem);
+                    if (player.level().isClientSide) {
+                        ClientMeleeAttackHandler.spawnHitParticles((ClientLevel) player.level(), aoeTarget);
+                    }
+                }
             }
+        } else {
+            LivingEntity raycastTarget = raycastForMeleeAttack(player, 2.5); // Example reach distance
+            if (raycastTarget != null && raycastTarget.hurt(damageSource, attackDamage)) {
+                applyKnockback(player, raycastTarget, heldItem);
+                applySpecialEnchantmentsFromBayonet(heldItem, raycastTarget, player, gunItem);
+                triggerBanzaiImpactIfNecessary(heldItem);
+                if (player.level().isClientSide) {
+                    ClientMeleeAttackHandler.spawnHitParticles((ClientLevel) player.level(), raycastTarget);
+                }
+            }
+        }
+    }
+
+    private static void triggerBanzaiImpactIfNecessary(ItemStack heldItem) {
+        if (((GunItem) heldItem.getItem()).hasBayonet(heldItem)) {
+            GunRenderingHandler.get().triggerBanzaiImpact();
         }
     }
 
@@ -161,30 +170,6 @@ public class MeleeAttackHandler {
                 }
             }
         }
-    }
-
-    private static void spawnHitParticles(ClientLevel clientLevel, LivingEntity target) {
-        clientLevel.addParticle(ParticleTypes.ENCHANTED_HIT, target.getX(), target.getY(), target.getZ(), 0.1D, 0.1D, 0.1D);
-    }
-
-    private static void logPlayerSpeed(ServerPlayer player, float speedDamageMultiplier, float baseDamage, float totalDamage, ItemStack heldItem) {
-        double speed = player.getDeltaMovement().length();
-        int banzaiLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.BANZAI.get(), heldItem);
-        //System.out.printf("Player speed: %.3f, Base damage: %.3f, Speed multiplier: %.3f, Total damage: %.3f, Banzai level: %d%n", speed, baseDamage, speedDamageMultiplier, totalDamage, banzaiLevel);
-    }
-
-    private static void triggerBanzaiImpactIfNecessary(ItemStack heldItem) {
-        if (((GunItem) heldItem.getItem()).hasBayonet(heldItem)) {
-            GunRenderingHandler.get().triggerBanzaiImpact();
-        }
-    }
-
-    private static void setMeleeCooldown(ServerPlayer player, ItemStack heldItem, GunItem gunItem) {
-        CompoundTag tag = heldItem.getOrCreateTag();
-        long currentTime = player.level().getGameTime();
-        int cooldownTicks = gunItem.getModifiedGun(heldItem).getGeneral().getMeleeCooldownTicks();
-        tag.putLong(MELEE_COOLDOWN_TAG, currentTime + cooldownTicks);
-        heldItem.setTag(tag);
     }
 
     public static void performNormalMeleeAttack(ServerPlayer player) {
@@ -204,6 +189,7 @@ public class MeleeAttackHandler {
             stopBanzai();
             return;
         }
+
         List<LivingEntity> targets = findTargetsWithinReach(player);
         for (LivingEntity target : targets) {
             if (target != player) {
@@ -219,7 +205,6 @@ public class MeleeAttackHandler {
         if (banzaiLevel > 0 && banzaiLevel <= 3) {
             scalingFactor = BANZAI_SCALING_FACTORS[banzaiLevel - 1];
         }
-        // System.out.printf("Banzai Level: %d, Scaling Factor: %.2f%n", banzaiLevel, scalingFactor);
         return 1.0f + (float) speed * scalingFactor;
     }
 
@@ -245,25 +230,16 @@ public class MeleeAttackHandler {
     private static void applyEnchantmentEffects(Enchantment enchantment, int level, LivingEntity target, Player player) {
         if (enchantment == Enchantments.FIRE_ASPECT) {
             target.setSecondsOnFire(level * 4);
-            spawnParticleEffect(player, target, ParticleTypes.FLAME);
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientMeleeAttackHandler.spawnParticleEffect(player, target, ParticleTypes.FLAME));
         } else if (enchantment == Enchantments.KNOCKBACK) {
             Vec3 direction = target.position().subtract(player.position()).normalize();
             target.knockback(level * 0.5F, -direction.x(), -direction.z());
         } else if (enchantment == Enchantments.SMITE) {
-            spawnParticleEffect(player, target, ParticleTypes.ENCHANTED_HIT);
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientMeleeAttackHandler.spawnParticleEffect(player, target, ParticleTypes.ENCHANTED_HIT));
         } else if (enchantment == Enchantments.BANE_OF_ARTHROPODS) {
-            spawnParticleEffect(player, target, ParticleTypes.ENCHANTED_HIT);
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientMeleeAttackHandler.spawnParticleEffect(player, target, ParticleTypes.ENCHANTED_HIT));
         } else if (enchantment == Enchantments.SHARPNESS) {
-            spawnParticleEffect(player, target, ParticleTypes.ENCHANTED_HIT);
-        }
-    }
-
-    private static void spawnParticleEffect(Player player, LivingEntity target, ParticleType<?> particleType) {
-        if (player.level().isClientSide) {
-            ClientLevel clientLevel = (ClientLevel) player.level();
-            clientLevel.addParticle((ParticleOptions) particleType, target.getX(), target.getY(), target.getZ(), 0.1D, 0.1D, 0.1D);
-        } else {
-            ((ServerLevel) player.level()).sendParticles((SimpleParticleType) particleType, target.getX(), target.getY(), target.getZ(), 10, 0.5D, 0.5D, 0.5D, 0.0D);
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientMeleeAttackHandler.spawnParticleEffect(player, target, ParticleTypes.ENCHANTED_HIT));
         }
     }
 
@@ -271,6 +247,23 @@ public class MeleeAttackHandler {
         int knockbackLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, stack);
         Vec3 direction = target.position().subtract(player.position()).normalize();
         target.knockback(0.4F + (knockbackLevel * 0.5F), -direction.x(), -direction.z());
+    }
+    private static LivingEntity raycastForMeleeAttack(Player player, double reachDistance) {
+        Vec3 startVec = player.getEyePosition(1.0F);
+        Vec3 lookVec = player.getLookAngle();
+        Vec3 endVec = startVec.add(lookVec.scale(reachDistance));
+        AABB boundingBox = new AABB(startVec, endVec);
+
+        return player.level().getEntitiesOfClass(LivingEntity.class, boundingBox, entity -> entity != player && entity.isAlive())
+                .stream()
+                .min(Comparator.comparingDouble(player::distanceToSqr))
+                .orElse(null);
+    }
+    private static List<LivingEntity> findTargetsInArea(Player player, double radius) {
+        Vec3 position = player.position();
+        AABB boundingBox = new AABB(position.subtract(radius, radius, radius), position.add(radius, radius, radius));
+
+        return player.level().getEntitiesOfClass(LivingEntity.class, boundingBox, entity -> entity != player && entity.isAlive());
     }
 
     private static LivingEntity findTargetWithinReach(Player player) {
@@ -292,3 +285,5 @@ public class MeleeAttackHandler {
         GunEventBus.damageAttachments(stack, level, player);
     }
 }
+
+

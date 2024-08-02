@@ -1,0 +1,39 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:cogloader"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "scguns:treated_brass_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:treated_brass_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:rapid_firing_unit"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:heavy_gun_parts"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:heavy_gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_magazine"
+    }
+  ]
+}

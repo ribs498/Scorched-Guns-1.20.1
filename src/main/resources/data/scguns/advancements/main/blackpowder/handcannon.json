@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/blackpowder/flintlock_pistol",
+  "criteria": {
+    "handcannon": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:handcannon"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.handcannon.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:handcannon"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.handcannon"
+    }
+  },
+  "requirements": [
+    [
+      "handcannon"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

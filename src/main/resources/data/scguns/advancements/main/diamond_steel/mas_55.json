@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/diamond_steel/inertial",
+  "criteria": {
+    "mas_55": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:mas_55"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.mas_55.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:mas_55"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.mas_55"
+    }
+  },
+  "requirements": [
+    [
+      "mas_55"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

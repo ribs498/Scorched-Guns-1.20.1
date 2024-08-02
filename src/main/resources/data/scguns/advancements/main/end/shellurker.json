@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/end/carapice",
+  "criteria": {
+    "shellurker": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:shellurker"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.shellurker.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:shellurker"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.shellurker"
+    }
+  },
+  "requirements": [
+    [
+      "shellurker"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

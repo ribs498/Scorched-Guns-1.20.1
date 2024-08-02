@@ -1,0 +1,39 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "C":
+    {
+      "item": "scguns:gun_magazine"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "M": {
+      "item": "scguns:diamond_steel_ingot"
+    },
+    "X": {
+      "item": "scguns:diamond_steel_blueprint"
+    },
+    "K": {
+      "item": "scguns:diamond_steel_gun_frame"
+    }
+  },
+  "pattern": [
+    "MKX",
+    "LRS",
+    "Q C"
+  ],
+  "result": {
+    "item": "scguns:uppercut"
+  }
+}

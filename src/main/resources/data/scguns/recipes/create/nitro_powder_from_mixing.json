@@ -21,11 +21,17 @@
     },
     {
       "item": "scguns:netherite_scrap_chunk"
+    },
+    {
+      "item": "scguns:niter_dust"
+    },
+    {
+      "item": "scguns:phosphor_dust"
     }
   ],
   "results": [
     {
-      "count": 7,
+      "count": 8,
       "item": "scguns:nitro_powder"
     }
   ]

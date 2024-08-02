@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/diamond_steel/mas_55",
+  "criteria": {
+    "plasgun": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:plasgun"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.plasgun.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:plasgun"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.plasgun"
+    }
+  },
+  "requirements": [
+    [
+      "plasgun"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -58,6 +58,7 @@ public class ShootTracker
         this.cooldownMap.put(item, Pair.of(Util.getMillis(), rate * 50));
     }
 
+
     /**
      * Checks if the specified item has an active cooldown. If a cooldown is active, it means that
      * the weapon can not be fired until it has finished. This method provides leeway as sometimes a

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/treated_brass/cogloader",
+  "criteria": {
+    "gale": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:gale"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.gale.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:gale"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.gale"
+    }
+  },
+  "requirements": [
+    [
+      "gale"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

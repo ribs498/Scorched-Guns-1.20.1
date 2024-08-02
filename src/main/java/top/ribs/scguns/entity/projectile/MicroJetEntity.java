@@ -23,6 +23,7 @@ import top.ribs.scguns.effect.CustomExplosion;
 import top.ribs.scguns.init.ModDamageTypes;
 import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.util.GunEnchantmentHelper;
 
 /**
  * Author: MrCrayfish
@@ -63,6 +64,9 @@ public class MicroJetEntity extends ProjectileEntity {
     @Override
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
         float damage = this.getDamage(); // Use the damage from ProjectileEntity
+        if(entity instanceof LivingEntity) {
+            GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
+        }
         entity.hurt(ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner()), damage);
         createMiniExplosion(this, 1.0f);
     }

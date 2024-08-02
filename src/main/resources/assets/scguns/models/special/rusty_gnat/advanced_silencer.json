@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
-	"texture_size": [32, 32],
+	"texture_size": [64, 64],
 	"textures": {
-		"1": "scguns:item/advanced_silencer",
+		"6": "scguns:item/rusty_gnat",
 		"particle": "scguns:item/rusty_gnat"
 	},
 	"elements": [
@@ -11,12 +11,12 @@
 			"to": [8.85303, 4.1, 4.5625],
 			"rotation": {"angle": 45, "axis": "z", "origin": [8.05303, 3.225, 1.5]},
 			"faces": {
-				"north": {"uv": [4, 4, 5.5, 5.5], "texture": "#1"},
-				"east": {"uv": [0, 0, 4.5, 1.5], "texture": "#1"},
-				"south": {"uv": [5, 0, 6.5, 1.5], "texture": "#1", "cullface": "south"},
-				"west": {"uv": [0, 2, 4.5, 3.5], "texture": "#1"},
-				"up": {"uv": [1.5, 8.5, 0, 4], "texture": "#1"},
-				"down": {"uv": [3.5, 4, 2, 8.5], "texture": "#1"}
+				"north": {"uv": [6.25, 2, 6.625, 2.375], "texture": "#6"},
+				"east": {"uv": [2.75, 0, 3.875, 0.375], "texture": "#6"},
+				"south": {"uv": [6.25, 2.5, 6.625, 2.875], "texture": "#6", "cullface": "south"},
+				"west": {"uv": [2.75, 0.5, 3.875, 0.875], "texture": "#6"},
+				"up": {"uv": [0.625, 4.125, 0.25, 3], "texture": "#6"},
+				"down": {"uv": [1.125, 3, 0.75, 4.125], "texture": "#6"}
 			}
 		},
 		{
@@ -24,12 +24,12 @@
 			"to": [8.67981, 4.1, 5.0625],
 			"rotation": {"angle": 45, "axis": "z", "origin": [8.22981, 3.325, 2]},
 			"faces": {
-				"north": {"uv": [5, 2, 6, 3], "texture": "#1"},
-				"east": {"uv": [6, 2, 6.5, 3], "texture": "#1"},
-				"south": {"uv": [5, 3, 6, 4], "texture": "#1", "cullface": "south"},
-				"west": {"uv": [6, 3, 6.5, 4], "texture": "#1"},
-				"up": {"uv": [5, 6.5, 4, 6], "texture": "#1"},
-				"down": {"uv": [7, 4, 6, 4.5], "texture": "#1"}
+				"north": {"uv": [5.75, 1, 6, 1.25], "texture": "#6"},
+				"east": {"uv": [0.25, 8.5, 0.375, 8.75], "texture": "#6"},
+				"south": {"uv": [5.75, 6.25, 6, 6.5], "texture": "#6", "cullface": "south"},
+				"west": {"uv": [0.5, 8.5, 0.625, 8.75], "texture": "#6"},
+				"up": {"uv": [8.75, 0.625, 8.5, 0.5], "texture": "#6"},
+				"down": {"uv": [1, 8.5, 0.75, 8.625], "texture": "#6"}
 			}
 		}
 	],
@@ -68,13 +68,5 @@
 			"translation": [-5.5, 0, -1.75],
 			"scale": [3, 3, 3]
 		}
-	},
-	"groups": [
-		{
-			"name": "AdvancedSilencer",
-			"origin": [8.0625, 3.375, 12.775],
-			"color": 0,
-			"children": [0, 1]
-		}
-	]
+	}
 }

@@ -1,5 +1,9 @@
 {
 	"parent": "builtin/entity",
+	"textures": {
+		"1": "minecraft:block/stone",
+		"particle": "minecraft:block/stone"
+	},
 	"display": {
 		"thirdperson_righthand": {
 			"translation": [0, 7, -5.25],
@@ -21,13 +25,13 @@
 		},
 		"gui": {
 			"rotation": [74.02, -53.34, 70.48],
-			"translation": [-1.75, 5.75, 0],
+			"translation": [-2.25, 5.75, 0],
 			"scale": [1.2, 1.2, 1.2]
 		},
 		"fixed": {
-			"rotation": [90, 55, -90],
-			"translation": [-0.75, 11.25, 0],
-			"scale": [1.7, 1.7, 1.7]
+			"rotation": [-90, 90, 90],
+			"translation": [-2.75, 10.0, 0],
+			"scale": [2.0, 2.0, 2.0]
 		}
 	}
 }

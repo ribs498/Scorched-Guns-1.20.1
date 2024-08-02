@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/treated_brass/spitfire",
+  "criteria": {
+    "gattaler": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:gattaler"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.gattaler.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:gattaler"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.gattaler"
+    }
+  },
+  "requirements": [
+    [
+      "gattaler"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

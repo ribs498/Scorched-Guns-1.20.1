@@ -1,0 +1,17 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:nether_wart_block",
+    "minecraft:warped_wart_block",
+    "minecraft:chorus_flower",
+    "minecraft:chorus_plant",
+    "minecraft:pitcher_pod",
+    "minecraft:turtle_egg",
+    "minecraft:sniffer_egg",
+    "minecraft:golden_apple",
+    {"id":"vintagedelight:century_egg",    "required":false},
+    {"id":"vintagedelight:magic_peanut",    "required":false},
+    {"id":"vintagedelight:organic_mash",    "required":false},
+    {"id":"farmersrespite:coffee_berries",    "required":false}
+  ]
+}

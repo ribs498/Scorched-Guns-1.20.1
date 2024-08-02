@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:standard_bullet",
+    "minecraft:iron_nugget",
+    {"id":"immersiveengineering:nugget_lead",  "required":false},
+    {"id":"eidolon:lead_nugget", "required":false},
+    {"id":"create:zinc_nugget", "required":false}
+    ]
+}

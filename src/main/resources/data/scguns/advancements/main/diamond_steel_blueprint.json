@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/iron_blueprint",
+  "criteria": {
+    "diamond_steel_blueprint": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:diamond_steel_blueprint"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.diamond_steel_blueprint.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:diamond_steel_blueprint"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.diamond_steel_blueprint"
+    }
+  },
+  "requirements": [
+    [
+      "diamond_steel_blueprint"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

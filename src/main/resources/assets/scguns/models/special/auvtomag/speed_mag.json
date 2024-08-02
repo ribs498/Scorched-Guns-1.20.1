@@ -2,33 +2,33 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"3": "scguns:item/auvtomag",
+		"5": "scguns:item/auvtomag",
 		"particle": "scguns:item/auvtomag"
 	},
 	"elements": [
 		{
-			"from": [7.54, 0.15, 14.4],
-			"to": [8.46, 0.65, 16.2],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.5, 1.05, 15.75]},
+			"from": [8, -1.35, 14.4],
+			"to": [8, -0.35, 16.2],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.5, 0.55, 15.75]},
 			"faces": {
-				"north": {"uv": [9.5, 8, 10, 8.25], "texture": "#3"},
-				"east": {"uv": [7, 8.5, 8, 8.75], "texture": "#3"},
-				"south": {"uv": [8.5, 9.5, 9, 9.75], "texture": "#3"},
-				"west": {"uv": [8.5, 7, 9.5, 7.25], "texture": "#3"},
-				"up": {"uv": [3.5, 8, 3, 7], "texture": "#3"},
-				"down": {"uv": [4, 7, 3.5, 8], "texture": "#3"}
+				"north": {"uv": [0, 0, 0, 0.5], "texture": "#5"},
+				"east": {"uv": [9, 3, 10, 3.5], "texture": "#5"},
+				"south": {"uv": [0, 0, 0, 0.5], "texture": "#5"},
+				"up": {"uv": [0, 1, 0, 0], "texture": "#5"},
+				"down": {"uv": [0, 0, 0, 1], "texture": "#5"}
 			}
 		},
 		{
-			"from": [8, -0.85, 14.4],
-			"to": [8, 0.15, 16.2],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.5, 1.05, 15.75]},
+			"from": [7.54, -0.35, 14.4],
+			"to": [8.46, 0.15, 16.2],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.5, 0.55, 15.75]},
 			"faces": {
-				"north": {"uv": [0, 0, 0, 0.5], "texture": "#3"},
-				"east": {"uv": [11.5, 8, 12.5, 8.5], "texture": "#3"},
-				"south": {"uv": [0, 0, 0, 0.5], "texture": "#3"},
-				"up": {"uv": [0, 1, 0, 0], "texture": "#3"},
-				"down": {"uv": [0, 0, 0, 1], "texture": "#3"}
+				"north": {"uv": [12.5, 4, 13, 4.25], "texture": "#5"},
+				"east": {"uv": [4, 11, 5, 11.25], "texture": "#5"},
+				"south": {"uv": [12.5, 4.5, 13, 4.75], "texture": "#5"},
+				"west": {"uv": [11, 4.5, 12, 4.75], "texture": "#5"},
+				"up": {"uv": [4, 10, 3.5, 9], "texture": "#5"},
+				"down": {"uv": [9.5, 8.5, 9, 9.5], "texture": "#5"}
 			}
 		}
 	],

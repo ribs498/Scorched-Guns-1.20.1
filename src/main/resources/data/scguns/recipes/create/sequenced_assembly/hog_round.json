@@ -1,7 +1,7 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "scguns:small_iron_casing"
+    "item": "minecraft:gold_nugget"
   },
   "loops": 1,
   "results": [
@@ -14,7 +14,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:small_iron_casing"
+          "item": "scguns:unfinished_hog_round"
         },
         [
           {
@@ -24,7 +24,7 @@
       ],
       "results": [
         {
-          "item": "scguns:small_iron_casing"
+          "item": "scguns:unfinished_hog_round"
         }
       ]
     },
@@ -32,17 +32,17 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:small_iron_casing"
+          "item": "scguns:unfinished_hog_round"
         },
         [
           {
-            "item": "minecraft:gold_nugget"
+            "item": "scguns:small_iron_casing"
           }
         ]
       ],
       "results": [
         {
-          "item": "scguns:small_iron_casing"
+          "item": "scguns:unfinished_hog_round"
         }
       ]
     },
@@ -50,17 +50,17 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "scguns:small_iron_casing"
+          "item": "scguns:unfinished_hog_round"
         }
       ],
       "results": [
         {
-          "item": "scguns:small_iron_casing"
+          "item": "scguns:unfinished_hog_round"
         }
       ]
     }
   ],
   "transitionalItem": {
-    "item": "scguns:small_iron_casing"
+    "item": "scguns:unfinished_hog_round"
   }
 }

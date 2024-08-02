@@ -1,9 +1,8 @@
 {
 	"credit": "Made with Blockbench",
-	"texture_size": [32, 32],
+	"texture_size": [64, 64],
 	"textures": {
-		"9": "scguns:item/iron_spear",
-		"particle": "scguns:item/carabine_grips"
+		"8": "scguns:item/iron_spear"
 	},
 	"elements": [
 		{
@@ -11,12 +10,12 @@
 			"to": [8.49, 1.371, 12.13879],
 			"rotation": {"angle": 22.5, "axis": "x", "origin": [8.01, 0.6574, 10.71319]},
 			"faces": {
-				"north": {"uv": [12, 10, 12.5, 10.5], "texture": "#9"},
-				"east": {"uv": [7.5, 12, 8.75, 12.5], "texture": "#9"},
-				"south": {"uv": [10.5, 12, 11, 12.5], "texture": "#9", "cullface": "south"},
-				"west": {"uv": [12, 8, 13.25, 8.5], "texture": "#9"},
-				"up": {"uv": [12.5, 9.75, 12, 8.5], "texture": "#9"},
-				"down": {"uv": [9.5, 12, 9, 13.25], "texture": "#9"}
+				"north": {"uv": [8.5, 7.75, 8.75, 8], "texture": "#8"},
+				"east": {"uv": [8, 1.5, 8.625, 1.75], "texture": "#8"},
+				"south": {"uv": [2.75, 9.5, 3, 9.75], "texture": "#8", "cullface": "south"},
+				"west": {"uv": [2.25, 8, 2.875, 8.25], "texture": "#8"},
+				"up": {"uv": [0.5, 8.625, 0.25, 8], "texture": "#8"},
+				"down": {"uv": [3.25, 8, 3, 8.625], "texture": "#8"}
 			}
 		},
 		{
@@ -24,12 +23,12 @@
 			"to": [8.5, 2.79767, 12.28983],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 0.18407, 10.66423]},
 			"faces": {
-				"north": {"uv": [9.5, 12, 10, 13], "texture": "#9"},
-				"east": {"uv": [5.5, 12, 7, 13], "texture": "#9"},
-				"south": {"uv": [10, 12, 10.5, 13], "texture": "#9", "cullface": "south"},
-				"west": {"uv": [12, 5.5, 13.5, 6.5], "texture": "#9"},
-				"up": {"uv": [12.5, 8, 12, 6.5], "texture": "#9"},
-				"down": {"uv": [7.5, 12, 7, 13.5], "texture": "#9"}
+				"north": {"uv": [3, 3.5, 3.25, 4], "texture": "#8"},
+				"east": {"uv": [5.75, 2.25, 6.5, 2.75], "texture": "#8"},
+				"south": {"uv": [8.75, 5.75, 9, 6.25], "texture": "#8", "cullface": "south"},
+				"west": {"uv": [6, 0, 6.75, 0.5], "texture": "#8"},
+				"up": {"uv": [2, 8.25, 1.75, 7.5], "texture": "#8"},
+				"down": {"uv": [2.25, 7.5, 2, 8.25], "texture": "#8"}
 			}
 		}
 	],
@@ -62,13 +61,5 @@
 			"translation": [4, 6, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	},
-	"groups": [
-		{
-			"name": "ExtMag",
-			"origin": [8, 0.18407, 10.66423],
-			"color": 0,
-			"children": [0, 1]
-		}
-	]
+	}
 }

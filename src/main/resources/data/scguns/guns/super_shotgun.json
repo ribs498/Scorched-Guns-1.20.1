@@ -5,7 +5,7 @@
       "yOffset": 3.8,
       "zOffset": -14.0
     },
-    "muzzleFlashType": "flash_type_1"
+    "muzzleFlashType": "flash_type_5"
   },
   "general": {
     "alwaysSpread": true,
@@ -34,7 +34,7 @@
     "damage": 15.0,
     "item": "scguns:shotgun_shell",
     "casingType": "scguns:small_copper_casing",
-    "life": 6,
+    "life": 20,
     "size": 0.05,
     "speed": 4.0,
     "trailLengthMultiplier": 2.0
@@ -43,7 +43,7 @@
     "emptyMagTimer": 15,
     "maxAmmo": 2,
     "reloadItem": "scguns:shotgun_shell",
-    "reloadTimer": 25,
+    "reloadTimer": 15,
     "reloadType": "scguns:manual"
   },
   "sounds": {
@@ -51,6 +51,6 @@
     "enchantedFire": "scguns:item.boomstick.fire",
     "fire": "scguns:item.boomstick.fire",
     "silencedFire": "scguns:item.combat_shotgun.silenced_fire",
-    "reload": "scguns:item.pistol.reload"
+    "reload": "scguns:item.gauss.reload"
   }
 }

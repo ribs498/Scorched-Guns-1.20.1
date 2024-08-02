@@ -1,0 +1,17 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 100,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "item": "scguns:anthralite_block"
+    }
+  ],
+  "mold": {
+    "item": "scguns:gun_parts_mold"
+  },
+  "result": {
+    "item": "scguns:heavy_gun_parts",
+    "count": 2
+  }
+}

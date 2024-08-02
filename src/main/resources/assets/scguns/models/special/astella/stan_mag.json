@@ -62,5 +62,13 @@
 			"translation": [5.5, 4.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "Stanmag",
+			"origin": [8.075, 4.55201, 8.57182],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
 }

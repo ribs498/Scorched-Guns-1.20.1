@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/deep_dark/whispers",
+  "criteria": {
+    "echoes_2": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:echoes_2"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.echoes_2.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:echoes_2"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.echoes_2"
+    }
+  },
+  "requirements": [
+    [
+      "echoes_2"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

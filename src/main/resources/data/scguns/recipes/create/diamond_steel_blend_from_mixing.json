@@ -1,0 +1,33 @@
+{
+  "type": "create:mixing",
+  "heatRequirement": "superheated",
+  "ingredients": [
+    [
+      {
+        "item": "scguns:raw_anthralite"
+      },
+      {
+        "item": "scguns:anthralite_ingot"
+      }
+    ],
+    {
+      "item": "minecraft:diamond"
+    },
+    {
+      "item": "minecraft:redstone"
+    },
+    {
+      "item": "minecraft:lapis_lazuli"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:diamond_steel_blend",
+      "count": 3
+    },
+    {
+      "chance": 0.1,
+      "item": "scguns:diamond_steel_blend"
+    }
+  ]
+}

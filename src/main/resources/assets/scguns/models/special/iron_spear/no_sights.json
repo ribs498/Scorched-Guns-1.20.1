@@ -1,9 +1,8 @@
 {
 	"credit": "Made with Blockbench",
-	"texture_size": [32, 32],
+	"texture_size": [64, 64],
 	"textures": {
-		"9": "scguns:item/iron_spear",
-		"particle": "scguns:item/carabine_grips"
+		"8": "scguns:item/iron_spear"
 	},
 	"elements": [
 		{
@@ -11,12 +10,12 @@
 			"to": [8.45303, 6.44767, 15.60233],
 			"rotation": {"angle": 0, "axis": "y", "origin": [7.62803, 2.47267, 8.07733]},
 			"faces": {
-				"north": {"uv": [13, 1, 13.5, 1.25], "texture": "#9"},
-				"east": {"uv": [12.5, 9.5, 15.25, 9.75], "texture": "#9"},
-				"south": {"uv": [2.5, 13, 3, 13.25], "texture": "#9"},
-				"west": {"uv": [12.5, 10, 15.25, 10.25], "texture": "#9"},
-				"up": {"uv": [9, 15.25, 8.5, 12.5], "texture": "#9"},
-				"down": {"uv": [11, 12.5, 10.5, 15.25], "texture": "#9"}
+				"north": {"uv": [10, 10.5, 10.25, 10.625], "texture": "#8"},
+				"east": {"uv": [8, 1, 9.375, 1.125], "texture": "#8"},
+				"south": {"uv": [10.5, 10, 10.75, 10.125], "texture": "#8"},
+				"west": {"uv": [8, 1.25, 9.375, 1.375], "texture": "#8"},
+				"up": {"uv": [7, 6.875, 6.75, 5.5], "texture": "#8"},
+				"down": {"uv": [0.25, 7, 0, 8.375], "texture": "#8"}
 			}
 		},
 		{
@@ -24,12 +23,12 @@
 			"to": [8.3375, 6.19767, 12.17733],
 			"rotation": {"angle": 0, "axis": "y", "origin": [7.5125, 2.47267, 8.07733]},
 			"faces": {
-				"north": {"uv": [3, 13, 3.25, 13.25], "texture": "#9"},
-				"east": {"uv": [13, 0, 13.75, 0.25], "texture": "#9"},
-				"south": {"uv": [13, 3, 13.25, 3.25], "texture": "#9"},
-				"west": {"uv": [13, 0.5, 13.75, 0.75], "texture": "#9"},
-				"up": {"uv": [2.25, 13.75, 2, 13], "texture": "#9"},
-				"down": {"uv": [13.25, 2, 13, 2.75], "texture": "#9"}
+				"north": {"uv": [10.75, 5.75, 10.875, 5.875], "texture": "#8"},
+				"east": {"uv": [6.25, 10.25, 6.625, 10.375], "texture": "#8"},
+				"south": {"uv": [6, 10.75, 6.125, 10.875], "texture": "#8"},
+				"west": {"uv": [10.25, 6.25, 10.625, 6.375], "texture": "#8"},
+				"up": {"uv": [10.375, 6.875, 10.25, 6.5], "texture": "#8"},
+				"down": {"uv": [6.875, 10.25, 6.75, 10.625], "texture": "#8"}
 			}
 		}
 	],
@@ -62,13 +61,5 @@
 			"translation": [4, 6, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	},
-	"groups": [
-		{
-			"name": "NoSights",
-			"origin": [7.5125, 2.47267, 8.07733],
-			"color": 0,
-			"children": [0, 1]
-		}
-	]
+	}
 }

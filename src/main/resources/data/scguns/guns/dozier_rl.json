@@ -45,7 +45,7 @@
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:rocket",
-    "life": 30,
+    "life": 55,
     "size": 0.05,
     "speed": 5.0,
     "trailLengthMultiplier": 2.0
@@ -61,6 +61,6 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.rocket.fire",
     "fire": "scguns:item.rocket.fire",
-    "reload": "scguns:item.pistol.reload"
+    "reload": "scguns:item.gauss.reload"
   }
 }

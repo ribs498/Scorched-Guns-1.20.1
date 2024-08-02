@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "group": "phosphorite",
+  "cookingtime": 200,
+  "experience": 0.7,
+  "ingredient": {
+    "item": "scguns:rich_phosphorite"
+  },
+  "result": "scguns:raw_phosphor",
+  "count": 2
+}

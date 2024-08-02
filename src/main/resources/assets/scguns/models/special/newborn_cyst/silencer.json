@@ -100,5 +100,13 @@
 			"translation": [1.5, 8.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "Silencer",
+			"origin": [8, 5.75, -8.9],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4]
+		}
+	]
 }

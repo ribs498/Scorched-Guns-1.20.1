@@ -1,0 +1,41 @@
+{
+  "parent": "scguns:main/vehement_coal",
+  "criteria": {
+    "scorched_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:scorched_ingot"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.scorched_ingot.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:scorched_ingot"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.scorched_ingot"
+    }
+  },
+  "requirements": [
+    [
+      "scorched_ingot"
+    ]
+  ],
+  "rewards": {
+  "experience": 200
+},
+  "sends_telemetry_event": true
+}

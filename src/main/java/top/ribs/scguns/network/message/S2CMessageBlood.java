@@ -8,6 +8,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.ribs.scguns.client.network.ClientPlayHandler;
 
+import java.util.Objects;
+
 /**
  * Author: MrCrayfish
  */
@@ -34,7 +36,7 @@ public class S2CMessageBlood extends PlayMessage<S2CMessageBlood>
         buffer.writeDouble(message.x);
         buffer.writeDouble(message.y);
         buffer.writeDouble(message.z);
-        buffer.writeResourceLocation(ForgeRegistries.ENTITY_TYPES.getKey(message.entityType));
+        buffer.writeResourceLocation(Objects.requireNonNull(ForgeRegistries.ENTITY_TYPES.getKey(message.entityType)));
     }
 
     @Override

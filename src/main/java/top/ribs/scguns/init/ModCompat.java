@@ -12,4 +12,7 @@ public class ModCompat {
     public static boolean isIELoaded() {
         return ModList.get().isLoaded("immersiveengineering");
     }
+    public static boolean isMekanismLoaded() {
+        return ModList.get().isLoaded("mekanism");
+    }
 }

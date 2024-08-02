@@ -36,9 +36,6 @@
       "underBarrel": {
         "yOffset": 5.5,
         "zOffset": -2.5
-      },
-      "magazine": {
-        "scale": 0.0
       }
     },
     "zoom": {
@@ -54,7 +51,7 @@
     "gravity": false,
     "item": "scguns:bearpack_shell",
     "casingType": "scguns:medium_brass_casing",
-    "life": 15,
+    "life": 30,
     "size": 0.05,
     "speed": 6.0,
     "trailLengthMultiplier": 2.0
@@ -70,7 +67,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.brass_shotgun.fire",
     "fire": "scguns:item.brass_shotgun.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.combat_shotgun.silenced_fire"
   }
 }

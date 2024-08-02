@@ -43,8 +43,8 @@
     "damage": 10.0,
     "ejectsCasing": true,
     "item": "scguns:sculk_cell",
-    "casingType": "scguns:small_iron_casing",
-    "life": 15,
+    "casingType": "scguns:empty_cell",
+    "life": 65,
     "size": 2.0,
     "speed": 7.0,
     "trailLengthMultiplier": 0.5
@@ -60,6 +60,6 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.sculk.fire",
     "fire": "scguns:item.sculk.fire",
-    "reload": "scguns:item.pistol.reload"
+    "reload": "scguns:item.gauss.reload"
   }
 }

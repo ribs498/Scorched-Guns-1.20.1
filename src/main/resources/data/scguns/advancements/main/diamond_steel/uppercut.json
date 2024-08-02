@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/diamond_steel/soul_drummer",
+  "criteria": {
+    "uppercut": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:uppercut"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.uppercut.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:uppercut"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.uppercut"
+    }
+  },
+  "requirements": [
+    [
+      "uppercut"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

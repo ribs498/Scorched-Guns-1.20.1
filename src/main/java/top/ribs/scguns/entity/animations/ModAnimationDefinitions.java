@@ -1864,25 +1864,27 @@ public class ModAnimationDefinitions {
                             new Keyframe(1.1f, KeyframeAnimations.degreeVec(0f, 0f, 2.5f),
                                     AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(2f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
-                                    AnimationChannel.Interpolations.LINEAR)))
-            .addAnimation("right_ear",
-                    new AnimationChannel(AnimationChannel.Targets.ROTATION,
-                            new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
-                                    AnimationChannel.Interpolations.LINEAR),
-                            new Keyframe(1.1f, KeyframeAnimations.degreeVec(0f, 0f, -2.5f),
-                                    AnimationChannel.Interpolations.LINEAR),
-                            new Keyframe(2f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.LINEAR))).build();
     public static final AnimationDefinition HORNLIN_WALK = AnimationDefinition.Builder.withLength(1.2f).looping()
+            .addAnimation("head",
+                    new AnimationChannel(AnimationChannel.Targets.POSITION,
+                            new Keyframe(0f, KeyframeAnimations.posVec(0f, 0f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.4f, KeyframeAnimations.posVec(0f, -0.25f, -0.25f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.9f, KeyframeAnimations.posVec(0f, -0.15f, 0.35f),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(1.2f, KeyframeAnimations.posVec(0f, 0f, 0f),
+                                    AnimationChannel.Interpolations.LINEAR)))
             .addAnimation("head",
                     new AnimationChannel(AnimationChannel.Targets.ROTATION,
                             new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM),
-                            new Keyframe(0.5f, KeyframeAnimations.degreeVec(0.5f, 0f, 0f),
+                            new Keyframe(0.4f, KeyframeAnimations.degreeVec(3f, 0f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM),
-                            new Keyframe(1f, KeyframeAnimations.degreeVec(-3f, 0f, 0f),
+                            new Keyframe(0.9f, KeyframeAnimations.degreeVec(-2.5f, 0f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM),
-                            new Keyframe(1.3f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
+                            new Keyframe(1.2f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM)))
             .addAnimation("body",
                     new AnimationChannel(AnimationChannel.Targets.ROTATION,
@@ -1926,12 +1928,12 @@ public class ModAnimationDefinitions {
                                     AnimationChannel.Interpolations.CATMULLROM),
                             new Keyframe(1.2f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
                                     AnimationChannel.Interpolations.CATMULLROM)))
-            .addAnimation("right_ear",
+            .addAnimation("right_arm",
                     new AnimationChannel(AnimationChannel.Targets.ROTATION,
                             new Keyframe(0f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
-                                    AnimationChannel.Interpolations.CATMULLROM),
-                            new Keyframe(0.5f, KeyframeAnimations.degreeVec(0f, 0f, 2.5f),
-                                    AnimationChannel.Interpolations.CATMULLROM),
+                                    AnimationChannel.Interpolations.LINEAR),
+                            new Keyframe(0.5f, KeyframeAnimations.degreeVec(3.65f, 2.19f, 1.67f),
+                                    AnimationChannel.Interpolations.LINEAR),
                             new Keyframe(1.2f, KeyframeAnimations.degreeVec(0f, 0f, 0f),
-                                    AnimationChannel.Interpolations.CATMULLROM))).build();
+                                    AnimationChannel.Interpolations.LINEAR))).build();
 }

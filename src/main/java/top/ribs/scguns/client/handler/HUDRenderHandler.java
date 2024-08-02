@@ -39,6 +39,7 @@ public class HUDRenderHandler {
     private static final ResourceLocation FILL_BAR = new ResourceLocation(Reference.MOD_ID, "textures/gui/fill_bar.png");
     private static final ResourceLocation MELEE_ATTACK_INDICATOR_PROGRESS = new ResourceLocation(Reference.MOD_ID, "textures/gui/melee_attack_indicator_progress.png");
     private static final ResourceLocation MELEE_ATTACK_INDICATOR_BACKGROUND = new ResourceLocation(Reference.MOD_ID, "textures/gui/melee_attack_indicator_background.png");
+
     static int meleeCooldown = 0;
     static int maxMeleeCooldown = 0;
     static boolean isMeleeCooldownActive = false;
@@ -51,10 +52,13 @@ public class HUDRenderHandler {
     private static int reserveAmmo = 0;
     private static int ammoAutoUpdateTimer = 0;
     private static int ammoAutoUpdateRate = 20;
-    private static boolean isChargeBarActive = false;
 
     @SubscribeEvent
     public static void onRenderGuiOverlay(RenderGuiOverlayEvent.Post event) {
+        if (!Config.CLIENT.display.displayGunInfo.get()) {
+            return; // Early exit if HUD is disabled
+        }
+
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
 
@@ -86,8 +90,8 @@ public class HUDRenderHandler {
         int screenHeight = mc.getWindow().getGuiScaledHeight();
         int barWidth = 16;
         int barHeight = 16;
-        int barX = (int) (screenWidth * 0.87);  // Move more to the left
-        int barY = (int) (screenHeight * 0.73); // Move higher up
+        int barX = (int) (screenWidth * 0.87);  // Adjust position
+        int barY = (int) (screenHeight * 0.73); // Adjust position
 
         float cooldownRatio = (meleeCooldown > 0) ? (float) meleeCooldown / maxMeleeCooldown : 0;
 
@@ -107,7 +111,6 @@ public class HUDRenderHandler {
         RenderSystem.disableBlend();
     }
 
-
     private static void renderGunInfoHUD(ItemStack heldItem, float partialTick, PoseStack poseStack, GuiGraphics guiGraphics) {
         if (!Config.CLIENT.display.displayGunInfo.get())
             return;
@@ -115,12 +118,17 @@ public class HUDRenderHandler {
         Minecraft mc = Minecraft.getInstance();
         Gun gun = ((GunItem) heldItem.getItem()).getGun();
         CompoundTag tagCompound = heldItem.getTag();
+        Player player = mc.player;
 
-        if (tagCompound != null) {
+        if (tagCompound != null && player != null) {
             int currentAmmo = tagCompound.getInt("AmmoCount");
-            MutableComponent ammoCountValue = Component.literal(currentAmmo + " / " + GunModifierHelper.getModifiedAmmoCapacity(heldItem, gun)).withStyle(ChatFormatting.BOLD);
-            if (Gun.hasInfiniteAmmo(heldItem))
-                ammoCountValue = (Component.literal("∞ / ∞").withStyle(ChatFormatting.BOLD));
+            MutableComponent ammoCountValue;
+
+            if (player.isCreative()) {
+                ammoCountValue = Component.literal("∞ / ∞").withStyle(ChatFormatting.BOLD);
+            } else {
+                ammoCountValue = Component.literal(currentAmmo + " / " + GunModifierHelper.getModifiedAmmoCapacity(heldItem, gun)).withStyle(ChatFormatting.BOLD);
+            }
 
             int screenWidth = mc.getWindow().getGuiScaledWidth();
             int screenHeight = mc.getWindow().getGuiScaledHeight();
@@ -130,17 +138,24 @@ public class HUDRenderHandler {
             RenderSystem.enableBlend();
             RenderSystem.defaultBlendFunc();
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            Player player = mc.player;
+
             if (ModSyncedDataKeys.RELOADING.getValue(player)) {
-                assert player != null;
                 if (player.isAlive()) {
                     guiGraphics.drawString(mc.font, "Reloading...", ammoPosX, ammoPosY - 10, 0xFFFF55);
                 }
             }
 
-            guiGraphics.drawString(mc.font, ammoCountValue, ammoPosX, ammoPosY, (currentAmmo > 0 || Gun.hasInfiniteAmmo(heldItem) ? 0xFFFFFF : 0xFF5555));
+            guiGraphics.drawString(mc.font, ammoCountValue, ammoPosX, ammoPosY, (currentAmmo > 0 || player.isCreative() ? 0xFFFFFF : 0xFF5555));
+
             int reserveAmmoPosY = ammoPosY + 10;
-            MutableComponent reserveAmmoValue = Component.literal(String.valueOf(reserveAmmo)).withStyle(ChatFormatting.BOLD);
+            MutableComponent reserveAmmoValue;
+
+            if (player.isCreative()) {
+                reserveAmmoValue = Component.literal("∞").withStyle(ChatFormatting.BOLD);
+            } else {
+                reserveAmmoValue = Component.literal(String.valueOf(reserveAmmo)).withStyle(ChatFormatting.BOLD);
+            }
+
             guiGraphics.drawString(mc.font, reserveAmmoValue, ammoPosX, reserveAmmoPosY, (reserveAmmo <= 0 && !Gun.hasUnlimitedReloads(heldItem) ? 0x555555 : 0xAAAAAA));
             ItemStack ammoItemStack = new ItemStack(Objects.requireNonNull(gun.getProjectile().getItem()));
             renderAmmoTypeTexture(ammoItemStack, ammoPosX - 20, ammoPosY, guiGraphics, mc);
@@ -148,7 +163,6 @@ public class HUDRenderHandler {
             RenderSystem.disableBlend();
         }
     }
-
 
     private static void renderAmmoTypeTexture(ItemStack ammoItemStack, int x, int y, GuiGraphics guiGraphics, Minecraft mc) {
         RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
@@ -158,6 +172,7 @@ public class HUDRenderHandler {
         int zLevel = 0;
         guiGraphics.blit(x, y, zLevel, iconSize, iconSize, sprite);
     }
+
     private static void renderChargeBarHUD(ItemStack heldItem, float partialTick, PoseStack poseStack, GuiGraphics guiGraphics, LocalPlayer player) {
         Minecraft mc = Minecraft.getInstance();
         Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
@@ -179,8 +194,7 @@ public class HUDRenderHandler {
         int screenWidth = mc.getWindow().getGuiScaledWidth();
         int screenHeight = mc.getWindow().getGuiScaledHeight();
 
-        // Adjust the barX position to be slightly left of the current position
-        int barX = screenWidth / 2 - 15; // Slightly left from the previous position
+        int barX = screenWidth / 2 - 15;
         int barY = screenHeight / 2 - barHeight / 2;
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
@@ -225,6 +239,7 @@ public class HUDRenderHandler {
         reserveAmmo = Gun.getReserveAmmoCount(player, gun.getProjectile().getItem());
         ammoAutoUpdateTimer = 0;
     }
+
     public static void stageReserveAmmoUpdate() {
         ammoAutoUpdateTimer = ammoAutoUpdateRate;
     }
@@ -236,14 +251,15 @@ public class HUDRenderHandler {
             fetchReserveAmmo(player, modifiedGun);
         }
     }
+
     @SubscribeEvent
     public static void onTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END)
             return;
 
         updateHitMarker();
-        ammoAutoUpdateTimer++;
-        if (ammoAutoUpdateTimer >= ammoAutoUpdateRate) {
+
+        if (++ammoAutoUpdateTimer >= ammoAutoUpdateRate) {
             ammoAutoUpdateTimer = 0;
         }
 
@@ -255,7 +271,6 @@ public class HUDRenderHandler {
             }
         }
     }
-
 
     private static void updateHitMarker() {
         prevHitMarkerTime = hitMarkerTime;
@@ -282,8 +297,7 @@ public class HUDRenderHandler {
     public static boolean getHitMarkerCrit() {
         return hitMarkerCrit;
     }
-
-
 }
+
 
 

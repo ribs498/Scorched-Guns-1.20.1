@@ -1,0 +1,9 @@
+{
+  "parent": "minecraft:block/orientable",
+  "textures": {
+    "particle": "scguns:block/penetrator_side",
+    "down": "scguns:block/penetrator_bottom",
+    "up": "scguns:block/penetrator_top",
+    "side": "scguns:block/penetrator_side"
+  }
+}

@@ -5,7 +5,7 @@
       "yOffset": 3.6,
       "zOffset": -9.5
     },
-    "muzzleFlashType": "flash_type_1"
+    "muzzleFlashType": "flash_type_5"
   },
   "general": {
     "alwaysSpread": true,
@@ -32,14 +32,14 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 7.0,
+    "damage": 9.0,
     "gravity": true,
     "ejectsCasing": false,
     "item": "scguns:blaze_fuel",
     "casingType": "scguns:large_iron_casing",
-    "life": 3,
+    "life": 12,
     "size": 0.1,
-    "speed": 3.0,
+    "speed": 1.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/anthralite",
+  "criteria": {
+    "diamond_steel_ingot": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:diamond_steel_ingot"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.diamond_steel.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:diamond_steel_ingot"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.diamond_steel"
+    }
+  },
+  "requirements": [
+    [
+      "diamond_steel_ingot"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

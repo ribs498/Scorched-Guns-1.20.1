@@ -7,9 +7,14 @@
     "R": {
       "item": "minecraft:black_dye"
     },
-    "N": {
-      "item": "minecraft:iron_ingot"
-    }
+    "N":  [
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      {
+        "item": "scguns:treated_iron_ingot"
+      }
+    ]
   },
   "pattern": [
     "QQQ",

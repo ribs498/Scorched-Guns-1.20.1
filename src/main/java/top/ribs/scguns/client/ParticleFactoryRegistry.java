@@ -32,9 +32,13 @@ public class ParticleFactoryRegistry
         event.registerSpriteSet(ModParticleTypes.BEARPACK_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.GREEN_FLAME.get(), GreenFlameParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.PLASMA_RING.get(), PlasmaRingParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.SULFUR_SMOKE.get(), SulfurSmokeParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.SULFUR_DUST.get(), SulfurDustParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.RAMROD_IMPACT.get(), RamrodImpactParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.BEOWULF_IMPACT.get(), BeowulfImpactParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.TURRET_MUZZLE_FLASH.get(), TurretMuzzleFlashParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.LASER.get(), LaserParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.SMALL_LASER.get(), SmallLaserParticle.Provider::new);
 
 
         event.registerSpriteSet(ModParticleTypes.PLASMA_EXPLOSION.get(), PlasmaExplosionParticle.Provider::new);

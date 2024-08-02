@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/end/shellurker",
+  "criteria": {
+    "dark_matter": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:dark_matter"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.dark_matter.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:dark_matter"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.dark_matter"
+    }
+  },
+  "requirements": [
+    [
+      "dark_matter"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

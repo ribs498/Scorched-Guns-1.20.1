@@ -1,0 +1,18 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 200,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "item": "minecraft:copper_block"
+    }
+
+  ],
+  "mold": {
+    "item": "scguns:disc_mold"
+  },
+  "result": {
+    "item": "scguns:copper_disc",
+    "count": 2
+  }
+}

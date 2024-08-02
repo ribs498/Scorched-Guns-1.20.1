@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/diamond_steel/uppercut",
+  "criteria": {
+    "prush_gun": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:prush_gun"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.prush_gun.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:prush_gun"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.prush_gun"
+    }
+  },
+  "requirements": [
+    [
+      "prush_gun"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

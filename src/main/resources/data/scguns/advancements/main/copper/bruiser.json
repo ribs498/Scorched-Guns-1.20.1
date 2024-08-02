@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/copper/boomstick",
+  "criteria": {
+    "bruiser": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:bruiser"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.bruiser.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:bruiser"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.bruiser"
+    }
+  },
+  "requirements": [
+    [
+      "bruiser"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

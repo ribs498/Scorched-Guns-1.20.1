@@ -19,6 +19,7 @@ public class RarityUtils {
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "marlin"), Constants.OCEANIC);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "bomb_lance"), Constants.OCEANIC);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "ocean_blueprint"), Constants.OCEANIC);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "sequoia"), Constants.OCEANIC);
 
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "super_shotgun"), Constants.PIGLISH);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "blasphemy"), Constants.PIGLISH);
@@ -31,9 +32,13 @@ public class RarityUtils {
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "echoes_2"), Constants.DEEP_DARK);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "sculk_resonator"), Constants.DEEP_DARK);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "deep_dark_blueprint"), Constants.DEEP_DARK);
-        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "end_blueprint"), Constants.ENDISH);
 
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "end_blueprint"), Constants.ENDISH);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "lone_wonder"), Constants.ENDISH);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "raygun"), Constants.ENDISH);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "dark_matter"), Constants.ENDISH);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "shellurker"), Constants.ENDISH);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "carapice"), Constants.ENDISH);
 
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "scorched_blueprint"), Constants.SCORCHED);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "scorched_ingot"), Constants.SCORCHED);

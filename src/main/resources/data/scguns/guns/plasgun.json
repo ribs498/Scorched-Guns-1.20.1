@@ -48,8 +48,8 @@
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:energy_cell",
-    "casingType": "scguns:small_diamond_steel_casing",
-    "life": 20,
+    "casingType": "scguns:empty_cell",
+    "life": 45,
     "size": 6.0,
     "speed": 2.0,
     "trailLengthMultiplier": 1.0
@@ -65,6 +65,6 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.plasma.fire",
     "fire": "scguns:item.plasma.fire",
-    "reload": "scguns:item.pistol.reload"
+    "reload": "scguns:item.gauss.reload"
   }
 }

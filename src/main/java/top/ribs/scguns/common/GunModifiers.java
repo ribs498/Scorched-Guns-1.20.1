@@ -63,7 +63,32 @@ public class GunModifiers
             return 6.0F;
         }
     };
+    public static final IGunModifier EXTENDED_BARREL = new IGunModifier()
+    {
+        @Override
+        public double modifyProjectileSpeed(double speed)
+        {
+            return speed * 1.2; // 20% increase in projectile speed
+        }
 
+        @Override
+        public float modifyProjectileSpread(float spread)
+        {
+            return spread * 0.8F; // 20% reduction in spread
+        }
+
+        @Override
+        public float recoilModifier()
+        {
+            return 1.15F; // 15% increase in recoil
+        }
+
+        @Override
+        public double modifyAimDownSightSpeed(double speed)
+        {
+            return speed * 0.9; // 10% decrease in ADS speed
+        }
+    };
     public static final IGunModifier SLOW_ADS = new IGunModifier()
     {
         @Override
@@ -158,59 +183,6 @@ public class GunModifiers
             return speed * 0.98F;
         }
     };
-    public static final IGunModifier STABILISED = new IGunModifier()
-    {
-        @Override
-        public float kickModifier()
-        {
-            return 0.8F;
-        }
-
-        @Override
-        public float modifyProjectileSpread(float spread)
-        {
-            return spread * 0.65F;
-        }
-
-        @Override
-        public double modifyAimDownSightSpeed(double speed)
-        {
-            return speed * 0.95F;
-        }
-    };
-
-    public static final IGunModifier SUPER_STABILISED = new IGunModifier()
-    {
-        @Override
-        public float recoilModifier()
-        {
-            return 0.75F;
-        }
-
-        @Override
-        public float kickModifier()
-        {
-            return 0.75F;
-        }
-
-        @Override
-        public float modifyProjectileSpread(float spread)
-        {
-            return spread * 0.5F;
-        }
-
-        @Override
-        public double modifyAimDownSightSpeed(double speed)
-        {
-            return speed * 0.75F;
-        }
-
-        @Override
-        public int modifyFireRate(int rate)
-        {
-            return Mth.clamp(rate, rate, Integer.MAX_VALUE);
-        }
-    };
 
     public static final IGunModifier LIGHT_RECOIL = new IGunModifier()
     {
@@ -219,7 +191,6 @@ public class GunModifiers
         {
             return 0.85F;
         }
-
         @Override
         public float kickModifier()
         {
@@ -229,16 +200,10 @@ public class GunModifiers
         @Override
         public double modifyAimDownSightSpeed(double speed)
         {
-            return speed * 1.1F;
+            return speed * 1.2F;
         }
 
-        @Override
-        public float modifyProjectileSpread(float spread)
-        {
-            return spread * 0.9F;
-        }
     };
-
     public static final IGunModifier REDUCED_RECOIL = new IGunModifier()
     {
         @Override
@@ -246,42 +211,36 @@ public class GunModifiers
         {
             return 0.8F;
         }
-
         @Override
         public float kickModifier()
         {
             return 0.8F;
         }
-
         @Override
         public double modifyAimDownSightSpeed(double speed)
         {
             return speed * 0.97F;
         }
 
-        @Override
-        public float modifyProjectileSpread(float spread)
-        {
-            return spread * 0.75F;
-        }
     };
+
     public static final IGunModifier SLOW_RELOAD = new IGunModifier() {
         @Override
         public double modifyReloadSpeed(double reloadSpeed) {
-            return reloadSpeed * 1.4;
+            return reloadSpeed * 1.3;
         }
     };
 
     public static final IGunModifier FAST_RELOAD = new IGunModifier() {
         @Override
         public double modifyReloadSpeed(double reloadSpeed) {
-            return reloadSpeed * 0.7;
+            return reloadSpeed * 0.8;
         }
     };
     public static final IGunModifier EXTENDED_MAG = new IGunModifier() {
         @Override
         public int modifyAmmoCapacity(int baseCapacity) {
-            return (int) (baseCapacity * 1.75);
+            return (int) (baseCapacity * 2.0);
         }
     };
 
@@ -291,4 +250,155 @@ public class GunModifiers
             return (int) (baseCapacity * 0.5);
         }
     };
+    public static final IGunModifier LIGHT_STOCK_MODIFIER = new IGunModifier() {
+        @Override
+        public float recoilModifier() {
+            return 0.9F;
+        }
+
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed * 1.1F;
+        }
+    };
+
+    public static final IGunModifier WEIGHTED_STOCK_MODIFIER = new IGunModifier() {
+        @Override
+        public float recoilModifier() {
+            return 0.75F;
+        }
+
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed * 0.85F;
+        }
+
+        @Override
+        public float kickModifier() {
+            return 0.9F;
+        }
+    };
+
+    public static final IGunModifier WOODEN_STOCK_MODIFIER = new IGunModifier() {
+        @Override
+        public float recoilModifier() {
+            return 0.85F;
+        }
+
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed * 1.05F;
+        }
+    };
+    public static final IGunModifier MUZZLE_BRAKE_MODIFIER = new IGunModifier() {
+        @Override
+        public float modifyProjectileSpread(float spread) {
+            return spread * 0.6F;
+        }
+
+        @Override
+        public double modifyProjectileSpeed(double speed) {
+            return speed * 0.9;
+        }
+
+        @Override
+        public float recoilModifier() {
+            return 0.95F;
+        }
+    };
+
+    public static final IGunModifier EXTENDED_BARREL_MODIFIER = new IGunModifier() {
+        @Override
+        public double modifyProjectileSpeed(double speed) {
+            return speed * 1.25;
+        }
+
+        @Override
+        public float modifyProjectileSpread(float spread) {
+            return spread * 0.85F;
+        }
+
+        @Override
+        public float recoilModifier() {
+            return 1.15F;
+        }
+
+        @Override
+        public float kickModifier() {
+            return 1.2F;
+        }
+    };
+
+    public static final IGunModifier SILENCER_MODIFIER = new IGunModifier() {
+        @Override
+        public float modifyProjectileDamage(float damage) {
+            return damage * 0.9F;
+        }
+
+        @Override
+        public double modifyProjectileSpeed(double speed) {
+            return speed * 0.9;
+        }
+
+        @Override
+        public float criticalChance() {
+            return 0.15F;
+        }
+    };
+
+    public static final IGunModifier ADVANCED_SILENCER_MODIFIER = new IGunModifier() {
+        @Override
+        public double modifyProjectileSpeed(double speed) {
+            return speed * 0.95; // Slight decrease
+        }
+
+        @Override
+        public float criticalChance() {
+            return 0.25F;
+        }
+    };
+    public static final IGunModifier EXTENDED_MAG_MODIFIER = new IGunModifier() {
+        @Override
+        public double modifyReloadSpeed(double reloadSpeed) {
+            return reloadSpeed * 1.3;
+        }
+
+        @Override
+        public int modifyAmmoCapacity(int baseCapacity) {
+            return (int) (baseCapacity * 2.0);
+        }
+
+        @Override
+        public float recoilModifier() {
+            return 0.9F;
+        }
+
+        @Override
+        public float kickModifier() {
+            return 0.9F;
+        }
+    };
+
+    public static final IGunModifier SPEED_MAG_MODIFIER = new IGunModifier() {
+        @Override
+        public double modifyReloadSpeed(double reloadSpeed) {
+            return reloadSpeed * 0.8;
+        }
+
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed * 1.1F;
+        }
+
+        @Override
+        public float recoilModifier() {
+            return 0.9F;
+        }
+
+        @Override
+        public float kickModifier() {
+            return 0.95F;
+        }
+    };
+
 }

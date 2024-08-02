@@ -1,0 +1,14 @@
+{
+  "type": "scguns:powered_macerating",
+  "processingTime": 50,
+  "energyUse": 1000,
+  "ingredients": [
+    {
+      "item": "scguns:sulfur_chunk"
+    }
+  ],
+  "result": {
+    "item": "scguns:sulfur_dust",
+    "count": 3
+  }
+}

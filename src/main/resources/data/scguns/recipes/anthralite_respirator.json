@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "S": {
+      "item": "minecraft:leather"
+    },
+    "L": {
+      "item": "scguns:composite_filter"
+    }
+  },
+  "pattern": [
+    "XXX",
+    "S S",
+    " L "
+  ],
+  "result": {
+    "item": "scguns:anthralite_respirator"
+  }
+}

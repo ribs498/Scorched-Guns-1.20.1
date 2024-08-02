@@ -86,5 +86,13 @@
 			"translation": [1.5, 8.5, -0.75],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "Silenver",
+			"origin": [10.25303, 2.625, -0.85],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
 }

@@ -1,0 +1,77 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"5": "scguns:item/venturi"
+	},
+	"elements": [
+		{
+			"from": [7.375, 0.5, 15.75],
+			"to": [8.625, 4, 17.5],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [7.925, 0.65, 16.8]},
+			"faces": {
+				"north": {"uv": [4.5, 3.5, 4.875, 4.375], "texture": "#5"},
+				"east": {"uv": [2.5, 3, 3, 3.875], "texture": "#5"},
+				"south": {"uv": [4.5, 4.5, 4.875, 5.375], "texture": "#5"},
+				"west": {"uv": [3, 3, 3.5, 3.875], "texture": "#5"},
+				"up": {"uv": [4.875, 6, 4.5, 5.5], "texture": "#5"},
+				"down": {"uv": [0.375, 5.75, 0, 6.25], "texture": "#5"}
+			}
+		},
+		{
+			"from": [7.525, 0.16194, 15.55866],
+			"to": [8.475, 0.46194, 17.15866],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [7.875, 1.11194, 16.60866]},
+			"faces": {
+				"north": {"uv": [8, 5.75, 8.25, 5.875], "texture": "#5"},
+				"east": {"uv": [8, 1.25, 8.375, 1.375], "texture": "#5"},
+				"south": {"uv": [8, 6, 8.25, 6.125], "texture": "#5"},
+				"west": {"uv": [1.5, 8, 1.875, 8.125], "texture": "#5"},
+				"up": {"uv": [7.5, 4.875, 7.25, 4.5], "texture": "#5"},
+				"down": {"uv": [5.5, 7.25, 5.25, 7.625], "texture": "#5"}
+			}
+		},
+		{
+			"from": [7.385, 2.81775, 15.626],
+			"to": [8.615, 4.09275, 16.706],
+			"rotation": {"angle": 45, "axis": "x", "origin": [7.875, 3.44275, 16.416]},
+			"faces": {
+				"north": {"uv": [5.5, 7.25, 5.75, 7.625], "texture": "#5"},
+				"east": {"uv": [7.25, 5.5, 7.5, 5.875], "texture": "#5"},
+				"south": {"uv": [5.75, 7.25, 6, 7.625], "texture": "#5"},
+				"west": {"uv": [6.5, 7.25, 6.75, 7.625], "texture": "#5"},
+				"up": {"uv": [1, 6.5, 0.75, 6.25], "texture": "#5"},
+				"down": {"uv": [7.5, 6, 7.25, 6.25], "texture": "#5"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0.25, 5.75, -6.5],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0.25, 5.75, -6.5],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"firstperson_righthand": {
+			"translation": [-4.5, 9, -0.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4.5, 9, -0.5]
+		},
+		"ground": {
+			"translation": [0, 9.5, -1.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-2, 4.25, 0]
+		},
+		"fixed": {
+			"rotation": [-90, 90, 90],
+			"translation": [-6.25, 8.75, 0],
+			"scale": [2, 2, 2]
+		}
+	}
+}

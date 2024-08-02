@@ -71,4 +71,5 @@ public class ThrowableGrenadeEntity extends ThrowableItemEntity
     {
         GrenadeEntity.createExplosion(this, Config.COMMON.grenades.explosionRadius.get().floatValue(), true);
     }
+
 }

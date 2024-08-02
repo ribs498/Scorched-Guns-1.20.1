@@ -10,7 +10,7 @@
   "general": {
     "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
-    "gripType": "scguns:two_handed",
+    "gripType": "scguns:two_handed_shotgun",
     "projectileAmount": 14,
     "rate": 11,
     "recoilAngle": 10.0,
@@ -34,9 +34,10 @@
       },
       "magazine": {
         "scale": 0.0
-      },   "scope": {
+      },
+      "scope": {
         "size": 0.8,
-        "yOffset": 5.9,
+        "yOffset": 5.7,
         "zOffset": 5.2
       }
     },
@@ -52,7 +53,7 @@
     "ejectsCasing": true,
     "item": "scguns:shotgun_shell",
     "casingType": "scguns:small_copper_casing",
-    "life": 10,
+    "life": 36,
     "size": 0.05,
     "speed": 5.0,
     "trailLengthMultiplier": 2.0
@@ -69,6 +70,6 @@
     "enchantedFire": "scguns:item.combat_shotgun.fire",
     "fire": "scguns:item.combat_shotgun.fire",
     "silencedFire": "scguns:item.combat_shotgun.silenced_fire",
-    "reload": "scguns:item.pistol.reload"
+    "reload": "scguns:item.gauss.reload"
   }
 }

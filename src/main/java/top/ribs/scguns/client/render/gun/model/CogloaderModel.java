@@ -27,12 +27,13 @@ public class CogloaderModel implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.COGLOADER_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         }
         renderStockAttachments(matrixStack, buffer, stack, light, overlay);
-        renderBarrelAttachments(matrixStack, buffer, stack, light, overlay);
+        renderBarrelAndAttachments(matrixStack, buffer, stack, light, overlay);
         renderUnderBarrelAttachments(matrixStack, buffer, stack, light, overlay);
         if (entity.equals(Minecraft.getInstance().player)) {
             renderBoltAndMagazine(matrixStack, buffer, stack, light, overlay);
         }
     }
+
     private void renderStockAttachments(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get()) {
@@ -44,17 +45,25 @@ public class CogloaderModel implements IOverrideModel {
             }
         }
     }
-    private void renderBarrelAttachments(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
+    private void renderBarrelAndAttachments(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
+        boolean hasExtendedBarrel = false;
+
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get()) {
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get()) {
+                RenderUtil.renderModel(SpecialModels.COGLOADER_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+                hasExtendedBarrel = true;
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get()) {
                 RenderUtil.renderModel(SpecialModels.COGLOADER_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
-            }
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get()) {
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get()) {
                 RenderUtil.renderModel(SpecialModels.COGLOADER_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
-            }
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get()) {
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get()) {
                 RenderUtil.renderModel(SpecialModels.COGLOADER_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
             }
+        }
+
+        // Render the standard barrel if no extended barrel is attached
+        if (!hasExtendedBarrel) {
+            RenderUtil.renderModel(SpecialModels.COGLOADER_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
         }
     }
     private void renderUnderBarrelAttachments(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {

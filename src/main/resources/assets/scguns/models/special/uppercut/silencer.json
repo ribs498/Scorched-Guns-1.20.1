@@ -88,5 +88,13 @@
 			"translation": [0, 8.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "Silencer",
+			"origin": [10.25303, 3.775, 1.95],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
 }

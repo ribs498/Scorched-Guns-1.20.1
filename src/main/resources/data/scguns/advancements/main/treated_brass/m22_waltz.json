@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/treated_brass_blueprint",
+  "criteria": {
+    "m22_waltz": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:m22_waltz"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.m22_waltz.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:m22_waltz"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.m22_waltz"
+    }
+  },
+  "requirements": [
+    [
+      "m22_waltz"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

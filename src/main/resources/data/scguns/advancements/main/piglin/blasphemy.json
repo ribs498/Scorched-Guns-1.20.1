@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/piglin_blueprint",
+  "criteria": {
+    "blasphemy": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:blasphemy"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.blasphemy.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:blasphemy"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.blasphemy"
+    }
+  },
+  "requirements": [
+    [
+      "blasphemy"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

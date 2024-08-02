@@ -9,7 +9,7 @@
                 "processors": "minecraft:empty",
                 "location": "scguns:asgharian_tower"
             },
-            "weight": 1
+            "weight": 4
         }
     ]
 }

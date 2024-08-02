@@ -35,14 +35,28 @@ public class NewbornCystModel implements IOverrideModel {
         renderStockAttachments(matrixStack, buffer, stack, light, overlay);
         renderBarrelAttachments(matrixStack, buffer, stack, light, overlay);
         renderUnderBarrelAttachments(matrixStack, buffer, stack, light, overlay);
-        if ((Gun.getScope(stack) == null))
-            RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
-        else
-            RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
 
-        assert entity != null;
+        // Render the iron sights if no scope is attached.
+        if (Gun.getScope(stack) == null) {
+            RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
+        } else {
+            RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
+
         if (entity.equals(Minecraft.getInstance().player)) {
             renderBoltAndMagazine(matrixStack, buffer, stack, partialTicks, light, overlay);
+        }
+        if (entity.equals(Minecraft.getInstance().player)) {
+            matrixStack.pushPose();
+            matrixStack.translate(0, -0.30, 0.33);
+            ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
+            float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
+            cooldown = (float) ease(cooldown);
+            float rotationAngle = -cooldown * 30;
+            matrixStack.mulPose(Axis.XP.rotationDegrees(rotationAngle));
+            matrixStack.translate(0, 0.30, -0.33);
+            RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_HAMMER.getModel(), stack, matrixStack, buffer, light, overlay);
+            matrixStack.popPose();
         }
     }
 
@@ -59,18 +73,27 @@ public class NewbornCystModel implements IOverrideModel {
     }
 
     private void renderBarrelAttachments(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
+        boolean hasExtendedBarrel = false;
+
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get()) {
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get()) {
+                RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+                hasExtendedBarrel = true;
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get()) {
                 RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
-            }
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get()) {
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get()) {
                 RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
-            }
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get()) {
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get()) {
                 RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
             }
         }
+
+        // Render the standard barrel if no extended barrel is attached
+        if (!hasExtendedBarrel) {
+            RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
     }
+
     private void renderUnderBarrelAttachments(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.UNDER_BARREL)) {
             if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.VERTICAL_GRIP.get()) {
@@ -88,8 +111,8 @@ public class NewbornCystModel implements IOverrideModel {
             }
         }
     }
+
     private void renderBoltAndMagazine(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, float partialTicks, int light, int overlay) {
-        assert Minecraft.getInstance().player != null;
         ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
         float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
         int shotCount = GunFireCystEventHandler.getShotCount();
@@ -112,14 +135,13 @@ public class NewbornCystModel implements IOverrideModel {
         matrixStack.pushPose();
         matrixStack.translate(0, -0.21, 0);
         matrixStack.mulPose(Axis.ZP.rotationDegrees(currentRotation));
-        matrixStack.translate(-0, 0.21, -0);
+        matrixStack.translate(0, 0.21, 0);
         RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_DRUM.getModel(), stack, matrixStack, buffer, light, overlay);
         matrixStack.popPose();
     }
 
     @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
     public static class GunFireCystEventHandler {
-
         private static int shotCount = 0;
 
         @SubscribeEvent
@@ -134,6 +156,7 @@ public class NewbornCystModel implements IOverrideModel {
             return shotCount;
         }
     }
+    private double ease(double x) {
+        return 1 - Math.pow(1 - (2 * x), 4);
+    }
 }
-
-

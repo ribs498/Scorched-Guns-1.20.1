@@ -49,32 +49,25 @@ public class ModEvents {
                     new ItemStack(ModItems.BUCKSHOT.get(), 4),
                     new ItemStack(Items.EMERALD, 1),
                     16, 5, 0.02f));
-
-            // Level 2 Trades
-            trades.get(2).add((pTrader, pRandom) -> new MerchantOffer(
-                    new ItemStack(Items.EMERALD, 8),
-                    new ItemStack(ModItems.EXTENDED_MAG.get(), 1),
-                    10, 10, 0.05f));
-            trades.get(2).add((pTrader, pRandom) -> new MerchantOffer(
+            trades.get(1).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 6),
                     new ItemStack(ModItems.SMALL_CASING_MOLD.get(), 1),
                     3, 10, 0.05f));
-            trades.get(2).add((pTrader, pRandom) -> new MerchantOffer(
+            trades.get(1).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 2),
                     new ItemStack(ModItems.SMALL_IRON_CASING.get(), 8),
                     10, 10, 0.05f));
-            trades.get(2).add((pTrader, pRandom) -> new MerchantOffer(
-                    new ItemStack(Items.EMERALD, 15),
-                    new ItemStack(ModItems.MUSKET.get(), 1),
-                    2, 12, 0.05f));
-            trades.get(2).add((pTrader, pRandom) -> new MerchantOffer(
+            trades.get(1).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(ModItems.ANTHRALITE_INGOT.get(), 3),
                     new ItemStack(Items.EMERALD, 1),
                     12, 10, 0.05f));
+
+            // Level 2 Trades
             trades.get(2).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 25),
                     new ItemStack(ModItems.COPPER_BLUEPRINT.get(), 1),
                     2, 12, 0.05f));
+
             // Level 3 Trades
             trades.get(3).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 9),
@@ -92,6 +85,14 @@ public class ModEvents {
                     new ItemStack(Items.GUNPOWDER, 8),
                     new ItemStack(Items.EMERALD, 1),
                     16, 15, 0.05f));
+            trades.get(3).add((pTrader, pRandom) -> new MerchantOffer(
+                    new ItemStack(Items.EMERALD, 8),
+                    new ItemStack(ModItems.EXTENDED_MAG.get(), 1),
+                    10, 10, 0.05f));
+            trades.get(3).add((pTrader, pRandom) -> new MerchantOffer(
+                    new ItemStack(Items.EMERALD, 15),
+                    new ItemStack(ModItems.MUSKET.get(), 1),
+                    2, 12, 0.05f));
 
             // Level 4 Trades
             trades.get(4).add((pTrader, pRandom) -> new MerchantOffer(
@@ -114,6 +115,7 @@ public class ModEvents {
                     new ItemStack(Items.EMERALD, 1),
                     new ItemStack(ModItems.LARGE_CASING_MOLD.get(), 1),
                     5, 20, 0.05f));
+
             // Level 5 Trades
             trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 25),
@@ -141,12 +143,13 @@ public class ModEvents {
     @SubscribeEvent
     public static void addCustomWanderingTrades(WandererTradesEvent event) {
         List<VillagerTrades.ItemListing> rareTrades = event.getRareTrades();
+        List<VillagerTrades.ItemListing> trades = event.getGenericTrades();
 
-        rareTrades.add((pTrader, pRandom) -> new MerchantOffer(
+        trades.add((pTrader, pRandom) -> new MerchantOffer(
                 new ItemStack(Items.EMERALD, 24),
                 new ItemStack(ModItems.TREATED_BRASS_BLUEPRINT.get(), 1),
                 1, 12, 0.15f));
-        rareTrades.add((pTrader, pRandom) -> new MerchantOffer(
+        trades.add((pTrader, pRandom) -> new MerchantOffer(
                 new ItemStack(Items.EMERALD, 24),
                 new ItemStack(ModItems.DIAMOND_STEEL_BLUEPRINT.get(), 1),
                 1, 12, 0.15f));

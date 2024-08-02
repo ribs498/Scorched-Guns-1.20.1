@@ -9,7 +9,7 @@
                 "processors": "minecraft:empty",
                 "location": "scguns:trench"
             },
-            "weight": 1
+            "weight": 4
         }
     ]
 }

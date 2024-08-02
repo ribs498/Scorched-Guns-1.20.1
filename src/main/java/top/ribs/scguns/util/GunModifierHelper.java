@@ -132,7 +132,13 @@ public class GunModifierHelper
                 recoilReduction *= Mth.clamp(modifier.recoilModifier(), 0.0F, 1.0F);
             }
         }
-        return 1.0F - recoilReduction;
+        float attachmentRecoilModifier = 1.0F - recoilReduction;
+
+        // Apply enchantment-based recoil modification
+        float enchantmentRecoilModifier = GunEnchantmentHelper.getRecoilModifier(weapon);
+
+        // Combine attachment-based recoil reduction with enchantment-based recoil increase
+        return attachmentRecoilModifier * enchantmentRecoilModifier;
     }
 
     public static boolean isSilencedFire(ItemStack weapon)

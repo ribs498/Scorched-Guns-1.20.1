@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/diamond_steel_blueprint",
+  "criteria": {
+    "deep_dark_blueprint": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:deep_dark_blueprint"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.deep_dark_blueprint.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:deep_dark_blueprint"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.deep_dark_blueprint"
+    }
+  },
+  "requirements": [
+    [
+      "deep_dark_blueprint"
+    ]
+  ],
+  "sdeep_darks_telemetry_event": true
+}

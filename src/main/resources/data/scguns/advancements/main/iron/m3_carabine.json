@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/iron/greaser_smg",
+  "criteria": {
+    "m3_carabine": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:m3_carabine"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.m3_carabine.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:m3_carabine"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.m3_carabine"
+    }
+  },
+  "requirements": [
+    [
+      "m3_carabine"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

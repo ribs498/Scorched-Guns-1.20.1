@@ -45,7 +45,7 @@
     "item": "scguns:beowulf_round",
     "casingType": "scguns:small_diamond_steel_casing",
     "ejectsCasing": true,
-    "life": 30,
+    "life": 60,
     "size": 0.1,
     "speed": 5.5,
     "trailLengthMultiplier": 2.0
@@ -61,7 +61,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.brass_revolver.fire",
     "fire": "scguns:item.brass_revolver.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.bruiser.silenced_fire"
   }
 }

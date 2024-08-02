@@ -15,15 +15,14 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.minecraftforge.registries.ForgeRegistries;
-import top.ribs.scguns.ScorchedGuns;
+import top.ribs.scguns.Config;
 import top.ribs.scguns.client.GunItemStackRenderer;
 import top.ribs.scguns.client.KeyBinds;
 import top.ribs.scguns.common.*;
-import top.ribs.scguns.debug.Debug;
 import top.ribs.scguns.enchantment.EnchantmentTypes;
 import top.ribs.scguns.init.ModEnchantments;
 import top.ribs.scguns.init.ModItems;
+import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
@@ -51,19 +50,21 @@ public class GunItem extends Item implements IColored, IMeta {
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flag) {
         Gun modifiedGun = this.getModifiedGun(stack);
 
-        String fireMode = modifiedGun.getGeneral().getFireMode().getId().toString();
-        tooltip.add(Component.translatable("info.scguns.fire_mode").withStyle(ChatFormatting.GRAY)
-                .append(Component.translatable("fire_mode." + fireMode).withStyle(ChatFormatting.WHITE)));
+        // Calculate base damage and apply modifiers
+        float baseDamage = modifiedGun.getProjectile().getDamage();
+        baseDamage = GunModifierHelper.getModifiedProjectileDamage(stack, baseDamage);
+        baseDamage = GunEnchantmentHelper.getAcceleratorDamage(stack, baseDamage);
+        baseDamage = GunEnchantmentHelper.getHeavyShotDamage(stack, baseDamage);
 
-        Item ammo = modifiedGun.getProjectile().getItem();
-        Item reloadItem = modifiedGun.getReloads().getReloadItem();
-        if (modifiedGun.getReloads().getReloadType() == ReloadType.SINGLE_ITEM) {
-            ammo = reloadItem;
-        }
-        if (ammo != null) {
-            tooltip.add(Component.translatable("info.scguns.ammo_type", Component.translatable(ammo.getDescriptionId()).withStyle(ChatFormatting.WHITE)).withStyle(ChatFormatting.GRAY));
+        // Check if scaling is enabled and modify the damage based on the world day
+        if (worldIn != null && Config.GunScalingConfig.getInstance().isScalingEnabled()) {
+            long worldDay = worldIn.getDayTime() / 24000L;
+            double scaledDamage = Config.GunScalingConfig.getInstance().getBaseDamage() +
+                    (Config.GunScalingConfig.getInstance().getDamageIncreaseRate() * worldDay);
+            baseDamage *= (float) Math.min(scaledDamage, Config.GunScalingConfig.getInstance().getMaxDamage());
         }
 
+        // Add damage information to the tooltip
         String additionalDamageText = "";
         CompoundTag tagCompound = stack.getTag();
         if (tagCompound != null) {
@@ -79,19 +80,23 @@ public class GunItem extends Item implements IColored, IMeta {
             }
         }
 
-        float damage = modifiedGun.getProjectile().getDamage();
-        ResourceLocation advantage = modifiedGun.getProjectile().getAdvantage();
-        damage = GunModifierHelper.getModifiedProjectileDamage(stack, damage);
-        damage = GunEnchantmentHelper.getAcceleratorDamage(stack, damage);
         tooltip.add(Component.translatable("info.scguns.damage")
                 .append(": ").withStyle(ChatFormatting.GRAY)
-                .append(Component.literal(ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(damage) + additionalDamageText).withStyle(ChatFormatting.WHITE)));
+                .append(Component.literal(ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(baseDamage) + additionalDamageText).withStyle(ChatFormatting.WHITE)));
 
-        if (!advantage.equals(ModTags.Entities.NONE.location())) {
-            tooltip.add(Component.translatable("info.scguns.advantage").withStyle(ChatFormatting.GRAY)
-                    .append(Component.translatable("advantage." + advantage).withStyle(ChatFormatting.GOLD)));
+        // Add other tooltip information (fire mode, ammo type, etc.)
+        String fireMode = modifiedGun.getGeneral().getFireMode().id().toString();
+        tooltip.add(Component.translatable("info.scguns.fire_mode").withStyle(ChatFormatting.GRAY)
+                .append(Component.translatable("fire_mode." + fireMode).withStyle(ChatFormatting.WHITE)));
+
+        Item ammo = modifiedGun.getProjectile().getItem();
+        Item reloadItem = modifiedGun.getReloads().getReloadItem();
+        if (modifiedGun.getReloads().getReloadType() == ReloadType.SINGLE_ITEM) {
+            ammo = reloadItem;
         }
-
+        if (ammo != null) {
+            tooltip.add(Component.translatable("info.scguns.ammo_type", Component.translatable(ammo.getDescriptionId()).withStyle(ChatFormatting.WHITE)).withStyle(ChatFormatting.GRAY));
+        }
         if (tagCompound != null) {
             if (tagCompound.getBoolean("IgnoreAmmo")) {
                 tooltip.add(Component.translatable("info.scguns.ignore_ammo").withStyle(ChatFormatting.AQUA));
@@ -102,8 +107,7 @@ public class GunItem extends Item implements IColored, IMeta {
                         .append(Component.literal(ammoCount + "/" + GunModifierHelper.getModifiedAmmoCapacity(stack, modifiedGun)).withStyle(ChatFormatting.WHITE)));
             }
         }
-
-        // Add total melee damage to tooltip
+        // Add melee damage information to the tooltip
         float totalMeleeDamage = getTotalMeleeDamage(stack);
         if (totalMeleeDamage > 0) {
             String meleeDamageText = (totalMeleeDamage % 1.0 == 0) ? String.format("%d", (int) totalMeleeDamage) : String.format("%.1f", totalMeleeDamage);
@@ -112,8 +116,10 @@ public class GunItem extends Item implements IColored, IMeta {
                     .append(Component.literal(meleeDamageText).withStyle(ChatFormatting.WHITE)));
         }
 
+        // Add the attachment help information
         tooltip.add(Component.translatable("info.scguns.attachment_help", KeyBinds.KEY_ATTACHMENTS.getTranslatedKeyMessage().getString().toUpperCase(Locale.ENGLISH)).withStyle(ChatFormatting.YELLOW));
     }
+
 
 
     public float getBayonetAdditionalDamage(ItemStack gunStack) {
@@ -205,7 +211,7 @@ public class GunItem extends Item implements IColored, IMeta {
 
     @Override
     public int getEnchantmentValue() {
-        return 5;
+        return 10;
     }
 
     @Override
@@ -233,6 +239,9 @@ public class GunItem extends Item implements IColored, IMeta {
     }
 
     public boolean hasBayonet(ItemStack gunStack) {
+        if (this.isBuiltInBayonetGun()) {
+            return true;
+        }
         for (IAttachment.Type type : IAttachment.Type.values()) {
             ItemStack attachmentStack = Gun.getAttachment(type, gunStack);
             if (attachmentStack != null && attachmentStack.getItem() instanceof BayonetItem) {
@@ -240,6 +249,13 @@ public class GunItem extends Item implements IColored, IMeta {
             }
         }
         return false;
+    }
+
+    public boolean isBuiltInBayonetGun() {
+        return this == ModItems.BOMB_LANCE.get() ||
+                this == ModItems.LOCUST.get() ||
+                this == ModItems.EARTHS_CORPSE.get() ||
+                this == ModItems.SUPER_SHOTGUN.get();
     }
 
     public int getBayonetBanzaiLevel(ItemStack gunStack) {

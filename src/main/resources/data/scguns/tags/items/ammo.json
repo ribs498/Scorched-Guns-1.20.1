@@ -18,6 +18,21 @@
     "scguns:grapeshot",
     "scguns:blaze_fuel",
     "scguns:hog_round",
-    "scguns:gibbs_round"
+    "scguns:gibbs_round",
+    "scguns:shock_cell",
+    "scguns:sculk_cell",
+    "scguns:shulkshot",
+    "scguns:small_iron_casing",
+    "scguns:empty_cell",
+    "scguns:large_iron_casing",
+    "scguns:small_copper_casing",
+    "scguns:medium_copper_casing",
+    "scguns:small_brass_casing",
+    "scguns:medium_brass_casing",
+    "scguns:large_brass_casing",
+    "scguns:small_diamond_steel_casing",
+    "scguns:medium_diamond_steel_casing",
+    "minecraft:bowl",
+    "minecraft:glass_bottle"
   ]
 }

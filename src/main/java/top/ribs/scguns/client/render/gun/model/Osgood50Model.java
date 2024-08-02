@@ -31,9 +31,21 @@ public class Osgood50Model implements IOverrideModel {
         RenderUtil.renderModel(SpecialModels.OSGOOD_50_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
         renderStockAttachments(matrixStack, buffer, stack, light, overlay);
         renderBarrelAttachments(matrixStack, buffer, stack, light, overlay);
-        assert entity != null;
+
         if (entity.equals(Minecraft.getInstance().player)) {
             renderBoltAndMagazine(matrixStack, buffer, stack, partialTicks, light, overlay);
+        }
+        if (entity.equals(Minecraft.getInstance().player)) {
+            matrixStack.pushPose();
+            matrixStack.translate(0, -0.30, 0.33);
+            ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
+            float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
+            cooldown = (float) ease(cooldown);
+            float rotationAngle = -cooldown * 30;
+            matrixStack.mulPose(Axis.XP.rotationDegrees(rotationAngle));
+            matrixStack.translate(0, 0.30, -0.33);
+            RenderUtil.renderModel(SpecialModels.OSGOOD__50_HAMMER.getModel(), stack, matrixStack, buffer, light, overlay);
+            matrixStack.popPose();
         }
     }
 
@@ -50,21 +62,28 @@ public class Osgood50Model implements IOverrideModel {
     }
 
     private void renderBarrelAttachments(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
+        boolean hasExtendedBarrel = false;
+
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get()) {
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get()) {
+                RenderUtil.renderModel(SpecialModels.OSGOOD_50_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+                hasExtendedBarrel = true;
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get()) {
                 RenderUtil.renderModel(SpecialModels.OSGOOD_50_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
-            }
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get()) {
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get()) {
                 RenderUtil.renderModel(SpecialModels.OSGOOD_50_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
-            }
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get()) {
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get()) {
                 RenderUtil.renderModel(SpecialModels.OSGOOD_50_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
             }
+        }
+
+        // Render the standard barrel if no extended barrel is attached
+        if (!hasExtendedBarrel) {
+            RenderUtil.renderModel(SpecialModels.OSGOOD_50_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
         }
     }
 
     private void renderBoltAndMagazine(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, float partialTicks, int light, int overlay) {
-        assert Minecraft.getInstance().player != null;
         ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
         float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
         int shotCount = GunFireEventOsgoodHandler.getShotCount();
@@ -87,7 +106,7 @@ public class Osgood50Model implements IOverrideModel {
         matrixStack.pushPose();
         matrixStack.translate(0, -0.24, 0);
         matrixStack.mulPose(Axis.ZP.rotationDegrees(currentRotation));
-        matrixStack.translate(-0, 0.24, -0);
+        matrixStack.translate(0, 0.24, 0);
         RenderUtil.renderModel(SpecialModels.OSGOOD_50_DRUM.getModel(), stack, matrixStack, buffer, light, overlay);
         matrixStack.popPose();
     }
@@ -108,5 +127,8 @@ public class Osgood50Model implements IOverrideModel {
         public static int getShotCount() {
             return shotCount;
         }
+    }
+    private double ease(double x) {
+        return 1 - Math.pow(1 - (2 * x), 4);
     }
 }

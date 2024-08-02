@@ -46,7 +46,7 @@
     "gravity": false,
     "item": "scguns:gibbs_round",
     "casingType": "scguns:medium_diamond_steel_casing",
-    "life": 50,
+    "life": 70,
     "size": 0.05,
     "speed": 10.0,
     "trailLengthMultiplier": 2.0
@@ -62,7 +62,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.scorched_rifle.fire",
     "fire": "scguns:item.scorched_rifle.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.makeshift_rifle.silenced_fire"
   }
 }

@@ -1,0 +1,28 @@
+{
+  "type": "scguns:powered_macerating",
+  "processingTime": 100,
+  "energyUse": 1000,
+  "ingredients": [
+    [
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      {
+        "item": "minecraft:raw_iron"
+      }
+    ],
+    {
+      "item": "scguns:niter_dust"
+    },
+    {
+      "item": "minecraft:charcoal"
+    },
+    {
+      "item": "minecraft:redstone"
+    }
+  ],
+  "result": {
+    "item": "scguns:treated_iron_blend",
+    "count": 3
+  }
+}

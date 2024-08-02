@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "Q": {
+      "item": "minecraft:copper_block"
+    },
+    "Z": {
+      "item": "minecraft:redstone"
+    }
+  },
+  "pattern": [
+    "HZH",
+    "ZQZ",
+    "HZH"
+  ],
+  "result": {
+    "item": "scguns:lightning_battery",
+    "count": 1
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/iron/defender_pistol",
+  "criteria": {
+    "greaser_smg": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:greaser_smg"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.greaser_smg.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:greaser_smg"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.greaser_smg"
+    }
+  },
+  "requirements": [
+    [
+      "greaser_smg"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

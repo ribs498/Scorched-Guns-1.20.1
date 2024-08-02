@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/copper/scrapper",
+  "criteria": {
+    "rusty_gnat": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:rusty_gnat"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.rusty_gnat.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:rusty_gnat"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.rusty_gnat"
+    }
+  },
+  "requirements": [
+    [
+      "rusty_gnat"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

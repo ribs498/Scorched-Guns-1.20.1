@@ -1,8 +1,8 @@
 {
 	"credit": "Made with Blockbench",
-	"texture_size": [32, 32],
+	"texture_size": [64, 64],
 	"textures": {
-		"4": "scguns:item/greaser_smg"
+		"5": "scguns:item/greaser_smg"
 	},
 	"elements": [
 		{
@@ -10,12 +10,12 @@
 			"to": [8.5, 1.4886, 11.875],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, -0.575, 10.6994]},
 			"faces": {
-				"north": {"uv": [0, 9, 0.5, 10.75], "texture": "#4"},
-				"east": {"uv": [6, 0, 6.75, 1.75], "texture": "#4"},
-				"south": {"uv": [0.5, 9, 1, 10.75], "texture": "#4", "cullface": "south"},
-				"west": {"uv": [1, 6, 1.75, 7.75], "texture": "#4"},
-				"up": {"uv": [12, 2.75, 11.5, 2], "texture": "#4"},
-				"down": {"uv": [3.5, 11.5, 3, 12.25], "texture": "#4"}
+				"north": {"uv": [4, 7, 4.25, 7.875], "texture": "#5"},
+				"east": {"uv": [0.5, 5.75, 0.875, 6.625], "texture": "#5"},
+				"south": {"uv": [4.75, 7, 5, 7.875], "texture": "#5", "cullface": "south"},
+				"west": {"uv": [1, 5.75, 1.375, 6.625], "texture": "#5"},
+				"up": {"uv": [0.75, 9.125, 0.5, 8.75], "texture": "#5"},
+				"down": {"uv": [9, 0.5, 8.75, 0.875], "texture": "#5"}
 			}
 		},
 		{
@@ -23,12 +23,12 @@
 			"to": [8.625, -2.1114, 12],
 			"rotation": {"angle": 0, "axis": "y", "origin": [7.875, -1.175, 10.5744]},
 			"faces": {
-				"north": {"uv": [4.5, 12.5, 5.25, 12.75], "texture": "#4"},
-				"east": {"uv": [12, 7.5, 13, 7.75], "texture": "#4"},
-				"south": {"uv": [12.5, 4.5, 13.25, 4.75], "texture": "#4", "cullface": "south"},
-				"west": {"uv": [12, 8, 13, 8.25], "texture": "#4"},
-				"up": {"uv": [9.75, 7, 9, 6], "texture": "#4"},
-				"down": {"uv": [9.75, 7, 9, 8], "texture": "#4"}
+				"north": {"uv": [9.75, 2, 10.125, 2.125], "texture": "#5"},
+				"east": {"uv": [8.5, 9, 9, 9.125], "texture": "#5"},
+				"south": {"uv": [9.75, 2.25, 10.125, 2.375], "texture": "#5", "cullface": "south"},
+				"west": {"uv": [9, 8.5, 9.5, 8.625], "texture": "#5"},
+				"up": {"uv": [7.625, 3.75, 7.25, 3.25], "texture": "#5"},
+				"down": {"uv": [7.625, 4.75, 7.25, 5.25], "texture": "#5"}
 			}
 		}
 	],
@@ -61,13 +61,5 @@
 			"translation": [0.75, 8.25, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	},
-	"groups": [
-		{
-			"name": "StanMag",
-			"origin": [7.875, -1.175, 10.5744],
-			"color": 0,
-			"children": [0, 1]
-		}
-	]
+	}
 }

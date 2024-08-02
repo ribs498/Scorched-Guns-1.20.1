@@ -39,18 +39,18 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 4.65,
+      "yOffset": 4.7,
       "zOffset": 1.2
     }
   },
   "projectile": {
     "advantage": "scguns:fire",
-    "damage": 10.0,
+    "damage": 13.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:advanced_round",
     "casingType": "scguns:medium_brass_casing",
-    "life": 30,
+    "life": 55,
     "size": 0.1,
     "speed": 9.0,
     "trailLengthMultiplier": 4.0
@@ -66,7 +66,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.heavier_rifle.fire",
     "fire": "scguns:item.heavier_rifle.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.bruiser.silenced_fire"
   }
 }

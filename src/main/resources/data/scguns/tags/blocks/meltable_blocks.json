@@ -1,0 +1,26 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:stone",
+    "minecraft:cobblestone",
+    "minecraft:andesite",
+    "minecraft:diorite",
+    "minecraft:granite",
+    "minecraft:calcite",
+    "minecraft:deepslate",
+    "minecraft:tuff",
+    "minecraft:blackstone",
+    "minecraft:basalt",
+    "minecraft:netherrack",
+    {"id": "quark:jasper",  "required":false},
+    {"id": "quark:slate",  "required":false},
+    {"id": "quark:limestone",  "required":false},
+    {"id": "create:limestone",  "required":false},
+    {"id": "create:scoria",  "required":false},
+    {"id": "create:scorchia",  "required":false},
+    {"id": "create:asurine",  "required":false},
+    {"id": "create:ochrum",  "required":false},
+    {"id": "create:veridium",  "required":false},
+    {"id": "create:crimsite",  "required":false}
+  ]
+}

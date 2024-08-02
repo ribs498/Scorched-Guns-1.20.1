@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/copper/makeshift_rifle",
+  "criteria": {
+    "boomstick": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:boomstick"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.boomstick.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:boomstick"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.boomstick"
+    }
+  },
+  "requirements": [
+    [
+      "boomstick"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

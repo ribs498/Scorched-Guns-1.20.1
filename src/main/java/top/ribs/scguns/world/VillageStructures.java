@@ -21,11 +21,11 @@ public class VillageStructures {
 	public static void addNewVillageBuilding(final ServerAboutToStartEvent event) {
 		Registry<StructureTemplatePool> templatePools = event.getServer().registryAccess().registry(Registries.TEMPLATE_POOL).get();
 		Registry<StructureProcessorList> processorLists = event.getServer().registryAccess().registry(Registries.PROCESSOR_LIST).get();
-		VillageStructures.addBuildingToPool(templatePools, processorLists, new ResourceLocation("minecraft:village/plains/houses"), Reference.MOD_ID + ":village/houses/plains_gunsmith_house", 8);
-      VillageStructures.addBuildingToPool(templatePools, processorLists, new ResourceLocation("minecraft:village/snowy/houses"), Reference.MOD_ID + ":village/houses/snowy_gunsmith_house", 8);
-      VillageStructures.addBuildingToPool(templatePools, processorLists, new ResourceLocation("minecraft:village/savanna/houses"), Reference.MOD_ID + ":village/houses/savanna_gunsmith_house", 8);
-		VillageStructures.addBuildingToPool(templatePools, processorLists, new ResourceLocation("minecraft:village/desert/houses"), Reference.MOD_ID + ":village/houses/desert_gunsmith_house", 8);
-      VillageStructures.addBuildingToPool(templatePools, processorLists, new ResourceLocation("minecraft:village/taiga/houses"), Reference.MOD_ID + ":village/houses/taiga_gunsmith_house", 8);
+		VillageStructures.addBuildingToPool(templatePools, processorLists, new ResourceLocation("minecraft:village/plains/houses"), Reference.MOD_ID + ":village/houses/plains_gunsmith_house", 10);
+      VillageStructures.addBuildingToPool(templatePools, processorLists, new ResourceLocation("minecraft:village/snowy/houses"), Reference.MOD_ID + ":village/houses/snowy_gunsmith_house", 10);
+      VillageStructures.addBuildingToPool(templatePools, processorLists, new ResourceLocation("minecraft:village/savanna/houses"), Reference.MOD_ID + ":village/houses/savanna_gunsmith_house", 10);
+		VillageStructures.addBuildingToPool(templatePools, processorLists, new ResourceLocation("minecraft:village/desert/houses"), Reference.MOD_ID + ":village/houses/desert_gunsmith_house", 10);
+      VillageStructures.addBuildingToPool(templatePools, processorLists, new ResourceLocation("minecraft:village/taiga/houses"), Reference.MOD_ID + ":village/houses/taiga_gunsmith_house", 10);
 	}
 
 	public static void addBuildingToPool(Registry<StructureTemplatePool> templatePoolRegistry, Registry<StructureProcessorList> processorListRegistry, ResourceLocation poolRL, String nbtPieceRL, int weight) {

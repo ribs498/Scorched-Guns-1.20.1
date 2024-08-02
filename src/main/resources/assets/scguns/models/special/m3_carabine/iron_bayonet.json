@@ -1,8 +1,9 @@
 {
 	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
 	"textures": {
-		"7": "scguns:item/makeshift_rifle_bayonets",
-		"particle": "scguns:item/carabine_grips"
+		"1": "scguns:item/m3_carabine",
+		"particle": "scguns:item/m3_carabine"
 	},
 	"elements": [
 		{
@@ -10,12 +11,12 @@
 			"to": [8.56464, 5.46036, 3.8],
 			"rotation": {"angle": 45, "axis": "z", "origin": [8.01464, 4.91036, 3.5375]},
 			"faces": {
-				"north": {"uv": [0, 4, 1.5, 5.5], "texture": "#7"},
-				"east": {"uv": [4, 6, 4.5, 7.5], "texture": "#7"},
-				"south": {"uv": [2, 4, 3.5, 5.5], "texture": "#7", "cullface": "south"},
-				"west": {"uv": [6, 4, 6.5, 5.5], "texture": "#7"},
-				"up": {"uv": [6.5, 6.5, 5, 6], "texture": "#7"},
-				"down": {"uv": [3.5, 7, 2, 7.5], "texture": "#7"}
+				"north": {"uv": [5.25, 8.75, 5.625, 9.125], "texture": "#1"},
+				"east": {"uv": [10.5, 5.5, 10.625, 5.875], "texture": "#1"},
+				"south": {"uv": [8.75, 7.25, 9.125, 7.625], "texture": "#1", "cullface": "south"},
+				"west": {"uv": [5.75, 10.5, 5.875, 10.875], "texture": "#1"},
+				"up": {"uv": [6.625, 10.625, 6.25, 10.5], "texture": "#1"},
+				"down": {"uv": [10.875, 6.25, 10.5, 6.375], "texture": "#1"}
 			}
 		},
 		{
@@ -23,12 +24,12 @@
 			"to": [8.75, 4.75, 3.775],
 			"rotation": {"angle": 0, "axis": "y", "origin": [7, 3, 2.025]},
 			"faces": {
-				"north": {"uv": [4, 4, 5.5, 5.5], "texture": "#7"},
-				"east": {"uv": [7, 4, 7.5, 5.5], "texture": "#7"},
-				"south": {"uv": [0, 6, 1.5, 7.5], "texture": "#7"},
-				"west": {"uv": [5, 7, 5.5, 8.5], "texture": "#7"},
-				"up": {"uv": [7.5, 7.5, 6, 7], "texture": "#7"},
-				"down": {"uv": [8.5, 6, 7, 6.5], "texture": "#7"}
+				"north": {"uv": [7.75, 8.75, 8.125, 9.125], "texture": "#1"},
+				"east": {"uv": [10.5, 6.5, 10.625, 6.875], "texture": "#1"},
+				"south": {"uv": [8.25, 8.75, 8.625, 9.125], "texture": "#1"},
+				"west": {"uv": [6.75, 10.5, 6.875, 10.875], "texture": "#1"},
+				"up": {"uv": [7.375, 10.625, 7, 10.5], "texture": "#1"},
+				"down": {"uv": [10.875, 7, 10.5, 7.125], "texture": "#1"}
 			}
 		},
 		{
@@ -36,12 +37,12 @@
 			"to": [8.375, 3.25, 3.775],
 			"rotation": {"angle": 0, "axis": "y", "origin": [7.125, 1.5, 2.025]},
 			"faces": {
-				"north": {"uv": [2, 6, 3, 7], "texture": "#7"},
-				"east": {"uv": [0, 8, 0.5, 9], "texture": "#7"},
-				"south": {"uv": [3, 6, 4, 7], "texture": "#7"},
-				"west": {"uv": [1, 8, 1.5, 9], "texture": "#7"},
-				"up": {"uv": [3, 8.5, 2, 8], "texture": "#7"},
-				"down": {"uv": [4, 8, 3, 8.5], "texture": "#7"}
+				"north": {"uv": [7.25, 9.75, 7.5, 10], "texture": "#1"},
+				"east": {"uv": [5.25, 11, 5.375, 11.25], "texture": "#1"},
+				"south": {"uv": [7.75, 9.75, 8, 10], "texture": "#1"},
+				"west": {"uv": [11, 5.25, 11.125, 5.5], "texture": "#1"},
+				"up": {"uv": [5.75, 11.125, 5.5, 11], "texture": "#1"},
+				"down": {"uv": [11.25, 5.5, 11, 5.625], "texture": "#1"}
 			}
 		},
 		{
@@ -49,12 +50,11 @@
 			"to": [8, 3.225, 4.275],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 2.575, 0.65]},
 			"faces": {
-				"north": {"uv": [0, 0, 0, 1.5], "texture": "#7"},
-				"east": {"uv": [10.5, 2, 0, 3.5], "texture": "#7"},
-				"south": {"uv": [0, 0, 0, 1.5], "texture": "#7"},
-				"west": {"uv": [10.5, 0, 0, 1.5], "texture": "#7"},
-				"up": {"uv": [0, 10.5, 0, 0], "texture": "#7"},
-				"down": {"uv": [0, 0, 0, 10.5], "texture": "#7"}
+				"north": {"uv": [0, 0, 0, 0.375], "texture": "#1"},
+				"east": {"uv": [0, 1.5, 2.625, 1.875], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 0.375], "texture": "#1"},
+				"up": {"uv": [0, 2.625, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 2.625], "texture": "#1"}
 			}
 		}
 	],
@@ -87,13 +87,5 @@
 			"translation": [1.5, 8.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	},
-	"groups": [
-		{
-			"name": "IronBayonet",
-			"origin": [8, 8, 8],
-			"color": 0,
-			"children": [0, 1, 2, 3]
-		}
-	]
+	}
 }

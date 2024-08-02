@@ -28,7 +28,9 @@ public class MechanicalPressRecipe implements Recipe<SimpleContainer> {
         this.output = output;
         this.processingTime = processingTime;
     }
-
+    public boolean requiresMold() {
+        return !moldItem.isEmpty();
+    }
     @Override
     public boolean matches(SimpleContainer inv, Level world) {
         if (world.isClientSide()) {

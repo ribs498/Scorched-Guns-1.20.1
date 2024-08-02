@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:bowl",
+    "minecraft:glass_bottle",
+    {"id":"vintagedelight:empty_mason_jar",  "required":false}
+  ]
+}

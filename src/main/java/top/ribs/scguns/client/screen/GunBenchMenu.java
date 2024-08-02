@@ -153,21 +153,6 @@ public class GunBenchMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public void removed(Player player) {
-        super.removed(player);
-        this.containerAccess.execute((level, pos) -> {
-            for (int i = 0; i < this.container.getContainerSize(); ++i) {
-                if (i != SLOT_OUTPUT) {
-                    ItemStack itemstack = this.container.removeItemNoUpdate(i);
-                    if (!itemstack.isEmpty()) {
-                        player.drop(itemstack, false);
-                    }
-                }
-            }
-        });
-    }
-
-    @Override
     public ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);

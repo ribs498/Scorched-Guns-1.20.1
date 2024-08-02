@@ -1,12 +1,18 @@
 package top.ribs.scguns;
 
 import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.fml.ModLoadingContext;
+import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.lang3.tuple.Pair;
 import top.ribs.scguns.cache.ObjectCache;
 import top.ribs.scguns.client.SwayType;
 import top.ribs.scguns.client.render.crosshair.Crosshair;
 import top.ribs.scguns.client.screen.ButtonAlignment;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -117,6 +123,8 @@ public class Config
         public final ForgeConfigSpec.DoubleValue bulletHoleFadeThreshold;
         public final ForgeConfigSpec.BooleanValue enableBlood;
         public final ForgeConfigSpec.DoubleValue impactParticleDistance;
+        public final ForgeConfigSpec.BooleanValue enableWaterImpactParticles;
+        public final ForgeConfigSpec.BooleanValue enableLavaImpactParticles;
 
         public Particle(ForgeConfigSpec.Builder builder)
         {
@@ -125,8 +133,10 @@ public class Config
                 this.bulletHoleLifeMin = builder.comment("The minimum duration in ticks before bullet holes will disappear").defineInRange("bulletHoleLifeMin", 150, 0, Integer.MAX_VALUE);
                 this.bulletHoleLifeMax = builder.comment("The maximum duration in ticks before bullet holes will disappear").defineInRange("bulletHoleLifeMax", 200, 0, Integer.MAX_VALUE);
                 this.bulletHoleFadeThreshold = builder.comment("The percentage of the maximum life that must pass before particles begin fading away. 0 makes the particles always fade and 1 removes facing completely").defineInRange("bulletHoleFadeThreshold", 0.98, 0, 1.0);
-                this.enableBlood = builder.comment("If true, blood will will spawn from entities that are hit from a projectile").define("enableBlood", false);
+                this.enableBlood = builder.comment("If true, blood will will spawn from entities that are hit from a projectile").define("enableBlood", true);
                 this.impactParticleDistance = builder.comment("The maximum distance impact particles can be seen from the player").defineInRange("impactParticleDistance", 32.0, 0.0, 64.0);
+                this.enableWaterImpactParticles = builder.comment("If true, particles will spawn when projectiles impact water").define("enableWaterImpactParticles", true);
+                this.enableLavaImpactParticles = builder.comment("If true, particles will spawn when projectiles impact lava").define("enableLavaImpactParticles", true);
             }
             builder.pop();
         }
@@ -198,6 +208,8 @@ public class Config
     public static class Gameplay
     {
         public final Griefing griefing;
+        public final ForgeConfigSpec.BooleanValue enableGunDamage;
+        public final ForgeConfigSpec.BooleanValue enableAttachmentDamage;
         public final ForgeConfigSpec.DoubleValue growBoundingBoxAmount;
         public final ForgeConfigSpec.BooleanValue enableHeadShots;
         public final ForgeConfigSpec.DoubleValue headShotDamageMultiplier;
@@ -206,20 +218,25 @@ public class Config
         public final ForgeConfigSpec.BooleanValue enableKnockback;
         public final ForgeConfigSpec.DoubleValue knockbackStrength;
         public final ForgeConfigSpec.BooleanValue improvedHitboxes;
+        public final ForgeConfigSpec.DoubleValue enemyBulletDamage;
 
         public Gameplay(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Properties relating to gameplay").push("gameplay");
             {
                 this.griefing = new Griefing(builder);
+                this.enableGunDamage = builder.comment("If true, guns will be damageable and can break, coward if you toggle this").define("enableGunDamage", true);
+                this.enableAttachmentDamage = builder.comment("If true, gun attachments will be damageable and can break, also a coward").define("enableAttachmentDamage", true);
                 this.growBoundingBoxAmount = builder.comment("The extra amount to expand an entity's bounding box when checking for projectile collision. Setting this value higher will make it easier to hit entities").defineInRange("growBoundingBoxAmount", 0.3, 0.0, 1.0);
                 this.enableHeadShots = builder.comment("Enables the check for head shots for players. Projectiles that hit the head of a player will have increased damage.").define("enableHeadShots", true);
                 this.headShotDamageMultiplier = builder.comment("The value to multiply the damage by if projectile hit the players head").defineInRange("headShotDamageMultiplier", 1.25, 1.0, Double.MAX_VALUE);
                 this.criticalDamageMultiplier = builder.comment("The value to multiply the damage by if projectile is a critical hit").defineInRange("criticalDamageMultiplier", 1.5, 1.0, Double.MAX_VALUE);
                 this.ignoreLeaves = builder.comment("If true, projectiles will ignore leaves when checking for collision").define("ignoreLeaves", true);
                 this.enableKnockback = builder.comment("If true, projectiles will cause knockback when an entity is hit. By default this is set to true to match the behaviour of Minecraft.").define("enableKnockback", true);
-                this.knockbackStrength = builder.comment("Sets the strengthof knockback when shot by a bullet projectile. Knockback must be enabled for this to take effect. If value is equal to zero, knockback will use default minecraft value").defineInRange("knockbackStrength", 0.15, 0.0, 1.0);
+                this.knockbackStrength = builder.comment("Sets the strength of knockback when shot by a bullet projectile. Knockback must be enabled for this to take effect. If value is equal to zero, knockback will use default minecraft value").defineInRange("knockbackStrength", 0.15, 0.0, 1.0);
                 this.improvedHitboxes = builder.comment("If true, improves the accuracy of weapons by considering the ping of the player. This has no affect on singleplayer. This will add a little overhead if enabled.").define("improvedHitboxes", false);
+                this.enemyBulletDamage = builder.comment("Damage dealt by the Enemy Guns")
+                        .defineInRange("enemyBulletDamage", 4.5, 0.0, Double.MAX_VALUE);
             }
             builder.pop();
         }
@@ -456,6 +473,96 @@ public class Config
                 this.maxCount = builder.comment("The amount of times a player has to shoot within the spread threshold before the maximum amount of spread is applied. Setting the value higher means it will take longer for the spread to be applied.").defineInRange("maxCount", 10, 1, Integer.MAX_VALUE);
             }
             builder.pop();
+        }
+    }
+    public static class GunScalingConfig {
+        private static final ForgeConfigSpec SPEC;
+        public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
+        private static final GunScalingConfig INSTANCE = new GunScalingConfig();
+
+        private static final ForgeConfigSpec.BooleanValue enableScalingDamage;
+        private static final ForgeConfigSpec.DoubleValue damageIncreaseRate;
+        private static final ForgeConfigSpec.DoubleValue baseDamage;
+        private static final ForgeConfigSpec.DoubleValue maxDamage;
+
+        static {
+            BUILDER.push("Scaling Damage");
+
+            enableScalingDamage = BUILDER
+                    .comment("If true, gun damage will scale with the days in the world.")
+                    .define("Enable Scaling Damage", false);
+
+            damageIncreaseRate = BUILDER
+                    .comment("The decimal amount that gun damage increases per day.")
+                    .defineInRange("Damage Increase Rate", 0.03, 0.0, Double.POSITIVE_INFINITY);
+
+            baseDamage = BUILDER
+                    .comment("The base damage value for the guns.")
+                    .defineInRange("Base Damage", 1.0, 0.0, Double.POSITIVE_INFINITY);
+
+            maxDamage = BUILDER
+                    .comment("The maximum damage that gun scaling can reach.")
+                    .defineInRange("Max Scaled Damage", Double.POSITIVE_INFINITY, 0.0, Double.POSITIVE_INFINITY);
+
+            BUILDER.pop();
+
+            SPEC = BUILDER.build();
+        }
+
+        // Getters
+        public boolean isScalingEnabled() {
+            return enableScalingDamage.get();
+        }
+
+        public double getDamageIncreaseRate() {
+            return damageIncreaseRate.get();
+        }
+
+        public double getBaseDamage() {
+            return baseDamage.get();
+        }
+
+        public double getMaxDamage() {
+            return maxDamage.get();
+        }
+
+        // Setters
+        public void setScalingEnabled(boolean enabled) {
+            enableScalingDamage.set(enabled);
+        }
+
+        public void setDamageIncreaseRate(double rate) {
+            damageIncreaseRate.set(rate);
+        }
+
+        public void setBaseDamage(double damage) {
+            baseDamage.set(damage);
+        }
+
+        public void setMaxDamage(double max) {
+            maxDamage.set(max);
+        }
+
+        public static void setup() {
+            Path configPath = FMLPaths.CONFIGDIR.get();
+            Path gunConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "gun_scaling");
+
+            // Create the config folder
+            try {
+                Files.createDirectory(gunConfigPath);
+            } catch (Exception e) {
+                // Do nothing
+            }
+
+            ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SPEC, "gun_scaling/main.toml");
+        }
+
+        public static GunScalingConfig getInstance() {
+            return INSTANCE;
+        }
+
+        public void save() {
+            SPEC.save();
         }
     }
 

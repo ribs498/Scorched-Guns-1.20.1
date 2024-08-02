@@ -25,6 +25,7 @@ public class ModCommonEventBus {
         event.put(ModEntities.HIVE.get(), HiveEntity.createAttributes().build());
         event.put(ModEntities.SWARM.get(), SwarmEntity.createAttributes().build());
         event.put(ModEntities.HORNLIN.get(), HornlinEntity.createAttributes().build());
+        event.put(ModEntities.ZOMBIFIED_HORNLIN.get(), ZombifiedHornlinEntity.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -89,6 +90,13 @@ public class ModCommonEventBus {
         );
         event.register(
                 ModEntities.HORNLIN.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.WORLD_SURFACE,
+                HornlinEntity::checkMonsterSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.OR
+        );
+        event.register(
+                ModEntities.ZOMBIFIED_HORNLIN.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.WORLD_SURFACE,
                 HornlinEntity::checkMonsterSpawnRules,

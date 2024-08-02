@@ -1,0 +1,19 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "minecraft:basalt"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.5,
+      "item": "scguns:sulfur_dust"
+    },
+    {
+      "chance": 0.3,
+      "item": "minecraft:quartz"
+    }
+  ]
+}

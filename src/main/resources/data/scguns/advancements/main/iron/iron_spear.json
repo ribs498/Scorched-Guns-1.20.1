@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/iron/iron_javelin",
+  "criteria": {
+    "iron_spear": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:iron_spear"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.iron_spear.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:iron_spear"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.iron_spear"
+    }
+  },
+  "requirements": [
+    [
+      "iron_spear"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

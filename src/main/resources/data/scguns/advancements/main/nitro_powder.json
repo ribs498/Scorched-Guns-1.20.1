@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/craft_macerator",
+  "criteria": {
+    "nitro_powder": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:nitro_powder"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.nitro_powder.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item":  "scguns:nitro_powder"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.nitro_powder"
+    }
+  },
+  "requirements": [
+    [
+      "nitro_powder"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

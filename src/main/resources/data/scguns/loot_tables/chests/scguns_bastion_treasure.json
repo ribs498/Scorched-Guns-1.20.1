@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-      "rolls": 1,
+      "rolls": 2,
       "entries": [
         {
           "type": "minecraft:item",
@@ -24,8 +24,26 @@
           "name": "scguns:piglin_blueprint"
         },
         {
+          "type": "minecraft:item",
+          "name": "scguns:treated_brass_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 2.0,
+                "max": 16.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:shotgun_shell"
+        },
+        {
           "type": "minecraft:empty",
-          "weight": 5
+          "weight": 1
         }
       ]
     }

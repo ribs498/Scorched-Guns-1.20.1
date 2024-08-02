@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/scorched_blueprint",
+  "criteria": {
+    "rat_king_and_queen": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:rat_king_and_queen"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.rat_king_and_queen.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:rat_king_and_queen"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.rat_king_and_queen"
+    }
+  },
+  "requirements": [
+    [
+      "rat_king_and_queen"
+    ]
+  ],
+  "sscorcheds_telemetry_event": true
+}

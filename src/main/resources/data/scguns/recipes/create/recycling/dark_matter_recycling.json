@@ -1,0 +1,39 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:dark_matter"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "scguns:diamond_steel_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:diamond_steel_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:rapid_firing_unit"
+    },
+    {
+      "chance": 0.9,
+      "item": "minecraft:dragon_egg"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "minecraft:shulker_shell"
+    },
+    {
+      "chance": 0.3,
+      "item": "minecraft:shulker_shell"
+    }
+  ]
+}

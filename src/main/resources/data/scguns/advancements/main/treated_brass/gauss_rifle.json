@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/treated_brass/howler_conversion",
+  "criteria": {
+    "gauss_rifle": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:gauss_rifle"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.gauss_rifle.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:gauss_rifle"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.gauss_rifle"
+    }
+  },
+  "requirements": [
+    [
+      "gauss_rifle"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

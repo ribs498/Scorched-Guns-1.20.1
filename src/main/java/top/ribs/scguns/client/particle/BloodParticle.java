@@ -8,14 +8,13 @@ import net.minecraft.client.particle.*;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import top.ribs.scguns.common.ModTags;
+import top.ribs.scguns.init.ModTags;
 
 /**
  * Author: MrCrayfish

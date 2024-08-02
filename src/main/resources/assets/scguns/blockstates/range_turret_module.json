@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "facing=north,connected=false": { "model": "scguns:block/range_turret_module", "y": 0 },
+    "facing=south,connected=false": { "model": "scguns:block/range_turret_module", "y": 180 },
+    "facing=east,connected=false": { "model": "scguns:block/range_turret_module", "y": 90 },
+    "facing=west,connected=false": { "model": "scguns:block/range_turret_module", "y": 270 },
+
+    "facing=north,connected=true": { "model": "scguns:block/range_turret_module_connected", "y": 0 },
+    "facing=south,connected=true": { "model": "scguns:block/range_turret_module_connected", "y": 180 },
+    "facing=east,connected=true": { "model": "scguns:block/range_turret_module_connected", "y": 90 },
+    "facing=west,connected=true": { "model": "scguns:block/range_turret_module_connected", "y": 270 }
+  }
+}

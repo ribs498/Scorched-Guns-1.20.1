@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "bottom": "scguns:block/nitro_keg_bottom",
+    "side": "scguns:block/nitro_keg_side",
+    "top": "scguns:block/nitro_keg_top"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/geothermal_vent",
+  "criteria": {
+    "vent_collector": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:vent_collector"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.craft_vent_collector.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:vent_collector"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.craft_vent_collector"
+    }
+  },
+  "requirements": [
+    [
+      "vent_collector"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

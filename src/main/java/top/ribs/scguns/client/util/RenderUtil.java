@@ -106,10 +106,19 @@ public class RenderUtil
             return;
         }
 
-        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.solid()); // Use solid RenderType for the wheels
+        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.solid());
         Minecraft.getInstance().getItemRenderer().renderModelLists(model, ItemStack.EMPTY, light, overlay, poseStack, vertexConsumer);
     }
 
+ public static void renderPolarGeneratorWheel(BakedModel model, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay) {
+        if (model == null) {
+            LogManager.getLogger().warn("Tried to render a null model!");
+            return;
+        }
+
+        VertexConsumer vertexConsumer = buffer.getBuffer(RenderType.solid()); // Use solid RenderType for the wheels
+        Minecraft.getInstance().getItemRenderer().renderModelLists(model, ItemStack.EMPTY, light, overlay, poseStack, vertexConsumer);
+    }
 
     public static void renderModel(BakedModel model, ItemDisplayContext display, @Nullable Runnable transform, ItemStack stack, ItemStack parent, PoseStack poseStack, MultiBufferSource buffer, int light, int overlay)
     {

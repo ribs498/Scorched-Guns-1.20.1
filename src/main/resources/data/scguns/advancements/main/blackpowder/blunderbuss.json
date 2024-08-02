@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/blackpowder/handcannon",
+  "criteria": {
+    "musket": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:musket"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.musket.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:musket"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.musket"
+    }
+  },
+  "requirements": [
+    [
+      "musket"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

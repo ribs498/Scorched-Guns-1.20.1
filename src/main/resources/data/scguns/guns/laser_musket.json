@@ -42,10 +42,11 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 19.0,
-    "ejectsCasing": false,
+    "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:energy_cell",
-    "life": 40,
+    "casingType": "scguns:empty_cell",
+    "life": 60,
     "size": 1.0,
     "speed": 7.0,
     "trailLengthMultiplier": 2.0
@@ -62,6 +63,6 @@
     "enchantedFire": "scguns:item.plasma.fire",
     "preFire": "scguns:item.gauss.pre_fire",
     "fire": "scguns:item.plasma.fire",
-    "reload": "scguns:item.pistol.reload"
+    "reload": "scguns:item.gauss.reload"
   }
 }

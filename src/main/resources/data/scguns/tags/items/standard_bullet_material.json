@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:iron_ingot",
+    {"id":"immersiveengineering:ingot_lead",  "required":false},
+    {"id":"eidolon:lead_ingot", "required":false},
+    {"id":"create:zinc_ingot", "required":false},
+    {"id":"tfmg:lead_ingot", "required":false}
+  ]
+}

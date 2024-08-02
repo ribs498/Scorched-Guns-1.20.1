@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/scorched/locust",
+  "criteria": {
+    "newborn_cyst": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:newborn_cyst"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.newborn_cyst.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:newborn_cyst"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.newborn_cyst"
+    }
+  },
+  "requirements": [
+    [
+      "newborn_cyst"
+    ]
+  ],
+  "sscorcheds_telemetry_event": true
+}

@@ -119,7 +119,7 @@ public final class PropertyHelper
         if (scopeObject.has("translation", DataType.ARRAY)) {
             DataArray translationArray = scopeObject.getDataArray("translation");
             Vec3 translation = arrayToVec3(translationArray, Vec3.ZERO);
-            System.out.println("Custom attachment position for " + type.getName() + ": " + translation);
+           // System.out.println("Custom attachment position for " + type.getName() + ": " + translation);
             return translation;
         }
         Gun.ScaledPositioned positioned = modifiedGun.getAttachmentPosition(type);

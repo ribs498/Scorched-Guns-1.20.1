@@ -1,6 +1,6 @@
 {
   "type": "forge:add_spawns",
-  "biomes": ["minecraft:nether_wastes", "minecraft:crimson_forest"],
+  "biomes": ["minecraft:crimson_forest"],
   "spawners": {
     "type": "scguns:hornlin",
     "weight": 25,

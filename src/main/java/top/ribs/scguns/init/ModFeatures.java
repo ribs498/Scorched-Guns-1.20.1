@@ -11,6 +11,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.world.GeothermalVentFeature;
+import top.ribs.scguns.world.SulfurVentFeature;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ModFeatures {
@@ -19,6 +20,10 @@ public class ModFeatures {
 
     public static final RegistryObject<Feature<NoneFeatureConfiguration>> GEOTHERMAL_VENT_FEATURE = FEATURES.register("geothermal_vent",
             () -> new GeothermalVentFeature(NoneFeatureConfiguration.CODEC));
+
+    public static final RegistryObject<Feature<NoneFeatureConfiguration>> SULFUR_VENT_FEATURE = FEATURES.register("sulfur_vent",
+            () -> new SulfurVentFeature(NoneFeatureConfiguration.CODEC));
+
 
     public static void register(IEventBus bus) {
         FEATURES.register(bus);

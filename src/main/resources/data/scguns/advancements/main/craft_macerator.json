@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/root",
+  "criteria": {
+    "macerator": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:macerator"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.craft_macerator.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:macerator"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.craft_macerator"
+    }
+  },
+  "requirements": [
+    [
+      "macerator"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

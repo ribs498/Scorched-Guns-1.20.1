@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "item": "minecraft:chorus_fruit"
+    },
+    "Q": {
+      "item": "scguns:end_blueprint"
+    },
+    "Z": {
+      "item": "minecraft:paper"
+    }
+  },
+  "pattern": [
+    "HZH",
+    "ZQZ",
+    "HZH"
+  ],
+  "result": {
+    "item": "scguns:end_blueprint",
+    "count": 1
+  }
+}

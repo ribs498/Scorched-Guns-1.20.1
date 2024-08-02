@@ -7,6 +7,20 @@
           "type": "minecraft:item",
           "functions": [
             {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 1.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:iron_blueprint"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
               "function": "minecraft:set_damage",
               "damage": {
                 "min": 0.15,
@@ -69,6 +83,20 @@
             }
           ],
           "name": "scguns:grapeshot"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 1.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:copper_blueprint"
         },
         {
           "type": "minecraft:empty",

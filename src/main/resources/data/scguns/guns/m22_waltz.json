@@ -11,7 +11,7 @@
     "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed_one_handed",
-    "rate": 5,
+    "rate": 6,
     "recoilAngle": 5.7,
     "recoilKick": 1.22,
     "spread": 2.0,
@@ -41,19 +41,19 @@
   },
   "projectile": {
     "advantage": "scguns:undead",
-    "damage": 15.0,
+    "damage": 16.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:ramrod_round",
     "casingType": "scguns:small_iron_casing",
-    "life": 20,
+    "life": 60,
     "size": 0.1,
     "speed": 6.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 7,
+    "maxAmmo": 8,
     "reloadItem": "scguns:ramrod_round",
     "reloadTimer": 35,
     "reloadType": "scguns:mag_fed"
@@ -62,7 +62,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.brass_pistol.fire",
     "fire": "scguns:item.brass_pistol.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.bruiser.silenced_fire"
   }
 }

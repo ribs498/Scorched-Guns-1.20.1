@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/end_blueprint",
+  "criteria": {
+    "carapice": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:carapice"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.carapice.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:carapice"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.carapice"
+    }
+  },
+  "requirements": [
+    [
+      "carapice"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

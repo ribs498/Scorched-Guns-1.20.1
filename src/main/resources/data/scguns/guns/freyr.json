@@ -34,7 +34,7 @@
       },
       "barrel": {
         "yOffset": 4.8,
-        "zOffset": -5.3
+        "zOffset": -5.8
       },
       "magazine": {
         "scale": 0.0
@@ -52,7 +52,7 @@
     "ejectsCasing": true,
     "item": "scguns:hog_round",
     "casingType": "scguns:small_iron_casing",
-    "life": 15,
+    "life": 30,
     "size": 0.1,
     "speed": 4.0,
     "trailLengthMultiplier": 2.0
@@ -68,7 +68,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.greaser_smg.fire",
     "fire": "scguns:item.greaser_smg.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.makeshift_rifle.silenced_fire"
   }
 }

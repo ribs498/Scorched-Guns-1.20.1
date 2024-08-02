@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/iron/iron_spear",
+  "criteria": {
+    "auvtomag": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:auvtomag"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.auvtomag.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:auvtomag"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.auvtomag"
+    }
+  },
+  "requirements": [
+    [
+      "auvtomag"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

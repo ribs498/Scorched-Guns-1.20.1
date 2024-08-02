@@ -26,11 +26,33 @@ public class AstellaModel implements IOverrideModel {
 
         //Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.ASTELLA_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
+
         if (Gun.getScope(stack) == null) {
             RenderUtil.renderModel(SpecialModels.ASTELLA_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         } else {
             RenderUtil.renderModel(SpecialModels.ASTELLA_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         }
+
+        // Render the standard barrel by default
+        boolean extendedBarrelAttached = false;
+
+        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get()) {
+                RenderUtil.renderModel(SpecialModels.ASTELLA_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+                extendedBarrelAttached = true;
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
+                RenderUtil.renderModel(SpecialModels.ASTELLA_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
+                RenderUtil.renderModel(SpecialModels.ASTELLA_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
+                RenderUtil.renderModel(SpecialModels.ASTELLA_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
+
+        // Render the standard barrel if no extended barrel is attached
+        if (!extendedBarrelAttached) {
+            RenderUtil.renderModel(SpecialModels.ASTELLA_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
+
         if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)))
         {
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
@@ -43,15 +65,6 @@ public class AstellaModel implements IOverrideModel {
         else
             RenderUtil.renderModel(SpecialModels.ASTELLA_STANDARD_GRIP.getModel(), stack, matrixStack, buffer, light, overlay);
 
-
-        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
-                RenderUtil.renderModel(SpecialModels.ASTELLA_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
-                RenderUtil.renderModel(SpecialModels.ASTELLA_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
-                RenderUtil.renderModel(SpecialModels.ASTELLA_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
-        }
         if ((Gun.hasAttachmentEquipped(stack, IAttachment.Type.MAGAZINE)))
         {
             if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.EXTENDED_MAG.get())
@@ -64,9 +77,7 @@ public class AstellaModel implements IOverrideModel {
         else
             RenderUtil.renderModel(SpecialModels.ASTELLA_STANDARD_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
 
-
         if (entity.equals(Minecraft.getInstance().player)) {
-
             //Always push.
             matrixStack.pushPose();
             //Don't touch this, it's better to use the display options in Blockbench.
@@ -86,15 +97,10 @@ public class AstellaModel implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.ASTELLA_BOLT.getModel(), stack, matrixStack, buffer, light, overlay);
             //Always pop
             matrixStack.popPose();
-
         }
-
     }
 
     private double ease(double x) {
-
         return 1 - Math.pow(1 - (2 * x), 4);
-
     }
-
 }

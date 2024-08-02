@@ -39,7 +39,7 @@
     "advantage": "scguns:fire",
     "damage": 16.0,
     "item": "scguns:grapeshot",
-    "life": 8,
+    "life": 30,
     "size": 0.05,
     "speed": 5.0,
     "trailLengthMultiplier": 2.0
@@ -55,6 +55,6 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.boomstick.fire",
     "fire": "scguns:item.boomstick.fire",
-    "reload": "scguns:item.pistol.reload"
+    "reload": "scguns:item.gauss.reload"
   }
 }

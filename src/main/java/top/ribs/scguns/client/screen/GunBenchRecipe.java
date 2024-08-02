@@ -31,26 +31,17 @@ public class GunBenchRecipe implements Recipe<Container> {
         // Check if the blueprint matches
         ItemStack blueprintStack = container.getItem(GunBenchMenu.SLOT_BLUEPRINT);
         if (!blueprint.test(blueprintStack)) {
-            System.out.println("Blueprint mismatch: " + blueprintStack);
             return false;
         }
-
-        // Check if all ingredients match
         for (int i = 0; i < recipeItems.size(); i++) {
             ItemStack stackInSlot = container.getItem(i);
             Ingredient requiredIngredient = recipeItems.get(i);
-
-            // Check if required ingredient matches the slot, or if the slot is intended to be empty
             if (!requiredIngredient.isEmpty() && !requiredIngredient.test(stackInSlot)) {
-                System.out.println("Ingredient mismatch at slot " + i + ": " + stackInSlot);
                 return false;
             } else if (requiredIngredient.isEmpty() && !stackInSlot.isEmpty()) {
-                System.out.println("Slot " + i + " should be empty but has: " + stackInSlot);
-                return false; // Slot should be empty but has an item
+                return false;
             }
         }
-
-        System.out.println("Recipe matches successfully.");
         return true;
     }
 

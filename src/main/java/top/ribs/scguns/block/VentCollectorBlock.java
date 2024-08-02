@@ -4,12 +4,16 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.Container;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
@@ -33,6 +37,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.blockentity.VentCollectorBlockEntity;
 import top.ribs.scguns.init.ModBlockEntities;
@@ -62,8 +67,11 @@ public class VentCollectorBlock extends Block implements EntityBlock {
         FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
         BlockPos pos = context.getClickedPos().relative(context.getHorizontalDirection().getOpposite());
         boolean attached = context.getLevel().getBlockEntity(pos) != null;
-        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite()).setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER).setValue(ATTACHED, attached);
+        return this.defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite())
+                .setValue(WATERLOGGED, fluidState.getType() == Fluids.WATER)
+                .setValue(ATTACHED, attached);
     }
+
 
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
@@ -71,10 +79,15 @@ public class VentCollectorBlock extends Block implements EntityBlock {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
         if (direction == state.getValue(FACING)) {
-            boolean attached = level.getBlockEntity(neighborPos) != null;
+            boolean attached = hasInventory(level, neighborPos, direction.getOpposite());
             return state.setValue(ATTACHED, attached);
         }
         return super.updateShape(state, direction, neighborState, level, pos, neighborPos);
+    }
+
+    private boolean hasInventory(LevelAccessor level, BlockPos pos, Direction direction) {
+        BlockEntity be = level.getBlockEntity(pos);
+        return be != null && be.getCapability(ForgeCapabilities.ITEM_HANDLER, direction).isPresent();
     }
 
     @Override
@@ -103,18 +116,35 @@ public class VentCollectorBlock extends Block implements EntityBlock {
         if (!level.isClientSide) {
             BlockEntity blockEntity = level.getBlockEntity(pos);
             if (blockEntity instanceof VentCollectorBlockEntity) {
-                IItemHandler itemHandler = blockEntity.getCapability(ForgeCapabilities.ITEM_HANDLER, null).orElse(null);
-                if (itemHandler != null) {
-                    ItemStack extracted = itemHandler.extractItem(0, Math.min(itemHandler.getStackInSlot(0).getCount(), 64), false);
-                    if (!extracted.isEmpty()) {
-                        if (!player.addItem(extracted)) {
-                            player.drop(extracted, false);
-                        }
-                    }
-                }
+                NetworkHooks.openScreen((ServerPlayer) player, (VentCollectorBlockEntity) blockEntity, pos);
             }
         }
         return InteractionResult.SUCCESS;
+    }
+
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            if (blockEntity instanceof VentCollectorBlockEntity) {
+                ((VentCollectorBlockEntity) blockEntity).drops();
+            }
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
+    }
+
+    @Override
+    public boolean hasAnalogOutputSignal(BlockState state) {
+        return true;
+    }
+
+    @Override
+    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+        BlockEntity blockEntity = level.getBlockEntity(pos);
+        if (blockEntity instanceof VentCollectorBlockEntity) {
+            return AbstractContainerMenu.getRedstoneSignalFromContainer((Container) blockEntity);
+        }
+        return 0;
     }
 
     @Override
@@ -126,12 +156,21 @@ public class VentCollectorBlock extends Block implements EntityBlock {
     public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
         BlockState belowState = level.getBlockState(pos.below());
         boolean isGeothermalVentBelow = belowState.getBlock() instanceof GeothermalVentBlock;
-        boolean isActive = isGeothermalVentBelow && belowState.getValue(GeothermalVentBlock.ACTIVE);
+        boolean isSulfurVentBelow = belowState.getBlock() instanceof SulfurVentBlock;
+        boolean isActive = (isGeothermalVentBelow && belowState.getValue(GeothermalVentBlock.ACTIVE)) ||
+                (isSulfurVentBelow && belowState.getValue(SulfurVentBlock.ACTIVE));
 
         if (isActive) {
             if (random.nextInt(20) == 0) {
                 level.playLocalSound((double) pos.getX() + 0.5, (double) pos.getY() + 0.5, (double) pos.getZ() + 0.5, SoundEvents.CAMPFIRE_CRACKLE, SoundSource.BLOCKS, 0.5F + random.nextFloat(), random.nextFloat() * 0.7F + 0.6F, false);
             }
+
+            BlockEntity blockEntity = level.getBlockEntity(pos);
+            boolean hasFilterCharge = false;
+            if (blockEntity instanceof VentCollectorBlockEntity ventCollector) {
+                hasFilterCharge = ventCollector.getFilterCharge() > 0;
+            }
+
             Direction facing = state.getValue(FACING);
             double x = pos.getX() + 0.5;
             double y = pos.getY() + 0.55;
@@ -151,9 +190,14 @@ public class VentCollectorBlock extends Block implements EntityBlock {
                 double offsetX = random.nextDouble() * 0.05 - 0.025;
                 double offsetY = 0.05 + random.nextDouble() * 0.05;
                 double offsetZ = random.nextDouble() * 0.05 - 0.025;
-                level.addParticle(ParticleTypes.LARGE_SMOKE, x, y, z, offsetX, offsetY, offsetZ);
+
+                if (hasFilterCharge) {
+                    level.addParticle(ParticleTypes.CLOUD, x, y, z, offsetX, offsetY, offsetZ);
+                } else {
+                    level.addParticle(ParticleTypes.LARGE_SMOKE, x, y, z, offsetX, offsetY, offsetZ);
+                }
             }
         }
     }
-}
 
+}

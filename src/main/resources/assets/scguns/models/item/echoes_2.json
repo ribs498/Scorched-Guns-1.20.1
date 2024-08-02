@@ -1,5 +1,9 @@
 {
 	"parent": "builtin/entity",
+	"textures": {
+		"1": "minecraft:item/echo_shard",
+		"particle": "minecraft:item/echo_shard"
+	},
 	"display": {
 		"thirdperson_righthand": {
 			"translation": [0, 6, -5.25],
@@ -24,9 +28,9 @@
 			"translation": [-2.75, 4, 0]
 		},
 		"fixed": {
-			"rotation": [90, 55, -90],
-			"translation": [5, 6, -0.75],
-			"scale": [1.5, 1.5, 1.5]
+			"rotation": [-90, 90, 90],
+			"translation": [0.5, 9.75, 0],
+			"scale": [2.0, 2.0, 2.0]
 		}
 	}
 }

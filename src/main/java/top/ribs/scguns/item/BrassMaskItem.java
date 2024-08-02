@@ -17,6 +17,8 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.UseAnim;
 import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
@@ -26,9 +28,12 @@ import top.ribs.scguns.init.ModItems;
 import java.util.UUID;
 
 public class BrassMaskItem extends Item {
+    private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("6e57a153-8e12-11eb-8dcd-0242ac132223");
+    private static final UUID ARMOR_TOUGHNESS_MODIFIER_UUID = UUID.fromString("6e61a188-8e12-11eb-8dcd-0242ac130003");
+    private static final UUID KNOCKBACK_RESISTANCE_MODIFIER_UUID = UUID.fromString("6e57a133-8e12-11eb-8dcd-0242ac130003");
+
     private final int defense;
     private final float toughness;
-    private final int durability;
     private final int enchantability;
     private final float knockbackResistance;
 
@@ -36,7 +41,6 @@ public class BrassMaskItem extends Item {
         super(properties.defaultDurability(durability));
         this.defense = defense;
         this.toughness = toughness;
-        this.durability = durability;
         this.enchantability = enchantability;
         this.knockbackResistance = knockbackResistance;
     }
@@ -52,16 +56,26 @@ public class BrassMaskItem extends Item {
         EquipmentSlot slot = getEquipmentSlotForItem(heldStack);
         if (slot != null) {
             ItemStack currentHelmet = player.getItemBySlot(slot);
-            if (!currentHelmet.isEmpty() && currentHelmet.getItem() instanceof ArmorItem) {
-                ((ArmorItem) currentHelmet.getItem()).getEquipmentSlot();
+            if (!currentHelmet.isEmpty()) {
+                player.getAttributes().removeAttributeModifiers(currentHelmet.getAttributeModifiers(slot));
             }
             player.setItemSlot(slot, heldStack.copy());
-            heldStack.shrink(1);  // Reduce the stack size by 1
+            player.getAttributes().addTransientAttributeModifiers(heldStack.getAttributeModifiers(slot));
+            if (!currentHelmet.isEmpty()) {
+                if (!player.getInventory().add(currentHelmet)) {
+                    player.drop(currentHelmet, false);
+                }
+            }
+            heldStack.shrink(1);
+
             return new InteractionResultHolder<>(InteractionResult.SUCCESS, heldStack);
         }
         return new InteractionResultHolder<>(InteractionResult.PASS, heldStack);
     }
-
+    @Override
+    public boolean canApplyAtEnchantingTable(ItemStack stack, Enchantment enchantment) {
+        return enchantment.category == EnchantmentCategory.ARMOR_HEAD || super.canApplyAtEnchantingTable(stack, enchantment);
+    }
     @Override
     public UseAnim getUseAnimation(ItemStack stack) {
         return UseAnim.EAT;
@@ -80,11 +94,10 @@ public class BrassMaskItem extends Item {
     public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot equipmentSlot) {
         if (equipmentSlot == EquipmentSlot.HEAD) {
             ImmutableMultimap.Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-            UUID uuid = UUID.randomUUID(); // You can use a specific UUID for consistency
-            builder.put(Attributes.ARMOR, new AttributeModifier(uuid, "Armor modifier", this.defense, AttributeModifier.Operation.ADDITION));
-            builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(uuid, "Armor toughness", this.toughness, AttributeModifier.Operation.ADDITION));
+            builder.put(Attributes.ARMOR, new AttributeModifier(ARMOR_MODIFIER_UUID, "Armor modifier", this.defense, AttributeModifier.Operation.ADDITION));
+            builder.put(Attributes.ARMOR_TOUGHNESS, new AttributeModifier(ARMOR_TOUGHNESS_MODIFIER_UUID, "Armor toughness", this.toughness, AttributeModifier.Operation.ADDITION));
             if (this.knockbackResistance > 0.0F) {
-                builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(uuid, "Armor knockback resistance", this.knockbackResistance, AttributeModifier.Operation.ADDITION));
+                builder.put(Attributes.KNOCKBACK_RESISTANCE, new AttributeModifier(KNOCKBACK_RESISTANCE_MODIFIER_UUID, "Armor knockback resistance", this.knockbackResistance, AttributeModifier.Operation.ADDITION));
             }
             return builder.build();
         }
@@ -110,6 +123,11 @@ public class BrassMaskItem extends Item {
     public boolean canBeDepleted() {
         return true;
     }
+
+    public int getDefense() {
+        return defense;
+    }
+
     public static class BrassMaskEventHandler {
         @SubscribeEvent
         public void onLivingHurt(LivingHurtEvent event) {

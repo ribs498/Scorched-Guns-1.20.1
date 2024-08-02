@@ -83,24 +83,19 @@ public class TwoHandedPose extends WeaponPose
         float angle = this.getPlayerPitch(player);
         head.xRot = (float) Math.toRadians(angle > 0.0 ? angle * 70F : angle * 90F);
 
-        if (!player.getOffhandItem().isEmpty()) {
-            boolean right = Minecraft.getInstance().options.mainHand().get() == HumanoidArm.RIGHT ? hand == InteractionHand.MAIN_HAND : hand == InteractionHand.OFF_HAND;
-            ModelPart arm = right ? rightArm : leftArm;
-            IHeldAnimation.copyModelAngles(head, arm);
-            arm.xRot += (float) Math.toRadians(-70F - (aimProgress * 25));
+        boolean isTwoHandedPose = true;
 
-            if (player.getUseItem().getItem() == Items.SHIELD) {
-                arm.xRot = (float) Math.toRadians(-30F);
-            }
-        } else {
-            super.applyPlayerModelRotation(player, rightArm, leftArm, head, hand, aimProgress);
+        if (!isTwoHandedPose) {
+            player.getOffhandItem().isEmpty();
         }
+        super.applyPlayerModelRotation(player, rightArm, leftArm, head, hand, aimProgress);
 
         if (GunRenderingHandler.get().isThirdPersonMeleeAttacking()) {
             float banzaiProgress = GunRenderingHandler.get().getThirdPersonMeleeProgress();
             applyBanzaiPose(rightArm, leftArm, banzaiProgress);
         }
     }
+
     @Override
     @OnlyIn(Dist.CLIENT)
     public void applyPlayerPreRender(Player player, InteractionHand hand, float aimProgress, PoseStack poseStack, MultiBufferSource buffer)

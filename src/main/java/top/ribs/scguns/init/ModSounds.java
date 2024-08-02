@@ -10,10 +10,18 @@ import top.ribs.scguns.Reference;
 public class ModSounds {
     public static final DeferredRegister<SoundEvent> REGISTER = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, Reference.MOD_ID);
 
+
+    public static final RegistryObject<SoundEvent> MASS_PRODUCTION = register("mass_production");
+    public static final RegistryObject<SoundEvent> MASS_DESTRUCTION = register("mass_destruction");
+    public static final RegistryObject<SoundEvent> MASS_DESTRUCTION_EXTENDED = register("mass_destruction_extended");
     public static final RegistryObject<SoundEvent> COPPER_GUN_JAM = register("item.rusty_gnat.copper_jam");
     public static final RegistryObject<SoundEvent> BLACKPOWDER_FIRE = register("item.blackpowder.fire");
+    public static final RegistryObject<SoundEvent> AIRGUN_FIRE = register("item.airgun.fire");
     public static final RegistryObject<SoundEvent> BRUISER_SILENCED_FIRE = register("item.bruiser.silenced_fire");
     public static final RegistryObject<SoundEvent> MAKESHIFT_RIFLE_FIRE = register("item.makeshift_rifle.fire");
+    public static final RegistryObject<SoundEvent> COWBOY_FIRE = register("item.cowboy.fire");
+    public static final RegistryObject<SoundEvent> SHOCK_FIRE = register("item.shock.fire");
+    public static final RegistryObject<SoundEvent> SHULKER_FIRE = register("item.shulker.fire");
     public static final RegistryObject<SoundEvent> SCULK_FIRE = register("item.sculk.fire");
     public static final RegistryObject<SoundEvent> SCORCHED_SNIPER_FIRE = register("item.scorched_sniper.fire");
     public static final RegistryObject<SoundEvent> SCORCHED_RIFLE_FIRE = register("item.scorched_rifle.fire");

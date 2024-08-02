@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/deep_dark/echoes_2",
+  "criteria": {
+    "sculk_resonator": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:sculk_resonator"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.sculk_resonator.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:sculk_resonator"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.sculk_resonator"
+    }
+  },
+  "requirements": [
+    [
+      "sculk_resonator"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

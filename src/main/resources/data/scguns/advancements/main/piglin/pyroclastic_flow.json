@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/piglin/blasphemy",
+  "criteria": {
+    "pyroclastic_flow": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:pyroclastic_flow"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.pyroclastic_flow.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:pyroclastic_flow"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.pyroclastic_flow"
+    }
+  },
+  "requirements": [
+    [
+      "pyroclastic_flow"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

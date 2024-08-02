@@ -1,0 +1,17 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 100,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "item": "minecraft:iron_block"
+    }
+  ],
+  "mold": {
+    "item": "scguns:gun_parts_mold"
+  },
+  "result": {
+    "item": "scguns:gun_parts",
+    "count": 2
+  }
+}

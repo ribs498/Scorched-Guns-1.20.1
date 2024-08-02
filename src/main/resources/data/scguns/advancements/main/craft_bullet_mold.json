@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/craft_blank_mold",
+  "criteria": {
+    "bullet_mold": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:bullet_mold"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.craft_bullet_mold.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:bullet_mold"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.craft_bullet_mold"
+    }
+  },
+  "requirements": [
+    [
+      "bullet_mold"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

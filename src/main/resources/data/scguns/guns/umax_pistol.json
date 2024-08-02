@@ -1,0 +1,58 @@
+{
+  "display": {
+  },
+  "general": {
+    "alwaysSpread": false,
+    "fireMode": "scguns:pulse",
+    "fireTimer": 13,
+    "gripType": "scguns:two_handed",
+    "rate": 6,
+    "recoilAngle": 1.0,
+    "recoilKick": 1.0,
+    "spread": 0.1,
+    "meleeDamage": 2.0,
+    "meleeCooldownTicks": 15,
+    "energyUse": 30.0
+  },
+  "modules": {
+    "attachments": {
+      "scope": {
+        "size": 0.8,
+        "yOffset": 6.0,
+        "zOffset": 5.2
+      },
+      "stock": {
+        "scale": 0.0
+      }
+    },
+    "zoom": {
+      "fovModifier": 0.6,
+      "yOffset": 6.3,
+      "zOffset": 0.85
+    }
+  },
+  "projectile": {
+    "advantage": "scguns:none",
+    "damage": 8.0,
+    "ejectsCasing": false,
+    "gravity": false,
+    "item": "scguns:standard_bullet",
+    "life": 40,
+    "size": 1.0,
+    "speed": 6.0,
+    "trailLengthMultiplier": 0.2
+  },
+  "reloads": {
+    "emptyMagTimer": 30,
+    "maxAmmo": 4,
+    "reloadItem": "scguns:standard_bullet",
+    "reloadTimer": 15,
+    "reloadType": "scguns:manual"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.airgun.fire",
+    "fire": "scguns:item.airgun.fire",
+    "reload": "scguns:item.gauss.reload"
+  }
+}

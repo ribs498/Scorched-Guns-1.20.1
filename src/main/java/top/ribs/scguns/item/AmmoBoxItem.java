@@ -18,8 +18,14 @@ import net.minecraft.core.NonNullList;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SlotAccess;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
+import top.theillusivec4.curios.api.CuriosCapability;
+import top.theillusivec4.curios.api.type.capability.ICurio;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -31,6 +37,7 @@ public abstract class AmmoBoxItem extends Item {
     public AmmoBoxItem(Item.Properties properties) {
         super(properties);
     }
+
 
     @Override
     public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction action, Player player) {
@@ -77,6 +84,7 @@ public abstract class AmmoBoxItem extends Item {
             return false;
         }
     }
+
     @Override
     public boolean isBarVisible(ItemStack stack) {
         return getTotalItemCount(stack) > 0;
@@ -94,7 +102,7 @@ public abstract class AmmoBoxItem extends Item {
         return BAR_COLOR;
     }
 
-    private static int add(ItemStack pouchStack, ItemStack insertedStack) {
+    public static int add(ItemStack pouchStack, ItemStack insertedStack) {
         if (!insertedStack.isEmpty() && insertedStack.is(ItemTags.create(new ResourceLocation("scguns", "ammo")))) {
             CompoundTag compoundTag = pouchStack.getOrCreateTag();
             if (!compoundTag.contains(TAG_ITEMS)) {
@@ -109,12 +117,32 @@ public abstract class AmmoBoxItem extends Item {
             }
 
             ListTag listTag = compoundTag.getList(TAG_ITEMS, 10);
-            ItemStack newItemStack = insertedStack.copyWithCount(itemsToInsert);
-            CompoundTag newItemTag = new CompoundTag();
-            newItemStack.save(newItemTag);
-            listTag.add(newItemTag);
+            for (int i = 0; i < listTag.size(); i++) {
+                CompoundTag itemTag = listTag.getCompound(i);
+                ItemStack existingStack = ItemStack.of(itemTag);
+                if (ItemStack.isSameItemSameTags(existingStack, insertedStack)) {
+                    int remainingSpace = Math.min(existingStack.getMaxStackSize() - existingStack.getCount(), itemsToInsert);
+                    existingStack.grow(remainingSpace);
+                    itemsToInsert -= remainingSpace;
+                    existingStack.save(itemTag);
+                    listTag.set(i, itemTag);
+                    if (itemsToInsert <= 0) {
+                        break;
+                    }
+                }
+            }
+
+            while (itemsToInsert > 0) {
+                int countToInsert = Math.min(insertedStack.getMaxStackSize(), itemsToInsert);
+                ItemStack newItemStack = insertedStack.copyWithCount(countToInsert);
+                CompoundTag newItemTag = new CompoundTag();
+                newItemStack.save(newItemTag);
+                listTag.add(newItemTag);
+                itemsToInsert -= countToInsert;
+            }
+
             compoundTag.put(TAG_ITEMS, listTag);
-            return itemsToInsert;
+            return insertedStack.getCount() - itemsToInsert;
         } else {
             return 0;
         }
@@ -153,7 +181,7 @@ public abstract class AmmoBoxItem extends Item {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, Level level, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
-       // tooltipComponents.add(Component.translatable("item.scguns.ammo_pouch.fullness").withStyle(ChatFormatting.GRAY));
+        // tooltipComponents.add(Component.translatable("item.scguns.ammo_pouch.fullness").withStyle(ChatFormatting.GRAY));
     }
 
     @Override
@@ -168,6 +196,7 @@ public abstract class AmmoBoxItem extends Item {
     private void playInsertSound(Entity entity) {
         entity.playSound(SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
+
     public static int getMaxItemCount(ItemStack stack) {
         Item item = stack.getItem();
         if (item instanceof AmmoBoxItem) {
@@ -175,6 +204,7 @@ public abstract class AmmoBoxItem extends Item {
         }
         return 256;
     }
+
     protected abstract int getMaxItemCount();
 
     public static Stream<ItemStack> getContents(ItemStack stack) {

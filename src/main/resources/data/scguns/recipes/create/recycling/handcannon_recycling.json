@@ -1,0 +1,23 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:handcannon"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "minecraft:flint"
+    },
+    {
+      "chance": 0.3,
+      "item": "minecraft:smooth_stone"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:stone_gun_barrel"
+    }
+  ]
+}

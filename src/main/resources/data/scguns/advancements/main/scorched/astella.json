@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/scorched/earths_corpse",
+  "criteria": {
+    "astella": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:astella"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.astella.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:astella"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.astella"
+    }
+  },
+  "requirements": [
+    [
+      "astella"
+    ]
+  ],
+  "sscorcheds_telemetry_event": true
+}

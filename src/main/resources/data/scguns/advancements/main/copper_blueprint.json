@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/craft_gun_bench",
+  "criteria": {
+    "copper_blueprint": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:copper_blueprint"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.copper_blueprint.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:copper_blueprint"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.copper_blueprint"
+    }
+  },
+  "requirements": [
+    [
+      "copper_blueprint"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -6,9 +6,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import top.ribs.scguns.Reference;
-import top.ribs.scguns.client.screen.GunBenchRecipe;
-import top.ribs.scguns.client.screen.MaceratorRecipe;
-import top.ribs.scguns.client.screen.MechanicalPressRecipe;
+import top.ribs.scguns.client.screen.*;
 
 import java.sql.Ref;
 
@@ -19,13 +17,17 @@ public class ModRecipes {
 
     public static final RegistryObject<RecipeSerializer<MechanicalPressRecipe>> MECHANICAL_PRESS_SERIALIZER =
             SERIALIZERS.register("mechanical_pressing", () -> MechanicalPressRecipe.Serializer.INSTANCE);
-
+    public static final RegistryObject<RecipeSerializer<PoweredMechanicalPressRecipe>> POWERED_MECHANICAL_PRESS_SERIALIZER =
+            SERIALIZERS.register("powered_mechanical_pressing", () -> PoweredMechanicalPressRecipe.Serializer.INSTANCE);
     public static final RegistryObject<RecipeSerializer<MaceratorRecipe>> MACERATOR_SERIALIZER =
             SERIALIZERS.register("macerating", () -> MaceratorRecipe.Serializer.INSTANCE);
-
+    public static final RegistryObject<RecipeSerializer<PoweredMaceratorRecipe>> POWERED_MACERATOR_SERIALIZER =
+            SERIALIZERS.register("powered_macerating", () -> PoweredMaceratorRecipe.Serializer.INSTANCE);
     public static final RegistryObject<RecipeSerializer<GunBenchRecipe>> GUN_BENCH_SERIALIZER =
             SERIALIZERS.register("gun_bench", () -> GunBenchRecipe.Serializer.INSTANCE);
 
+    public static final RegistryObject<RecipeSerializer<LightningBatteryRecipe>> LIGHTNING_BATTERY_SERIALIZER =
+            SERIALIZERS.register("lightning_battery", () -> LightningBatteryRecipe.Serializer.INSTANCE);
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);
     }

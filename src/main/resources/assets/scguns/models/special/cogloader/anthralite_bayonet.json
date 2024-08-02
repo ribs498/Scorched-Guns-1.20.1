@@ -87,5 +87,13 @@
 			"translation": [2.5, 4, 0],
 			"scale": [1.2, 1.2, 1.2]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "AnthraliteBayo",
+			"origin": [8.00947, 2.825, -8.3],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
 }

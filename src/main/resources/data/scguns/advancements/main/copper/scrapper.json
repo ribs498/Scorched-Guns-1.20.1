@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/copper_blueprint",
+  "criteria": {
+    "scrapper": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:scrapper"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.scrapper.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:scrapper"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.scrapper"
+    }
+  },
+  "requirements": [
+    [
+      "scrapper"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

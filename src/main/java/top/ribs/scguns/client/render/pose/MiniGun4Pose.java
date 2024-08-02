@@ -88,18 +88,12 @@ public class MiniGun4Pose extends WeaponPose
         float angle = this.getPlayerPitch(player);
         head.xRot = (float) Math.toRadians(angle > 0.0 ? angle * 70F : angle * 90F);
 
-        if (!player.getOffhandItem().isEmpty()) {
-            boolean right = Minecraft.getInstance().options.mainHand().get() == HumanoidArm.RIGHT ? hand == InteractionHand.MAIN_HAND : hand == InteractionHand.OFF_HAND;
-            ModelPart arm = right ? rightArm : leftArm;
-            IHeldAnimation.copyModelAngles(head, arm);
-            arm.xRot += (float) Math.toRadians(-70F - (aimProgress * 25));
+        boolean isTwoHandedPose = true; // You can set this based on your conditions for when the pose is two-handed.
 
-            if (player.getUseItem().getItem() == Items.SHIELD) {
-                arm.xRot = (float) Math.toRadians(-30F);
-            }
-        } else {
-            super.applyPlayerModelRotation(player, rightArm, leftArm, head, hand, aimProgress);
-        }
+        if (!isTwoHandedPose) {
+            player.getOffhandItem().isEmpty();
+        }// Skip offhand adjustments for two-handed poses
+        super.applyPlayerModelRotation(player, rightArm, leftArm, head, hand, aimProgress);
 
         if (GunRenderingHandler.get().isThirdPersonMeleeAttacking()) {
             float banzaiProgress = GunRenderingHandler.get().getThirdPersonMeleeProgress();

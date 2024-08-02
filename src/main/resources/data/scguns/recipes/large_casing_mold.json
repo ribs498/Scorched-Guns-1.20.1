@@ -1,19 +1,8 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "Q": {
-      "item": "scguns:blank_mold"
-    },
-    "#": {
-      "item": "scguns:treated_brass_ingot"
-    }
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "scguns:blank_mold"
   },
-  "pattern": [
-    "   ",
-    "#Q#",
-    "   "
-  ],
-  "result": {
-    "item": "scguns:large_casing_mold"
-  }
+  "result": "scguns:large_casing_mold"
 }

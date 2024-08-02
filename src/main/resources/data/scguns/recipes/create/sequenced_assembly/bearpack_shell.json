@@ -1,7 +1,7 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "scguns:medium_brass_casing"
+    "item": "minecraft:paper"
   },
   "loops": 1,
   "results": [
@@ -14,17 +14,17 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:medium_brass_casing"
+          "item": "scguns:unfinished_bearpack_shell"
         },
         [
           {
-            "item": "minecraft:paper"
+            "item": "scguns:medium_brass_casing"
           }
         ]
       ],
       "results": [
         {
-          "item": "scguns:medium_brass_casing"
+          "item": "scguns:unfinished_bearpack_shell"
         }
       ]
     },
@@ -32,7 +32,7 @@
       "type": "create:deploying",
       "ingredients": [
         {
-          "item": "scguns:medium_brass_casing"
+          "item": "scguns:unfinished_bearpack_shell"
         },
         [
           {
@@ -42,7 +42,7 @@
       ],
       "results": [
         {
-          "item": "scguns:medium_brass_casing"
+          "item": "scguns:unfinished_bearpack_shell"
         }
       ]
     },
@@ -50,17 +50,17 @@
       "type": "create:pressing",
       "ingredients": [
         {
-          "item": "scguns:medium_brass_casing"
+          "item": "scguns:unfinished_bearpack_shell"
         }
       ],
       "results": [
         {
-          "item": "scguns:medium_brass_casing"
+          "item": "scguns:unfinished_bearpack_shell"
         }
       ]
     }
   ],
   "transitionalItem": {
-    "item": "scguns:medium_brass_casing"
+    "item": "scguns:unfinished_bearpack_shell"
   }
 }

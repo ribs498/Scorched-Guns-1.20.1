@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "item": "minecraft:echo_shard"
+    },
+    "Q": {
+      "item": "scguns:deep_dark_blueprint"
+    },
+    "Z": {
+      "item": "minecraft:paper"
+    }
+  },
+  "pattern": [
+    "HZH",
+    "ZQZ",
+    "HZH"
+  ],
+  "result": {
+    "item": "scguns:deep_dark_blueprint",
+    "count": 1
+  }
+}

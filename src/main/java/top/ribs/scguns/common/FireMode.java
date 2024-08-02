@@ -9,8 +9,7 @@ import java.util.Map;
 /**
  * Author: ribs
  */
-public class FireMode
-{
+public record FireMode(ResourceLocation id) {
     /**
      * A fire mode that shoots once per trigger press
      */
@@ -26,6 +25,10 @@ public class FireMode
      * A fire mode that shoots once per cooldown
      */
     public static final FireMode PULSE = new FireMode(new ResourceLocation(Reference.MOD_ID, "pulse"));
+    /**
+     * A fire mode that shoots a continuous beam
+     */
+    public static final FireMode BEAM = new FireMode(new ResourceLocation(Reference.MOD_ID, "beam"));
 
 
     /**
@@ -33,12 +36,13 @@ public class FireMode
      */
     private static final Map<ResourceLocation, FireMode> fireModeMap = new HashMap<>();
 
-    static
-    {
+    static {
         /* Registers the standard fire modes when the class is loaded */
         registerType(SEMI_AUTO);
         registerType(AUTOMATIC);
         registerType(PULSE);
+        registerType(BEAM);
+
     }
 
     /**
@@ -46,9 +50,8 @@ public class FireMode
      *
      * @param mode the get of the fire mode
      */
-    public static void registerType(FireMode mode)
-    {
-        fireModeMap.putIfAbsent(mode.getId(), mode);
+    public static void registerType(FireMode mode) {
+        fireModeMap.putIfAbsent(mode.id(), mode);
     }
 
     /**
@@ -58,29 +61,23 @@ public class FireMode
      * @param id the id of the fire mode
      * @return returns an get of the fire mode or SEMI_AUTO if it doesn't exist
      */
-    public static FireMode getType(ResourceLocation id)
-    {
+    public static FireMode getType(ResourceLocation id) {
         return fireModeMap.getOrDefault(id, SEMI_AUTO);
     }
-
-    private final ResourceLocation id;
 
     /**
      * Creates a new fire mode.
      *
      * @param id the id of the fire mode
-     *
      */
-    public FireMode(ResourceLocation id)
-    {
-        this.id = id;
+    public FireMode {
     }
 
     /**
      * Gets the id of the fire mode
      */
-    public ResourceLocation getId()
-    {
+    @Override
+    public ResourceLocation id() {
         return this.id;
     }
 

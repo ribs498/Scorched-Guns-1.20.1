@@ -74,5 +74,13 @@
 			"translation": [0, 10.75, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "LightGrip",
+			"origin": [6.88447, 0.95, 10.025],
+			"color": 0,
+			"children": [0, 1, 2]
+		}
+	]
 }

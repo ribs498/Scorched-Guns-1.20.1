@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:hardened_bullet",
+    "scguns:anthralite_nugget",
+    "scguns:treated_iron_nugget",
+    {"id":"immersiveengineering:nugget_steel",  "required":false},
+    {"id":"magistuarmory:steel_nugget",  "required":false}
+  ]
+}

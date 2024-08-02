@@ -6,6 +6,7 @@
       "entries": [
         {
           "type": "minecraft:item",
+          "weight": 2,
           "name": "minecraft:rotten_flesh",
           "functions": [
             {

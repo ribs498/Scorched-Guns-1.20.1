@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/treated_brass/jackhammer",
+  "criteria": {
+    "howler": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:howler"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.howler.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:howler"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.howler"
+    }
+  },
+  "requirements": [
+    [
+      "howler"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

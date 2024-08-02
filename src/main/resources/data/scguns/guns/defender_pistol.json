@@ -40,19 +40,19 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 7.0,
+    "damage": 7.5,
     "gravity": false,
     "item": "scguns:compact_advanced_round",
     "ejectsCasing": true,
     "casingType": "scguns:small_brass_casing",
-    "life": 20,
+    "life": 45,
     "size": 0.05,
     "speed": 7.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 7,
+    "maxAmmo": 9,
     "reloadItem": "scguns:compact_advanced_round",
     "reloadTimer": 20,
     "reloadType": "scguns:mag_fed"
@@ -61,7 +61,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.iron_pistol.fire",
     "fire": "scguns:item.iron_pistol.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.bruiser.silenced_fire"
   }
 }

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/iron/pulsar",
+  "criteria": {
+    "gyrojet_pistol": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:gyrojet_pistol"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.gyrojet_pistol.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:gyrojet_pistol"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.gyrojet_pistol"
+    }
+  },
+  "requirements": [
+    [
+      "gyrojet_pistol"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

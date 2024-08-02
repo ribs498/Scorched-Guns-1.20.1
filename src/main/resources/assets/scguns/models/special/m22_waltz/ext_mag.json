@@ -2,8 +2,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"6": "scguns:item/m22_waltz",
-		"particle": "scguns:item/m22_waltz"
+		"3": "scguns:item/m22_waltz"
 	},
 	"elements": [
 		{
@@ -12,12 +11,12 @@
 			"to": [8.35, -1.54619, 16.76913],
 			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 0.60381, 15.81913]},
 			"faces": {
-				"north": {"uv": [11, 0.5, 11.25, 0.75], "texture": "#6"},
-				"east": {"uv": [9.5, 5.5, 10.5, 5.75], "texture": "#6"},
-				"south": {"uv": [1, 11, 1.25, 11.25], "texture": "#6"},
-				"west": {"uv": [9.5, 6, 10.5, 6.25], "texture": "#6"},
-				"up": {"uv": [9.75, 7.5, 9.5, 6.5], "texture": "#6"},
-				"down": {"uv": [7.75, 9.5, 7.5, 10.5], "texture": "#6"}
+				"north": {"uv": [13, 3.5, 13.25, 3.75], "texture": "#3"},
+				"east": {"uv": [11, 5, 12, 5.25], "texture": "#3"},
+				"south": {"uv": [4, 13, 4.25, 13.25], "texture": "#3"},
+				"west": {"uv": [11, 5.5, 12, 5.75], "texture": "#3"},
+				"up": {"uv": [7.25, 12, 7, 11], "texture": "#3"},
+				"down": {"uv": [7.75, 11, 7.5, 12], "texture": "#3"}
 			}
 		},
 		{
@@ -26,12 +25,12 @@
 			"to": [8.35, 0.5, 16.75],
 			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 0.65, 15.8]},
 			"faces": {
-				"north": {"uv": [8, 9.5, 8.25, 10.5], "texture": "#6"},
-				"east": {"uv": [7, 3, 8, 4], "texture": "#6"},
-				"south": {"uv": [9.5, 9, 9.75, 10], "texture": "#6"},
-				"west": {"uv": [5, 7, 6, 8], "texture": "#6"},
-				"up": {"uv": [2.75, 11, 2.5, 10], "texture": "#6"},
-				"down": {"uv": [3.25, 10, 3, 11], "texture": "#6"}
+				"north": {"uv": [8, 11, 8.25, 12], "texture": "#3"},
+				"east": {"uv": [4, 8, 5, 9], "texture": "#3"},
+				"south": {"uv": [8.5, 11, 8.75, 12], "texture": "#3"},
+				"west": {"uv": [8, 5, 9, 6], "texture": "#3"},
+				"up": {"uv": [9.25, 12, 9, 11], "texture": "#3"},
+				"down": {"uv": [9.75, 11, 9.5, 12], "texture": "#3"}
 			}
 		}
 	],

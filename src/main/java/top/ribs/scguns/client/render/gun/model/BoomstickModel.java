@@ -34,7 +34,9 @@ public class BoomstickModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.BOOMSTICK_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.BOOMSTICK_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
-        }
+        } else
+            RenderUtil.renderModel(SpecialModels.BOOMSTICK_STAN_GRIP.getModel(), stack, matrixStack, buffer, light, overlay);
+
 
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.UNDER_BARREL)) {
             if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.VERTICAL_GRIP.get())
@@ -71,17 +73,21 @@ public class BoomstickModel implements IOverrideModel {
     }
 
     private void renderBarrelAndAttachments(ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
-        // Render the moving part of the gun (barrel)
-        RenderUtil.renderModel(SpecialModels.BOOMSTICK_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+        boolean hasExtendedBarrel = false;
 
-        // Render barrel attachments
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get()) {
+                RenderUtil.renderModel(SpecialModels.BOOMSTICK_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+                hasExtendedBarrel = true;
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
                 RenderUtil.renderModel(SpecialModels.BOOMSTICK_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
+            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
                 RenderUtil.renderModel(SpecialModels.BOOMSTICK_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
+            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
                 RenderUtil.renderModel(SpecialModels.BOOMSTICK_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
+        if (!hasExtendedBarrel) {
+            RenderUtil.renderModel(SpecialModels.BOOMSTICK_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
         }
     }
 

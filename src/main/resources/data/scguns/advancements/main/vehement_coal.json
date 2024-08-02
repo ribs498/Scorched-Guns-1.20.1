@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/sulfur_chunk",
+  "criteria": {
+    "vehement_coal": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:vehement_coal"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.vehement_coal.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:vehement_coal"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.vehement_coal"
+    }
+  },
+  "requirements": [
+    [
+      "vehement_coal"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

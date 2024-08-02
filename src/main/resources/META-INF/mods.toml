@@ -4,7 +4,7 @@ license="GNU GPLv3"
 
 [[mods]]
 modId="scguns"
-version="0.3.1"
+version="0.2.7"
 displayName="Scorched Guns"
 authors="ribs"
 credits="MrCrayfish, Ribs"
@@ -40,3 +40,9 @@ description="SCORCHED GUNSSSSS"
     versionRange="[2.1.9,)"
     ordering="AFTER"
     side="CLIENT"
+[[dependencies.scguns]]
+modId="curios"
+mandatory=true
+versionRange="[5.9.1,)"
+ordering="AFTER"
+side="CLIENT"

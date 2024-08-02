@@ -52,7 +52,7 @@
     "gravity": false,
     "item": "scguns:advanced_round",
     "casingType": "scguns:medium_brass_casing",
-    "life": 30,
+    "life": 45,
     "size": 0.05,
     "speed": 9.5,
     "trailLengthMultiplier": 2.0
@@ -68,7 +68,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.iron_rifle.fire",
     "fire": "scguns:item.iron_rifle.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.bruiser.silenced_fire"
   }
 }

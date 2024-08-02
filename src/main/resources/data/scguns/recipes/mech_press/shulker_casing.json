@@ -1,0 +1,16 @@
+{
+  "type": "scguns:mechanical_pressing",
+  "processingTime": 50,
+  "ingredients": [
+    {
+      "item": "minecraft:shulker_shell"
+    }
+  ],
+  "mold": {
+    "item": "scguns:medium_casing_mold"
+  },
+  "result": {
+    "item": "scguns:shulker_casing",
+    "count": 12
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/piglin/pyroclastic_flow",
+  "criteria": {
+    "freyr": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:freyr"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.freyr.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:freyr"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.freyr"
+    }
+  },
+  "requirements": [
+    [
+      "freyr"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/iron/gyrojet_pistol",
+  "criteria": {
+    "rocket_rifle": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:rocket_rifle"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.rocket_rifle.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:rocket_rifle"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.rocket_rifle"
+    }
+  },
+  "requirements": [
+    [
+      "rocket_rifle"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

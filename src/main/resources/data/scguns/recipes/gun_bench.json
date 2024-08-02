@@ -1,15 +1,23 @@
 {
   "type": "minecraft:crafting_shaped",
   "key": {
-    "Q": {
-      "item": "scguns:anthralite_ingot"
+    "Q":     [
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      {
+        "item": "scguns:treated_iron_ingot"
+      }
+    ],
+    "M": {
+      "item": "minecraft:flint"
     },
     "X": {
       "tag": "minecraft:planks"
     }
   },
   "pattern": [
-    "QQ ",
+    "QM ",
     "XX "
   ],
   "result": {

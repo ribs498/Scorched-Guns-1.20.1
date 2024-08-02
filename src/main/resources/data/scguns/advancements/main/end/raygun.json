@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/end/lone_wonder",
+  "criteria": {
+    "raygun": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:raygun"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.raygun.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:raygun"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.raygun"
+    }
+  },
+  "requirements": [
+    [
+      "raygun"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

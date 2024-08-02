@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/cowboy/sawed_off_callwell",
+  "criteria": {
+    "callwell": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:callwell"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.callwell.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:callwell"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.callwell"
+    }
+  },
+  "requirements": [
+    [
+      "callwell"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

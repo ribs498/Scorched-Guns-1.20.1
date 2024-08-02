@@ -42,7 +42,7 @@
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:grapeshot",
-    "life": 10,
+    "life": 30,
     "size": 1.0,
     "speed": 5.0,
     "trailLengthMultiplier": 2.0
@@ -58,6 +58,6 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.blackpowder.fire",
     "fire": "scguns:item.blackpowder.fire",
-    "reload": "scguns:item.pistol.reload"
+    "reload": "scguns:item.gauss.reload"
   }
 }

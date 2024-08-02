@@ -1,9 +1,14 @@
 {
   "type": "create:mixing",
   "ingredients": [
-    {
-      "item": "scguns:sulfur_chunk"
-    },
+    [
+      {
+        "item": "scguns:sulfur_chunk"
+      },
+      {
+        "item": "scguns:sulfur_dust"
+      }
+    ],
     {
       "item": "scguns:niter_dust"
     },

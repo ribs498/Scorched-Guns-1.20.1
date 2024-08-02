@@ -1,5 +1,6 @@
 package top.ribs.scguns.entity.monster;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -83,11 +84,46 @@ public class SupplyScampEntity extends TamableAnimal {
     @Override
     public void tick() {
         super.tick();
+
+        if (!this.level().isClientSide && this.isAlive() && this.isTame()) {
+            if (this.isInWall()) {
+                this.teleportToSafeLocation();
+            }
+        }
+
         if (this.level().isClientSide) {
             setupAnimationStates();
         } else if (this.isAlive()) {
             pickUpNearbyItems();
         }
+    }
+
+    public boolean isInWall() {
+        return !this.level().noCollision(this.getBoundingBox().inflate(-0.1));
+    }
+
+    private void teleportToSafeLocation() {
+        BlockPos ownerPos = Objects.requireNonNull(this.getOwner()).blockPosition();
+        BlockPos teleportPos = findNearbySafePosition(ownerPos);
+
+        if (teleportPos != null) {
+            this.teleportTo(teleportPos.getX() + 0.5, teleportPos.getY(), teleportPos.getZ() + 0.5);
+        }
+    }
+
+    @Nullable
+    private BlockPos findNearbySafePosition(BlockPos pos) {
+        for (int dx = -2; dx <= 2; dx++) {
+            for (int dy = -1; dy <= 1; dy++) {
+                for (int dz = -2; dz <= 2; dz++) {
+                    BlockPos newPos = pos.offset(dx, dy, dz);
+                    if (this.level().isEmptyBlock(newPos) && this.level().isEmptyBlock(newPos.above())) {
+                        return newPos;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private void setupAnimationStates() {

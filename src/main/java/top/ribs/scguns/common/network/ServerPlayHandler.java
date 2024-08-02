@@ -42,6 +42,7 @@ import top.ribs.scguns.event.GunFireEvent;
 import top.ribs.scguns.init.ModEnchantments;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.interfaces.IProjectileFactory;
+import top.ribs.scguns.item.AirGunItem;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.item.IColored;
 import top.ribs.scguns.item.SilencedFirearm;
@@ -100,7 +101,7 @@ public class ServerPlayHandler {
                 }
                 tracker.putCooldown(heldItem, item, modifiedGun);
 
-               if(ModSyncedDataKeys.RELOADING.getValue(player))
+                if(ModSyncedDataKeys.RELOADING.getValue(player))
                 {
                     ModSyncedDataKeys.RELOADING.setValue(player, false);
                 }
@@ -139,7 +140,7 @@ public class ServerPlayHandler {
                 double fleeRadius = GunModifierHelper.getModifiedFireSoundRadius(heldItem, Config.COMMON.fleeingMobs.unsilencedRange.get());
 
                 // Check if the weapon is silenced
-                boolean isSilenced = heldItem.getItem() instanceof SilencedFirearm || GunModifierHelper.isSilencedFire(heldItem);
+                boolean isSilenced = heldItem.getItem() instanceof SilencedFirearm || heldItem.getItem() instanceof AirGunItem || GunModifierHelper.isSilencedFire(heldItem);
 
                 AABB aggroBox = new AABB(x - aggroRadius, y - aggroRadius, z - aggroRadius, x + aggroRadius, y + aggroRadius, z + aggroRadius);
                 AABB fleeBox = new AABB(x - fleeRadius, y - fleeRadius, z - fleeRadius, x + fleeRadius, y + fleeRadius, z + fleeRadius);
@@ -321,7 +322,7 @@ public class ServerPlayHandler {
                     }
                     int residue = currentAmmo - modifiedCapacity;
                     tag.putInt("AmmoCount", modifiedCapacity);
-                   // ScorchedGuns.LOGGER.atInfo().log("Returning " + residue + " excess ammo to player.");
+                    // ScorchedGuns.LOGGER.atInfo().log("Returning " + residue + " excess ammo to player.");
                     spawnAmmo(player, new ItemStack(item, residue));
                 }
             }

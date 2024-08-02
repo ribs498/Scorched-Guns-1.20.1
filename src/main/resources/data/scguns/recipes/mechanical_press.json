@@ -7,12 +7,20 @@
     "I": {
       "item": "minecraft:furnace"
     },
-    "M": {
-      "item": "minecraft:iron_ingot"
+    "M":     [
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      {
+        "item": "scguns:treated_iron_ingot"
+      }
+    ],
+    "X": {
+      "item": "minecraft:iron_block"
     }
   },
   "pattern": [
-    "QMQ",
+    "QXQ",
     "MIM",
     "QQQ"
   ],

@@ -1,0 +1,15 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:phosphorite"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.5,
+      "item": "scguns:phosphor_dust"
+    }
+  ]
+}

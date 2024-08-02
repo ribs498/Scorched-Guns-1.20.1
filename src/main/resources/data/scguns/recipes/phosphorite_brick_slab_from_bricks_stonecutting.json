@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "scguns:phosphorite_bricks"
+  },
+  "result": "scguns:phosphorite_brick_slab"
+}

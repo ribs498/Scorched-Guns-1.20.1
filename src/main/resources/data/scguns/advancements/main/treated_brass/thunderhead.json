@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/treated_brass/gattaler",
+  "criteria": {
+    "thunderhead": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:thunderhead"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.thunderhead.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:thunderhead"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.thunderhead"
+    }
+  },
+  "requirements": [
+    [
+      "thunderhead"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,27 @@
+{
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "scguns:raw_phosphor"
+    }
+  ],
+  "processingTime": 100,
+  "results": [
+    {
+      "count": 3,
+      "item": "scguns:phosphor_dust"
+    },
+    {
+      "chance": 0.05,
+      "item": "scguns:phosphor_dust"
+    },
+    {
+      "chance": 0.03,
+      "item": "minecraft:blue_dye"
+    },
+    {
+      "chance": 0.03,
+      "item": "scguns:sulfur_dust"
+    }
+  ]
+}

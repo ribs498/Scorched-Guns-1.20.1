@@ -1,0 +1,42 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:thunderhead",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:treated_brass_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "scguns:rapid_firing_unit"
+    },
+    "gun_internal_2": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "gun_top_internal_1": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:treated_brass_gun_frame"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "gun_top_barrel_2": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "gun_top_barrel_1": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "gun_grip": {
+      "item": "scguns:treated_brass_gun_frame"
+    },
+    "gun_magazine": {
+      "item": "scguns:gun_magazine"
+    }
+  }
+}

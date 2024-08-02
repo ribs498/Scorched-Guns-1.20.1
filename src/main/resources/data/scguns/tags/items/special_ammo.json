@@ -2,8 +2,6 @@
   "replace": false,
   "values": [
     "scguns:powder_and_ball",
-    "scguns:grapeshot",
-    "scguns:energy_cell",
-    "scguns:blaze_fuel"
+    "scguns:grapeshot"
   ]
 }

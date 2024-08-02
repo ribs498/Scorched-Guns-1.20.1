@@ -24,6 +24,8 @@ public class ModModelLayers {
             new ResourceLocation(Reference.MOD_ID, "swarm_layer"), "main");
     public static final ModelLayerLocation HORNLIN_LAYER = new ModelLayerLocation(
             new ResourceLocation(Reference.MOD_ID, "hornlin_layer"), "main");
+    public static final ModelLayerLocation ZOMBIFIED_HORNLIN_LAYER = new ModelLayerLocation(
+            new ResourceLocation(Reference.MOD_ID, "zombified_hornlin_layer"), "main");
     public static final ModelLayerLocation BLUNDERER_LAYER = new ModelLayerLocation(
             new ResourceLocation(Reference.MOD_ID, "blunderer_layer"), "main");
 

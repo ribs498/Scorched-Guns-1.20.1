@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/iron_blueprint",
+  "criteria": {
+    "treated_brass_blueprint": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:treated_brass_blueprint"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.treated_brass_blueprint.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:treated_brass_blueprint"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.treated_brass_blueprint"
+    }
+  },
+  "requirements": [
+    [
+      "treated_brass_blueprint"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

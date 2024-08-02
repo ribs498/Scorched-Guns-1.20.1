@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/diamond_steel/krauser",
+  "criteria": {
+    "soul_drummer": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:soul_drummer"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.soul_drummer.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:soul_drummer"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.soul_drummer"
+    }
+  },
+  "requirements": [
+    [
+      "soul_drummer"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

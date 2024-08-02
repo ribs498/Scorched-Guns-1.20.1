@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/piglin/vulcanic_repeater",
+  "criteria": {
+    "super_shotgun": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:super_shotgun"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.super_shotgun.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:super_shotgun"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.super_shotgun"
+    }
+  },
+  "requirements": [
+    [
+      "super_shotgun"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/blackpowder/repeating_musket",
+  "criteria": {
+    "laser_musket": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:laser_musket"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.laser_musket.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:laser_musket"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.laser_musket"
+    }
+  },
+  "requirements": [
+    [
+      "laser_musket"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

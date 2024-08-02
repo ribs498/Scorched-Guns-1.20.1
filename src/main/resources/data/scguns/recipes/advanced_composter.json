@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "tag": "minecraft:wooden_slabs"
+    },
+    "L":  [
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      {
+        "item": "scguns:treated_iron_ingot"
+      }
+    ],
+    "R": {
+      "tag": "minecraft:wooden_trapdoors"
+    }
+  },
+  "pattern": [
+    "QRQ",
+    "L L",
+    "QQQ"
+  ],
+  "result": {
+    "item": "scguns:advanced_composter"
+  }
+}

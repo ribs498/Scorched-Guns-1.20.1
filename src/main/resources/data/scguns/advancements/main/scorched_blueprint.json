@@ -1,0 +1,41 @@
+{
+  "parent": "scguns:main/end_blueprint",
+  "criteria": {
+    "scorched_blueprint": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:scorched_blueprint"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.scorched_blueprint.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:scorched_blueprint"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.scorched_blueprint"
+    }
+  },
+  "requirements": [
+    [
+      "scorched_blueprint"
+    ]
+  ],
+  "rewards": {
+    "experience": 200
+  },
+  "sends_telemetry_event": true
+}

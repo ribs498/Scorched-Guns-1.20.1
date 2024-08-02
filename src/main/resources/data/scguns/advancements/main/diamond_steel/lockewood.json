@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/diamond_steel/prush_gun",
+  "criteria": {
+    "lockewood": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:lockewood"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.lockewood.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:lockewood"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.lockewood"
+    }
+  },
+  "requirements": [
+    [
+      "lockewood"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

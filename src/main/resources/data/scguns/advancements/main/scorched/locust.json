@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/scorched/rat_king_and_queen",
+  "criteria": {
+    "locust": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:locust"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.locust.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:locust"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.locust"
+    }
+  },
+  "requirements": [
+    [
+      "locust"
+    ]
+  ],
+  "sscorcheds_telemetry_event": true
+}

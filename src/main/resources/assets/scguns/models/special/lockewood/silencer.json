@@ -87,5 +87,13 @@
 			"translation": [2.75, 7.25, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "Sielncer",
+			"origin": [10.25303, 2.55, -3.7],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
 }

@@ -1,8 +1,9 @@
 {
 	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
 	"textures": {
-		"6": "scguns:item/carabine",
-		"particle": "scguns:item/carabine_grips"
+		"1": "scguns:item/m3_carabine",
+		"particle": "scguns:item/m3_carabine"
 	},
 	"elements": [
 		{
@@ -10,12 +11,12 @@
 			"to": [9.65, 4.7, 11.17733],
 			"rotation": {"angle": 0, "axis": "y", "origin": [7.9, 2.04767, 5.65233]},
 			"faces": {
-				"north": {"uv": [10, 2.5, 10.5, 2.75], "texture": "#6"},
-				"east": {"uv": [10.5, 5, 10.75, 5.25], "texture": "#6"},
-				"south": {"uv": [10, 3, 10.5, 3.25], "texture": "#6"},
-				"west": {"uv": [5.5, 10.5, 5.75, 10.75], "texture": "#6"},
-				"up": {"uv": [10.5, 3.75, 10, 3.5], "texture": "#6"},
-				"down": {"uv": [10.25, 4, 9.75, 4.25], "texture": "#6"}
+				"north": {"uv": [10.75, 10.5, 11, 10.625], "texture": "#1"},
+				"east": {"uv": [11.25, 0, 11.375, 0.125], "texture": "#1"},
+				"south": {"uv": [10.75, 10.75, 11, 10.875], "texture": "#1"},
+				"west": {"uv": [0.25, 11.25, 0.375, 11.375], "texture": "#1"},
+				"up": {"uv": [0.25, 11.125, 0, 11], "texture": "#1"},
+				"down": {"uv": [11.25, 0, 11, 0.125], "texture": "#1"}
 			}
 		},
 		{
@@ -23,12 +24,12 @@
 			"to": [9.9, 4.7, 11.42733],
 			"rotation": {"angle": 0, "axis": "y", "origin": [7.9, 2.04767, 5.65233]},
 			"faces": {
-				"north": {"uv": [10.5, 5.5, 10.75, 5.75], "texture": "#6"},
-				"east": {"uv": [10, 4.5, 10.25, 4.75], "texture": "#6"},
-				"south": {"uv": [6, 10.5, 6.25, 10.75], "texture": "#6"},
-				"west": {"uv": [5, 10, 5.5, 10.25], "texture": "#6"},
-				"up": {"uv": [11, 5.75, 10.75, 5.5], "texture": "#6"},
-				"down": {"uv": [6.25, 10.5, 6, 11], "texture": "#6"}
+				"north": {"uv": [11.25, 0.25, 11.375, 0.375], "texture": "#1"},
+				"east": {"uv": [0.25, 11, 0.5, 11.125], "texture": "#1"},
+				"south": {"uv": [0.5, 11.25, 0.625, 11.375], "texture": "#1"},
+				"west": {"uv": [11, 0.25, 11.25, 0.375], "texture": "#1"},
+				"up": {"uv": [0.625, 11.25, 0.5, 11], "texture": "#1"},
+				"down": {"uv": [0.875, 11, 0.75, 11.25], "texture": "#1"}
 			}
 		}
 	],
@@ -61,13 +62,5 @@
 			"translation": [1.5, 8.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	},
-	"groups": [
-		{
-			"name": "Bolt",
-			"origin": [8, 2.39767, 8.90233],
-			"color": 0,
-			"children": [0, 1]
-		}
-	]
+	}
 }

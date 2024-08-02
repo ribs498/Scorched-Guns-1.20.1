@@ -111,6 +111,15 @@ public abstract class Attachment
             {
                 addPerk(positivePerks, true, "perk.scguns.sound_radius.positive");
             }
+            float criticalChance = 0.0F;
+            for (IGunModifier modifier : modifiers) {
+                criticalChance += modifier.criticalChance();
+            }
+            if (criticalChance > 0.0F) {
+                addPerk(positivePerks, true, "perk.scguns.critical_chance.positive", ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(criticalChance * 100) + "%");
+            } else if (criticalChance < 0.0F) {
+                addPerk(negativePerks, false, "perk.scguns.critical_chance.negative", ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(criticalChance * 100) + "%");
+            }
 
             /* Test for additional damage */
             float additionalDamage = 0.0F;

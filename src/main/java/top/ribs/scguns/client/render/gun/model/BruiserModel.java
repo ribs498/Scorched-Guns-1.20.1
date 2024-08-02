@@ -27,7 +27,6 @@ public class BruiserModel implements IOverrideModel {
         // Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.BRUISER_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
 
-
         if (entity.equals(Minecraft.getInstance().player)) {
             // Always push.
             matrixStack.pushPose();
@@ -48,16 +47,24 @@ public class BruiserModel implements IOverrideModel {
     }
 
     private void renderBarrelAndAttachments(ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
-        // Render the moving part of the gun (barrel)
-        RenderUtil.renderModel(SpecialModels.BRUISER_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+        // Check if extended barrel is attached
+        boolean hasExtendedBarrel = Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL) &&
+                Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get();
 
-        // Render barrel attachments
+        // Render the appropriate barrel
+        if (hasExtendedBarrel) {
+            RenderUtil.renderModel(SpecialModels.BRUISER_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+        } else {
+            RenderUtil.renderModel(SpecialModels.BRUISER_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
+
+        // Render other barrel attachments
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
                 RenderUtil.renderModel(SpecialModels.BRUISER_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
+            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
                 RenderUtil.renderModel(SpecialModels.BRUISER_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
+            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
                 RenderUtil.renderModel(SpecialModels.BRUISER_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
         }
     }

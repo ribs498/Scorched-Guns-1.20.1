@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "H": {
+      "item": "minecraft:prismarine_shard"
+    },
+    "T": {
+      "item": "minecraft:prismarine_crystals"
+    },
+    "Q": {
+      "item": "scguns:ocean_blueprint"
+    },
+    "Z": {
+      "item": "minecraft:paper"
+    }
+  },
+  "pattern": [
+    "HZT",
+    "ZQZ",
+    "TZH"
+  ],
+  "result": {
+    "item": "scguns:ocean_blueprint",
+    "count": 1
+  }
+}

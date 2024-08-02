@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.item.AmmoBoxItem;
 
 public class RocketAmmoBoxItem extends AmmoBoxItem {
-    private static final int ROCKET_MAX_ITEM_COUNT = 128;
+    private static final int ROCKET_MAX_ITEM_COUNT = 256;
     private static final int ROCKET_BAR_COLOR = Mth.color(0.4F, 0.4F, 0.7F);
 
     public RocketAmmoBoxItem(Properties properties) {

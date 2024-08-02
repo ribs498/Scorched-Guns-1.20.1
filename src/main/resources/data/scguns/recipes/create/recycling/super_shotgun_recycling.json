@@ -1,0 +1,35 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:super_shotgun"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:firing_unit"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_parts"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:heavy_gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_magazine"
+    }
+  ]
+}

@@ -45,15 +45,18 @@ public class PaxModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.PAX_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
         }
 
+        // Render barrel attachments
+        renderBarrelAttachments(matrixStack, buffer, stack, light, overlay);
+
         if (entity.equals(Minecraft.getInstance().player)) {
             matrixStack.pushPose();
-            matrixStack.translate(0, -0.335, 0.244);
+            matrixStack.translate(0, -0.30, 0.33);
             ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
             float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
             cooldown = (float) ease(cooldown);
             float rotationAngle = -cooldown * 38;
             matrixStack.mulPose(Axis.XP.rotationDegrees(rotationAngle));
-            matrixStack.translate(0, 0.335, -0.244);
+            matrixStack.translate(0, 0.30, -0.33);
             RenderUtil.renderModel(SpecialModels.PAX_HAMMER.getModel(), stack, matrixStack, buffer, light, overlay);
             matrixStack.popPose();
 
@@ -61,17 +64,38 @@ public class PaxModel implements IOverrideModel {
         }
     }
 
+    private void renderBarrelAttachments(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
+        boolean hasExtendedBarrel = false;
+
+        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get()) {
+                RenderUtil.renderModel(SpecialModels.PAX_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+                hasExtendedBarrel = true;
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get()) {
+                RenderUtil.renderModel(SpecialModels.PAX_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get()) {
+                RenderUtil.renderModel(SpecialModels.PAX_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get()) {
+                RenderUtil.renderModel(SpecialModels.PAX_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
+        }
+
+        // Render the standard barrel if no extended barrel is attached
+        if (!hasExtendedBarrel) {
+            RenderUtil.renderModel(SpecialModels.PAX_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
+    }
+
     private void renderDrumRotation(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, float partialTicks, int light, int overlay) {
-        assert Minecraft.getInstance().player != null;
         ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
         float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
         int shotCount = GunFireEventPaxHandler.getShotCount();
         targetRotation = shotCount * ROTATION_INCREMENT;
         currentRotation = currentRotation + (targetRotation - currentRotation) * partialTicks;
         matrixStack.pushPose();
-        matrixStack.translate(0, -0.3, 0);
+        matrixStack.translate(0, -0.265, 0);
         matrixStack.mulPose(Axis.ZP.rotationDegrees(currentRotation));
-        matrixStack.translate(-0, 0.3, -0);
+        matrixStack.translate(-0, 0.265, -0);
         RenderUtil.renderModel(SpecialModels.PAX_DRUM.getModel(), stack, matrixStack, buffer, light, overlay);
         matrixStack.popPose();
     }

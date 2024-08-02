@@ -2,7 +2,7 @@
   "display": {
     "flash": {
       "size": 1.5,
-      "yOffset": 7.5,
+      "yOffset": 7.8,
       "zOffset": -12.0
     },
     "muzzleFlashType": "flash_type_1"
@@ -13,7 +13,7 @@
     "rate": 2,
     "recoilAngle": 3.0,
     "recoilKick": 0.5,
-    "spread": 5.0,
+    "spread": 6.0,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20
   },
@@ -23,12 +23,12 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 4.0,
+    "damage": 6.0,
     "gravity": false,
     "item": "scguns:compact_advanced_round",
     "ejectsCasing": true,
     "casingType": "scguns:small_brass_casing",
-    "life": 20,
+    "life": 40,
     "size": 0.1,
     "speed": 5.0,
     "trailLengthMultiplier": 2.0
@@ -44,7 +44,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.rusty_gnat.fire",
     "fire": "scguns:item.rusty_gnat.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.rusty_gnat.silenced_fire"
   }
 }

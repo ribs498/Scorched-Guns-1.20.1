@@ -47,7 +47,7 @@
     "ejectsCasing": true,
     "item": "scguns:compact_advanced_round",
     "casingType": "scguns:small_brass_casing",
-    "life": 20,
+    "life": 30,
     "size": 0.1,
     "speed": 5.0,
     "trailLengthMultiplier": 2.0
@@ -63,7 +63,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.rusty_gnat.fire",
     "fire": "scguns:item.greaser_smg.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.makeshift_rifle.silenced_fire"
   }
 }

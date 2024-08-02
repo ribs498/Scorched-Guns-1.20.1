@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/iron/combat_shotgun",
+  "criteria": {
+    "venturi": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:venturi"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.venturi.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:venturi"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.venturi"
+    }
+  },
+  "requirements": [
+    [
+      "venturi"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

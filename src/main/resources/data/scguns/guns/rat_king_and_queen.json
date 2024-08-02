@@ -35,7 +35,7 @@
     "gravity": false,
     "item": "scguns:ramrod_round",
     "casingType": "scguns:small_iron_casing",
-    "life": 20,
+    "life": 40,
     "size": 0.1,
     "speed": 9.0,
     "trailLengthMultiplier": 2.0
@@ -51,7 +51,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.iron_pistol.fire",
     "fire": "scguns:item.iron_pistol.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.bruiser.silenced_fire"
   }
 }

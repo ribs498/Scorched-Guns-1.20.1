@@ -1,12 +1,15 @@
 package top.ribs.scguns.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
@@ -28,6 +31,26 @@ public class NiterDustItem extends Item {
         ItemStack itemstack = context.getItemInHand();
 
         BlockState blockstate = world.getBlockState(blockpos);
+
+        // Check if the block is a crop and apply weaker bonemeal effect
+        if (blockstate.getBlock() instanceof BonemealableBlock) {
+            if (applyWeakerBonemeal(itemstack, world, blockpos, player)) {
+                if (!world.isClientSide) {
+                    world.levelEvent(1505, blockpos, 0);
+                }
+                return InteractionResult.sidedSuccess(world.isClientSide);
+            }
+        }
+
+        // Prevent placing Niter layer on top of fully grown crops
+        if (blockstate.getBlock() instanceof BonemealableBlock) {
+            BonemealableBlock bonemealableblock = (BonemealableBlock) blockstate.getBlock();
+            if (!bonemealableblock.isValidBonemealTarget(world, blockpos, blockstate, world.isClientSide)) {
+                return InteractionResult.FAIL;
+            }
+        }
+
+        // If not a crop, place the Niter layer
         FluidState fluidstate = world.getFluidState(blockpos);
 
         if (blockstate.is(ModBlocks.NITER_LAYER.get())) {
@@ -55,5 +78,26 @@ public class NiterDustItem extends Item {
         }
 
         return InteractionResult.FAIL;
+    }
+
+    public static boolean applyWeakerBonemeal(ItemStack stack, Level world, BlockPos pos, Player player) {
+        BlockState blockstate = world.getBlockState(pos);
+        if (blockstate.getBlock() instanceof BonemealableBlock) {
+            BonemealableBlock bonemealableblock = (BonemealableBlock) blockstate.getBlock();
+            if (bonemealableblock.isValidBonemealTarget(world, pos, blockstate, world.isClientSide)) {
+                if (world instanceof ServerLevel) {
+                    RandomSource random = world.getRandom();
+                    // Apply effect with a lower chance than regular bonemeal
+                    if (random.nextInt(3) == 0) { // 33% chance to apply effect
+                        if (bonemealableblock.isBonemealSuccess(world, random, pos, blockstate)) {
+                            bonemealableblock.performBonemeal((ServerLevel) world, random, pos, blockstate);
+                        }
+                    }
+                    stack.shrink(1);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 }

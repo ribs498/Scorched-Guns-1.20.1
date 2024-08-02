@@ -1,0 +1,19 @@
+{
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "minecraft:glowstone_dust"
+    }
+  ],
+  "processingTime": 100,
+  "results": [
+    {
+      "count": 1,
+      "item": "scguns:phosphor_dust"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:phosphor_dust"
+    }
+  ]
+}

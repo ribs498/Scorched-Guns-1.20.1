@@ -74,5 +74,13 @@
 			"translation": [0, 10.75, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "AnthraliteBayonet",
+			"origin": [8.00947, 2.6, 2.275],
+			"color": 0,
+			"children": [0, 1, 2]
+		}
+	]
 }

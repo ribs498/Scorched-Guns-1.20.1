@@ -25,12 +25,27 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> SULFUR_ORE_KEY = registerKey("sulfur_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> NETHER_SULFUR_ORE_KEY = registerKey("nether_sulfur_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> GEOTHERMAL_VENT_KEY = registerKey("geothermal_vent");
+    public  static final ResourceKey<ConfiguredFeature<?, ?>> SULFUR_VENT_KEY = registerKey("sulfur_vent");
     public static final ResourceKey<ConfiguredFeature<?, ?>> VEHEMENT_COAL_ORE_KEY = registerKey("vehement_coal_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> RICH_PHOSPHORITE_ORE_KEY = registerKey("rich_phosphorite");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> PHOSPHORITE_KEY = registerKey("phosphorite");
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
         RuleTest stoneReplaceables = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
         RuleTest deepslateReplaceables = new TagMatchTest(BlockTags.DEEPSLATE_ORE_REPLACEABLES);
         RuleTest netherrackReplaceables = new BlockMatchTest(Blocks.NETHERRACK);
+        RuleTest phosphoriteReplaceables = new BlockMatchTest(ModBlocks.PHOSPHORITE.get());
+
+        List<OreConfiguration.TargetBlockState> richPhosphoriteOres = List.of(
+                OreConfiguration.target(phosphoriteReplaceables, ModBlocks.RICH_PHOSPHORITE.get().defaultBlockState())
+        );
+        List<OreConfiguration.TargetBlockState> phosphoriteOres = List.of(
+                OreConfiguration.target(stoneReplaceables, ModBlocks.PHOSPHORITE.get().defaultBlockState())
+        );
+
+        register(context, PHOSPHORITE_KEY, Feature.ORE, new OreConfiguration(phosphoriteOres, 33));
+
+        register(context, RICH_PHOSPHORITE_ORE_KEY, Feature.ORE, new OreConfiguration(richPhosphoriteOres, 8));
 
         List<OreConfiguration.TargetBlockState> overworldAnthraliteOres = List.of(
                 OreConfiguration.target(stoneReplaceables, ModBlocks.ANTHRALITE_ORE.get().defaultBlockState()),
@@ -53,10 +68,11 @@ public class ModConfiguredFeatures {
         register(context, ANTHRALITE_ORE_KEY, Feature.ORE, new OreConfiguration(overworldAnthraliteOres, 10));
         register(context, SULFUR_ORE_KEY, Feature.ORE, new OreConfiguration(overworldSulfurOres, 9));
         register(context, NETHER_SULFUR_ORE_KEY, Feature.ORE, new OreConfiguration(netherSulfurOres, 12));
-        register(context, VEHEMENT_COAL_ORE_KEY, Feature.ORE, new OreConfiguration(netherVehementCoalOres, 6)); // Reduced vein size for rarity
+        register(context, VEHEMENT_COAL_ORE_KEY, Feature.ORE, new OreConfiguration(netherVehementCoalOres, 6));
 
         // Geothermal Vent Configuration
         register(context, GEOTHERMAL_VENT_KEY, ModFeatures.GEOTHERMAL_VENT_FEATURE.get(), NoneFeatureConfiguration.INSTANCE);
+        register(context, SULFUR_VENT_KEY, ModFeatures.SULFUR_VENT_FEATURE.get(), NoneFeatureConfiguration.INSTANCE);
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {

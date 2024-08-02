@@ -23,15 +23,19 @@ public class ModDamageTypes
 {
     public static final ResourceKey<DamageType> BULLET = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Reference.MOD_ID, "bullet"));
     public static final ResourceKey<DamageType> MELEE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(Reference.MOD_ID, "melee"));
+
     /**
      * Based on code in Botania by Vazkii
      * <a href="https://github.com/VazkiiMods/Botania/blob/1.19.x/Xplat/src/main/java/vazkii/botania/common/BotaniaDamageTypes.java">Link</a>
      */
     public static class Sources
     {
-        private static Holder.Reference<DamageType> getHolder(RegistryAccess access, ResourceKey<DamageType> damageTypeKey)
-        {
+        private static Holder.Reference<DamageType> getHolder(RegistryAccess access, ResourceKey<DamageType> damageTypeKey) {
             return access.registryOrThrow(Registries.DAMAGE_TYPE).getHolderOrThrow(damageTypeKey);
+        }
+
+        public static DamageSource projectile(RegistryAccess access, @Nullable Entity directEntity, @Nullable Entity causingEntity) {
+            return new DamageSource(getHolder(access, BULLET), directEntity, causingEntity);
         }
 
         private static DamageSource source(RegistryAccess access, ResourceKey<DamageType> damageTypeKey, @Nullable Entity directEntity, @Nullable Entity causingEntity)

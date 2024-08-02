@@ -23,7 +23,7 @@
     "attachments": {
       "barrel": {
         "yOffset": 5.4,
-        "zOffset": -5.8
+        "zOffset": -6.2
       },
       "stock": {
         "scale": 0.0
@@ -44,7 +44,7 @@
     "ejectsCasing": true,
     "item": "scguns:compact_advanced_round",
     "casingType": "scguns:small_brass_casing",
-    "life": 20,
+    "life": 35,
     "size": 0.05,
     "speed": 4.0,
     "trailLengthMultiplier": 2.0
@@ -60,7 +60,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.greaser_smg.fire",
     "fire": "scguns:item.greaser_smg.fire",
-    "reload": "scguns:item.pistol.reload",
+    "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.makeshift_rifle.silenced_fire"
   }
 }

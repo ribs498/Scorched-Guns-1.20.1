@@ -1,0 +1,39 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:whispers"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "scguns:diamond_steel_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "minecraft:sculk_sensor"
+    },
+    {
+      "chance": 0.3,
+      "item": "minecraft:echo_shard"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:rapid_firing_unit"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:heavy_gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_magazine"
+    }
+  ]
+}
