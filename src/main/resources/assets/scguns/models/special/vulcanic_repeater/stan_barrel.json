@@ -1,0 +1,65 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"5": "scguns:item/vulcanic_repeater"
+	},
+	"elements": [
+		{
+			"from": [7.3473, 3.21595, 3.19528],
+			"to": [8.3473, 4.21595, 4.69528],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.0053, 3.86645, -4.49797]},
+			"faces": {
+				"north": {"uv": [5, 8, 5.25, 8.25], "texture": "#5"},
+				"east": {"uv": [6.5, 7.5, 6.875, 7.75], "texture": "#5"},
+				"south": {"uv": [8, 5, 8.25, 5.25], "texture": "#5", "cullface": "south"},
+				"west": {"uv": [7, 7.5, 7.375, 7.75], "texture": "#5"},
+				"up": {"uv": [7.75, 7.875, 7.5, 7.5], "texture": "#5"},
+				"down": {"uv": [0.25, 7.75, 0, 8.125], "texture": "#5"}
+			}
+		},
+		{
+			"from": [7.0973, 2.96595, 2.69528],
+			"to": [8.5973, 4.46595, 3.19528],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.0053, 3.86645, -5.99797]},
+			"faces": {
+				"north": {"uv": [6.75, 2.75, 7.125, 3.125], "texture": "#5"},
+				"east": {"uv": [2, 8.25, 2.125, 8.625], "texture": "#5"},
+				"south": {"uv": [3.75, 6.75, 4.125, 7.125], "texture": "#5", "cullface": "south"},
+				"west": {"uv": [2.25, 8.25, 2.375, 8.625], "texture": "#5"},
+				"up": {"uv": [3.375, 8.375, 3, 8.25], "texture": "#5"},
+				"down": {"uv": [8.625, 3.25, 8.25, 3.375], "texture": "#5"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0.25, 7.25, -6.25],
+			"scale": [1.25, 1.25, 1.25]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0.25, 7.25, -6.25],
+			"scale": [1.25, 1.25, 1.25]
+		},
+		"firstperson_righthand": {
+			"translation": [-4, 9.75, -1]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4, 9.75, -1]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1, 7, 0],
+			"scale": [1.1, 1.1, 1.1]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [0, 10.75, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	}
+}
