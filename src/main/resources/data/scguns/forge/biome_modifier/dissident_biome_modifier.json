@@ -3,7 +3,7 @@
   "biomes": "#forge:is_general",
   "spawners": {
     "type": "scguns:dissident",
-    "weight": 20,
+    "weight": 15,
     "minCount": 1,
     "maxCount": 1
   }
