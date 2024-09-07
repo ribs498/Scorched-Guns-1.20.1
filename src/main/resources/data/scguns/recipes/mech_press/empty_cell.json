@@ -3,7 +3,7 @@
   "processingTime": 50,
   "ingredients": [
     {
-      "item": "minecraft:iron_ingot"
+      "tag": "forge:ingots/iron"
     }
   ],
   "mold": {

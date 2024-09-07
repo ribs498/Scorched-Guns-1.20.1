@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "scguns:diamond_steel_ingot"
+    },
+    {
+      "item": "scguns:small_casing_mold"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:small_diamond_steel_casing",
+        "count": 12
+    }
+  ]
+}

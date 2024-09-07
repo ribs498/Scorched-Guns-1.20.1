@@ -5,17 +5,15 @@ import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.lang3.tuple.Pair;
-import top.ribs.scguns.cache.ObjectCache;
 import top.ribs.scguns.client.SwayType;
 import top.ribs.scguns.client.render.crosshair.Crosshair;
 import top.ribs.scguns.client.screen.ButtonAlignment;
+import top.ribs.scguns.entity.projectile.turret.TurretProjectileEntity;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Config
 {
@@ -183,6 +181,7 @@ public class Config
         public final StunGrenades stunGrenades;
         public final ProjectileSpread projectileSpread;
         public final Gunsmith Gunsmith;
+        public final Turret turret;
 
         public Common(ForgeConfigSpec.Builder builder)
         {
@@ -197,6 +196,7 @@ public class Config
                 this.stunGrenades = new StunGrenades(builder);
                 this.projectileSpread = new ProjectileSpread(builder);
                 this.Gunsmith = new Gunsmith(builder);
+                this.turret = new Turret(builder);
             }
             builder.pop();
         }
@@ -371,6 +371,52 @@ public class Config
 
             }
             builder.pop();
+        }
+    }
+    public static class Turret
+    {
+        public final Map<TurretProjectileEntity.BulletType, ForgeConfigSpec.DoubleValue> bulletDamage;
+        public final ForgeConfigSpec.BooleanValue enableDamageScaling;
+        public final ForgeConfigSpec.DoubleValue damageScalingRate;
+        public final ForgeConfigSpec.DoubleValue maxScaledDamage;
+
+        public Turret(ForgeConfigSpec.Builder builder)
+        {
+            builder.comment("Properties relating to turrets").push("turret");
+            {
+                bulletDamage = new EnumMap<>(TurretProjectileEntity.BulletType.class);
+                for (TurretProjectileEntity.BulletType type : TurretProjectileEntity.BulletType.values()) {
+                    bulletDamage.put(type, builder
+                            .comment("Base damage for " + type.name() + " turret projectile")
+                            .defineInRange(type.name().toLowerCase() + "_damage", getDefaultDamage(type), 0.0, Double.MAX_VALUE));
+                }
+
+                this.enableDamageScaling = builder
+                        .comment("If true, turret damage will scale over time")
+                        .define("enable_damage_scaling", false);
+
+                this.damageScalingRate = builder
+                        .comment("The rate at which turret damage increases per day")
+                        .defineInRange("damage_scaling_rate", 0.03, 0.0, Double.MAX_VALUE);
+
+                this.maxScaledDamage = builder
+                        .comment("The maximum damage that turret scaling can reach")
+                        .defineInRange("max_scaled_damage", Double.MAX_VALUE, 0.0, Double.MAX_VALUE);
+            }
+            builder.pop();
+        }
+
+        private double getDefaultDamage(TurretProjectileEntity.BulletType type) {
+            return switch (type) {
+                case STANDARD_COPPER_ROUND -> 4.0;
+                case ADVANCED_ROUND -> 6.0;
+                case GIBBS_ROUND -> 8.0;
+                case COMPACT_COPPER_ROUND -> 2.0;
+                case COMPACT_ADVANCED_ROUND -> 3.5;
+                case HOG_ROUND -> 5.0;
+                case SHOTGUN_SHELL -> 12.0;
+                case BEARPACK_SHELL -> 16.0;
+            };
         }
     }
     /**

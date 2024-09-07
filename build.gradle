@@ -6,7 +6,7 @@ plugins {
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
-version = "0.2.7-1.20.1"
+version = "0.2.8-1.20.1"
 group = "top.ribs"
 archivesBaseName = "ScorchedGuns"
 
@@ -112,7 +112,8 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
-    implementation fg.deobf("curse.maven:create-328085:4835191")
+    implementation fg.deobf("curse.maven:create-328085:5689514")
+    implementation fg.deobf("curse.maven:createaddition-439890:5658602")
  //implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5455954")
     implementation fg.deobf("curse.maven:farmers-delight-398521:5051242")
  // implementation fg.deobf("curse.maven:immersive-engineering-231951:5224387")

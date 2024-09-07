@@ -290,6 +290,7 @@ import java.lang.reflect.Constructor;
     public static final RegistryObject<Item> UNFINISHED_BLAZE_FUEL = REGISTER.register("unfinished_blaze_fuel", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> UNFINISHED_GUN_PARTS = REGISTER.register("unfinished_gun_parts", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> UNFINISHED_HEAVY_GUN_PARTS = REGISTER.register("unfinished_heavy_gun_parts", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> UNFINISHED_PLASMA_CORE = REGISTER.register("unfinished_plasma_core", () -> new Item(new Item.Properties()));
 
     public static final RegistryObject<Item> ROCKET = REGISTER.register("rocket", () -> new AmmoItem(new Item.Properties()));
     public static final RegistryObject<Item> OSBORNE_SLUG = REGISTER.register("osborne_slug", () -> new AmmoItem(new Item.Properties()));

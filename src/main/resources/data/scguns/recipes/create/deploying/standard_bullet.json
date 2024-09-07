@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "tag": "scguns:standard_bullet_material"
+    },
+    {
+      "item": "scguns:bullet_mold"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:standard_bullet",
+        "count": 12
+    }
+  ]
+}

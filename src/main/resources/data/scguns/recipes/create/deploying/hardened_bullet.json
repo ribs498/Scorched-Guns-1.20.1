@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "tag": "scguns:advanced_bullet_material"
+    },
+    {
+      "item": "scguns:bullet_mold"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:hardened_bullet",
+        "count": 12
+    }
+  ]
+}

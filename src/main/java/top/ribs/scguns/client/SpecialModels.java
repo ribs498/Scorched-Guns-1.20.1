@@ -871,6 +871,8 @@ COGLOADER_MAIN("cogloader/main"),
 
     ///EARTHS_CORPSE
     EARTHS_CORPSE_MAIN("earths_corpse/main"),
+    EARTHS_CORPSE_STAN_BARREL("earths_corpse/stan_barrel"),
+    EARTHS_CORPSE_EXT_BARREL("earths_corpse/ext_barrel"),
     EARTHS_CORPSE_STOCK_LIGHT("earths_corpse/light_stock"),
     EARTHS_CORPSE_STOCK_HEAVY("earths_corpse/heavy_stock"),
     EARTHS_CORPSE_STOCK_WOODEN("earths_corpse/wooden_stock"),
@@ -885,6 +887,8 @@ COGLOADER_MAIN("cogloader/main"),
     EARTHS_CORPSE_BOLT("earths_corpse/bolt"),
     ///LOCUST
     LOCUST_MAIN("locust/main"),
+    LOCUST_STAN_BARREL("locust/stan_barrel"),
+    LOCUST_EXT_BARREL("locust/ext_barrel"),
     LOCUST_STOCK_LIGHT("locust/light_stock"),
     LOCUST_STOCK_HEAVY("locust/heavy_stock"),
     LOCUST_STOCK_WOODEN("locust/wooden_stock"),

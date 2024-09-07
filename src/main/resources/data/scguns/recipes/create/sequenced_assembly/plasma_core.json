@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "scguns:nether_star_fragment"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "scguns:plasma_core"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_plasma_core"
+        },
+        [
+          {
+            "item": "scguns:plasma"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_plasma_core"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_plasma_core"
+        },
+        [
+          {
+            "item": "scguns:large_iron_casing"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_plasma_core"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_plasma_core"
+        }
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_plasma_core"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "scguns:unfinished_plasma_core"
+  }
+}

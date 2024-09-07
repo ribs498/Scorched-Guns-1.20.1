@@ -4,7 +4,7 @@
   "energyUse": 500,
   "ingredients": [
     {
-      "item": "minecraft:iron_ingot"
+      "tag": "forge:ingots/iron"
     }
   ],
   "mold": {
@@ -12,6 +12,6 @@
   },
   "result": {
     "item": "scguns:large_iron_casing",
-    "count": 4
+    "count": 5
   }
 }

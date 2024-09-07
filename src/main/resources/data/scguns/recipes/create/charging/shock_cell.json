@@ -1,0 +1,13 @@
+{
+	"type":"createaddition:charging",
+	"input": {
+      	"item": "scguns:empty_cell",
+		"count": 1
+	},
+	"result": {
+		"item": "scguns:shock_cell",
+		"count": 1
+	},
+	"energy": 1600,
+	"maxChargeRate": 200
+}

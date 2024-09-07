@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/copper"
+    },
+    {
+      "item": "scguns:medium_casing_mold"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:medium_copper_casing",
+      "count": 8
+    }
+  ]
+}

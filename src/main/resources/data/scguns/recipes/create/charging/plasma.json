@@ -1,0 +1,13 @@
+{
+	"type":"createaddition:charging",
+	"input": {
+      	"item": "minecraft:redstone",
+		"count": 1
+	},
+	"result": {
+		"item": "scguns:plasma",
+		"count": 1
+	},
+	"energy": 3200,
+	"maxChargeRate": 400
+}

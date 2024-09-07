@@ -40,8 +40,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
+import top.ribs.scguns.Config;
 import top.ribs.scguns.block.*;
-import top.ribs.scguns.client.screen.ShotgunTurretMenu;
 import top.ribs.scguns.client.screen.ShotgunTurretMenu;
 import top.ribs.scguns.entity.projectile.turret.TurretProjectileEntity;
 import top.ribs.scguns.init.ModBlockEntities;
@@ -241,6 +241,7 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
         Vec3 targetPos = new Vec3(target.getX(), target.getY() + target.getEyeHeight() * 0.5, target.getZ());
         Vec3 direction = targetPos.subtract(muzzlePos).normalize();
 
+        // Fire the cluster of pellets
         fireCluster(bulletType, muzzlePos, direction, damageModifier);
 
         this.recoilPitchOffset = RECOIL_MAX;
@@ -249,9 +250,26 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
     }
 
     private void fireCluster(TurretProjectileEntity.BulletType bulletType, Vec3 muzzlePos, Vec3 baseDirection, int damageModifier) {
-        double baseDamage = bulletType.getDamage() + damageModifier;
-        double pelletDamage = baseDamage / PELLET_COUNT;
+        // Fetch base damage from the config
+        double baseDamage = Config.COMMON.turret.bulletDamage.get(bulletType).get();
 
+        // If damage scaling is enabled
+        if (Config.COMMON.turret.enableDamageScaling.get()) {
+            long daysInWorld = this.level.getDayTime() / 24000L;
+            double scalingRate = Config.COMMON.turret.damageScalingRate.get();
+            double maxDamage = Config.COMMON.turret.maxScaledDamage.get();
+
+            // Calculate the scaled damage
+            baseDamage = Math.min(baseDamage + (scalingRate * daysInWorld), maxDamage);
+        }
+
+        // Apply damage modifier to the final damage
+        double finalDamage = baseDamage + damageModifier;
+
+        // Split the damage across pellets
+        double pelletDamage = finalDamage / PELLET_COUNT;
+
+        // Fire each pellet with adjusted direction and damage
         for (int i = 0; i < PELLET_COUNT; i++) {
             Vec3 spreadDirection = applySpread(baseDirection);
             TurretProjectileEntity projectile = getTurretProjectileEntity(bulletType, spreadDirection.x, spreadDirection.y, spreadDirection.z);
@@ -261,6 +279,7 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
             this.level.addFreshEntity(projectile);
         }
     }
+
 
     private Vec3 applySpread(Vec3 baseDirection) {
         float angleX = (float) (this.level.random.nextGaussian() * SPREAD_ANGLE);
@@ -356,9 +375,9 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
     private void spawnCasing(TurretProjectileEntity.BulletType bulletType) {
         ItemStack casingStack;
 
-        if (bulletType == TurretProjectileEntity.BulletType.SHELL) {
-            casingStack = new ItemStack(ModItems.SMALL_BRASS_CASING.get());
-        } else if (bulletType == TurretProjectileEntity.BulletType.BEARPACK) {
+        if (bulletType == TurretProjectileEntity.BulletType.SHOTGUN_SHELL) {
+            casingStack = new ItemStack(ModItems.SMALL_COPPER_CASING.get());
+        } else if (bulletType == TurretProjectileEntity.BulletType.BEARPACK_SHELL) {
             casingStack = new ItemStack(ModItems.MEDIUM_BRASS_CASING.get());
         } else {
             casingStack = new ItemStack(ModItems.SMALL_COPPER_CASING.get());
@@ -395,7 +414,7 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
             BlockEntity blockEntity = this.level.getBlockEntity(neighborPos);
             if (blockEntity instanceof ShellCatcherModuleBlockEntity shellCatcher) {
                 ItemStack casingStack = switch (bulletType) {
-                    case BEARPACK -> new ItemStack(ModItems.MEDIUM_BRASS_CASING.get());
+                    case BEARPACK_SHELL -> new ItemStack(ModItems.MEDIUM_BRASS_CASING.get());
                     default -> new ItemStack(ModItems.SMALL_COPPER_CASING.get());
                 };
                 for (int i = 0; i < shellCatcher.getContainerSize(); i++) {
@@ -451,10 +470,10 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
             if (!stack.isEmpty()) {
                  if (stack.getItem() == ModItems.SHOTGUN_SHELL.get()) {
                     consumeAmmo(i);
-                    return TurretProjectileEntity.BulletType.SHELL;
+                    return TurretProjectileEntity.BulletType.SHOTGUN_SHELL;
                 } else if (stack.getItem() == ModItems.BEARPACK_SHELL.get()) {
                     consumeAmmo(i);
-                    return TurretProjectileEntity.BulletType.BEARPACK;
+                    return TurretProjectileEntity.BulletType.BEARPACK_SHELL;
                 }
             }
         }

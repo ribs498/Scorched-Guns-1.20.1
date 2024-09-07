@@ -16,36 +16,39 @@ import java.util.Objects;
 @Mod.EventBusSubscriber(modid = "scguns")
 public class HeavyWeaponEventHandler {
 
+    private static final int HEAVY_WEAPON_SLOWNESS_AMPLIFIER = 0;
+    private static final int HEAVY_WEAPON_SLOWNESS_DURATION = 60;
+
     @SubscribeEvent
     public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
         if (event.getEntity() instanceof Player player) {
-            applySpeedDecrease(player);
+            updateSlowness(player);
         }
     }
 
     @SubscribeEvent
     public static void onPlayerTick(LivingEvent.LivingTickEvent event) {
         if (event.getEntity() instanceof Player player) {
-            applySpeedDecrease(player);
+            updateSlowness(player);
         }
     }
 
-    private static void applySpeedDecrease(Player player) {
+    private static void updateSlowness(Player player) {
         ItemStack mainHandItem = player.getMainHandItem();
         ItemStack offHandItem = player.getOffhandItem();
 
         boolean holdingSpecialItem = isSpecialItem(mainHandItem) || isSpecialItem(offHandItem);
-        MobEffectInstance slownessEffect = player.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
+        MobEffectInstance currentSlowness = player.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
 
         if (holdingSpecialItem) {
-            if (slownessEffect == null || slownessEffect.getAmplifier() < 0 || slownessEffect.getDuration() <= 20) {
-                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 0, false, false, true));
-            }
-        } else {
-            if (slownessEffect != null) {
-                player.removeEffect(MobEffects.MOVEMENT_SLOWDOWN);
+            if (currentSlowness == null || currentSlowness.getAmplifier() < HEAVY_WEAPON_SLOWNESS_AMPLIFIER) {
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, HEAVY_WEAPON_SLOWNESS_DURATION, HEAVY_WEAPON_SLOWNESS_AMPLIFIER, false, false, true));
+            } else if (currentSlowness.getDuration() <= 20) {
+                // Refresh the duration of the existing effect if it's about to expire
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, HEAVY_WEAPON_SLOWNESS_DURATION, currentSlowness.getAmplifier(), false, false, true));
             }
         }
+        // We no longer remove the effect when not holding a special item
     }
 
     private static boolean isSpecialItem(ItemStack itemStack) {

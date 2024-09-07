@@ -40,6 +40,7 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
+import top.ribs.scguns.Config;
 import top.ribs.scguns.block.*;
 import top.ribs.scguns.client.screen.AutoTurretMenu;
 import top.ribs.scguns.entity.projectile.turret.TurretProjectileEntity;
@@ -233,7 +234,8 @@ public class AutoTurretBlockEntity extends BlockEntity implements MenuProvider {
             PacketHandler.getPlayChannel().sendToTrackingChunk(() -> level.getChunkAt(worldPosition),
                     new S2CMessageMuzzleFlash(muzzlePos, yaw, pitch));
         }
-        this.level.playSound(null, this.worldPosition, ModSounds.IRON_RIFLE_FIRE.get(), SoundSource.BLOCKS, 0.7F, 0.7F);
+        this.level.playSound(null, this.worldPosition, ModSounds.IRON_PISTOL_FIRE.get(), SoundSource.BLOCKS, 0.7F, 0.7F);
+
         Vec3 targetPos = new Vec3(target.getX(), target.getY() + target.getEyeHeight() * 0.5, target.getZ());
         Vec3 direction = targetPos.subtract(muzzlePos).normalize();
         direction = direction.add(
@@ -243,11 +245,18 @@ public class AutoTurretBlockEntity extends BlockEntity implements MenuProvider {
         ).normalize();
         TurretProjectileEntity projectile = getTurretProjectileEntity(bulletType, direction.x, direction.y, direction.z);
         projectile.setPos(muzzlePos.x, muzzlePos.y, muzzlePos.z);
-        double finalDamage = bulletType.getDamage() + damageModifier;
+        double baseDamage = Config.COMMON.turret.bulletDamage.get(bulletType).get();
+        if (Config.COMMON.turret.enableDamageScaling.get()) {
+            long daysInWorld = this.level.getDayTime() / 24000L;
+            double scalingRate = Config.COMMON.turret.damageScalingRate.get();
+            double maxDamage = Config.COMMON.turret.maxScaledDamage.get();
+            baseDamage = Math.min(baseDamage + (scalingRate * daysInWorld), maxDamage);
+        }
+        double finalDamage = baseDamage + damageModifier;
         projectile.setBaseDamage(finalDamage);
+
         this.level.addFreshEntity(projectile);
         this.recoilPitchOffset = RECOIL_MAX;
-
         if (this.hasShellCatchingModule) {
             boolean inserted = tryInsertIntoShellCatcher(bulletType);
             if (!inserted) {
@@ -259,6 +268,7 @@ public class AutoTurretBlockEntity extends BlockEntity implements MenuProvider {
             }
         }
     }
+
     Vec3 getMuzzlePosition(float yaw, float pitch) {
         double muzzleLength = 1.3;
         double muzzleOffsetY = 1.4;
@@ -314,9 +324,9 @@ public class AutoTurretBlockEntity extends BlockEntity implements MenuProvider {
 
         if (bulletType == TurretProjectileEntity.BulletType.HOG_ROUND) {
             casingStack = new ItemStack(ModItems.SMALL_IRON_CASING.get());
-        } else if (bulletType == TurretProjectileEntity.BulletType.ADVANCED_PISTOL) {
+        } else if (bulletType == TurretProjectileEntity.BulletType.COMPACT_ADVANCED_ROUND) {
             casingStack = new ItemStack(ModItems.SMALL_BRASS_CASING.get());
-        } else if (bulletType == TurretProjectileEntity.BulletType.COPPER_PISTOL) {
+        } else if (bulletType == TurretProjectileEntity.BulletType.COMPACT_COPPER_ROUND) {
             casingStack = new ItemStack(ModItems.SMALL_COPPER_CASING.get());
         } else {
             casingStack = new ItemStack(ModItems.SMALL_COPPER_CASING.get());
@@ -352,8 +362,8 @@ public class AutoTurretBlockEntity extends BlockEntity implements MenuProvider {
             BlockEntity blockEntity = this.level.getBlockEntity(neighborPos);
             if (blockEntity instanceof ShellCatcherModuleBlockEntity shellCatcher) {
                 ItemStack casingStack = switch (bulletType) {
-                    case GIBBS -> new ItemStack(ModItems.MEDIUM_DIAMOND_STEEL_CASING.get());
-                    case ADVANCED -> new ItemStack(ModItems.MEDIUM_BRASS_CASING.get());
+                    case GIBBS_ROUND -> new ItemStack(ModItems.MEDIUM_DIAMOND_STEEL_CASING.get());
+                    case ADVANCED_ROUND -> new ItemStack(ModItems.MEDIUM_BRASS_CASING.get());
                     default -> new ItemStack(ModItems.MEDIUM_COPPER_CASING.get());
                 };
                 for (int i = 0; i < shellCatcher.getContainerSize(); i++) {
@@ -409,7 +419,7 @@ public class AutoTurretBlockEntity extends BlockEntity implements MenuProvider {
             if (!stack.isEmpty()) {
                 if (stack.getItem() == ModItems.COMPACT_ADVANCED_ROUND.get()) {
                     consumeAmmo(i);
-                    return TurretProjectileEntity.BulletType.ADVANCED_PISTOL;
+                    return TurretProjectileEntity.BulletType.COMPACT_ADVANCED_ROUND;
                 }
                 else if (stack.getItem() == ModItems.HOG_ROUND.get()) {
                     consumeAmmo(i);
@@ -417,7 +427,7 @@ public class AutoTurretBlockEntity extends BlockEntity implements MenuProvider {
                 }
                 else if (stack.getItem() == ModItems.COMPACT_COPPER_ROUND.get()) {
                     consumeAmmo(i);
-                    return TurretProjectileEntity.BulletType.COPPER_PISTOL;
+                    return TurretProjectileEntity.BulletType.COMPACT_COPPER_ROUND;
                 }
             }
         }

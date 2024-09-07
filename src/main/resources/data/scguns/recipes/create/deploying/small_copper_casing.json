@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:copper_ingot"
+    },
+    {
+      "item": "scguns:small_casing_mold"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:small_copper_casing",
+        "count": 12
+    }
+  ]
+}

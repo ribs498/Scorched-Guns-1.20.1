@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "scguns:diamond_steel_ingot"
+    },
+    {
+      "item": "scguns:medium_casing_mold"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:medium_diamond_steel_casing",
+      "count": 8
+    }
+  ]
+}

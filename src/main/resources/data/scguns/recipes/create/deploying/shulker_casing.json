@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:shulker_shell"
+    },
+    {
+      "item": "scguns:medium_casing_mold"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:shulker_casing",
+      "count": 12
+    }
+  ]
+}

@@ -308,7 +308,7 @@
   "block.scguns.basic_turret": "Basic Turret",
   "block.scguns.auto_turret": "Auto Turret",
     "block.scguns.shotgun_turret": "Shotgun Turret",
-  "block.scguns.turret_targeting_module": "Turret Targeting Module",
+  "block.scguns.turret_targeting_module": "Universal Turret Targeting Module",
   "block.scguns.fire_rate_turret_module": "Fire Rate Turret Module",
     "block.scguns.damage_turret_module": "Damage Turret Module",
     "block.scguns.range_turret_module": "Range Turret Module",
@@ -349,6 +349,7 @@
   "item.scguns.unfinished_shulkshot": "Unfinished Shulkshot",
   "item.scguns.unfinished_gun_parts": "Unfinished Gun Parts",
   "item.scguns.unfinished_heavy_gun_parts": "Unfinished Heavy Gun Parts",
+    "item.scguns.unfinished_plasma_core": "Unfinished Plasma Core",
 
   "tooltip.scguns.homing": "Homes In On Enemies",
   "tooltip.scguns.arcing": "Arcs Between Enemies",

@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/iron"
+    },
+    {
+      "item": "scguns:medium_casing_mold"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:empty_cell",
+      "count": 8
+    }
+  ]
+}

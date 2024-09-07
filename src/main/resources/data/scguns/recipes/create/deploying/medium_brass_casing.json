@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "tag": "forge:ingots/brass"
+    },
+    {
+      "item": "scguns:medium_casing_mold"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:medium_brass_casing",
+      "count": 8
+    }
+  ]
+}

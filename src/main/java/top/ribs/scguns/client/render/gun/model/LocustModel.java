@@ -24,61 +24,75 @@ public class LocustModel implements IOverrideModel {
     @Override
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
 
-        //Renders the static parts of the model.
+        // Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.LOCUST_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
 
-        //Renders the iron sights if no scope is attached.
+        // Renders the iron sights if no scope is attached.
         if ((Gun.getScope(stack) == null))
             RenderUtil.renderModel(SpecialModels.LOCUST_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         else
             RenderUtil.renderModel(SpecialModels.LOCUST_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
-        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
-                RenderUtil.renderModel(SpecialModels.LOCUST_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
-                RenderUtil.renderModel(SpecialModels.LOCUST_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
-                RenderUtil.renderModel(SpecialModels.LOCUST_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
-        }
-        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
 
-            if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
-                RenderUtil.renderModel(SpecialModels.LOCUST_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.get())
-                RenderUtil.renderModel(SpecialModels.LOCUST_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
-                RenderUtil.renderModel(SpecialModels.LOCUST_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
-        }
+        // Render barrel attachments
+        renderBarrelAndAttachments(stack, matrixStack, buffer, light, overlay);
+
+        // Render stock attachments
+        renderStockAttachments(stack, matrixStack, buffer, light, overlay);
+
         if (entity.equals(Minecraft.getInstance().player)) {
-
-            //Always push.
+            // Always push.
             matrixStack.pushPose();
-            //Don't touch this, it's better to use the display options in Blockbench.
+            // Translation for moving part of the gun.
             matrixStack.translate(0, -5.8 * 0.0625, 0);
-            //Gets the cooldown tracker for the item. Items like swords and enderpearls also have this.
+
             ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
             float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
             cooldown = (float) ease(cooldown);
-            /**
-             * We are moving whatever part is moving.
-             * X,Y,Z, use Z for moving back and forth.
-             * The higher the number, the shorter the distance.
-             */
+
             matrixStack.translate(0, 0, cooldown / 8);
             matrixStack.translate(0, 5.8 * 0.0625, 0);
-            //Renders the moving part of the gun.
-            RenderUtil.renderModel(SpecialModels.LOCUST_BOLT.getModel(), stack, matrixStack, buffer, light, overlay);
-            //Always pop
-            matrixStack.popPose();
 
+            // Renders the moving part of the gun.
+            RenderUtil.renderModel(SpecialModels.LOCUST_BOLT.getModel(), stack, matrixStack, buffer, light, overlay);
+            matrixStack.popPose();
+        }
+    }
+
+    private void renderBarrelAndAttachments(ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
+        boolean hasExtendedBarrel = false;
+
+        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get()) {
+                RenderUtil.renderModel(SpecialModels.LOCUST_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+                hasExtendedBarrel = true;
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get()) {
+                RenderUtil.renderModel(SpecialModels.LOCUST_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get()) {
+                RenderUtil.renderModel(SpecialModels.LOCUST_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get()) {
+                RenderUtil.renderModel(SpecialModels.LOCUST_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
         }
 
+        // Render the standard barrel if no extended barrel is attached
+        if (!hasExtendedBarrel) {
+            RenderUtil.renderModel(SpecialModels.LOCUST_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
+    }
+
+    private void renderStockAttachments(ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
+        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
+            if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get()) {
+                RenderUtil.renderModel(SpecialModels.LOCUST_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
+            } else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.get()) {
+                RenderUtil.renderModel(SpecialModels.LOCUST_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
+            } else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get()) {
+                RenderUtil.renderModel(SpecialModels.LOCUST_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
+        }
     }
 
     private double ease(double x) {
-
         return 1 - Math.pow(1 - (2 * x), 4);
-
     }
-
 }

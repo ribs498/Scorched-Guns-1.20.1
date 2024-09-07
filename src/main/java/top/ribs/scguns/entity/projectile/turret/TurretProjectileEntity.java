@@ -25,14 +25,29 @@ public class TurretProjectileEntity extends AbstractArrow {
 
     public TurretProjectileEntity(EntityType<? extends AbstractArrow> type, Level world) {
         super(type, world);
-        this.setBaseDamage(BulletType.COPPER.getDamage());
     }
 
     public TurretProjectileEntity(Level world, BulletType bulletType) {
         super(ModEntities.TURRET_PROJECTILE.get(), world);
-        this.setBaseDamage(bulletType.getDamage());
+
+        double baseDamage = Config.COMMON.turret.bulletDamage.get(bulletType).get();
+
+        // If damage scaling is enabled
+        if (Config.COMMON.turret.enableDamageScaling.get()) {
+            long daysInWorld = this.level().getDayTime() / 24000L;
+            double scalingRate = Config.COMMON.turret.damageScalingRate.get();
+            double maxDamage = Config.COMMON.turret.maxScaledDamage.get();
+
+            // Calculate the scaled damage
+            double scaledDamage = Math.min(baseDamage + (scalingRate * daysInWorld), maxDamage);
+            this.setBaseDamage(scaledDamage);
+        } else {
+            this.setBaseDamage(baseDamage);
+        }
+
         this.setNoGravity(true);
     }
+
 
     @Override
     protected @NotNull ItemStack getPickupItem() {
@@ -122,6 +137,7 @@ public class TurretProjectileEntity extends AbstractArrow {
             this.setBaseDamage(compound.getDouble("TurretDamage"));
         }
     }
+
     @Override
     public void playSound(SoundEvent soundEvent, float volume, float pitch) {
 
@@ -138,25 +154,16 @@ public class TurretProjectileEntity extends AbstractArrow {
     }
 
     public enum BulletType {
-        COPPER(4.0),
-        ADVANCED(6.0),
-        GIBBS(8.0),
-        COPPER_PISTOL(2.0),
-        ADVANCED_PISTOL(3.5),
-        HOG_ROUND(5.0),
-        SHELL(12),
-        BEARPACK(16);
-
-        private final double damage;
-
-        BulletType(double damage) {
-            this.damage = damage;
-        }
-
-        public double getDamage() {
-            return damage;
-        }
+        STANDARD_COPPER_ROUND,
+        ADVANCED_ROUND,
+        GIBBS_ROUND,
+        COMPACT_COPPER_ROUND,
+        COMPACT_ADVANCED_ROUND,
+        HOG_ROUND,
+        SHOTGUN_SHELL,
+        BEARPACK_SHELL;
     }
+
 
 }
 
