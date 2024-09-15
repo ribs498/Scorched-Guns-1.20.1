@@ -496,6 +496,15 @@ public enum SpecialModels {
     M22_WALTZ_STANDARD_MAG("m22_waltz/stan_mag"),
     M22_WALTZ_SIGHTS("m22_waltz/sights"),
     M22_WALTZ_NO_SIGHTS("m22_waltz/no_sights"),
+    ///WALTZ_CONVERSION
+    WALTZ_CONVERSION_MAIN("waltz_conversion/main"),
+    WALTZ_CONVERSION_SILENCER("waltz_conversion/silencer"),
+    WALTZ_CONVERSION_ADVANCED_SILENCER("waltz_conversion/advanced_silencer"),
+    WALTZ_CONVERSION_MUZZLE_BRAKE("waltz_conversion/muzzle_brake"),
+    WALTZ_CONVERSION_STAN_BARREL("waltz_conversion/stan_barrel"),
+    WALTZ_CONVERSION_EXT_BARREL("waltz_conversion/ext_barrel"),
+    WALTZ_CONVERSION_SIGHTS("waltz_conversion/sights"),
+    WALTZ_CONVERSION_NO_SIGHTS("waltz_conversion/no_sights"),
     ///SPITFIRE
     SPITFIRE_MAIN("spitfire/main"),
     ///SUPER_SHOTGUN

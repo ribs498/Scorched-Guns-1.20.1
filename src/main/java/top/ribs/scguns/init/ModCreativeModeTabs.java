@@ -31,7 +31,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SAWED_OFF_CALLWELL.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.CALLWELL.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SAKETINI.get());
-                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.LASER_MUSKET.get());
+                        CreativeTabHelper.addGunOrEnergyWeaponWithFullResources(pOutput, ModItems.LASER_MUSKET.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.FLOUNDERGAT.get());
 
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SCRAPPER.get());
@@ -75,6 +75,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.CYCLONE.get());
 
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.M22_WALTZ.get());
+                        CreativeTabHelper.addGunOrEnergyWeaponWithFullResources(pOutput, ModItems.WALTZ_CONVERSION.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.OSGOOD_50.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.COGLOADER.get());
                         if (ScorchedGuns.createLoaded) {
@@ -428,19 +429,32 @@ public class ModCreativeModeTabs {
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);
     }
-        public static class CreativeTabHelper {
-            public static void addItemWithFullAmmo(CreativeModeTab.Output output, Item item) {
-                if (item instanceof GunItem gunItem) {
-                    ItemStack stack = new ItemStack(gunItem);
-                    stack.getOrCreateTag().putInt("AmmoCount", gunItem.getGun().getReloads().getMaxAmmo());
-                    output.accept(stack);
-                } else if (item instanceof EnergyGunItem energyGunItem) {
-                    ItemStack stack = new ItemStack(energyGunItem);
-                    stack.getOrCreateTag().putInt("Energy", energyGunItem.getMaxEnergyStored(stack));
-                    output.accept(stack);
-                } else {
-                    output.accept(item);
-                }
+    public static class CreativeTabHelper {
+        public static void addItemWithFullAmmo(CreativeModeTab.Output output, Item item) {
+            if (item instanceof GunItem gunItem) {
+                ItemStack stack = new ItemStack(gunItem);
+                stack.getOrCreateTag().putInt("AmmoCount", gunItem.getGun().getReloads().getMaxAmmo());
+                output.accept(stack);
+            } else {
+                output.accept(item);
             }
         }
+        public static void addGunOrEnergyWeaponWithFullResources(CreativeModeTab.Output output, Item item) {
+            ItemStack stack = new ItemStack(item);
+
+            if (item instanceof GunItem gunItem) {
+                // Set full ammo
+                stack.getOrCreateTag().putInt("AmmoCount", gunItem.getGun().getReloads().getMaxAmmo());
+            }
+
+            if (item instanceof EnergyGunItem energyGunItem) {
+                // Set full energy
+                stack.getOrCreateTag().putInt("Energy", energyGunItem.getMaxEnergyStored(stack));
+            }
+
+            output.accept(stack);
+        }
+    }
+
+
 }

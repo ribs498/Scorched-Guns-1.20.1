@@ -237,6 +237,7 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.HOWLER.get(), new HowlerModel());
         ModelOverrides.register(ModItems.HOWLER_CONVERSION.get(), new HowlerConversionModel());
         ModelOverrides.register(ModItems.M22_WALTZ.get(), new M22WaltzModel());
+        ModelOverrides.register(ModItems.WALTZ_CONVERSION.get(), new WaltzConversionModel());
         ModelOverrides.register(ModItems.UPPERCUT.get(), new UppercutModel());
         ModelOverrides.register(ModItems.MAS_55.get(), new Mas55Model());
         ModelOverrides.register(ModItems.DOZIER_RL.get(), new DozierRLModel());

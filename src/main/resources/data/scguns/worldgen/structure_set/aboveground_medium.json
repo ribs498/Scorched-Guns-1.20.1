@@ -6,10 +6,14 @@
     },
     {
       "structure": "scguns:osgood_lab_outpost",
-      "weight": 2
+      "weight": 3
     },
     {
       "structure": "scguns:asgharian_tower",
+      "weight": 4
+    },
+    {
+      "structure": "scguns:asgharian_citadel",
       "weight": 4
     }
   ],
@@ -17,7 +21,7 @@
     "type": "minecraft:random_spread",
     "salt": 109345295,
     "locate_offset": [0, 4, -5],
-    "spacing": 130,
-    "separation":  40
+    "spacing": 90,
+    "separation":  30
   }
 }

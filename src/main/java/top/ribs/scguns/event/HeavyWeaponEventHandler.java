@@ -17,7 +17,7 @@ import java.util.Objects;
 public class HeavyWeaponEventHandler {
 
     private static final int HEAVY_WEAPON_SLOWNESS_AMPLIFIER = 0;
-    private static final int HEAVY_WEAPON_SLOWNESS_DURATION = 60;
+    private static final int HEAVY_WEAPON_SLOWNESS_DURATION = 80;
 
     @SubscribeEvent
     public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
@@ -43,7 +43,7 @@ public class HeavyWeaponEventHandler {
         if (holdingSpecialItem) {
             if (currentSlowness == null || currentSlowness.getAmplifier() < HEAVY_WEAPON_SLOWNESS_AMPLIFIER) {
                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, HEAVY_WEAPON_SLOWNESS_DURATION, HEAVY_WEAPON_SLOWNESS_AMPLIFIER, false, false, true));
-            } else if (currentSlowness.getDuration() <= 20) {
+            } else if (currentSlowness.getDuration() <= 30) {
                 // Refresh the duration of the existing effect if it's about to expire
                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, HEAVY_WEAPON_SLOWNESS_DURATION, currentSlowness.getAmplifier(), false, false, true));
             }

@@ -250,6 +250,8 @@
     "scguns.advancement.cyclone.desc": "The storm is coming",
     "scguns.advancement.m22_waltz": "M22 Waltz",
       "scguns.advancement.m22_waltz.desc": "The godless dance",
+    "scguns.advancement.waltz_conversion": "Waltz Conversion",
+    "scguns.advancement.waltz_conversion.desc": "Dark heresy",
     "scguns.advancement.gauss_rifle": "Gauss Rifle",
     "scguns.advancement.gauss_rifle.desc": "How does it work",
     "scguns.advancement.cogloader": "Cogloader",
@@ -359,7 +361,7 @@
   "item.scguns.unfinished_shulkshot": "Unfinished Shulkshot",
   "item.scguns.unfinished_gun_parts": "Unfinished Gun Parts",
   "item.scguns.unfinished_heavy_gun_parts": "Unfinished Heavy Gun Parts",
-    "item.scguns.unfinished_plasma_core": "Unfinished Plasma Core",
+    "item.scguns.unfinished_plasma_core": "Unfinished Energy Core",
 
   "tooltip.scguns.homing": "Homes In On Enemies",
   "tooltip.scguns.arcing": "Arcs Between Enemies",
@@ -437,6 +439,7 @@
   "item.scguns.musket": "Musket",
   "item.scguns.saketini": "Saketini",
   "item.scguns.callwell": "Callwell",
+
   "item.scguns.arc_worker": "Arc Worker",
   "item.scguns.thunderhead": "Thunderhead",
   "item.scguns.blunderbuss": "Blunderbuss",
@@ -489,6 +492,7 @@
   "item.scguns.lockewood": "Lockewood",
     "item.scguns.astella": "Astella",
   "item.scguns.m22_waltz": "M22 Waltz",
+  "item.scguns.waltz_conversion": "Waltz Conversion",
   "item.scguns.plasgun": "Plasgun",
   "item.scguns.gauss_rifle": "Gauss Rifle",
   "item.scguns.prush_gun": "Prush Gun",
@@ -702,7 +706,7 @@
   "info.scguns.ignore_ammo": "Infinite Ammo",
   "info.scguns.ammo": "Ammo",
   "info.scguns.ammo_type": "Ammo Type: %s",
-  "info.scguns.energy": "Energy: %s",
+  "info.scguns.energy": "Energy",
   "key.scguns.reload": "Reload",
   "key.scguns.unload": "Unload",
     "key.scguns.melee": "Melee",
@@ -892,7 +896,8 @@
   "scguns.jei.info.blasphemy": "Can be obtained from using an Empty Blasphemy on a Blaze spawner.",
 
 
-
+  "item.scguns.healing_bandage.heal": "Restores %s ♥",
+  "item.scguns.healing_bandage.effects": "Effects:",
   "info.scguns.silenced": "Silenced",
   "container.lightning_battery": "Lightning Battery",
   "tooltip.lightning_battery.energy":  "Energy: %d",

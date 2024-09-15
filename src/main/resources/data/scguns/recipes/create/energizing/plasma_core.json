@@ -1,0 +1,14 @@
+{
+  "type": "create_new_age:energising",
+  "energy_needed": 16000,
+  "ingredients": [
+    {
+      "item": "scguns:energy_core"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:plasma_Core"
+    }
+  ]
+}

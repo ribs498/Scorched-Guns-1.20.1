@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "#is_forest",
+    "plains",
+    "meadow",
+    "savanna",
+    "savanna_plateau",
+    "wooded_badlands"
+  ]
+}

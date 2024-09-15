@@ -105,6 +105,8 @@ import java.lang.reflect.Constructor;
     public static final RegistryObject<GunItem> OSGOOD_50 = REGISTER.register("osgood_50", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
     public static final RegistryObject<GunItem> JACKHAMMER = REGISTER.register("jackhammer", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
     public static final RegistryObject<GunItem> M22_WALTZ = REGISTER.register("m22_waltz", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
+    public static final RegistryObject<GunItem> WALTZ_CONVERSION = REGISTER.register("waltz_conversion",  () -> new EnergyGunItem(new Item.Properties().stacksTo(1).durability(900), 6400));
+
     public static final RegistryObject<GunItem> HOWLER = REGISTER.register("howler", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
     public static final RegistryObject<GunItem> HOWLER_CONVERSION = REGISTER.register("howler_conversion", () -> new GunItem(new Item.Properties().stacksTo(1).durability(800)));
     public static final RegistryObject<GunItem> LOCKEWOOD = REGISTER.register("lockewood", () -> new DiamondSteelGunItem(new Item.Properties().stacksTo(1).durability(800)));

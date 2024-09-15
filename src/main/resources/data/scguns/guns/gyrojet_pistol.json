@@ -40,7 +40,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 4.5,
+    "damage": 4.0,
     "gravity": false,
     "item": "scguns:microjet",
     "ejectsCasing": false,

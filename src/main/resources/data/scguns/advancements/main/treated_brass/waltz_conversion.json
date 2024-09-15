@@ -1,12 +1,12 @@
 {
-  "parent": "scguns:main/treated_brass/waltz_conversion",
+  "parent": "scguns:main/treated_brass/m22_waltz",
   "criteria": {
-    "osgood_50": {
+    "waltz_conversion": {
       "conditions": {
         "items": [
           {
             "items": [
-              "scguns:osgood_50"
+              "scguns:waltz_conversion"
             ]
           }
         ]
@@ -17,21 +17,21 @@
   "display": {
     "announce_to_chat": false,
     "description": {
-      "translate": "scguns.advancement.osgood_50.desc"
+      "translate": "scguns.advancement.waltz_conversion.desc"
     },
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "scguns:osgood_50"
+      "item": "scguns:waltz_conversion"
     },
     "show_toast": true,
     "title": {
-      "translate": "scguns.advancement.osgood_50"
+      "translate": "scguns.advancement.waltz_conversion"
     }
   },
   "requirements": [
     [
-      "osgood_50"
+      "waltz_conversion"
     ]
   ],
   "sends_telemetry_event": true

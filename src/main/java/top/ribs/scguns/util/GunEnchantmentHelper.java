@@ -77,7 +77,7 @@ public class GunEnchantmentHelper
             speedModifier += 0.5 * acceleratorLevel;
         }
         if (heavyShotLevel > 0) {
-            speedModifier -= 0.15 * heavyShotLevel;
+            speedModifier -= 0.10 * heavyShotLevel;
         }
         return Mth.clamp(speedModifier, 0.1, 5.0);
     }

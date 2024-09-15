@@ -6,7 +6,7 @@ public class DiamondSteelGunItem extends GunItem{
     }
     @Override
     public int getEnchantmentValue() {
-        return 15;
+        return 18;
     }
 
 }

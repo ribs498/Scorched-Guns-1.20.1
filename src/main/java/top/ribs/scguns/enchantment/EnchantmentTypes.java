@@ -23,7 +23,7 @@ public class EnchantmentTypes {
 
     public static final EnchantmentCategory SINGLE_SHOT_GUN = EnchantmentCategory.create(
             Reference.MOD_ID + ":single_shot_gun",
-            item -> item instanceof GunItem && isSingleShotGun((GunItem) item)
+            item -> item instanceof GunItem && !isSingleShotGun((GunItem) item)
     );
     public static final EnchantmentCategory WATER_PROOF_COMPATIBLE = EnchantmentCategory.create(
             Reference.MOD_ID + ":water_proof_compatible",
@@ -46,6 +46,7 @@ public class EnchantmentTypes {
                 gunItem == ModItems.BLUNDERBUSS.get()||
                 gunItem == ModItems.ROCKET_RIFLE.get()||
                 gunItem == ModItems.BOMB_LANCE.get()||
+                gunItem == ModItems.BRAWLER.get()||
                 gunItem == ModItems.SAKETINI.get();
     }
     private static boolean isNonCollateral(GunItem gunItem) {

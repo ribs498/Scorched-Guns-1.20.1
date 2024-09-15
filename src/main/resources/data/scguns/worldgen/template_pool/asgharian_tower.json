@@ -3,13 +3,27 @@
     "fallback": "minecraft:empty",
     "elements": [
         {
+            "weight": 1,
             "element": {
                 "element_type": "minecraft:single_pool_element",
+                "location": "scguns:asgharian_tower",
                 "projection": "rigid",
-                "processors": "minecraft:empty",
-                "location": "scguns:asgharian_tower"
-            },
-            "weight": 4
+                "processors": {
+                    "processors": [
+                        {
+                            "processor_type": "minecraft:block_ignore",
+                            "blocks": [
+                                {
+                                    "Name": "minecraft:structure_block"
+                                },
+                                {
+                                    "Name": "minecraft:air"
+                                }
+                            ]
+                        }
+                    ]
+                }
+            }
         }
     ]
 }

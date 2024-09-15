@@ -218,7 +218,7 @@ public class GunItem extends Item implements IColored, IMeta {
 
     @Override
     public int getEnchantmentValue() {
-        return 10;
+        return 13;
     }
 
     @Override

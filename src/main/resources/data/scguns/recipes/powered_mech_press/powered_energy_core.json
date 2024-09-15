@@ -1,19 +1,20 @@
 {
-  "type": "scguns:mechanical_pressing",
-  "processingTime": 20,
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 300,
+  "energyUse": 1200,
   "ingredients": [
     {
       "item": "scguns:large_iron_casing"
     },
     {
-      "item": "scguns:plasma"
+      "item": "minecraft:redstone_block"
     },
     {
       "item": "scguns:nether_star_fragment"
     }
   ],
   "result": {
-    "item": "scguns:plasma_core",
+    "item": "scguns:energy_core",
     "count": 1
   }
 }

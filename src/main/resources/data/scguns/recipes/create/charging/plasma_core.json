@@ -1,0 +1,13 @@
+{
+	"type":"createaddition:charging",
+	"input": {
+      	"item": "scguns:energy_core",
+		"count": 1
+	},
+	"result": {
+		"item": "scguns:plasma_core",
+		"count": 1
+	},
+	"energy": 16000,
+	"maxChargeRate": 400
+}

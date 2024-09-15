@@ -1,0 +1,36 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:waltz_conversion",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:treated_brass_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "scguns:firing_unit"
+    },
+    "gun_internal_2": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:treated_brass_ingot"
+    },
+    "gun_top_internal_1": {
+      "item": "scguns:treated_brass_ingot"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:energy_core"
+    },
+    "gun_grip": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_magazine": {
+      "item": "scguns:gun_magazine"
+    }
+  }
+}
