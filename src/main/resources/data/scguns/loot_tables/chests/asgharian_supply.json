@@ -164,6 +164,7 @@
           "name": "scguns:small_copper_casing",
           "weight": 2
         },
+
         {
           "type": "minecraft:item",
           "functions": [
@@ -244,6 +245,11 @@
             }
           ],
           "name": "minecraft:iron_chestplate",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:diamond_steel_blueprint",
           "weight": 3
         },
         {

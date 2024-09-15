@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.blockentity.ShotgunTurretBlockEntity;
 import top.ribs.scguns.blockentity.ShotgunTurretBlockEntity;
 import top.ribs.scguns.init.ModBlocks;
+import top.ribs.scguns.item.EnemyLogItem;
 import top.ribs.scguns.item.TeamLogItem;
 
 public class ShotgunTurretMenu extends AbstractContainerMenu {
@@ -46,7 +47,7 @@ public class ShotgunTurretMenu extends AbstractContainerMenu {
         this.addSlot(new SlotItemHandler(handler, 9, 134, 17) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.getItem() instanceof TeamLogItem;
+                return stack.getItem() instanceof TeamLogItem || stack.getItem() instanceof EnemyLogItem;
             }
         });
 

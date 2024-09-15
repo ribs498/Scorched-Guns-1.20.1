@@ -61,8 +61,10 @@ import java.lang.reflect.Constructor;
     public static final RegistryObject<GunItem> SAWED_OFF_CALLWELL = REGISTER.register("sawed_off_callwell", () -> new GunItem(new Item.Properties().stacksTo(1).durability(256)));
         public static final RegistryObject<GunItem> PAX = REGISTER.register("pax", () -> new GunItem(new Item.Properties().stacksTo(1).durability(256)));
     public static final RegistryObject<GunItem> WINNIE = REGISTER.register("winnie", () -> new GunItem(new Item.Properties().stacksTo(1).durability(256)));
-    public static final RegistryObject<GunItem> LASER_MUSKET = REGISTER.register("laser_musket", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
-    ///COPPER
+        public static final RegistryObject<GunItem> LASER_MUSKET = REGISTER.register("laser_musket",
+                () -> new EnergyGunItem(new Item.Properties().stacksTo(1).durability(512), 6400));
+
+        ///COPPER
     public static final RegistryObject<GunItem> ARC_WORKER = REGISTER.register("arc_worker", () -> new GunItem(new Item.Properties().stacksTo(1).durability(400)));
 
     public static final RegistryObject<GunItem> BOOMSTICK = REGISTER.register("boomstick", () -> new GunItem(new Item.Properties().stacksTo(1).durability(400)));
@@ -80,8 +82,11 @@ import java.lang.reflect.Constructor;
     public static final RegistryObject<GunItem> COMBAT_SHOTGUN = REGISTER.register("combat_shotgun", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
     public static final RegistryObject<GunItem> AUVTOMAG = REGISTER.register("auvtomag", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
     public static final RegistryObject<GunItem> PULSAR = REGISTER.register("pulsar", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
+        public static final RegistryObject<GunItem> BRAWLER = REGISTER.register("brawler", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
 
-    public static final RegistryObject<GunItem> GYROJET_PISTOL = REGISTER.register("gyrojet_pistol", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
+
+        public static final RegistryObject<GunItem> GYROJET_PISTOL = REGISTER.register("gyrojet_pistol", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
+        public static final RegistryObject<GunItem> MK43_RIFLE = REGISTER.register("mk43_rifle", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
     public static final RegistryObject<GunItem> ROCKET_RIFLE = REGISTER.register("rocket_rifle", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
     public static final RegistryObject<GunItem> MARLIN = REGISTER.register("marlin", () -> new UnderwaterGunItem(new Item.Properties().stacksTo(1).durability(560)));
 
@@ -168,6 +173,7 @@ import java.lang.reflect.Constructor;
     public static final RegistryObject<Item> NITRO_POWDER_DUST= REGISTER.register("nitro_powder_dust", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> NITER_DUST = REGISTER.register("niter_dust", () -> new NiterDustItem(new Item.Properties()));
     public static final RegistryObject<Item> SHEOL = REGISTER.register("sheol", () -> new Item(new Item.Properties()));
+        public static final RegistryObject<Item> SCAMP_CONTROLLER = REGISTER.register("scamp_controller", () -> new ScampControllerItem(new Item.Properties()));
     public static final RegistryObject<Item> PEAL = REGISTER.register("peal", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> PEAL_DUST = REGISTER.register("peal_dust", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> VEHEMENT_COAL = REGISTER.register("vehement_coal", () -> new FuelItem(new Item.Properties(), 4800));
@@ -177,6 +183,7 @@ import java.lang.reflect.Constructor;
     public static final RegistryObject<Item> SULFUR_DUST = REGISTER.register("sulfur_dust", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> PHOSPHOR_DUST = REGISTER.register("phosphor_dust", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> BUCKSHOT = REGISTER.register("buckshot", () -> new Item(new Item.Properties()));
+        public static final RegistryObject<Item> NITRO_BUCKSHOT = REGISTER.register("nitro_buckshot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> RAW_PHOSPHOR = REGISTER.register("raw_phosphor", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> GUNPOWDER_DUST = REGISTER.register("gunpowder_dust", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> RAW_ANTHRALITE = REGISTER.register("raw_anthralite", () -> new Item(new Item.Properties()));
@@ -193,7 +200,7 @@ import java.lang.reflect.Constructor;
             () -> new RecordItem(20, ModSounds.MASS_DESTRUCTION_EXTENDED, new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 8320));
 
     public static final RegistryObject<Item> TEAM_LOG = REGISTER.register("team_log", () -> new TeamLogItem(new Item.Properties().stacksTo(1)));
-
+    public static final RegistryObject<Item> ENEMY_LOG = REGISTER.register("enemy_log", () -> new EnemyLogItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> ANTHRALITE_INGOT = REGISTER.register("anthralite_ingot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ANTHRALITE_NUGGET = REGISTER.register("anthralite_nugget", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ANCIENT_BRASS= REGISTER.register("ancient_brass", () -> new Item(new Item.Properties()));
@@ -207,7 +214,8 @@ import java.lang.reflect.Constructor;
     public static final RegistryObject<Item> DIAMOND_STEEL_INGOT = REGISTER.register("diamond_steel_ingot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> SCORCHED_BLEND = REGISTER.register("scorched_blend", () -> new ScorchedItem(new Item.Properties()));
     public static final RegistryObject<Item> SCORCHED_INGOT = REGISTER.register("scorched_ingot", () -> new ScorchedItem(new Item.Properties()));
-    public static final RegistryObject<Item> PLASMA_CORE = REGISTER.register("plasma_core", () -> new Item(new Item.Properties()));
+        public static final RegistryObject<Item> ENERGY_CORE = REGISTER.register("energy_core", () -> new Item(new Item.Properties()));
+        public static final RegistryObject<Item> PLASMA_CORE = REGISTER.register("plasma_core", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> NETHER_STAR_FRAGMENT = REGISTER.register("nether_star_fragment", () -> new NetherStarFragmentItem(new Item.Properties()));
     public static final RegistryObject<Item> EMPTY_BLASPHEMY = REGISTER.register("empty_blasphemy", () -> new EmptyBlasphemyItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> GUN_GRIP = REGISTER.register("gun_grip", () -> new Item(new Item.Properties()));
@@ -295,9 +303,10 @@ import java.lang.reflect.Constructor;
     public static final RegistryObject<Item> ROCKET = REGISTER.register("rocket", () -> new AmmoItem(new Item.Properties()));
     public static final RegistryObject<Item> OSBORNE_SLUG = REGISTER.register("osborne_slug", () -> new AmmoItem(new Item.Properties()));
     public static final RegistryObject<Item> PEBBLES = REGISTER.register("pebbles", () -> new Item(new Item.Properties()));
+     public static final RegistryObject<Item> HARDENED_PEBBLES = REGISTER.register("hardened_pebbles", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> NETHERITE_SCRAP_CHUNK = REGISTER.register("netherite_scrap_chunk", () -> new ScorchedItem(new Item.Properties()));
 
-    public static final RegistryObject<Item> PLASMA = REGISTER.register("plasma", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> PLASMA = REGISTER.register("plasma", () -> new FuelItem(new Item.Properties(), 2400));
         public static final RegistryObject<Item> PISTOL_AMMO_BOX = REGISTER.register("pistol_ammo_box", () -> new PistolAmmoBoxItem(new Item.Properties().stacksTo(1)));
         public static final RegistryObject<Item> RIFLE_AMMO_BOX = REGISTER.register("rifle_ammo_box", () -> new RifleAmmoBoxItem(new Item.Properties().stacksTo(1)));
         public static final RegistryObject<Item>SHOTGUN_AMMO_BOX = REGISTER.register("shotgun_ammo_box", () -> new ShotgunAmmoBoxItem(new Item.Properties().stacksTo(1)));
@@ -344,7 +353,7 @@ import java.lang.reflect.Constructor;
     public static final RegistryObject<Item> SILENCER = REGISTER.register("silencer", () -> new BarrelItem(Barrel.create(0.0F, GunModifiers.SILENCER_MODIFIER, GunModifiers.SILENCED, GunModifiers.REDUCED_DAMAGE), new Item.Properties().stacksTo(1).durability(500)));
     public static final RegistryObject<Item> ADVANCED_SILENCER = REGISTER.register("advanced_silencer", () -> new BarrelItem(Barrel.create(0.0F, GunModifiers.ADVANCED_SILENCER_MODIFIER, GunModifiers.SILENCED), new Item.Properties().stacksTo(1).durability(900)));
     public static final RegistryObject<Item> MUZZLE_BRAKE = REGISTER.register("muzzle_brake", () -> new BarrelItem(Barrel.create(0.0F, GunModifiers.MUZZLE_BRAKE_MODIFIER), new Item.Properties().stacksTo(1).durability(560)));
-    public static final RegistryObject<Item> EXTENDED_BARREL = REGISTER.register("extended_barrel", () -> new BarrelItem(Barrel.create(0.0F, GunModifiers.EXTENDED_BARREL_MODIFIER), new Item.Properties().stacksTo(1).durability(550)));
+    public static final RegistryObject<Item> EXTENDED_BARREL = REGISTER.register("extended_barrel", () -> new ExtendedBarrelItem(Barrel.create(0.0F, GunModifiers.EXTENDED_BARREL_MODIFIER), new Item.Properties().stacksTo(1).durability(550)));
 
     // Under Barrel Attachments
     public static final RegistryObject<Item> LIGHT_GRIP = REGISTER.register("light_grip", () -> new UnderBarrelItem(UnderBarrel.create(GunModifiers.LIGHT_RECOIL), new Item.Properties().stacksTo(1).durability(700)));

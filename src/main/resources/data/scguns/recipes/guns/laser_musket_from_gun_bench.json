@@ -7,7 +7,7 @@
   "ingredients": {
 
     "gun_internal_1": {
-      "item": "scguns:plasma_core"
+      "item": "scguns:energy_core"
     },
     "gun_internal_2": {
       "item": "minecraft:smooth_stone"

@@ -23,7 +23,17 @@ public class ModSyncedDataKeys
             .defaultValueSupplier(() -> false)
             .resetOnDeath()
             .build();
+    public static final SyncedDataKey<Player, Integer> BURSTCOUNT = SyncedDataKey.builder(SyncedClassKey.PLAYER, Serializers.INTEGER)
+            .id(new ResourceLocation(Reference.MOD_ID, "burstcount"))
+            .defaultValueSupplier(() -> 0)
+            .resetOnDeath()
+            .build();
 
+    public static final SyncedDataKey<Player, Boolean> ONBURSTCOOLDOWN = SyncedDataKey.builder(SyncedClassKey.PLAYER, Serializers.BOOLEAN)
+            .id(new ResourceLocation(Reference.MOD_ID, "onburstcooldown"))
+            .defaultValueSupplier(() -> false)
+            .resetOnDeath()
+            .build();
     public static final SyncedDataKey<Player, Boolean> RELOADING = SyncedDataKey.builder(SyncedClassKey.PLAYER, Serializers.BOOLEAN)
             .id(new ResourceLocation(Reference.MOD_ID, "reloading"))
             .defaultValueSupplier(() -> false)

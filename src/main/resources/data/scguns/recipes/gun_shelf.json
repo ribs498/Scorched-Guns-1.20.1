@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": {
+      "tag": "forge:nuggets/iron"
+    },
+    "Q": {
+      "item": "minecraft:paper"
+    },
+    "Z": {
+      "tag": "minecraft:wooden_slabs"
+    }
+  },
+  "pattern": [
+    "ZQZ",
+    "X X"
+  ],
+  "result": {
+    "item": "scguns:gun_shelf",
+    "count": 2
+  }
+}

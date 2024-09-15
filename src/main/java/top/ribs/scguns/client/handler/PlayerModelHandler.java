@@ -4,19 +4,12 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import top.ribs.scguns.Reference;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.item.GunItem;
 
@@ -35,7 +28,7 @@ public class PlayerModelHandler {
            applyCustomArmTransforms(event.getPoseStack(), event.getPartialTick(), event.getRenderer().getModel(), player);
        } else if (!heldItem.isEmpty() && heldItem.getItem() instanceof GunItem) {
          Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
-           gun.getGeneral().getGripType().getHeldAnimation().applyPlayerPreRender(player, InteractionHand.MAIN_HAND, AimingHandler.get().getAimProgress(event.getEntity(), event.getPartialTick()), event.getPoseStack(), event.getMultiBufferSource());
+           gun.getGeneral().getGripType(heldItem).heldAnimation().applyPlayerPreRender(player, InteractionHand.MAIN_HAND, AimingHandler.get().getAimProgress(event.getEntity(), event.getPartialTick()), event.getPoseStack(), event.getMultiBufferSource());
        }
     }
 

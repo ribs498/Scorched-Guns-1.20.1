@@ -5,11 +5,18 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -18,12 +25,15 @@ import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModDamageTypes;
 import top.ribs.scguns.init.ModParticleTypes;
+import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageProjectileHitEntity;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 
 public class FireRoundEntity extends ProjectileEntity {
+
+    private static final float SHIELD_IGNITE_CHANCE = 0.4f; // 40% chance to set the shield on fire
 
     public FireRoundEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -66,17 +76,40 @@ public class FireRoundEntity extends ProjectileEntity {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
 
-        entity.hurt(ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner()), damage);
+        DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
+
+        // Handle shield interaction
+        boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage);
+
+        if (blocked) {
+            // If blocked, attempt to set the shield on fire
+            if (entity instanceof Player player && this.random.nextFloat() < SHIELD_IGNITE_CHANCE) {
+                ItemStack shield = player.getUseItem();
+                if (shield.getItem() instanceof ShieldItem) {
+                    player.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.AIR));
+                    player.level().addFreshEntity(new ItemEntity(player.level(), player.getX(), player.getY(), player.getZ(), shield));
+                    player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                            SoundEvents.FIRE_AMBIENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                }
+            }
+        } else {
+            if (!(entity.getType().is(ModTags.Entities.GHOST) &&
+                    !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
+                entity.hurt(source, damage);
+            }
+            entity.setSecondsOnFire(5);
+        }
+
         if(entity instanceof LivingEntity) {
             GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
         }
+
         if (this.shooter instanceof Player) {
             int hitType = critical ? S2CMessageProjectileHitEntity.HitType.CRITICAL : headshot ? S2CMessageProjectileHitEntity.HitType.HEADSHOT : S2CMessageProjectileHitEntity.HitType.NORMAL;
             PacketHandler.getPlayChannel().sendToPlayer(() -> (ServerPlayer) this.shooter, new S2CMessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
         }
 
         spawnExplosionParticles(hitVec);
-        entity.setSecondsOnFire(5);
     }
 
     @Override

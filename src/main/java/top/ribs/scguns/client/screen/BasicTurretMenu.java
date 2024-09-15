@@ -17,6 +17,7 @@ import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.blockentity.BasicTurretBlockEntity;
 import top.ribs.scguns.init.ModBlocks;
+import top.ribs.scguns.item.EnemyLogItem;
 import top.ribs.scguns.item.TeamLogItem;
 
 import java.util.Objects;
@@ -49,7 +50,7 @@ public class BasicTurretMenu extends AbstractContainerMenu {
         this.addSlot(new SlotItemHandler(handler, 9, 134, 17) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.getItem() instanceof TeamLogItem;
+                return stack.getItem() instanceof TeamLogItem || stack.getItem() instanceof EnemyLogItem;
             }
         });
 

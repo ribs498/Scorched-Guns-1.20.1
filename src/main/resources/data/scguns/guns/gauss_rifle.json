@@ -10,14 +10,16 @@
   "general": {
     "alwaysSpread": false,
     "fireMode": "scguns:pulse",
-    "fireTimer": 30,
+    "fireTimer": 27,
     "gripType": "scguns:two_handed",
-    "rate": 9,
+    "baseGripType": "scguns:two_handed",
+    "rate": 6,
     "recoilAngle": 3.5,
     "recoilKick": 1.0,
     "spread": 0.1,
     "meleeDamage": 3.5,
-    "meleeCooldownTicks": 20
+    "meleeCooldownTicks": 20,
+    "hotBarrelRate": 55
   },
   "modules": {
     "attachments": {

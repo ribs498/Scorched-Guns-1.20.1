@@ -34,6 +34,10 @@ public class EnchantmentTypes {
             Reference.MOD_ID + ":shell_catcher_compatible",
             item -> item instanceof GunItem && !doesNotEjectCasings((GunItem) item)
     );
+    public static final EnchantmentCategory COLLATERAL_COMPATIBLE = EnchantmentCategory.create(
+            Reference.MOD_ID + ":collateral_compatible",
+            item -> item instanceof GunItem && !isNonCollateral((GunItem) item)
+    );
 
     private static boolean isSingleShotGun(GunItem gunItem) {
         return gunItem == ModItems.FLINTLOCK_PISTOL.get() ||
@@ -44,7 +48,15 @@ public class EnchantmentTypes {
                 gunItem == ModItems.BOMB_LANCE.get()||
                 gunItem == ModItems.SAKETINI.get();
     }
-
+    private static boolean isNonCollateral(GunItem gunItem) {
+        return gunItem == ModItems.ROCKET_RIFLE.get() ||
+                gunItem == ModItems.GYROJET_PISTOL.get() ||
+                gunItem == ModItems.MK43_RIFLE.get() ||
+                gunItem == ModItems.DOZIER_RL.get() ||
+                gunItem == ModItems.CYCLONE.get() ||
+                gunItem == ModItems.SHELLURKER.get() ||
+                gunItem == ModItems.CARAPICE.get();
+    }
     private static boolean isNonUnderwaterGun(GunItem gunItem) {
         // Check if the gun is an instance of NonUnderwaterGunItem
         return gunItem instanceof NonUnderwaterGunItem;
@@ -59,6 +71,7 @@ public class EnchantmentTypes {
                 gunItem == ModItems.DOZIER_RL.get() ||
                 gunItem == ModItems.REPEATING_MUSKET.get() ||
                 gunItem == ModItems.ROCKET_RIFLE.get() ||
+                gunItem == ModItems.MK43_RIFLE.get() ||
                 gunItem == ModItems.GYROJET_PISTOL.get();
     }
 }

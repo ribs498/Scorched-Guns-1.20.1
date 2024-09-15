@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.effect.CustomExplosion;
 import top.ribs.scguns.init.ModDamageTypes;
@@ -30,6 +31,8 @@ import top.ribs.scguns.util.GunEnchantmentHelper;
  */
 public class MicroJetEntity extends ProjectileEntity {
     public static final float EXPLOSION_DAMAGE_MULTIPLIER = 2.0F;
+    private static final float SHIELD_DISABLE_CHANCE = 0.75f; // 75% chance to disable shield
+    private static final float SHIELD_DAMAGE_PENETRATION = 0.2f; // 20% of damage passes through shield
 
     public MicroJetEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -38,7 +41,6 @@ public class MicroJetEntity extends ProjectileEntity {
     public MicroJetEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
     }
-
     @Override
     protected void onProjectileTick() {
         if (this.level().isClientSide) {
@@ -63,13 +65,26 @@ public class MicroJetEntity extends ProjectileEntity {
 
     @Override
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
-        float damage = this.getDamage(); // Use the damage from ProjectileEntity
+        float damage = this.getDamage();
+        if (headshot) {
+            damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
+        }
+        DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
+        boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, SHIELD_DISABLE_CHANCE);
+
+        if (blocked) {
+            float penetratingDamage = damage * SHIELD_DAMAGE_PENETRATION;
+            entity.hurt(source, penetratingDamage);
+        } else {
+            entity.hurt(source, damage);
+        }
+
         if(entity instanceof LivingEntity) {
             GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
         }
-        entity.hurt(ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner()), damage);
         createMiniExplosion(this, 1.0f);
     }
+
 
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {

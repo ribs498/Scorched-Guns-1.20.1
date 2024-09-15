@@ -32,12 +32,14 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.init.ModParticleTypes;
+import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.item.AnthraliteRespiratorItem;
 import top.ribs.scguns.item.NetheriteRespiratorItem;
 
@@ -64,33 +66,53 @@ public class SulfurVentBlock extends Block {
     public static final int CHECK_RADIUS = 32;
     public static final int EFFECT_RADIUS_SQUARED = EFFECT_RADIUS * EFFECT_RADIUS;
     private static final int HELMET_DAMAGE_INTERVAL = 50;
+    public static final IntegerProperty VENT_POWER = IntegerProperty.create("vent_power", 1, 5);
+    public static final int MAX_VENT_POWER = 5;
     private final Random random = new Random();
 
     public SulfurVentBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(VENT_TYPE, SulfurVentType.BASE).setValue(ACTIVE, false));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(VENT_TYPE, SulfurVentType.BASE)
+                .setValue(ACTIVE, false)
+                .setValue(VENT_POWER, 1));
     }
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(VENT_TYPE, ACTIVE);
+        builder.add(VENT_TYPE, ACTIVE, VENT_POWER);
     }
     @Override
-    @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Level level = context.getLevel();
         BlockPos pos = context.getClickedPos();
         boolean isActive = isActive(level, pos);
+        int ventPower = calculateVentPower(level, pos);
         return this.updateState(level.getBlockState(pos.below()), level.getBlockState(pos.above()))
-                .setValue(ACTIVE, isActive);
+                .setValue(ACTIVE, isActive)
+                .setValue(VENT_POWER, ventPower);
     }
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (level instanceof Level) {
-            boolean isActive = isActive((Level) level, pos);
+            boolean isActive = isActive(level, pos);
+            int ventPower = calculateVentPower((Level) level, pos);
             return this.updateState(level.getBlockState(pos.below()), level.getBlockState(pos.above()))
-                    .setValue(ACTIVE, isActive);
+                    .setValue(ACTIVE, isActive)
+                    .setValue(VENT_POWER, ventPower);
         }
         return this.updateState(level.getBlockState(pos.below()), level.getBlockState(pos.above()));
+    }
+    private int calculateVentPower(LevelAccessor level, BlockPos pos) {
+        BlockPos basePos = getBasePos(level, pos);
+        int power = 1;
+        BlockPos checkPos = basePos.above();
+
+        while (level.getBlockState(checkPos).getBlock() instanceof SulfurVentBlock && power < MAX_VENT_POWER) {
+            power++;
+            checkPos = checkPos.above();
+        }
+
+        return power;
     }
 
     private BlockState updateState(BlockState belowState, BlockState aboveState) {
@@ -109,24 +131,7 @@ public class SulfurVentBlock extends Block {
         return state.getValue(VENT_TYPE) == SulfurVentType.BASE ? SHAPE_BASE : SHAPE_MIDDLE_TOP;
     }
 
-    @Override
-    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
-        boolean isActive = isActive(level, pos);
-        int activeVentCount = countActiveVentsNearby(level, pos);
 
-        // Set the block state based on the result of the isActive check
-        level.setBlock(pos, state.setValue(ACTIVE, isActive), 3);
-
-        // Display the message only if there are too many active vents nearby
-        if (activeVentCount >= MAX_ACTIVE_VENTS) {
-            Player player = level.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
-            if (player != null) {
-                player.displayClientMessage(Component.translatable("message.sulfur_vent.too_many_active").withStyle(ChatFormatting.RED), true);
-            }
-        }
-
-        level.scheduleTick(pos, this, calculateNextTickInterval());
-    }
 
     @Override
     public PushReaction getPistonPushReaction(BlockState state) {
@@ -314,7 +319,7 @@ public class SulfurVentBlock extends Block {
                 }
             }
             ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
-            if (helmet.getItem() instanceof AnthraliteRespiratorItem || helmet.getItem() instanceof NetheriteRespiratorItem) {
+            if (helmet.is(ModTags.Items.GAS_MASK)) {
                 int unbreakingLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, helmet);
                 if (entity.getPersistentData().getLong("LastHelmetDamageTick") + HELMET_DAMAGE_INTERVAL <= entity.tickCount) {
                     entity.getPersistentData().putLong("LastHelmetDamageTick", entity.tickCount);
@@ -326,12 +331,12 @@ public class SulfurVentBlock extends Block {
 
                 continue;
             }
-            // Apply effects if the entity is not wearing the helmet or it's not the special helmet
-            entity.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 3)); // Duration: 5 seconds, Amplifier: 3
-            entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 60, 2)); // Duration: 3 seconds, Amplifier: 2
-            entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1)); // Duration: 5 seconds, Amplifier: 1
-            entity.hurt(entity.damageSources().magic(), 2.0F); // 1 heart of direct damage every 0.5 seconds
-            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2)); // Duration: 2 seconds, Amplifier: 2
+            // Apply effects if the entity is not wearing a gas mask
+            entity.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 3));
+            entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 60, 2));
+            entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1));
+            entity.hurt(entity.damageSources().magic(), 2.0F);
+            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2));
         }
     }
 
@@ -360,7 +365,7 @@ public class SulfurVentBlock extends Block {
         if (!belowState.is(Blocks.MAGMA_BLOCK)) {
             return false;
         }
-        int activeVentCount = countActiveVentsNearby(level, pos);
+        int activeVentCount = countActiveVentsNearby(level, basePos);
         return activeVentCount < MAX_ACTIVE_VENTS;
     }
 
@@ -372,7 +377,7 @@ public class SulfurVentBlock extends Block {
                 continue;
             }
             BlockState state = level.getBlockState(checkPos);
-            if (state.getBlock() instanceof SulfurVentBlock && state.getValue(ACTIVE)) {
+            if (state.getBlock() instanceof SulfurVentBlock && state.getValue(ACTIVE) && state.getValue(VENT_TYPE) == SulfurVentType.BASE) {
                 activeCount++;
             }
             if (activeCount >= MAX_ACTIVE_VENTS) {
@@ -383,13 +388,51 @@ public class SulfurVentBlock extends Block {
         return activeCount;
     }
 
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        BlockPos basePos = getBasePos(level, pos);
+        boolean isActive = isActive(level, basePos);
+        int activeVentCount = countActiveVentsNearby(level, basePos);
+
+        // Only update vent power if needed
+        updateVentPower(level, pos);
+
+        // Avoid updating the state if it's already correct
+        if (state.getValue(ACTIVE) != isActive) {
+            level.setBlock(pos, state.setValue(ACTIVE, isActive), 3);
+        }
+
+        // Schedule tick only if necessary
+        if (activeVentCount >= MAX_ACTIVE_VENTS && state.getValue(VENT_TYPE) == SulfurVentType.BASE) {
+            Player player = level.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
+            if (player != null) {
+                player.displayClientMessage(Component.translatable("message.sulfur_vent.too_many_active").withStyle(ChatFormatting.RED), true);
+            }
+        }
+
+        level.scheduleTick(pos, this, calculateNextTickInterval());
+    }
 
     private BlockPos getBasePos(LevelAccessor level, BlockPos pos) {
         while (level.getBlockState(pos.below()).getBlock() instanceof SulfurVentBlock) {
+            if (pos.getY() <= 0) { // Ensure it doesn't go below the world
+                break;
+            }
             pos = pos.below();
         }
         return pos;
     }
+    private void updateVentPower(Level level, BlockPos pos) {
+        BlockState currentState = level.getBlockState(pos);
+        int currentPower = currentState.getValue(VENT_POWER);
+        int newPower = calculateVentPower(level, pos);
+
+        if (currentPower != newPower) {
+            // Update only if power changes
+            level.setBlock(pos, currentState.setValue(VENT_POWER, newPower), 3);
+        }
+    }
+
 
     public enum SulfurVentType implements StringRepresentable {
         BASE("base"),

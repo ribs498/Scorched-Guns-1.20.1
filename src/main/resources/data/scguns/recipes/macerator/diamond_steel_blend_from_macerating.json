@@ -13,15 +13,20 @@
     {
       "item": "minecraft:diamond"
     },
-    {
-      "item": "minecraft:redstone"
-    },
+    [
+      {
+        "item": "scguns:treated_iron_blend"
+      },
+      {
+        "item": "scguns:treated_iron_ingot"
+      }
+    ],
     {
       "item": "minecraft:lapis_lazuli"
     }
   ],
   "result": {
     "item": "scguns:diamond_steel_blend",
-    "count": 3
+    "count": 5
   }
 }

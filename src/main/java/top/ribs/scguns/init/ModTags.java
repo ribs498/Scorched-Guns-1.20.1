@@ -35,6 +35,7 @@ public class ModTags
         public static final TagKey<Item> NORMAL_COMPOST = tag("normal_compost");
         public static final TagKey<Item> STRONG_COMPOST = tag("strong_compost");
         public static final TagKey<Item> COMPOST_DROPS= tag("compost_drops");
+        public static final TagKey<Item> GAS_MASK = tag("gas_mask");
 
         private static TagKey<Item> tag(String name)
         {

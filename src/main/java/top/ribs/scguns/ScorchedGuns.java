@@ -15,7 +15,6 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.valkyrienskies.core.impl.shadow.M;
 import top.ribs.scguns.client.CustomGunManager;
 import top.ribs.scguns.client.handler.HUDRenderHandler;
 import top.ribs.scguns.client.screen.*;
@@ -54,6 +53,7 @@ public class ScorchedGuns {
     public static boolean mekanismLoaded;
     public static boolean ieLoaded;
     public static boolean valkyrienSkiesLoaded;
+    public static boolean marjLoaded;
 
 
     public ScorchedGuns() {
@@ -126,6 +126,7 @@ public class ScorchedGuns {
         farmersDelightLoaded = ModList.get().isLoaded("farmersdelight");
         ieLoaded = ModList.get().isLoaded("immersiveengineering");
         mekanismLoaded = ModList.get().isLoaded("mekanism");
+        marjLoaded = ModList.get().isLoaded("majruszsdifficulty");
     }
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
@@ -134,6 +135,8 @@ public class ScorchedGuns {
             FrameworkAPI.registerSyncedDataKey(ModSyncedDataKeys.AIMING);
             FrameworkAPI.registerSyncedDataKey(ModSyncedDataKeys.RELOADING);
             FrameworkAPI.registerSyncedDataKey(ModSyncedDataKeys.SHOOTING);
+            FrameworkAPI.registerSyncedDataKey(ModSyncedDataKeys.BURSTCOUNT);
+            FrameworkAPI.registerSyncedDataKey(ModSyncedDataKeys.ONBURSTCOOLDOWN);
             FrameworkAPI.registerSyncedDataKey(ModSyncedDataKeys.MELEE);
 
             // Register login data

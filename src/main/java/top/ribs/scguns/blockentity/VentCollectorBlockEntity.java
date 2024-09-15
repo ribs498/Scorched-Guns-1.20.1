@@ -34,13 +34,14 @@ import javax.annotation.Nullable;
 import java.util.Random;
 
 public class VentCollectorBlockEntity extends BlockEntity implements MenuProvider {
-    private static final int BASE_TICK_INTERVAL = 120;
+    private static final int BASE_TICK_INTERVAL = 100;
     private static final int TICK_WIGGLE_ROOM = 60;
+    private static final float POWER_SPEED_MULTIPLIER = 0.35f;
     private static final int MAX_FILTER_CHARGE = 64;
     private static final int WEAK_FILTER_CHARGE = 4;
     private static final int STRONG_FILTER_CHARGE = 8;
-    private static final float FILTER_CONSUMPTION_CHANCE = 0.65f;
-    private static final int FILTER_PROCESS_COOLDOWN = 5;
+    private static final float FILTER_CONSUMPTION_CHANCE = 0.5f;
+    private static final int FILTER_PROCESS_COOLDOWN = 2;
     private static final int PUSH_COOLDOWN = 5;
     private int pushCooldown = 0;
     private int filterProcessCooldown = 0;
@@ -99,16 +100,24 @@ public class VentCollectorBlockEntity extends BlockEntity implements MenuProvide
                     (isSulfurVentBelow && belowState.getValue(SulfurVentBlock.ACTIVE));
 
             if (isActive && blockEntity.filterCharge > 0) {
-                blockEntity.productionCounter++;
+                int ventPower = 1;
+                if (isGeothermalVentBelow) {
+                    ventPower = belowState.getValue(GeothermalVentBlock.VENT_POWER);
+                } else {
+                    ventPower = belowState.getValue(SulfurVentBlock.VENT_POWER);
+                }
+
+                float speedMultiplier = 1 + (ventPower - 1) * POWER_SPEED_MULTIPLIER;
+                blockEntity.productionCounter += (int) speedMultiplier;
 
                 if (blockEntity.productionCounter >= blockEntity.currentTickInterval) {
                     blockEntity.productionCounter = 0;
                     blockEntity.currentTickInterval = blockEntity.calculateNextTickInterval();
 
-                    boolean produced = false;
+                    boolean produced;
                     if (isGeothermalVentBelow) {
                         produced = blockEntity.produceNiterDust();
-                    } else if (isSulfurVentBelow) {
+                    } else {
                         produced = blockEntity.produceSulfurDust();
                     }
 

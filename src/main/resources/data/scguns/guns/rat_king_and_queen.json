@@ -10,12 +10,14 @@
   "general": {
     "fireMode": "scguns:automatic",
     "gripType": "scguns:dual_wield",
+    "baseGripType": "scguns:dual_wield",
     "rate": 4,
     "recoilAngle": 2.0,
     "recoilKick": 1.0,
     "spread": 2.0,
     "meleeDamage": 4.5,
-    "meleeCooldownTicks": 15
+    "meleeCooldownTicks": 15,
+    "hotBarrelRate": 15
   },
   "modules": {
     "attachments": {

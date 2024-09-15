@@ -13,11 +13,12 @@
     "gripType": "scguns:one_handed",
     "projectileAmount": 8,
     "rate": 6,
-    "recoilAngle": 10.0,
+    "recoilAngle": 25.0,
     "recoilKick": 3.0,
-    "spread": 14.0,
+    "spread": 22.0,
     "meleeDamage": 2.5,
-    "meleeCooldownTicks": 15
+    "meleeCooldownTicks": 15,
+    "hotBarrelRate": 100
   },
   "modules": {
     "attachments": {

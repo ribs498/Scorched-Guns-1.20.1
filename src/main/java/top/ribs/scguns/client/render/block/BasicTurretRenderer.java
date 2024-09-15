@@ -12,7 +12,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import org.valkyrienskies.core.impl.shadow.Ax;
 import top.ribs.scguns.block.BasicTurretBlock;
 import top.ribs.scguns.block.MaceratorBlock;
 import top.ribs.scguns.blockentity.BasicTurretBlockEntity;

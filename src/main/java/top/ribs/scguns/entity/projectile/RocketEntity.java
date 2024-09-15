@@ -1,5 +1,10 @@
 package top.ribs.scguns.entity.projectile;
 
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ShieldItem;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.item.GunItem;
@@ -19,6 +24,8 @@ import net.minecraft.world.level.Level;
  */
 public class RocketEntity extends ProjectileEntity
 {
+    private static final float SHIELD_DISABLE_CHANCE = 1.0f; // 100% chance to disable shield
+
     public RocketEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn)
     {
         super(entityType, worldIn);
@@ -49,6 +56,33 @@ public class RocketEntity extends ProjectileEntity
     @Override
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot)
     {
+        // Always attempt to disable the shield
+        if (entity instanceof Player player)
+        {
+            ItemStack mainHandItem = player.getMainHandItem();
+            ItemStack offHandItem = player.getOffhandItem();
+
+            boolean isBlockingMainHand = player.isBlocking() && mainHandItem.getItem() instanceof ShieldItem;
+            boolean isBlockingOffHand = player.isBlocking() && offHandItem.getItem() instanceof ShieldItem;
+
+            if (isBlockingMainHand || isBlockingOffHand)
+            {
+                ItemStack shield = isBlockingMainHand ? mainHandItem : offHandItem;
+                InteractionHand hand = isBlockingMainHand ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
+
+                player.getCooldowns().addCooldown(shield.getItem(), 100);
+                player.stopUsingItem();
+                player.level().broadcastEntityEvent(player, (byte)30);
+
+                // Play shield break sound
+                player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                        SoundEvents.SHIELD_BREAK, SoundSource.PLAYERS, 1.0F, 0.8F + player.level().getRandom().nextFloat() * 0.4F);
+
+                shield.hurtAndBreak(15, player, (p) -> p.broadcastBreakEvent(hand)); // Damage the shield significantly
+            }
+        }
+
+        // Create explosion
         createExplosion(this, Config.COMMON.rockets.explosionRadius.get().floatValue(), false);
     }
 

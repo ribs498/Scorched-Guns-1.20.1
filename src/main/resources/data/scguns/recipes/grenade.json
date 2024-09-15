@@ -9,7 +9,7 @@
       "item": "minecraft:flower_pot"
     },
     "Q": {
-      "item": "minecraft:gunpowder"
+      "item": "scguns:buckshot"
     }
   },
   "pattern": [

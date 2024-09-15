@@ -117,11 +117,7 @@ public class ModEvents {
                     5, 20, 0.05f));
 
             // Level 5 Trades
-            trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
-                    new ItemStack(Items.EMERALD, 25),
-                    new ItemStack(ModItems.BOOMSTICK.get(), 1),
-                    1, 25, 0.05f));
-            trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
+            trades.get(4).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 32),
                     new ItemStack(ModItems.MAKESHIFT_RIFLE.get(), 1),
                     1, 25, 0.05f));
@@ -129,10 +125,6 @@ public class ModEvents {
                     new ItemStack(Items.EMERALD, 25),
                     new ItemStack(ModItems.IRON_BLUEPRINT.get(), 1),
                     1, 30, 0.05f));
-            trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
-                    new ItemStack(ModItems.HEAVY_GUN_PARTS.get(), 2),
-                    new ItemStack(Items.EMERALD, 1),
-                    8, 25, 0.05f));
             trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(ModItems.NITRO_POWDER.get(), 1),
                     new ItemStack(Items.EMERALD, 14),

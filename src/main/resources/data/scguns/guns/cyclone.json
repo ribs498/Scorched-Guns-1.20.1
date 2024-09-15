@@ -10,12 +10,14 @@
   "general": {
     "fireMode": "scguns:automatic",
     "gripType": "scguns:mini_gun_2",
+    "baseGripType": "scguns:mini_gun_2",
     "rate": 7,
     "recoilAngle": 2.0,
     "recoilKick": 3.0,
     "spread": 3.0,
     "meleeDamage": 4.0,
-    "meleeCooldownTicks": 20
+    "meleeCooldownTicks": 20,
+    "hotBarrelRate": 12
   },
   "modules": {
   },

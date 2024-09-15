@@ -1,7 +1,10 @@
 package top.ribs.scguns.common;
 
 import net.minecraft.util.Mth;
+import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.interfaces.IGunModifier;
+
+import static top.ribs.scguns.item.GunItem.ONE_HANDED_CARBINE_CANDIDATES;
 
 /**
  * Author: MrCrayfish
@@ -224,19 +227,6 @@ public class GunModifiers
 
     };
 
-    public static final IGunModifier SLOW_RELOAD = new IGunModifier() {
-        @Override
-        public double modifyReloadSpeed(double reloadSpeed) {
-            return reloadSpeed * 1.3;
-        }
-    };
-
-    public static final IGunModifier FAST_RELOAD = new IGunModifier() {
-        @Override
-        public double modifyReloadSpeed(double reloadSpeed) {
-            return reloadSpeed * 0.8;
-        }
-    };
     public static final IGunModifier EXTENDED_MAG = new IGunModifier() {
         @Override
         public int modifyAmmoCapacity(int baseCapacity) {
@@ -319,15 +309,26 @@ public class GunModifiers
         }
 
         @Override
-        public float recoilModifier() {
-            return 1.15F;
+        public float recoilModifier(ItemStack weapon) {
+            return isCarbineCandidate(weapon) ? 0.9F : 1.15F;
         }
 
         @Override
-        public float kickModifier() {
-            return 1.2F;
+        public float kickModifier(ItemStack weapon) {
+            return isCarbineCandidate(weapon) ? 0.95F : 1.2F;
+        }
+
+        @Override
+        public float modifyProjectileDamage(float damage) {
+            return damage * 1.1F;
+        }
+
+        private boolean isCarbineCandidate(ItemStack weapon) {
+            return ONE_HANDED_CARBINE_CANDIDATES.stream().anyMatch(candidate -> candidate.get() == weapon.getItem());
         }
     };
+
+
 
     public static final IGunModifier SILENCER_MODIFIER = new IGunModifier() {
         @Override
@@ -342,7 +343,7 @@ public class GunModifiers
 
         @Override
         public float criticalChance() {
-            return 0.15F;
+            return 0.1F;
         }
     };
 
@@ -354,7 +355,7 @@ public class GunModifiers
 
         @Override
         public float criticalChance() {
-            return 0.25F;
+            return 0.15F;
         }
     };
     public static final IGunModifier EXTENDED_MAG_MODIFIER = new IGunModifier() {

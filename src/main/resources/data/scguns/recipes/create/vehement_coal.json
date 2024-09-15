@@ -1,0 +1,24 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:vehement_coal"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.20,
+      "item": "scguns:nitro_powder_dust"
+    },
+    {
+      "chance": 0.75,
+      "item": "minecraft:blaze_powder",
+      "count": 2
+    },
+    {
+      "chance": 0.5,
+      "item": "minecraft:blaze_powder"
+    }
+  ]
+}

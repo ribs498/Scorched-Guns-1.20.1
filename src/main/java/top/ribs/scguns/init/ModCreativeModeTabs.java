@@ -10,6 +10,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.ScorchedGuns;
+import top.ribs.scguns.item.EnergyGunItem;
 import top.ribs.scguns.item.GunItem;
 
 public class ModCreativeModeTabs {
@@ -56,6 +57,8 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.AUVTOMAG.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.PULSAR.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.GYROJET_PISTOL.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BRAWLER.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.MK43_RIFLE.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.ROCKET_RIFLE.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.MARLIN.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BOMB_LANCE.get());
@@ -128,8 +131,10 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.NETHERITE_RESPIRATOR.get());
                         pOutput.accept(ModItems.REPAIR_KIT.get());
                         pOutput.accept(ModItems.COMPOSITE_FILTER.get());
+                        pOutput.accept(ModItems.SCAMP_CONTROLLER.get());
 
                         pOutput.accept(ModItems.PEBBLES.get());
+                         pOutput.accept(ModItems.HARDENED_PEBBLES.get());
                         pOutput.accept(ModItems.SULFUR_CHUNK.get());
                         pOutput.accept(ModItems.SULFUR_DUST.get());
                         pOutput.accept(ModItems.RAW_PHOSPHOR.get());
@@ -141,6 +146,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.PEAL.get());
                         pOutput.accept(ModItems.PEAL_DUST.get());
                         pOutput.accept(ModItems.BUCKSHOT.get());
+                        pOutput.accept(ModItems.NITRO_BUCKSHOT.get());
                         pOutput.accept(ModItems.VEHEMENT_COAL.get());
                         pOutput.accept(ModItems.NITRO_POWDER.get());
                         pOutput.accept(ModItems.NITRO_POWDER_DUST.get());
@@ -269,6 +275,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.HEAVY_GUN_BARREL.get());
                         pOutput.accept(ModItems.GUN_GRIP.get());
                         pOutput.accept(ModItems.GUN_MAGAZINE.get());
+                        pOutput.accept(ModItems.ENERGY_CORE.get());
                         pOutput.accept(ModItems.PLASMA_CORE.get());
                         pOutput.accept(ModItems.EMPTY_BLASPHEMY.get());
                         pOutput.accept(ModItems.COPPER_DISC.get());
@@ -311,6 +318,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.MASS_DESTRUCTION_MUSIC_DISC.get());
                         pOutput.accept(ModItems.MASS_DESTRUCTION_EXTENDED_MUSIC_DISC.get());
                         pOutput.accept(ModItems.TEAM_LOG.get());
+                        pOutput.accept(ModItems.ENEMY_LOG.get());
 
                         pOutput.accept(ModBlocks.ANTHRALITE_ORE.get());
                         pOutput.accept(ModBlocks.DEEPSLATE_ANTHRALITE_ORE.get());
@@ -382,6 +390,8 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.MECHANICAL_PRESS.get());
                         pOutput.accept(ModBlocks.POWERED_MACERATOR.get());
                         pOutput.accept(ModBlocks.POWERED_MECHANICAL_PRESS.get());
+                        pOutput.accept(ModBlocks.GUN_SHELF.get());
+                        pOutput.accept(ModBlocks.PLASMA_LANTERN.get());
 
                         pOutput.accept(ModBlocks.BASIC_TURRET.get());
                         pOutput.accept(ModBlocks.AUTO_TURRET.get());
@@ -393,6 +403,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.DAMAGE_TURRET_MODULE.get());
                         pOutput.accept(ModBlocks.RANGE_TURRET_MODULE.get());
                         pOutput.accept(ModBlocks.SHELL_CATCHER_TURRET_MODULE.get());
+                        pOutput.accept(ModBlocks.AMMO_TURRET_MODULE.get());
 
 
 
@@ -417,16 +428,19 @@ public class ModCreativeModeTabs {
     public static void register(IEventBus eventBus) {
         CREATIVE_MODE_TABS.register(eventBus);
     }
-    public static class CreativeTabHelper {
-        public static void addItemWithFullAmmo(CreativeModeTab.Output output, Item item) {
-            if (item instanceof GunItem gunItem) {
-                ItemStack stack = new ItemStack(gunItem);
-                stack.getOrCreateTag().putInt("AmmoCount", gunItem.getGun().getReloads().getMaxAmmo());
-                output.accept(stack);
-            } else {
-                output.accept(item);
+        public static class CreativeTabHelper {
+            public static void addItemWithFullAmmo(CreativeModeTab.Output output, Item item) {
+                if (item instanceof GunItem gunItem) {
+                    ItemStack stack = new ItemStack(gunItem);
+                    stack.getOrCreateTag().putInt("AmmoCount", gunItem.getGun().getReloads().getMaxAmmo());
+                    output.accept(stack);
+                } else if (item instanceof EnergyGunItem energyGunItem) {
+                    ItemStack stack = new ItemStack(energyGunItem);
+                    stack.getOrCreateTag().putInt("Energy", energyGunItem.getMaxEnergyStored(stack));
+                    output.accept(stack);
+                } else {
+                    output.accept(item);
+                }
             }
         }
-    }
-
 }

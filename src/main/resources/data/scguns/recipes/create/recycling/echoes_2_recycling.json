@@ -9,11 +9,8 @@
   "results": [
     {
       "chance": 0.3,
-      "item": "scguns:diamond_steel_ingot"
-    },
-    {
-      "chance": 0.3,
-      "item": "scguns:diamond_steel_ingot"
+      "item": "scguns:diamond_steel_ingot",
+        "count": 2
     },
     {
       "chance": 0.3,

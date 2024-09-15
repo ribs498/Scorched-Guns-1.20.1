@@ -6,6 +6,10 @@
         {
           "type": "minecraft:item",
           "name": "scguns:ocean_blueprint"
+        },
+        {
+          "type": "minecraft:empty",
+          "weight": 1
         }
       ]
     }

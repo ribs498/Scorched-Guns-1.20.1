@@ -24,7 +24,7 @@ import top.ribs.scguns.blockentity.ShellCatcherModuleBlockEntity;
 
 import javax.annotation.Nullable;
 
-public class ShellCatcherModuleBlock extends TurretTargetingBlock {
+public class ShellCatcherModuleBlock extends BaseTurretModuleBlock {
     private static final VoxelShape SHAPE_CENTERED = Block.box(2.0, 0.0, 2.0, 14.0, 9.0, 14.0);
     private static final VoxelShape SHAPE_CONNECTED_NORTH = Block.box(2.0, 0.0, 6.0, 14.0, 9.0, 16.0); // Adjusted for north shift
     private static final VoxelShape SHAPE_CONNECTED_SOUTH = Block.box(2.0, 0.0, 0.0, 14.0, 9.0, 10.0); // Mirrored

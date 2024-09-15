@@ -9,14 +9,18 @@
   },
   "general": {
     "alwaysSpread": false,
-    "fireMode": "scguns:automatic",
+    "fireMode": "scguns:burst",
+    "burstAmount": 4,
+    "burstCooldown": 8,
     "gripType": "scguns:two_handed",
-    "rate": 6,
+    "baseGripType": "scguns:two_handed",
+    "rate": 2,
     "recoilAngle": 2.5,
     "recoilKick": 1.0,
     "spread": 2.0,
     "meleeDamage": 7.0,
-    "meleeCooldownTicks": 15
+    "meleeCooldownTicks": 15,
+    "hotBarrelRate": 5
   },
   "modules": {
     "attachments": {
@@ -28,6 +32,9 @@
       "barrel": {
         "yOffset": 4.8,
         "zOffset": -15.2
+      },
+      "magazine": {
+        "scale": 0.0
       },
       "stock": {
         "scale": 0.0
@@ -41,7 +48,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 25,
+    "damage": 22,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:gibbs_round",
@@ -52,11 +59,9 @@
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
-    "emptyMagTimer": 10,
-    "maxAmmo": 10,
-    "reloadItem": "scguns:500_gibbs_round",
-    "reloadTimer": 6,
-    "reloadType": "scguns:manual"
+    "maxAmmo": 24,
+    "reloadTimer": 15,
+    "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",

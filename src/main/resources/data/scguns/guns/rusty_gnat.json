@@ -3,26 +3,28 @@
     "flash": {
       "size": 1.0,
       "yOffset": 3.4,
-      "zOffset": -2.0
+      "zOffset": -2.4
     },
     "muzzleFlashType": "flash_type_1"
   },
   "general": {
     "alwaysSpread": false,
     "fireMode": "scguns:automatic",
-    "gripType": "scguns:one_handed_two_handed",
+    "gripType": "scguns:two_handed",
+    "baseGripType": "scguns:two_handed",
     "rate": 3,
     "recoilAngle": 6.0,
     "recoilKick": 1.0,
     "spread": 4.0,
     "meleeDamage": 2.5,
-    "meleeCooldownTicks": 15
+    "meleeCooldownTicks": 15,
+    "hotBarrelRate": 6
   },
   "modules": {
     "attachments": {
       "barrel": {
         "yOffset": 3.4,
-        "zOffset": -3.0
+        "zOffset": -3.6
       },
       "scope": {
         "size": 0.7,

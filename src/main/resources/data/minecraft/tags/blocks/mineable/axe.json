@@ -4,6 +4,7 @@
     "scguns:supply_crate",
     "scguns:advanced_composter",
     "scguns:powder_keg",
-    "scguns:nitro_keg"
+    "scguns:nitro_keg",
+    "scguns:gun_shelf"
   ]
 }

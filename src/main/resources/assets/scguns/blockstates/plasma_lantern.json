@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "hanging=false": {
+      "model": "scguns:block/plasma_lantern"
+    },
+    "hanging=true": {
+      "model": "scguns:block/plasma_lantern_hanging"
+    }
+  }
+}

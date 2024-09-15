@@ -1,0 +1,11 @@
+{
+  "type": "scguns:add_loot_table",
+  "conditions":
+  [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:gameplay/piglin_bartering"
+    }
+  ],
+  "lootTable": "scguns:gameplay/scguns_piglin_bartering"
+}

@@ -54,18 +54,20 @@ public class GunModifierHelper
     }
 
 
-    public static float getModifiedSpread(ItemStack weapon, float spread)
-    {
-        for(int i = 0; i < IAttachment.Type.values().length; i++)
-        {
+    public static float getModifiedSpread(ItemStack weapon, float spread) {
+        // First, apply attachment modifiers to the spread
+        for (int i = 0; i < IAttachment.Type.values().length; i++) {
             IGunModifier[] modifiers = getModifiers(weapon, IAttachment.Type.values()[i]);
-            for(IGunModifier modifier : modifiers)
-            {
+            for (IGunModifier modifier : modifiers) {
                 spread = modifier.modifyProjectileSpread(spread);
             }
         }
+
+        spread = GunEnchantmentHelper.getHotBarrelSpread(weapon, spread);
+
         return spread;
     }
+
 
     public static double getModifiedProjectileSpeed(ItemStack weapon, double speed)
     {

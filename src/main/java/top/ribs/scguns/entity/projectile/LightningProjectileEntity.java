@@ -12,8 +12,15 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import top.ribs.scguns.block.AutoTurretBlock;
+import top.ribs.scguns.block.BasicTurretBlock;
+import top.ribs.scguns.block.ShotgunTurretBlock;
+import top.ribs.scguns.blockentity.AutoTurretBlockEntity;
+import top.ribs.scguns.blockentity.BasicTurretBlockEntity;
+import top.ribs.scguns.blockentity.ShotgunTurretBlockEntity;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModDamageTypes;
 import top.ribs.scguns.item.GunItem;
@@ -23,6 +30,8 @@ import top.ribs.scguns.network.message.S2CMessageProjectileHitEntity;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 
 import java.util.List;
+
+import static top.ribs.scguns.blockentity.AutoTurretBlockEntity.MAX_DISABLE_TIME;
 
 public class LightningProjectileEntity extends ProjectileEntity {
     private static final int MAX_BOUNCES = 3;
@@ -87,9 +96,30 @@ public class LightningProjectileEntity extends ProjectileEntity {
 
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
+        // Check if the block hit is an Auto Turret
+        if (state.getBlock() instanceof AutoTurretBlock) {
+            BlockEntity blockEntity = level().getBlockEntity(pos);
+            if (blockEntity instanceof AutoTurretBlockEntity turret) {
+                turret.onHitByLightningProjectile();
+            }
+        }
+        if (state.getBlock() instanceof BasicTurretBlock) {
+            BlockEntity blockEntity = level().getBlockEntity(pos);
+            if (blockEntity instanceof BasicTurretBlockEntity turret) {
+                turret.onHitByLightningProjectile();
+            }
+        }
+        if (state.getBlock() instanceof ShotgunTurretBlock) {
+            BlockEntity blockEntity = level().getBlockEntity(pos);
+            if (blockEntity instanceof ShotgunTurretBlockEntity turret) {
+               // turret.onHitByLightningProjectile();
+            }
+        }
         spawnLightningParticles(new Vec3(x, y + 0.1, z));
         this.discard();
     }
+
+
 
     @Override
     public void onExpired() {

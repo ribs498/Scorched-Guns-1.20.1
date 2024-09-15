@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/iron/gyrojet_pistol",
+  "criteria": {
+    "brawler": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:brawler"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.brawler.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:brawler"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.brawler"
+    }
+  },
+  "requirements": [
+    [
+      "brawler"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

@@ -414,8 +414,8 @@ public class Config
                 case COMPACT_COPPER_ROUND -> 2.0;
                 case COMPACT_ADVANCED_ROUND -> 3.5;
                 case HOG_ROUND -> 5.0;
-                case SHOTGUN_SHELL -> 12.0;
-                case BEARPACK_SHELL -> 16.0;
+                case SHOTGUN_SHELL -> 18.0;
+                case BEARPACK_SHELL -> 24.0;
             };
         }
     }

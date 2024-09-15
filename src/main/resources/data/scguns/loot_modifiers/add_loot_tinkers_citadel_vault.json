@@ -1,0 +1,11 @@
+{
+  "type": "scguns:add_loot_table",
+  "conditions":
+  [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "idas:chests/tinkers_citadel/tinkers_citadel_vault"
+    }
+  ],
+  "lootTable": "scguns:chests/scguns_tinkers_citadel_vault"
+}

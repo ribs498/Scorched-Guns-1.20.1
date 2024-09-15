@@ -1,0 +1,33 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+
+    "X": {
+      "item": "scguns:iron_blueprint"
+    },
+    "A": {
+      "item": "scguns:treated_iron_ingot"
+    }
+  },
+  "pattern": [
+    " A  ",
+    "LRSS",
+    "Q  X"
+  ],
+  "result": {
+    "item": "scguns:brawler"
+  }
+}

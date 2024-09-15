@@ -56,7 +56,7 @@ public class TeamLogItem extends Item {
         return InteractionResultHolder.sidedSuccess(itemStack, level.isClientSide());
     }
 
-    private EntityHitResult rayTraceEntities(Level level, Player player) {
+    EntityHitResult rayTraceEntities(Level level, Player player) {
         Vec3 eyePosition = player.getEyePosition();
         Vec3 lookVector = player.getLookAngle();
         Vec3 endPos = eyePosition.add(lookVector.scale(5.0));
@@ -77,7 +77,7 @@ public class TeamLogItem extends Item {
         }
         return closestHitResult;
     }
-    private boolean addEntityToTeamLog(ItemStack stack, LivingEntity targetEntity) {
+    boolean addEntityToTeamLog(ItemStack stack, LivingEntity targetEntity) {
         CompoundTag tag = stack.getOrCreateTag();
         ListTag listTag = tag.getList("Entities", Tag.TAG_COMPOUND);
         for (int i = 0; i < listTag.size(); i++) {
@@ -96,7 +96,7 @@ public class TeamLogItem extends Item {
         return true;
     }
 
-    private boolean addEntityTypeToBlacklist(ItemStack stack, LivingEntity targetEntity) {
+    boolean addEntityTypeToBlacklist(ItemStack stack, LivingEntity targetEntity) {
         CompoundTag tag = stack.getOrCreateTag();
         ListTag blacklistTag = tag.getList("Blacklist", Tag.TAG_STRING);
         String entityTypeKey = EntityType.getKey(targetEntity.getType()).toString();
@@ -111,7 +111,7 @@ public class TeamLogItem extends Item {
         return true;
     }
 
-    private void logCurrentEntities(ItemStack stack, Player player) {
+    void logCurrentEntities(ItemStack stack, Player player) {
         CompoundTag tag = stack.getTag();
         if (tag != null) {
             if (tag.contains("Entities", Tag.TAG_LIST)) {

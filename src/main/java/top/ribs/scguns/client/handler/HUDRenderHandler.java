@@ -6,16 +6,15 @@ import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.player.LocalPlayer;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.event.TickEvent;
@@ -24,11 +23,13 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
+import top.ribs.scguns.common.ChargeHandler;
 import top.ribs.scguns.common.FireMode;
 import top.ribs.scguns.common.Gun;
+import top.ribs.scguns.common.HotBarrelHandler;
+import top.ribs.scguns.init.ModEnchantments;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GunItem;
-import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
 
 import java.util.Objects;
@@ -39,7 +40,7 @@ public class HUDRenderHandler {
     private static final ResourceLocation FILL_BAR = new ResourceLocation(Reference.MOD_ID, "textures/gui/fill_bar.png");
     private static final ResourceLocation MELEE_ATTACK_INDICATOR_PROGRESS = new ResourceLocation(Reference.MOD_ID, "textures/gui/melee_attack_indicator_progress.png");
     private static final ResourceLocation MELEE_ATTACK_INDICATOR_BACKGROUND = new ResourceLocation(Reference.MOD_ID, "textures/gui/melee_attack_indicator_background.png");
-
+    public static final ResourceLocation HOT_BARREL_TEXTURE = new ResourceLocation(Reference.MOD_ID, "textures/gui/hot_barrel.png");
     static int meleeCooldown = 0;
     static int maxMeleeCooldown = 0;
     static boolean isMeleeCooldownActive = false;
@@ -61,7 +62,6 @@ public class HUDRenderHandler {
 
         Minecraft mc = Minecraft.getInstance();
         LocalPlayer player = mc.player;
-
         if (player == null || mc.screen != null) {
             return;
         }
@@ -74,11 +74,47 @@ public class HUDRenderHandler {
         GuiGraphics guiGraphics = event.getGuiGraphics();
         PoseStack poseStack = guiGraphics.pose();
 
+        // Existing gun info HUD
         renderGunInfoHUD(heldItem, event.getPartialTick(), poseStack, guiGraphics);
         renderChargeBarHUD(heldItem, event.getPartialTick(), poseStack, guiGraphics, player);
         renderMeleeCooldownHUD(event.getPartialTick(), poseStack, guiGraphics);
         renderHitMarker(event.getPartialTick(), poseStack, guiGraphics);
+
+        // Render hot barrel overlay
+        renderHotBarrelOverlay(heldItem, poseStack, guiGraphics);
     }
+    public static void renderHotBarrelOverlay(ItemStack heldItem, PoseStack poseStack, GuiGraphics guiGraphics) {
+        if (!(heldItem.getItem() instanceof GunItem) || EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), heldItem) <= 0) {
+            return;
+        }
+
+        int hotBarrelLevel = HotBarrelHandler.getHotBarrelLevel(heldItem);
+        float chargeRatio = (float) hotBarrelLevel / HotBarrelHandler.MAX_HOT_BARREL;
+        Minecraft mc = Minecraft.getInstance();
+        int screenWidth = mc.getWindow().getGuiScaledWidth();
+        int screenHeight = mc.getWindow().getGuiScaledHeight();
+        int barWidth = 128;
+        int barHeight = 8;
+        float scale = 1.25f;
+        int barX = (int) ((screenWidth / 2) - ((barWidth * scale) / 2));
+        int barY = (int) (screenHeight - 45 * scale);
+        poseStack.pushPose();
+        poseStack.scale(scale, scale, 1.0f);
+        RenderSystem.enableBlend();
+        RenderSystem.defaultBlendFunc();
+        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+        RenderSystem.setShaderTexture(0, HOT_BARREL_TEXTURE);
+        guiGraphics.blit(HOT_BARREL_TEXTURE, (int) (barX / scale), (int) (barY / scale), 0, 0, barWidth, 5, barWidth, barHeight);
+        int fillWidth = (int) (barWidth * chargeRatio);
+        if (fillWidth > 0) {
+            int fillY = (int) ((barY / scale) + 1);
+            guiGraphics.blit(HOT_BARREL_TEXTURE, (int) (barX / scale), fillY, 0, 5, fillWidth, 3, barWidth, barHeight);
+        }
+
+        RenderSystem.disableBlend();
+        poseStack.popPose();
+    }
+
 
     private static void renderMeleeCooldownHUD(float partialTick, PoseStack poseStack, GuiGraphics guiGraphics) {
         if (!isMeleeCooldownActive) {

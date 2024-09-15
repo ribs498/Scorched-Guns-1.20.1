@@ -15,9 +15,10 @@
     "rate": 13,
     "recoilAngle": 16.0,
     "recoilKick": 5.0,
-    "spread": 50.0,
+    "spread": 21.0,
     "meleeDamage": 3.0,
-    "meleeCooldownTicks": 20
+    "meleeCooldownTicks": 20,
+    "hotBarrelRate": 50
   },
   "modules": {
     "attachments": {

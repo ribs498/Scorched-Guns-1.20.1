@@ -1,17 +1,28 @@
 package top.ribs.scguns.init;
 
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.event.RegisterGameTestsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
+import top.ribs.scguns.Reference;
 import top.ribs.scguns.blockentity.*;
+import top.ribs.scguns.common.Gun;
 
 
 public class ModBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES =
             DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, "scguns");
-
+    public static final RegistryObject<BlockEntityType<GunShelfBlockEntity>> GUN_SHELF_BLOCK_ENTITY =
+            BLOCK_ENTITIES.register("gun_shelf", () ->
+                    BlockEntityType.Builder.of(GunShelfBlockEntity::new,
+                            ModBlocks.GUN_SHELF.get()).build(null));
     public static final RegistryObject<BlockEntityType<AdvancedComposterBlockEntity>> ADVANCED_COMPOSTER =
             BLOCK_ENTITIES.register("advanced_composter", () ->
                     BlockEntityType.Builder.of(AdvancedComposterBlockEntity::new,
@@ -87,7 +98,10 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("shell_catcher_module", () ->
                     BlockEntityType.Builder.of(ShellCatcherModuleBlockEntity::new,
                             ModBlocks.SHELL_CATCHER_TURRET_MODULE.get()).build(null));
-
+    public static final RegistryObject<BlockEntityType<AmmoModuleBlockEntity>> AMMO_MODULE =
+            BLOCK_ENTITIES.register("ammo_module", () ->
+                    BlockEntityType.Builder.of(AmmoModuleBlockEntity::new,
+                            ModBlocks.AMMO_TURRET_MODULE.get()).build(null));
     public static final RegistryObject<BlockEntityType<VentCollectorBlockEntity>> VENT_COLLECTOR = BLOCK_ENTITIES.register("vent_collector",
             () -> BlockEntityType.Builder.of(VentCollectorBlockEntity::new, ModBlocks.VENT_COLLECTOR.get()).build(null));
 

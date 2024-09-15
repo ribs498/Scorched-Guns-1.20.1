@@ -5,6 +5,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,6 +26,8 @@ import top.ribs.scguns.network.message.S2CMessageProjectileHitEntity;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 
 public class RamrodProjectileEntity extends ProjectileEntity {
+    private static final float SHIELD_DISABLE_CHANCE = 0.40f; // 40% chance to disable shield, slightly higher than standard
+    private static final float SHIELD_DAMAGE_PENETRATION = 0.35f; // 35% of damage passes through shield
 
     public RamrodProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -61,14 +64,19 @@ public class RamrodProjectileEntity extends ProjectileEntity {
         float newDamage = this.getCriticalDamage(this.getWeapon(), this.random, damage);
         boolean critical = damage != newDamage;
         damage = newDamage;
-        ResourceLocation advantage = this.getProjectile().getAdvantage();
         damage *= advantageMultiplier(entity);
 
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
-
-        entity.hurt(ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner()), damage);
+        DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
+        boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, SHIELD_DISABLE_CHANCE);
+        if (blocked) {
+            float penetratingDamage = damage * SHIELD_DAMAGE_PENETRATION;
+            entity.hurt(source, penetratingDamage);
+        } else {
+            entity.hurt(source, damage);
+        }
         if(entity instanceof LivingEntity) {
             GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
         }
@@ -76,11 +84,7 @@ public class RamrodProjectileEntity extends ProjectileEntity {
             int hitType = critical ? S2CMessageProjectileHitEntity.HitType.CRITICAL : headshot ? S2CMessageProjectileHitEntity.HitType.HEADSHOT : S2CMessageProjectileHitEntity.HitType.NORMAL;
             PacketHandler.getPlayChannel().sendToPlayer(() -> (ServerPlayer) this.shooter, new S2CMessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
         }
-
-        // Send blood particle to tracking clients
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
-
-        // Custom explosion particle effect
         spawnExplosionParticles(hitVec);
     }
 

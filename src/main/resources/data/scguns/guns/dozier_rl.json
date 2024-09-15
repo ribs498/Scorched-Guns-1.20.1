@@ -11,12 +11,14 @@
     "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:bazooka",
+    "baseGripType": "scguns:bazooka",
     "rate": 7,
     "recoilAngle": 6.7,
     "recoilKick": 2.22,
     "spread": 4.0,
     "meleeDamage": 3.5,
-    "meleeCooldownTicks": 25
+    "meleeCooldownTicks": 25,
+    "hotBarrelRate": 18
   },
   "modules": {
     "attachments": {

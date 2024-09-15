@@ -1,5 +1,5 @@
 {
-  "parent": "scguns:main/iron/gyrojet_pistol",
+  "parent": "scguns:main/iron/brawler",
   "criteria": {
     "rocket_rifle": {
       "conditions": {

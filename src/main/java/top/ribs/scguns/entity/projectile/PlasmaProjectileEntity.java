@@ -6,6 +6,7 @@ import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -26,6 +27,8 @@ import top.ribs.scguns.network.message.S2CMessageProjectileHitEntity;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 
 public class PlasmaProjectileEntity extends ProjectileEntity {
+    private static final float SHIELD_DISABLE_CHANCE = 0.70f;
+    private static final float SHIELD_DAMAGE_PENETRATION = 0.25f;
 
     public PlasmaProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -63,15 +66,30 @@ public class PlasmaProjectileEntity extends ProjectileEntity {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
 
-        entity.hurt(ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner()), damage);
+        DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
+
+        // Handle shield interaction
+        boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, SHIELD_DISABLE_CHANCE);
+
+        if (blocked) {
+            // Even if blocked, some damage passes through
+            float penetratingDamage = damage * SHIELD_DAMAGE_PENETRATION;
+            entity.hurt(source, penetratingDamage);
+        } else {
+            // Full damage if not blocked
+            entity.hurt(source, damage);
+        }
+
         if(entity instanceof LivingEntity) {
             GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
         }
+
         if (this.shooter instanceof Player) {
             int hitType = critical ? S2CMessageProjectileHitEntity.HitType.CRITICAL : headshot ? S2CMessageProjectileHitEntity.HitType.HEADSHOT : S2CMessageProjectileHitEntity.HitType.NORMAL;
             PacketHandler.getPlayChannel().sendToPlayer(() -> (ServerPlayer) this.shooter, new S2CMessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
         }
 
+        // Create plasma explosion regardless of shield block
         createPlasmaExplosion(this, 1.0f);
         spawnExplosionParticles(hitVec);
     }

@@ -1,6 +1,5 @@
 package top.ribs.scguns.util;
 
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
@@ -8,12 +7,10 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.common.Gun;
+import top.ribs.scguns.common.HotBarrelHandler;
 import top.ribs.scguns.common.ReloadType;
 import top.ribs.scguns.init.ModEnchantments;
-import top.ribs.scguns.init.ModItems;
-import top.ribs.scguns.item.BayonetItem;
 import top.ribs.scguns.item.GunItem;
-import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.particles.TrailData;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -75,45 +72,42 @@ public class GunEnchantmentHelper
     public static double getProjectileSpeedModifier(ItemStack weapon) {
         int acceleratorLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.ACCELERATOR.get(), weapon);
         int heavyShotLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEAVY_SHOT.get(), weapon);
-
         double speedModifier = 1.0;
         if (acceleratorLevel > 0) {
             speedModifier += 0.5 * acceleratorLevel;
         }
-
         if (heavyShotLevel > 0) {
-            speedModifier -= 0.35 * heavyShotLevel;
+            speedModifier -= 0.15 * heavyShotLevel;
         }
         return Mth.clamp(speedModifier, 0.1, 5.0);
     }
-
     public static int getRate(ItemStack weapon, Gun modifiedGun) {
         int baseRate = modifiedGun.getGeneral().getRate();
-
         int triggerFingerLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.TRIGGER_FINGER.get(), weapon);
         int heavyShotLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEAVY_SHOT.get(), weapon);
-
         float rateModifier = getRateModifier(triggerFingerLevel, heavyShotLevel);
-
         int modifiedRate = Math.round(baseRate * rateModifier);
+        modifiedRate = GunEnchantmentHelper.getHotBarrelFireRate(weapon, modifiedRate);
         return Math.max(modifiedRate, 1);
     }
-
     private static float getRateModifier(int triggerFingerLevel, int heavyShotLevel) {
         float heavyShotModifier = 1.0f + (0.3f * heavyShotLevel);
-        float triggerFingerModifier = 1.0f - (0.25f * triggerFingerLevel);
+        float triggerFingerModifier = 1.0f - (0.2f * triggerFingerLevel);
         float combinedModifier = heavyShotModifier * triggerFingerModifier;
-
         return Mth.clamp(combinedModifier, 0.5f, 2.0f);
     }
     public static float getRecoilModifier(ItemStack weapon) {
         int heavyShotLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEAVY_SHOT.get(), weapon);
-        return 1.0f + (0.15f * heavyShotLevel);
+        float recoilModifier = 1.0f + (0.15f * heavyShotLevel);
+        recoilModifier = getHotBarrelRecoil(weapon, recoilModifier);
+
+        return recoilModifier;
     }
+
     public static float getHeavyShotDamage(ItemStack weapon, float damage) {
         int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEAVY_SHOT.get(), weapon);
         if (level > 0) {
-            damage += damage * (0.05F * level);
+            damage += damage * (0.1F * level);
         }
         return damage;
     }
@@ -121,41 +115,60 @@ public class GunEnchantmentHelper
     public static float getAcceleratorDamage(ItemStack weapon, float damage) {
         int acceleratorLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.ACCELERATOR.get(), weapon);
         if (acceleratorLevel > 0) {
-            damage += damage * (0.1F * acceleratorLevel);
+            damage += damage * (0.06F * acceleratorLevel);
         }
         int heavyShotLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEAVY_SHOT.get(), weapon);
         if (heavyShotLevel > 0) {
-            damage += damage * (0.05F * heavyShotLevel);
+            damage += damage * (0.075F * heavyShotLevel);
         }
         return damage;
     }
+    public static float getHotBarrelDamage(ItemStack weapon, float baseDamage) {
+        int hotBarrelLevel = HotBarrelHandler.getHotBarrelLevel(weapon);
+        float damageBoost = (hotBarrelLevel / 100.0f) * 0.35f;
+        return baseDamage + (baseDamage * damageBoost);
+    }
+    public static int getHotBarrelFireRate(ItemStack weapon, int baseRate) {
+        int hotBarrelLevel = HotBarrelHandler.getHotBarrelLevel(weapon);
+        float fireRateBoost = (hotBarrelLevel / 100.0f) * 0.25f;
+        return Math.max((int) (baseRate * (1.0f - fireRateBoost)), 1);
+    }
+    public static float getHotBarrelRecoil(ItemStack weapon, float baseRecoil) {
+        int hotBarrelLevel = HotBarrelHandler.getHotBarrelLevel(weapon);
+        float recoilIncreaseFactor = 1.0f + (hotBarrelLevel / 100.0f) * 0.75f;
+        return baseRecoil * recoilIncreaseFactor;
+    }
 
+    public static float getHotBarrelSpread(ItemStack weapon, float baseSpread) {
+        int hotBarrelLevel = HotBarrelHandler.getHotBarrelLevel(weapon);
+        float spreadIncrease = (hotBarrelLevel / 100.0f) * 1.5f;
+        return baseSpread + (baseSpread * spreadIncrease);
+    }
+    public static boolean shouldSetOnFire(ItemStack weapon) {
+        int hotBarrelLevel = HotBarrelHandler.getHotBarrelLevel(weapon);
+        return hotBarrelLevel >= 60;
+    }
     public static float getPuncturingChance(ItemStack weapon)
     {
         int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.PUNCTURING.get(), weapon);
         return level * 0.05F;
     }
-    public static ParticleOptions getParticle(ItemStack weapon)
-    {
+    public static ParticleOptions getParticle(ItemStack weapon) {
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(weapon);
-        if(enchantments.containsKey(ModEnchantments.FIRE_STARTER.get()))
-        {
+        if (enchantments.containsKey(ModEnchantments.HOT_BARREL.get()) && HotBarrelHandler.getHotBarrelLevel(weapon) >= 75) {
             return ParticleTypes.LAVA;
         }
-        else if(enchantments.containsKey(ModEnchantments.PUNCTURING.get()))
-    {
-        return ParticleTypes.ENCHANTED_HIT;
-    }
-        else if(enchantments.containsKey(ModEnchantments.HEAVY_SHOT.get()))
-        {
+        if (enchantments.containsKey(ModEnchantments.PUNCTURING.get())) {
+            return ParticleTypes.ENCHANTED_HIT;
+        } else if (enchantments.containsKey(ModEnchantments.HEAVY_SHOT.get())) {
             return ParticleTypes.MYCELIUM;
-        }
-        else if(enchantments.containsKey(ModEnchantments.ELEMENTAL_POP.get()))
-        {
+        } else if (enchantments.containsKey(ModEnchantments.ELEMENTAL_POP.get())) {
             return ParticleTypes.CRIMSON_SPORE;
         }
+
         return new TrailData(weapon.isEnchanted());
     }
+
     private static final Map<MobEffect, Integer> ELEMENTAL_EFFECTS = new HashMap<>();
 
     static {
@@ -186,7 +199,7 @@ public class GunEnchantmentHelper
 
                 if (random.nextInt(100) < finalChance) {
                     int duration = getRandomEffectDuration(effect, enchantmentLevel, random);
-                    int amplifier = getRandomEffectAmplifier(effect, enchantmentLevel, random);
+                    int amplifier = getRandomEffectAmplifier(enchantmentLevel, random);
 
                     target.addEffect(new MobEffectInstance(effect, duration, amplifier));
                     triggerVisualSplashEffect(target, effect);
@@ -205,7 +218,7 @@ public class GunEnchantmentHelper
         return Math.min(duration, maxDuration);
     }
 
-    private static int getRandomEffectAmplifier(MobEffect effect, int enchantmentLevel, Random random) {
+    private static int getRandomEffectAmplifier(int enchantmentLevel, Random random) {
         int baseAmplifier = 0;
         int maxAmplifier = 2;
         int amplifier = baseAmplifier + random.nextInt(enchantmentLevel + 1);

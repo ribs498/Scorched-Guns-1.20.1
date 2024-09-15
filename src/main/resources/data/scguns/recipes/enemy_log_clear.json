@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "scguns:enemy_log"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "scguns:enemy_log"
+  }
+}

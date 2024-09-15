@@ -26,6 +26,8 @@ import top.ribs.scguns.util.GunEnchantmentHelper;
 public class KrahgRoundProjectileEntity extends ProjectileEntity {
 
     private static final int ARMOR_BYPASS_AMOUNT = 4;
+    private static final float KRAHG_SHIELD_DISABLE_CHANCE = 0.60f;
+    private static final float SHIELD_DAMAGE_PENETRATION = 0.4f;
 
     public KrahgRoundProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -45,20 +47,33 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
         damage *= advantageMultiplier(entity);
 
         if (headshot) {
-            damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get(); // Adjust damage for headshots
+            damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
+
         if (entity instanceof LivingEntity livingEntity) {
             damage = applyArmorBypass(livingEntity, damage);
         }
 
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
 
-        if (!(entity.getType().is(ModTags.Entities.GHOST) && !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
-            entity.hurt(source, damage);
+        // Handle shield interaction
+        boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, KRAHG_SHIELD_DISABLE_CHANCE);
+
+        if (blocked) {
+            // Even if blocked, some damage passes through
+            float penetratingDamage = damage * SHIELD_DAMAGE_PENETRATION;
+            entity.hurt(source, penetratingDamage);
+        } else {
+            // Full damage if not blocked
+            if (!(entity.getType().is(ModTags.Entities.GHOST) && !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
+                entity.hurt(source, damage);
+            }
         }
+
         if(entity instanceof LivingEntity) {
             GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
         }
+
         if (this.shooter instanceof Player) {
             int hitType = critical ? S2CMessageProjectileHitEntity.HitType.CRITICAL : headshot ? S2CMessageProjectileHitEntity.HitType.HEADSHOT : S2CMessageProjectileHitEntity.HitType.NORMAL;
             PacketHandler.getPlayChannel().sendToPlayer(() -> (ServerPlayer) this.shooter, new S2CMessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
@@ -67,6 +82,7 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
         // Send blood particle to tracking clients
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
     }
+
     private float applyArmorBypass(LivingEntity entity, float damage) {
         int armorValue = entity.getArmorValue();
         int bypassedArmorValue = Math.max(0, armorValue - ARMOR_BYPASS_AMOUNT);
@@ -80,6 +96,7 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
         super.onHitBlock(state, pos, face, x, y, z);
     }
+
     @Override
     public void onExpired() {
     }

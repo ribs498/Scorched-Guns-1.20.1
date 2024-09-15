@@ -17,23 +17,13 @@ public class AttachmentItem extends Item implements IMeta
         super(properties);
     }
 
-    /* Dirty hack to apply enchant effect to attachments if gun is enchanted */
     @Override
     public boolean isFoil(ItemStack stack)
     {
-        if(FMLEnvironment.dist == Dist.CLIENT)
-        {
-            ItemStack weapon = GunRenderingHandler.get().getRenderingWeapon();
-            if(weapon != null)
-            {
-                return weapon.getItem().isFoil(weapon);
-            }
-        }
-        return super.isFoil(stack);
+        return false;
     }
 
     public boolean isValidRepairItem(ItemStack pToRepair, ItemStack pRepair) {
         return pRepair.is(ModItems.REPAIR_KIT.get());
     }
-
 }

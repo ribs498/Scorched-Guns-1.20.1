@@ -3,17 +3,17 @@
   "category": "ammo",
   "ingredients": [
     {
-      "tag": "forge:gunpowder"
+      "item": "scguns:gunpowder_dust"
     },
     {
-      "item": "scguns:pebbles"
+      "item": "scguns:hardened_pebbles"
     },
     {
       "item": "minecraft:stick"
     }
   ],
   "result": {
-    "count": 4,
+    "count": 2,
     "item": "scguns:grapeshot"
   }
 }

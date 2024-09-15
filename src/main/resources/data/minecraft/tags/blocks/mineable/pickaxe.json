@@ -53,6 +53,8 @@
     "scguns:raw_phosphor_block",
     "scguns:cracked_phosphorite_bricks",
     "scguns:shotgun_turret",
-    "scguns:auto_turret"
+    "scguns:auto_turret",
+    "scguns:ammo_turret_module",
+    "scguns:plasma_lantern"
   ]
 }

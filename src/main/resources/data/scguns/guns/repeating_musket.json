@@ -11,12 +11,14 @@
     "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
+    "baseGripType": "scguns:two_handed",
     "rate": 13,
     "recoilAngle": 10.0,
     "recoilKick": 3.0,
     "spread": 7.0,
     "meleeDamage": 2.5,
-    "meleeCooldownTicks": 20
+    "meleeCooldownTicks": 20,
+    "hotBarrelRate": 20
   },
   "modules": {
     "attachments": {

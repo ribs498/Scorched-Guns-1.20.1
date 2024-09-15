@@ -24,6 +24,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
@@ -43,8 +44,11 @@ public class AutoTurretBlock extends BaseEntityBlock {
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
-        return Block.box(0, 0, 0, 16, 10, 16);
+        VoxelShape base = Block.box(0, 0, 0, 16, 10, 16);
+        VoxelShape turretHead = Block.box(6, 10, 6, 10, 16, 10);
+        return Shapes.or(base, turretHead);
     }
+
 
     @Nullable
     @Override

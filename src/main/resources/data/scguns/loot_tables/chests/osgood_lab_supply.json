@@ -214,6 +214,11 @@
         },
         {
           "type": "minecraft:item",
+          "name": "scguns:treated_brass_blueprint",
+          "weight": 4
+        },
+        {
+          "type": "minecraft:item",
           "functions": [
             {
               "function": "minecraft:set_damage",

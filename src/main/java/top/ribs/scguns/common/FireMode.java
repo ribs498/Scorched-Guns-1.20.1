@@ -30,6 +30,8 @@ public record FireMode(ResourceLocation id) {
      */
     public static final FireMode BEAM = new FireMode(new ResourceLocation(Reference.MOD_ID, "beam"));
 
+    public static final FireMode BURST = new FireMode(new ResourceLocation(Reference.MOD_ID, "burst"));
+
 
     /**
      * The fire mode map.
@@ -42,6 +44,7 @@ public record FireMode(ResourceLocation id) {
         registerType(AUTOMATIC);
         registerType(PULSE);
         registerType(BEAM);
+        registerType(BURST);
 
     }
 
@@ -81,4 +84,7 @@ public record FireMode(ResourceLocation id) {
         return this.id;
     }
 
+    public int ordinal() {
+        return 0;
+    }
 }

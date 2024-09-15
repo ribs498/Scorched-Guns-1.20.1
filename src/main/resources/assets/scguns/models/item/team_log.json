@@ -1,6 +1,6 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "item/generated",
+	"parent": "item/handheld",
 	"textures": {
 		"layer0": "scguns:item/team_log"
 	}

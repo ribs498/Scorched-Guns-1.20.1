@@ -23,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -35,6 +36,7 @@ import top.ribs.scguns.client.handler.MeleeAttackHandler;
 import top.ribs.scguns.client.render.gun.model.RatKingAndQueenModel;
 import top.ribs.scguns.common.FireMode;
 import top.ribs.scguns.common.Gun;
+import top.ribs.scguns.common.HotBarrelHandler;
 import top.ribs.scguns.init.*;
 import top.ribs.scguns.item.*;
 import top.ribs.scguns.item.ammo_boxes.EmptyCasingPouchItem;
@@ -131,21 +133,27 @@ public class GunEventBus {
             }
         }
     }
-
-
     @SubscribeEvent
     public static void postShoot(GunFireEvent.Post event) {
         Player player = event.getEntity();
         Level level = event.getEntity().level();
         ItemStack heldItem = player.getMainHandItem();
-        CompoundTag tag = heldItem.getTag();
+        CompoundTag tag = heldItem.getOrCreateTag(); // Get or create tag for storing hot barrel
 
         if (heldItem.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(heldItem);
-            boolean inSulfurCloud = isInSulfurCloudArea(level, player.blockPosition());
 
-            if (inSulfurCloud) {
-                triggerExplosion(level, player.blockPosition());
+            // Check if the gun has the HotBarrelEnchantment
+            int hotBarrelLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), heldItem);
+
+            if (hotBarrelLevel > 0) {
+                int hotBarrelFillRate = gun.getGeneral().getHotBarrelRate();
+                HotBarrelHandler.increaseHotBarrel(heldItem, hotBarrelFillRate);
+
+                boolean inSulfurCloud = isInSulfurCloudArea(player.level(), player.blockPosition());
+                if (inSulfurCloud) {
+                    triggerExplosion(player.level(), player.blockPosition());
+                }
             }
             // Get shot count and determine mirroring
             int shotCount = RatKingAndQueenModel.GunFireEventRatHandler.getShotCount();
@@ -187,6 +195,26 @@ public class GunEventBus {
             }
         }
     }
+    @SubscribeEvent
+    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        Player player = event.player;
+        ItemStack heldItem = player.getMainHandItem();
+
+        // If the player is holding a gun with Hot Barrel enchantment, decay the hot barrel
+        if (heldItem.getItem() instanceof GunItem && EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), heldItem) > 0) {
+            HotBarrelHandler.decayHotBarrel(heldItem);
+        } else {
+            // If the player is not holding the gun, clear the hot barrel charge on all guns in their inventory
+            for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
+                ItemStack itemStack = player.getInventory().getItem(i);
+                if (itemStack.getItem() instanceof GunItem && EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), itemStack) > 0) {
+                    HotBarrelHandler.clearHotBarrel(itemStack);
+                }
+            }
+        }
+    }
+
+
     private static boolean isInSulfurCloudArea(Level level, BlockPos playerPos) {
         int effectRadiusSquared = SulfurVentBlock.EFFECT_RADIUS_SQUARED;
 

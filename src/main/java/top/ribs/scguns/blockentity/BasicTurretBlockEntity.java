@@ -2,6 +2,7 @@ package top.ribs.scguns.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;
@@ -9,7 +10,9 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.*;
@@ -44,6 +47,7 @@ import top.ribs.scguns.client.screen.BasicTurretMenu;
 import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.entity.projectile.turret.TurretProjectileEntity;
 import top.ribs.scguns.init.*;
+import top.ribs.scguns.item.EnemyLogItem;
 import top.ribs.scguns.item.TeamLogItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageMuzzleFlash;
@@ -75,7 +79,7 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
     private double smoothedTargetZ;
     private float pitch;
     private static final float MAX_PITCH = 60.0F;
-    private static final float MIN_PITCH = -15.0F;
+    private static final float MIN_PITCH = -25.0F;
     private double smoothedTargetY;
     private static final float POSITION_SMOOTHING_FACTOR = 0.2F;
     private static final float ROTATION_SPEED = 0.5F;
@@ -93,6 +97,9 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
     private boolean hasDamageModule;
     private boolean hasRangeModule;
     private boolean hasShellCatchingModule;
+    public boolean disabled = false;
+    public int disableCooldown = 0;
+    public static final int MAX_DISABLE_TIME = 200; // 10 seconds
 
 
     public BasicTurretBlockEntity(BlockPos pos, BlockState state) {
@@ -112,7 +119,6 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
     }
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T t) {
         if (t instanceof BasicTurretBlockEntity turret) {
-            // Cache module checks
             turret.hasFireRateModule = turret.isAdjacentToFireRateModule(level, pos);
             turret.hasDamageModule = turret.isAdjacentToDamageModule(level, pos);
             turret.hasRangeModule = turret.isAdjacentToRangeModule(level, pos);
@@ -127,7 +133,14 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
             }
             turret.tickRecoil();
 
-            if (state.getValue(BasicTurretBlock.POWERED)) {
+            if (turret.disabled) {
+                turret.disableCooldown--;
+                if (turret.disableCooldown <= 0) {
+                    turret.disabled = false;
+                    turret.disableCooldown = 0;
+                }
+                turret.resetToRestPosition();
+            } else if (state.getValue(BasicTurretBlock.POWERED)) {
                 turret.updateTargetRange(rangeModifier);
                 if (!turret.isTargetValid()) {
                     turret.target = null;
@@ -149,10 +162,42 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
         }
     }
 
+
     private void updateTargetRange(double rangeModifier) {
         TARGETING_RADIUS = 24.0f + (float)rangeModifier;
     }
 
+    public void onHitByLightningProjectile() {
+        this.disabled = true;
+        this.disableCooldown = MAX_DISABLE_TIME;
+        this.resetToRestPosition(); // Stop turret movement
+        this.setChanged();
+        if (this.level != null && !this.level.isClientSide) {
+            this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), 3);
+            spawnDisableParticles();
+        }
+    }
+    private void spawnDisableParticles() {
+        if (this.level instanceof ServerLevel serverLevel) {
+            double x = this.worldPosition.getX() + 0.5;
+            double y = this.worldPosition.getY() + 1.0;
+            double z = this.worldPosition.getZ() + 0.5;
+
+            int particleCount = 20;
+            double spread = 0.5;
+
+            for (int i = 0; i < particleCount; i++) {
+                double offsetX = this.level.random.nextDouble() * spread - spread / 2;
+                double offsetY = this.level.random.nextDouble() * spread;
+                double offsetZ = this.level.random.nextDouble() * spread - spread / 2;
+
+                serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK,
+                        x + offsetX, y + offsetY, z + offsetZ,
+                        1, 0, 0, 0, 0.05);
+            }
+            serverLevel.playSound(null, this.worldPosition, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F);
+        }
+    }
 
 
     public boolean isReadyToFire() {
@@ -267,7 +312,7 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
     }
 
     Vec3 getMuzzlePosition(float yaw, float pitch) {
-        double muzzleLength = 1.3;
+        double muzzleLength = 1.0;
         double muzzleOffsetY = 1.4;
         double yawRad = Math.toRadians(yaw);
         double pitchRad = Math.toRadians(pitch);
@@ -286,7 +331,10 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
         double distance = toTarget.length();
         Vec3 rayVector = toTarget.normalize().scale(distance);
 
-        ClipContext clipContext = new ClipContext(turretPos, turretPos.add(rayVector), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null);
+        // Adjust the start position to be slightly above the turret base
+        Vec3 adjustedTurretPos = turretPos.add(0, 0.5, 0);
+
+        ClipContext clipContext = new ClipContext(adjustedTurretPos, adjustedTurretPos.add(rayVector), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null);
         BlockHitResult hitResult = level.clip(clipContext);
 
         return hitResult.getType() == HitResult.Type.MISS;
@@ -460,37 +508,66 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
         if (!hasTargetingModule) {
             return;
         }
-        ItemStack teamLogStack = itemHandler.getStackInSlot(9);
+
+        ItemStack logStack = itemHandler.getStackInSlot(9);
+        boolean hasTeamLog = logStack.getItem() instanceof TeamLogItem && !(logStack.getItem() instanceof EnemyLogItem);
+        boolean hasEnemyLog = logStack.getItem() instanceof EnemyLogItem;
+
         List<UUID> loggedEntityUUIDs = new ArrayList<>();
         List<String> blacklistedEntityTypes = new ArrayList<>();
-        if (teamLogStack.getItem() instanceof TeamLogItem) {
-            CompoundTag tag = teamLogStack.getTag();
+        List<UUID> whitelistedEntityUUIDs = new ArrayList<>();
+        List<String> whitelistedEntityTypes = new ArrayList<>();
+
+        if (hasTeamLog || hasEnemyLog) {
+            CompoundTag tag = logStack.getTag();
             if (tag != null) {
-                if (tag.contains("Entities", Tag.TAG_LIST)) {
-                    ListTag listTag = tag.getList("Entities", Tag.TAG_COMPOUND);
-                    for (int i = 0; i < listTag.size(); i++) {
-                        CompoundTag entityTag = listTag.getCompound(i);
-                        UUID entityUUID = entityTag.getUUID("UUID");
-                        loggedEntityUUIDs.add(entityUUID);
+                if (hasTeamLog) {
+                    if (tag.contains("Entities", Tag.TAG_LIST)) {
+                        ListTag listTag = tag.getList("Entities", Tag.TAG_COMPOUND);
+                        for (int i = 0; i < listTag.size(); i++) {
+                            CompoundTag entityTag = listTag.getCompound(i);
+                            loggedEntityUUIDs.add(entityTag.getUUID("UUID"));
+                        }
                     }
-                }
-                if (tag.contains("Blacklist", Tag.TAG_LIST)) {
-                    ListTag blacklistTag = tag.getList("Blacklist", Tag.TAG_STRING);
-                    for (int i = 0; i < blacklistTag.size(); i++) {
-                        String entityType = blacklistTag.getString(i);
-                        blacklistedEntityTypes.add(entityType);
+                    if (tag.contains("Blacklist", Tag.TAG_LIST)) {
+                        ListTag blacklistTag = tag.getList("Blacklist", Tag.TAG_STRING);
+                        for (int i = 0; i < blacklistTag.size(); i++) {
+                            blacklistedEntityTypes.add(blacklistTag.getString(i));
+                        }
+                    }
+                } else if (hasEnemyLog) {
+                    if (tag.contains("Whitelist", Tag.TAG_LIST)) {
+                        ListTag listTag = tag.getList("Whitelist", Tag.TAG_COMPOUND);
+                        for (int i = 0; i < listTag.size(); i++) {
+                            CompoundTag entityTag = listTag.getCompound(i);
+                            whitelistedEntityUUIDs.add(entityTag.getUUID("UUID"));
+                        }
+                    }
+                    if (tag.contains("WhitelistEntityTypes", Tag.TAG_LIST)) {
+                        ListTag whitelistTag = tag.getList("WhitelistEntityTypes", Tag.TAG_STRING);
+                        for (int i = 0; i < whitelistTag.size(); i++) {
+                            whitelistedEntityTypes.add(whitelistTag.getString(i));
+                        }
                     }
                 }
             }
         }
+
+        Vec3 turretPos = new Vec3(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 1.0, this.worldPosition.getZ() + 0.5);
+
+        // Increase the vertical search range
+        double verticalSearchRange = TARGETING_RADIUS;
+        AABB searchBox = new AABB(pos).inflate(TARGETING_RADIUS, verticalSearchRange, TARGETING_RADIUS);
+
         boolean finalIsPlayerTargetingModule = isPlayerTargetingModule;
         boolean finalIsHostileTargetingModule = isHostileTargetingModule;
-        List<LivingEntity> potentialTargets = level.getEntitiesOfClass(LivingEntity.class, new AABB(pos).inflate(TARGETING_RADIUS),
+        List<LivingEntity> potentialTargets = level.getEntitiesOfClass(LivingEntity.class, searchBox,
                 entity -> entity != null
                         && entity.isAlive()
                         && !isOwner(entity)
-                        && !loggedEntityUUIDs.contains(entity.getUUID())
-                        && !blacklistedEntityTypes.contains(EntityType.getKey(entity.getType()).toString())
+                        && ((!hasTeamLog && !hasEnemyLog) || // Default targeting when no logs are present
+                        (hasTeamLog && !loggedEntityUUIDs.contains(entity.getUUID()) && !blacklistedEntityTypes.contains(EntityType.getKey(entity.getType()).toString())) ||
+                        (hasEnemyLog && (whitelistedEntityUUIDs.contains(entity.getUUID()) || whitelistedEntityTypes.contains(EntityType.getKey(entity.getType()).toString()))))
                         && !(entity instanceof EnderMan)
                         && (!finalIsPlayerTargetingModule || (entity instanceof Player && !((Player) entity).isCreative()))
                         && (!finalIsHostileTargetingModule || entity.getType().getCategory() == MobCategory.MONSTER)
@@ -498,8 +575,6 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
         );
 
         if (!potentialTargets.isEmpty()) {
-            Vec3 turretPos = new Vec3(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 1.0, this.worldPosition.getZ() + 0.5);
-
             this.target = potentialTargets.stream()
                     .filter(entity -> hasLineOfSight(level, turretPos, entity))
                     .min(Comparator.comparingDouble(entity -> entity.distanceToSqr(turretPos)))
@@ -507,16 +582,18 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
 
             if (this.target != null) {
                 double predictedX = this.target.getX() + this.target.getDeltaMovement().x * 7;
-                double predictedY = (this.target.getY() + this.target.getEyeY()) / 2;
+                double predictedY = this.target.getY() + (this.target.getBbHeight() / 2); // Target center of entity
                 double predictedZ = this.target.getZ() + this.target.getDeltaMovement().z * 7;
 
-                smoothedTargetX = smoothedTargetX * (1.0F - POSITION_SMOOTHING_FACTOR) + predictedX * POSITION_SMOOTHING_FACTOR;
-                smoothedTargetY = smoothedTargetY * (1.0F - POSITION_SMOOTHING_FACTOR) + predictedY * POSITION_SMOOTHING_FACTOR;
-                smoothedTargetZ = smoothedTargetZ * (1.0F - POSITION_SMOOTHING_FACTOR) + predictedZ * POSITION_SMOOTHING_FACTOR;
+                smoothedTargetX = lerp(smoothedTargetX, predictedX, POSITION_SMOOTHING_FACTOR);
+                smoothedTargetY = lerp(smoothedTargetY, predictedY, POSITION_SMOOTHING_FACTOR);
+                smoothedTargetZ = lerp(smoothedTargetZ, predictedZ, POSITION_SMOOTHING_FACTOR);
             }
         }
     }
-
+    private static double lerp(double a, double b, double t) {
+        return a + t * (b - a);
+    }
     private void updateYaw() {
         this.previousYaw = this.yaw;
 
@@ -539,7 +616,6 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
             if (this.yaw < 0) this.yaw += 360.0F;
         }
     }
-
     private void updatePitch() {
         this.previousPitch = this.pitch;
 
@@ -557,7 +633,6 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
             this.pitch += pitchDifference * ROTATION_SPEED;
         }
     }
-
 
     public float getPreviousYaw() {
         return this.previousYaw;
@@ -598,9 +673,11 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
         tag.put("Inventory", itemHandler.serializeNBT());
         tag.putFloat("Yaw", this.yaw);
         tag.putFloat("Pitch", this.pitch);
+        tag.putBoolean("Disabled", this.disabled);
+        tag.putInt("DisableCooldown", this.disableCooldown);
         if (ownerUUID != null) {
             tag.putUUID("OwnerUUID", ownerUUID);
-            tag.putString("OwnerName", ownerName); // Save the owner's name
+            tag.putString("OwnerName", ownerName);
         }
     }
 
@@ -611,10 +688,12 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
         this.previousYaw = this.yaw;
         this.pitch = tag.getFloat("Pitch");
         this.previousPitch = this.pitch;
+        this.disabled = tag.getBoolean("Disabled");
+        this.disableCooldown = tag.getInt("DisableCooldown");
         itemHandler.deserializeNBT(tag.getCompound("Inventory"));
         if (tag.hasUUID("OwnerUUID")) {
             this.ownerUUID = tag.getUUID("OwnerUUID");
-            this.ownerName = tag.getString("OwnerName"); // Load the owner's name
+            this.ownerName = tag.getString("OwnerName");
         }
     }
     private boolean isOwner(LivingEntity entity) {

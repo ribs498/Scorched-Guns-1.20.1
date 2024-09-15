@@ -1,0 +1,39 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:anthralite_respirator",
+    "scguns:netherite_respirator",
+    {"id":"createbigcannons:gas_mask",  "required":false},
+    {"id":"alexscaves:hazmat_mask",  "required":false},
+    {"id":"steam_powered:gas_mask_helmet",  "required":false},
+    {"id":"protection_pixel:plagueas_helmet",  "required":false},
+    {"id":"create:netherite_diving_helmet",  "required":false},
+    {"id":"protection_pixel:plague_helmet",  "required":false},
+    {"id":"marbledsarsenal:cm6m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:cm7m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:cm8m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:black_gp5_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:white_gp5_gas_mask", "required":false},
+
+    {"id":"marbledsarsenal:helmet_cm6m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:un_helmet_cm6m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:olive_helmet_cm6m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:medical_helmet_cm6m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:medical_un_helmet_cm6m_gas_mask", "required":false},
+    {"id":"marbledsarsenal:medical_olive_helmet_cm6m_gas_mask", "required":false},
+
+    {"id":"marbledsarsenal:helmet_cm7m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:un_helmet_cm7m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:olive_helmet_cm7m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:medical_helmet_cm7m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:medical_un_helmet_cm7m_gas_mask", "required":false},
+    {"id":"marbledsarsenal:medical_olive_helmet_cm7m_gas_mask", "required":false},
+
+    {"id":"marbledsarsenal:helmet_cm8m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:un_helmet_cm8m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:olive_helmet_cm8m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:medical_helmet_cm8m_gas_mask",  "required":false},
+    {"id":"marbledsarsenal:medical_un_helmet_cm8m_gas_mask", "required":false},
+    {"id":"marbledsarsenal:medical_olive_helmet_cm8m_gas_mask", "required":false}
+  ]
+}

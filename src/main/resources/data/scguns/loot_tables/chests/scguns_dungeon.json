@@ -9,6 +9,10 @@
         },
         {
           "type": "minecraft:item",
+          "name": "scguns:copper_blueprint"
+        },
+        {
+          "type": "minecraft:item",
           "functions": [
             {
               "function": "minecraft:set_damage",

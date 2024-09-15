@@ -25,7 +25,10 @@ import java.util.function.Supplier;
 public class ModBlocks {
 
     public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Reference.MOD_ID);
-
+    public static final RegistryObject<Block> GUN_SHELF = register("gun_shelf",
+            () -> new GunShelfBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)
+                    .requiresCorrectToolForDrops()
+                    .strength(0.5F)));
     public static final RegistryObject<Block> ADVANCED_COMPOSTER = register("advanced_composter",
             () -> new AdvancedComposterBlock(BlockBehaviour.Properties.copy(Blocks.COMPOSTER)
                     .requiresCorrectToolForDrops()
@@ -185,6 +188,12 @@ public static final RegistryObject<Block> MACERATOR = register("macerator",
                     .requiresCorrectToolForDrops()
                     .strength(0.5F)
                     .noOcclusion()));
+    public static final RegistryObject<Block> AMMO_TURRET_MODULE = register("ammo_turret_module",
+            () -> new AmmoModuleBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .requiresCorrectToolForDrops()
+                    .strength(0.5F)
+                    .randomTicks()
+                    .noOcclusion()));
 
     public static final RegistryObject<Block> RICH_PHOSPHORITE = register("rich_phosphorite",
             () -> new DropExperienceBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
@@ -207,7 +216,12 @@ public static final RegistryObject<Block> MACERATOR = register("macerator",
             () -> new PenetratorBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
                     .strength(1.0F), 10));
 
-
+    public static final RegistryObject<Block> PLASMA_LANTERN = register("plasma_lantern",
+            () -> new LanternBlock(BlockBehaviour.Properties.copy(Blocks.LANTERN)
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()
+                    .strength(3.0F)
+                    .lightLevel((state) -> 15)));
 
     public static final RegistryObject<Block> GEOTHERMAL_VENT = register("geothermal_vent",
             () -> new GeothermalVentBlock(BlockBehaviour.Properties.copy(Blocks.STONE)

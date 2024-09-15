@@ -29,10 +29,7 @@ import top.ribs.scguns.debug.IEditorMenu;
 import top.ribs.scguns.debug.client.screen.widget.DebugButton;
 import top.ribs.scguns.debug.client.screen.widget.DebugSlider;
 import top.ribs.scguns.debug.client.screen.widget.DebugToggle;
-import top.ribs.scguns.item.AmmoBoxItem;
-import top.ribs.scguns.item.GunItem;
-import top.ribs.scguns.item.LaserSightItem;
-import top.ribs.scguns.item.ScopeItem;
+import top.ribs.scguns.item.*;
 import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.item.attachment.impl.Scope;
 import top.ribs.scguns.util.GunJsonUtil;
@@ -47,6 +44,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
+import static top.ribs.scguns.item.GunItem.ONE_HANDED_CARBINE_CANDIDATES;
+
 public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
 {
     protected General general = new General();
@@ -55,6 +54,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
     protected Sounds sounds = new Sounds();
     protected Display display = new Display();
     protected Modules modules = new Modules();
+    private final GripType baseGripType = GripType.ONE_HANDED;
 
     public static boolean hasInfiniteAmmo(ItemStack heldItem) {
         return Reloads.hasInfiniteAmmo(heldItem);
@@ -77,6 +77,51 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
     }
     public static boolean isBeamWeapon(Gun gun) {
         return gun.getGeneral().getFireMode() == FireMode.BEAM;
+    }
+
+    public static int getBurstCooldown(ItemStack stack) {
+        return ((GunItem) stack.getItem()).getModifiedGun(stack).getGeneral().getBurstCooldown();
+
+    }
+    public GripType determineGripType(ItemStack stack) {
+        GripType baseGripType = this.general.getBaseGripType();  // Avoid recursion
+
+        if (Gun.hasExtendedBarrel(stack) && ONE_HANDED_CARBINE_CANDIDATES.stream()
+                .anyMatch(candidate -> candidate.get() == stack.getItem())) {
+            return GripType.TWO_HANDED; // Switch to two-handed grip if extended barrel is equipped
+        }
+
+        return baseGripType;
+    }
+    public GripType getBaseGripType() {
+        return this.baseGripType;  // This is the base grip type without modifications
+    }
+
+
+    public static boolean hasExtendedBarrel(ItemStack stack) {
+        for (IAttachment.Type type : IAttachment.Type.values()) {
+            ItemStack attachmentStack = Gun.getAttachment(type, stack);
+            if (attachmentStack.getItem() instanceof ExtendedBarrelItem) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean hasBurstFire(ItemStack stack) {
+        return ((GunItem) stack.getItem()).getModifiedGun(stack).getGeneral().getFireMode() == FireMode.BURST;
+    }
+
+    public static boolean canShoot(ItemStack heldItem) {
+        return !hasBurstFire(heldItem) || getFireTimer(heldItem) == 0;
+
+    }
+
+    public static int getBurstCount(ItemStack heldItem) {
+        return ((GunItem) heldItem.getItem()).getModifiedGun(heldItem).getGeneral().getBurstAmount();
+    }
+
+    public static int getFireMode(ItemStack heldItem) {
+        return ((GunItem) heldItem.getItem()).getModifiedGun(heldItem).getGeneral().getFireMode().ordinal();
     }
 
 
@@ -136,11 +181,16 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         private FireMode fireMode = FireMode.SEMI_AUTO;
         @Optional
         private int burstAmount;
+        @Optional
+        private int burstCooldown;
         private int rate;
+        private int hotBarrelRate;
         @Optional
         private int fireTimer;
         @Ignored
         private GripType gripType = GripType.ONE_HANDED;
+        @Ignored
+        private GripType baseGripType = GripType.ONE_HANDED;
         //@Optional
         private float recoilAngle;
         @Optional
@@ -174,9 +224,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             CompoundTag tag = new CompoundTag();
             tag.putString("FireMode", this.fireMode.id().toString());
             tag.putInt("BurstAmount", this.burstAmount);
+            tag.putInt("BurstCooldown", this.burstCooldown);
             tag.putInt("Rate", this.rate);
+            tag.putInt("HotBarrelRate", this.hotBarrelRate);
             tag.putInt("FireTimer", this.fireTimer);
-            tag.putString("GripType", this.gripType.getId().toString());
+            tag.putString("GripType", this.gripType.id().toString());
+            tag.putString("BaseGripType", this.baseGripType.id().toString());
             tag.putFloat("RecoilAngle", this.recoilAngle);
             tag.putFloat("RecoilKick", this.recoilKick);
             tag.putFloat("RecoilDurationOffset", this.recoilDurationOffset);
@@ -203,9 +256,17 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             {
                 this.burstAmount = tag.getInt("BurstAmount");
             }
+            if(tag.contains("BurstCooldown", Tag.TAG_ANY_NUMERIC))
+            {
+                this.burstCooldown = tag.getInt("BurstCooldown");
+            }
             if(tag.contains("Rate", Tag.TAG_ANY_NUMERIC))
             {
                 this.rate = tag.getInt("Rate");
+            }
+            if(tag.contains("HotBarrelRate", Tag.TAG_ANY_NUMERIC))
+            {
+                this.hotBarrelRate = tag.getInt("HotBarrelRate");
             }
             if(tag.contains("FireTimer", Tag.TAG_ANY_NUMERIC))
             {
@@ -214,6 +275,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             if(tag.contains("GripType", Tag.TAG_STRING))
             {
                 this.gripType = GripType.getType(ResourceLocation.tryParse(tag.getString("GripType")));
+            }
+            if(tag.contains("BaseGripType", Tag.TAG_STRING))
+            {
+                this.baseGripType = GripType.getType(ResourceLocation.tryParse(tag.getString("BaseGripType")));
             }
             if(tag.contains("RecoilAngle", Tag.TAG_ANY_NUMERIC))
             {
@@ -272,6 +337,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         public JsonObject toJsonObject()
         {
             Preconditions.checkArgument(this.rate > 0, "Rate must be more than zero");
+            Preconditions.checkArgument(this.hotBarrelRate >= 0, "Hot barrel rate must be more than or equal to zero");
             Preconditions.checkArgument(this.recoilAngle >= 0.0F, "Recoil angle must be more than or equal to zero");
             Preconditions.checkArgument(this.recoilKick >= 0.0F, "Recoil kick must be more than or equal to zero");
             Preconditions.checkArgument(this.recoilDurationOffset >= 0.0F && this.recoilDurationOffset <= 1.0F, "Recoil duration offset must be between 0.0 and 1.0");
@@ -285,9 +351,11 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             if(this.infiniteAmmo) object.addProperty("infiniteAmmo", true);
             object.addProperty("fireMode", this.fireMode.id().toString());
             if(this.burstAmount != 0) object.addProperty("burstAmount", this.burstAmount);
+            if(this.burstCooldown != 0) object.addProperty("burstCooldown", this.burstCooldown);
             object.addProperty("rate", this.rate);
             if(this.fireTimer != 0) object.addProperty("fireTimer", this.fireTimer);
-            object.addProperty("gripType", this.gripType.getId().toString());
+            object.addProperty("gripType", this.gripType.id().toString());
+            object.addProperty("baseGripType", this.baseGripType.id().toString());
             if(this.recoilAngle != 0.0F) object.addProperty("recoilAngle", this.recoilAngle);
             if(this.recoilKick != 0.0F) object.addProperty("recoilKick", this.recoilKick);
             if(this.recoilDurationOffset != 0.0F) object.addProperty("recoilDurationOffset", this.recoilDurationOffset);
@@ -311,9 +379,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             General general = new General();
             general.fireMode = this.fireMode;
             general.burstAmount = this.burstAmount;
+            general.burstCooldown = this.burstCooldown;
             general.rate = this.rate;
+            general.hotBarrelRate = this.hotBarrelRate;
             general.fireTimer = this.fireTimer;
             general.gripType = this.gripType;
+            general.baseGripType = this.baseGripType;
             general.recoilAngle = this.recoilAngle;
             general.recoilKick = this.recoilKick;
             general.recoilDurationOffset = this.recoilDurationOffset;
@@ -367,6 +438,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             return this.rate;
         }
 
+        public int getHotBarrelRate()
+        {
+            return this.hotBarrelRate;
+        }
         /**
          * @return The timer before firing
          */
@@ -378,10 +453,19 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         /**
          * @return The type of grip this weapon uses
          */
-        public GripType getGripType()
-        {
-            return this.gripType;
+        public GripType getGripType(ItemStack stack) {
+            return this.getModifiedGun(stack).determineGripType(stack);
         }
+
+        private Gun getModifiedGun(ItemStack stack) {
+            if (stack.isEmpty() || !(stack.getItem() instanceof GunItem item)) {
+                // Return a default or empty Gun to avoid further crashes
+                return new Gun();
+            }
+
+            return item.getModifiedGun(stack);
+        }
+
 
         /**
          * @return The amount of recoil this gun produces upon firing in degrees
@@ -463,6 +547,18 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         public float getSpreadAdsReduction()
         {
             return this.spreadAdsReduction;
+        }
+
+        public int getBurstAmount() {
+            return this.burstAmount;
+        }
+
+        public int getBurstCooldown() {
+            return this.burstCooldown;
+        }
+
+        public GripType getBaseGripType() {
+            return this.baseGripType;
         }
     }
     public static int getFireTimer(ItemStack stack) {

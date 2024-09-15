@@ -9,9 +9,8 @@ public class CollateralEnchantment extends GunEnchantment
 {
     public CollateralEnchantment()
     {
-        super(Rarity.RARE, EnchantmentTypes.GUN, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.PROJECTILE);
+        super(Rarity.RARE, EnchantmentTypes.COLLATERAL_COMPATIBLE, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.PROJECTILE);
     }
-
     @Override
     public int getMinCost(int level)
     {

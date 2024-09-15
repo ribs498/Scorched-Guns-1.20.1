@@ -42,21 +42,28 @@ public class RatKingAndQueenModel implements IOverrideModel {
             renderReceivers(matrixStack, buffer, stack, light, overlay);
         }
     }
-
     private void renderBarrelAttachments(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
-        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
-            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get())
-                RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get())
-                RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
-                RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get())
-                RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
-        } else {
+        boolean isExtendedBarrelEquipped = false;
+        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL) &&
+                Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get()) {
+            isExtendedBarrelEquipped = true;
+            RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
+        if (!isExtendedBarrelEquipped) {
             RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
         }
+
+        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
+            if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.SILENCER.get()) {
+                RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.MUZZLE_BRAKE.get()) {
+                RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
+            } else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get()) {
+                RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
+        }
     }
+
 
     private void renderMagazineAttachments(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.MAGAZINE)) {

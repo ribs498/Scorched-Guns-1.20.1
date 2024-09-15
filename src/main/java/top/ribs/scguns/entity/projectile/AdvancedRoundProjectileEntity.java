@@ -26,6 +26,7 @@ import top.ribs.scguns.util.GunEnchantmentHelper;
 public class AdvancedRoundProjectileEntity extends ProjectileEntity {
 
     private static final int ARMOR_BYPASS_AMOUNT = 2;
+    private static final float ADVANCED_SHIELD_DISABLE_CHANCE = 0.45f; // 45% chance, increased from the default 30%
 
     public AdvancedRoundProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -47,22 +48,30 @@ public class AdvancedRoundProjectileEntity extends ProjectileEntity {
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
+
         if (entity instanceof LivingEntity livingEntity) {
             damage = applyArmorBypass(livingEntity, damage);
         }
 
-        DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
+        boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, ADVANCED_SHIELD_DISABLE_CHANCE);
 
-        if (!(entity.getType().is(ModTags.Entities.GHOST) && !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
-            entity.hurt(source, damage);
+        if (!blocked) {
+            DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
+
+            if (!(entity.getType().is(ModTags.Entities.GHOST) && !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
+                entity.hurt(source, damage);
+            }
+
+            if(entity instanceof LivingEntity) {
+                GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
+            }
         }
-        if(entity instanceof LivingEntity) {
-            GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
-        }
+
         if (this.shooter instanceof Player) {
             int hitType = critical ? S2CMessageProjectileHitEntity.HitType.CRITICAL : headshot ? S2CMessageProjectileHitEntity.HitType.HEADSHOT : S2CMessageProjectileHitEntity.HitType.NORMAL;
             PacketHandler.getPlayChannel().sendToPlayer(() -> (ServerPlayer) this.shooter, new S2CMessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
         }
+
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
     }
 
@@ -74,7 +83,6 @@ public class AdvancedRoundProjectileEntity extends ProjectileEntity {
         float finalDamage = damage * damageMultiplier;
         return Math.min(finalDamage, damage);
     }
-
 
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {

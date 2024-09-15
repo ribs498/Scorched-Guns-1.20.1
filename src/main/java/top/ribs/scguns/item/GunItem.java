@@ -7,14 +7,20 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraftforge.event.entity.player.PlayerXpEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.RegistryObject;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.client.GunItemStackRenderer;
 import top.ribs.scguns.client.KeyBinds;
@@ -50,21 +56,19 @@ public class GunItem extends Item implements IColored, IMeta {
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flag) {
         Gun modifiedGun = this.getModifiedGun(stack);
 
+        ResourceLocation advantage = modifiedGun.getProjectile().getAdvantage();
         // Calculate base damage and apply modifiers
         float baseDamage = modifiedGun.getProjectile().getDamage();
         baseDamage = GunModifierHelper.getModifiedProjectileDamage(stack, baseDamage);
         baseDamage = GunEnchantmentHelper.getAcceleratorDamage(stack, baseDamage);
         baseDamage = GunEnchantmentHelper.getHeavyShotDamage(stack, baseDamage);
 
-        // Check if scaling is enabled and modify the damage based on the world day
         if (worldIn != null && Config.GunScalingConfig.getInstance().isScalingEnabled()) {
             long worldDay = worldIn.getDayTime() / 24000L;
             double scaledDamage = Config.GunScalingConfig.getInstance().getBaseDamage() +
                     (Config.GunScalingConfig.getInstance().getDamageIncreaseRate() * worldDay);
             baseDamage *= (float) Math.min(scaledDamage, Config.GunScalingConfig.getInstance().getMaxDamage());
         }
-
-        // Add damage information to the tooltip
         String additionalDamageText = "";
         CompoundTag tagCompound = stack.getTag();
         if (tagCompound != null) {
@@ -83,7 +87,10 @@ public class GunItem extends Item implements IColored, IMeta {
         tooltip.add(Component.translatable("info.scguns.damage")
                 .append(": ").withStyle(ChatFormatting.GRAY)
                 .append(Component.literal(ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(baseDamage) + additionalDamageText).withStyle(ChatFormatting.WHITE)));
-
+        if (!advantage.equals(ModTags.Entities.NONE.location())) {
+            tooltip.add(Component.translatable("info.scguns.advantage").withStyle(ChatFormatting.GRAY)
+                    .append(Component.translatable("advantage." + advantage).withStyle(ChatFormatting.GOLD)));
+        }
         // Add other tooltip information (fire mode, ammo type, etc.)
         String fireMode = modifiedGun.getGeneral().getFireMode().id().toString();
         tooltip.add(Component.translatable("info.scguns.fire_mode").withStyle(ChatFormatting.GRAY)
@@ -251,7 +258,37 @@ public class GunItem extends Item implements IColored, IMeta {
         return false;
     }
 
-    public boolean isBuiltInBayonetGun() {
+    public boolean hasExtendedBarrel(ItemStack gunStack) {
+        for (IAttachment.Type type : IAttachment.Type.values()) {
+            ItemStack attachmentStack = Gun.getAttachment(type, gunStack);
+            if (attachmentStack != null && attachmentStack.getItem() instanceof ExtendedBarrelItem) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static final List<RegistryObject<GunItem>> ONE_HANDED_CARBINE_CANDIDATES = Arrays.asList(
+            ModItems.PAX,
+            ModItems.KRAUSER,
+            ModItems.OSGOOD_50,
+            ModItems.SCRAPPER,
+            ModItems.UPPERCUT,
+            ModItems.SEQUOIA,
+            ModItems.SOUL_DRUMMER
+    );
+
+
+
+    public boolean hasMendingInAttachments(ItemStack gunStack) {
+        for (IAttachment.Type type : IAttachment.Type.values()) {
+            ItemStack attachmentStack = Gun.getAttachment(type, gunStack);
+            if (!attachmentStack.isEmpty() && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MENDING, attachmentStack) > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+   public boolean isBuiltInBayonetGun() {
         return this == ModItems.BOMB_LANCE.get() ||
                 this == ModItems.LOCUST.get() ||
                 this == ModItems.EARTHS_CORPSE.get() ||

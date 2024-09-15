@@ -10,6 +10,9 @@
     "scguns:add_loot_ancient_city",
     "scguns:pebbles_from_gravel",
     "scguns:add_loot_stronghold_library",
-    "scguns:add_loot_stronghold_corridor"
+    "scguns:add_loot_piglin_trading",
+    "scguns:add_loot_stronghold_corridor",
+    "scguns:add_loot_tinkers_citadel_vault",
+    "scguns:add_loot_tinkers_workshop_vault"
   ]
 }

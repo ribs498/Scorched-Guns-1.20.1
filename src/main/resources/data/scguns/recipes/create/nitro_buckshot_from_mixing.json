@@ -1,0 +1,23 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "scguns:nitro_powder_dust"
+    },
+    {
+      "item": "scguns:buckshot"
+    },
+    {
+      "item": "scguns:buckshot"
+    },
+    {
+      "item": "scguns:phosphor_dust"
+    }
+  ],
+  "results": [
+    {
+      "count": 4,
+      "item": "scguns:nitro_buckshot"
+    }
+  ]
+}

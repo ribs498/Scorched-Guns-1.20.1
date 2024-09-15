@@ -26,10 +26,12 @@
     "item.scguns.clump_anthralite": "Anthralite Clump",
     "item.scguns.shard_anthralite": "Anthralite Shard",
     "item.scguns.dirty_dust_anthralite": "Dirty Anthralite Dust",
-
+  "item.scguns.scamp_controller": "Scamp Controller",
 
   "entity.scguns.primed_powder_keg": "Primed Powder Keg",
   "entity.scguns.primed_nitro_keg": "Primed Nitro Keg",
+  "block.scguns.gun_shelf": "Gun Shelf",
+  "block.scguns.plasma_lantern": "Plasma Lantern",
   "block.scguns.nitro_keg": "Nitro Keg",
   "block.scguns.advanced_composter": "Advanced Composter",
   "block.scguns.powder_keg": "Powder Keg",
@@ -183,6 +185,10 @@
   "scguns.advancement.umax_pistol.desc": "Maximum U",
     "scguns.advancement.venturi": "Venturi",
     "scguns.advancement.venturi.desc": "Reduce",
+  "scguns.advancement.mk43_rifle": "MK43 Rifle",
+  "scguns.advancement.mk43_rifle.desc": "STAY OUT",
+    "scguns.advancement.brawler": "Brawler",
+    "scguns.advancement.brawler.desc": "Assume the position",
 
     "scguns.advancement.scrapper": "Scrapper",
     "scguns.advancement.scrapper.desc": "Surprised it even works.",
@@ -315,6 +321,7 @@
     "block.scguns.shell_catcher_turret_module": "Shell Catcher Turret Module",
   "block.scguns.player_turret_targeting_module": "Player Turret Targeting Module",
   "block.scguns.hostile_turret_targeting_module": "Hostile Turret Targeting Module",
+  "block.scguns.ammo_turret_module": "Ammo Turret Module",
   "block.scguns.penetrator": "Penetrator",
   "block.scguns.thermolith": "Thermolith",
   "item.scguns.music_disc_mass_production": "Music Disc",
@@ -323,7 +330,10 @@
   "item.scguns.music_disc_mass_destruction.desc": "KryoX - Mass Destruction",
   "item.scguns.music_disc_mass_destruction_extended": "Music Disc",
   "item.scguns.music_disc_mass_destruction_extended.desc": "KryoX - Mass Destruction ~ Extended ~",
+  "item.scguns.hardened_pebbles": "Hardened Pebbles",
+  "item.scguns.energy_core": "Energy Core",
   "item.scguns.team_log": "Team Log",
+  "item.scguns.enemy_log": "Enemy Log",
     "item.scguns.disc_mold": "Disc Mold",
   "item.scguns.copper_disc": "Copper Disc",
   "item.scguns.dishes_pouch": "Dishes Pouch",
@@ -411,7 +421,7 @@
   "item.scguns.shulker_casing": "Shulker Casing",
   "item.scguns.shulkshot": "Shulkshot",
   "item.scguns.iron_javelin": "Iron Javelin",
-
+  "item.scguns.mk43_rifle": "MK43 Rifle",
   "item.scguns.adrien_helm": "Adrien Helm",
   "item.scguns.adrien_chestplate": "Adrien Chestplate",
   "item.scguns.adrien_leggings": "Adrien Leggings",
@@ -433,6 +443,7 @@
   "item.scguns.floundergat": "Floundergat",
     "item.scguns.sequoia": "Sequoia",
   "item.scguns.lone_wonder": "Lone Wonder",
+  "item.scguns.brawler": "Brawler",
     "item.scguns.marlin": "Marlin",
   "item.scguns.flintlock_pistol": "Flintlock Pistol",
   "item.scguns.handcannon": "Handcannon",
@@ -548,6 +559,7 @@
   "item.scguns.repair_kit": "Repair Kit",
   "item.scguns.gunpowder_dust": "Gunpowder Dust",
   "item.scguns.buckshot": "Buckshot",
+    "item.scguns.nitro_buckshot": "Nitro Buckshot",
   "item.scguns.sulfur_chunk": "Sulfur Chunk",
   "item.scguns.niter_dust": "Niter Dust",
   "item.scguns.nitro_powder": "Nitro Powder",
@@ -756,6 +768,7 @@
   "enchantment.scguns.heavy_shot": "Heavy Shot",
   "enchantment.scguns.elemental_pop": "Elemental Pop",
   "enchantment.scguns.waterproof": "Tight Seal",
+    "enchantment.scguns.hot_barrel": "Hot Barrel",
   "enchantment.scguns.quick_hands.desc": "Increases the speed of reloading weapons",
   "enchantment.scguns.trigger_finger.desc": "Increases the speed you can fire weapons",
   "enchantment.scguns.lightweight.desc": "Reduces the weight of a weapon to increase ADS speed",
@@ -766,7 +779,9 @@
   "enchantment.scguns.fire_starter.desc": "Fired bullets will set blocks and entities on fire upon impact",
   "enchantment.scguns.shell_catcher.desc": "Increases the amount of spent shells retrieved when firing.",
   "enchantment.scguns.banzai.desc": "Increases damage multiplier based off speed during Banzai.",
-  "enchantment.scguns.heavy_shot.desc": "Increases damage, But lowers fire rate.",
+  "enchantment.scguns.heavy_shot.desc": "Increases damage, But lowers fire rate and shot speed.",
+  "enchantment.scguns.hot_barrel.desc": "Firing fills a draining bar, the bars level increases damage and fire rate, and heavily increases recoil and weapon spread.",
+
   "enchantment.scguns.elemental_pop.desc": "Fired bullets will have a chance to inflict a variety of status effects",
     "enchantment.scguns.waterproof.desc": "Reduces the damage to weapons when firing underwater",
   "perk.scguns.title": "Perks:",
@@ -861,8 +876,15 @@
   "scguns.jei.info.turret_targeting_block": "Must be connected to a turret. Will target all non-owner mobs within range",
   "scguns.jei.info.fire_rate_turret_module": "Must be connected to a turret. Will increase the fire rate of the turret",
     "scguns.jei.info.damage_turret_module": "Must be connected to a turret. Will increase the damage of the turret",
-    "scguns.jei.info.range_turret_module": "Must be connected to a turret. Will increase the range of the turret",
+  "scguns.jei.info.ammo_turret_module": "Must be connected to a turret. Acts as a hopper will supply turrets inventory",
+
+  "scguns.jei.info.range_turret_module": "Must be connected to a turret. Will increase the range of the turret",
     "scguns.jei.info.shell_catcher_turret_module": "Must be connected to a turret. Will increase the chance of retrieving spent casings to 100%",
+  "scguns.jei.info.ancient_brass": "Can be used in place of Brass, or used to tame Supply Scamps",
+  "scguns.jei.info.scamp_controller": "Used to link a Supply Scamp to a container, or to change the behavior of a Supply Scamp, via shift right clicking",
+  "scguns.jei.info.enemy_log": "Used to whitelist mobs a turret will fire at. Right click a mob to have the turrets fire at just that mob, Shift right click to whitelist that whole mob type.",
+  "scguns.jei.info.team_log": "Used to blacklist mobs a turret will fire at. Right click a mob to have the turrets ignore just that mob, Shift right click to blacklist that whole mob type.",
+
 
 
   "scguns.jei.info.niter_dust": "Can be obtained from Geothermal vents, or composting in a Advanced Composter. Used in Gunpowder production, or as a weak fertilizer",
@@ -895,5 +917,12 @@
   "container.shotgun_turret": "Shotgun Turret",
   "info.airgun.air_usage": "Air Use",
   "container.auto_turret": "Auto Turret",
-  "info.airgun.requires_airtank": "Requires an Backtank equipped!"
+  "info.airgun.requires_airtank": "Requires an Backtank equipped!",
+  "message.supply_scamp.sitting": "Sitting",
+  "message.supply_scamp.following": "Following",
+  "message.supply_scamp.patrolling": "Patrolling",
+  "message.supply_scamp.linked": "Linked",
+  "message.supply_scamp.new_patrol_origin": "Patrol Point Changed",
+  "message.supply_scamp.container_linked": "Container Linked",
+  "container.ammo_module": "Ammo Module"
 }

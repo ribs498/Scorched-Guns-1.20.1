@@ -71,11 +71,16 @@ public class JEIScorchedPlugin implements IModPlugin {
         registration.addIngredientInfo(new ItemStack(ModItems.SPECIAL_AMMO_BOX.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.special_ammo_box"));
         registration.addIngredientInfo(new ItemStack(ModItems.EMPTY_CASING_POUCH.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.empty_casing_pouch"));
         registration.addIngredientInfo(new ItemStack(ModItems.DISHES_POUCH.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.dishes_pouch"));
+        registration.addIngredientInfo(new ItemStack(ModItems.ANCIENT_BRASS.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.ancient_brass"));
 
+        registration.addIngredientInfo(new ItemStack(ModItems.SCAMP_CONTROLLER.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.scamp_controller"));
 
         registration.addIngredientInfo(new ItemStack(ModBlocks.BASIC_TURRET.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.basic_turret"));
         registration.addIngredientInfo(new ItemStack(ModBlocks.AUTO_TURRET.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.auto_turret"));
         registration.addIngredientInfo(new ItemStack(ModBlocks.SHOTGUN_TURRET.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.shotgun_turret"));
+        registration.addIngredientInfo(new ItemStack(ModItems.TEAM_LOG.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.team_log"));
+        registration.addIngredientInfo(new ItemStack(ModItems.ENEMY_LOG.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.enemy_log"));
+
 
 
         registration.addIngredientInfo(new ItemStack(ModBlocks.HOSTILE_TURRET_TARGETING_BLOCK.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.hostile_turret_targeting_block"));

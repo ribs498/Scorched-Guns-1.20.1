@@ -16,7 +16,8 @@
     "recoilKick": 1.5,
     "spread": 6.0,
     "meleeDamage": 3.0,
-    "meleeCooldownTicks": 10
+    "meleeCooldownTicks": 10,
+    "hotBarrelRate": 3
   },
   "modules": {
     "attachments": {

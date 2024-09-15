@@ -40,7 +40,7 @@ public class ItemInHandLayerMixin {
 
                 if (entity.getMainHandItem().getItem() instanceof GunItem gunItem) {
                     Gun modifiedGun = gunItem.getModifiedGun(entity.getMainHandItem());
-                    if (!modifiedGun.getGeneral().getGripType().getHeldAnimation().canRenderOffhandItem()) {
+                    if (!modifiedGun.getGeneral().getGripType(stack).heldAnimation().canRenderOffhandItem()) {
                         ci.cancel();
                         return;
                     }
@@ -63,7 +63,7 @@ public class ItemInHandLayerMixin {
         poseStack.translate(((float) (arm == HumanoidArm.LEFT ? -1 : 1) / 16F), 0.125, -0.625);
         GunRenderingHandler.get().applyWeaponScale(stack, poseStack);
         Gun gun = item.getModifiedGun(stack);
-        gun.getGeneral().getGripType().getHeldAnimation().applyHeldItemTransforms(player, hand, AimingHandler.get().getAimProgress(player, deltaTicks), poseStack, source);
+        gun.getGeneral().getGripType(stack).heldAnimation().applyHeldItemTransforms(player, hand, AimingHandler.get().getAimProgress(player, deltaTicks), poseStack, source);
         GunRenderingHandler.get().renderWeapon(player, stack, display, poseStack, source, light, deltaTicks);
         poseStack.popPose();
     }

@@ -1,9 +1,14 @@
 {
   "type": "create:mixing",
   "ingredients": [
-    {
-      "item": "scguns:sulfur_chunk"
-    },
+    [
+      {
+        "item": "scguns:sulfur_chunk"
+      },
+      {
+        "tag": "forge:dusts/sulfur"
+      }
+    ],
     {
       "item": "minecraft:blaze_powder"
     },

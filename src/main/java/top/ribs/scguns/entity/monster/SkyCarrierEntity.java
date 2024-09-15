@@ -161,7 +161,7 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
             return false;
         }
         int lightLevel = level.getLightEmission(pos);
-        if (lightLevel > 7) {
+        if (lightLevel > 0) {
             return false;
         }
         return level.getBlockState(pos.below()).isValidSpawn(level, pos.below(), entityType);

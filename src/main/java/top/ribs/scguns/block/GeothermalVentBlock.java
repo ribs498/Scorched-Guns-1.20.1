@@ -27,6 +27,7 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.level.material.PushReaction;
@@ -43,21 +44,24 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
     public static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
     public static final BooleanProperty ACTIVE = BooleanProperty.create("active");
     private static final VoxelShape SHAPE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
-
+    public static final IntegerProperty VENT_POWER = IntegerProperty.create("vent_power", 1, 5);
+    public static final int MAX_VENT_POWER = 5;
     private static final int BASE_TICK_INTERVAL = 100;
     private static final int TICK_WIGGLE_ROOM = 90;
     private final Random random = new Random();
 
     public GeothermalVentBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(VENT_TYPE, GeothermalVentType.BASE).setValue(WATERLOGGED, false).setValue(ACTIVE, false));
+        this.registerDefaultState(this.stateDefinition.any()
+                .setValue(VENT_TYPE, GeothermalVentType.BASE)
+                .setValue(WATERLOGGED, false)
+                .setValue(ACTIVE, false)
+                .setValue(VENT_POWER, 1));
     }
-
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(VENT_TYPE, WATERLOGGED, ACTIVE);
+        builder.add(VENT_TYPE, WATERLOGGED, ACTIVE, VENT_POWER);
     }
-
     @Override
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context) {
@@ -66,11 +70,12 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
         FluidState fluidState = level.getFluidState(pos);
         boolean waterlogged = fluidState.getType() == Fluids.WATER;
         boolean isActive = isActive(level, pos);
+        int ventPower = calculateVentPower(level, pos);
         return this.updateState(level.getBlockState(pos.below()), level.getBlockState(pos.above()))
                 .setValue(WATERLOGGED, waterlogged)
-                .setValue(ACTIVE, isActive);
+                .setValue(ACTIVE, isActive)
+                .setValue(VENT_POWER, ventPower);
     }
-
     @Override
     public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (state.getValue(WATERLOGGED)) {
@@ -78,16 +83,45 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
         }
 
         if (level instanceof Level) {
-            boolean isActive = isActive((Level) level, pos);
+            boolean isActive = isActive(level, pos);
+            int ventPower = calculateVentPower((Level) level, pos);
             return this.updateState(level.getBlockState(pos.below()), level.getBlockState(pos.above()))
                     .setValue(WATERLOGGED, state.getValue(WATERLOGGED))
-                    .setValue(ACTIVE, isActive);
+                    .setValue(ACTIVE, isActive)
+                    .setValue(VENT_POWER, ventPower);
         }
 
         return this.updateState(level.getBlockState(pos.below()), level.getBlockState(pos.above()))
                 .setValue(WATERLOGGED, state.getValue(WATERLOGGED));
     }
+    private int calculateVentPower(LevelAccessor level, BlockPos pos) {
+        BlockPos basePos = getBasePos(level, pos);
+        int power = 1;
+        BlockPos checkPos = basePos.above();
 
+        while (level.getBlockState(checkPos).getBlock() instanceof GeothermalVentBlock && power < MAX_VENT_POWER) {
+            power++;
+            checkPos = checkPos.above();
+        }
+
+        return power;
+    }
+    private void updateVentPower(Level level, BlockPos pos) {
+        BlockPos basePos = getBasePos(level, pos);
+        int power = calculateVentPower(level, basePos);
+
+        // Update the base block
+        BlockState baseState = level.getBlockState(basePos);
+        level.setBlock(basePos, baseState.setValue(VENT_POWER, power), 3);
+
+        // Update all blocks above the base
+        BlockPos checkPos = basePos.above();
+        while (level.getBlockState(checkPos).getBlock() instanceof GeothermalVentBlock) {
+            BlockState state = level.getBlockState(checkPos);
+            level.setBlock(checkPos, state.setValue(VENT_POWER, power), 3);
+            checkPos = checkPos.above();
+        }
+    }
     private BlockState updateState(BlockState belowState, BlockState aboveState) {
         if (belowState.getBlock() instanceof GeothermalVentBlock) {
             if (aboveState.getBlock() instanceof GeothermalVentBlock) {
@@ -108,17 +142,25 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         boolean isActive = isActive(level, pos);
-        level.setBlock(pos, state.setValue(ACTIVE, isActive), 3);
+        int ventPower = calculateVentPower(level, pos);
+        level.setBlock(pos, state.setValue(ACTIVE, isActive).setValue(VENT_POWER, ventPower), 3);
         if (state.getValue(WATERLOGGED)) {
             level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
         }
         level.scheduleTick(pos, this, calculateNextTickInterval());
+        updateVentPower(level, pos);
+    }    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        super.onRemove(state, level, pos, newState, isMoving);
+        if (!(newState.getBlock() instanceof GeothermalVentBlock)) {
+            updateVentPower(level, pos.below());
+        }
     }
 
     @Override
     public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         if (!world.isClientSide && state.getValue(ACTIVE)) {
-            int growthAttempts = Math.max(1, Math.round(40.0F / 10.0F)); // Up to 10 attempts at 100 speed
+            int growthAttempts = Math.max(1, Math.round(40.0F / 10.0F));
             for (int i = 0; i < growthAttempts; i++) {
                 if (!hasVentCollectorAbove(world, pos) && random.nextFloat() < calculateGrowthProbability()) {
                     this.growNiterLayer(world, pos, random);

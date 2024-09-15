@@ -73,6 +73,7 @@ public class ClientHandler {
         EntityRenderers.register(ModEntities.PRIMED_POWDER_KEG.get(), PowderKegRenderer::new);
         EntityRenderers.register(ModEntities.PRIMED_NITRO_KEG.get(), NitroKegRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.MACERATOR.get(), MaceratorRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.GUN_SHELF_BLOCK_ENTITY.get(), GunShelfRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.POWERED_MACERATOR.get(), PoweredMaceratorRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.MECHANICAL_PRESS.get(), MechanicalPressRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.BASIC_TURRET.get(), BasicTurretRenderer::new);
@@ -80,6 +81,7 @@ public class ClientHandler {
         BlockEntityRenderers.register(ModBlockEntities.SHOTGUN_TURRET.get(), ShotgunTurretRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.POWERED_MECHANICAL_PRESS.get(), PoweredMechanicalPressRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.POLAR_GENERATOR.get(), PolarGeneratorRenderer::new);
+        ItemBlockRenderTypes.setRenderLayer(ModBlocks.PLASMA_LANTERN.get(), RenderType.cutout());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.NITER_GLASS.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.WHITE_NITER_GLASS.get(), RenderType.translucent());;
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.RED_NITER_GLASS.get(), RenderType.translucent());
@@ -97,6 +99,7 @@ public class ClientHandler {
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.MAGENTA_NITER_GLASS.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.GRAY_NITER_GLASS.get(), RenderType.translucent());
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.LIGHT_GRAY_NITER_GLASS.get(), RenderType.translucent());
+
         registerAmmoCountProperty(ModItems.PISTOL_AMMO_BOX.get());
         registerAmmoCountProperty(ModItems.RIFLE_AMMO_BOX.get());
         registerAmmoCountProperty(ModItems.SHOTGUN_AMMO_BOX.get());
@@ -112,6 +115,7 @@ public class ClientHandler {
         MenuScreens.register(ModMenuTypes.LIGHTING_BATTERY_MENU.get(), LightningBatteryScreen::new);
         MenuScreens.register(ModMenuTypes.SUPPLY_SCAMP_MENU.get(), SupplyScampScreen::new);
         MenuScreens.register(ModMenuTypes.SHELL_CATCHER_MODULE.get(), ShellCatcherModuleScreen::new);
+        MenuScreens.register(ModMenuTypes.AMMO_MODULE.get(), AmmoModuleScreen::new);
         MenuScreens.register(ModMenuTypes.BASIC_TURRET_MENU.get(), BasicTurretScreen::new);
         MenuScreens.register(ModMenuTypes.AUTO_TURRET_MENU.get(), AutoTurretScreen::new);
         MenuScreens.register(ModMenuTypes.SHOTGUN_TURRET_MENU.get(), ShotgunTurretScreen::new);
@@ -191,6 +195,7 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.SCRAPPER.get(), new ScrapperModel());
         ModelOverrides.register(ModItems.MAKESHIFT_RIFLE.get(), new MakeshiftRifleModel());
         ModelOverrides.register(ModItems.BOOMSTICK.get(), new BoomstickModel());
+        ModelOverrides.register(ModItems.MK43_RIFLE.get(), new Mk43RifleModel());
         ModelOverrides.register(ModItems.RUSTY_GNAT.get(), new RustyGnatModel());
         ModelOverrides.register(ModItems.PAX.get(), new PaxModel());
         ModelOverrides.register(ModItems.BRUISER.get(), new BruiserModel());
@@ -205,6 +210,7 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.COMBAT_SHOTGUN.get(), new CombatShotgunModel());
         ModelOverrides.register(ModItems.AUVTOMAG.get(), new AuvtomagModel());
         ModelOverrides.register(ModItems.PULSAR.get(), new PulsarModel());
+        ModelOverrides.register(ModItems.BRAWLER.get(), new BrawlerModel());
         ModelOverrides.register(ModItems.EARTHS_CORPSE.get(), new EarthsCorpseModel());
         ModelOverrides.register(ModItems.ASTELLA.get(), new AstellaModel());
         ModelOverrides.register(ModItems.RAT_KING_AND_QUEEN.get(), new RatKingAndQueenModel());

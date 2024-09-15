@@ -55,6 +55,7 @@ public class HeavyWeaponEventHandler {
         return itemStack.getItem() == ModItems.GATTALER.get() ||
                 itemStack.getItem() == ModItems.THUNDERHEAD.get() ||
                 itemStack.getItem() == ModItems.SPITFIRE.get() ||
+                itemStack.getItem() == ModItems.EARTHS_CORPSE.get() ||
                 itemStack.getItem() == ModItems.CYCLONE.get();
     }
 }

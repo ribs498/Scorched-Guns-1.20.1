@@ -1,5 +1,6 @@
 package top.ribs.scguns.interfaces;
 
+import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.common.GunModifiers;
 import top.ribs.scguns.item.attachment.impl.Barrel;
 
@@ -23,7 +24,13 @@ public interface IGunModifier
     {
         return volume;
     }
+    default float recoilModifier(ItemStack weapon) {
+        return recoilModifier();  // Use the existing recoilModifier by default
+    }
 
+    default float kickModifier(ItemStack weapon) {
+        return kickModifier();  // Use the existing kickModifier by default
+    }
     /**
      * Determines if the fire sound should be the silenced version. If at one attachment on the
      * weapon has this set to true, it will be silenced regardless if other attachments specify false.

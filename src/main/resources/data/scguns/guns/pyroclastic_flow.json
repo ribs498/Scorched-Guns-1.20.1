@@ -10,12 +10,13 @@
   "general": {
     "fireMode": "scguns:pulse",
     "fireTimer": 15,
-    "gripType": "scguns:one_handed_two_handed",
-    "rate": 15,
+    "gripType": "scguns:one_handed",
+    "rate": 12,
     "recoilAngle": 8.0,
     "recoilKick": 0.5,
     "meleeDamage": 2.5,
-    "meleeCooldownTicks": 10
+    "meleeCooldownTicks": 10,
+    "hotBarrelRate":  50
   },
   "modules": {
     "attachments": {

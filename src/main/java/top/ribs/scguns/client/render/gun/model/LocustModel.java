@@ -35,7 +35,7 @@ public class LocustModel implements IOverrideModel {
 
         // Render barrel attachments
         renderBarrelAndAttachments(stack, matrixStack, buffer, light, overlay);
-
+        renderMagazineAttachments(stack, matrixStack, buffer, light, overlay);
         // Render stock attachments
         renderStockAttachments(stack, matrixStack, buffer, light, overlay);
 
@@ -77,6 +77,19 @@ public class LocustModel implements IOverrideModel {
         // Render the standard barrel if no extended barrel is attached
         if (!hasExtendedBarrel) {
             RenderUtil.renderModel(SpecialModels.LOCUST_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
+        }
+    }
+    private void renderMagazineAttachments(ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
+        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.MAGAZINE)) {
+            if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.EXTENDED_MAG.get()) {
+                RenderUtil.renderModel(SpecialModels.LOCUST_EXT_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+            } else if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.SPEED_MAG.get()) {
+                RenderUtil.renderModel(SpecialModels.LOCUST_SPEED_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+            } else if (Gun.getAttachment(IAttachment.Type.MAGAZINE, stack).getItem() == ModItems.PLUS_P_MAG.get()) {
+                RenderUtil.renderModel(SpecialModels.LOCUST_EXT_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
+        } else {
+            RenderUtil.renderModel(SpecialModels.LOCUST_STAN_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
         }
     }
 

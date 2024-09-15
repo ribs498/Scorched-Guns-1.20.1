@@ -9,13 +9,14 @@
   },
   "general": {
     "fireMode": "scguns:semi_automatic",
-    "gripType": "scguns:two_handed_one_handed",
+    "gripType": "scguns:one_handed",
     "rate": 5,
     "recoilAngle": 4.0,
     "recoilKick": 0.33,
     "spread": 3.0,
     "meleeDamage": 3.0,
-    "meleeCooldownTicks": 15
+    "meleeCooldownTicks": 15,
+    "hotBarrelRate": 15
   },
   "modules": {
     "attachments": {
@@ -39,10 +40,10 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 13.5,
+    "damage": 4.5,
     "gravity": false,
     "item": "scguns:microjet",
-    "ejectsCasing": true,
+    "ejectsCasing": false,
     "casingType": "scguns:small_iron_casing",
     "life": 35,
     "size": 1.0,
@@ -53,8 +54,8 @@
     "emptyMagTimer": 10,
     "maxAmmo": 6,
     "reloadItem": "scguns:microjet",
-    "reloadTimer": 15,
-    "reloadType": "scguns:manual"
+    "reloadTimer": 25,
+    "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",

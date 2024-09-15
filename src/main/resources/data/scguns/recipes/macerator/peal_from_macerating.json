@@ -13,9 +13,14 @@
     {
       "item": "minecraft:sculk"
     },
-    {
-      "item": "scguns:phosphor_dust"
-    },
+    [
+      {
+        "item": "scguns:raw_phosphor"
+      },
+      {
+        "item": "scguns:phosphor_dust"
+      }
+    ],
     {
       "item": "minecraft:charcoal"
     }

@@ -19,7 +19,8 @@ public class ModMenuTypes {
             DeferredRegister.create(ForgeRegistries.MENU_TYPES, Reference.MOD_ID);
     public static final RegistryObject<MenuType<ShellCatcherModuleMenu>> SHELL_CATCHER_MODULE =
             registerMenuType("shell_catcher_module", ShellCatcherModuleMenu::new);
-
+    public static final RegistryObject<MenuType<AmmoModuleMenu>> AMMO_MODULE =
+            registerMenuType("ammo_module", AmmoModuleMenu::new);
     public static final RegistryObject<MenuType<CryoniterMenu>> CRYONITER_MENU =
             MENUS.register("cryoniter_menu", () -> IForgeMenuType.create(CryoniterMenu::new));
     public static final RegistryObject<MenuType<VentCollectorMenu>> VENT_COLLECTOR_MENU =

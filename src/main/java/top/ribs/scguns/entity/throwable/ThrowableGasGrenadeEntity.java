@@ -21,6 +21,7 @@ import top.ribs.scguns.event.GasExplosion;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.init.ModParticleTypes;
+import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.item.AnthraliteRespiratorItem;
 import top.ribs.scguns.item.NetheriteRespiratorItem;
 
@@ -92,7 +93,7 @@ public class ThrowableGasGrenadeEntity extends ThrowableGrenadeEntity {
             if (entity instanceof Player player && (player.isCreative() || player.isSpectator())) continue;
 
             ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
-            if (helmet.getItem() instanceof AnthraliteRespiratorItem || helmet.getItem() instanceof NetheriteRespiratorItem) {
+            if (helmet.is(ModTags.Items.GAS_MASK)) {
                 int unbreakingLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, helmet);
                 if (entity.getPersistentData().getLong("LastHelmetDamageTick") + 50 <= entity.tickCount) {
                     entity.getPersistentData().putLong("LastHelmetDamageTick", entity.tickCount);

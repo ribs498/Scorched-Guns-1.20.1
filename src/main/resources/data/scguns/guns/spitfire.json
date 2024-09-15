@@ -11,23 +11,18 @@
     "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:mini_gun",
+    "baseGripType": "scguns:mini_gun",
     "projectileAmount": 5,
     "rate": 3,
     "recoilAngle": 3.0,
     "recoilKick": 0.5,
     "spread": 10.0,
     "meleeDamage": 3.5,
-    "meleeCooldownTicks": 20
+    "meleeCooldownTicks": 20,
+    "hotBarrelRate": 25
   },
   "modules": {
     "attachments": {
-      "barrel": {
-        "yOffset": 3.0,
-        "zOffset": -1.6
-      },
-      "stock": {
-        "scale": 0.0
-      }
     }
   },
   "projectile": {

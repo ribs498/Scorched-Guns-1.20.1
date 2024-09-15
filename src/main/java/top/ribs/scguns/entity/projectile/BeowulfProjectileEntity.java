@@ -27,6 +27,9 @@ import top.ribs.scguns.util.GunEnchantmentHelper;
 
 public class BeowulfProjectileEntity extends ProjectileEntity {
     private static final int ARMOR_BYPASS_AMOUNT = 2;
+    private static final float SHIELD_DISABLE_CHANCE = 0.50f; // 50% chance to disable shield
+    private static final float SHIELD_DAMAGE_PENETRATION = 0.3f; // 30% of damage passes through shield
+
     public BeowulfProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
     }
@@ -55,6 +58,7 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
             }
         }
     }
+
     @Override
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
         float damage = this.getDamage();
@@ -73,9 +77,18 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
 
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
 
-        if (!(entity.getType().is(ModTags.Entities.GHOST) && !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
-            entity.hurt(source, damage);
+        // Handle shield interaction
+        boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, SHIELD_DISABLE_CHANCE);
+
+        if (blocked) {
+            float penetratingDamage = damage * SHIELD_DAMAGE_PENETRATION;
+            entity.hurt(source, penetratingDamage);
+        } else {
+            if (!(entity.getType().is(ModTags.Entities.GHOST) && !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
+                entity.hurt(source, damage);
+            }
         }
+
         if(entity instanceof LivingEntity) {
             GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
         }
@@ -83,13 +96,10 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
             int hitType = critical ? S2CMessageProjectileHitEntity.HitType.CRITICAL : headshot ? S2CMessageProjectileHitEntity.HitType.HEADSHOT : S2CMessageProjectileHitEntity.HitType.NORMAL;
             PacketHandler.getPlayChannel().sendToPlayer(() -> (ServerPlayer) this.shooter, new S2CMessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
         }
-
-        // Send blood particle to tracking clients
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
-
-        // Custom explosion particle effect
         spawnExplosionParticles(hitVec);
     }
+
     private float applyArmorBypass(LivingEntity entity, float damage) {
         int armorValue = entity.getArmorValue();
         int bypassedArmorValue = Math.max(0, armorValue - ARMOR_BYPASS_AMOUNT);
@@ -98,6 +108,7 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
         float finalDamage = damage * damageMultiplier;
         return Math.min(finalDamage, damage);
     }
+
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
         spawnExplosionParticles(new Vec3(x, y + 0.1, z));
@@ -108,12 +119,10 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
         spawnExplosionParticles(new Vec3(this.getX(), this.getY() + 0.1, this.getZ()));
     }
 
-
     private void spawnExplosionParticles(Vec3 position) {
         if (!this.level().isClientSide) {
             ServerLevel serverLevel = (ServerLevel) this.level();
-            // Reduce particle count for optimization
-            int particleCount = 5; // Adjust the number of particles
+            int particleCount = 5;
             serverLevel.sendParticles(ModParticleTypes.BEOWULF_IMPACT.get(), position.x, position.y, position.z, particleCount, 0, 0, 0, 0.1);
             for (int i = 0; i < particleCount; i++) {
                 double offsetX = (this.random.nextDouble() - 0.5) * 0.2;
