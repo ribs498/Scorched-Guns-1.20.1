@@ -13,7 +13,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
-
+import top.ribs.scguns.util.GunModifierHelper;
 import javax.annotation.Nullable;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -64,13 +64,16 @@ public class ModDamageTypes
 
             public Component getLocalizedDeathMessage(LivingEntity pLivingEntity) {
                 final String s = "death.attack." + this.getMsgId();
+
                 if (this.getEntity() == null && this.getDirectEntity() == null) {
                     LivingEntity living = pLivingEntity.getKillCredit();
                     return living != null ? Component.translatable(s + ".player", pLivingEntity.getDisplayName(), living.getDisplayName()) : Component.translatable(s, pLivingEntity.getDisplayName());
                 } else {
                     final Component component = this.getEntity() == null ? this.getDirectEntity().getDisplayName() : this.getEntity().getDisplayName();
                     final ItemStack stack = this.getEntity() instanceof LivingEntity livingentity ? livingentity.getMainHandItem() : ItemStack.EMPTY;
-                    return !stack.isEmpty() && stack.hasCustomHoverName() ?
+                    final boolean isSilenced = GunModifierHelper.isSilencedFire(stack);
+
+                    return isSilenced ? Component.translatable(s + ".silenced", pLivingEntity.getDisplayName()) : !stack.isEmpty() && stack.hasCustomHoverName() ?
                             Component.translatable(
                                     s + ".item",
                                     pLivingEntity.getDisplayName(),
