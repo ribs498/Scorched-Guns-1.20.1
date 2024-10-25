@@ -41,6 +41,7 @@ import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import org.valkyrienskies.mod.common.world.RaycastUtilsKt;
 import top.ribs.scguns.ScorchedGuns;
+import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.block.NitroKegBlock;
 import top.ribs.scguns.block.PowderKegBlock;
 import top.ribs.scguns.common.Gun.Projectile;
@@ -92,6 +93,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     private ItemStack weapon = ItemStack.EMPTY;
     private ItemStack item = ItemStack.EMPTY;
     protected float additionalDamage = 0.0F;
+    protected float attributeAdditionalDamage = 0.0F;
+    protected double attributeDamageMultiplier = 0.0;
     protected EntityDimensions entitySize;
     protected double modifiedGravity;
     protected int life;
@@ -107,6 +110,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.modifiedGun = modifiedGun;
         this.general = modifiedGun.getGeneral();
         this.projectile = modifiedGun.getProjectile();
+        this.attributeAdditionalDamage = (float) shooter.getAttribute(SCAttributes.ADDITIONAL_BULLET_DAMAGE.get()).getValue();
+        this.attributeDamageMultiplier = shooter.getAttribute(SCAttributes.BULLET_DAMAGE_MULTIPLIER.get()).getValue();
         this.entitySize = new EntityDimensions(this.projectile.getSize(), this.projectile.getSize(), false);
         this.modifiedGravity = modifiedGun.getProjectile().isGravity() ? GunModifierHelper.getModifiedProjectileGravity(weapon, -0.04) : 0.0;
         this.life = GunModifierHelper.getModifiedProjectileLife(weapon, this.projectile.getLife());
@@ -115,6 +120,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         Vec3 dir = this.getDirection(shooter, weapon, item, modifiedGun);
         double speedModifier = GunEnchantmentHelper.getProjectileSpeedModifier(weapon);
         double speed = GunModifierHelper.getModifiedProjectileSpeed(weapon, this.projectile.getSpeed() * speedModifier);
+        speed *= shooter.getAttribute(SCAttributes.PROJECTILE_SPEED.get()).getValue();
         this.setDeltaMovement(dir.x * speed, dir.y * speed, dir.z * speed);
         this.updateHeading();
 
@@ -172,6 +178,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 gunSpread *= 0.7F;
             }
         }
+
+        gunSpread *= (float) shooter.getAttribute(SCAttributes.SPREAD_MULTIPLIER.get()).getValue();
 
         // Return the final direction with modified spread
         return this.getVectorFromRotation(
@@ -294,7 +302,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     }
 
     /**
-     * Called when the projectile has run out of it's life. In other words, the projectile managed
+     * Called when the projectile has run out of its life. In other words, the projectile managed
      * to not hit any blocks and instead aged. The grenade uses this to explode in the air.
      */
     protected void onExpired() {
@@ -602,8 +610,13 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         ResourceLocation advantage = this.getProjectile().getAdvantage();
         damage *= advantageMultiplier(entity);
 
+
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
+        }
+
+        if (entity.getType() == EntityType.PLAYER){
+            damage*=1-(((LivingEntity) entity).getAttribute(SCAttributes.BULLET_RESISTANCE.get()).getValue()/100);
         }
 
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, this.shooter);
@@ -756,7 +769,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     }
 
     public float getDamage() {
-        float initialDamage = (this.projectile.getDamage() + this.additionalDamage);
+        float initialDamage = (this.projectile.getDamage() + this.additionalDamage + this.attributeAdditionalDamage);
+        initialDamage*=this.attributeDamageMultiplier;
         if (this.projectile.isDamageReduceOverLife()) {
             float modifier = ((float) this.projectile.getLife() - (float) (this.tickCount - 1)) / (float) this.projectile.getLife();
             initialDamage *= modifier;

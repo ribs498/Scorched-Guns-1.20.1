@@ -15,6 +15,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.client.CustomGunManager;
 import top.ribs.scguns.client.handler.HUDRenderHandler;
 import top.ribs.scguns.client.screen.*;
@@ -42,6 +43,7 @@ import static top.ribs.scguns.Reference.MOD_ID;
 
 @Mod(MOD_ID)
 public class ScorchedGuns {
+    public static final String MODID = "scguns";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
     public static CogMinionConfig COG_MINION_CONFIG = new CogMinionConfig();
     public static boolean backpackedLoaded;
@@ -69,6 +71,9 @@ public class ScorchedGuns {
         // Initialize the deferred register for items
         ModItems.REGISTER.register(bus);
         ModRecipes.register(modEventBus);
+
+        //Register Attributes
+        SCAttributes.ATTRIBUTES.register(modEventBus);
 
         // Load mod dependencies before registering items
         initializeModDependencies();

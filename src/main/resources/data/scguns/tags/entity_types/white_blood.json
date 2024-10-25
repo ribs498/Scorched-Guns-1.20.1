@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "minecraft:skeleton",
+    "minecraft:skeleton_horse",
     "minecraft:stray",
     "minecraft:snow_golem",
     "minecraft:vex"
