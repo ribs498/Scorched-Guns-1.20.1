@@ -21,6 +21,9 @@
 		"thirdperson_lefthand": {
 			"parent": "scguns:item/shock_cell_2d"
 		},
+		"fixed": {
+			"parent": "scguns:item/shock_cell_2d"
+		},
 		"gui": {
 			"parent": "scguns:item/shock_cell_2d"
 		},

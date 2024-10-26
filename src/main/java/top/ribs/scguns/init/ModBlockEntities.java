@@ -1,19 +1,11 @@
 package top.ribs.scguns.init;
 
-import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.event.RegisterGameTestsEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegisterEvent;
 import net.minecraftforge.registries.RegistryObject;
-import top.ribs.scguns.Reference;
 import top.ribs.scguns.blockentity.*;
-import top.ribs.scguns.common.Gun;
 
 
 public class ModBlockEntities {
@@ -23,6 +15,10 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("gun_shelf", () ->
                     BlockEntityType.Builder.of(GunShelfBlockEntity::new,
                             ModBlocks.GUN_SHELF.get()).build(null));
+    public static final RegistryObject<BlockEntityType<MobTrapBlockEntity>> MOB_TRAP =
+            BLOCK_ENTITIES.register("mob_trap", () ->
+                    BlockEntityType.Builder.of(MobTrapBlockEntity::new,
+                            ModBlocks.MOB_TRAP.get()).build(null));
     public static final RegistryObject<BlockEntityType<AdvancedComposterBlockEntity>> ADVANCED_COMPOSTER =
             BLOCK_ENTITIES.register("advanced_composter", () ->
                     BlockEntityType.Builder.of(AdvancedComposterBlockEntity::new,
@@ -89,6 +85,11 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("auto_turret", () ->
                     BlockEntityType.Builder.of(AutoTurretBlockEntity::new,
                             ModBlocks.AUTO_TURRET.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<EnemyTurretBlockEntity>> ENEMY_TURRET =
+            BLOCK_ENTITIES.register("enemy_turret", () ->
+                    BlockEntityType.Builder.of(EnemyTurretBlockEntity::new,
+                            ModBlocks.ENEMY_TURRET.get()).build(null));
     public static final RegistryObject<BlockEntityType<ShotgunTurretBlockEntity>> SHOTGUN_TURRET =
             BLOCK_ENTITIES.register("shotgun_turret", () ->
                     BlockEntityType.Builder.of(ShotgunTurretBlockEntity::new,
@@ -102,6 +103,11 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("ammo_module", () ->
                     BlockEntityType.Builder.of(AmmoModuleBlockEntity::new,
                             ModBlocks.AMMO_TURRET_MODULE.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<AmmoBoxBlockEntity>> AMMO_BOX =
+            BLOCK_ENTITIES.register("ammo_box", () ->
+                    BlockEntityType.Builder.of(AmmoBoxBlockEntity::new,
+                            ModBlocks.AMMO_BOX.get()).build(null));
     public static final RegistryObject<BlockEntityType<VentCollectorBlockEntity>> VENT_COLLECTOR = BLOCK_ENTITIES.register("vent_collector",
             () -> BlockEntityType.Builder.of(VentCollectorBlockEntity::new, ModBlocks.VENT_COLLECTOR.get()).build(null));
 

@@ -1,6 +1,7 @@
 package top.ribs.scguns.client.handler;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemCooldowns;
@@ -17,6 +18,7 @@ import top.ribs.scguns.common.ChargeHandler;
 import top.ribs.scguns.common.FireMode;
 import top.ribs.scguns.common.GripType;
 import top.ribs.scguns.common.Gun;
+import top.ribs.scguns.common.network.ServerPlayHandler;
 import top.ribs.scguns.compat.PlayerReviveHelper;
 import top.ribs.scguns.event.GunFireEvent;
 import top.ribs.scguns.init.ModSyncedDataKeys;
@@ -25,10 +27,11 @@ import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.C2SMessagePreFireSound;
 import top.ribs.scguns.network.message.C2SMessageShoot;
 import top.ribs.scguns.network.message.C2SMessageShooting;
+import top.ribs.scguns.network.message.C2SMessageStopBeam;
 import top.ribs.scguns.util.GunCompositeStatHelper;
 
 /**
- * Author: Ribs
+ * Author: MrCrayfish
  */
 public class ShootingHandler
 {
@@ -93,7 +96,6 @@ public class ShootingHandler
             {
                 if(event.getHand() == InteractionHand.OFF_HAND)
                 {
-                    // Allow shields to be used if weapon is one-handed
                     if(player.getOffhandItem().getItem() == Items.SHIELD)
                     {
                         Gun modifiedGun = gunItem.getModifiedGun(heldItem);
@@ -115,51 +117,62 @@ public class ShootingHandler
         }
     }
     @SubscribeEvent
-    public void onHandleShooting(TickEvent.ClientTickEvent event)
-    {
-        if(event.phase != TickEvent.Phase.START)
+    public void onHandleShooting(TickEvent.ClientTickEvent event) {
+        if (event.phase != TickEvent.Phase.START)
             return;
 
-        if(!this.isInGame())
+        if (!this.isInGame())
             return;
 
         Minecraft mc = Minecraft.getInstance();
         Player player = mc.player;
-        if(player != null)
-        {
+
+        if (player != null) {
             ItemStack heldItem = player.getMainHandItem();
-            if(heldItem.getItem() instanceof GunItem && !isEmpty(player, heldItem) && !PlayerReviveHelper.isBleeding(player))
-            {
+            if (heldItem.getItem() instanceof GunItem gunItem && !isEmpty(player, heldItem) && !PlayerReviveHelper.isBleeding(player)) {
+                Gun modifiedGun = gunItem.getModifiedGun(heldItem);
+
                 boolean shouldShoot = KeyBinds.getShootMapping().isDown() || (burstCounter > 0 && Gun.hasBurstFire(heldItem));
-                if(ScorchedGuns.controllableLoaded)
-                {
+                if (ScorchedGuns.controllableLoaded) {
                     shouldShoot |= ControllerHandler.isShooting();
                 }
-                if(shouldShoot && burstCooldownTimer <= 0)
-                {
-                    if(!this.shooting)
-                    {
-                        this.shooting = true;
-                        PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(true));
+
+                // Handle beam fire mode
+                if (modifiedGun.getGeneral().getFireMode() == FireMode.BEAM) {
+                    if (shouldShoot && burstCooldownTimer <= 0) {
+                        if (!this.shooting) {
+                            this.shooting = true;
+                            PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(true));
+                        }
+                    } else if (this.shooting) {
+                        this.shooting = false;
+                        PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(false));
+                        // Send a stop beam message to the server
+                        PacketHandler.getPlayChannel().sendToServer(new C2SMessageStopBeam());
+                    }
+                } else {  // Non-beam weapons
+                    if (shouldShoot && burstCooldownTimer <= 0) {
+                        if (!this.shooting) {
+                            this.shooting = true;
+                            PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(true));
+                        }
+                    } else if (this.shooting) {
+                        this.shooting = false;
+                        PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(false));
                     }
                 }
-                else if(this.shooting)
-                {
-                    this.shooting = false;
-                    PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(false));
-                }
-            }
-            else if(this.shooting)
-            {
+            } else if (this.shooting) {
                 this.shooting = false;
                 PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(false));
+                // Send a stop beam message to the server if the player is no longer shooting
+                PacketHandler.getPlayChannel().sendToServer(new C2SMessageStopBeam());
             }
-        }
-        else
-        {
+        } else {
             this.shooting = false;
         }
     }
+
+
     private boolean isEmpty(Player player, ItemStack heldItem)
     {
         if(!(heldItem.getItem() instanceof GunItem))
@@ -192,48 +205,41 @@ public class ShootingHandler
                     burstCooldownTimer = 0;
                 }
             }
-
             ItemStack heldItem = player.getMainHandItem();
             if (heldItem.getItem() instanceof GunItem) {
                 Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
-                int maxChargeTime = gun.getGeneral().getFireTimer(); // Get the base charge time for pulse weapons
-
-                // Handle burst cooldown
+                int maxChargeTime = gun.getGeneral().getFireTimer();
                 if (burstCooldownTimer > 0) {
                     burstCooldownTimer--;
                 }
-
-                // If the shoot key is not pressed and the weapon has a charge time, reset the timer
                 if (!KeyBinds.getShootMapping().isDown() && maxChargeTime != 0) {
                     fireTimer = maxChargeTime;
                 }
-
-                // Handle charging or burst firing
                 if ((KeyBinds.getShootMapping().isDown() || burstCounter > 0) && burstCooldownTimer <= 0) {
-                    if (maxChargeTime != 0) { // If the gun is a pulse weapon
+                    if (maxChargeTime != 0) {
                         ItemCooldowns tracker = player.getCooldowns();
-                        if (fireTimer > 0 && !tracker.isOnCooldown(heldItem.getItem())) { // Handle charging
+                        if (fireTimer > 0 && !tracker.isOnCooldown(heldItem.getItem())) {
                             if (fireTimer == maxChargeTime - 2) {
-                                PacketHandler.getPlayChannel().sendToServer(new C2SMessagePreFireSound(player)); // Play pre-fire sound
+                                PacketHandler.getPlayChannel().sendToServer(new C2SMessagePreFireSound(player));
                             }
-                            fireTimer--; // Decrease the fire timer by 1
+                            fireTimer--;
 
-                        } else { // Once the fire timer reaches 0, fire the weapon
+                        } else {
                             this.fire(player, heldItem);
                             if (gun.getGeneral().getFireMode() == FireMode.SEMI_AUTO || gun.getGeneral().getFireMode() == FireMode.PULSE) {
                                 mc.options.keyAttack.setDown(false);
-                                fireTimer = maxChargeTime; // Reset fire timer after firing
+                                fireTimer = maxChargeTime;
                                 ChargeHandler.updateChargeTime(maxChargeTime, false);
                             }
                         }
-                    } else { // Handle non-pulse weapons
+                    } else {
                         this.fire(player, heldItem);
                         if (gun.getGeneral().getFireMode() == FireMode.SEMI_AUTO) {
                             mc.options.keyAttack.setDown(false);
                         }
                     }
-                    ChargeHandler.updateChargeTime(maxChargeTime, true); // Update charge time while holding down the shoot key
-                } else { // Reset charge if not firing
+                    ChargeHandler.updateChargeTime(maxChargeTime, true);
+                } else {
                     ChargeHandler.updateChargeTime(maxChargeTime, false);
                     doEmptyClick = true;
                 }

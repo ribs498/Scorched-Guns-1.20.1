@@ -18,14 +18,16 @@ public class DishesPouch extends AmmoBoxItem {
         return new ResourceLocation("scguns", "dishes");
     }
 
-    @Override
-    protected int getMaxItemCount() {
-        return CASING_MAX_ITEM_COUNT;
-    }
+
 
     @Override
     public int getBarColor(ItemStack stack) {
         return CASING_BAR_COLOR;
+    }
+
+    @Override
+    protected int getBaseMaxItemCount() {
+        return CASING_MAX_ITEM_COUNT;
     }
 
 }

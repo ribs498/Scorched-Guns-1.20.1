@@ -226,4 +226,10 @@ public interface IGunModifier
     default int modifyAmmoCapacity(int baseCapacity) {
         return baseCapacity;
     }
+
+
+    default boolean isMeleeOnly() {
+        return false;
+    }
+
 }

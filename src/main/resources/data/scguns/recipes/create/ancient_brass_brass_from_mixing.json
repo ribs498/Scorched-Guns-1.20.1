@@ -1,0 +1,17 @@
+{
+  "type": "create:mixing",
+  "ingredients": [
+    {
+      "item": "scguns:ancient_brass"
+    },
+    {
+      "tag": "forge:ingots/brass"
+    }
+  ],
+  "results": [
+    {
+      "count": 3,
+      "item": "create:brass_ingot"
+    }
+  ]
+}

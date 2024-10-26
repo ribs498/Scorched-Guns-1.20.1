@@ -24,6 +24,7 @@ public enum SpecialModels {
     BASIC_TURRET_TOP("basic_turret/basic_turret_top"),
     SHOTGUN_TURRET_TOP("basic_turret/shotgun_turret_top"),
     AUTO_TURRET_TOP("basic_turret/auto_turret_top"),
+    ENEMY_TURRET_TOP("basic_turret/enemy_turret_top"),
 ///FLINTLOCK
     FLINTLOCK_PISTOL_MAIN("flintlock_pistol/main"),
     FLINTLOCK_PISTOL_HAMMER("flintlock_pistol/hammer"),
@@ -308,6 +309,7 @@ public enum SpecialModels {
     DARK_MATTER_EXT_BARREL("dark_matter/ext_barrel"),
     DARK_MATTER_MUZZLE_BRAKE("dark_matter/muzzle_brake"),
     DARK_MATTER_ADVANCED_SILENCER("dark_matter/advanced_silencer"),
+    DARK_MATTER_BOLT("dark_matter/bolt"),
     ///SHELLURKER
     SHELLURKER_MAIN("shellurker/main"),
     SHELLURKER_SIGHTS("shellurker/sights"),

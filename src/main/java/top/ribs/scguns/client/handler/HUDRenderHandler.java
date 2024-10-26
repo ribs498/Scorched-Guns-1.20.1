@@ -20,6 +20,7 @@ import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
@@ -30,9 +31,12 @@ import top.ribs.scguns.common.HotBarrelHandler;
 import top.ribs.scguns.init.ModEnchantments;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.ammo_boxes.CreativeAmmoBoxItem;
 import top.ribs.scguns.util.GunModifierHelper;
+import top.theillusivec4.curios.api.CuriosApi;
 
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class HUDRenderHandler {
@@ -47,12 +51,12 @@ public class HUDRenderHandler {
     private static boolean playingHitMarker = false;
     private static int hitMarkerTime;
     private static int prevHitMarkerTime;
-    private static int hitMarkerMaxTime = 2;
+    private static final int hitMarkerMaxTime = 2;
     private static boolean hitMarkerCrit = false;
 
     private static int reserveAmmo = 0;
     private static int ammoAutoUpdateTimer = 0;
-    private static int ammoAutoUpdateRate = 20;
+    private static final int ammoAutoUpdateRate = 20;
 
     @SubscribeEvent
     public static void onRenderGuiOverlay(RenderGuiOverlayEvent.Post event) {
@@ -73,14 +77,10 @@ public class HUDRenderHandler {
 
         GuiGraphics guiGraphics = event.getGuiGraphics();
         PoseStack poseStack = guiGraphics.pose();
-
-        // Existing gun info HUD
         renderGunInfoHUD(heldItem, event.getPartialTick(), poseStack, guiGraphics);
         renderChargeBarHUD(heldItem, event.getPartialTick(), poseStack, guiGraphics, player);
         renderMeleeCooldownHUD(event.getPartialTick(), poseStack, guiGraphics);
         renderHitMarker(event.getPartialTick(), poseStack, guiGraphics);
-
-        // Render hot barrel overlay
         renderHotBarrelOverlay(heldItem, poseStack, guiGraphics);
     }
     public static void renderHotBarrelOverlay(ItemStack heldItem, PoseStack poseStack, GuiGraphics guiGraphics) {
@@ -158,12 +158,44 @@ public class HUDRenderHandler {
 
         if (tagCompound != null && player != null) {
             int currentAmmo = tagCompound.getInt("AmmoCount");
+            int maxAmmo = GunModifierHelper.getModifiedAmmoCapacity(heldItem, gun);
             MutableComponent ammoCountValue;
+            MutableComponent reserveAmmoValue;
 
-            if (player.isCreative()) {
+            // Check if the player is in creative mode
+            boolean isCreative = player.isCreative();
+
+            // Check if the player has a CreativeAmmoBoxItem in their inventory
+            AtomicBoolean hasCreativeAmmoBox = new AtomicBoolean(player.getInventory().items.stream()
+                    .anyMatch(itemStack -> itemStack.getItem() instanceof CreativeAmmoBoxItem));
+
+            // If not found in inventory, check Curios slots
+            if (!hasCreativeAmmoBox.get()) {
+                CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
+                    IItemHandlerModifiable curios = handler.getEquippedCurios();
+                    for (int i = 0; i < curios.getSlots(); i++) {
+                        ItemStack stack = curios.getStackInSlot(i);
+                        if (stack.getItem() instanceof CreativeAmmoBoxItem) {
+                            hasCreativeAmmoBox.set(true);
+                            break;
+                        }
+                    }
+                });
+            }
+
+            // Determine ammo count display
+            if (isCreative) {
                 ammoCountValue = Component.literal("∞ / ∞").withStyle(ChatFormatting.BOLD);
+                reserveAmmoValue = Component.literal("∞").withStyle(ChatFormatting.BOLD);
             } else {
-                ammoCountValue = Component.literal(currentAmmo + " / " + GunModifierHelper.getModifiedAmmoCapacity(heldItem, gun)).withStyle(ChatFormatting.BOLD);
+                ammoCountValue = Component.literal(currentAmmo + " / " + maxAmmo).withStyle(ChatFormatting.BOLD);
+
+                // Display infinity for reserve ammo if the player has a CreativeAmmoBoxItem
+                if (hasCreativeAmmoBox.get()) {
+                    reserveAmmoValue = Component.literal("∞").withStyle(ChatFormatting.BOLD);
+                } else {
+                    reserveAmmoValue = Component.literal(String.valueOf(reserveAmmo)).withStyle(ChatFormatting.BOLD);
+                }
             }
 
             int screenWidth = mc.getWindow().getGuiScaledWidth();
@@ -181,24 +213,21 @@ public class HUDRenderHandler {
                 }
             }
 
-            guiGraphics.drawString(mc.font, ammoCountValue, ammoPosX, ammoPosY, (currentAmmo > 0 || player.isCreative() ? 0xFFFFFF : 0xFF5555));
+            // Draw the current ammo value
+            guiGraphics.drawString(mc.font, ammoCountValue, ammoPosX, ammoPosY, (currentAmmo > 0 || isCreative ? 0xFFFFFF : 0xFF5555));
 
+            // Draw the reserve ammo value
             int reserveAmmoPosY = ammoPosY + 10;
-            MutableComponent reserveAmmoValue;
-
-            if (player.isCreative()) {
-                reserveAmmoValue = Component.literal("∞").withStyle(ChatFormatting.BOLD);
-            } else {
-                reserveAmmoValue = Component.literal(String.valueOf(reserveAmmo)).withStyle(ChatFormatting.BOLD);
-            }
-
             guiGraphics.drawString(mc.font, reserveAmmoValue, ammoPosX, reserveAmmoPosY, (reserveAmmo <= 0 && !Gun.hasUnlimitedReloads(heldItem) ? 0x555555 : 0xAAAAAA));
+
+            // Render the ammo type texture
             ItemStack ammoItemStack = new ItemStack(Objects.requireNonNull(gun.getProjectile().getItem()));
             renderAmmoTypeTexture(ammoItemStack, ammoPosX - 20, ammoPosY, guiGraphics, mc);
 
             RenderSystem.disableBlend();
         }
     }
+
 
     private static void renderAmmoTypeTexture(ItemStack ammoItemStack, int x, int y, GuiGraphics guiGraphics, Minecraft mc) {
         RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);

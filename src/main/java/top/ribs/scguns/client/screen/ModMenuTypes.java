@@ -17,6 +17,8 @@ import top.ribs.scguns.client.screen.widget.ThermolithMenu;
 public class ModMenuTypes {
     public static final DeferredRegister<MenuType<?>> MENUS =
             DeferredRegister.create(ForgeRegistries.MENU_TYPES, Reference.MOD_ID);
+    public static final RegistryObject<MenuType<AmmoBoxMenu>> AMMO_BOX =
+            registerMenuType("ammo_box", AmmoBoxMenu::new);
     public static final RegistryObject<MenuType<ShellCatcherModuleMenu>> SHELL_CATCHER_MODULE =
             registerMenuType("shell_catcher_module", ShellCatcherModuleMenu::new);
     public static final RegistryObject<MenuType<AmmoModuleMenu>> AMMO_MODULE =

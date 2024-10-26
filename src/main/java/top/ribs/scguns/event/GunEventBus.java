@@ -17,6 +17,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,6 +36,7 @@ import top.ribs.scguns.block.SulfurVentBlock;
 import top.ribs.scguns.client.handler.MeleeAttackHandler;
 import top.ribs.scguns.client.render.gun.model.RatKingAndQueenModel;
 import top.ribs.scguns.common.FireMode;
+import top.ribs.scguns.common.GripType;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.common.HotBarrelHandler;
 import top.ribs.scguns.init.*;
@@ -63,24 +65,25 @@ public class GunEventBus {
 
         if (heldItem.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(heldItem);
-            int energyUse = gun.getGeneral().getEnergyUse();
 
-            // Skip energy or air requirements if the player is in creative mode
+            GripType gripType = gun.determineGripType(heldItem);
+            if (player.isUsingItem() && player.getOffhandItem().getItem() == Items.SHIELD
+                    && (gripType == GripType.ONE_HANDED || gripType == GripType.ONE_HANDED_2)) {
+                event.setCanceled(true);
+                return;
+            }
+            int energyUse = gun.getGeneral().getEnergyUse();
             if (!player.isCreative()) {
                 if (heldItem.getItem() instanceof EnergyGunItem) {
                     IEnergyStorage energyStorage = heldItem.getCapability(ForgeCapabilities.ENERGY).orElseThrow(IllegalStateException::new);
                     if (energyStorage.getEnergyStored() >= energyUse) {
-                        // Consume energy
                         energyStorage.extractEnergy(energyUse, false);
                     } else {
-                        // Not enough energy
                         player.displayClientMessage(Component.translatable("message.energy_gun.no_energy").withStyle(ChatFormatting.RED), true);
                         event.setCanceled(true);
                         return;
                     }
                 }
-
-                // Check if the Create mod is loaded before handling AirGunItem logic
                 if (ScorchedGuns.createLoaded && heldItem.getItem() instanceof AirGunItem) {
                     List<ItemStack> backtanks = BacktankUtil.getAllWithAir(player);
                     if (backtanks.isEmpty()) {
@@ -97,8 +100,6 @@ public class GunEventBus {
                     }
                 }
             }
-
-            // Rest of the GunItem logic
             if (heldItem.getItem() instanceof NonUnderwaterGunItem && player.isUnderWater()) {
                 event.setCanceled(true);
             }
@@ -114,7 +115,6 @@ public class GunEventBus {
                     event.getEntity().getCooldowns().addCooldown(event.getStack().getItem(), gun.getGeneral().getRate());
                     event.setCanceled(true);
                 }
-                // This is the Jam function
                 int maxDamage = heldItem.getMaxDamage();
                 int currentDamage = heldItem.getDamageValue();
                 if (currentDamage >= maxDamage / 1.5) {
@@ -138,12 +138,10 @@ public class GunEventBus {
         Player player = event.getEntity();
         Level level = event.getEntity().level();
         ItemStack heldItem = player.getMainHandItem();
-        CompoundTag tag = heldItem.getOrCreateTag(); // Get or create tag for storing hot barrel
+        CompoundTag tag = heldItem.getOrCreateTag();
 
         if (heldItem.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(heldItem);
-
-            // Check if the gun has the HotBarrelEnchantment
             int hotBarrelLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), heldItem);
 
             if (hotBarrelLevel > 0) {
@@ -155,26 +153,24 @@ public class GunEventBus {
                     triggerExplosion(player.level(), player.blockPosition());
                 }
             }
-            // Get shot count and determine mirroring
             int shotCount = RatKingAndQueenModel.GunFireEventRatHandler.getShotCount();
             boolean mirror = (heldItem.getItem() instanceof DualWieldGunItem && (shotCount % 2 == 1));
 
-            // Eject casing particles
-            if (gun.getProjectile().ejectsCasing() && tag != null) {
-                if (tag.getInt("AmmoCount") >= 1 || player.getAbilities().instabuild) {
-                    ejectCasing(level, player, mirror);
+            if (Config.COMMON.gameplay.spawnCasings.get()) {
+                if (gun.getProjectile().ejectsCasing()) {
+                    if (tag.getInt("AmmoCount") >= 1 || player.getAbilities().instabuild) {
+                        ejectCasing(level, player, mirror);
+                    }
                 }
-            }
-
-            // Casing retrieval logic
-            if (gun.getProjectile().casingType != null && !player.getAbilities().instabuild) {
-                ItemStack casingStack = new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(gun.getProjectile().casingType)));
-                double baseChance = 0.4;
-                int enchantmentLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SHELL_CATCHER.get(), heldItem);
-                double finalChance = baseChance + (enchantmentLevel * 0.15);
-                if (Math.random() < finalChance) {
-                    if (!addCasingToPouch(player, casingStack)) {
-                        spawnCasingInWorld(level, player, casingStack);
+                if (gun.getProjectile().casingType != null && !player.getAbilities().instabuild) {
+                    ItemStack casingStack = new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(gun.getProjectile().casingType)));
+                    double baseChance = 0.4;
+                    int enchantmentLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SHELL_CATCHER.get(), heldItem);
+                    double finalChance = baseChance + (enchantmentLevel * 0.15);
+                    if (Math.random() < finalChance) {
+                        if (!addCasingToPouch(player, casingStack)) {
+                            spawnCasingInWorld(level, player, casingStack);
+                        }
                     }
                 }
             }

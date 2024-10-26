@@ -28,7 +28,7 @@
       },
       "scope": {
         "size": 0.7,
-        "yOffset": 4.7,
+        "yOffset": 4.6,
         "zOffset": 5.2
       },
       "stock": {
@@ -53,7 +53,7 @@
     "item": "scguns:advanced_round",
     "casingType": "scguns:medium_brass_casing",
     "life": 60,
-    "size": 0.1,
+    "size": 0.23,
     "speed": 11.0,
     "trailLengthMultiplier": 4.0
   },

@@ -21,6 +21,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -40,6 +41,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import org.joml.Matrix4f;
+import org.joml.Vector4f;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.client.GunModel;
@@ -80,9 +82,9 @@ public class GunRenderingHandler {
     }
 
     private final Random random = new Random();
-    private final Set<Integer> entityIdForMuzzleFlash = new HashSet<>();
+    public static final Set<Integer> entityIdForMuzzleFlash = new HashSet<>();
     private final Set<Integer> entityIdForDrawnMuzzleFlash = new HashSet<>();
-    private final Map<Integer, Float> entityIdToRandomValue = new HashMap<>();
+    public static final Map<Integer, Float> entityIdToRandomValue = new HashMap<>();
 
     private int sprintTransition;
     private int prevSprintTransition;
@@ -115,8 +117,9 @@ public class GunRenderingHandler {
     private boolean isThirdPersonMeleeAttacking;
     private long thirdPersonMeleeStartTime;
     public static final float THIRD_PERSON_MELEE_DURATION = 400.0f;
-    private static final long PARTICLE_COOLDOWN_MS = 100; // 100 milliseconds cooldown between particle spawns
+    private static final long PARTICLE_COOLDOWN_MS = 100;
     private long lastParticleSpawnTime = 0;
+
     @Nullable
     private ItemStack renderingWeapon;
 
@@ -169,10 +172,6 @@ public class GunRenderingHandler {
         }
 
         if (heldItem.getItem() instanceof GunItem gunItem) {
-//            if (gunItem.hasBayonetWithBanzai(heldItem)) {
-//                logPlayerSpeed(player);
-//            }
-
             if (player.isUsingItem() && player.getUsedItemHand() == InteractionHand.MAIN_HAND && heldItem.getItem() instanceof GrenadeItem) {
                 return;
             }
@@ -202,12 +201,6 @@ public class GunRenderingHandler {
             renderCooldownIndicator(mc, player, heldItem);
         }
     }
-
-//    private void logPlayerSpeed(Player player) {
-//        double speed = Math.sqrt(player.getDeltaMovement().x * player.getDeltaMovement().x + player.getDeltaMovement().z * player.getDeltaMovement().z);
-//        speed *= 10;
-//        //System.out.printf("Player speed: %.3f%n", speed);
-//    }
 
     private void renderCooldownIndicator(Minecraft mc, Player player, ItemStack heldItem) {
         if (Config.CLIENT.display.cooldownIndicator.get()) {
@@ -256,11 +249,11 @@ public class GunRenderingHandler {
         }
     }
 
-    private void updateMuzzleFlash() {
-        this.entityIdForMuzzleFlash.removeAll(this.entityIdForDrawnMuzzleFlash);
-        this.entityIdToRandomValue.keySet().removeAll(this.entityIdForDrawnMuzzleFlash);
+    public void updateMuzzleFlash() {
+        entityIdForMuzzleFlash.removeAll(this.entityIdForDrawnMuzzleFlash);
+        entityIdToRandomValue.keySet().removeAll(this.entityIdForDrawnMuzzleFlash);
         this.entityIdForDrawnMuzzleFlash.clear();
-        this.entityIdForDrawnMuzzleFlash.addAll(this.entityIdForMuzzleFlash);
+        this.entityIdForDrawnMuzzleFlash.addAll(entityIdForMuzzleFlash);
     }
 
     private void updateOffhandTranslate() {
@@ -288,7 +281,10 @@ public class GunRenderingHandler {
         }
 
         ItemStack heldItem = mc.player.getMainHandItem();
-        if (heldItem.isEmpty() || !(heldItem.getItem() instanceof GunItem)) {
+        boolean isGun = heldItem.getItem() instanceof GunItem;
+
+        // Check if we restrict to weapons only
+        if (Config.CLIENT.display.restrictCameraRollToWeapons.get() && !isGun) {
             this.immersiveRoll = 0.0F;
             return;
         }
@@ -305,6 +301,7 @@ public class GunRenderingHandler {
         float intensity = mc.player.isSprinting() ? 0.75F : 1.0F;
         this.sprintIntensity = Mth.approach(this.sprintIntensity, intensity, 0.1F);
     }
+
 
     private void updateMelee() {
         float prevBanzaiProgress = banzaiProgress;
@@ -426,26 +423,43 @@ public class GunRenderingHandler {
             ModSyncedDataKeys.MELEE.setValue(player, true);
         }
     }
-
     private void applyMeleeTransforms(PoseStack poseStack, float partialTicks) {
         if (isMeleeAttacking) {
             float progress = Mth.lerp(partialTicks, prevMeleeProgress, meleeProgress);
             assert Minecraft.getInstance().player != null;
             ItemStack heldItem = Minecraft.getInstance().player.getMainHandItem();
+
+            if (Config.CLIENT.display.cinematicGunEffects.get()) {
+                addCameraShake(0.5f * (1 - progress), 5); // Enhanced initial shake
+            }
+
             boolean isBayonetEquipped = heldItem.getItem() instanceof GunItem && ((GunItem) heldItem.getItem()).hasBayonet(heldItem);
+
             if (isBayonetEquipped) {
-                if (progress < 0.4f) {
-                    // Quicker stab part
-                    float stabProgress = progress / 0.4f;
-                    poseStack.translate(0, 0, -0.3 * stabProgress);
-                    poseStack.mulPose(Axis.XP.rotationDegrees(15F * stabProgress));
+                // **Dynamic Stab Animation with Smooth Tilt**
+                if (progress < 0.3f) {
+                    float stabProgress = progress / 0.3f;
+                    poseStack.translate(0, 0, -0.35 * stabProgress); // Reduced forward distance
+
+                    // Smooth forward tilt reaching about 10 degrees at peak
+                    poseStack.mulPose(Axis.XP.rotationDegrees(10F * stabProgress));
+
+                    if (Config.CLIENT.display.cinematicGunEffects.get()) {
+                        addCameraShake(0.3f * stabProgress, 3); // Intense shake during stab peak
+                    }
                 } else {
-                    // Longer return part
-                    float returnProgress = (progress - 0.4f) / 0.6f;
-                    poseStack.translate(0, 0, -0.3 * (1 - returnProgress));
-                    poseStack.mulPose(Axis.XP.rotationDegrees(15F * (1 - returnProgress)));
+                    float returnProgress = (progress - 0.3f) / 0.7f;
+                    poseStack.translate(0, 0, 0.35 * (returnProgress - 1));
+
+                    // Gradual reduction of the tilt as it returns
+                    poseStack.mulPose(Axis.XP.rotationDegrees(10F * (1 - returnProgress)));
+
+                    if (Config.CLIENT.display.cinematicGunEffects.get()) {
+                        addCameraShake(0.1f * (1 - returnProgress), 2); // Final subtle shake on retraction
+                    }
                 }
             } else {
+                // **Default Swing Animation (No Bayonet)**
                 if (progress < 0.33f) {
                     float raiseProgress = progress / 0.33f;
                     poseStack.translate(0, 0.35 * raiseProgress, 0);
@@ -465,8 +479,6 @@ public class GunRenderingHandler {
             }
         }
     }
-
-
 
 
     @SubscribeEvent
@@ -593,7 +605,7 @@ public class GunRenderingHandler {
         this.applyMeleeTransforms(poseStack, event.getPartialTick());
 
         int blockLight = player.isOnFire() ? 15 : player.level().getBrightness(LightLayer.BLOCK, BlockPos.containing(player.getEyePosition(event.getPartialTick())));
-        blockLight += (this.entityIdForMuzzleFlash.contains(player.getId()) ? 3 : 0);
+        blockLight += (entityIdForMuzzleFlash.contains(player.getId()) ? 3 : 0);
         blockLight = Math.min(blockLight, 15);
         int packedLight = LightTexture.pack(blockLight, player.level().getBrightness(LightLayer.SKY, BlockPos.containing(player.getEyePosition(event.getPartialTick()))));
 
@@ -612,30 +624,28 @@ public class GunRenderingHandler {
 
         this.sprintTransition = 0;
         this.sprintCooldown = 20;
-
         ItemStack heldItem = event.getStack();
         GunItem gunItem = (GunItem) heldItem.getItem();
         Gun modifiedGun = gunItem.getModifiedGun(heldItem);
-
+        if (Config.CLIENT.display.cinematicGunEffects.get()) {
+            addCameraShake(0.5f, 10);
+        }
         if (event.getShooter() instanceof Player) {
             if (modifiedGun.getDisplay().getFlash() != null) {
                 int entityId = event.getShooter().getId();
                 this.showMuzzleFlashForPlayer(entityId);
-
-                // Update shot count
                 this.entityShotCount.put(entityId, this.entityShotCount.getOrDefault(entityId, 0) + 1);
             }
         }
     }
-
-
-
-    public void showMuzzleFlashForPlayer(int entityId) {
-        this.entityIdForMuzzleFlash.add(entityId);
-        this.entityIdToRandomValue.put(entityId, this.random.nextFloat());
+    private void addCameraShake(float intensity, int durationTicks) {
+        this.immersiveRoll = intensity;
+        this.sprintCooldown = durationTicks;
     }
-
-
+    public void showMuzzleFlashForPlayer(int entityId) {
+        entityIdForMuzzleFlash.add(entityId);
+        entityIdToRandomValue.put(entityId, this.random.nextFloat());
+    }
 
     @SubscribeEvent
     public void onComputeFov(ViewportEvent.ComputeFov event) {
@@ -751,7 +761,6 @@ public class GunRenderingHandler {
     }
 
     private void applyShieldTransforms(PoseStack poseStack, LocalPlayer player, Gun modifiedGun, ItemStack stack, float partialTick) {
-        // Use the dynamically determined grip type
         GripType gripType = modifiedGun.determineGripType(stack);
         if (player.isUsingItem() && player.getOffhandItem().getItem() == Items.SHIELD
                 && (gripType == GripType.ONE_HANDED || gripType == GripType.ONE_HANDED_2)) {
@@ -866,9 +875,9 @@ public class GunRenderingHandler {
 
         if (display != ItemDisplayContext.FIRST_PERSON_RIGHT_HAND && display != ItemDisplayContext.THIRD_PERSON_RIGHT_HAND && display != ItemDisplayContext.FIRST_PERSON_LEFT_HAND && display != ItemDisplayContext.THIRD_PERSON_LEFT_HAND) return;
 
-        if (!this.entityIdForMuzzleFlash.contains(entity.getId())) return;
+        if (!entityIdForMuzzleFlash.contains(entity.getId())) return;
 
-        float randomValue = this.entityIdToRandomValue.get(entity.getId());
+        float randomValue = entityIdToRandomValue.get(entity.getId());
         String flashType = modifiedGun.getDisplay().getMuzzleFlashType();
         ResourceLocation flashTexture = getFlashTexture(flashType);
 
@@ -1003,6 +1012,7 @@ public class GunRenderingHandler {
 
         poseStack.popPose();
     }
+
     private void renderReloadArm(PoseStack poseStack, MultiBufferSource buffer, int light, Gun modifiedGun, ItemStack stack, HumanoidArm hand, float translateX) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.player.tickCount < ReloadHandler.get().getStartReloadTick() || ReloadHandler.get().getReloadTimer() != 5)
@@ -1053,7 +1063,11 @@ public class GunRenderingHandler {
         if (Config.CLIENT.display.cameraRollEffect.get()) {
             float roll = (float) Mth.lerp(event.getPartialTick(), this.prevImmersiveRoll, this.immersiveRoll);
             roll = (float) Math.sin((roll * Math.PI) / 2.0);
-            roll *= Config.CLIENT.display.cameraRollAngle.get().floatValue();
+
+            if (Config.CLIENT.display.cinematicGunEffects.get()) {
+                roll *= Config.CLIENT.display.cameraRollAngle.get().floatValue() + this.immersiveRoll;
+            }
+
             event.setRoll(-roll);
         }
     }
@@ -1061,4 +1075,5 @@ public class GunRenderingHandler {
     public float getThirdPersonMeleeProgress() {
         return this.thirdPersonMeleeProgress;
     }
+
 }

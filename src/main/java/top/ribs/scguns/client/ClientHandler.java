@@ -11,6 +11,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.item.ItemProperties;
+import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.Item;
@@ -20,6 +21,7 @@ import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
 import net.minecraftforge.client.event.ScreenEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -68,8 +70,19 @@ public class ClientHandler {
         bus.addListener(ClientHandler::onClientSetup);
         MinecraftForge.EVENT_BUS.register(HUDRenderHandler.class);
     }
-
+    @SubscribeEvent
+    public static void onClientTick(TickEvent.ClientTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            //BeamHandler.clientTick();
+        }
+    }
     private static void onClientSetup(FMLClientSetupEvent event) {
+        event.enqueueWork(() -> {
+            Minecraft.getInstance().getTextureManager().register(
+                    new ResourceLocation("textures/entity/beacon_beam.png"),
+                    new SimpleTexture(new ResourceLocation("textures/entity/beacon_beam.png"))
+            );
+        });
         EntityRenderers.register(ModEntities.PRIMED_POWDER_KEG.get(), PowderKegRenderer::new);
         EntityRenderers.register(ModEntities.PRIMED_NITRO_KEG.get(), NitroKegRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.MACERATOR.get(), MaceratorRenderer::new);
@@ -77,6 +90,7 @@ public class ClientHandler {
         BlockEntityRenderers.register(ModBlockEntities.POWERED_MACERATOR.get(), PoweredMaceratorRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.MECHANICAL_PRESS.get(), MechanicalPressRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.BASIC_TURRET.get(), BasicTurretRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.ENEMY_TURRET.get(), EnemyTurretRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.AUTO_TURRET.get(), AutoTurretRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.SHOTGUN_TURRET.get(), ShotgunTurretRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.POWERED_MECHANICAL_PRESS.get(), PoweredMechanicalPressRenderer::new);
@@ -109,6 +123,8 @@ public class ClientHandler {
         registerAmmoCountProperty(ModItems.SPECIAL_AMMO_BOX.get());
         registerAmmoCountProperty(ModItems.EMPTY_CASING_POUCH.get());
         registerAmmoCountProperty(ModItems.DISHES_POUCH.get());
+        registerAmmoCountProperty(ModItems.ROCK_POUCH.get());
+        registerAmmoCountProperty(ModItems.CREATIVE_AMMO_BOX.get());
         MinecraftForge.EVENT_BUS.register(new PlayerModelHandler());
         MenuScreens.register(ModMenuTypes.MACERATOR_MENU.get(), MaceratorScreen::new);
         MenuScreens.register(ModMenuTypes.POWERED_MACERATOR_MENU.get(), PoweredMaceratorScreen::new);
@@ -150,6 +166,9 @@ public class ClientHandler {
         CuriosRendererRegistry.register(ModItems.SPECIAL_AMMO_BOX.get(), AmmoBoxRenderer::new);
         CuriosRendererRegistry.register(ModItems.EMPTY_CASING_POUCH.get(), AmmoBoxRenderer::new);
         CuriosRendererRegistry.register(ModItems.DISHES_POUCH.get(), AmmoBoxRenderer::new);
+        CuriosRendererRegistry.register(ModItems.ROCK_POUCH.get(), AmmoBoxRenderer::new);
+        CuriosRendererRegistry.register(ModItems.CREATIVE_AMMO_BOX.get(), AmmoBoxRenderer::new);
+
         event.enqueueWork(ModMuzzleFlashes::init);
         event.enqueueWork(ClientHandler::setup);
     }

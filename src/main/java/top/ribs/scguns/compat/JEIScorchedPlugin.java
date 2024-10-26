@@ -70,7 +70,9 @@ public class JEIScorchedPlugin implements IModPlugin {
         registration.addIngredientInfo(new ItemStack(ModItems.ROCKET_AMMO_BOX.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.rocket_ammo_box"));
         registration.addIngredientInfo(new ItemStack(ModItems.SPECIAL_AMMO_BOX.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.special_ammo_box"));
         registration.addIngredientInfo(new ItemStack(ModItems.EMPTY_CASING_POUCH.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.empty_casing_pouch"));
+        registration.addIngredientInfo(new ItemStack(ModItems.CREATIVE_AMMO_BOX.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.creative_ammo_box"));
         registration.addIngredientInfo(new ItemStack(ModItems.DISHES_POUCH.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.dishes_pouch"));
+        registration.addIngredientInfo(new ItemStack(ModItems.ROCK_POUCH.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.rock_pouch"));
         registration.addIngredientInfo(new ItemStack(ModItems.ANCIENT_BRASS.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.ancient_brass"));
 
         registration.addIngredientInfo(new ItemStack(ModItems.SCAMP_CONTROLLER.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.scamp_controller"));
@@ -81,6 +83,7 @@ public class JEIScorchedPlugin implements IModPlugin {
         registration.addIngredientInfo(new ItemStack(ModItems.TEAM_LOG.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.team_log"));
         registration.addIngredientInfo(new ItemStack(ModItems.ENEMY_LOG.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.enemy_log"));
 
+        registration.addIngredientInfo(new ItemStack(ModItems.SUPER_SHOTGUN.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.super_shotgun"));
 
 
         registration.addIngredientInfo(new ItemStack(ModBlocks.HOSTILE_TURRET_TARGETING_BLOCK.get()), VanillaTypes.ITEM_STACK, getTranslation("jei.info.hostile_turret_targeting_block"));
@@ -118,7 +121,7 @@ public class JEIScorchedPlugin implements IModPlugin {
     @Override
     public void registerGuiHandlers(IGuiHandlerRegistration registration) {
         registration.addRecipeClickArea(GunBenchScreen.class, 100, 47, 30, 20, GunBenchCategory.GUN_BENCH_TYPE);
-        registration.addRecipeClickArea(MaceratorScreen.class, 90, 25, 30, 20, MaceratorCategory.MACERATING_TYPE);
+        registration.addRecipeClickArea(MaceratorScreen.class, 80, 25, 30, 20, MaceratorCategory.MACERATING_TYPE);
         registration.addRecipeClickArea(PoweredMaceratorScreen.class, 80, 25, 25, 20, PoweredMaceratorCategory.POWERED_MACERATING_TYPE);
         registration.addRecipeClickArea(MechanicalPressScreen.class, 80, 25, 25, 20, MechanicalPressCategory.MECHANICAL_PRESS_TYPE);
         registration.addRecipeClickArea(PoweredMechanicalPressScreen.class, 80, 25, 25, 20, PoweredMechanicalPressCategory.POWERED_MECHANICAL_PRESS_TYPE);

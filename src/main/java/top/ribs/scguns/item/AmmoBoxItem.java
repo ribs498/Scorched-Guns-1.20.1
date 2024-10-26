@@ -21,6 +21,7 @@ import net.minecraft.world.entity.SlotAccess;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
 import org.jetbrains.annotations.NotNull;
+import top.ribs.scguns.Config;
 import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
@@ -47,7 +48,7 @@ public abstract class AmmoBoxItem extends Item {
                 this.playRemoveOneSound(player);
                 removeOne(stack).ifPresent(removedStack -> add(stack, slot.safeInsert(removedStack)));
             } else if (itemStackInSlot.is(ItemTags.create(getAmmoTag()))) {
-                int maxInsertCount = getMaxItemCount() - getTotalItemCount(stack);
+                int maxInsertCount = getMaxItemCount(stack) - getTotalItemCount(stack);
                 int itemsToInsert = Math.min(itemStackInSlot.getCount(), maxInsertCount);
                 int insertedItems = add(stack, slot.safeTake(itemStackInSlot.getCount(), itemsToInsert, player));
                 if (insertedItems > 0) {
@@ -71,7 +72,7 @@ public abstract class AmmoBoxItem extends Item {
                     slotAccess.set(removedStack);
                 });
             } else if (otherStack.is(ItemTags.create(getAmmoTag()))) {
-                int maxInsertCount = getMaxItemCount() - getTotalItemCount(stack);
+                int maxInsertCount = getMaxItemCount(stack) - getTotalItemCount(stack);
                 int itemsToInsert = Math.min(otherStack.getCount(), maxInsertCount);
                 int insertedItems = add(stack, otherStack.copyWithCount(itemsToInsert));
                 if (insertedItems > 0) {
@@ -86,13 +87,13 @@ public abstract class AmmoBoxItem extends Item {
     }
 
     @Override
-    public boolean isBarVisible(ItemStack stack) {
+    public boolean isBarVisible(@NotNull ItemStack stack) {
         return getTotalItemCount(stack) > 0;
     }
 
     @Override
-    public int getBarWidth(ItemStack stack) {
-        return Math.min(1 + 12 * getTotalItemCount(stack) / getMaxItemCount(), 13);
+    public int getBarWidth(@NotNull ItemStack stack) {
+        return Math.min(1 + 12 * getTotalItemCount(stack) / getMaxItemCount(stack), 13);
     }
 
     protected abstract ResourceLocation getAmmoTag();
@@ -178,15 +179,14 @@ public abstract class AmmoBoxItem extends Item {
         getContents(stack).forEach(nonNullList::add);
         return Optional.of(new BundleTooltip(nonNullList, getTotalItemCount(stack)));
     }
+    @Override
+    public void onDestroyed(@NotNull ItemEntity itemEntity) {
+        ItemUtils.onContainerDestroyed(itemEntity, getContents(itemEntity.getItem()));
+    }
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, Level level, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
         // tooltipComponents.add(Component.translatable("item.scguns.ammo_pouch.fullness").withStyle(ChatFormatting.GRAY));
-    }
-
-    @Override
-    public void onDestroyed(@NotNull ItemEntity itemEntity) {
-        ItemUtils.onContainerDestroyed(itemEntity, getContents(itemEntity.getItem()));
     }
 
     private void playRemoveOneSound(Entity entity) {
@@ -200,12 +200,15 @@ public abstract class AmmoBoxItem extends Item {
     public static int getMaxItemCount(ItemStack stack) {
         Item item = stack.getItem();
         if (item instanceof AmmoBoxItem) {
-            return ((AmmoBoxItem) item).getMaxItemCount();
+            double multiplier = Config.COMMON.gameplay.ammoBoxCapacityMultiplier.get();
+            return (int) (((AmmoBoxItem) item).getBaseMaxItemCount() * multiplier);
         }
         return 256;
     }
 
-    protected abstract int getMaxItemCount();
+    protected abstract int getBaseMaxItemCount();
+
+
 
     public static Stream<ItemStack> getContents(ItemStack stack) {
         CompoundTag compoundTag = stack.getTag();

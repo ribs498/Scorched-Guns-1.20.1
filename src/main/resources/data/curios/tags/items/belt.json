@@ -9,6 +9,8 @@
     "scguns:special_ammo_box",
     "scguns:magnum_ammo_box",
     "scguns:empty_casing_pouch",
-    "scguns:dishes_pouch"
+    "scguns:dishes_pouch",
+    "scguns:rock_pouch",
+    "scguns:creative_ammo_box"
   ]
 }

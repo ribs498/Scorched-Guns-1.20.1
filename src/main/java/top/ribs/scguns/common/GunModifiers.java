@@ -3,8 +3,8 @@ package top.ribs.scguns.common;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.interfaces.IGunModifier;
+import top.ribs.scguns.item.GunItem;
 
-import static top.ribs.scguns.item.GunItem.ONE_HANDED_CARBINE_CANDIDATES;
 
 /**
  * Author: MrCrayfish
@@ -46,24 +46,43 @@ public class GunModifiers
         public float additionalDamage() {
             return 2.0F;
         }
+
+        @Override
+        public boolean isMeleeOnly() {
+            return true;
+        }
     };
+
     public static final IGunModifier ANTHRALITE_BAYONET_DAMAGE = new IGunModifier() {
         @Override
         public float additionalDamage() {
             return 3.0F;
         }
+
+        @Override
+        public boolean isMeleeOnly() {
+            return true;
+        }
     };
     public static final IGunModifier DIAMOND_BAYONET_DAMAGE = new IGunModifier() {
         @Override
         public float additionalDamage() {
-            return 4.0F;
+            return 3.5F;
+        }
+        @Override
+        public boolean isMeleeOnly() {
+            return true;
         }
     };
 
     public static final IGunModifier NETHERITE_BAYONET_DAMAGE = new IGunModifier() {
         @Override
         public float additionalDamage() {
-            return 6.0F;
+            return 4.5F;
+        }
+        @Override
+        public boolean isMeleeOnly() {
+            return true;
         }
     };
     public static final IGunModifier EXTENDED_BARREL = new IGunModifier()
@@ -71,25 +90,25 @@ public class GunModifiers
         @Override
         public double modifyProjectileSpeed(double speed)
         {
-            return speed * 1.2; // 20% increase in projectile speed
+            return speed * 1.2;
         }
 
         @Override
         public float modifyProjectileSpread(float spread)
         {
-            return spread * 0.8F; // 20% reduction in spread
+            return spread * 0.8F;
         }
 
         @Override
         public float recoilModifier()
         {
-            return 1.15F; // 15% increase in recoil
+            return 1.25F;
         }
 
         @Override
         public double modifyAimDownSightSpeed(double speed)
         {
-            return speed * 0.9; // 10% decrease in ADS speed
+            return speed * 0.9;
         }
     };
     public static final IGunModifier SLOW_ADS = new IGunModifier()
@@ -324,13 +343,11 @@ public class GunModifiers
         }
 
         private boolean isCarbineCandidate(ItemStack weapon) {
-            return ONE_HANDED_CARBINE_CANDIDATES.stream().anyMatch(candidate -> candidate.get() == weapon.getItem());
+            return ((GunItem) weapon.getItem()).isOneHandedCarbineCandidate(weapon);
         }
     };
 
-
-
-    public static final IGunModifier SILENCER_MODIFIER = new IGunModifier() {
+        public static final IGunModifier SILENCER_MODIFIER = new IGunModifier() {
         @Override
         public float modifyProjectileDamage(float damage) {
             return damage * 0.9F;
@@ -343,19 +360,19 @@ public class GunModifiers
 
         @Override
         public float criticalChance() {
-            return 0.1F;
+            return 0.15F;
         }
     };
 
     public static final IGunModifier ADVANCED_SILENCER_MODIFIER = new IGunModifier() {
         @Override
         public double modifyProjectileSpeed(double speed) {
-            return speed * 0.95; // Slight decrease
+            return speed * 0.93;
         }
 
         @Override
         public float criticalChance() {
-            return 0.15F;
+            return 0.25F;
         }
     };
     public static final IGunModifier EXTENDED_MAG_MODIFIER = new IGunModifier() {

@@ -1,6 +1,10 @@
 package top.ribs.scguns.common.network;
 
+import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mrcrayfish.framework.api.network.LevelLocation;
+import net.minecraft.client.renderer.MultiBufferSource;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
@@ -12,7 +16,6 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.*;
@@ -23,18 +26,24 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.EnderMan;
 import net.minecraft.world.entity.monster.ZombifiedPiglin;
 import net.minecraft.world.entity.monster.piglin.Piglin;
-import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.AABB;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.phys.*;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.network.NetworkDirection;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.joml.Matrix4f;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.ScorchedGuns;
+import top.ribs.scguns.client.handler.BeamHandler;
+import top.ribs.scguns.client.handler.GunRenderingHandler;
+import top.ribs.scguns.client.util.PropertyHelper;
 import top.ribs.scguns.common.*;
 import top.ribs.scguns.common.container.AttachmentContainer;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
@@ -44,20 +53,18 @@ import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.interfaces.IProjectileFactory;
 import top.ribs.scguns.item.AirGunItem;
 import top.ribs.scguns.item.GunItem;
-import top.ribs.scguns.item.IColored;
 import top.ribs.scguns.item.SilencedFirearm;
 import top.ribs.scguns.network.PacketHandler;
-import top.ribs.scguns.network.message.C2SMessagePreFireSound;
-import top.ribs.scguns.network.message.C2SMessageShoot;
-import top.ribs.scguns.network.message.S2CMessageBulletTrail;
-import top.ribs.scguns.network.message.S2CMessageGunSound;
+import top.ribs.scguns.network.message.*;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 
 /**
@@ -68,7 +75,7 @@ public class ServerPlayHandler {
     private static final Predicate<LivingEntity> HOSTILE_ENTITIES = entity ->
             (entity.getSoundSource() == SoundSource.HOSTILE || entity.getType() == EntityType.PIGLIN || entity.getType() == EntityType.ZOMBIFIED_PIGLIN || entity.getType() == EntityType.ENDERMAN) &&
                     !Config.COMMON.aggroMobs.exemptEntities.get().contains(EntityType.getKey(entity.getType()).toString());
-
+    private static final Map<UUID, BeamHandler.BeamInfo> activeBeams = new HashMap<UUID, BeamHandler.BeamInfo>();
     private static final Predicate<LivingEntity> FLEEING_ENTITIES = entity ->
             Config.COMMON.fleeingMobs.fleeingEntities.get().contains(EntityType.getKey(entity.getType()).toString());
 
@@ -109,28 +116,33 @@ public class ServerPlayHandler {
                     SpreadTracker.get(player).update(player, item);
                 }
 
-                int count = modifiedGun.getGeneral().getProjectileAmount();
-                Gun.Projectile projectileProps = modifiedGun.getProjectile();
-                ProjectileEntity[] spawnedProjectiles = new ProjectileEntity[count];
-                for (int i = 0; i < count; i++) {
+                FireMode fireMode = modifiedGun.getGeneral().getFireMode();
+                if (fireMode.equals(FireMode.BEAM)) {
+                    handleBeamWeapon(player, heldItem, modifiedGun);
+                } else {
+                    int count = modifiedGun.getGeneral().getProjectileAmount();
+                    Gun.Projectile projectileProps = modifiedGun.getProjectile();
+                    ProjectileEntity[] spawnedProjectiles = new ProjectileEntity[count];
+                    for (int i = 0; i < count; i++) {
+                        IProjectileFactory factory = ProjectileManager.getInstance().getFactory(ForgeRegistries.ITEMS.getKey(projectileProps.getItem()));
+                        ProjectileEntity projectileEntity = factory.create(world, player, heldItem, item, modifiedGun);
+                        projectileEntity.setWeapon(heldItem);
+                        projectileEntity.setAdditionalDamage(Gun.getAdditionalDamage(heldItem));
+                        world.addFreshEntity(projectileEntity);
+                        spawnedProjectiles[i] = projectileEntity;
+                        projectileEntity.tick();
+                    }
+                    if (!projectileProps.isVisible()) {
+                        double spawnX = player.getX();
+                        double spawnY = player.getY() + 1.0;
+                        double spawnZ = player.getZ();
+                        double radius = Config.COMMON.network.projectileTrackingRange.get();
+                        ParticleOptions data = GunEnchantmentHelper.getParticle(heldItem);
+                        S2CMessageBulletTrail messageBulletTrail = new S2CMessageBulletTrail(spawnedProjectiles, projectileProps, player.getId(), data);
+                        PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(player.level(), spawnX, spawnY, spawnZ, radius), messageBulletTrail);
+                    }
+                }
 
-                    IProjectileFactory factory = ProjectileManager.getInstance().getFactory(ForgeRegistries.ITEMS.getKey(projectileProps.getItem()));
-                    ProjectileEntity projectileEntity = factory.create(world, player, heldItem, item, modifiedGun);
-                    projectileEntity.setWeapon(heldItem);
-                    projectileEntity.setAdditionalDamage(Gun.getAdditionalDamage(heldItem));
-                    world.addFreshEntity(projectileEntity);
-                    spawnedProjectiles[i] = projectileEntity;
-                    projectileEntity.tick();
-                }
-                if (!projectileProps.isVisible()) {
-                    double spawnX = player.getX();
-                    double spawnY = player.getY() + 1.0;
-                    double spawnZ = player.getZ();
-                    double radius = Config.COMMON.network.projectileTrackingRange.get();
-                    ParticleOptions data = GunEnchantmentHelper.getParticle(heldItem);
-                    S2CMessageBulletTrail messageBulletTrail = new S2CMessageBulletTrail(spawnedProjectiles, projectileProps, player.getId(), data);
-                    PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(player.level(), spawnX, spawnY, spawnZ, radius), messageBulletTrail);
-                }
                 MinecraftForge.EVENT_BUS.post(new GunFireEvent.Post(player, heldItem));
 
                 double x = player.getX();
@@ -166,7 +178,8 @@ public class ServerPlayHandler {
                             } else if (entity instanceof EnderMan enderman) {
                                 enderman.setTarget(player);
                             } else {
-                                entity.setLastHurtByMob(player);}
+                                entity.setLastHurtByMob(player);
+                            }
                         }
                     }
                 }
@@ -222,9 +235,106 @@ public class ServerPlayHandler {
             world.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, 0.8F);
         }
     }
+    private static void handleBeamWeapon(ServerPlayer player, ItemStack heldItem, Gun modifiedGun) {
+        UUID playerId = player.getUUID();
+        Level world = player.level();
+
+        // Always get the player's position
+        Vec3 playerPos = player.position();
+
+        // Static offset for the beam's origin (relative to player body, tweak as necessary)
+        // Adjust the offset to shift it down and flip on the X-axis
+        Vec3 beamOriginOffset = new Vec3(-0.1, player.getEyeHeight() - 0.1, 0.0);  // Adjust this as necessary (X = right/left, Y = up/down, Z = forward/back)
+
+        // Rotate the offset based on the player's current yaw and pitch
+        Vec3 beamOrigin = rotateOffset(player, beamOriginOffset);
+
+        // Get the direction the player is looking (view direction)
+        Vec3 lookVec = player.getLookAngle(); // The direction where the player is looking
+
+        // Maximum distance the beam can travel
+        double maxDistance = 50.0;
+
+        // End position of the beam (where it will hit)
+        Vec3 endPos = beamOrigin.add(lookVec.scale(maxDistance));
+
+        // Perform the raytrace (ray hits an entity or block)
+        HitResult hitResult = world.clip(new ClipContext(beamOrigin, endPos, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
+        Vec3 hitPos = hitResult.getLocation();
+
+        // Store and update the beam info
+        long currentTime = System.currentTimeMillis();
+        BeamHandler.BeamInfo beamInfo = activeBeams.computeIfAbsent(playerId, k -> new BeamHandler.BeamInfo(beamOrigin, hitPos, currentTime));
+        beamInfo.startPos = beamOrigin;
+        beamInfo.endPos = hitPos;
+
+        // Consume ammo every second for continuous beam fire
+        if (currentTime - beamInfo.startTime >= 1000) {
+            consumeAmmo(player, heldItem, modifiedGun);
+            beamInfo.startTime = currentTime;
+        }
+
+        // Update the beam and send updates to nearby players
+        BeamHandler.updateBeam(playerId, beamOrigin, hitPos);
+        PacketHandler.getPlayChannel().sendToPlayer(() -> player, new S2CMessageBeamUpdate(playerId, beamOrigin, hitPos));
+
+        // Handle any effects caused by the beam (damage to entities, interaction with blocks)
+        handleBeamEffects(player, hitResult, modifiedGun);
+
+        // Play sound for firing the beam
+        playBeamSound(player, heldItem, modifiedGun, beamOrigin);
+    }
+
+    private static Vec3 rotateOffset(ServerPlayer player, Vec3 offset) {
+        // Get player's yaw (horizontal rotation) and pitch (vertical rotation)
+        float yaw = player.getYRot() * ((float) Math.PI / 180F);  // Convert to radians
+        float pitch = player.getXRot() * ((float) Math.PI / 180F);  // Convert to radians
+
+        // Apply yaw (horizontal rotation) to the offset
+        double x = offset.x * Math.cos(yaw) - offset.z * Math.sin(yaw);
+        double z = offset.x * Math.sin(yaw) + offset.z * Math.cos(yaw);
+
+        // Apply pitch (vertical rotation) to the offset
+        double y = offset.y - (pitch != 0.0 ? offset.z * Math.sin(pitch) : 0);
+
+        // Return the rotated offset
+        return player.position().add(x, y, z);
+    }
 
 
+    private static void handleBeamEffects(ServerPlayer player, HitResult hitResult, Gun modifiedGun) {
+        if (hitResult.getType() == HitResult.Type.ENTITY) {
+            Entity hitEntity = ((EntityHitResult) hitResult).getEntity();
+            // Apply damage or effects to the hit entity
+            // For example: hitEntity.hurt(DamageSource.playerAttack(player), modifiedGun.getDamage());
+        } else if (hitResult.getType() == HitResult.Type.BLOCK) {
+            BlockPos hitBlock = ((BlockHitResult) hitResult).getBlockPos();
+            // Handle any block interactions or effects
+        }
+    }
 
+    private static void playBeamSound(ServerPlayer player, ItemStack heldItem, Gun modifiedGun, Vec3 muzzlePos) {
+        ResourceLocation fireSound = getFireSound(heldItem, modifiedGun);
+        if (fireSound != null) {
+            double radius = GunModifierHelper.getModifiedFireSoundRadius(heldItem, Config.SERVER.gunShotMaxDistance.get());
+            S2CMessageGunSound messageSound = new S2CMessageGunSound(fireSound, SoundSource.PLAYERS,
+                    (float) muzzlePos.x, (float) muzzlePos.y, (float) muzzlePos.z,
+                    GunModifierHelper.getFireSoundVolume(heldItem),
+                    0.9F + player.level().random.nextFloat() * 0.2F,
+                    player.getId(), false, true);
+            PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(player.level(), muzzlePos.x, muzzlePos.y, muzzlePos.z, radius), messageSound);
+        }
+    }
+
+    private static void consumeAmmo(ServerPlayer player, ItemStack heldItem, Gun modifiedGun) {
+        if (!player.isCreative()) {
+            CompoundTag tag = heldItem.getOrCreateTag();
+            if (!tag.getBoolean("IgnoreAmmo")) {
+                int currentAmmo = tag.getInt("AmmoCount");
+                tag.putInt("AmmoCount", Math.max(0, currentAmmo - 1));
+            }
+        }
+    }
 
     public static void handlePreFireSound(C2SMessagePreFireSound message, ServerPlayer player) {
         Level world = player.level();

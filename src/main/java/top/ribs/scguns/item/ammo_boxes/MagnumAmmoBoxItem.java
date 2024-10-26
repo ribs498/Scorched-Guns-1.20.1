@@ -6,8 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.item.AmmoBoxItem;
 
 public class MagnumAmmoBoxItem extends AmmoBoxItem {
-    private static final int MAGNUM_MAX_ITEM_COUNT = 512;
-    private static final int MAGNUM_BAR_COLOR = Mth.color(0.4F, 0.4F, 0.7F);
+    private static final int MAGNUM_BASE_CAPACITY = 512;  // Define the base capacity for this type
 
     public MagnumAmmoBoxItem(Properties properties) {
         super(properties);
@@ -19,13 +18,13 @@ public class MagnumAmmoBoxItem extends AmmoBoxItem {
     }
 
     @Override
-    protected int getMaxItemCount() {
-        return MAGNUM_MAX_ITEM_COUNT;
+    protected int getBaseMaxItemCount() {
+        return MAGNUM_BASE_CAPACITY;  // Return the base capacity
     }
 
     @Override
     public int getBarColor(ItemStack stack) {
-        return MAGNUM_BAR_COLOR;
+        return Mth.color(0.4F, 0.4F, 0.7F);
     }
-
 }
+

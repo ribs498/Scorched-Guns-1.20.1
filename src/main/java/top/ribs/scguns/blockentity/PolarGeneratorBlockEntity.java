@@ -65,7 +65,7 @@ public class PolarGeneratorBlockEntity extends BlockEntity implements MenuProvid
     private final LazyOptional<IEnergyStorage> externalEnergy = LazyOptional.of(() -> new EnergyStorage(energyStorage.getMaxEnergyStored()) {
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {
-            return 0; // Prevent receiving energy
+            return 0;
         }
 
         @Override
@@ -165,7 +165,7 @@ public class PolarGeneratorBlockEntity extends BlockEntity implements MenuProvid
 
             @Override
             public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
-                return super.extractItem(slot, amount, simulate); // Allow extraction from the fuel slot
+                return super.extractItem(slot, amount, simulate);
             }
         };
     }
@@ -236,15 +236,12 @@ public class PolarGeneratorBlockEntity extends BlockEntity implements MenuProvid
 
     public static void tick(Level level, BlockPos pos, BlockState state, PolarGeneratorBlockEntity blockEntity) {
         if (!level.isClientSide) {
-            // Continue burning the current fuel item
             if (blockEntity.burnTime > 0) {
                 blockEntity.burnTime--;
                 blockEntity.energyStorage.receiveEnergy(50, false);
                 blockEntity.setChanged();
                 blockEntity.sync();
             }
-
-            // Push energy to adjacent blocks
             for (Direction direction : Direction.values()) {
                 BlockEntity adjacentEntity = level.getBlockEntity(pos.relative(direction));
                 if (adjacentEntity != null) {
@@ -259,8 +256,6 @@ public class PolarGeneratorBlockEntity extends BlockEntity implements MenuProvid
                     });
                 }
             }
-
-            // Only consume the next fuel item if the energy storage is not full
             if (blockEntity.burnTime == 0 && blockEntity.energyStorage.getEnergyStored() < blockEntity.energyStorage.getMaxEnergyStored()) {
                 ItemStack fuelStack = blockEntity.itemHandler.getStackInSlot(0);
                 if (!fuelStack.isEmpty()) {

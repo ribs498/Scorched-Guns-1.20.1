@@ -25,6 +25,7 @@ public class TurretProjectileEntity extends AbstractArrow {
 
     public TurretProjectileEntity(EntityType<? extends AbstractArrow> type, Level world) {
         super(type, world);
+        this.setNoGravity(true);
     }
 
     public TurretProjectileEntity(Level world, BulletType bulletType) {
@@ -32,13 +33,11 @@ public class TurretProjectileEntity extends AbstractArrow {
 
         double baseDamage = Config.COMMON.turret.bulletDamage.get(bulletType).get();
 
-        // If damage scaling is enabled
         if (Config.COMMON.turret.enableDamageScaling.get()) {
             long daysInWorld = this.level().getDayTime() / 24000L;
             double scalingRate = Config.COMMON.turret.damageScalingRate.get();
             double maxDamage = Config.COMMON.turret.maxScaledDamage.get();
 
-            // Calculate the scaled damage
             double scaledDamage = Math.min(baseDamage + (scalingRate * daysInWorld), maxDamage);
             this.setBaseDamage(scaledDamage);
         } else {
@@ -48,11 +47,11 @@ public class TurretProjectileEntity extends AbstractArrow {
         this.setNoGravity(true);
     }
 
-
     @Override
     protected @NotNull ItemStack getPickupItem() {
         return ItemStack.EMPTY;
     }
+
     @Override
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
         super.shoot(x, y, z, velocity, inaccuracy);
@@ -61,8 +60,9 @@ public class TurretProjectileEntity extends AbstractArrow {
 
     @Override
     public void setEnchantmentEffectsFromEntity(LivingEntity pShooter, float pVelocity) {
-
+        // Do nothing to avoid applying enchantments
     }
+
     @Override
     protected void onHitEntity(EntityHitResult pResult) {
         super.onHitEntity(pResult);
@@ -75,14 +75,16 @@ public class TurretProjectileEntity extends AbstractArrow {
                     this.doPostHurtEffects(livingEntity);
                 }
             }
-            this.discard();
+            livingEntity.setArrowCount(livingEntity.getArrowCount() - 1);
         }
+        this.discard();
     }
 
     @Override
     public boolean isCritArrow() {
         return false;
     }
+
     @Override
     protected void onHitBlock(BlockHitResult result) {
         super.onHitBlock(result);
@@ -124,6 +126,7 @@ public class TurretProjectileEntity extends AbstractArrow {
     protected @NotNull SoundEvent getDefaultHitGroundSoundEvent() {
         return null;
     }
+
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -161,9 +164,6 @@ public class TurretProjectileEntity extends AbstractArrow {
         COMPACT_ADVANCED_ROUND,
         HOG_ROUND,
         SHOTGUN_SHELL,
-        BEARPACK_SHELL;
+        BEARPACK_SHELL
     }
-
-
 }
-

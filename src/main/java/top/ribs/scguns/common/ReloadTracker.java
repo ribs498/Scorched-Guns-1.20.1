@@ -18,6 +18,7 @@ import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.AmmoBoxItem;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.ammo_boxes.CreativeAmmoBoxItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageGunSound;
 import top.ribs.scguns.util.GunEnchantmentHelper;
@@ -107,8 +108,11 @@ public class ReloadTracker {
 
     private void shrinkFromAmmoPool(ItemStack[] ammoStack, Player player, int shrinkAmount) {
         final int[] shrinkAmt = {shrinkAmount};
-
-        // Shrink from Curios slots
+        for (ItemStack itemStack : player.getInventory().items) {
+            if (itemStack.getItem() instanceof CreativeAmmoBoxItem) {
+                return;
+            }
+        }
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
             for (int i = 0; i < curios.getSlots(); i++) {
@@ -175,6 +179,18 @@ public class ReloadTracker {
 
     private void increaseMagAmmo(Player player) {
         ItemStack[] ammoStack = Gun.findAmmoStack(player, this.gun.getProjectile().getItem());
+        boolean hasCreativeAmmoBox = player.getInventory().items.stream()
+                .anyMatch(itemStack -> itemStack.getItem() instanceof CreativeAmmoBoxItem);
+        if (hasCreativeAmmoBox) {
+            CompoundTag tag = this.stack.getTag();
+            if (tag != null) {
+                int maxAmmo = GunModifierHelper.getModifiedAmmoCapacity(this.stack, this.gun);
+                tag.putInt("AmmoCount", maxAmmo);
+            }
+
+            playReloadSound(player);
+            return;
+        }
         if (ammoStack.length > 0) {
             CompoundTag tag = this.stack.getTag();
             int ammoAmount = Math.min(ammoInInventory(ammoStack), GunModifierHelper.getModifiedAmmoCapacity(this.stack, this.gun));
@@ -193,6 +209,7 @@ public class ReloadTracker {
 
         playReloadSound(player);
     }
+
 
     private void reloadItem(Player player) {
         AmmoContext context = Gun.findAmmo(player, this.gun.getReloads().getReloadItem());

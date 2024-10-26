@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "X": {
+      "item": "create:precision_mechanism"
+    },
+    "L": {
+      "item": "scguns:treated_iron_ingot"
+    },
+    "R": {
+      "item": "create:brass_block"
+    },
+    "M": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "K": {
+      "item": "create:cogwheel"
+    }
+  },
+  "pattern": [
+    " K ",
+    "LXL",
+    "MRM"
+  ],
+  "result": {
+    "item": "scguns:scamp_package",
+    "count": 1
+  }
+}

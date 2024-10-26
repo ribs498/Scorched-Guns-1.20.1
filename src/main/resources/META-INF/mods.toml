@@ -4,7 +4,7 @@ license="GNU GPLv3"
 
 [[mods]]
 modId="scguns"
-version="0.3.0"
+version="0.3.2.5"
 displayName="Scorched Guns"
 authors="ribs"
 credits="MrCrayfish, Ribs"

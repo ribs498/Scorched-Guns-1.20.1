@@ -1,12 +1,12 @@
 {
   "parent": "scguns:main/blackpowder/handcannon",
   "criteria": {
-    "musket": {
+    "blunderbuss": {
       "conditions": {
         "items": [
           {
             "items": [
-              "scguns:musket"
+              "scguns:blunderbuss"
             ]
           }
         ]
@@ -17,21 +17,21 @@
   "display": {
     "announce_to_chat": false,
     "description": {
-      "translate": "scguns.advancement.musket.desc"
+      "translate": "scguns.advancement.blunderbuss.desc"
     },
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "scguns:musket"
+      "item": "scguns:blunderbuss"
     },
     "show_toast": true,
     "title": {
-      "translate": "scguns.advancement.musket"
+      "translate": "scguns.advancement.blunderbuss"
     }
   },
   "requirements": [
     [
-      "musket"
+      "blunderbuss"
     ]
   ],
   "sends_telemetry_event": true

@@ -27,7 +27,7 @@
     "item.scguns.shard_anthralite": "Anthralite Shard",
     "item.scguns.dirty_dust_anthralite": "Dirty Anthralite Dust",
   "item.scguns.scamp_controller": "Scamp Controller",
-
+  "item.scguns.scamp_package": "Scamp Package",
   "entity.scguns.primed_powder_keg": "Primed Powder Keg",
   "entity.scguns.primed_nitro_keg": "Primed Nitro Keg",
   "block.scguns.gun_shelf": "Gun Shelf",
@@ -166,7 +166,7 @@
   "scguns.advancement.blunderbuss.desc": "No aim Required.",
     "scguns.advancement.repeating_musket": "Repeating Musket",
     "scguns.advancement.repeating_musket.desc": "Classic design, rapid delivery.",
-    "scguns.advancement.laser_musket": "Laser Musket",
+    "scguns.advancement.laser_musket": "Rail Musket",
     "scguns.advancement.laser_musket.desc": "Settlement.",
   "scguns.advancement.pax": "Pax",
   "scguns.advancement.pax.desc": "Its High Noon.",
@@ -313,6 +313,7 @@
 
 
   "block.scguns.cryoniter": "Cryoniter",
+  "block.scguns.enemy_turret": "Enemy Turret",
   "block.scguns.basic_turret": "Basic Turret",
   "block.scguns.auto_turret": "Auto Turret",
     "block.scguns.shotgun_turret": "Shotgun Turret",
@@ -373,8 +374,9 @@
     "entity.scguns.zombified_hornlin": "Zombified Hornlin",
 
   "entity.scguns.shulkshot_projectile": "Shulkshot Projectile",
-  "entity.scguns.basic_turret": "Basic Turret",
-
+  "entity.scguns.basic_turret": "Turret",
+  "block.scguns.mob_trap": "Mob Trap",
+  "block.scguns.ammo_box": "Ammo Box",
   "block.scguns.macerator": "Macerator",
   "block.scguns.gun_bench": "Gun Bench",
   "block.scguns.mechanical_press": "Stamping Press",
@@ -451,7 +453,7 @@
   "item.scguns.flintlock_pistol": "Flintlock Pistol",
   "item.scguns.handcannon": "Handcannon",
   "item.scguns.repeating_musket": "Repeating Musket",
-  "item.scguns.laser_musket": "Laser Musket",
+  "item.scguns.laser_musket": "Rail Musket",
   "item.scguns.scrapper": "Scrapper",
   "item.scguns.makeshift_rifle": "Makeshift Rifle",
     "item.scguns.llr_director": "LLR Director",
@@ -646,6 +648,8 @@
     "item.scguns.energy_ammo_box": "Energy Ammo Box",
     "item.scguns.special_ammo_box": "Special Ammo Box",
     "item.scguns.empty_casing_pouch": "Empty Casing Pouch",
+    "item.scguns.rock_pouch": "Rock Pouch",
+    "item.scguns.creative_ammo_box": "Creative Ammo Box",
 
   "item.scguns.cog_knight_spawn_egg": "Cog Knight Spawn Egg",
   "item.scguns.cog_minion_spawn_egg": "Cog Minion Spawn Egg",
@@ -864,7 +868,7 @@
     "scguns.jei.info.vent_collector": "Place on top of a Geothermal Vent to collect Niter, or on a Sulfuric Vent to obtain Sulfur. Accepts Wool and Composite filters as filter items.",
     "scguns.jei.info.lightning_battery": "Can be used to store energy, and obtain plasma or shock cells. Can be charged with FE power, or by placing a lightning rod, on top, and striking with lightning",
   "scguns.jei.info.lightning_rod_connector": "Can be used to transfer the charged state of a lightning rod to a lightning battery",
-
+  "scguns.jei.info.super_shotgun": "Found in Bastions",
   "scguns.jei.info.pistol_ammo_box": "Can store Compact Copper Rounds, Compact Advanced Rounds, and Hog Rounds",
     "scguns.jei.info.rifle_ammo_box": "Can store Standard Copper Rounds, Advanced Rounds, Gibbs Rounds, and Krāhg Rounds",
     "scguns.jei.info.shotgun_ammo_box": "Can store Shotgun Shells, Shulkshot and Bearpack Shells",
@@ -873,7 +877,9 @@
     "scguns.jei.info.energy_ammo_box": "Can store Energy Cells, Sculk Cells, Shock Cells and Blaze Fuel",
     "scguns.jei.info.special_ammo_box": "Can store Powder and Ball and Grapeshot",
     "scguns.jei.info.empty_casing_pouch": "Can be used to store casing and will catch spent casings",
+  "scguns.jei.info.rock_pouch": "Can be used to store rocks",
   "scguns.jei.info.dishes_pouch": "Can be used to store your dirty dishes",
+  "scguns.jei.info.creative_ammo_box": "Gives infinite ammo for all guns",
   "scguns.jei.info.cryoniter": "Inserting Niter/Cold items will freeze surrounding Water blocks ",
   "scguns.jei.info.thermolith": "Inserting Vehement Coal/Extremely hot fuel items will melt surrounding rock to lava",
     "scguns.jei.info.penetrator": "A shaped charge, will explode a 3x3 tunnel in the direction its facing",
@@ -935,7 +941,10 @@
   "message.supply_scamp.new_patrol_origin": "Patrol Point Changed",
   "message.supply_scamp.container_linked": "Container Linked",
   "container.ammo_module": "Ammo Module",
-
+  "container.ammo_box": "Ammo Box",
+  "mobtrap.too_many_mobs": "Too many Mobs",
+  "mobtrap.empty": "Empty",
+  "mobtrap.stored_mobs": "Stored Mobs",
   "attribute.scguns.additional_ammo": "Additional Ammunition Capacity",
   "attribute.scguns.additional_bullet_damage": "Additional Firearm Projectile Damage",
   "attribute.scguns.bullet_damage_multiplier": "Firearm Projectile Damage Multiplier",

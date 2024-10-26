@@ -4,6 +4,8 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.Style;
+import net.minecraft.network.chat.TextColor;
 import net.minecraft.world.Container;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -14,6 +16,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -22,6 +25,7 @@ import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.entity.monster.SupplyScampEntity;
 import top.ribs.scguns.init.ModEntities;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
@@ -32,7 +36,15 @@ public class ScampControllerItem extends Item {
     public ScampControllerItem(Properties pProperties) {
         super(pProperties);
     }
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.literal("Right-click to link a Supply Scamp.")
+                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x00FF00))));
+        tooltip.add(Component.literal("Shift + Right-click to set patrol or link a container.")
+                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x00FF00))));
 
+        super.appendHoverText(stack, level, tooltip, flag);
+    }
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();

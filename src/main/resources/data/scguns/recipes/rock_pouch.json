@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "minecraft:leather"
+    },
+    "R": {
+      "item": "minecraft:iron_nugget"
+    },
+    "X": {
+      "item": "minecraft:paper"
+    }
+
+  },
+  "pattern": [
+    "QRQ",
+    "RXR",
+    "QRQ"
+  ],
+  "result": {
+    "item": "scguns:rock_pouch"
+  }
+}

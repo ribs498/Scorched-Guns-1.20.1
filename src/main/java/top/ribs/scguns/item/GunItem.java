@@ -74,7 +74,8 @@ public class GunItem extends Item implements IColored, IMeta {
         if (tagCompound != null) {
             if (tagCompound.contains("AdditionalDamage", Tag.TAG_ANY_NUMERIC)) {
                 float additionalDamage = tagCompound.getFloat("AdditionalDamage");
-                additionalDamage += GunModifierHelper.getAdditionalDamage(stack);
+                additionalDamage += GunModifierHelper.getAdditionalDamage(stack, false);
+
 
                 if (additionalDamage > 0) {
                     additionalDamageText = ChatFormatting.GREEN + " +" + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage);
@@ -246,9 +247,11 @@ public class GunItem extends Item implements IColored, IMeta {
     }
 
     public boolean hasBayonet(ItemStack gunStack) {
-        if (this.isBuiltInBayonetGun()) {
+        // Check if the gun has a built-in bayonet via tag
+        if (isBuiltInBayonetGun(gunStack)) {
             return true;
         }
+        // Check for attached bayonet items
         for (IAttachment.Type type : IAttachment.Type.values()) {
             ItemStack attachmentStack = Gun.getAttachment(type, gunStack);
             if (attachmentStack != null && attachmentStack.getItem() instanceof BayonetItem) {
@@ -257,6 +260,12 @@ public class GunItem extends Item implements IColored, IMeta {
         }
         return false;
     }
+
+    // Updated isBuiltInBayonetGun method that uses tags only
+    public boolean isBuiltInBayonetGun(ItemStack gunStack) {
+        return gunStack.is(ModTags.Items.BUILT_IN_BAYONET);
+    }
+
 
     public boolean hasExtendedBarrel(ItemStack gunStack) {
         for (IAttachment.Type type : IAttachment.Type.values()) {
@@ -267,16 +276,9 @@ public class GunItem extends Item implements IColored, IMeta {
         }
         return false;
     }
-    public static final List<RegistryObject<GunItem>> ONE_HANDED_CARBINE_CANDIDATES = Arrays.asList(
-            ModItems.PAX,
-            ModItems.KRAUSER,
-            ModItems.OSGOOD_50,
-            ModItems.SCRAPPER,
-            ModItems.UPPERCUT,
-            ModItems.SEQUOIA,
-            ModItems.SOUL_DRUMMER
-    );
-
+    public boolean isOneHandedCarbineCandidate(ItemStack gunStack) {
+        return gunStack.is(ModTags.Items.ONE_HANDED_CARBINE);
+    }
 
 
     public boolean hasMendingInAttachments(ItemStack gunStack) {
@@ -287,12 +289,6 @@ public class GunItem extends Item implements IColored, IMeta {
             }
         }
         return false;
-    }
-   public boolean isBuiltInBayonetGun() {
-        return this == ModItems.BOMB_LANCE.get() ||
-                this == ModItems.LOCUST.get() ||
-                this == ModItems.EARTHS_CORPSE.get() ||
-                this == ModItems.SUPER_SHOTGUN.get();
     }
 
     public int getBayonetBanzaiLevel(ItemStack gunStack) {

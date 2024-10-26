@@ -44,6 +44,8 @@
     "scguns:polished_phosphorite",
     "scguns:raw_phosphor_block",
     "scguns:cracked_phosphorite_bricks",
-    "scguns:ammo_turret_module"
+    "scguns:ammo_turret_module",
+    "scguns:enemy_turret",
+    "scguns:ammo_box"
   ]
 }

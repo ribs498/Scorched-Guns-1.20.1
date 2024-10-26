@@ -79,6 +79,7 @@ public class Config
         public final ForgeConfigSpec.BooleanValue oldAnimations;
         public final ForgeConfigSpec.ConfigValue<String> crosshair;
         public final ForgeConfigSpec.BooleanValue displayGunInfo;
+        public final ForgeConfigSpec.BooleanValue cinematicGunEffects;
         public final ForgeConfigSpec.BooleanValue cooldownIndicator;
         public final ForgeConfigSpec.BooleanValue weaponSway;
         public final ForgeConfigSpec.DoubleValue swaySensitivity;
@@ -106,6 +107,7 @@ public class Config
                 this.sprintAnimation = builder.comment("Enables the sprinting animation on weapons for better immersion. This only applies to weapons that support a sprinting animation.").define("sprintingAnimation", true);
                 this.displayGunInfo = builder.comment("If enabled, renders a HUD element displaying the gun's ammo count and ammo capacity, as well as pulse weapon charge.").define("displayGunInfo", true);
                 this.bobbingIntensity = builder.comment("The intensity of the custom bobbing animation while holding a gun").defineInRange("bobbingIntensity", 1.0, 0.0, 2.0);
+                this.cinematicGunEffects = builder.comment("If enabled, enables cinematic camera effects on guns ").define("cinematicGunEffects", true);
             }
             builder.pop();
         }
@@ -210,6 +212,7 @@ public class Config
         public final Griefing griefing;
         public final ForgeConfigSpec.BooleanValue enableGunDamage;
         public final ForgeConfigSpec.BooleanValue enableAttachmentDamage;
+        public  final ForgeConfigSpec.BooleanValue spawnCasings;
         public final ForgeConfigSpec.DoubleValue growBoundingBoxAmount;
         public final ForgeConfigSpec.BooleanValue enableHeadShots;
         public final ForgeConfigSpec.DoubleValue headShotDamageMultiplier;
@@ -219,14 +222,17 @@ public class Config
         public final ForgeConfigSpec.DoubleValue knockbackStrength;
         public final ForgeConfigSpec.BooleanValue improvedHitboxes;
         public final ForgeConfigSpec.DoubleValue enemyBulletDamage;
+        public final ForgeConfigSpec.DoubleValue ammoBoxCapacityMultiplier;
 
         public Gameplay(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Properties relating to gameplay").push("gameplay");
             {
                 this.griefing = new Griefing(builder);
+                this.ammoBoxCapacityMultiplier = builder.comment("Multiplier to adjust the capacity of all ammo boxes.").defineInRange("ammoBoxCapacityMultiplier", 1.0, 0.1, 100.0);
                 this.enableGunDamage = builder.comment("If true, guns will be damageable and can break, coward if you toggle this").define("enableGunDamage", true);
                 this.enableAttachmentDamage = builder.comment("If true, gun attachments will be damageable and can break, also a coward").define("enableAttachmentDamage", true);
+                this.spawnCasings = builder.comment("Set to false to disable the spawning of casing items when firing guns.").define("gameplay.spawnCasings", true);
                 this.growBoundingBoxAmount = builder.comment("The extra amount to expand an entity's bounding box when checking for projectile collision. Setting this value higher will make it easier to hit entities").defineInRange("growBoundingBoxAmount", 0.3, 0.0, 1.0);
                 this.enableHeadShots = builder.comment("Enables the check for head shots for players. Projectiles that hit the head of a player will have increased damage.").define("enableHeadShots", true);
                 this.headShotDamageMultiplier = builder.comment("The value to multiply the damage by if projectile hit the players head").defineInRange("headShotDamageMultiplier", 1.25, 1.0, Double.MAX_VALUE);

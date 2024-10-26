@@ -19,14 +19,15 @@ public class PistolAmmoBoxItem extends AmmoBoxItem {
         return new ResourceLocation("scguns", "pistol_ammo");
     }
 
-    @Override
-    protected int getMaxItemCount() {
-        return PISTOL_MAX_ITEM_COUNT;
-    }
 
     @Override
     public int getBarColor(ItemStack stack) {
         return PISTOL_BAR_COLOR;
+    }
+
+    @Override
+    protected int getBaseMaxItemCount() {
+        return PISTOL_MAX_ITEM_COUNT;
     }
 
 }

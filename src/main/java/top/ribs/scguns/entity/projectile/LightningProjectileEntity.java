@@ -17,9 +17,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.block.AutoTurretBlock;
 import top.ribs.scguns.block.BasicTurretBlock;
+import top.ribs.scguns.block.EnemyTurretBlock;
 import top.ribs.scguns.block.ShotgunTurretBlock;
 import top.ribs.scguns.blockentity.AutoTurretBlockEntity;
 import top.ribs.scguns.blockentity.BasicTurretBlockEntity;
+import top.ribs.scguns.blockentity.EnemyTurretBlockEntity;
 import top.ribs.scguns.blockentity.ShotgunTurretBlockEntity;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModDamageTypes;
@@ -112,7 +114,13 @@ public class LightningProjectileEntity extends ProjectileEntity {
         if (state.getBlock() instanceof ShotgunTurretBlock) {
             BlockEntity blockEntity = level().getBlockEntity(pos);
             if (blockEntity instanceof ShotgunTurretBlockEntity turret) {
-               // turret.onHitByLightningProjectile();
+                turret.onHitByLightningProjectile();
+            }
+        }
+        if (state.getBlock() instanceof EnemyTurretBlock) {
+            BlockEntity blockEntity = level().getBlockEntity(pos);
+            if (blockEntity instanceof EnemyTurretBlockEntity turret) {
+                turret.onHitByLightningProjectile();
             }
         }
         spawnLightningParticles(new Vec3(x, y + 0.1, z));

@@ -57,21 +57,28 @@ import java.util.*;
         private static final EntityDataAccessor<Optional<BlockPos>> LINKED_CONTAINER =
                 SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
 
+        private static final int PATROL_COOLDOWN = 30;
+        private int patrolCooldownTimer = PATROL_COOLDOWN;
+
+        private static final int ITEM_COOLDOWN = 20;
+        private int itemCooldownTimer = ITEM_COOLDOWN;
+
         private static final int PATROL_RADIUS = 9;
         private static final int PATROL_MOVE_INTERVAL = 100;
         private static final int PATROL_DURATION = 80;
         private static final EntityDataAccessor<Boolean> STATIONARY =
                 SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.BOOLEAN);
-        private static final double ITEM_DETECTION_RANGE = 11.0;
+        private static final double ITEM_DETECTION_RANGE = 9.0;
         private static final double ITEM_PICKUP_RANGE = 2.5;
-        private static final int ITEM_CHECK_INTERVAL = 10;
-        private int itemCheckTimer = 0;
         private int patrolTimer = 0;
         private BlockPos currentPatrolTarget = null;
         private static final int INVENTORY_SIZE = 27;
 
         public final SimpleContainer inventory = new SimpleContainer(INVENTORY_SIZE);
-
+        private boolean inventoryFullCached = false;
+        private boolean hasItemsToDepositCached = false;
+        private static final int ANIMATION_UPDATE_INTERVAL = 5;
+        private int animationUpdateTimer = ANIMATION_UPDATE_INTERVAL;
 
         public SupplyScampEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
             super(entityType, level);
@@ -83,32 +90,35 @@ import java.util.*;
         public final AnimationState sitAnimationState = new AnimationState();
         public int panicAnimationTimeout = 0;
         public int idleAnimationTimeout = 0;
-
+        private BlockPos cachedNearestContainer = null;
+        private int containerSearchCooldown = 100; // Cooldown for search
         @Override
         public void tick() {
             super.tick();
 
             if (!this.level().isClientSide && this.isAlive() && this.isTame()) {
-                Optional<BlockPos> containerPosOpt = this.getLinkedContainer();
-                if (containerPosOpt.isPresent()) {
-                    BlockPos containerPos = containerPosOpt.get();
-                    if (this.distanceToSqr(Vec3.atCenterOf(containerPos)) < 8.0D) {
-                        BlockEntity blockEntity = this.level().getBlockEntity(containerPos);
-                        if (blockEntity instanceof Container container) {
-                            depositItems(container);
-                        }
+                if (patrolCooldownTimer <= 0) {
+                    if (this.isPatrolling()) {
+                        handlePatrolling();
                     }
-                }
-            }
-            if (!this.level().isClientSide && this.isAlive() && this.isTame()) {
-                if (this.isPatrolling()) {
-                    handlePatrolling();
-                }
-                if (itemCheckTimer <= 0) {
-                    checkForItems();
-                    itemCheckTimer = ITEM_CHECK_INTERVAL;
+                    patrolCooldownTimer = PATROL_COOLDOWN;
                 } else {
-                    itemCheckTimer--;
+                    patrolCooldownTimer--;
+                }
+
+                if (itemCooldownTimer <= 0) {
+                    checkForItems();
+                    itemCooldownTimer = ITEM_COOLDOWN;
+                } else {
+                    itemCooldownTimer--;
+                }
+
+                Optional<BlockPos> containerPosOpt = this.getLinkedContainer();
+                if (containerPosOpt.isPresent() && this.distanceToSqr(Vec3.atCenterOf(containerPosOpt.get())) < 8.0D) {
+                    BlockEntity blockEntity = this.level().getBlockEntity(containerPosOpt.get());
+                    if (blockEntity instanceof Container container) {
+                        depositItems(container);
+                    }
                 }
             }
 
@@ -116,75 +126,72 @@ import java.util.*;
                 setupAnimationStates();
             }
         }
+
         private boolean isInventoryFull() {
+            if (inventoryFullCached) {
+                return true;
+            }
             for (int i = 0; i < this.inventory.getContainerSize(); i++) {
                 if (this.inventory.getItem(i).isEmpty()) {
+                    inventoryFullCached = false;
                     return false;
                 }
             }
+            inventoryFullCached = true;
             return true;
         }
 
         private boolean hasItemsToDeposit() {
+            if (hasItemsToDepositCached) {
+                return true;
+            }
             for (int i = 0; i < this.inventory.getContainerSize(); i++) {
                 if (!this.inventory.getItem(i).isEmpty()) {
+                    hasItemsToDepositCached = true;
                     return true;
                 }
             }
+            hasItemsToDepositCached = false;
             return false;
         }
+
         private void handlePatrolling() {
             Optional<BlockPos> patrolOrigin = this.getPatrolOrigin();
             Optional<BlockPos> linkedContainerPos = this.getLinkedContainer();
             if (patrolOrigin.isPresent()) {
                 boolean hasItemsToDeposit = hasItemsToDeposit();
                 boolean inventoryFull = isInventoryFull();
-
-                // Priority 1: Deposit items if has items and is near the container or inventory is full
                 if (hasItemsToDeposit) {
                     BlockPos targetContainer = null;
                     targetContainer = linkedContainerPos.orElseGet(this::findNearestContainer);
 
                     if (targetContainer != null) {
                         double distanceToContainer = this.distanceToSqr(Vec3.atCenterOf(targetContainer));
-                        System.out.println("Debug: Distance to container: " + distanceToContainer); // Debug message
 
-                        if (distanceToContainer <= 2.0D) { // Increased from 1.0D to 2.0D
+                        if (distanceToContainer <= 2.0D) {
                             BlockEntity blockEntity = this.level().getBlockEntity(targetContainer);
                             if (blockEntity instanceof Container container) {
                                 depositItems(container);
-                                System.out.println("Debug: Attempting to deposit items into container");
-                            } else {
-                                System.out.println("Debug: BlockEntity is not a Container");
                             }
-                        } else if (inventoryFull || distanceToContainer <= 100.0) { // Increased from 10.0 to 100.0
+                        } else if (inventoryFull || distanceToContainer <= 15.0) {
                             this.getNavigation().moveTo(targetContainer.getX() + 0.5, targetContainer.getY(), targetContainer.getZ() + 0.5, 1.0);
                             this.setStationary(false);
-                            System.out.println("Debug: Moving to container to deposit items");
                             return;
                         }
-                    } else {
-                        System.out.println("Debug: No target container found");
                     }
                 }
-
-                // Priority 2: Pick up nearby items if inventory isn't full
                 if (!inventoryFull) {
                     ItemEntity nearestItem = findNearestItem();
                     if (nearestItem != null && this.distanceToSqr(nearestItem) <= ITEM_DETECTION_RANGE * ITEM_DETECTION_RANGE) {
                         if (this.distanceToSqr(nearestItem) > ITEM_PICKUP_RANGE * ITEM_PICKUP_RANGE) {
                             this.getNavigation().moveTo(nearestItem, 1.0);
                             this.setStationary(false);
-                            System.out.println("Debug: Moving to pick up item"); // Debug message
                             return;
                         } else {
                             pickUpItem(nearestItem);
-                            System.out.println("Debug: Picked up item"); // Debug message
                         }
                     }
                 }
-
-                // Priority 3: Continue patrolling
                 if (this.patrolTimer <= 0) {
                     if (this.random.nextFloat() < 0.45) {
                         this.currentPatrolTarget = patrolOrigin.get().offset(
@@ -195,13 +202,11 @@ import java.util.*;
                         this.getNavigation().moveTo(this.currentPatrolTarget.getX(), this.currentPatrolTarget.getY(), this.currentPatrolTarget.getZ(), 1.0);
                         this.setStationary(false);
                         this.patrolTimer = PATROL_DURATION;
-                        System.out.println("Debug: Moving to new patrol point"); // Debug message
                     } else {
                         this.getNavigation().stop();
                         this.setStationary(true);
                         this.currentPatrolTarget = null;
                         this.patrolTimer = PATROL_MOVE_INTERVAL;
-                        System.out.println("Debug: Staying stationary"); // Debug message
                     }
                 } else {
                     this.patrolTimer--;
@@ -210,39 +215,35 @@ import java.util.*;
                         this.setStationary(true);
                         this.currentPatrolTarget = null;
                         this.patrolTimer = PATROL_MOVE_INTERVAL;
-                        System.out.println("Debug: Reached patrol point, staying stationary"); // Debug message
                     }
                 }
-
-                // Always check if we're too far from the patrol origin
                 if (this.distanceToSqr(Vec3.atCenterOf(patrolOrigin.get())) > PATROL_RADIUS * PATROL_RADIUS) {
                     this.getNavigation().moveTo(patrolOrigin.get().getX(), patrolOrigin.get().getY(), patrolOrigin.get().getZ(), 1.0);
                     this.setStationary(false);
                     this.currentPatrolTarget = null;
                     this.patrolTimer = PATROL_MOVE_INTERVAL;
-                    System.out.println("Debug: Returning to patrol origin"); // Debug message
                 }
             }
         }
         private void depositItems(Container container) {
-            boolean deposited = false;
             for (int i = 0; i < this.inventory.getContainerSize(); i++) {
                 ItemStack itemStack = this.inventory.getItem(i);
                 if (!itemStack.isEmpty()) {
                     ItemStack remainingStack = tryAddItemToContainer(container, itemStack);
                     this.inventory.setItem(i, remainingStack);
-                    if (remainingStack.isEmpty()) {
-                        deposited = true;
+                    if (remainingStack.isEmpty()) {                        inventoryFullCached = false;
+                        hasItemsToDepositCached = false;
                     }
                 }
             }
-            if (deposited) {
-                System.out.println("Debug: Successfully deposited items into container"); // Debug message
-            } else {
-                System.out.println("Debug: Failed to deposit any items into container"); // Debug message
-            }
         }
+
         private BlockPos findNearestContainer() {
+            if (containerSearchCooldown > 0 && cachedNearestContainer != null) {
+                containerSearchCooldown--;
+                return cachedNearestContainer;
+            }
+
             BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
             BlockPos nearestContainer = null;
             double nearestDistance = Double.MAX_VALUE;
@@ -263,12 +264,8 @@ import java.util.*;
                 }
             }
 
-            if (nearestContainer != null) {
-                System.out.println("Debug: Found nearest container at " + nearestContainer + ", distance: " + Math.sqrt(nearestDistance));
-            } else {
-                System.out.println("Debug: No container found in search range");
-            }
-
+            cachedNearestContainer = nearestContainer;
+            containerSearchCooldown = 100; // Reset cooldown
             return nearestContainer;
         }
         private ItemStack tryAddItemToContainer(Container container, ItemStack itemStack) {
@@ -347,6 +344,12 @@ import java.util.*;
             return this.entityData.get(PATROL_ORIGIN);
         }
         private void setupAnimationStates() {
+            if (animationUpdateTimer > 0) {
+                animationUpdateTimer--;
+                return;
+            }
+            animationUpdateTimer = ANIMATION_UPDATE_INTERVAL;
+
             if (this.isSitting()) {
                 if (!sitAnimationState.isStarted()) {
                     sitAnimationState.start(this.tickCount);
@@ -447,6 +450,14 @@ import java.util.*;
                 return flag ? InteractionResult.CONSUME : InteractionResult.PASS;
             } else {
                 if (this.isTame()) {
+                    if (itemstack.getItem() instanceof DyeItem) {
+                        DyeColor dyeColor = ((DyeItem) itemstack.getItem()).getDyeColor();
+                        this.setMaskColor(DYE_COLOR_TO_MASK_INDEX[dyeColor.getId()]);
+                        if (!player.getAbilities().instabuild) {
+                            itemstack.shrink(1);
+                        }
+                        return InteractionResult.SUCCESS;
+                    }
                     if (player.isShiftKeyDown()) {
                         if (itemstack.getItem() instanceof ScampControllerItem scampControllerItem) {
                             UUID currentLinkedUUID = scampControllerItem.getLinkedScampUUID(itemstack);
@@ -461,7 +472,6 @@ import java.util.*;
                                 return InteractionResult.SUCCESS;
                             }
                         }
-                        // Cycle through the states: Sitting -> Patrolling -> Following
                         if (this.isOrderedToSit()) {
                             setScampPatrolling(player);
                         } else if (this.isPatrolling()) {
@@ -469,11 +479,10 @@ import java.util.*;
                         } else {
                             setScampSitting(player);
                         }
-                        return InteractionResult.SUCCESS;
                     } else {
                         player.openMenu(new SupplyScampMenuProvider(this));
-                        return InteractionResult.SUCCESS;
                     }
+                    return InteractionResult.SUCCESS;
                 } else if (itemstack.is(ModItems.ANCIENT_BRASS.get())) {
                     // Handle taming logic
                     if (!player.getAbilities().instabuild) {
@@ -497,6 +506,7 @@ import java.util.*;
         }
 
 
+
         private void setScampPatrolling(Player player) {
             this.setOrderedToSit(false);
             this.setSitting(false);
@@ -507,9 +517,9 @@ import java.util.*;
         }
 
         private void setScampFollowing(Player player) {
-            this.setPatrolling(false);  // Ensure scamp stops patrolling
-            this.setOrderedToSit(false);  // Ensure scamp stops sitting
-            this.getNavigation().moveTo(player, 1.0);  // Follow the player
+            this.setPatrolling(false);
+            this.setOrderedToSit(false);
+            this.getNavigation().moveTo(player, 1.0);
             player.displayClientMessage(Component.translatable("message.supply_scamp.following"), true);
         }
 
@@ -672,8 +682,13 @@ import java.util.*;
             }
         }
         public void setPatrolOrigin(BlockPos pos) {
-            this.entityData.set(PATROL_ORIGIN, Optional.of(pos));
+            if (pos != null) {
+                this.entityData.set(PATROL_ORIGIN, Optional.of(pos));
+            } else {
+                this.entityData.set(PATROL_ORIGIN, Optional.empty());
+            }
         }
+
 
         public void spawnPatrolOriginParticles() {
             if (this.level() instanceof ServerLevel) {

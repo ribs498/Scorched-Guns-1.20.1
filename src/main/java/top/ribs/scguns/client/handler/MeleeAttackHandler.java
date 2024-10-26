@@ -38,7 +38,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 public class MeleeAttackHandler {
-    private static final double REACH_DISTANCE = 2.5f;
+    private static final double REACH_DISTANCE = 3.0f;
     private static final float ENCHANTMENT_DAMAGE_SCALING_FACTOR = 0.70f;
     private static final float BASE_SPEED_DAMAGE_SCALING_FACTOR = 2.0f;
     private static final float[] BANZAI_SCALING_FACTORS = {5.0f, 7.5f, 10.0f};
@@ -111,7 +111,8 @@ public class MeleeAttackHandler {
         }
 
         float baseDamage = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE);
-        float additionalDamage = GunModifierHelper.getAdditionalDamage(heldItem);
+        float additionalDamage = GunModifierHelper.getAdditionalDamage(heldItem, true); // Pass true for melee attacks
+
         float enchantmentDamage = getEnchantmentDamageFromBayonet(heldItem, target, gunItem);
 
         // Use melee damage from the gun
@@ -128,7 +129,7 @@ public class MeleeAttackHandler {
         DamageSource damageSource = player.serverLevel().damageSources().playerAttack(player);
 
         if (isBanzaiAttack) {
-            List<LivingEntity> targets = findTargetsInArea(player, 3.0); // Example radius
+            List<LivingEntity> targets = findTargetsInArea(player, 3.0);
             for (LivingEntity aoeTarget : targets) {
                 if (aoeTarget.hurt(damageSource, attackDamage)) {
                     applyKnockback(player, aoeTarget, heldItem);

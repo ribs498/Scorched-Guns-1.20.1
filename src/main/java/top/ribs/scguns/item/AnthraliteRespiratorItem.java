@@ -21,11 +21,12 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import top.ribs.scguns.event.ArmorRemoveEventHandler;
 import top.ribs.scguns.init.ModItems;
 
 import java.util.UUID;
 
-public class AnthraliteRespiratorItem extends Item {
+public class AnthraliteRespiratorItem extends Item implements ArmorRemoveEventHandler.IArmorItem {
     private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("6e59a150-8e12-11eb-8dcd-0242ac136703");
     private static final UUID ARMOR_TOUGHNESS_MODIFIER_UUID = UUID.fromString("6e59a151-8e12-11eb-8dcd-0262ac130003");
     private static final UUID KNOCKBACK_RESISTANCE_MODIFIER_UUID = UUID.fromString("6e59a152-8e12-11eb-7dcd-0242ac130003");
@@ -122,7 +123,7 @@ public class AnthraliteRespiratorItem extends Item {
     public boolean canBeDepleted() {
         return true;
     }
-
+   @Override
     public int getDefense() {
         return defense;
     }

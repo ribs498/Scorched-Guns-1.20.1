@@ -33,6 +33,19 @@
     "scguns:small_diamond_steel_casing",
     "scguns:medium_diamond_steel_casing",
     "minecraft:bowl",
-    "minecraft:glass_bottle"
+    "minecraft:glass_bottle",
+    "minecraft:cobblestone",
+    "minecraft:cobbled_deepslate",
+    "minecraft:stone",
+    "minecraft:deepslate",
+    "minecraft:granite",
+    "minecraft:diorite",
+    "minecraft:andesite",
+    "minecraft:calcite",
+    "minecraft:tuff",
+    "minecraft:dripstone_block",
+    "minecraft:blackstone",
+    "minecraft:netherrack",
+    "minecraft:basalt"
   ]
 }
