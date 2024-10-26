@@ -16,6 +16,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.ribs.scguns.client.CustomGunManager;
+import top.ribs.scguns.client.handler.BeamHandler;
+import top.ribs.scguns.client.handler.GunRenderingHandler;
 import top.ribs.scguns.client.handler.HUDRenderHandler;
 import top.ribs.scguns.client.screen.*;
 import top.ribs.scguns.common.BoundingBoxManager;
@@ -32,7 +34,6 @@ import top.ribs.scguns.init.ModBlockEntities;
 import top.ribs.scguns.client.ClientHandler;
 import top.ribs.scguns.entity.config.CogMinionConfig;
 import top.ribs.scguns.init.*;
-import top.ribs.scguns.item.*;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.world.VillageStructures;
 import java.io.IOException;
@@ -75,7 +76,7 @@ public class ScorchedGuns {
 
         // Register mod items after loading dependencies
         ModItems.registerItems();
-
+        MinecraftForge.EVENT_BUS.register(BeamHandler.class);
         // Register other mod features
         MinecraftForge.EVENT_BUS.addListener(VillageStructures::addNewVillageBuilding);
         ModCreativeModeTabs.register(bus);

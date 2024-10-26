@@ -55,6 +55,9 @@
     "scguns:shotgun_turret",
     "scguns:auto_turret",
     "scguns:ammo_turret_module",
-    "scguns:plasma_lantern"
+    "scguns:plasma_lantern",
+    "scguns:enemy_turret",
+       "scguns:ammo_box",
+    "scguns:mob_trap"
   ]
 }

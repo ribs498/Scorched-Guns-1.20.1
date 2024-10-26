@@ -25,6 +25,7 @@ import top.ribs.scguns.Config;
 import top.ribs.scguns.client.BulletTrail;
 import top.ribs.scguns.client.CustomGunManager;
 import top.ribs.scguns.client.audio.GunShotSound;
+import top.ribs.scguns.client.handler.BeamHandler;
 import top.ribs.scguns.client.handler.BulletTrailRenderingHandler;
 import top.ribs.scguns.client.handler.GunRenderingHandler;
 import top.ribs.scguns.client.handler.HUDRenderHandler;
@@ -36,6 +37,7 @@ import top.ribs.scguns.particles.BulletHoleData;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Author: MrCrayfish
@@ -83,12 +85,14 @@ public class ClientPlayHandler
             }
         }
     }
+    public static void handleBeamUpdate(S2CMessageBeamUpdate message) {
+        UUID playerId = message.getPlayerId();
+        Vec3 startPos = message.getStartPos();
+        Vec3 endPos = message.getEndPos();
 
-
-
-
-
-
+        // Update the beam visuals on the client side using BeamHandler
+        BeamHandler.updateBeam(playerId, startPos, endPos);
+    }
 
     public static void handleMessageBulletTrail(S2CMessageBulletTrail message)
     {
@@ -229,4 +233,11 @@ public class ClientPlayHandler
         NetworkGunManager.updateRegisteredGuns(message);
         CustomGunManager.updateCustomGuns(message);
     }
+
+    public static void handleStopBeam(S2CMessageStopBeam message) {
+        UUID playerId = message.getPlayerId();
+        // Stop the beam using the BeamHandler
+        BeamHandler.stopBeam(playerId);
+    }
+
 }

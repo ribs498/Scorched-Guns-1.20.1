@@ -18,11 +18,12 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import top.ribs.scguns.event.ArmorRemoveEventHandler;
 import top.ribs.scguns.init.ModItems;
 
 import java.util.UUID;
 
-public class AdrienHelmItem extends Item {
+public class AdrienHelmItem extends Item implements ArmorRemoveEventHandler.IArmorItem {
     private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("6e59a153-8e15-11eb-8dcd-0242ac130003");
     private static final UUID ARMOR_TOUGHNESS_MODIFIER_UUID = UUID.fromString("6e59a154-8e15-11eb-8dcd-0242ac130003");
     private static final UUID KNOCKBACK_RESISTANCE_MODIFIER_UUID = UUID.fromString("6e59a133-8e12-11eb-8dcd-0242ac130003");
@@ -120,10 +121,10 @@ public class AdrienHelmItem extends Item {
         return true;
     }
 
+    @Override
     public int getDefense() {
         return defense;
     }
-
     public static class AdrienHelmEventHandler {
         @SubscribeEvent
         public void onLivingHurt(LivingHurtEvent event) {
@@ -140,5 +141,6 @@ public class AdrienHelmItem extends Item {
             MinecraftForge.EVENT_BUS.register(new AdrienHelmEventHandler());
         }
     }
+
 }
 

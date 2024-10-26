@@ -18,6 +18,9 @@
 		"thirdperson_righthand": {
 			"parent": "scguns:item/gibbs_round_2d"
 		},
+		"fixed": {
+			"parent": "scguns:item/gibbs_round_2d"
+		},
 		"thirdperson_lefthand": {
 			"parent": "scguns:item/gibbs_round_2d"
 		},

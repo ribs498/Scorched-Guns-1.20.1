@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "   ",
+    "A A",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "item": "scguns:treated_iron_ingot"
+    }
+  },
+  "result": {
+    "item": "minecraft:bucket"
+  }
+}

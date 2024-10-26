@@ -18,14 +18,15 @@ public class EnergyAmmoBoxItem extends AmmoBoxItem {
         return new ResourceLocation("scguns", "energy_ammo");
     }
 
-    @Override
-    protected int getMaxItemCount() {
-        return ENERGY_MAX_ITEM_COUNT;
-    }
 
     @Override
     public int getBarColor(ItemStack stack) {
         return ENERGY_BAR_COLOR;
+    }
+
+    @Override
+    protected int getBaseMaxItemCount() {
+        return ENERGY_MAX_ITEM_COUNT;
     }
 
 }

@@ -257,8 +257,10 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.ENERGY_AMMO_BOX.get());
                         pOutput.accept(ModItems.ROCKET_AMMO_BOX.get());
                         pOutput.accept(ModItems.SPECIAL_AMMO_BOX.get());
+                        pOutput.accept(ModItems.CREATIVE_AMMO_BOX.get());
                         pOutput.accept(ModItems.EMPTY_CASING_POUCH.get());
                         pOutput.accept(ModItems.DISHES_POUCH.get());
+                        pOutput.accept(ModItems.ROCK_POUCH.get());
 
 
 
@@ -320,6 +322,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.MASS_DESTRUCTION_EXTENDED_MUSIC_DISC.get());
                         pOutput.accept(ModItems.TEAM_LOG.get());
                         pOutput.accept(ModItems.ENEMY_LOG.get());
+                        pOutput.accept(ModItems.SCAMP_PACKAGE.get());
 
                         pOutput.accept(ModBlocks.ANTHRALITE_ORE.get());
                         pOutput.accept(ModBlocks.DEEPSLATE_ANTHRALITE_ORE.get());
@@ -392,6 +395,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.POWERED_MACERATOR.get());
                         pOutput.accept(ModBlocks.POWERED_MECHANICAL_PRESS.get());
                         pOutput.accept(ModBlocks.GUN_SHELF.get());
+                        pOutput.accept(ModBlocks.AMMO_BOX.get());
                         pOutput.accept(ModBlocks.PLASMA_LANTERN.get());
 
                         pOutput.accept(ModBlocks.BASIC_TURRET.get());
@@ -406,6 +410,8 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.SHELL_CATCHER_TURRET_MODULE.get());
                         pOutput.accept(ModBlocks.AMMO_TURRET_MODULE.get());
 
+                        pOutput.accept(ModBlocks.ENEMY_TURRET.get());
+                        pOutput.accept(ModBlocks.MOB_TRAP.get());
 
 
 

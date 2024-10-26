@@ -151,7 +151,7 @@ public class CogKnightEntity extends Monster {
             this.damageDealtDuringAnimation = false;
         }
         private double calculateAttackRangeSqr() {
-            final double baseReach = 1.0;
+            final double baseReach = 1.15;
             return baseReach * baseReach;
         }
 

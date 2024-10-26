@@ -12,6 +12,7 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.fml.DistExecutor;
@@ -23,6 +24,7 @@ import top.ribs.scguns.Reference;
 import top.ribs.scguns.annotation.Ignored;
 import top.ribs.scguns.annotation.Optional;
 import top.ribs.scguns.client.ClientHandler;
+import top.ribs.scguns.client.util.PropertyHelper;
 import top.ribs.scguns.debug.Debug;
 import top.ribs.scguns.debug.IDebugWidget;
 import top.ribs.scguns.debug.IEditorMenu;
@@ -30,6 +32,7 @@ import top.ribs.scguns.debug.client.screen.widget.DebugButton;
 import top.ribs.scguns.debug.client.screen.widget.DebugSlider;
 import top.ribs.scguns.debug.client.screen.widget.DebugToggle;
 import top.ribs.scguns.item.*;
+import top.ribs.scguns.item.ammo_boxes.CreativeAmmoBoxItem;
 import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.item.attachment.impl.Scope;
 import top.ribs.scguns.util.GunJsonUtil;
@@ -44,7 +47,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
-import static top.ribs.scguns.item.GunItem.ONE_HANDED_CARBINE_CANDIDATES;
+//import static top.ribs.scguns.item.GunItem.ONE_HANDED_CARBINE_CANDIDATES;
 
 public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
 {
@@ -84,15 +87,14 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
 
     }
     public GripType determineGripType(ItemStack stack) {
-        GripType baseGripType = this.general.getBaseGripType();  // Avoid recursion
-
-        if (Gun.hasExtendedBarrel(stack) && ONE_HANDED_CARBINE_CANDIDATES.stream()
-                .anyMatch(candidate -> candidate.get() == stack.getItem())) {
-            return GripType.TWO_HANDED; // Switch to two-handed grip if extended barrel is equipped
+        GripType baseGripType = this.general.getBaseGripType();
+        if (Gun.hasExtendedBarrel(stack) && ((GunItem) stack.getItem()).isOneHandedCarbineCandidate(stack)) {
+            return GripType.TWO_HANDED;
         }
 
         return baseGripType;
     }
+
     public GripType getBaseGripType() {
         return this.baseGripType;  // This is the base grip type without modifications
     }
@@ -123,7 +125,17 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
     public static int getFireMode(ItemStack heldItem) {
         return ((GunItem) heldItem.getItem()).getModifiedGun(heldItem).getGeneral().getFireMode().ordinal();
     }
-
+    public Vec3 getMuzzlePosition(ItemStack stack) {
+        Vec3 origin = PropertyHelper.getModelOrigin(stack, PropertyHelper.GUN_DEFAULT_ORIGIN);
+        if (this.display.flash != null) {
+            return new Vec3(
+                    origin.x + this.display.flash.xOffset,
+                    origin.y + this.display.flash.yOffset,
+                    origin.z + this.display.flash.zOffset
+            );
+        }
+        return origin; // Return default origin if flash is not set
+    }
 
     public General getGeneral() { return this.general; }
 
@@ -459,7 +471,6 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
 
         private Gun getModifiedGun(ItemStack stack) {
             if (stack.isEmpty() || !(stack.getItem() instanceof GunItem item)) {
-                // Return a default or empty Gun to avoid further crashes
                 return new Gun();
             }
 
@@ -2055,7 +2066,15 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             return new AmmoContext(ammo, null);
         }
 
-        // Check player's main inventory
+        // Check player's main inventory for the CreativeAmmoBoxItem
+        for (ItemStack itemStack : player.getInventory().items) {
+            if (itemStack.getItem() instanceof CreativeAmmoBoxItem) {
+                ItemStack ammo = new ItemStack(item, Integer.MAX_VALUE); // Infinite ammo
+                return new AmmoContext(ammo, null); // Returning infinite ammo
+            }
+        }
+
+        // Check player's main inventory for regular ammo
         for (int i = 0; i < player.getInventory().getContainerSize(); ++i) {
             ItemStack stack = player.getInventory().getItem(i);
             if (isAmmo(stack, item)) {
@@ -2075,12 +2094,19 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             }
         }
 
-        // Check Curios slots
+        // Check Curios slots for the CreativeAmmoBoxItem and other ammo
         AtomicReference<AmmoContext> ammoContextRef = new AtomicReference<>(AmmoContext.NONE);
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
             for (int i = 0; i < curios.getSlots(); i++) {
                 ItemStack stack = curios.getStackInSlot(i);
+                // Check for the CreativeAmmoBoxItem
+                if (stack.getItem() instanceof CreativeAmmoBoxItem) {
+                    ItemStack ammo = new ItemStack(item, Integer.MAX_VALUE); // Infinite ammo
+                    ammoContextRef.set(new AmmoContext(ammo, null));
+                    return;
+                }
+                // Check for ammo pouches
                 if (stack.getItem() instanceof AmmoBoxItem pouch) {
                     List<ItemStack> contents = AmmoBoxItem.getContents(stack).toList();
                     for (ItemStack ammoStack : contents) {
@@ -2097,6 +2123,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
     }
 
 
+
     public static boolean isAmmo(ItemStack stack, Item item) {
         return stack != null && stack.getItem() == item;
     }
@@ -2107,11 +2134,15 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         }
 
         List<ItemStack> ammoStacks = new ArrayList<>();
+
+        // Check player's main inventory
         for (ItemStack stack : player.getInventory().items) {
             if (stack.getItem() == item) {
                 ammoStacks.add(stack);
             }
         }
+
+        // Check player's main inventory for ammo pouches
         for (ItemStack itemStack : player.getInventory().items) {
             if (itemStack.getItem() instanceof AmmoBoxItem pouch) {
                 List<ItemStack> contents = AmmoBoxItem.getContents(itemStack).toList();
@@ -2123,11 +2154,15 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             }
         }
 
-        // Check Curios slots
+        // Check Curios slots for the CreativeAmmoBoxItem and other ammo
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
             for (int i = 0; i < curios.getSlots(); i++) {
                 ItemStack stack = curios.getStackInSlot(i);
+                if (stack.getItem() instanceof CreativeAmmoBoxItem) {
+                    ammoStacks.add(new ItemStack(item, Integer.MAX_VALUE)); // Infinite ammo
+                    return;
+                }
                 if (stack.getItem() instanceof AmmoBoxItem pouch) {
                     List<ItemStack> contents = AmmoBoxItem.getContents(stack).toList();
                     for (ItemStack ammoStack : contents) {
@@ -2141,7 +2176,6 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
 
         return ammoStacks.toArray(new ItemStack[0]);
     }
-
     public static int getReserveAmmoCount(Player player, Item item) {
         if (player.isCreative()) {
             return Integer.MAX_VALUE;
@@ -2149,7 +2183,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
 
         AtomicInteger ammoCount = new AtomicInteger();
 
-        // Check player's main inventory
+        // Check player's main inventory for regular ammo
         for (int i = 0; i < player.getInventory().getContainerSize(); ++i) {
             ItemStack stack = player.getInventory().getItem(i);
             if (isAmmo(stack, item)) {
@@ -2169,11 +2203,15 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             }
         }
 
-        // Check Curios slots
+        // Check Curios slots for the CreativeAmmoBoxItem and other ammo
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
             for (int i = 0; i < curios.getSlots(); i++) {
                 ItemStack stack = curios.getStackInSlot(i);
+                if (stack.getItem() instanceof CreativeAmmoBoxItem) {
+                    ammoCount.set(Integer.MAX_VALUE); // Infinite ammo
+                    return;
+                }
                 if (stack.getItem() instanceof AmmoBoxItem pouch) {
                     List<ItemStack> contents = AmmoBoxItem.getContents(stack).toList();
                     for (ItemStack ammoStack : contents) {
@@ -2187,6 +2225,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
 
         return ammoCount.get();
     }
+
 
 
     public static float getFovModifier(ItemStack stack, Gun modifiedGun)

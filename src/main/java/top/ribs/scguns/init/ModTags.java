@@ -29,6 +29,8 @@ public class ModTags
     }
     public static class Items
     {
+        public static final TagKey<Item> ONE_HANDED_CARBINE  = tag("one_handed_carbine");
+        public static final TagKey<Item> BUILT_IN_BAYONET  = tag("built_in_bayonet");
         public static final TagKey<Item> WEAK_FILTER = tag("weak_filter");
         public static final TagKey<Item> STRONG_FILTER = tag("strong_filter");
         public static final TagKey<Item> WEAK_COMPOST = tag("weak_compost");

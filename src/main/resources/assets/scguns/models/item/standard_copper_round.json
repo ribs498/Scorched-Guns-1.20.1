@@ -15,6 +15,9 @@
 		"firstperson_lefthand": {
 			"parent": "scguns:item/standard_copper_round_2d"
 		},
+		"fixed": {
+			"parent": "scguns:item/standard_copper_round_2d"
+		},
 		"thirdperson_righthand": {
 			"parent": "scguns:item/standard_copper_round_2d"
 		},

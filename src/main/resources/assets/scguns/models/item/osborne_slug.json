@@ -21,6 +21,9 @@
 		"thirdperson_lefthand": {
 			"parent": "scguns:item/osborne_slug_2d"
 		},
+		"fixed": {
+			"parent": "scguns:item/osborne_slug_2d"
+		},
 		"gui": {
 			"parent": "scguns:item/osborne_slug_2d"
 		},

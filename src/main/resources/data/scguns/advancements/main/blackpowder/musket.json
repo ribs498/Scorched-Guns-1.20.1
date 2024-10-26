@@ -1,12 +1,12 @@
 {
-  "parent": "scguns:main/blackpowder/musket",
+  "parent": "scguns:main/blackpowder/blunderbuss",
   "criteria": {
-    "blunderbuss": {
+    "musket": {
       "conditions": {
         "items": [
           {
             "items": [
-              "scguns:blunderbuss"
+              "scguns:musket"
             ]
           }
         ]
@@ -17,21 +17,21 @@
   "display": {
     "announce_to_chat": false,
     "description": {
-      "translate": "scguns.advancement.blunderbuss.desc"
+      "translate": "scguns.advancement.musket.desc"
     },
     "frame": "task",
     "hidden": false,
     "icon": {
-      "item": "scguns:blunderbuss"
+      "item": "scguns:musket"
     },
     "show_toast": true,
     "title": {
-      "translate": "scguns.advancement.blunderbuss"
+      "translate": "scguns.advancement.musket"
     }
   },
   "requirements": [
     [
-      "blunderbuss"
+      "musket"
     ]
   ],
   "sends_telemetry_event": true

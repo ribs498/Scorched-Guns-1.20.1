@@ -29,6 +29,16 @@ public class ModBlocks {
             () -> new GunShelfBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)
                     .requiresCorrectToolForDrops()
                     .strength(0.5F)));
+public static final RegistryObject<Block> MOB_TRAP = register("mob_trap",
+            () -> new MobTrapBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .requiresCorrectToolForDrops()
+                    .strength(8.0F)
+                    .noOcclusion()));
+    public static final RegistryObject<Block> AMMO_BOX = register("ammo_box",
+            () -> new AmmoBoxBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .requiresCorrectToolForDrops()
+                    .noOcclusion()
+                    .strength(2.5F)));
     public static final RegistryObject<Block> ADVANCED_COMPOSTER = register("advanced_composter",
             () -> new AdvancedComposterBlock(BlockBehaviour.Properties.copy(Blocks.COMPOSTER)
                     .requiresCorrectToolForDrops()
@@ -65,7 +75,11 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .strength(3.0F)
                     .noOcclusion()));
-
+    public static final RegistryObject<Block> ENEMY_TURRET = register("enemy_turret",
+            () -> new EnemyTurretBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .requiresCorrectToolForDrops()
+                    .strength(8.0F)
+                    .noOcclusion()));
     public static final RegistryObject<Block> POLAR_GENERATOR = register("polar_generator",
             () -> new PolarGeneratorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                     .requiresCorrectToolForDrops()

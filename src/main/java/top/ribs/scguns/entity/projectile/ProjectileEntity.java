@@ -153,17 +153,12 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     }
 
     private Vec3 getDirection(LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
-        // Get the modified spread including attachments and Hot Barrel effects
-        float gunSpread = GunModifierHelper.getModifiedSpread(weapon, modifiedGun.getGeneral().getSpread());
 
-        // If no spread, return the direct shot
+        float gunSpread = GunModifierHelper.getModifiedSpread(weapon, modifiedGun.getGeneral().getSpread());
         if (gunSpread == 0F) {
             return this.getVectorFromRotation(shooter.getXRot(), shooter.getYRot());
         }
-
-        // If the shooter is a player, adjust the spread based on conditions
         if (shooter instanceof Player) {
-            // Adjust for spread tracking if the gun does not always spread
             if (!modifiedGun.getGeneral().isAlwaysSpread()) {
                 gunSpread *= SpreadTracker.get((Player) shooter).getSpread(item);
             }
@@ -172,8 +167,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 gunSpread *= 0.7F;
             }
         }
-
-        // Return the final direction with modified spread
         return this.getVectorFromRotation(
                 shooter.getXRot() - (gunSpread / 2.0F) + random.nextFloat() * gunSpread,
                 shooter.getYHeadRot() - (gunSpread / 2.0F) + random.nextFloat() * gunSpread
@@ -919,11 +912,9 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, explosion))
             return;
 
-        // Do explosion logic
         explosion.explode();
         explosion.finalizeExplosion(true);
 
-        // Send event to blocks that are exploded (none if mode is none)
         explosion.getToBlow().forEach(pos ->
         {
             if (world.getBlockState(pos).getBlock() instanceof IExplosionDamageable) {
@@ -954,20 +945,15 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
         if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, explosion))
             return;
-
-        // Do explosion logic
         explosion.explode();
         explosion.finalizeExplosion(true);
 
-        // Send event to blocks that are exploded (none if mode is none)
         explosion.getToBlow().forEach(pos ->
         {
             if (world.getBlockState(pos).getBlock() instanceof IExplosionDamageable) {
                 ((IExplosionDamageable) world.getBlockState(pos).getBlock()).onProjectileExploded(world, world.getBlockState(pos), pos, entity);
             }
         });
-
-        // Clears the affected blocks if mode is none
         if (!explosion.interactsWithBlocks()) {
             explosion.clearToBlow();
         }

@@ -33,10 +33,8 @@ public class ArmorBoostEventHandler {
     private static void applyArmorBoost(Player player) {
         AttributeInstance armorAttribute = player.getAttributes().getInstance(Attributes.ARMOR);
         if (armorAttribute == null) return;
-
         double currentArmorValue = armorAttribute.getBaseValue();
         boolean holdingSpecialItem = isSpecialItem(player.getMainHandItem()) || isSpecialItem(player.getOffhandItem());
-
         if (holdingSpecialItem && currentArmorValue != 4) {
             armorAttribute.setBaseValue(4);
         } else if (!holdingSpecialItem && currentArmorValue != 0) {
@@ -47,4 +45,5 @@ public class ArmorBoostEventHandler {
     private static boolean isSpecialItem(ItemStack itemStack) {
         return itemStack.getItem() == ModItems.SHELLURKER.get();
     }
+
 }

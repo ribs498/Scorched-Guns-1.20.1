@@ -36,6 +36,28 @@ public class DarkMatterModel implements IOverrideModel {
         renderStockAttachments(stack, matrixStack, buffer, light, overlay);
         renderBarrelAndAttachments(stack, matrixStack, buffer, light, overlay);
         renderUnderBarrelAttachments(stack, matrixStack, buffer, light, overlay);
+        if (entity.equals(Minecraft.getInstance().player)) {
+
+            //Always push.
+            matrixStack.pushPose();
+            //Don't touch this, it's better to use the display options in Blockbench.
+            matrixStack.translate(0, -5.8 * 0.0625, 0);
+            //Gets the cooldown tracker for the item. Items like swords and enderpearls also have this.
+            ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
+            float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
+            cooldown = (float) ease(cooldown);
+            /**
+             * We are moving whatever part is moving.
+             * X,Y,Z, use Z for moving back and forth.
+             * The higher the number, the shorter the distance.
+             */
+            matrixStack.translate(0, 0, cooldown / 12);
+            matrixStack.translate(0, 5.8 * 0.0625, 0);
+            //Renders the moving part of the gun.
+            RenderUtil.renderModel(SpecialModels.DARK_MATTER_BOLT.getModel(), stack, matrixStack, buffer, light, overlay);
+            //Always pop
+            matrixStack.popPose();
+        }
     }
 
     private void renderStockAttachments(ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
@@ -85,5 +107,10 @@ public class DarkMatterModel implements IOverrideModel {
             else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.NETHERITE_BAYONET.get())
                 RenderUtil.renderModel(SpecialModels.DARK_MATTER_NETHERITE_BAYONET.getModel(), stack, matrixStack, buffer, light, overlay);
         }
+    }
+    private double ease(double x) {
+
+        return 1 - Math.pow(1 - (2 * x), 4);
+
     }
 }

@@ -23,11 +23,12 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import top.ribs.scguns.event.ArmorRemoveEventHandler;
 import top.ribs.scguns.init.ModItems;
 
 import java.util.UUID;
 
-public class BrassMaskItem extends Item {
+public class BrassMaskItem extends Item implements ArmorRemoveEventHandler.IArmorItem {
     private static final UUID ARMOR_MODIFIER_UUID = UUID.fromString("6e57a153-8e12-11eb-8dcd-0242ac132223");
     private static final UUID ARMOR_TOUGHNESS_MODIFIER_UUID = UUID.fromString("6e61a188-8e12-11eb-8dcd-0242ac130003");
     private static final UUID KNOCKBACK_RESISTANCE_MODIFIER_UUID = UUID.fromString("6e57a133-8e12-11eb-8dcd-0242ac130003");
@@ -124,6 +125,7 @@ public class BrassMaskItem extends Item {
         return true;
     }
 
+    @Override
     public int getDefense() {
         return defense;
     }

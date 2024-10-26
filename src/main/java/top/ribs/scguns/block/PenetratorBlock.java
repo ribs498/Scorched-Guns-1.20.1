@@ -40,9 +40,18 @@ public class PenetratorBlock extends BaseEntityBlock {
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        Direction facing = pContext.getClickedFace();
+        // Get the player's horizontal direction for placing the block
+        Direction facing = pContext.getNearestLookingDirection().getOpposite();
+
+        // If the player is crouching, it will place the block upwards or downwards
+        if (pContext.getPlayer() != null && pContext.getPlayer().isShiftKeyDown()) {
+            return this.defaultBlockState().setValue(FACING, pContext.getClickedFace());
+        }
+
+        // Otherwise, place it based on the player's horizontal facing direction
         return this.defaultBlockState().setValue(FACING, facing);
     }
+
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {

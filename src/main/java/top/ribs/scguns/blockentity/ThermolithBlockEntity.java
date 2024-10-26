@@ -36,8 +36,8 @@ import java.util.Random;
 public class ThermolithBlockEntity extends BlockEntity implements MenuProvider {
     private static final ResourceLocation THERMOLITH_INGREDIENT_TAG = new ResourceLocation("scguns", "thermolith_ingredient");
     private static final ResourceLocation MELTABLE_BLOCKS_TAG = new ResourceLocation("scguns", "meltable_blocks");
-    private static final int MELT_INTERVAL = 50;
-    private static final double MELT_RADIUS = 4.0;
+    private static final int MELT_INTERVAL = 40;
+    private static final double MELT_RADIUS = 6.0;
     private static final ThreadLocal<RandomSource> RANDOM = ThreadLocal.withInitial(RandomSource::create);
 
     private final ItemStackHandler itemHandler = new ItemStackHandler(1) {
@@ -82,7 +82,7 @@ public class ThermolithBlockEntity extends BlockEntity implements MenuProvider {
 
         if (level.getBlockState(targetPos).is(BlockTags.create(MELTABLE_BLOCKS_TAG))) {
             level.setBlockAndUpdate(targetPos, Blocks.LAVA.defaultBlockState());
-            if (rand.nextFloat() < 0.25f) {
+            if (rand.nextFloat() < 0.15f) {
                 itemHandler.extractItem(0, 1, false);
             }
             if (level instanceof ServerLevel serverLevel) {

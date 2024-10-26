@@ -1,0 +1,10 @@
+
+{
+  "replace": false,
+  "values": [
+    "scguns:bomb_lance",
+    "scguns:locust",
+    "scguns:earths_corpse",
+    "scguns:super_shotgun"
+  ]
+}

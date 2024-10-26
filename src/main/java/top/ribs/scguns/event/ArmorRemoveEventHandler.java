@@ -2,6 +2,7 @@ package top.ribs.scguns.event;
 
 
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingEquipmentChangeEvent;
@@ -30,29 +31,27 @@ public class ArmorRemoveEventHandler {
         for (EquipmentSlot slot : EquipmentSlot.values()) {
             if (slot.getType() == EquipmentSlot.Type.ARMOR) {
                 ItemStack itemStack = player.getItemBySlot(slot);
-                if (itemStack.getItem() instanceof AdrienHelmItem) {
-                    totalArmor += ((AdrienHelmItem) itemStack.getItem()).getDefense();
-                }
-                if (itemStack.getItem() instanceof BrassMaskItem) {
-                    totalArmor += ((BrassMaskItem) itemStack.getItem()).getDefense();
-                }
-                if (itemStack.getItem() instanceof RidgetopItem) {
-                    totalArmor += ((RidgetopItem) itemStack.getItem()).getDefense();
-                }
-                if (itemStack.getItem() instanceof AnthraliteRespiratorItem) {
-                    totalArmor += ((AnthraliteRespiratorItem) itemStack.getItem()).getDefense();
-                }
-                if (itemStack.getItem() instanceof NetheriteRespiratorItem) {
-                    totalArmor += ((NetheriteRespiratorItem) itemStack.getItem()).getDefense();
-                }
 
+                if (itemStack.getItem() instanceof AdrienHelmItem ||
+                        itemStack.getItem() instanceof BrassMaskItem ||
+                        itemStack.getItem() instanceof RidgetopItem ||
+                        itemStack.getItem() instanceof AnthraliteRespiratorItem ||
+                        itemStack.getItem() instanceof NetheriteRespiratorItem) {
+
+                    totalArmor += ((IArmorItem) itemStack.getItem()).getDefense();
+                }
             }
         }
-        double currentArmorValue = Objects.requireNonNull(player.getAttributes().getInstance(Attributes.ARMOR)).getBaseValue();
-        if (totalArmor > currentArmorValue) {
-            player.getAttributes().getInstance(Attributes.ARMOR).setBaseValue(totalArmor);
+
+        AttributeInstance armorAttribute = player.getAttributes().getInstance(Attributes.ARMOR);
+        if (armorAttribute != null && totalArmor > armorAttribute.getBaseValue()) {
+            armorAttribute.setBaseValue(totalArmor);
         }
     }
+    public interface IArmorItem {
+        int getDefense();
+    }
+
 
 }
 

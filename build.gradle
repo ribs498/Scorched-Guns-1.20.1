@@ -6,7 +6,7 @@ plugins {
     id 'org.parchmentmc.librarian.forgegradle' version '1.+'
 }
 
-version = "0.3.0-1.20.1"
+version = "0.3.5-1.20.1"
 group = "top.ribs"
 archivesBaseName = "ScorchedGuns"
 
@@ -112,28 +112,18 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
+// implementation fg.deobf("curse.maven:geckolib-388172:5675221")
     implementation fg.deobf("curse.maven:create-328085:5689514")
    implementation fg.deobf("curse.maven:createaddition-439890:5658602")
 implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5455954")
     implementation fg.deobf("curse.maven:farmers-delight-398521:5051242")
- // implementation fg.deobf("curse.maven:immersive-engineering-231951:5224387")
     implementation fg.deobf("curse.maven:kotlin-for-forge-351264:5402061")
     implementation fg.deobf("curse.maven:valkyrien-skies-258371:5212232")
-// implementation fg.deobf("curse.maven:the-one-probe-245211:4629624")
     implementation fg.deobf("curse.maven:curios-309927:5367944")
-  //  implementation fg.deobf("curse.maven:effortless-building-302113:4979130")
- // implementation fg.deobf("curse.maven:leawind-third-person-930880:5611288")
   implementation fg.deobf("curse.maven:jade-324717:5493390")
-  //  implementation fg.deobf("curse.maven:architectury-api-419699:5137938")
-  //  implementation fg.deobf("curse.maven:create-ore-excavation-649832:5517194")
-  //  implementation fg.deobf("curse.maven:mekanism-268560:5662583")
     implementation fg.deobf("curse.maven:mmmmmmmmmmmm-225738:5710049")
     implementation fg.deobf("curse.maven:selene-499980:5702363")
-   // implementation fg.deobf("curse.maven:enchantment-descriptions-250419:5598368")
-   // implementation fg.deobf("curse.maven:bookshelf-228525:5423987")
 
-//    implementation fg.deobf("curse.maven:majruszs-progressive-difficulty-430642:5293465")
-//    implementation fg.deobf("curse.maven:majrusz-library-437409:5302100")
 }
 
 jar {

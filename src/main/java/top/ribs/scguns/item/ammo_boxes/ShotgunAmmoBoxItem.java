@@ -17,14 +17,15 @@ public class ShotgunAmmoBoxItem extends AmmoBoxItem {
         return new ResourceLocation("scguns", "shotgun_ammo");
     }
 
-    @Override
-    protected int getMaxItemCount() {
-        return SHOTGUN_MAX_ITEM_COUNT;
-    }
 
     @Override
     public int getBarColor(ItemStack stack) {
         return SHOTGUN_BAR_COLOR;
+    }
+
+    @Override
+    protected int getBaseMaxItemCount() {
+        return SHOTGUN_MAX_ITEM_COUNT;
     }
 
 }

@@ -6,6 +6,5 @@
     {"id":"immersiveengineering:ingot_steel",  "required":false},
     {"id":"magistuarmory:steel_ingot",  "required":false},
     {"id": "tfmg:steel_ingot",  "required":false}
-
   ]
 }
