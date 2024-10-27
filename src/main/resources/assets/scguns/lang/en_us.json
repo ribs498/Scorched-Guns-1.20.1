@@ -951,5 +951,6 @@
   "attribute.scguns.bullet_resistance": "Player Firearm Projectile Resistance",
   "attribute.scguns.fire_rate_multiplier": "Firearm Firing Rate Multiplier",
   "attribute.scguns.projectile_speed": "Firearm Projectile Speed",
-  "attribute.scguns.reload_speed": "Firearm Reload Speed"
+  "attribute.scguns.reload_speed": "Firearm Reload Speed",
+  "attribute.scguns.spread_multiplier": "Firearm Bullet Spread Multiplier"
 }
