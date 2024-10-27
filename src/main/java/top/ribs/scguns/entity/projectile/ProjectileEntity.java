@@ -110,8 +110,10 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.modifiedGun = modifiedGun;
         this.general = modifiedGun.getGeneral();
         this.projectile = modifiedGun.getProjectile();
+        //Set damage related attributes.
         this.attributeAdditionalDamage = (float) shooter.getAttribute(SCAttributes.ADDITIONAL_BULLET_DAMAGE.get()).getValue();
         this.attributeDamageMultiplier = shooter.getAttribute(SCAttributes.BULLET_DAMAGE_MULTIPLIER.get()).getValue();
+
         this.entitySize = new EntityDimensions(this.projectile.getSize(), this.projectile.getSize(), false);
         this.modifiedGravity = modifiedGun.getProjectile().isGravity() ? GunModifierHelper.getModifiedProjectileGravity(weapon, -0.04) : 0.0;
         this.life = GunModifierHelper.getModifiedProjectileLife(weapon, this.projectile.getLife());
@@ -764,7 +766,9 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     }
 
     public float getDamage() {
+        //Add attribute-related additional damage.
         float initialDamage = (this.projectile.getDamage() + this.additionalDamage + this.attributeAdditionalDamage);
+        //Apply damage multiplier.
         initialDamage*=this.attributeDamageMultiplier;
         if (this.projectile.isDamageReduceOverLife()) {
             float modifier = ((float) this.projectile.getLife() - (float) (this.tickCount - 1)) / (float) this.projectile.getLife();

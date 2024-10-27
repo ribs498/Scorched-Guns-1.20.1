@@ -75,12 +75,13 @@ public class ReloadTracker {
 
     private boolean canReload(Player player) {
         int deltaTicks = player.tickCount - this.startTick;
+        //Get the shooters RELOAD_SPEED attribute.
         double reloadSpeed = player.getAttribute(SCAttributes.RELOAD_SPEED.get()).getValue();
         if (gun.getReloads().getReloadType() == ReloadType.MANUAL) {
             if (this.initialReload) {
                 this.initialReload = false;
                 this.currentBulletReloadTick = GunEnchantmentHelper.getReloadInterval(this.stack);
-                //I'm using ceil here so there is no 0-tick reloads.
+                //Apply the reload speed modifier using ceil here so there is no 0-tick reloads.
                 this.currentBulletReloadTick = (int) Math.ceil((double)currentBulletReloadTick/reloadSpeed);
                 return false;
             } else if (currentBulletReloadTick <= 0) {
