@@ -173,6 +173,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 gunSpread *= 0.7F;
             }
         }
+        // Applies the SPREAD_MULTIPLIER player attribute.
         gunSpread *= (float) shooter.getAttribute(SCAttributes.SPREAD_MULTIPLIER.get()).getValue();
         // Return the final direction with modified spread
         return this.getVectorFromRotation(
@@ -608,9 +609,10 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
 
-        if (entity.getType() == EntityType.PLAYER){
-            damage*=1-(((LivingEntity) entity).getAttribute(SCAttributes.BULLET_RESISTANCE.get()).getValue()/100);
-        }
+        //Disabled due to difficulty of testing without my server up.
+        //if (entity.getType() == EntityType.PLAYER){
+        //    damage*=1-(((LivingEntity) entity).getAttribute(SCAttributes.BULLET_RESISTANCE.get()).getValue()/100);
+        //}
 
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, this.shooter);
 

@@ -14,11 +14,12 @@ public class SCEntityAttributes {
     @SubscribeEvent
     public static void onEntityAttributeModification(EntityAttributeModificationEvent event) {
         event.add(EntityType.PLAYER, SCAttributes.PROJECTILE_SPEED.get());
-        event.add(EntityType.PLAYER, SCAttributes.FIRE_RATE.get());
         event.add(EntityType.PLAYER, SCAttributes.RELOAD_SPEED.get());
         event.add(EntityType.PLAYER, SCAttributes.ADDITIONAL_BULLET_DAMAGE.get());
         event.add(EntityType.PLAYER, SCAttributes.BULLET_DAMAGE_MULTIPLIER.get());
         event.add(EntityType.PLAYER, SCAttributes.SPREAD_MULTIPLIER.get());
-        event.add(EntityType.PLAYER, SCAttributes.BULLET_RESISTANCE.get());
+        //Disabled
+        //event.add(EntityType.PLAYER, SCAttributes.BULLET_RESISTANCE.get());
+        //event.add(EntityType.PLAYER, SCAttributes.FIRE_RATE_MULTIPLIER.get());
     }
 }

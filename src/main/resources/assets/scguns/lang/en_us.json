@@ -949,7 +949,7 @@
   "attribute.scguns.additional_bullet_damage": "Additional Firearm Projectile Damage",
   "attribute.scguns.bullet_damage_multiplier": "Firearm Projectile Damage Multiplier",
   "attribute.scguns.bullet_resistance": "Player Firearm Projectile Resistance",
-  "attribute.scguns.fire_rate": "Firearm Firing Rate",
+  "attribute.scguns.fire_rate_multiplier": "Firearm Firing Rate Multiplier",
   "attribute.scguns.projectile_speed": "Firearm Projectile Speed",
   "attribute.scguns.reload_speed": "Firearm Reload Speed"
 }
