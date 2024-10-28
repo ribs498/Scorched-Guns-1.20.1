@@ -64,6 +64,7 @@
     "enchantedFire": "scguns:item.plasma.fire",
     "preFire": "scguns:item.gauss.pre_fire",
     "fire": "scguns:item.plasma.fire",
-    "reload": "scguns:item.pistol.reload"
+    "reload": "scguns:item.pistol.reload",
+    "flyby": "scguns:bullet.flyby1"
   }
 }

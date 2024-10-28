@@ -69,6 +69,7 @@
     "enchantedFire": "scguns:item.rusty_gnat.fire",
     "fire": "scguns:item.rusty_gnat.fire",
     "reload": "scguns:item.gauss.reload",
-    "silencedFire": "scguns:item.rusty_gnat.silenced_fire"
+    "silencedFire": "scguns:item.rusty_gnat.silenced_fire",
+    "flyby": "scguns:bullet.flyby1"
   }
 }

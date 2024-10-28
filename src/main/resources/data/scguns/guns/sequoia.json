@@ -62,6 +62,7 @@
     "cock": "scguns:item.pistol.cock",
     "enchantedFire": "scguns:item.brass_revolver.fire",
     "fire": "scguns:item.brass_revolver.fire",
-    "reload": "scguns:item.gauss.reload"
+    "reload": "scguns:item.gauss.reload",
+    "flyby": "scguns:bullet.flyby1"
   }
 }
