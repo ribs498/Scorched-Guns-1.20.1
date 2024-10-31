@@ -154,8 +154,10 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
     @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         super.onRemove(state, level, pos, newState, isMoving);
-        if (newState.getBlock() instanceof GeothermalVentBlock) {
-            updateVentPower(level, pos.below());
+        if (!(newState.getBlock() instanceof GeothermalVentBlock)) {
+            BlockState stateBelow = level.getBlockState(pos.below());
+            if (stateBelow.getBlock() instanceof GeothermalVentBlock)
+                updateVentPower(level, pos.below());
         }
     }
 
