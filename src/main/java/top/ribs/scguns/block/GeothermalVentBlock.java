@@ -149,10 +149,12 @@ public class GeothermalVentBlock extends Block implements SimpleWaterloggedBlock
         }
         level.scheduleTick(pos, this, calculateNextTickInterval());
         updateVentPower(level, pos);
-    }    @Override
+    }
+
+    @Override
     public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
         super.onRemove(state, level, pos, newState, isMoving);
-        if (!(newState.getBlock() instanceof GeothermalVentBlock)) {
+        if (newState.getBlock() instanceof GeothermalVentBlock) {
             updateVentPower(level, pos.below());
         }
     }
