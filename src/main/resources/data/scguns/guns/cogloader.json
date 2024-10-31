@@ -69,6 +69,7 @@
     "enchantedFire": "scguns:item.iron_rifle.fire",
     "fire": "scguns:item.iron_rifle.fire",
     "reload": "scguns:item.gauss.reload",
-    "silencedFire": "scguns:item.bruiser.silenced_fire"
+    "silencedFire": "scguns:item.bruiser.silenced_fire",
+    "flyby": "scguns:bullet.flyby1"
   }
 }

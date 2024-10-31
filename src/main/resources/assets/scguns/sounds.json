@@ -457,5 +457,13 @@
         "name": "scguns:ui/weapon/attach"
       }
     ]
+  },
+  "bullet.flyby1": {
+    "subtitle": "subtitle.scguns.flyby",
+    "sounds": [
+      {
+        "name": "scguns:bullet/flyby1"
+      }
+    ]
   }
 }

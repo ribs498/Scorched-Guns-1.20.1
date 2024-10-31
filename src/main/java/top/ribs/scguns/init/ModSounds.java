@@ -65,6 +65,9 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> ENTITY_STUN_GRENADE_RING = register("entity.stun_grenade.ring");
     public static final RegistryObject<SoundEvent> UI_WEAPON_ATTACH = register("ui.weapon.attach");
 
+    //bullet flyby sounds
+    public static final RegistryObject<SoundEvent> BULLET_FLYBY = register("bullet.flyby1"); //TODO: Set this to an actual sound later.
+
     private static RegistryObject<SoundEvent> register(String key) {
         return REGISTER.register(key, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Reference.MOD_ID, key)));
     }
