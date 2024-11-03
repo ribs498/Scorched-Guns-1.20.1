@@ -63,6 +63,7 @@
     "enchantedFire": "scguns:item.greaser_smg.fire",
     "fire": "scguns:item.greaser_smg.fire",
     "reload": "scguns:item.gauss.reload",
-    "silencedFire": "scguns:item.makeshift_rifle.silenced_fire"
+    "silencedFire": "scguns:item.makeshift_rifle.silenced_fire",
+    "flyby": "scguns:bullet.flyby1"
   }
 }

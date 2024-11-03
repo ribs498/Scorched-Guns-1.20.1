@@ -713,6 +713,8 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         @Optional
         private double trailLengthMultiplier = 1.0;
 
+
+
         @Override
         public CompoundTag serializeNBT() {
             CompoundTag tag = new CompoundTag();
@@ -949,6 +951,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         @Optional
         @Nullable
         private ResourceLocation preFire;
+        @Optional
+        @Nullable
+        private ResourceLocation flyby;
 
         @Override
         public CompoundTag serializeNBT()
@@ -977,6 +982,11 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             if(this.preFire != null)
             {
                 tag.putString("PreFire", this.preFire.toString());
+            }
+
+            if(this.flyby != null)
+            {
+                tag.putString("Flyby", this.flyby.toString());
             }
             return tag;
         }
@@ -1007,6 +1017,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             if(tag.contains("PreFire", Tag.TAG_STRING))
             {
                 this.preFire = this.createSound(tag, "PreFire");
+            }
+            if(tag.contains("Flyby", Tag.TAG_STRING)) {
+                this.flyby = this.createSound(tag, "Flyby");
             }
         }
 
@@ -1049,6 +1062,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
             sounds.silencedFire = this.silencedFire;
             sounds.enchantedFire = this.enchantedFire;
             sounds.preFire = this.preFire;
+            sounds.flyby = this.flyby;
             return sounds;
         }
 
@@ -1111,6 +1125,15 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu
         public ResourceLocation getPreFire()
         {
             return this.preFire;
+        }
+
+        /**
+         * @return the registry id of the sound event when the projectile flies by a player.
+         */
+        @Nullable
+        public ResourceLocation getFlybySound()
+        {
+            return this.flyby;
         }
     }
 

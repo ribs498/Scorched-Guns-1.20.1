@@ -39,6 +39,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.valkyrienskies.mod.common.world.RaycastUtilsKt;
 import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.attributes.SCAttributes;
@@ -48,13 +49,9 @@ import top.ribs.scguns.common.Gun.Projectile;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.Gun;
-import top.ribs.scguns.init.ModTags;
+import top.ribs.scguns.init.*;
 import top.ribs.scguns.common.SpreadTracker;
 import top.ribs.scguns.event.GunProjectileHitEvent;
-import top.ribs.scguns.init.ModBlocks;
-import top.ribs.scguns.init.ModDamageTypes;
-import top.ribs.scguns.init.ModEnchantments;
-import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.interfaces.IDamageable;
 import top.ribs.scguns.interfaces.IExplosionDamageable;
 import top.ribs.scguns.interfaces.IHeadshotBox;
@@ -98,6 +95,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     protected EntityDimensions entitySize;
     protected double modifiedGravity;
     protected int life;
+    private int soundTime = 0;
 
     public ProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -215,10 +213,26 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.updateHeading();
         this.onProjectileTick();
 
+
         if (!this.level().isClientSide()) {
             Vec3 startVec = this.position();
             Vec3 endVec = startVec.add(this.getDeltaMovement());
             BlockHitResult fluidResult = this.level().clip(new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, this));
+
+            AABB range = new AABB(startVec.x-5, startVec.y-5, startVec.z-5, startVec.x+5, startVec.y+5, startVec.z+5);
+            List<Player> players = this.level().getEntitiesOfClass(Player.class, range);
+
+            ResourceLocation flybySound = modifiedGun.getSounds().getFlybySound();
+
+
+            //Only play if there's a nearby player. Also ignore weapons that shoot more than 1 proj to prevent deafening players irl.
+            System.out.println(this.tickCount);
+            System.out.println(this.soundTime);
+            System.out.println(soundTime < this.tickCount - 3);
+            if (!players.isEmpty() && flybySound != null && modifiedGun.getGeneral().getProjectileAmount() == 1 && this.tickCount > 3 && soundTime < this.tickCount - 3) {
+                this.level().playSound(null, startVec.x,startVec.y,startVec.z, ForgeRegistries.SOUND_EVENTS.getValue(flybySound), SoundSource.NEUTRAL, (float) 0.5F + this.level().getRandom().nextFloat() * 0.4F, 0.8F + this.level().getRandom().nextFloat() * 0.4F);
+                this.soundTime = this.tickCount;
+            }
 
             if (fluidResult.getType() == HitResult.Type.BLOCK) {
                 BlockPos blockPos = fluidResult.getBlockPos();

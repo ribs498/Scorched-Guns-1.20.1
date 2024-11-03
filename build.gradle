@@ -26,7 +26,10 @@ minecraft {
 
     runs {
         client {
-            workingDirectory project.file('run')
+            workingDirectory project.file('run') //set this to run2 and uncomment below, and run runCLient again to run 2 clients.
+            //args '--username', 'Dev2'
+            //I'm keeping this here commented so I don't forget - Atobá
+
             property 'mixin.env.disableRefMap', 'true'
             property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
             property 'forge.logging.markers', 'SCAN,REGISTRIES,REGISTRYDUMP'
@@ -146,6 +149,7 @@ jar.finalizedBy('reobfJar')
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
+
 
 publishing {
     publications {
