@@ -3,9 +3,9 @@
     "flash": {
       "size": 1.0,
       "yOffset": 4.2,
-      "zOffset": -1.2
-    },
-    "muzzleFlashType": "flash_type_1"
+      "zOffset": -1.2,
+      "textureLocation": "muzzle_flash_1"
+    }
   },
   "general": {
     "alwaysSpread": true,
@@ -17,7 +17,8 @@
     "spread": 2.0,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 10,
-    "hotBarrelRate": 13
+    "hotBarrelRate": 13,
+    "criticalChance": 0.05
   },
   "modules": {
     "attachments": {

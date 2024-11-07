@@ -49,7 +49,7 @@ public class BasicDirectionalBlock extends Block {
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        // Define your block's shape here
+
         return Shapes.block();
     }
 

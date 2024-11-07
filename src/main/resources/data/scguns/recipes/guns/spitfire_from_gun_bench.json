@@ -30,7 +30,7 @@
       "item": "scguns:heavy_gun_barrel"
     },
     "gun_magazine": {
-      "item": "scguns:gun_magazine"
+      "item": "scguns:empty_tank"
     }
   }
 }

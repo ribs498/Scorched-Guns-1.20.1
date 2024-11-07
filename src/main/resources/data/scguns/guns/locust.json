@@ -3,9 +3,14 @@
     "flash": {
       "size": 1.3,
       "yOffset": 4.8,
-      "zOffset": -13.0
-    },
-    "muzzleFlashType": "flash_type_5"
+      "zOffset": -13.0,
+      "textureLocation": "muzzle_flash_5",
+      "spawnParticles": true,
+      "particleType": "minecraft:small_flame",
+      "particleCount": 8,
+      "particleSpread": 0.1,
+      "particleRingRadius": 0.5
+    }
   },
   "general": {
     "alwaysSpread": false,
@@ -15,12 +20,13 @@
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 2,
-    "recoilAngle": 2.5,
-    "recoilKick": 1.0,
+    "recoilAngle": 2.25,
+    "recoilKick": 0.75,
     "spread": 2.0,
     "meleeDamage": 7.0,
     "meleeCooldownTicks": 15,
-    "hotBarrelRate": 5
+    "hotBarrelRate": 5,
+    "criticalChance": 0.05
   },
   "modules": {
     "attachments": {
@@ -59,7 +65,7 @@
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
-    "maxAmmo": 24,
+    "maxAmmo": 28,
     "reloadTimer": 15,
     "reloadType": "scguns:mag_fed"
   },

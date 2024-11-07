@@ -1,11 +1,16 @@
 {
   "display": {
     "flash": {
-      "size": 1.0,
+      "size": 1.2,
       "yOffset": 4.6,
-      "zOffset": -19.0
-    },
-    "muzzleFlashType": "flash_type_5"
+      "zOffset": -19.0,
+      "textureLocation": "muzzle_flash_5",
+      "spawnParticles": true,
+      "particleType": "minecraft:small_flame",
+      "particleCount": 8,
+      "particleSpread": 0.25,
+      "particleRingRadius": 1.0
+    }
   },
   "general": {
     "alwaysSpread": false,
@@ -18,7 +23,8 @@
     "spread": 0.0,
     "meleeDamage": 4.0,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 37
+    "hotBarrelRate": 37,
+    "criticalChance": 0.05
   },
   "modules": {
     "attachments": {

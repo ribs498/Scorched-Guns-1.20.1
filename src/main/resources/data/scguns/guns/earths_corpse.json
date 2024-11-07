@@ -3,9 +3,14 @@
     "flash": {
       "size": 1.5,
       "yOffset": 5.7,
-      "zOffset": -19.0
-    },
-    "muzzleFlashType": "flash_type_5"
+      "zOffset": -19.0,
+      "textureLocation": "muzzle_flash_5",
+      "spawnParticles": true,
+      "particleType": "minecraft:small_flame",
+      "particleCount": 3,
+      "particleSpread": 0.25,
+      "particleRingRadius": 1.0
+    }
   },
   "general": {
     "fireMode": "scguns:automatic",
@@ -17,7 +22,8 @@
     "spread": 5.0,
     "meleeDamage": 9.0,
     "meleeCooldownTicks": 15,
-    "hotBarrelRate": 5
+    "hotBarrelRate": 5,
+    "criticalChance": 0.05
   },
   "modules": {
     "attachments": {

@@ -36,13 +36,13 @@
         },
         [
           {
-            "item": "scguns:nitro_powder_dust"
+            "item": "scguns:nitro_buckshot"
           }
         ]
       ],
       "results": [
         {
-          "item": "scguns:nitro_buckshot"
+          "item": "scguns:unfinished_bearpack_shell"
         }
       ]
     },

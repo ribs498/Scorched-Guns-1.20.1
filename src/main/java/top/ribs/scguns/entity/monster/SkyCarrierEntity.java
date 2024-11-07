@@ -9,6 +9,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
@@ -26,7 +27,10 @@ import net.minecraft.world.entity.monster.Enemy;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.*;
+import net.minecraft.world.level.block.GlassBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.Tags;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.entity.projectile.BrassBoltEntity;
 import top.ribs.scguns.init.ModSounds;
@@ -154,14 +158,40 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
 
 
     public static boolean checkMonsterSpawnRules(EntityType<SkyCarrierEntity> entityType, ServerLevelAccessor level, MobSpawnType spawnType, BlockPos pos, RandomSource random) {
+
         if (level.getDifficulty() == Difficulty.PEACEFUL) {
             return false;
         }
-        if (level.getBrightness(LightLayer.SKY, pos) > 0) {
+        if (spawnType != MobSpawnType.NATURAL) {
+            return true;
+        }
+        if (!level.canSeeSky(pos)) {
             return false;
         }
-        int lightLevel = level.getLightEmission(pos);
-        if (lightLevel > 0) {
+        for (int i = 1; i <= 4; i++) {
+            if (!level.getBlockState(pos.above(i)).isAir()) {
+                return false;
+            }
+        }
+        int radius = 3;
+        for (int x = -radius; x <= radius; x++) {
+            for (int y = -radius; y <= radius; y++) {
+                for (int z = -radius; z <= radius; z++) {
+                    BlockPos checkPos = pos.offset(x, y, z);
+                    BlockState state = level.getBlockState(checkPos);
+                    if (state.is(BlockTags.WALLS) ||
+                            state.is(BlockTags.DOORS) ||
+                            state.is(BlockTags.FENCE_GATES) ||
+                            state.getBlock() instanceof GlassBlock ||
+                            state.is(Tags.Blocks.GLASS) ||
+                            state.is(BlockTags.PLANKS)) {
+                        return false;
+                    }
+                }
+            }
+        }
+        long timeOfDay = level.getLevelData().getDayTime() % 24000;
+        if (timeOfDay < 13000 || timeOfDay > 23000) {
             return false;
         }
         return level.getBlockState(pos.below()).isValidSpawn(level, pos.below(), entityType);

@@ -22,13 +22,13 @@ import java.util.WeakHashMap;
 
 
 public class BlasphemyModel implements IOverrideModel {
-    private WeakHashMap<LivingEntity, AnimationState> animationMap = new WeakHashMap<>();
-    private Random random = new Random();
+    private final WeakHashMap<LivingEntity, AnimationState> animationMap = new WeakHashMap<>();
 
     @Override
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
         RenderUtil.renderModel(SpecialModels.BLASPHEMY_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
 
+        assert entity != null;
         if (entity.equals(Minecraft.getInstance().player)) {
             matrixStack.pushPose();
             matrixStack.translate(0, -5.8 * 0.0625, 0);
@@ -40,11 +40,13 @@ public class BlasphemyModel implements IOverrideModel {
 
             AnimationState state = this.animationMap.computeIfAbsent(entity, k -> new AnimationState());
             if (!ModSyncedDataKeys.SHOOTING.getValue((Player) entity)) {
-                // Apply idle animations
-                matrixStack.translate(Math.sin(state.wiggle) * 0.01, Math.cos(state.wiggle) * 0.01, 0);
-                state.wiggle += (random.nextFloat() - 0.5) * 0.05; // Slower animation
-                state.lookAround += (random.nextFloat() - 0.5) * 0.05; // Slower animation
-                matrixStack.mulPose(Axis.YP.rotationDegrees((float) state.lookAround));
+                state.updateTimers(partialTicks);
+                float hoverHeight = (float) Math.sin(state.baseTimer * 0.3) * 0.012f;
+                matrixStack.translate(0, hoverHeight, 0);
+                float swayAmount = (float) Math.sin(state.baseTimer * 0.2) * 0.008f;
+                matrixStack.translate(swayAmount, 0, 0);
+                float rotation = state.getSmoothedRotation();
+                matrixStack.mulPose(Axis.YP.rotationDegrees(rotation));
             }
 
             renderBarrelAndAttachments(stack, matrixStack, buffer, light, overlay);
@@ -66,8 +68,36 @@ public class BlasphemyModel implements IOverrideModel {
     }
 
     private static class AnimationState {
-        private double wiggle;
-        private double lookAround;
-    }
+        private double baseTimer;
+        private static final Random random = new Random();
 
+        private double time = 0;
+        private static final double TWO_PI = Math.PI * 2;
+        private final double[] frequencies = {0.12, 0.05, 0.08};
+        private final double[] amplitudes = {2.0, 3.0, 1.5};
+        private final double[] phases = {0, TWO_PI / 3, TWO_PI * 2 / 3};
+
+        public AnimationState() {
+            for (int i = 0; i < phases.length; i++) {
+                phases[i] += random.nextDouble() * TWO_PI;
+            }
+        }
+
+        public void updateTimers(float partialTicks) {
+            baseTimer += 0.016 * partialTicks;
+            time += 0.016 * partialTicks;
+            if (time > 1000000) {
+                time = 0;
+            }
+        }
+
+        public float getSmoothedRotation() {
+            double rotation = 0;
+            for (int i = 0; i < frequencies.length; i++) {
+                rotation += Math.sin(time * frequencies[i] + phases[i]) * amplitudes[i];
+            }
+
+            return (float) rotation;
+        }
+    }
 }

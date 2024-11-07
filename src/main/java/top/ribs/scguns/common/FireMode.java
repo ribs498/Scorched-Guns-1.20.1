@@ -20,7 +20,6 @@ public record FireMode(ResourceLocation id) {
      */
     public static final FireMode AUTOMATIC = new FireMode(new ResourceLocation(Reference.MOD_ID, "automatic"));
 
-
     /**
      * A fire mode that shoots once per cooldown
      */
@@ -30,6 +29,14 @@ public record FireMode(ResourceLocation id) {
      */
     public static final FireMode BEAM = new FireMode(new ResourceLocation(Reference.MOD_ID, "beam"));
 
+    /**
+     * A fire mode that shoots a single beam per trigger press
+     */
+    public static final FireMode SEMI_BEAM = new FireMode(new ResourceLocation(Reference.MOD_ID, "semi_beam"));
+
+    /**
+     * A fire mode that shoots a burst of bullets
+     */
     public static final FireMode BURST = new FireMode(new ResourceLocation(Reference.MOD_ID, "burst"));
 
 
@@ -44,6 +51,7 @@ public record FireMode(ResourceLocation id) {
         registerType(AUTOMATIC);
         registerType(PULSE);
         registerType(BEAM);
+        registerType(SEMI_BEAM);
         registerType(BURST);
 
     }

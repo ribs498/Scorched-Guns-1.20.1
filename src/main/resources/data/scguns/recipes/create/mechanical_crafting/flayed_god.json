@@ -1,0 +1,41 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "L": {
+      "item": "scguns:energy_core"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:gun_barrel"
+    },
+    "X": {
+      "item": "scguns:scorched_blueprint"
+    },
+    "K": {
+      "item": "scguns:scorched_ingot"
+    },
+    "J": {
+      "item": "scguns:nether_star_fragment"
+    },
+    "O": {
+      "item": "scguns:scorched_gun_frame"
+    },
+    "G": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "pattern": [
+      "QOJX",
+      "LRGS",
+      "K K "
+    ],
+    "result": {
+      "item": "scguns:flayed_god"
+    }
+  }
+}

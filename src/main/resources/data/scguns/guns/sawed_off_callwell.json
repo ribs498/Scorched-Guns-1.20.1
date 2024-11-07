@@ -2,10 +2,16 @@
   "display": {
     "flash": {
       "size": 1.35,
-      "yOffset": 3.5,
-      "zOffset": -3.0
-    },
-    "muzzleFlashType": "flash_type_1"
+      "yOffset": 3.75,
+      "zOffset": -3.0,
+      "textureLocation": "muzzle_flash_1",
+      "alternateMuzzleFlash": true,
+      "alternatePosition": {
+        "x": -0.0,
+        "y": 0.0,
+        "z": -1.25
+      }
+    }
   },
   "general": {
     "alwaysSpread": true,
@@ -18,7 +24,8 @@
     "spread": 21.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 50
+    "hotBarrelRate": 50,
+    "criticalChance": 0.1
   },
   "modules": {
     "attachments": {

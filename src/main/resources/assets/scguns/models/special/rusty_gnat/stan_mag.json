@@ -68,5 +68,13 @@
 			"translation": [-5.5, 0, -1.75],
 			"scale": [3, 3, 3]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "group",
+			"origin": [7.875, -1.175, 9.7494],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
 }

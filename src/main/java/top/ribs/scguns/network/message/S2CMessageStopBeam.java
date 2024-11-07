@@ -8,7 +8,6 @@ import top.ribs.scguns.client.network.ClientPlayHandler;
 import java.util.UUID;
 
 public class S2CMessageStopBeam extends PlayMessage<S2CMessageStopBeam> {
-
     private UUID playerId;
 
     public S2CMessageStopBeam() {}

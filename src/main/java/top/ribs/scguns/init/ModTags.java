@@ -30,6 +30,9 @@ public class ModTags
     public static class Items
     {
         public static final TagKey<Item> ONE_HANDED_CARBINE  = tag("one_handed_carbine");
+        public static final TagKey<Item> HEAVY_WEAPON = tag("heavy_weapon");
+        public static final TagKey<Item> OCEAN_GUN = tag("ocean_gun");
+        public static final TagKey<Item> PIGLIN_GUN = tag("piglin_gun");
         public static final TagKey<Item> BUILT_IN_BAYONET  = tag("built_in_bayonet");
         public static final TagKey<Item> WEAK_FILTER = tag("weak_filter");
         public static final TagKey<Item> STRONG_FILTER = tag("strong_filter");

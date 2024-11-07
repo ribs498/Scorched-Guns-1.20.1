@@ -156,8 +156,7 @@ public class TwoHandedPose extends WeaponPose
             poseStack.scale(0.5F, 0.5F, 0.5F);
             poseStack.translate(4.0 * 0.0625 * side, 0, 0);
             poseStack.translate((armWidth / 2.0) * 0.0625 * side, 0, 0);
-            poseStack.translate(-0.3125 * side, -0.17, -0.35);
-
+            poseStack.translate(-0.3125 * side, -0.12, -0.35);
 
             poseStack.mulPose(Axis.XP.rotationDegrees(80F));
             poseStack.mulPose(Axis.YP.rotationDegrees(15F * -side));
@@ -171,11 +170,12 @@ public class TwoHandedPose extends WeaponPose
         // Back arm holding the handle
         poseStack.pushPose();
         {
-            poseStack.translate(0, 0.1, -0.6);
+            poseStack.translate(0, 0.1, -0.7);
             poseStack.scale(0.5F, 0.5F, 0.5F);
             poseStack.translate(-4.0 * 0.0625 * side, 0, 0);
             poseStack.translate(-(armWidth / 2.0) * 0.0625 * side, 0, 0);
             poseStack.mulPose(Axis.XP.rotationDegrees(80F));
+            poseStack.mulPose(Axis.YP.rotationDegrees(5F * side));
 
             RenderUtil.renderFirstPersonArm((LocalPlayer) player, hand, poseStack, buffer, light);
         }

@@ -178,6 +178,39 @@ public class TeamLogItem extends Item {
         }
     }
     @Override
+    public boolean isFoil(@NotNull ItemStack stack) {
+        CompoundTag tag = stack.getTag();
+        if (tag != null) {
+            // Check for any type of logged data
+            if (tag.contains("Entities", Tag.TAG_LIST)) {
+                ListTag listTag = tag.getList("Entities", Tag.TAG_COMPOUND);
+                if (!listTag.isEmpty()) {
+                    return true;
+                }
+            }
+            if (tag.contains("Blacklist", Tag.TAG_LIST)) {
+                ListTag blacklistTag = tag.getList("Blacklist", Tag.TAG_STRING);
+                if (!blacklistTag.isEmpty()) {
+                    return true;
+                }
+            }
+            // For EnemyLogItem whitelist checks
+            if (tag.contains("Whitelist", Tag.TAG_LIST)) {
+                ListTag whitelistTag = tag.getList("Whitelist", Tag.TAG_COMPOUND);
+                if (!whitelistTag.isEmpty()) {
+                    return true;
+                }
+            }
+            if (tag.contains("WhitelistEntityTypes", Tag.TAG_LIST)) {
+                ListTag whitelistTypeTag = tag.getList("WhitelistEntityTypes", Tag.TAG_STRING);
+                if (!whitelistTypeTag.isEmpty()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    @Override
     public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
         return ItemStack.EMPTY;
     }

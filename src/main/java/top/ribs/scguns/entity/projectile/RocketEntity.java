@@ -78,7 +78,7 @@ public class RocketEntity extends ProjectileEntity
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.SHIELD_BREAK, SoundSource.PLAYERS, 1.0F, 0.8F + player.level().getRandom().nextFloat() * 0.4F);
 
-                shield.hurtAndBreak(15, player, (p) -> p.broadcastBreakEvent(hand)); // Damage the shield significantly
+                shield.hurtAndBreak(15, player, (p) -> p.broadcastBreakEvent(hand));
             }
         }
 

@@ -23,6 +23,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -45,6 +46,7 @@ import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.block.NitroKegBlock;
 import top.ribs.scguns.block.PowderKegBlock;
+import top.ribs.scguns.common.ChargeHandler;
 import top.ribs.scguns.common.Gun.Projectile;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.BoundingBoxManager;
@@ -69,10 +71,7 @@ import top.ribs.scguns.util.math.ExtendedEntityRayTraceResult;
 import top.ribs.scguns.world.ProjectileExplosion;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -96,6 +95,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     protected double modifiedGravity;
     protected int life;
     private int soundTime = 0;
+    private float chargeProgress;
 
     public ProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -108,9 +108,19 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.modifiedGun = modifiedGun;
         this.general = modifiedGun.getGeneral();
         this.projectile = modifiedGun.getProjectile();
-        //Set damage related attributes.
-        this.attributeAdditionalDamage = (float) shooter.getAttribute(SCAttributes.ADDITIONAL_BULLET_DAMAGE.get()).getValue();
-        this.attributeDamageMultiplier = shooter.getAttribute(SCAttributes.BULLET_DAMAGE_MULTIPLIER.get()).getValue();
+        if (shooter instanceof Player player) {
+            this.chargeProgress = ChargeHandler.getChargeProgress(player, weapon);
+        } else {
+            this.chargeProgress = 0f;
+        }
+        if (shooter instanceof Player player) {
+            ChargeHandler.clearLastChargeProgress(player.getUUID());
+        }
+        AttributeInstance additionalDamageAttr = shooter.getAttribute(SCAttributes.ADDITIONAL_BULLET_DAMAGE.get());
+        this.attributeAdditionalDamage = additionalDamageAttr != null ? (float) additionalDamageAttr.getValue() : 0.0F;
+
+        AttributeInstance damageMultAttr = shooter.getAttribute(SCAttributes.BULLET_DAMAGE_MULTIPLIER.get());
+        this.attributeDamageMultiplier = damageMultAttr != null ? damageMultAttr.getValue() : 1.0;
 
         this.entitySize = new EntityDimensions(this.projectile.getSize(), this.projectile.getSize(), false);
         this.modifiedGravity = modifiedGun.getProjectile().isGravity() ? GunModifierHelper.getModifiedProjectileGravity(weapon, -0.04) : 0.0;
@@ -120,7 +130,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         Vec3 dir = this.getDirection(shooter, weapon, item, modifiedGun);
         double speedModifier = GunEnchantmentHelper.getProjectileSpeedModifier(weapon);
         double speed = GunModifierHelper.getModifiedProjectileSpeed(weapon, this.projectile.getSpeed() * speedModifier);
-        speed *= shooter.getAttribute(SCAttributes.PROJECTILE_SPEED.get()).getValue();
+        AttributeInstance speedAttr = shooter.getAttribute(SCAttributes.PROJECTILE_SPEED.get());
+        speed *= speedAttr != null ? speedAttr.getValue() : 1.0;
         this.setDeltaMovement(dir.x * speed, dir.y * speed, dir.z * speed);
         this.updateHeading();
 
@@ -152,7 +163,23 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     @Override
     protected void defineSynchedData() {
     }
+    public float getDamage() {
+        float damage = getaFloat();
+        damage = GunModifierHelper.getModifiedDamage(this.weapon, this.modifiedGun, damage);
+        damage = GunEnchantmentHelper.getAcceleratorDamage(this.weapon, damage);
+        damage = GunEnchantmentHelper.getHeavyShotDamage(this.weapon, damage);
+        damage = GunEnchantmentHelper.getHotBarrelDamage(this.weapon, damage);
 
+        damage = GunEnchantmentHelper.getChargeDamage(this.weapon, damage, this.chargeProgress);
+
+        if (Config.GunScalingConfig.getInstance().isScalingEnabled()) {
+            double scaledDamage = Config.GunScalingConfig.getInstance().getBaseDamage() +
+                    (Config.GunScalingConfig.getInstance().getDamageIncreaseRate() * this.worldDay);
+            damage *= (float) Math.min(scaledDamage, Config.GunScalingConfig.getInstance().getMaxDamage());
+        }
+
+        return Math.max(0F, damage);
+    }
     @Override
     public EntityDimensions getDimensions(Pose pose) {
         return this.entitySize;
@@ -162,7 +189,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
         float gunSpread = GunModifierHelper.getModifiedSpread(weapon, modifiedGun.getGeneral().getSpread());
         if (gunSpread == 0F) {
-            return this.getVectorFromRotation(shooter.getXRot(), shooter.getYRot());
+            return getVectorFromRotation(shooter.getXRot(), shooter.getYRot());
         }
         if (shooter instanceof Player) {
             if (!modifiedGun.getGeneral().isAlwaysSpread()) {
@@ -173,15 +200,23 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 gunSpread *= 0.7F;
             }
         }
-        // Applies the SPREAD_MULTIPLIER player attribute.
-        gunSpread *= (float) shooter.getAttribute(SCAttributes.SPREAD_MULTIPLIER.get()).getValue();
-        // Return the final direction with modified spread
-        return this.getVectorFromRotation(
+        AttributeInstance spreadAttr = shooter.getAttribute(SCAttributes.SPREAD_MULTIPLIER.get());
+        gunSpread *= spreadAttr != null ? (float) spreadAttr.getValue() : 1.0F;
+        return getVectorFromRotation(
                 shooter.getXRot() - (gunSpread / 2.0F) + random.nextFloat() * gunSpread,
                 shooter.getYHeadRot() - (gunSpread / 2.0F) + random.nextFloat() * gunSpread
         );
     }
 
+    public float getaFloat() {
+        float initialDamage = (this.projectile.getDamage() + this.additionalDamage + this.attributeAdditionalDamage);
+        initialDamage *= (float) this.attributeDamageMultiplier;
+        if (this.projectile.isDamageReduceOverLife()) {
+            float modifier = ((float) this.projectile.getLife() - (float) (this.tickCount - 1)) / (float) this.projectile.getLife();
+            initialDamage *= modifier;
+        }
+        return initialDamage / this.general.getProjectileAmount();
+    }
 
     public void setWeapon(ItemStack weapon) {
         this.weapon = weapon.copy();
@@ -226,11 +261,11 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
 
             //Only play if there's a nearby player. Also ignore weapons that shoot more than 1 proj to prevent deafening players irl.
-            System.out.println(this.tickCount);
-            System.out.println(this.soundTime);
-            System.out.println(soundTime < this.tickCount - 3);
+//            System.out.println(this.tickCount);
+//            System.out.println(this.soundTime);
+//            System.out.println(soundTime < this.tickCount - 3);
             if (!players.isEmpty() && flybySound != null && modifiedGun.getGeneral().getProjectileAmount() == 1 && this.tickCount > 3 && soundTime < this.tickCount - 3) {
-                this.level().playSound(null, startVec.x,startVec.y,startVec.z, ForgeRegistries.SOUND_EVENTS.getValue(flybySound), SoundSource.NEUTRAL, (float) 0.5F + this.level().getRandom().nextFloat() * 0.4F, 0.8F + this.level().getRandom().nextFloat() * 0.4F);
+                this.level().playSound(null, startVec.x,startVec.y,startVec.z, Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getValue(flybySound)), SoundSource.NEUTRAL, (float) 0.5F + this.level().getRandom().nextFloat() * 0.4F, 0.8F + this.level().getRandom().nextFloat() * 0.4F);
                 this.soundTime = this.tickCount;
             }
 
@@ -271,8 +306,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             if (hitEntities != null && !hitEntities.isEmpty()) {
                 for (EntityResult entityResult : hitEntities) {
                     result = new ExtendedEntityRayTraceResult(entityResult);
-                    if (((EntityHitResult) result).getEntity() instanceof Player) {
-                        Player player = (Player) ((EntityHitResult) result).getEntity();
+                    if (((EntityHitResult) result).getEntity() instanceof Player player) {
 
                         if (this.shooter instanceof Player && !((Player) this.shooter).canHarmPlayer(player)) {
                             result = null;
@@ -660,7 +694,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         Block block = state.getBlock();
 
         if (primeTNT(state, pos)) {
-            // TNT was primed, so we don't need to process further block interactions
             return;
         }
         if (block instanceof DoorBlock) {
@@ -757,7 +790,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         return this.projectile;
     }
 
-    private Vec3 getVectorFromRotation(float pitch, float yaw) {
+    static Vec3 getVectorFromRotation(float pitch, float yaw) {
         float f = Mth.cos(-yaw * 0.017453292F - (float) Math.PI);
         float f1 = Mth.sin(-yaw * 0.017453292F - (float) Math.PI);
         float f2 = -Mth.cos(-pitch * 0.017453292F);
@@ -779,31 +812,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         return this.shooterId;
     }
 
-    public float getDamage() {
-        //Add attribute-related additional damage.
-        float initialDamage = (this.projectile.getDamage() + this.additionalDamage + this.attributeAdditionalDamage);
-        //Apply damage multiplier.
-        initialDamage*=this.attributeDamageMultiplier;
-        if (this.projectile.isDamageReduceOverLife()) {
-            float modifier = ((float) this.projectile.getLife() - (float) (this.tickCount - 1)) / (float) this.projectile.getLife();
-            initialDamage *= modifier;
-        }
 
-        float damage = initialDamage / this.general.getProjectileAmount();
-        damage = GunModifierHelper.getModifiedDamage(this.weapon, this.modifiedGun, damage);
-        damage = GunEnchantmentHelper.getAcceleratorDamage(this.weapon, damage);
-        damage = GunEnchantmentHelper.getHeavyShotDamage(this.weapon, damage);
-        damage = GunEnchantmentHelper.getHotBarrelDamage(this.weapon, damage);
-
-        // Ensure config is loaded before accessing
-        if (Config.GunScalingConfig.getInstance().isScalingEnabled()) {
-            double scaledDamage = Config.GunScalingConfig.getInstance().getBaseDamage() +
-                    (Config.GunScalingConfig.getInstance().getDamageIncreaseRate() * this.worldDay);
-            damage *= (float) Math.min(scaledDamage, Config.GunScalingConfig.getInstance().getMaxDamage());
-        }
-
-        return Math.max(0F, damage);
-    }
 
 
     float getCriticalDamage(ItemStack weapon, RandomSource rand, float damage) {

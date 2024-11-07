@@ -78,6 +78,9 @@ public enum SpecialModels {
     BLUNDERBUSS_NETHERITE_BAYONET("blunderbuss/netherite_bayonet"),
     BLUNDERBUSS_LIGHT_GRIP("blunderbuss/light_grip"),
     BLUNDERBUSS_VERTICAL_GRIP("blunderbuss/vert_grip"),
+
+    ///PLASMABUSS
+    PLASMABUSS_MAIN("plasmabuss/main"),
     ///FLOUNDERGAT
     FLOUNDERGAT_MAIN("floundergat/main"),
     FLOUNDERGAT_IRON_BAYONET("floundergat/iron_bayonet"),
@@ -213,6 +216,23 @@ public enum SpecialModels {
     M3_CARABINE_STAN_BARREL("m3_carabine/stan_barrel"),
     M3_CARABINE_EXT_BARREL("m3_carabine/ext_barrel"),
 
+    //VALORA
+    VALORA_MAIN("valora/main"),
+    VALORA_BOLT("valora/bolt"),
+    VALORA_STOCK_LIGHT("valora/light_stock"),
+    VALORA_STOCK_HEAVY("valora/heavy_stock"),
+    VALORA_STOCK_WOODEN("valora/wooden_stock"),
+    VALORA_TACT_GRIP("valora/tact_grip"),
+    VALORA_LIGHT_GRIP("valora/light_grip"),
+    VALORA_IRON_BAYONET("valora/iron_bayonet"),
+    VALORA_ANTHRALITE_BAYONET("valora/anthralite_bayonet"),
+    VALORA_DIAMOND_BAYONET("valora/diamond_bayonet"),
+    VALORA_NETHERITE_BAYONET("valora/netherite_bayonet"),
+    VALORA_STAN_MAG("valora/stan_mag"),
+    VALORA_EXT_MAG("valora/ext_mag"),
+    VALORA_SPEED_MAG("valora/speed_mag"),
+
+
     ////  LOCKEWOOD
     LOCKEWOOD_MAIN("lockewood/main"),
     LOCKEWOOD_SIGHTS("lockewood/sights"),
@@ -237,6 +257,10 @@ public enum SpecialModels {
     LOCKEWOOD_SPEED_MAG("lockewood/speed_mag"),
     ///PULSAR
     PULSAR_MAIN("pulsar/main"),
+    ///SHARD_CULLER
+    SHARD_CULLER_MAIN("shard_culler/main"),
+    ///CR4K_MINING_LASER
+    CR4K_MINING_LASER("cr4k_mining_laser/main"),
     ///SAWED_OFF_CALLWELL
     SAWED_OFF_CALLWELL_MAIN("sawed_off_callwell/main"),
     ///CALLWELL
@@ -395,6 +419,28 @@ public enum SpecialModels {
     IRON_JAVELIN_SIGHTS("iron_javelin/sights"),
     IRON_JAVELIN_NO_SIGHTS("iron_javelin/no_sights"),
     IRON_JAVELIN_BOLT("iron_javelin/bolt"),
+    ///GRANDLE
+    GRANDLE_MAIN("grandle/main"),
+    GRANDLE_STOCK_LIGHT("grandle/light_stock"),
+    GRANDLE_STOCK_HEAVY("grandle/heavy_stock"),
+    GRANDLE_STOCK_WOODEN("grandle/wooden_stock"),
+    GRANDLE_TACT_GRIP("grandle/tact_grip"),
+    GRANDLE_LIGHT_GRIP("grandle/light_grip"),
+    GRANDLE_IRON_BAYONET("grandle/iron_bayonet"),
+    GRANDLE_ANTHRALITE_BAYONET("grandle/anthralite_bayonet"),
+    GRANDLE_DIAMOND_BAYONET("grandle/diamond_bayonet"),
+    GRANDLE_NETHERITE_BAYONET("grandle/netherite_bayonet"),
+    GRANDLE_STANDARD_MAG("grandle/stan_mag"),
+    GRANDLE_EXTENDED_MAG("grandle/ext_mag"),
+    GRANDLE_SPEED_MAG("grandle/speed_mag"),
+    GRANDLE_SIGHTS("grandle/sights"),
+    GRANDLE_NO_SIGHTS("grandle/no_sights"),
+    GRANDLE_BOLT("grandle/bolt"),
+    GRANDLE_STAN_BARREL("grandle/stan_barrel"),
+    GRANDLE_EXT_BARREL("grandle/ext_barrel"),
+    GRANDLE_SILENCER("grandle/silencer"),
+    GRANDLE_ADVANCED_SILENCER("grandle/advanced_silencer"),
+    GRANDLE_MUZZLE_BRAKE("grandle/muzzle_brake"),
 
     ///IRONSPEAR
     IRON_SPEAR_MAIN("iron_spear/main"),
@@ -507,6 +553,9 @@ public enum SpecialModels {
     WALTZ_CONVERSION_EXT_BARREL("waltz_conversion/ext_barrel"),
     WALTZ_CONVERSION_SIGHTS("waltz_conversion/sights"),
     WALTZ_CONVERSION_NO_SIGHTS("waltz_conversion/no_sights"),
+    WALTZ_CONVERSION_WOODEN_STOCK("waltz_conversion/wooden_stock"),
+    WALTZ_CONVERSION_LIGHT_STOCK("waltz_conversion/light_stock"),
+    WALTZ_CONVERSION_HEAVY_STOCK("waltz_conversion/heavy_stock"),
     ///SPITFIRE
     SPITFIRE_MAIN("spitfire/main"),
     ///SUPER_SHOTGUN
@@ -520,6 +569,14 @@ public enum SpecialModels {
     ///BOMB_LANCE
     BOMB_LANCE_MAIN("bomb_lance/main"),
   BOMB_LANCE_BARREL("bomb_lance/barrel"),
+
+    ///SCRATCHES
+    SCRATCHES_MAIN("scratches/main"),
+    SCRATCHES_BARREL("scratches/barrels"),
+    SCRATCHES_STOCK_LIGHT("scratches/light_stock"),
+    SCRATCHES_STOCK_HEAVY("scratches/heavy_stock"),
+    SCRATCHES_STOCK_WOODEN("scratches/wooden_stock"),
+
     ///GATTALER
     GATTALER_MAIN("gattaler/main"),
     GATTALER_BARREL("gattaler/barrels"),
@@ -630,6 +687,16 @@ public enum SpecialModels {
     PLASGUN_STANDARD_MAG("plasgun/stan_mag"),
     PLASGUN_EXTENDED_MAG("plasgun/ext_mag"),
     PLASGUN_SPEED_MAG("plasgun/speed_mag"),
+    ///NERVEPINCH
+    NERVEPINCH_MAIN("nervepinch/main"),
+    NERVEPINCH_SIGHTS("nervepinch/sights"),
+    NERVEPINCH_NO_SIGHTS("nervepinch/no_sights"),
+    NERVEPINCH_STOCK_LIGHT("nervepinch/light_stock"),
+    NERVEPINCH_STOCK_HEAVY("nervepinch/heavy_stock"),
+    NERVEPINCH_STOCK_WOODEN("nervepinch/wooden_stock"),
+    NERVEPINCH_STAN_MAG("nervepinch/stan_mag"),
+    NERVEPINCH_EXT_MAG("nervepinch/ext_mag"),
+    NERVEPINCH_SPEED_MAG("nervepinch/speed_mag"),
     ///GAUSS_RIFLE
     GAUSS_RIFLE_MAIN("gauss_rifle/main"),
     GAUSS_RIFLE_SIGHTS("gauss_rifle/sights"),
@@ -806,6 +873,9 @@ COGLOADER_MAIN("cogloader/main"),
     ///BLASPHEMY
     BLASPHEMY_MAIN("blasphemy/main"),
     BLASPHEMY_HEAD("blasphemy/head"),
+    //FLAYED_GOD
+    FLAYED_GOD_MAIN("flayed_god/main"),
+    FLAYED_GOD_HEAD("flayed_god/head"),
     ///PYROCLASTIC_FLOW
     PYROCLASTIC_FLOW_MAIN("pyroclastic_flow/main"),
     PYROCLASTIC_FLOW_WOODEN_STOCK("pyroclastic_flow/wooden_stock"),

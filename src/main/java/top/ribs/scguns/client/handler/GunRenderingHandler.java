@@ -17,11 +17,10 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -429,56 +428,55 @@ public class GunRenderingHandler {
             assert Minecraft.getInstance().player != null;
             ItemStack heldItem = Minecraft.getInstance().player.getMainHandItem();
 
-            if (Config.CLIENT.display.cinematicGunEffects.get()) {
-                addCameraShake(0.5f * (1 - progress), 5); // Enhanced initial shake
-            }
-
-            boolean isBayonetEquipped = heldItem.getItem() instanceof GunItem && ((GunItem) heldItem.getItem()).hasBayonet(heldItem);
-
-            if (isBayonetEquipped) {
-                // **Dynamic Stab Animation with Smooth Tilt**
-                if (progress < 0.3f) {
-                    float stabProgress = progress / 0.3f;
-                    poseStack.translate(0, 0, -0.35 * stabProgress); // Reduced forward distance
-
-                    // Smooth forward tilt reaching about 10 degrees at peak
-                    poseStack.mulPose(Axis.XP.rotationDegrees(10F * stabProgress));
-
-                    if (Config.CLIENT.display.cinematicGunEffects.get()) {
-                        addCameraShake(0.3f * stabProgress, 3); // Intense shake during stab peak
-                    }
-                } else {
-                    float returnProgress = (progress - 0.3f) / 0.7f;
-                    poseStack.translate(0, 0, 0.35 * (returnProgress - 1));
-
-                    // Gradual reduction of the tilt as it returns
-                    poseStack.mulPose(Axis.XP.rotationDegrees(10F * (1 - returnProgress)));
-
-                    if (Config.CLIENT.display.cinematicGunEffects.get()) {
-                        addCameraShake(0.1f * (1 - returnProgress), 2); // Final subtle shake on retraction
-                    }
+            if (heldItem.getItem() instanceof GunItem gunItem) {
+                Gun gun = gunItem.getModifiedGun(heldItem);
+                if (Config.CLIENT.display.cinematicGunEffects.get() && gun.getGeneral().hasCameraShake()) {
+                    addCameraShake(gun, 0.5f * (1 - progress), 5);
                 }
-            } else {
-                // **Default Swing Animation (No Bayonet)**
-                if (progress < 0.33f) {
-                    float raiseProgress = progress / 0.33f;
-                    poseStack.translate(0, 0.35 * raiseProgress, 0);
-                    poseStack.translate(0, 0, 0.1 * raiseProgress);
-                    poseStack.mulPose(Axis.XP.rotationDegrees(35F * raiseProgress));
-                } else if (progress < 0.66f) {
-                    float swingProgress = (progress - 0.33f) / 0.33f;
-                    poseStack.translate(0, 0.35 - 0.7 * swingProgress, 0);
-                    poseStack.translate(0, 0.1 - 0.2 * swingProgress, 0);
-                    poseStack.mulPose(Axis.XP.rotationDegrees(35F - 70F * swingProgress));
+                boolean isBayonetEquipped = gunItem.hasBayonet(heldItem);
+                if (isBayonetEquipped) {
+                    if (progress < 0.3f) {
+                        float stabProgress = progress / 0.3f;
+                        poseStack.translate(0, 0, -0.35 * stabProgress);
+
+                        poseStack.mulPose(Axis.XP.rotationDegrees(10F * stabProgress));
+
+                        if (Config.CLIENT.display.cinematicGunEffects.get() && gun.getGeneral().hasCameraShake()) {
+                            addCameraShake(gun, 0.3f * stabProgress, 3);
+                        }
+                    } else {
+                        float returnProgress = (progress - 0.3f) / 0.7f;
+                        poseStack.translate(0, 0, 0.35 * (returnProgress - 1));
+                        poseStack.mulPose(Axis.XP.rotationDegrees(10F * (1 - returnProgress)));
+
+                        if (Config.CLIENT.display.cinematicGunEffects.get() && gun.getGeneral().hasCameraShake()) {
+                            addCameraShake(gun, 0.1f * (1 - returnProgress), 2);
+                        }
+                    }
                 } else {
-                    float returnProgress = (progress - 0.66f) / 0.34f;
-                    poseStack.translate(0, -0.35 * (1 - returnProgress), 0);
-                    poseStack.translate(0, 0, -0.1 * (1 - returnProgress));
-                    poseStack.mulPose(Axis.XP.rotationDegrees(-35F * (1 - returnProgress)));
+                    // **Default Swing Animation (No Bayonet)**
+                    if (progress < 0.33f) {
+                        float raiseProgress = progress / 0.33f;
+                        poseStack.translate(0, 0.35 * raiseProgress, 0);
+                        poseStack.translate(0, 0, 0.1 * raiseProgress);
+                        poseStack.mulPose(Axis.XP.rotationDegrees(35F * raiseProgress));
+                    } else if (progress < 0.66f) {
+                        float swingProgress = (progress - 0.33f) / 0.33f;
+                        poseStack.translate(0, 0.35 - 0.7 * swingProgress, 0);
+                        poseStack.translate(0, 0.1 - 0.2 * swingProgress, 0);
+                        poseStack.mulPose(Axis.XP.rotationDegrees(35F - 70F * swingProgress));
+                    } else {
+                        float returnProgress = (progress - 0.66f) / 0.34f;
+                        poseStack.translate(0, -0.35 * (1 - returnProgress), 0);
+                        poseStack.translate(0, 0, -0.1 * (1 - returnProgress));
+                        poseStack.mulPose(Axis.XP.rotationDegrees(-35F * (1 - returnProgress)));
+                    }
                 }
             }
         }
     }
+
+
 
 
     @SubscribeEvent
@@ -628,7 +626,8 @@ public class GunRenderingHandler {
         GunItem gunItem = (GunItem) heldItem.getItem();
         Gun modifiedGun = gunItem.getModifiedGun(heldItem);
         if (Config.CLIENT.display.cinematicGunEffects.get()) {
-            addCameraShake(0.5f, 10);
+            addCameraShake(modifiedGun, 0.5f, 10);
+
         }
         if (event.getShooter() instanceof Player) {
             if (modifiedGun.getDisplay().getFlash() != null) {
@@ -638,10 +637,25 @@ public class GunRenderingHandler {
             }
         }
     }
-    private void addCameraShake(float intensity, int durationTicks) {
-        this.immersiveRoll = intensity;
-        this.sprintCooldown = durationTicks;
+    private void addCameraShake(Gun gun, float baseIntensity, int durationTicks) {
+        // Check if the gun has camera shake enabled
+        if (!gun.getGeneral().hasCameraShake()) {
+            return; // Skip camera shake if not enabled
+        }
+
+        // Add randomness to the intensity
+        float randomIntensity = baseIntensity + (random.nextFloat() - 0.5f) * 0.2f; // Adjust ±0.2f as needed
+
+        // Add randomness to the duration (optional)
+        int randomDuration = durationTicks + random.nextInt(5) - 2; // Random ±2 ticks
+
+        // Apply the shake
+        this.immersiveRoll = randomIntensity;
+        this.sprintCooldown = Math.max(randomDuration, 1); // Ensure duration is at least 1 tick
     }
+
+
+
     public void showMuzzleFlashForPlayer(int entityId) {
         entityIdForMuzzleFlash.add(entityId);
         entityIdToRandomValue.put(entityId, this.random.nextFloat());
@@ -709,8 +723,6 @@ public class GunRenderingHandler {
     private void applySwayTransforms(PoseStack poseStack, Gun modifiedGun, ItemStack stack, LocalPlayer player, float x, float y, float z, float partialTicks) {
         if (Config.CLIENT.display.weaponSway.get() && player != null) {
             poseStack.translate(x, y, z);
-
-            // Use the dynamically determined grip type
             double zOffset = modifiedGun.determineGripType(stack).heldAnimation().getFallSwayZOffset();
             poseStack.translate(0, -0.25, zOffset);
             poseStack.mulPose(Axis.XP.rotationDegrees(Mth.lerp(partialTicks, this.prevFallSway, this.fallSway)));
@@ -781,24 +793,7 @@ public class GunRenderingHandler {
         }
     }
 
-    public void renderWeapon(@Nullable LivingEntity entity, ItemStack stack, ItemDisplayContext display, PoseStack poseStack, MultiBufferSource renderTypeBuffer, int light, float partialTicks) {
-        if (stack.getItem() instanceof GunItem) {
-            poseStack.pushPose();
 
-            RenderUtil.applyTransformType(stack, poseStack, display, entity);
-
-            // Render the gun
-            renderGun(entity, display, stack, poseStack, renderTypeBuffer, light, partialTicks);
-
-            // Render the attachments
-            renderAttachments(entity, display, stack, poseStack, renderTypeBuffer, light, partialTicks);
-
-            // Render muzzle flash if applicable
-            renderMuzzleFlash(entity, poseStack, renderTypeBuffer, stack, display, partialTicks);
-
-            poseStack.popPose();
-        }
-    }
 
     private void renderGun(@Nullable LivingEntity entity, ItemDisplayContext display, ItemStack stack, PoseStack poseStack, MultiBufferSource renderTypeBuffer, int light, float partialTicks) {
         if (ModelOverrides.hasModel(stack)) {
@@ -867,117 +862,82 @@ public class GunRenderingHandler {
             }
         }
     }
+    public void renderWeapon(@Nullable LivingEntity entity, ItemStack stack, ItemDisplayContext display, PoseStack poseStack, MultiBufferSource renderTypeBuffer, int light, float partialTicks) {
+        if (stack.getItem() instanceof GunItem) {
+            poseStack.pushPose();
+
+            RenderUtil.applyTransformType(stack, poseStack, display, entity);
+
+            // Render the gun
+            renderGun(entity, display, stack, poseStack, renderTypeBuffer, light, partialTicks);
+
+            // Render the attachments
+            renderAttachments(entity, display, stack, poseStack, renderTypeBuffer, light, partialTicks);
+
+            // Render muzzle flash if applicable
+            renderMuzzleFlash(entity, poseStack, renderTypeBuffer, stack, display, partialTicks);
+
+            poseStack.popPose();
+        }
+    }
     private void renderMuzzleFlash(@Nullable LivingEntity entity, PoseStack poseStack, MultiBufferSource buffer, ItemStack weapon, ItemDisplayContext display, float partialTicks) {
         Gun modifiedGun = ((GunItem) weapon.getItem()).getModifiedGun(weapon);
-        if (modifiedGun.getDisplay().getFlash() == null) return;
+        Gun.Display.Flash flash = modifiedGun.getDisplay().getFlash();
+        if (flash == null) return;
 
         if (!(entity instanceof Player)) return;
+        if (display != ItemDisplayContext.FIRST_PERSON_RIGHT_HAND &&
+                display != ItemDisplayContext.THIRD_PERSON_RIGHT_HAND &&
+                display != ItemDisplayContext.FIRST_PERSON_LEFT_HAND &&
+                display != ItemDisplayContext.THIRD_PERSON_LEFT_HAND) return;
 
-        if (display != ItemDisplayContext.FIRST_PERSON_RIGHT_HAND && display != ItemDisplayContext.THIRD_PERSON_RIGHT_HAND && display != ItemDisplayContext.FIRST_PERSON_LEFT_HAND && display != ItemDisplayContext.THIRD_PERSON_LEFT_HAND) return;
+        boolean isBeamActive = BeamHandler.activeBeams.containsKey(entity.getUUID());
+        if (!isBeamActive && !entityIdForMuzzleFlash.contains(entity.getId())) return;
 
-        if (!entityIdForMuzzleFlash.contains(entity.getId())) return;
+        float randomValue = entityIdToRandomValue.getOrDefault(entity.getId(), 0f);
 
-        float randomValue = entityIdToRandomValue.get(entity.getId());
-        String flashType = modifiedGun.getDisplay().getMuzzleFlashType();
-        ResourceLocation flashTexture = getFlashTexture(flashType);
+        ResourceLocation flashTexture = new ResourceLocation(Reference.MOD_ID, "textures/effect/" + flash.getTextureLocation() + ".png");
+        boolean mirror = this.entityShotCount.getOrDefault(entity.getId(), 0) % 2 == 1 && flash.hasAlternateMuzzleFlash();
+        this.drawMuzzleFlash(weapon, modifiedGun, randomValue, mirror, poseStack, buffer, partialTicks, flashTexture, entity);
 
-        // Get shot count and determine mirroring for flash type 4
-        boolean mirror = false;
-        if ("flash_type_4".equals(flashType)) {
-            int shotCount = this.entityShotCount.getOrDefault(entity.getId(), 0);
-            mirror = (shotCount % 2 == 1);
-        }
-
-        this.drawMuzzleFlash(weapon, modifiedGun, randomValue, mirror, poseStack, buffer, partialTicks, flashTexture);
-
-        if ("flash_type_2".equals(flashType)) {
-            spawnSmokeParticles(entity);
-        } else if ("flash_type_4".equals(flashType) || "flash_type_5".equals(flashType)) {
-            spawnFlameParticles(entity);
+        if (flash.shouldSpawnParticles() && flash.getParticleType() != null) {
+            spawnParticles(flash, entity);
         }
     }
-    private void spawnFlameParticles(LivingEntity entity) {
-        ClientLevel world = (ClientLevel) entity.level();
-        double posX = entity.getX();
-        double posY = entity.getY() + entity.getEyeHeight();
-        double posZ = entity.getZ();
-        RandomSource random = entity.getRandom();
-        long currentTime = System.currentTimeMillis();
-
-        // Check if enough time has passed since the last particle spawn
-        if (currentTime - lastParticleSpawnTime >= PARTICLE_COOLDOWN_MS) {
-            lastParticleSpawnTime = currentTime;
-
-            for (int i = 0; i < 2; i++) { // Spawn fewer particles
-                double offsetX = (random.nextDouble() - 0.5) * 3; // Random X offset
-                double offsetY = (random.nextDouble() - 0.5) * 1.5; // Random Y offset
-                double offsetZ = (random.nextDouble() - 0.5) * 3; // Random Z offset
-                double motionX = (random.nextDouble() - 0.5) * 0.1; // Random motion in X direction
-                double motionY = (random.nextDouble() - 0.5) * 0.1; // Random motion in Y direction
-                double motionZ = (random.nextDouble() - 0.5) * 0.1; // Random motion in Z direction
-                world.addParticle(ParticleTypes.SMALL_FLAME, posX + offsetX, posY + offsetY, posZ + offsetZ, motionX, motionY, motionZ);
-            }
-        }
-    }
-    private void spawnSmokeParticles(LivingEntity entity) {
-        ClientLevel world = (ClientLevel) entity.level();
-        double posX = entity.getX();
-        double posY = entity.getY() + entity.getEyeHeight();
-        double posZ = entity.getZ() + 0.2;
-        RandomSource random = entity.getRandom();
-
-        for (int i = 0; i < 5; i++) {
-            double offsetX = random.nextGaussian() * 0.1;
-            double offsetY = random.nextGaussian() * 0.1;
-            double offsetZ = random.nextGaussian() * 0.1;
-            world.addParticle(ParticleTypes.SMOKE, posX, posY, posZ, offsetX, offsetY, offsetZ);
-        }
-    }
-
-    private ResourceLocation getFlashTexture(String flashType) {
-        if (flashType == null) {
-            return new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_1.png");
-        }
-        return switch (flashType) {
-            case "flash_type_2" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_2.png");
-            case "flash_type_3" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_3.png");
-            case "flash_type_4" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_4.png");
-            case "flash_type_5" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_5.png");
-            case "flash_type_6" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_6.png");
-            case "flash_type_7" -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_7.png");
-            default -> new ResourceLocation(Reference.MOD_ID, "textures/effect/muzzle_flash_1.png");
-        };
-    }
-    private void drawMuzzleFlash(ItemStack weapon, Gun modifiedGun, float random, boolean mirror, PoseStack poseStack, MultiBufferSource buffer, float partialTicks, ResourceLocation flashTexture) {
+    private void drawMuzzleFlash(ItemStack weapon, Gun modifiedGun, float random, boolean mirror, PoseStack poseStack, MultiBufferSource buffer, float partialTicks, ResourceLocation flashTexture, LivingEntity entity) {
         if (!PropertyHelper.hasMuzzleFlash(weapon, modifiedGun))
             return;
+        Gun.Display.Flash flash = modifiedGun.getDisplay().getFlash();
+        if (flash == null)
+            return;
+
+        int shotCount = entityShotCount.getOrDefault(entity.getId(), 0);
+        Vec3 muzzlePosition = (shotCount % 2 == 0) ? Vec3.ZERO : flash.getAlternatePosition();
+
+        drawSingleMuzzleFlash(weapon, modifiedGun, random, mirror, poseStack, buffer, partialTicks, flashTexture, muzzlePosition);
+    }
+
+
+
+    private void drawSingleMuzzleFlash(ItemStack weapon, Gun modifiedGun, float random, boolean mirror, PoseStack poseStack, MultiBufferSource buffer, float partialTicks, ResourceLocation flashTexture, Vec3 offset) {
+        Gun.Display.Flash flash = modifiedGun.getDisplay().getFlash();
+        if (flash == null) return;
 
         poseStack.pushPose();
-
         Vec3 weaponOrigin = PropertyHelper.getModelOrigin(weapon, PropertyHelper.GUN_DEFAULT_ORIGIN);
-        Vec3 flashPosition = PropertyHelper.getMuzzleFlashPosition(weapon, modifiedGun).subtract(weaponOrigin);
+        Vec3 flashPosition = PropertyHelper.getMuzzleFlashPosition(weapon, modifiedGun).subtract(weaponOrigin).add(offset);
         poseStack.translate(weaponOrigin.x * 0.0625, weaponOrigin.y * 0.0625, weaponOrigin.z * 0.0625);
         poseStack.translate(flashPosition.x * 0.0625, flashPosition.y * 0.0625, flashPosition.z * 0.0625);
         poseStack.translate(-0.5, -0.5, -0.5);
-
-        if (mirror) {
-            poseStack.translate(-0.55, 0.0, 0.0); //mirror position
-            poseStack.scale(-1, 1, 1);
-        }
-
         poseStack.mulPose(Axis.ZP.rotationDegrees(360F * random));
         poseStack.mulPose(Axis.XP.rotationDegrees(0F));
-
         Vec3 flashScale = PropertyHelper.getMuzzleFlashScale(weapon, modifiedGun);
         float scaleX = ((float) flashScale.x / 2F) - ((float) flashScale.x / 2F) * (1.0F - partialTicks);
         float scaleY = ((float) flashScale.y / 2F) - ((float) flashScale.y / 2F) * (1.0F - partialTicks);
         poseStack.scale(scaleX, scaleY, 1.0F);
-
         float scaleModifier = (float) GunModifierHelper.getMuzzleFlashScale(weapon, 1.0);
         poseStack.scale(scaleModifier, scaleModifier, 1.0F);
-
         poseStack.translate(-0.5, -0.5, 0);
-
         float minU = weapon.isEnchanted() ? 0.5F : 0.0F;
         float maxU = weapon.isEnchanted() ? 1.0F : 0.5F;
         Matrix4f matrix = poseStack.last().pose();
@@ -991,16 +951,15 @@ public class GunRenderingHandler {
         poseStack.translate(weaponOrigin.x * 0.0625, weaponOrigin.y * 0.0625, weaponOrigin.z * 0.0625);
         poseStack.translate(flashPosition.x * 0.0625, flashPosition.y * 0.0625, flashPosition.z * 0.0625);
         poseStack.translate(-0.5, -0.5, -0.5);
-        if (mirror) {
-            poseStack.translate(-0.55, 0.0, 0.0); //mirror position
-            poseStack.scale(-1, 1, 1);
-        }
+
+
         poseStack.mulPose(Axis.ZP.rotationDegrees(360F * random));
         poseStack.mulPose(Axis.XP.rotationDegrees(0F));
         poseStack.mulPose(Axis.YP.rotationDegrees(90F));
 
         poseStack.scale(scaleX, scaleY, 1.0F);
         poseStack.scale(scaleModifier, scaleModifier, 1.0F);
+
         poseStack.translate(-0.5, -0.5, 0);
 
         matrix = poseStack.last().pose();
@@ -1012,7 +971,65 @@ public class GunRenderingHandler {
 
         poseStack.popPose();
     }
+    private void spawnParticles(Gun.Display.Flash flash, LivingEntity entity) {
+        if (entity == null || !entity.level().isClientSide())
+            return;
 
+        ClientLevel world = (ClientLevel) entity.level();
+        RandomSource random = entity.getRandom();
+        double posX = entity.getX();
+        double posY = entity.getY() + entity.getEyeHeight();
+        double posZ = entity.getZ();
+        SimpleParticleType particleType = flash.getParticleType();
+
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastParticleSpawnTime >= PARTICLE_COOLDOWN_MS) {
+            lastParticleSpawnTime = currentTime;
+
+            double radius = flash.getParticleRingRadius();
+            if (radius > 0) {
+                for (int i = 0; i < flash.getParticleCount(); i++) {
+                    double angle = random.nextDouble() * 2 * Math.PI;
+
+                    double randomizedRadius = radius * (0.8 + random.nextDouble() * 0.4);
+
+                    double offsetX = Math.cos(angle) * randomizedRadius;
+                    double offsetZ = Math.sin(angle) * randomizedRadius;
+
+                    double spread = flash.getParticleSpread();
+                    double offsetY = (random.nextDouble() - 0.5) * spread;
+
+                    offsetX += (random.nextDouble() - 0.5) * spread * 0.5;
+                    offsetZ += (random.nextDouble() - 0.5) * spread * 0.5;
+
+                    double motionStrength = 0.03 + random.nextDouble() * 0.02;
+                    double motionX = offsetX * motionStrength;
+                    double motionY = offsetY * motionStrength + 0.01;
+                    double motionZ = offsetZ * motionStrength;
+
+                    world.addParticle(particleType,
+                            posX + offsetX,
+                            posY + offsetY,
+                            posZ + offsetZ,
+                            motionX, motionY, motionZ);
+                }
+            } else {
+                for (int i = 0; i < flash.getParticleCount(); i++) {
+                    double spread = flash.getParticleSpread();
+                    double offsetX = (random.nextDouble() - 0.5) * spread;
+                    double offsetY = (random.nextDouble() - 0.5) * spread;
+                    double offsetZ = (random.nextDouble() - 0.5) * spread;
+                    world.addParticle(particleType,
+                            posX + offsetX,
+                            posY + offsetY,
+                            posZ + offsetZ,
+                            offsetX * 0.1,
+                            offsetY * 0.1,
+                            offsetZ * 0.1);
+                }
+            }
+        }
+    }
     private void renderReloadArm(PoseStack poseStack, MultiBufferSource buffer, int light, Gun modifiedGun, ItemStack stack, HumanoidArm hand, float translateX) {
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null || mc.player.tickCount < ReloadHandler.get().getStartReloadTick() || ReloadHandler.get().getReloadTimer() != 5)

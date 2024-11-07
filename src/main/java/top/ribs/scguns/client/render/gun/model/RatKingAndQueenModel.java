@@ -30,14 +30,9 @@ public class RatKingAndQueenModel implements IOverrideModel {
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
         // Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.RAT_KING_AND_QUEEN_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
-
-        // Render barrel attachments
         renderBarrelAttachments(matrixStack, buffer, stack, light, overlay);
-
-        // Render magazine attachments
         renderMagazineAttachments(matrixStack, buffer, stack, light, overlay);
-
-        // Handle the rendering of receivers based on shot count and cooldown
+        assert entity != null;
         if (entity.equals(Minecraft.getInstance().player)) {
             renderReceivers(matrixStack, buffer, stack, light, overlay);
         }

@@ -27,7 +27,6 @@ public class HealingBandageItem extends Item {
 
     public HealingBandageItem(Item.Properties properties, int healingAmount, MobEffectInstance... potionEffects) {
         super(properties);
-        // Filter out null MobEffectInstances
         this.potionEffects = Arrays.stream(potionEffects).filter(Objects::nonNull).toList();
         this.healingAmount = healingAmount;
     }
@@ -40,17 +39,12 @@ public class HealingBandageItem extends Item {
     @Override
     public @NotNull ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity entityLiving) {
         if (entityLiving instanceof Player player && !world.isClientSide) {
-            // Heal the player
             player.heal(healingAmount);
-
-            // Apply potion effects from the bandage
             for (MobEffectInstance effect : potionEffects) {
                 if (effect != null) {
                     player.addEffect(new MobEffectInstance(effect));
                 }
             }
-
-            // Reduce the stack size unless the player is in creative mode
             if (!player.getAbilities().instabuild) {
                 stack.shrink(1);
             }

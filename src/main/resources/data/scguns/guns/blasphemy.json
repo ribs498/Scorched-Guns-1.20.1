@@ -3,9 +3,14 @@
     "flash": {
       "size": 0.8,
       "yOffset": 3.4,
-      "zOffset": -4.5
-    },
-    "muzzleFlashType": "flash_type_5"
+      "zOffset": -4.5,
+      "textureLocation": "muzzle_flash_5",
+      "spawnParticles": true,
+      "particleType": "minecraft:smoke",
+      "particleCount": 1,
+      "particleSpread": 0.3,
+      "particleRingRadius": 0.2
+    }
   },
   "general": {
     "alwaysSpread": true,
@@ -19,7 +24,8 @@
     "spread": 5.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 10,
-    "hotBarrelRate": 12
+    "hotBarrelRate": 12,
+    "criticalChance": 0.05
   },
   "modules": {
     "attachments": {
@@ -30,19 +36,20 @@
     "advantage": "scguns:none",
     "damage": 8.5,
     "gravity": false,
+    "ejectsCasing": false,
     "item": "scguns:blaze_fuel",
-    "casingType": "scguns:large_iron_casing",
-    "life": 28,
+    "life": 20,
     "size": 0.1,
     "speed": 2.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 5,
+    "maxAmmo": 10,
     "reloadItem": "scguns:blaze_fuel",
-    "reloadTimer": 10,
-    "reloadType": "scguns:manual"
+    "reloadByproduct": "scguns:empty_tank",
+    "reloadTimer": 30,
+    "reloadType": "scguns:single_item"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",

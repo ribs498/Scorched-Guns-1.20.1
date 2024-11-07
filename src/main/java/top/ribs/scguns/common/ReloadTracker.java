@@ -7,6 +7,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -92,7 +93,7 @@ public class ReloadTracker {
                 return false;
             }
         } else {
-            int interval = (gun.getReloads().getReloadType() == ReloadType.MAG_FED) ?
+            int interval = (gun.getReloads().getReloadType() == ReloadType.MAG_FED || gun.getReloads().getReloadType() == ReloadType.SINGLE_ITEM) ?
                     (int) Math.ceil((double)GunEnchantmentHelper.getMagReloadSpeed(this.stack)/reloadSpeed) :
                     (int) Math.ceil((double)GunEnchantmentHelper.getReloadInterval(this.stack)/reloadSpeed);
             return deltaTicks >= interval;
@@ -219,18 +220,21 @@ public class ReloadTracker {
             CompoundTag tag = this.stack.getTag();
             if (tag != null) {
                 int maxAmmo = GunModifierHelper.getModifiedAmmoCapacity(this.stack, this.gun);
-                tag.putInt("AmmoCount", maxAmmo);
-                ammo.shrink(1);
+                int currentAmmo = tag.getInt("AmmoCount");
+
+                if (currentAmmo < maxAmmo) {
+                    tag.putInt("AmmoCount", maxAmmo);
+                    ammo.shrink(1);
+
+                    Container container = context.container();
+                    if (container != null) {
+                        container.setChanged();
+                    }
+                }
             }
 
-            Container container = context.container();
-            if (container != null) {
-                container.setChanged();
-            }
-            shrinkFromAmmoPool(Gun.findAmmoStack(player, this.gun.getReloads().getReloadItem()), player, 1);
+            playReloadSound(player);
         }
-
-        playReloadSound(player);
     }
 
     private void increaseAmmo(Player player) {
@@ -273,13 +277,33 @@ public class ReloadTracker {
                         ModSyncedDataKeys.RELOADING.setValue(player, false);
                         return;
                     }
-                    RELOAD_TRACKER_MAP.put(player, new ReloadTracker(player));
+                    ReloadTracker tracker = new ReloadTracker(player);
+
+                    // Check if player can actually reload before playing sound
+                    if (tracker.hasNoAmmo(player) || tracker.isWeaponFull()) {
+                        ModSyncedDataKeys.RELOADING.setValue(player, false);
+                        return;
+                    }
+
+                    RELOAD_TRACKER_MAP.put(player, tracker);
+
+                    // Play pre-reload sound if it exists
+                    ResourceLocation preReloadSound = tracker.gun.getSounds().getPreReload();
+                    if (preReloadSound != null) {
+                        double soundX = player.getX();
+                        double soundY = player.getY() + 1.0;
+                        double soundZ = player.getZ();
+                        double radius = Config.SERVER.reloadMaxDistance.get();
+                        S2CMessageGunSound message = new S2CMessageGunSound(preReloadSound, SoundSource.PLAYERS,
+                                (float) soundX, (float) soundY, (float) soundZ, 1.0F, 1.0F, player.getId(), false, true);
+                        PacketHandler.getPlayChannel().sendToNearbyPlayers(
+                                () -> LevelLocation.create(player.level(), soundX, soundY, soundZ, radius), message);
+                    }
                 }
                 ReloadTracker tracker = RELOAD_TRACKER_MAP.get(player);
                 if (!tracker.isSameWeapon(player) || tracker.isWeaponFull() || tracker.hasNoAmmo(player)) {
                     RELOAD_TRACKER_MAP.remove(player);
                     ModSyncedDataKeys.RELOADING.setValue(player, false);
-                    //System.out.println("Reload stopped for player " + player.getName().getString() + " with gun " + tracker.stack.getItem().getDescriptionId());
                     return;
                 }
                 if (tracker.canReload(player)) {
@@ -289,6 +313,17 @@ public class ReloadTracker {
                         tracker.increaseMagAmmo(player);
                     } else if (gun.getReloads().getReloadType() == ReloadType.MANUAL) {
                         tracker.increaseAmmo(player);
+                    } else if (gun.getReloads().getReloadType() == ReloadType.SINGLE_ITEM) {
+                        tracker.reloadItem(player);
+
+                        // Handle byproduct if it exists
+                        Item byproduct = gun.getReloads().getReloadByproduct();
+                        if (byproduct != null) {
+                            ItemStack byproductStack = new ItemStack(byproduct);
+                            if (!player.getInventory().add(byproductStack)) {
+                                player.drop(byproductStack, false);
+                            }
+                        }
                     }
                     if (tracker.isWeaponFull() || tracker.hasNoAmmo(player)) {
                         RELOAD_TRACKER_MAP.remove(player);
@@ -301,10 +336,11 @@ public class ReloadTracker {
                                 double soundY = finalPlayer.getY() + 1.0;
                                 double soundZ = finalPlayer.getZ();
                                 double radius = Config.SERVER.reloadMaxDistance.get();
-                                S2CMessageGunSound messageSound = new S2CMessageGunSound(cockSound, SoundSource.PLAYERS, (float) soundX, (float) soundY, (float) soundZ, 1.0F, 1.0F, finalPlayer.getId(), false, true);
-                                PacketHandler.getPlayChannel().sendToNearbyPlayers(() -> LevelLocation.create(finalPlayer.level(), soundX, soundY, soundZ, radius), messageSound);
+                                S2CMessageGunSound messageSound = new S2CMessageGunSound(cockSound, SoundSource.PLAYERS,
+                                        (float) soundX, (float) soundY, (float) soundZ, 1.0F, 1.0F, finalPlayer.getId(), false, true);
+                                PacketHandler.getPlayChannel().sendToNearbyPlayers(
+                                        () -> LevelLocation.create(finalPlayer.level(), soundX, soundY, soundZ, radius), messageSound);
                             }
-                           // System.out.println("Reload completed for player " + finalPlayer.getName().getString() + " with gun " + tracker.stack.getItem().getDescriptionId());
                         });
                     }
                 }

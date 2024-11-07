@@ -7,34 +7,6 @@
       "dropChance": 0.2
     },
     {
-      "item": "scguns:flintlock_pistol",
-      "spawnChance": 0.2,
-      "dropChance": 0.2,
-      "minDurability": 0.5,
-      "maxDurability": 1.0
-    },
-    {
-      "item": "scguns:musket",
-      "spawnChance": 0.2,
-      "dropChance": 0.2,
-      "minDurability": 0.5,
-      "maxDurability": 1.0
-    },
-    {
-      "item": "scguns:blunderbuss",
-      "spawnChance": 0.2,
-      "dropChance": 0.2,
-      "minDurability": 0.5,
-      "maxDurability": 1.0
-    },
-    {
-      "item": "scguns:pax",
-      "spawnChance": 0.2,
-      "dropChance": 0.2,
-      "minDurability": 0.5,
-      "maxDurability": 1.0
-    },
-    {
       "item": "minecraft:wooden_sword",
       "spawnChance": 0.5,
       "dropChance": 0.2,

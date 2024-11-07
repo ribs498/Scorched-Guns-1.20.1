@@ -223,6 +223,7 @@ public class Config
         public final ForgeConfigSpec.BooleanValue improvedHitboxes;
         public final ForgeConfigSpec.DoubleValue enemyBulletDamage;
         public final ForgeConfigSpec.DoubleValue ammoBoxCapacityMultiplier;
+        public final ForgeConfigSpec.IntValue energyProductionRate;
 
         public Gameplay(ForgeConfigSpec.Builder builder)
         {
@@ -243,6 +244,9 @@ public class Config
                 this.improvedHitboxes = builder.comment("If true, improves the accuracy of weapons by considering the ping of the player. This has no affect on singleplayer. This will add a little overhead if enabled.").define("improvedHitboxes", false);
                 this.enemyBulletDamage = builder.comment("Damage dealt by the Enemy Guns")
                         .defineInRange("enemyBulletDamage", 4.5, 0.0, Double.MAX_VALUE);
+                this.energyProductionRate = builder
+                        .comment("Energy produced per tick by the Polar Generator. Adjust this value to balance the generator's output.")
+                        .defineInRange("energyProductionRate", 50, 1, Integer.MAX_VALUE);
             }
             builder.pop();
         }

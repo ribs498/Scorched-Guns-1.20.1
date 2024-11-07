@@ -1,0 +1,14 @@
+{
+  "type": "scguns:lightning_battery",
+  "processingTime": 200,
+  "requiredEnergy": 6400,
+  "ingredients": [
+    {
+      "item": "minecraft:amethyst_shard"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "scguns:charged_amethyst_shard"
+  }
+}

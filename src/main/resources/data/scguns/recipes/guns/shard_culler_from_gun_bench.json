@@ -1,0 +1,39 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:shard_culler",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:diamond_steel_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "scguns:energy_core"
+    },
+    "gun_internal_2": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "gun_top_internal_1": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:diamond_steel_gun_frame"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_grip": {
+      "item": "scguns:diamond_steel_gun_frame"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_top_barrel_1": {
+      "item": "minecraft:amethyst_shard"
+    },
+    "gun_magazine": {
+      "item": "scguns:diamond_steel_gun_frame"
+    }
+  }
+}

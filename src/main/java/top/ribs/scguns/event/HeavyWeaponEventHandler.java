@@ -10,6 +10,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.ribs.scguns.init.ModItems;
+import top.ribs.scguns.init.ModTags;
 
 import java.util.Objects;
 
@@ -37,7 +38,7 @@ public class HeavyWeaponEventHandler {
         ItemStack mainHandItem = player.getMainHandItem();
         ItemStack offHandItem = player.getOffhandItem();
 
-        boolean holdingSpecialItem = isSpecialItem(mainHandItem) || isSpecialItem(offHandItem);
+        boolean holdingSpecialItem = isHeavyWeapon(mainHandItem) || isHeavyWeapon(offHandItem);
         MobEffectInstance currentSlowness = player.getEffect(MobEffects.MOVEMENT_SLOWDOWN);
 
         if (holdingSpecialItem) {
@@ -48,14 +49,9 @@ public class HeavyWeaponEventHandler {
                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, HEAVY_WEAPON_SLOWNESS_DURATION, currentSlowness.getAmplifier(), false, false, true));
             }
         }
-        // We no longer remove the effect when not holding a special item
     }
 
-    private static boolean isSpecialItem(ItemStack itemStack) {
-        return itemStack.getItem() == ModItems.GATTALER.get() ||
-                itemStack.getItem() == ModItems.THUNDERHEAD.get() ||
-                itemStack.getItem() == ModItems.SPITFIRE.get() ||
-                itemStack.getItem() == ModItems.EARTHS_CORPSE.get() ||
-                itemStack.getItem() == ModItems.CYCLONE.get();
+    private static boolean isHeavyWeapon(ItemStack itemStack) {
+        return !itemStack.isEmpty() && itemStack.is(ModTags.Items.HEAVY_WEAPON);
     }
 }

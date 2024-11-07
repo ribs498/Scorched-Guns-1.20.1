@@ -3,9 +3,9 @@
     "flash": {
       "size": 0.8,
       "yOffset": 4.8,
-      "zOffset": -1.5
-    },
-    "muzzleFlashType": "flash_type_1"
+      "zOffset": -1.5,
+      "textureLocation": "muzzle_flash_1"
+    }
   },
   "general": {
     "fireMode": "scguns:semi_automatic",
@@ -16,7 +16,8 @@
     "spread": 2.0,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 10,
-    "hotBarrelRate": 14
+    "hotBarrelRate": 14,
+    "criticalChance": 0.08
   },
   "modules": {
     "attachments": {

@@ -8,6 +8,7 @@ import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -29,16 +30,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.server.ServerLifecycleHooks;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.block.SulfurVentBlock;
 import top.ribs.scguns.client.handler.MeleeAttackHandler;
 import top.ribs.scguns.client.render.gun.model.RatKingAndQueenModel;
-import top.ribs.scguns.common.FireMode;
-import top.ribs.scguns.common.GripType;
-import top.ribs.scguns.common.Gun;
-import top.ribs.scguns.common.HotBarrelHandler;
+import top.ribs.scguns.common.*;
 import top.ribs.scguns.init.*;
 import top.ribs.scguns.item.*;
 import top.ribs.scguns.item.ammo_boxes.EmptyCasingPouchItem;
@@ -51,7 +50,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class GunEventBus {
-
+    @SubscribeEvent
+    public static void onServerTick(TickEvent.ServerTickEvent event) {
+        if (event.phase == TickEvent.Phase.END) {
+            MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+            if (server != null) {
+                for (ServerLevel world : server.getAllLevels()) {
+                    BeamHandlerCommon.BeamMiningManager.tickMiningProgress(world);
+                }
+            }
+        }
+    }
     @SubscribeEvent
     public static void preShoot(GunFireEvent.Pre event) {
         Player player = event.getEntity();
@@ -65,7 +74,6 @@ public class GunEventBus {
 
         if (heldItem.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(heldItem);
-
             GripType gripType = gun.determineGripType(heldItem);
             if (player.isUsingItem() && player.getOffhandItem().getItem() == Items.SHIELD
                     && (gripType == GripType.ONE_HANDED || gripType == GripType.ONE_HANDED_2)) {
@@ -104,10 +112,6 @@ public class GunEventBus {
                 event.setCanceled(true);
             }
 
-            ItemCooldowns tracker = player.getCooldowns();
-            if (tracker.isOnCooldown(heldItem.getItem()) && gun.getGeneral().getFireMode() == FireMode.PULSE) {
-                event.setCanceled(true);
-            }
 
             if (heldItem.isDamageableItem() && tag != null) {
                 if (heldItem.getDamageValue() == (heldItem.getMaxDamage() - 1)) {
@@ -195,12 +199,9 @@ public class GunEventBus {
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
         ItemStack heldItem = player.getMainHandItem();
-
-        // If the player is holding a gun with Hot Barrel enchantment, decay the hot barrel
         if (heldItem.getItem() instanceof GunItem && EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), heldItem) > 0) {
             HotBarrelHandler.decayHotBarrel(heldItem);
         } else {
-            // If the player is not holding the gun, clear the hot barrel charge on all guns in their inventory
             for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                 ItemStack itemStack = player.getInventory().getItem(i);
                 if (itemStack.getItem() instanceof GunItem && EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), itemStack) > 0) {
@@ -214,7 +215,6 @@ public class GunEventBus {
     private static boolean isInSulfurCloudArea(Level level, BlockPos playerPos) {
         int effectRadiusSquared = SulfurVentBlock.EFFECT_RADIUS_SQUARED;
 
-        // Iterate through all sulfur vent blocks in the vicinity
         for (BlockPos checkPos : BlockPos.betweenClosed(playerPos.offset(-SulfurVentBlock.EFFECT_RADIUS, -1, -SulfurVentBlock.EFFECT_RADIUS), playerPos.offset(SulfurVentBlock.EFFECT_RADIUS, 1, SulfurVentBlock.EFFECT_RADIUS))) {
             BlockState state = level.getBlockState(checkPos);
 
@@ -396,7 +396,7 @@ public class GunEventBus {
             if (projectileLocation.equals(compactCopperRound) || projectileLocation.equals(standardCopperRound)) {
                 casingType = ModParticleTypes.COPPER_CASING_PARTICLE.get();
             }
-            if (projectileLocation.equals(hogRound) || projectileLocation.equals(ramrodRound)|| projectileLocation.equals(shockCell)||projectileLocation.equals(blazeFuel)|| projectileLocation.equals(energyCell) ||projectileLocation.equals(sculkCell)) {
+            if (projectileLocation.equals(hogRound) || projectileLocation.equals(ramrodRound)|| projectileLocation.equals(shockCell)|| projectileLocation.equals(energyCell) ||projectileLocation.equals(sculkCell)) {
                 casingType = ModParticleTypes.IRON_CASING_PARTICLE.get();
             } if ( projectileLocation.equals(gibbsRound) ||projectileLocation.equals(beowulfRound)) {
                 casingType = ModParticleTypes.DIAMOND_STEEL_CASING_PARTICLE.get();

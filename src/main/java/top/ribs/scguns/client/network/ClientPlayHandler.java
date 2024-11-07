@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
 import top.ribs.scguns.Config;
+import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.client.BulletTrail;
 import top.ribs.scguns.client.CustomGunManager;
 import top.ribs.scguns.client.audio.GunShotSound;
@@ -235,9 +236,9 @@ public class ClientPlayHandler
     }
 
     public static void handleStopBeam(S2CMessageStopBeam message) {
-        UUID playerId = message.getPlayerId();
-        // Stop the beam using the BeamHandler
-        BeamHandler.stopBeam(playerId);
+        ScorchedGuns.LOGGER.debug("Received stop beam message for player: " + message.getPlayerId());
+        BeamHandler.stopBeam(message.getPlayerId());
     }
-
 }
+
+

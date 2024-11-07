@@ -4,7 +4,7 @@
   "general": {
     "alwaysSpread": false,
     "fireMode": "scguns:pulse",
-    "fireTimer": 13,
+    "fireTimer": 16,
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 6,
@@ -14,7 +14,8 @@
     "meleeDamage": 2.0,
     "meleeCooldownTicks": 15,
     "energyUse": 30.0,
-    "hotBarrelRate": 40
+    "hotBarrelRate": 40,
+    "criticalChance": 0.05
   },
   "modules": {
     "attachments": {

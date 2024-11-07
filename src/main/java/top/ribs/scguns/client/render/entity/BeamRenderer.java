@@ -20,13 +20,11 @@ import org.joml.Vector3f;
 @OnlyIn(Dist.CLIENT)
 public class BeamRenderer {
     private static final ResourceLocation BEAM_LOCATION = new ResourceLocation("textures/entity/beacon_beam.png");
-    private static final int MAX_RENDER_DISTANCE = 64;
 
     public BeamRenderer() {
     }
 
     public static void renderBeam(PoseStack pPoseStack, MultiBufferSource pBuffer, float partialTicks, Vec3 start, Vec3 end, Vec3 lastStart, Vec3 lastEnd, float[] color) {
-        // Interpolate between last and current positions for smoother beam movement
         Vec3 interpolatedStart = lerpVec3(partialTicks, lastStart, start);
         Vec3 interpolatedEnd = lerpVec3(partialTicks, lastEnd, end);
 
@@ -36,25 +34,18 @@ public class BeamRenderer {
 
         pPoseStack.pushPose();
         pPoseStack.translate(interpolatedStart.x, interpolatedStart.y, interpolatedStart.z);
-
-        // Calculate rotation to align with beam direction
         Vec3 up = new Vec3(0, 1, 0);
         Vec3 axis = up.cross(beamNormal);
         float angle = (float) Math.acos(up.dot(beamNormal));
 
-        // Apply rotation
         if (!axis.equals(Vec3.ZERO)) {
             pPoseStack.mulPose(Axis.of(new Vector3f((float)axis.x, (float)axis.y, (float)axis.z)).rotationDegrees((float) Math.toDegrees(angle)));
         }
-
-        // Render the beam
         assert Minecraft.getInstance().level != null;
         renderBeamSegment(pPoseStack, pBuffer, partialTicks, Minecraft.getInstance().level.getGameTime(), 0, length, color);
 
         pPoseStack.popPose();
     }
-
-    // Linear interpolation (lerp) between two vectors
     private static Vec3 lerpVec3(float partialTicks, Vec3 lastPos, Vec3 currentPos) {
         double x = Mth.lerp(partialTicks, lastPos.x, currentPos.x);
         double y = Mth.lerp(partialTicks, lastPos.y, currentPos.y);
@@ -63,10 +54,9 @@ public class BeamRenderer {
     }
 
 
-    private static void renderBeamSegment(PoseStack pPoseStack, MultiBufferSource pBufferSource, float pPartialTick, long pGameTime, float pYOffset, float pHeight, float[] pColors) {
-        // Example of thinner beam
-        renderBeamPart(pPoseStack, pBufferSource, BEAM_LOCATION, pPartialTick, 1.0F, pGameTime, 0, Math.round(pHeight), pColors, 0.05F, 0.07F);
+    public static void renderBeamSegment(PoseStack pPoseStack, MultiBufferSource pBufferSource, float pPartialTick, long pGameTime, float pYOffset, float pHeight, float[] pColors) {
 
+        renderBeamPart(pPoseStack, pBufferSource, BEAM_LOCATION, pPartialTick, 1.0F, pGameTime, 0, Math.round(pHeight), pColors, 0.015F, 0.020F);
     }
 
         public static void renderBeamPart(PoseStack pPoseStack, MultiBufferSource pBufferSource, ResourceLocation pBeamLocation, float pPartialTick, float pTextureScale, long pGameTime, int pYOffset, int pHeight, float[] pColors, float pBeamRadius, float pGlowRadius) {

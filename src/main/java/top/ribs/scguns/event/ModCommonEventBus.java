@@ -61,8 +61,8 @@ public class ModCommonEventBus {
         );
         event.register(
                 ModEntities.SKY_CARRIER.get(),
-                SpawnPlacements.Type.NO_RESTRICTIONS,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.WORLD_SURFACE,
                 SkyCarrierEntity::checkMonsterSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.OR
         );

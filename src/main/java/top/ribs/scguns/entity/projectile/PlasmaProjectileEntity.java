@@ -59,7 +59,6 @@ public class PlasmaProjectileEntity extends ProjectileEntity {
         float newDamage = this.getCriticalDamage(this.getWeapon(), this.random, damage);
         boolean critical = damage != newDamage;
         damage = newDamage;
-        ResourceLocation advantage = this.getProjectile().getAdvantage();
         damage *= advantageMultiplier(entity);
 
         if (headshot) {
@@ -68,15 +67,12 @@ public class PlasmaProjectileEntity extends ProjectileEntity {
 
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
 
-        // Handle shield interaction
         boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, SHIELD_DISABLE_CHANCE);
 
         if (blocked) {
-            // Even if blocked, some damage passes through
             float penetratingDamage = damage * SHIELD_DAMAGE_PENETRATION;
             entity.hurt(source, penetratingDamage);
         } else {
-            // Full damage if not blocked
             entity.hurt(source, damage);
         }
 
@@ -88,26 +84,24 @@ public class PlasmaProjectileEntity extends ProjectileEntity {
             int hitType = critical ? S2CMessageProjectileHitEntity.HitType.CRITICAL : headshot ? S2CMessageProjectileHitEntity.HitType.HEADSHOT : S2CMessageProjectileHitEntity.HitType.NORMAL;
             PacketHandler.getPlayChannel().sendToPlayer(() -> (ServerPlayer) this.shooter, new S2CMessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
         }
-
-        // Create plasma explosion regardless of shield block
-        createPlasmaExplosion(this, 1.0f);
+        createPlasmaExplosion(this, 0.5f);
         spawnExplosionParticles(hitVec);
     }
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
-        createPlasmaExplosion(this, 1.0f);
+        createPlasmaExplosion(this, 0.5f);
         spawnExplosionParticles(new Vec3(x, y, z));
     }
 
     @Override
     public void onExpired() {
-        createPlasmaExplosion(this, 1.0f);
+        createPlasmaExplosion(this, 0.5f);
         spawnExplosionParticles(new Vec3(this.getX(), this.getY(), this.getZ()));
     }
 
     public static void createPlasmaExplosion(Entity entity, float radius) {
         if (!entity.level().isClientSide) {
-            PlasmaExplosion explosion = new PlasmaExplosion((ServerLevel) entity.level(), entity, entity.getX(), entity.getY(), entity.getZ(), radius, false, CustomExplosion.CustomBlockInteraction.NONE);
+            PlasmaExplosion explosion = new PlasmaExplosion(entity.level(), entity, entity.getX(), entity.getY(), entity.getZ(), radius, false, CustomExplosion.CustomBlockInteraction.NONE);
             explosion.explode();
         }
     }

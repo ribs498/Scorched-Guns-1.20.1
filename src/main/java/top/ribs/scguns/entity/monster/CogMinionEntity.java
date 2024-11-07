@@ -31,6 +31,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.ScorchedGuns;
+import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.entity.config.CogMinionConfig;
 import top.ribs.scguns.entity.weapon.ScGunsWeapon;
 import top.ribs.scguns.interfaces.IEntityCanReload;

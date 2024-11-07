@@ -10,6 +10,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.ribs.scguns.init.ModItems;
+import top.ribs.scguns.init.ModTags;
 
 @Mod.EventBusSubscriber(modid = "scguns")
 public class OceanWeaponEventHandler {
@@ -32,7 +33,7 @@ public class OceanWeaponEventHandler {
         ItemStack mainHandItem = player.getMainHandItem();
         ItemStack offHandItem = player.getOffhandItem();
 
-        boolean holdingSpecialItem = isSpecialItem(mainHandItem) || isSpecialItem(offHandItem);
+        boolean holdingSpecialItem = isOceanWeapon(mainHandItem) || isOceanWeapon(offHandItem);
         boolean isInWater = player.isEyeInFluid(FluidTags.WATER);
         MobEffectInstance dolphinGraceEffect = player.getEffect(MobEffects.DOLPHINS_GRACE);
 
@@ -47,10 +48,7 @@ public class OceanWeaponEventHandler {
         }
     }
 
-    private static boolean isSpecialItem(ItemStack itemStack) {
-        return itemStack.getItem() == ModItems.FLOUNDERGAT.get() ||
-                itemStack.getItem() == ModItems.BOMB_LANCE.get() ||
-                itemStack.getItem() == ModItems.SEQUOIA.get() ||
-                itemStack.getItem() == ModItems.MARLIN.get();
+    private static boolean isOceanWeapon(ItemStack itemStack) {
+        return !itemStack.isEmpty() && itemStack.is(ModTags.Items.OCEAN_GUN);
     }
 }

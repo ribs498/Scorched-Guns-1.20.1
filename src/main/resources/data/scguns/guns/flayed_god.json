@@ -1,0 +1,71 @@
+{
+  "display": {
+    "flash": {
+      "size": 1.8,
+      "yOffset": 2.2,
+      "zOffset": -12.0,
+      "textureLocation": "muzzle_flash_12",
+      "spawnParticles": true,
+      "particleType": "minecraft:small_flame",
+      "particleCount": 3,
+      "particleSpread": 0.25,
+      "particleRingRadius": 1.0
+    },
+    "beamOrigin": {
+      "horizontalOffset": 0.1,
+      "verticalOffset": -0.1,
+      "forwardOffset": 0.4,
+      "aimHorizontalOffset": 0.0
+    }
+  },
+  "general": {
+    "hasCameraShake": false,
+    "fireMode": "scguns:beam",
+    "beamColor": "#150202",
+    "secondaryBeamColor": "#2c0202",
+    "enchantedBeamColor": "#4a0606",
+    "enchantedSecondaryBeamColor": "#670505",
+    "gripType": "scguns:mini_gun_2",
+    "baseGripType": "scguns:mini_gun_2",
+    "rate": 10,
+    "recoilAngle": 0.0,
+    "recoilKick": 0.0,
+    "spread": 3.0,
+    "meleeDamage": 4.0,
+    "meleeCooldownTicks": 20,
+    "hotBarrelRate": 12,
+    "beamAmmoConsumptionDelay": 8000,
+    "beamDamageDelay": 0,
+    "enableMining": false,
+    "beamMaxDistance": 75.0,
+    "criticalChance": 0.05
+  },
+  "modules": {
+  },
+  "projectile": {
+    "advantage": "scguns:none",
+    "damage": 13.0,
+    "gravity": false,
+    "ejectsCasing": false,
+    "item": "scguns:energy_core",
+    "life": 50,
+    "size": 1.0,
+    "speed": 1.5,
+    "trailLengthMultiplier": 2.0
+  },
+  "reloads": {
+    "emptyMagTimer": 50,
+    "maxAmmo": 70,
+    "reloadItem": "scguns:energy_core",
+    "reloadByproduct": "scguns:empty_core",
+    "reloadTimer": 30,
+    "reloadType": "scguns:single_item"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "preReload": "scguns:item.wither.wither",
+    "enchantedFire": "scguns:item.beam.fire",
+    "fire": "scguns:item.beam.fire",
+    "reload": "scguns:item.flamethrower.reload"
+  }
+}

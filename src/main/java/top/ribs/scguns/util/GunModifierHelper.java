@@ -5,6 +5,7 @@ import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.interfaces.IGunModifier;
+import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.item.attachment.IAttachment;
 
 /**
@@ -248,20 +249,25 @@ import top.ribs.scguns.item.attachment.IAttachment;
         return Mth.clamp(rate, 0, Integer.MAX_VALUE);
     }
 
-    public static float getCriticalChance(ItemStack weapon)
-    {
-        float chance = 0F;
-        for(int i = 0; i < IAttachment.Type.values().length; i++)
+        public static float getCriticalChance(ItemStack weapon)
         {
-            IGunModifier[] modifiers = getModifiers(weapon, IAttachment.Type.values()[i]);
-            for(IGunModifier modifier : modifiers)
-            {
-                chance += modifier.criticalChance();
+            float chance = 0F;
+
+            if (weapon.getItem() instanceof GunItem gunItem) {
+                chance += gunItem.getModifiedGun(weapon).getGeneral().getCriticalChance();
             }
+            for(int i = 0; i < IAttachment.Type.values().length; i++)
+            {
+                IGunModifier[] modifiers = getModifiers(weapon, IAttachment.Type.values()[i]);
+                for(IGunModifier modifier : modifiers)
+                {
+                    chance += modifier.criticalChance();
+                }
+            }
+            chance += GunEnchantmentHelper.getPuncturingChance(weapon);
+
+            return Mth.clamp(chance, 0F, 1F);
         }
-        chance += GunEnchantmentHelper.getPuncturingChance(weapon);
-        return Mth.clamp(chance, 0F, 1F);
-    }
     public static int getModifiedAmmoCapacity(ItemStack weapon, Gun modifiedGun) {
         int baseCapacity = modifiedGun.getReloads().getMaxAmmo();
         for (IGunModifier modifier : getModifiers(weapon, IAttachment.Type.MAGAZINE)) {

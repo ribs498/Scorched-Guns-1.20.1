@@ -39,7 +39,7 @@ public class C2SMessagePreFireSound extends PlayMessage<C2SMessagePreFireSound>
             ServerPlayer player = context.getPlayer();
             if(player != null)
             {
-                ServerPlayHandler.handlePreFireSound(message, player);
+                ServerPlayHandler.handlePreFireSound(player);
             }
         });
         context.setHandled(true);

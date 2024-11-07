@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q": {
+      "item": "minecraft:polished_andesite"
+    },
+    "X": {
+      "item": "minecraft:diamond"
+    }
+  },
+  "pattern": [
+    " Q ",
+    "QQQ",
+    "QXQ"
+  ],
+  "result": {
+    "item": "scguns:felix_memorial"
+  }
+}

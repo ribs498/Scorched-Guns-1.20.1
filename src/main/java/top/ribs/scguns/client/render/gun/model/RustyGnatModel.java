@@ -49,7 +49,6 @@ public class RustyGnatModel implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_STANDARD_MAG.getModel(), stack, matrixStack, buffer, light, overlay);
         }
 
-        // Render barrel and its attachments, considering entity interaction
         if (entity.equals(Minecraft.getInstance().player)) {
             matrixStack.pushPose();
             matrixStack.translate(0, -5.8 * 0.0625, 0);
@@ -64,7 +63,6 @@ public class RustyGnatModel implements IOverrideModel {
     }
 
     private void renderBarrelAndAttachments(ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
-        // Check if the extended barrel is equipped and render accordingly
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
             if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get()) {
                 RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);

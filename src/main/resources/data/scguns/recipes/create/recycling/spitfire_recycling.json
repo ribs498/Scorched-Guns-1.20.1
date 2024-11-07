@@ -29,7 +29,7 @@
     },
     {
       "chance": 0.3,
-      "item": "scguns:gun_magazine"
+      "item": "scguns:empty_tank"
     }
   ]
 }

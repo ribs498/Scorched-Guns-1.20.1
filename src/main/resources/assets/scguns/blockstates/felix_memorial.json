@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "scguns:block/felix_memorial"
+    },
+    "facing=south": {
+      "model": "scguns:block/felix_memorial",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "scguns:block/felix_memorial",
+      "y": 270
+    },
+    "facing=east": {
+      "model": "scguns:block/felix_memorial",
+      "y": 90
+    },
+    "facing=up": {
+      "model": "scguns:block/felix_memorial",
+      "x": 270
+    },
+    "facing=down": {
+      "model": "scguns:block/felix_memorial",
+      "x": 90
+    }
+  }
+}

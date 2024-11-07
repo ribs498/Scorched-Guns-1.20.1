@@ -27,8 +27,8 @@ import top.ribs.scguns.util.GunEnchantmentHelper;
 
 public class BeowulfProjectileEntity extends ProjectileEntity {
     private static final int ARMOR_BYPASS_AMOUNT = 2;
-    private static final float SHIELD_DISABLE_CHANCE = 0.50f; // 50% chance to disable shield
-    private static final float SHIELD_DAMAGE_PENETRATION = 0.3f; // 30% of damage passes through shield
+    private static final float SHIELD_DISABLE_CHANCE = 0.50f;
+    private static final float SHIELD_DAMAGE_PENETRATION = 0.3f;
 
     public BeowulfProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -55,6 +55,11 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
                         velocityX,
                         velocityY,
                         velocityZ);
+            }
+        }
+        if (this.level().isClientSide && (this.tickCount > 1 && this.tickCount < this.life)) {
+            if (this.tickCount % 5 == 0) {
+                this.level().addParticle(ModParticleTypes.BEOWULF_IMPACT.get(), true, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
             }
         }
     }

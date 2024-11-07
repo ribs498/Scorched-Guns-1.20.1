@@ -30,7 +30,7 @@
       "item": "scguns:gun_parts"
     },
     "gun_magazine": {
-      "item": "scguns:large_iron_casing"
+      "item": "scguns:empty_tank"
     }
   }
 }

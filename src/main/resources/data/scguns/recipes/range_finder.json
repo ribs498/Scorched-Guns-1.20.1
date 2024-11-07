@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "X": {
+      "item": "scguns:gun_grip"
+    },
+    "R": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "#": {
+      "item": "scguns:laser_sight"
+    }
+  },
+  "pattern": [
+    "R# ",
+    "X  "
+  ],
+  "result": {
+    "item": "scguns:range_finder"
+  }
+}

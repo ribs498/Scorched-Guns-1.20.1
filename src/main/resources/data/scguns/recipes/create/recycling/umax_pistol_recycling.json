@@ -26,6 +26,10 @@
     {
       "chance": 0.3,
       "item": "scguns:gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:empty_tank"
     }
   ]
 }

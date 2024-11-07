@@ -29,7 +29,7 @@ public class ModBlocks {
             () -> new GunShelfBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)
                     .requiresCorrectToolForDrops()
                     .strength(0.5F)));
-public static final RegistryObject<Block> MOB_TRAP = register("mob_trap",
+    public static final RegistryObject<Block> MOB_TRAP = register("mob_trap",
             () -> new MobTrapBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                     .requiresCorrectToolForDrops()
                     .strength(8.0F)
@@ -98,11 +98,11 @@ public static final RegistryObject<Block> MOB_TRAP = register("mob_trap",
                     .noOcclusion()
                     .lightLevel((state) -> state.getValue(LightningBattery.CHARGED) ? 15 : 0)));
 
-public static final RegistryObject<Block> MACERATOR = register("macerator",
-        () -> new MaceratorBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
-                .requiresCorrectToolForDrops()
-                .strength(3.0F)
-                .noOcclusion()));
+    public static final RegistryObject<Block> MACERATOR = register("macerator",
+            () -> new MaceratorBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(3.0F)
+                    .noOcclusion()));
     public static final RegistryObject<Block> POWERED_MACERATOR = register("powered_macerator",
             () -> new PoweredMaceratorBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
                     .requiresCorrectToolForDrops()
@@ -140,6 +140,11 @@ public static final RegistryObject<Block> MACERATOR = register("macerator",
                     .requiresCorrectToolForDrops()
                     .strength(3.0F)), 43200);
 
+    public static final RegistryObject<Block> PLASMA_BLOCK = registerBurnable("plasma_block",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .requiresCorrectToolForDrops()
+                    .strength(3.0F)), 21600);
+
     public static final RegistryObject<Block> DIAMOND_STEEL_BLOCK = register("diamond_steel_block",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                     .requiresCorrectToolForDrops()
@@ -165,6 +170,11 @@ public static final RegistryObject<Block> MACERATOR = register("macerator",
             () -> new BasicDirectionalBlock(BlockBehaviour.Properties.copy(Blocks.RAW_COPPER_BLOCK)
                     .requiresCorrectToolForDrops()
                     .strength(2.0F)
+                    .noOcclusion()));
+    public static final RegistryObject<Block> FELIX_MEMORIAL = register("felix_memorial",
+            () -> new MemorialBlock(BlockBehaviour.Properties.copy(Blocks.ANDESITE)
+                    .requiresCorrectToolForDrops()
+                    .strength(4.0F)
                     .noOcclusion()));
 
     public static final RegistryObject<Block> TURRET_TARGETING_BLOCK = register("turret_targeting_module",
@@ -257,7 +267,6 @@ public static final RegistryObject<Block> MACERATOR = register("macerator",
                     .strength(0.5F)
                     .noOcclusion()
                     .randomTicks()));
-
 
 
     public static final RegistryObject<Block> NITER_GLASS = register("niter_glass",
@@ -366,6 +375,7 @@ public static final RegistryObject<Block> MACERATOR = register("macerator",
     private static <T extends Block> RegistryObject<T> register(String id, Supplier<T> blockSupplier) {
         return register(id, blockSupplier, block1 -> new BlockItem(block1, new Item.Properties()));
     }
+
     private static <T extends Block> RegistryObject<T> register(String id, Supplier<T> blockSupplier, @Nullable Function<T, BlockItem> supplier) {
         RegistryObject<T> registryObject = REGISTER.register(id, blockSupplier);
         if (supplier != null) {
@@ -373,6 +383,7 @@ public static final RegistryObject<Block> MACERATOR = register("macerator",
         }
         return registryObject;
     }
+
     private static <T extends Block> RegistryObject<T> registerBurnable(String id, Supplier<T> blockSupplier, int burnTime) {
         return register(id, blockSupplier, block -> new BlockItem(block, new Item.Properties()) {
             @Override

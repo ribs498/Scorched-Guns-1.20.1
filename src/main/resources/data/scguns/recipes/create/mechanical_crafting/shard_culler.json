@@ -1,0 +1,35 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "L": {
+      "item": "scguns:energy_core"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:gun_barrel"
+    },
+    "X": {
+      "item": "scguns:diamond_steel_blueprint"
+    },
+    "K": {
+      "item": "scguns:diamond_steel_gun_frame"
+    },
+    "J": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "pattern": [
+    "QKJX",
+    "LRSS",
+    "K K "
+  ],
+  "result": {
+    "item": "scguns:shard_culler"
+  }
+}

@@ -36,5 +36,6 @@ public class ModTiers {
             return Ingredient.of(ModItems.ANTHRALITE_INGOT.get());
         }
     };
+
 }
 

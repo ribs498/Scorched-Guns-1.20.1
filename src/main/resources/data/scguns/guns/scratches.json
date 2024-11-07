@@ -1,0 +1,53 @@
+{
+  "display": {
+  },
+  "general": {
+    "alwaysSpread": true,
+    "fireMode": "scguns:automatic",
+    "gripType": "scguns:mini_gun_5",
+    "baseGripType": "scguns:mini_gun_5",
+    "projectileAmount": 7,
+    "rate": 6,
+    "recoilAngle": 3.5,
+    "recoilKick": 4.0,
+    "spread": 10.5,
+    "meleeDamage": 4.5,
+    "meleeCooldownTicks": 20,
+    "energyUse": 25.0,
+    "hotBarrelRate": 40,
+    "criticalChance": 0.05
+  },
+  "modules": {
+    "attachments": {
+      "stock": {
+        "scale": 0.0
+      }
+    }
+  },
+  "projectile": {
+    "advantage": "scguns:none",
+    "damage": 23.0,
+    "ejectsCasing": false,
+    "gravity": false,
+    "item": "scguns:nitro_buckshot",
+    "life": 50,
+    "size": 1.0,
+    "speed": 4.0,
+    "trailLengthMultiplier": 0.2
+  },
+  "reloads": {
+    "emptyMagTimer": 10,
+    "maxAmmo": 24,
+    "reloadItem": "scguns:nitro_buckshot",
+    "reloadTimer": 30,
+    "reloadType": "scguns:mag_fed"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.rusty_gnat.fire",
+    "fire": "scguns:item.rusty_gnat.fire",
+    "reload": "scguns:item.gauss.reload",
+    "silencedFire": "scguns:item.rusty_gnat.silenced_fire",
+    "flyby": "scguns:bullet.flyby1"
+  }
+}

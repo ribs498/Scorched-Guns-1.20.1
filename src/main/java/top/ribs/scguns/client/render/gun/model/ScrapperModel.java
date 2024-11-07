@@ -44,15 +44,13 @@ public class ScrapperModel implements IOverrideModel {
             ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
             float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
             cooldown = (float) ease(cooldown);
-            matrixStack.translate(0, 0, cooldown / 16);
+            matrixStack.translate(0, 0, cooldown / 10);
             matrixStack.translate(0, 5.8 * 0.0625, 0);
             RenderUtil.renderModel(SpecialModels.SCRAPPER_BOLT.getModel(), stack, matrixStack, buffer, light, overlay);
             matrixStack.popPose();
         }
-
-        // Render the magazine and adjust its position based on ammo count.
         float magazinePosition = calculateMagazinePosition(stack);
-        float translationMultiplier = 0.25f; // Adjust this value to fine-tune the end position
+        float translationMultiplier = 0.25f;
         matrixStack.pushPose();
         matrixStack.translate(clampMagazinePosition(magazinePosition * translationMultiplier), 0, 0);
         RenderUtil.renderModel(SpecialModels.SCRAPPER_MAGAZINE.getModel(), stack, matrixStack, buffer, light, overlay);
@@ -74,8 +72,6 @@ public class ScrapperModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.SCRAPPER_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
             }
         }
-
-        // Render the standard barrel if no extended barrel is attached
         if (!hasExtendedBarrel) {
             RenderUtil.renderModel(SpecialModels.SCRAPPER_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
         }

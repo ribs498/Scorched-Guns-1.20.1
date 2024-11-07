@@ -49,7 +49,7 @@ public record GripType(ResourceLocation id, IHeldAnimation heldAnimation) {
 
     public static final GripType MINI_GUN_3 = new GripType(new ResourceLocation(Reference.MOD_ID, "mini_gun_3"), new MiniGun3Pose());
     public static final GripType MINI_GUN_4 = new GripType(new ResourceLocation(Reference.MOD_ID, "mini_gun_4"), new MiniGun4Pose());
-
+    public static final GripType MINI_GUN_5 = new GripType(new ResourceLocation(Reference.MOD_ID, "mini_gun_5"), new MiniGun5Pose());
 
     /**
      * A custom grip type designed for the bazooka.
@@ -105,6 +105,7 @@ public record GripType(ResourceLocation id, IHeldAnimation heldAnimation) {
         registerType(MINI_GUN_2);
         registerType(MINI_GUN_3);
         registerType(MINI_GUN_4);
+        registerType(MINI_GUN_5);
         registerType(BAZOOKA);
     }
 

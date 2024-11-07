@@ -3,9 +3,20 @@
     "flash": {
       "size": 0.8,
       "yOffset": 4.8,
-      "zOffset": -3.0
-    },
-    "muzzleFlashType": "flash_type_4"
+      "zOffset": -3.0,
+      "textureLocation": "muzzle_flash_5",
+      "spawnParticles": true,
+      "particleType": "minecraft:small_flame",
+      "particleCount": 8,
+      "particleSpread": 0.25,
+      "particleRingRadius": 1.0,
+      "alternateMuzzleFlash": true,
+      "alternatePosition": {
+        "x": -8.5,
+        "y": 0.0,
+        "z": -0.0
+      }
+    }
   },
   "general": {
     "fireMode": "scguns:automatic",
@@ -17,7 +28,8 @@
     "spread": 2.0,
     "meleeDamage": 4.5,
     "meleeCooldownTicks": 15,
-    "hotBarrelRate": 15
+    "hotBarrelRate": 15,
+    "criticalChance": 0.05
   },
   "modules": {
     "attachments": {
@@ -32,7 +44,7 @@
   },
   "projectile": {
     "advantage": "scguns:undead",
-    "damage": 22.0,
+    "damage": 23.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:ramrod_round",
@@ -44,7 +56,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 16,
+    "maxAmmo": 18,
     "reloadItem": "scguns:compact_advanced_round",
     "reloadTimer": 20,
     "reloadType": "scguns:mag_fed"

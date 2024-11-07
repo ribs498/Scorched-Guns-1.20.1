@@ -90,7 +90,7 @@ public class CogloaderModel implements IOverrideModel {
         matrixStack.pushPose();
         matrixStack.translate(0, -5.8 * 0.0625, 0);
         if (cooldown > 0) {
-            matrixStack.translate(0, 0, cooldown / 8);
+            matrixStack.translate(0, 0, cooldown / 6);
             magazineRotation += (float) (5.0f * (1.0 - cooldown));
             magazineRotation = magazineRotation % 360;
         }

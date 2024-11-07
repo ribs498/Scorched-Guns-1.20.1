@@ -2,8 +2,9 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
+		"1": "scguns:item/seal_2",
 		"5": "scguns:item/mas_55",
-		"particle": "scguns:item/mas_55"
+		"particle": "scguns:item/seal_2"
 	},
 	"elements": [
 		{
@@ -391,6 +392,31 @@
 				"up": {"uv": [5.375, 12.625, 5.25, 12.5], "texture": "#5"},
 				"down": {"uv": [12.625, 5.25, 12.5, 5.375], "texture": "#5"}
 			}
+		},
+		{
+			"from": [6.9625, 4.125, 9.825],
+			"to": [7.1875, 5.475, 11.175],
+			"rotation": {"angle": 45, "axis": "x", "origin": [7.075, 4.8, 10.5]},
+			"faces": {
+				"north": {"uv": [0, 8, 1, 11], "texture": "#1"},
+				"east": {"uv": [4, 0, 7, 3], "texture": "#1"},
+				"south": {"uv": [8, 0, 9, 3], "texture": "#1"},
+				"west": {"uv": [4, 4, 7, 7], "texture": "#1"},
+				"up": {"uv": [3, 11, 2, 8], "texture": "#1"},
+				"down": {"uv": [5, 8, 4, 11], "texture": "#1"}
+			}
+		},
+		{
+			"from": [7.075, 1.2, 9.825],
+			"to": [7.075, 4.8, 11.175],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.075, 4.125, 10.5]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 8], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 8], "texture": "#1"},
+				"west": {"uv": [0, 0, 3, 8], "texture": "#1"},
+				"up": {"uv": [0, 3, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 3], "texture": "#1"}
+			}
 		}
 	],
 	"display": {
@@ -422,5 +448,43 @@
 			"translation": [4, 6, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		0,
+		1,
+		2,
+		3,
+		4,
+		5,
+		6,
+		7,
+		8,
+		9,
+		10,
+		11,
+		12,
+		13,
+		14,
+		15,
+		16,
+		17,
+		18,
+		19,
+		20,
+		21,
+		22,
+		23,
+		24,
+		25,
+		26,
+		27,
+		28,
+		29,
+		{
+			"name": "Seal",
+			"origin": [7.125, 3.25, 10.75],
+			"color": 0,
+			"children": [30, 31]
+		}
+	]
 }

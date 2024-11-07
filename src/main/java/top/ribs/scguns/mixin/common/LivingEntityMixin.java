@@ -3,6 +3,8 @@ package top.ribs.scguns.mixin.common;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.LivingEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
@@ -14,33 +16,24 @@ import top.ribs.scguns.entity.projectile.ProjectileEntity;
  * Author: MrCrayfish
  */
 @Mixin(LivingEntity.class)
-public class LivingEntityMixin
-{
-    private DamageSource source;
+public class LivingEntityMixin {
+    @Unique
+    private DamageSource scorched_Guns_1_20_1$currentDamageSource;
 
-    @Inject(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"))
-    private void capture(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir)
-    {
-        this.source = source;
+    @Inject(method = "hurt", at = @At("HEAD"))
+    private void onHurtStart(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+        this.scorched_Guns_1_20_1$currentDamageSource = source;
     }
 
     @ModifyArg(method = "hurt", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;knockback(DDD)V"), index = 0)
-    private double modifyApplyKnockbackArgs(double original)
-    {
-        if(this.source.getEntity() instanceof ProjectileEntity)
-        {
-            if(!Config.COMMON.gameplay.enableKnockback.get())
-            {
-                return 0;
+    private double modifyApplyKnockbackArgs(double original) {
+        if (this.scorched_Guns_1_20_1$currentDamageSource != null && this.scorched_Guns_1_20_1$currentDamageSource.getDirectEntity() instanceof ProjectileEntity) {
+            if (!Config.COMMON.gameplay.enableKnockback.get()) {
+                return 0.0D;
             }
-
             double strength = Config.COMMON.gameplay.knockbackStrength.get();
-            if(strength > 0)
-            {
-                return strength;
-            }
+            return strength > 0 ? strength : original;
         }
         return original;
     }
-
 }

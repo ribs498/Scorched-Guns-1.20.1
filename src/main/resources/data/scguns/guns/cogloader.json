@@ -3,9 +3,9 @@
     "flash": {
       "size": 1.0,
       "yOffset": 4.8,
-      "zOffset": -15.0
-    },
-    "muzzleFlashType": "flash_type_1"
+      "zOffset": -15.0,
+      "textureLocation": "muzzle_flash_1"
+    }
   },
   "general": {
     "alwaysSpread": false,
@@ -14,11 +14,12 @@
     "baseGripType": "scguns:two_handed",
     "rate": 4,
     "recoilAngle": 2.0,
-    "recoilKick": 0.8,
+    "recoilKick": 0.5,
     "spread": 1.6,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 6
+    "hotBarrelRate": 6,
+    "criticalChance": 0.05
   },
   "modules": {
     "attachments": {
@@ -69,7 +70,6 @@
     "enchantedFire": "scguns:item.iron_rifle.fire",
     "fire": "scguns:item.iron_rifle.fire",
     "reload": "scguns:item.gauss.reload",
-    "silencedFire": "scguns:item.bruiser.silenced_fire",
-    "flyby": "scguns:bullet.flyby1"
+    "silencedFire": "scguns:item.bruiser.silenced_fire"
   }
 }

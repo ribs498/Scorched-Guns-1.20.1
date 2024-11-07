@@ -1,14 +1,16 @@
 package top.ribs.scguns.util;
 
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import top.ribs.scguns.common.Gun;
-import top.ribs.scguns.common.HotBarrelHandler;
-import top.ribs.scguns.common.ReloadType;
+import top.ribs.scguns.client.handler.ShootingHandler;
+import top.ribs.scguns.common.*;
+import top.ribs.scguns.common.network.ServerPlayHandler;
 import top.ribs.scguns.init.ModEnchantments;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.particles.TrailData;
@@ -19,6 +21,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 
+import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -28,7 +31,27 @@ import java.util.Random;
  */
 public class GunEnchantmentHelper
 {
+    public static float getChargeDamage(ItemStack weapon, float damage, float chargeProgress) {
+        if (!(weapon.getItem() instanceof GunItem gunItem)) {
+            return damage;
+        }
 
+        Gun modifiedGun = gunItem.getModifiedGun(weapon);
+        if (modifiedGun.getGeneral().getFireTimer() <= 0) {
+            return damage;
+        }
+
+        float minDamagePercent = 0.05f;
+        float fullChargeThreshold = 0.9f;
+        float effectiveCharge = (chargeProgress >= fullChargeThreshold) ? 1.0f : chargeProgress;
+
+        float normalizedCharge = effectiveCharge < fullChargeThreshold ?
+                effectiveCharge / fullChargeThreshold : 1.0f;
+        float damageReductionFactor = minDamagePercent +
+                (float)(Math.pow(normalizedCharge, 2) * (1.0f - minDamagePercent));
+
+        return damage * damageReductionFactor;
+    }
     public static int getRealReloadSpeed(ItemStack weapon)
     {
         Gun modifiedGun = ((GunItem) weapon.getItem()).getModifiedGun(weapon);

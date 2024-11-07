@@ -1,0 +1,39 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:flayed_god",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:scorched_ingot"
+    },
+    "gun_internal_1": {
+      "item": "scguns:energy_core"
+    },
+    "gun_internal_2": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "gun_top_internal_1": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:scorched_gun_frame"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_grip": {
+      "item": "scguns:diamond_steel_gun_frame"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "gun_top_barrel_1": {
+      "item": "scguns:nether_star_fragment"
+    },
+    "gun_magazine": {
+      "item": "scguns:scorched_ingot"
+    }
+  }
+}

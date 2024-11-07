@@ -3,20 +3,21 @@
     "flash": {
       "size": 1.0,
       "yOffset": 4.4,
-      "zOffset": -4.3
-    },
-    "muzzleFlashType": "flash_type_1"
+      "zOffset": -4.3,
+      "textureLocation": "muzzle_flash_5"
+    }
   },
   "general": {
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
     "rate": 7,
     "recoilAngle": 9.0,
-    "recoilKick": 2.4,
+    "recoilKick": 5.4,
     "spread": 2.0,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 20
+    "hotBarrelRate": 20,
+    "criticalChance": 0.1
   },
   "modules": {
     "attachments": {

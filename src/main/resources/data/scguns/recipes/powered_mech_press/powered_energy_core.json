@@ -4,13 +4,13 @@
   "energyUse": 1200,
   "ingredients": [
     {
-      "item": "scguns:large_iron_casing"
+      "item": "scguns:empty_core"
     },
     {
       "item": "minecraft:redstone_block"
     },
     {
-      "item": "scguns:nether_star_fragment"
+      "item": "scguns:charged_amethyst_shard"
     }
   ],
   "result": {

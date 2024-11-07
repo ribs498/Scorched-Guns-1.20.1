@@ -9,8 +9,7 @@ import java.util.Map;
 /**
  * Author: MrCrayfish
  */
-public class ReloadType
-{
+public record ReloadType(ResourceLocation id) {
     /**
      * A reload system that works with ammo items individually
      */
@@ -31,8 +30,7 @@ public class ReloadType
      */
     private static final Map<ResourceLocation, ReloadType> reloadTypeMap = new HashMap<>();
 
-    static
-    {
+    static {
         /* Registers the standard reload modes when the class is loaded */
         registerType(MANUAL);
         registerType(MAG_FED);
@@ -44,9 +42,8 @@ public class ReloadType
      *
      * @param mode the get of the reload system
      */
-    public static void registerType(ReloadType mode)
-    {
-        reloadTypeMap.putIfAbsent(mode.getId(), mode);
+    public static void registerType(ReloadType mode) {
+        reloadTypeMap.putIfAbsent(mode.id(), mode);
     }
 
     /**
@@ -56,29 +53,23 @@ public class ReloadType
      * @param id the id of the reload system
      * @return returns an get of the reload system or SEMI_AUTO if it doesn't exist
      */
-    public static ReloadType getType(ResourceLocation id)
-    {
+    public static ReloadType getType(ResourceLocation id) {
         return reloadTypeMap.getOrDefault(id, MANUAL);
     }
-
-    private final ResourceLocation id;
 
     /**
      * Creates a new reload system.
      *
      * @param id the id of the reload system
-     *
      */
-    public ReloadType(ResourceLocation id)
-    {
-        this.id = id;
+    public ReloadType {
     }
 
     /**
      * Gets the id of the reload system
      */
-    public ResourceLocation getId()
-    {
+    @Override
+    public ResourceLocation id() {
         return this.id;
     }
 

@@ -29,6 +29,10 @@ public class BloodParticle extends TextureSheetParticle
         this.quadSize = 0.1F;
         this.lifetime = (int)(12.0F / (this.random.nextFloat() * 0.9F + 0.1F));
     }
+    public void setCustomColor(float r, float g, float b, float a) {
+        this.setColor(r, g, b);
+        this.alpha = a;
+    }
 
     public void setColorBasedOnEntity(EntityType<?> entityType)
     {
@@ -67,10 +71,10 @@ public class BloodParticle extends TextureSheetParticle
     }
 
     @Override
-    public ParticleRenderType getRenderType()
-    {
-        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+    public ParticleRenderType getRenderType() {
+        return ParticleRenderType.PARTICLE_SHEET_TRANSLUCENT;
     }
+
 
     @Override
     public void tick()
@@ -140,22 +144,23 @@ public class BloodParticle extends TextureSheetParticle
     }
 
     @OnlyIn(Dist.CLIENT)
-    public static class Factory implements ParticleProvider<SimpleParticleType>
-    {
+    public static class Factory implements ParticleProvider<SimpleParticleType> {
         private final SpriteSet spriteSet;
 
-        public Factory(SpriteSet spriteSet)
-        {
+        public Factory(SpriteSet spriteSet) {
             this.spriteSet = spriteSet;
         }
 
         @Override
-        public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed)
-        {
+        public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn,
+                                       double x, double y, double z,
+                                       double xSpeed, double ySpeed, double zSpeed) {
             BloodParticle particle = new BloodParticle(worldIn, x, y, z);
+            particle.setColor((float) xSpeed, (float) ySpeed, (float) zSpeed);
             particle.pickSprite(this.spriteSet);
             return particle;
         }
     }
+
 }
 

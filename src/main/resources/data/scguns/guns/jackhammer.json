@@ -3,9 +3,9 @@
     "flash": {
       "size": 1.0,
       "yOffset": 5.3,
-      "zOffset": -9.2
-    },
-    "muzzleFlashType": "flash_type_1"
+      "zOffset": -9.2,
+      "textureLocation": "muzzle_flash_1"
+    }
   },
   "general": {
     "alwaysSpread": true,
@@ -15,11 +15,12 @@
     "rate": 7,
     "recoilAngle": 9.5,
     "recoilKick": 2.5,
-    "spread": 15.0,
+    "spread": 16.0,
     "projectileAmount": 22,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 16
+    "hotBarrelRate": 16,
+    "criticalChance": 0.05
   },
   "modules": {
     "attachments": {
@@ -45,7 +46,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 20.0,
+    "damage": 19.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:shotgun_shell",

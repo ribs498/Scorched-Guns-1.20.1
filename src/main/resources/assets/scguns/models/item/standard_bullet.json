@@ -1,6 +1,34 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "scguns:item/standard_bullet"
+    "0": "scguns:items/standard_bullet",
+    "particle": "scguns:item/standard_bullet"
+  },
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "scguns:item/compact_advanced_round_3d"
+  },
+  "perspectives": {
+    "firstperson_righthand": {
+      "parent": "scguns:item/standard_bullet_2d"
+    },
+    "firstperson_lefthand": {
+      "parent": "scguns:item/standard_bullet_2d"
+    },
+    "thirdperson_righthand": {
+      "parent": "scguns:item/standard_bullet_2d"
+    },
+    "thirdperson_lefthand": {
+      "parent": "scguns:item/standard_bullet_2d"
+    },
+    "fixed": {
+      "parent": "scguns:item/standard_bullet_2d"
+    },
+    "gui": {
+      "parent": "scguns:item/standard_bullet_2d"
+    },
+    "ground": {
+      "parent": "scguns:item/standard_bullet_2d"
+    }
   }
 }

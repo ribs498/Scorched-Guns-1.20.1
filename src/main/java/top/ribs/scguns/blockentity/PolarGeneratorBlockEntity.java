@@ -33,6 +33,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
+import top.ribs.scguns.Config;
 import top.ribs.scguns.client.screen.PolarGeneratorMenu;
 import top.ribs.scguns.init.ModBlockEntities;
 
@@ -233,12 +234,12 @@ public class PolarGeneratorBlockEntity extends BlockEntity implements MenuProvid
             this.level.sendBlockUpdated(this.worldPosition, this.getBlockState(), this.getBlockState(), Block.UPDATE_CLIENTS);
         }
     }
-
     public static void tick(Level level, BlockPos pos, BlockState state, PolarGeneratorBlockEntity blockEntity) {
         if (!level.isClientSide) {
             if (blockEntity.burnTime > 0) {
                 blockEntity.burnTime--;
-                blockEntity.energyStorage.receiveEnergy(50, false);
+                // Use the config value instead of hardcoded 50
+                blockEntity.energyStorage.receiveEnergy(Config.COMMON.gameplay.energyProductionRate.get(), false);
                 blockEntity.setChanged();
                 blockEntity.sync();
             }
@@ -247,7 +248,9 @@ public class PolarGeneratorBlockEntity extends BlockEntity implements MenuProvid
                 if (adjacentEntity != null) {
                     adjacentEntity.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).ifPresent(handler -> {
                         if (handler.canReceive()) {
-                            int extracted = blockEntity.energyStorage.extractEnergy(50, true);
+                            // Use the config value here as well for consistent energy transfer
+                            int extracted = blockEntity.energyStorage.extractEnergy(
+                                    Config.COMMON.gameplay.energyProductionRate.get(), true);
                             int accepted = handler.receiveEnergy(extracted, false);
                             blockEntity.energyStorage.extractEnergy(accepted, false);
                             blockEntity.setChanged();
@@ -256,6 +259,8 @@ public class PolarGeneratorBlockEntity extends BlockEntity implements MenuProvid
                     });
                 }
             }
+
+            // Rest of the tick method remains the same
             if (blockEntity.burnTime == 0 && blockEntity.energyStorage.getEnergyStored() < blockEntity.energyStorage.getMaxEnergyStored()) {
                 ItemStack fuelStack = blockEntity.itemHandler.getStackInSlot(0);
                 if (!fuelStack.isEmpty()) {

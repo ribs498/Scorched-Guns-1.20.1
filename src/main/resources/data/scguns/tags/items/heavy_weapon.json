@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:gattaler",
+    "scguns:thunderhead",
+    "scguns:spitfire",
+    "scguns:earths_corpse",
+    "scguns:cyclone"
+  ]
+}

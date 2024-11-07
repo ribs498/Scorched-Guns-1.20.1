@@ -94,7 +94,7 @@ public class HornlinEntity extends Monster implements RangedAttackMob {
                 this.burstCooldown--;
             } else {
                 if (--this.attackTime <= 0) {
-                    this.attackTime = 8; // Time between each shot in a burst
+                    this.attackTime = 8;
                     LivingEntity target = this.getTarget();
                     if (target != null) {
                         this.performRangedAttack(target, 1.0F);
@@ -116,9 +116,6 @@ public class HornlinEntity extends Monster implements RangedAttackMob {
 
         if (this.isConverting()) {
             this.conversionTime--;
-
-            // Rapid shaking effect during conversion
-            // Apply shake every 2 ticks for rapid effect
             double shakeIntensity = 0.01;
             this.setPosRaw(this.getX() + (this.random.nextDouble() - 0.5) * shakeIntensity,
                     this.getY(),

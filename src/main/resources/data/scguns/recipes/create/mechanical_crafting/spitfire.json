@@ -21,7 +21,7 @@
       "item": "scguns:treated_brass_gun_frame"
     },
     "M": {
-      "item": "scguns:gun_magazine"
+      "item": "scguns:empty_tank"
     }
   },
   "pattern": [

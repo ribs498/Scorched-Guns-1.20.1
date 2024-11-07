@@ -1,0 +1,64 @@
+{
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "scguns:item/wither_skull",
+		"particle": "scguns:item/flayed_god"
+	},
+	"elements": [
+		{
+			"from": [6.5, 5.5, 6.5],
+			"to": [9.5, 8.5, 9.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7, 8]},
+			"faces": {
+				"north": {"uv": [2, 10.75, 4, 12.75], "texture": "#0"},
+				"east": {"uv": [0, 10.75, 2, 12.75], "texture": "#0"},
+				"south": {"uv": [6, 10.75, 8, 12.75], "texture": "#0"},
+				"west": {"uv": [4, 10.75, 6, 12.75], "texture": "#0"},
+				"up": {"uv": [2, 8.75, 4, 10.75], "texture": "#0"},
+				"down": {"uv": [4, 8.75, 6, 10.75], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"rotation": [66.75, 0, 0],
+			"translation": [0.25, 10, 1.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"rotation": [66.75, 0, 0],
+			"translation": [0.25, 10, 1.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"rotation": [8, -3, 7],
+			"translation": [-3.75, 7.75, -0.75]
+		},
+		"firstperson_lefthand": {
+			"rotation": [8, -3, 7],
+			"translation": [-3.75, 7.75, -0.75]
+		},
+		"ground": {
+			"translation": [0, 6.5, 1.75]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-2.75, 2.5, 0],
+			"scale": [0.8, 0.8, 0.8]
+		},
+		"fixed": {
+			"rotation": [0, 90, 0],
+			"translation": [-0.75, 11, -3.5],
+			"scale": [2, 2, 2]
+		}
+	},
+	"groups": [
+		{
+			"name": "head",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [0]
+		}
+	]
+}

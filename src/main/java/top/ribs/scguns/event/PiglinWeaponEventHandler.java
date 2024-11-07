@@ -11,6 +11,7 @@ import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.ribs.scguns.init.ModItems;
+import top.ribs.scguns.init.ModTags;
 
 @Mod.EventBusSubscriber(modid = "scguns")
 public class PiglinWeaponEventHandler {
@@ -35,7 +36,7 @@ public class PiglinWeaponEventHandler {
         ItemStack mainHandItem = player.getMainHandItem();
         ItemStack offHandItem = player.getOffhandItem();
 
-        boolean holdingSpecialItem = isSpecialItem(mainHandItem) || isSpecialItem(offHandItem);
+        boolean holdingSpecialItem = isPiglinWeapon(mainHandItem) || isPiglinWeapon(offHandItem);
         boolean isInLava = player.isEyeInFluid(FluidTags.LAVA);
 
         int cooldown = getCooldown(player);
@@ -48,11 +49,8 @@ public class PiglinWeaponEventHandler {
         }
     }
 
-    private static boolean isSpecialItem(ItemStack itemStack) {
-        return itemStack.getItem() == ModItems.FREYR.get() ||
-                itemStack.getItem() == ModItems.SUPER_SHOTGUN.get() ||
-                itemStack.getItem() == ModItems.VULCANIC_REPEATER.get() ||
-                itemStack.getItem() == ModItems.PYROCLASTIC_FLOW.get();
+    private static boolean isPiglinWeapon(ItemStack itemStack) {
+        return !itemStack.isEmpty() && itemStack.is(ModTags.Items.PIGLIN_GUN);
     }
 
     private static int getCooldown(Player player) {

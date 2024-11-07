@@ -18,7 +18,7 @@
         },
         [
           {
-            "item": "scguns:large_iron_casing"
+            "item": "scguns:empty_core"
           }
         ]
       ],
@@ -36,7 +36,7 @@
         },
         [
           {
-            "item": "scguns:nether_star_fragment"
+            "item": "scguns:charged_amethyst_shard"
           }
         ]
       ],

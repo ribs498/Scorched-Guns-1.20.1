@@ -58,6 +58,8 @@
     "scguns:plasma_lantern",
     "scguns:enemy_turret",
        "scguns:ammo_box",
-    "scguns:mob_trap"
+    "scguns:mob_trap",
+    "scguns:felix_memorial",
+    "scguns:plasma_block"
   ]
 }

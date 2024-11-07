@@ -1,0 +1,14 @@
+{
+  "type": "create_new_age:energising",
+  "energy_needed": 26000,
+  "ingredients": [
+    {
+      "item": "minecraft:redstone_block"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:plasma_block"
+    }
+  ]
+}

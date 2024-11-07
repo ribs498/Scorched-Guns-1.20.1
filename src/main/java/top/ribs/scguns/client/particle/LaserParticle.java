@@ -9,10 +9,11 @@ import org.jetbrains.annotations.NotNull;
 @OnlyIn(Dist.CLIENT)
 public class LaserParticle extends TextureSheetParticle {
 
-   protected LaserParticle(ClientLevel level, double x, double y, double z) {
+   protected LaserParticle(ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
       super(level, x, y, z, 0.0, 0.0, 0.0);
       this.setColor(1.0F, 0.0F, 0.0F);
-      this.scale(0.5F);
+      // Use xSpeed as scale if it's greater than 0, otherwise use default scale
+      this.scale(xSpeed > 0 ? (float)xSpeed : 0.5F);
       this.lifetime = 3;
       this.gravity = 0.0F;
    }
@@ -39,7 +40,7 @@ public class LaserParticle extends TextureSheetParticle {
       }
       @Override
       public Particle createParticle(SimpleParticleType type, ClientLevel level, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-         LaserParticle particle = new LaserParticle(level, x, y, z);
+         LaserParticle particle = new LaserParticle(level, x, y, z, xSpeed, ySpeed, zSpeed);
          particle.pickSprite(this.sprite);
          particle.scale(0.5F);
          return particle;

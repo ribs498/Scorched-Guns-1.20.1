@@ -247,9 +247,9 @@ public class HUDRenderHandler {
         }
 
         int maxChargeTime = gun.getGeneral().getFireTimer();
-        int chargeTime = ChargeHandler.getChargeTime();
+        int chargeTime = ChargeHandler.getChargeTime(player.getUUID());
         if (chargeTime <= 0) {
-            return;  // Do not display the charge bar until firing starts
+            return;
         }
 
         float chargeRatio = (float) chargeTime / maxChargeTime;

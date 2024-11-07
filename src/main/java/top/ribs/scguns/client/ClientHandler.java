@@ -205,6 +205,7 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.BLUNDERBUSS.get(), new BlunderbussModel());
         ModelOverrides.register(ModItems.REPEATING_MUSKET.get(), new RepeatingMusketModel());
         ModelOverrides.register(ModItems.LASER_MUSKET.get(), new LaserMusketModel());
+        ModelOverrides.register(ModItems.PLASMABUSS.get(), new PlasmabussModel());
         ModelOverrides.register(ModItems.ARC_WORKER.get(), new ArcWorkerModel());
         ModelOverrides.register(ModItems.FLOUNDERGAT.get(), new FloundergatModel());
         ModelOverrides.register(ModItems.SAKETINI.get(), new SaketiniModel());
@@ -239,10 +240,13 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.PRUSH_GUN.get(), new PrushGunModel());
         ModelOverrides.register(ModItems.INERTIAL.get(), new InertialModel());
         ModelOverrides.register(ModItems.COGLOADER.get(), new CogloaderModel());
+        ModelOverrides.register(ModItems.GRANDLE.get(), new GrandleModel());
         ModelOverrides.register(ModItems.PLASGUN.get(), new PlasgunModel());
         ModelOverrides.register(ModItems.GAUSS_RIFLE.get(), new GaussRifleModel());
         ModelOverrides.register(ModItems.OSGOOD_50.get(), new Osgood50Model());
         ModelOverrides.register(ModItems.NEWBORN_CYST.get(), new NewbornCystModel());
+        ModelOverrides.register(ModItems.FLAYED_GOD.get(), new FlayedGodModel());
+        ModelOverrides.register(ModItems.NERVEPINCH.get(), new NervepinchModel());
         ModelOverrides.register(ModItems.WHISPERS.get(), new WhispersModel());
         ModelOverrides.register(ModItems.ECHOES_2.get(), new Echoes2Model());
         ModelOverrides.register(ModItems.SCULK_RESONATOR.get(), new SculkResonatorModel());
@@ -263,26 +267,23 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.SPITFIRE.get(), new SpitfireModel());
         ModelOverrides.register(ModItems.CYCLONE.get(), new CycloneModel());
         ModelOverrides.register(ModItems.SOUL_DRUMMER.get(), new SoulDrummerModel());
+        ModelOverrides.register(ModItems.VALORA.get(), new ValoraModel());
         ModelOverrides.register(ModItems.BLASPHEMY.get(), new BlasphemyModel());
         ModelOverrides.register(ModItems.PYROCLASTIC_FLOW.get(), new PyroclasticFlowModel());
         ModelOverrides.register(ModItems.SEQUOIA.get(), new SequoiaModel());
+        ModelOverrides.register(ModItems.SHARD_CULLER.get(), new ShardCullerModel());
         ModelOverrides.register(ModItems.LONE_WONDER.get(), new LoneWonderModel());
         ModelOverrides.register(ModItems.RAYGUN.get(), new RaygunModel());
         ModelOverrides.register(ModItems.SUPER_SHOTGUN.get(), new SuperShotgunModel());
         ModelOverrides.register(ModItems.FREYR.get(), new FreyrModel());
         ModelOverrides.register(ModItems.VULCANIC_REPEATER.get(), new VulcanicRepeaterModel());
+        ModelOverrides.register(ModItems.CR4K_MINING_LASER.get(), new Cr4kMiningLaserModel());
         ModelOverrides.register(ModItems.BOMB_LANCE.get(), new BombLanceModel());
-        if (ScorchedGuns.createLoaded) {
-            if (ModItems.GALE != null && ModItems.GALE.isPresent()) {
-                ModelOverrides.register(ModItems.GALE.get(), new GaleModel());
-            }
-            if (ModItems.UMAX_PISTOL != null && ModItems.UMAX_PISTOL.isPresent()) {
-                ModelOverrides.register(ModItems.UMAX_PISTOL.get(), new UmaxPistolModel());
-            }
-            if (ModItems.VENTURI != null && ModItems.VENTURI.isPresent()) {
-                ModelOverrides.register(ModItems.VENTURI.get(), new VenturiModel());
-            }
-        }
+        ModelOverrides.register(ModItems.GALE.get(), new GaleModel());
+        ModelOverrides.register(ModItems.UMAX_PISTOL.get(), new UmaxPistolModel());
+        ModelOverrides.register(ModItems.VENTURI.get(), new VenturiModel());
+        ModelOverrides.register(ModItems.SCRATCHES.get(), new ScratchesModel());
+
     }
 
 

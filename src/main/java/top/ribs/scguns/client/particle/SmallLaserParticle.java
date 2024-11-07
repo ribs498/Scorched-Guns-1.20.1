@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 public class SmallLaserParticle extends LaserParticle{
 
     public SmallLaserParticle(ClientLevel level, double x, double y, double z) {
-        super(level, x, y, z);
+        super(level, x, y, z, 0.0, 0.0, 0.0);
         this.setColor(1.0F, 0.0F, 0.0F);
         this.scale(0.25F);
         this.lifetime = 3;

@@ -15,6 +15,22 @@
       }
     ]
   },
+  "item.ping.ping": {
+    "subtitle": "subtitle.scguns.ping",
+    "sounds": [
+      {
+        "name": "scguns:item/ping/ping"
+      }
+    ]
+  },
+  "item.wither.wither": {
+    "subtitle": "subtitle.scguns.wither",
+    "sounds": [
+      {
+        "name": "scguns:item/wither/wither"
+      }
+    ]
+  },
   "item.airgun.fire": {
     "subtitle": "subtitle.scguns.fire",
     "sounds": [
@@ -403,6 +419,14 @@
     "sounds": [
       {
         "name": "scguns:item/pistol/cock"
+      }
+    ]
+  },
+  "item.beam.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/beam/fire"
       }
     ]
   },

@@ -3,14 +3,14 @@
     "flash": {
       "size": 1.0,
       "yOffset": 4.6,
-      "zOffset": -9.4
-    },
-    "muzzleFlashType": "flash_type_3"
+      "zOffset": -9.4,
+      "textureLocation": "muzzle_flash_3"
+    }
   },
   "general": {
     "alwaysSpread": false,
     "fireMode": "scguns:pulse",
-    "fireTimer": 27,
+    "fireTimer": 30,
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 6,
@@ -19,7 +19,8 @@
     "spread": 0.1,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 55
+    "hotBarrelRate": 55,
+    "criticalChance": 0.05
   },
   "modules": {
     "attachments": {
@@ -47,7 +48,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 27.0,
+    "damage": 24.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:energy_cell",
