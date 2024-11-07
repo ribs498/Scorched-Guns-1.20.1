@@ -1,6 +1,7 @@
 package top.ribs.scguns.common;
 
 import com.google.common.collect.Maps;
+import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
@@ -55,6 +56,11 @@ public class ShootTracker
     {
         int rate = GunEnchantmentHelper.getRate(weapon, modifiedGun);
         rate = GunModifierHelper.getModifiedRate(weapon, rate);
+
+        //Modifies the firing rate by the player's attribute
+        //Disabled, check the explanation in SCAttributes.
+        //rate = (int)Math.round(rate*(1-(player.getAttribute(SCAttributes.FIRE_RATE_MULTIPLIER.get()).getValue())/100));
+
         this.cooldownMap.put(item, Pair.of(Util.getMillis(), rate * 50));
     }
 

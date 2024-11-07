@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
+import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.AmmoBoxItem;
 import top.ribs.scguns.item.GunItem;
@@ -74,22 +75,26 @@ public class ReloadTracker {
 
     private boolean canReload(Player player) {
         int deltaTicks = player.tickCount - this.startTick;
+        //Get the shooters RELOAD_SPEED attribute.
+        double reloadSpeed = player.getAttribute(SCAttributes.RELOAD_SPEED.get()).getValue();
         if (gun.getReloads().getReloadType() == ReloadType.MANUAL) {
             if (this.initialReload) {
                 this.initialReload = false;
                 this.currentBulletReloadTick = GunEnchantmentHelper.getReloadInterval(this.stack);
+                //Apply the reload speed modifier using ceil here so there is no 0-tick reloads.
+                this.currentBulletReloadTick = (int) Math.ceil((double)currentBulletReloadTick/reloadSpeed);
                 return false;
             } else if (currentBulletReloadTick <= 0) {
                 currentBulletReloadTick = GunEnchantmentHelper.getReloadInterval(this.stack);
                 return true;
             } else {
-                currentBulletReloadTick--;
+                currentBulletReloadTick -= 1;
                 return false;
             }
         } else {
             int interval = (gun.getReloads().getReloadType() == ReloadType.MAG_FED) ?
-                    GunEnchantmentHelper.getMagReloadSpeed(this.stack) :
-                    GunEnchantmentHelper.getReloadInterval(this.stack);
+                    (int) Math.ceil((double)GunEnchantmentHelper.getMagReloadSpeed(this.stack)/reloadSpeed) :
+                    (int) Math.ceil((double)GunEnchantmentHelper.getReloadInterval(this.stack)/reloadSpeed);
             return deltaTicks >= interval;
         }
     }
