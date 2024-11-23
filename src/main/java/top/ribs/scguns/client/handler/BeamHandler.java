@@ -1,40 +1,18 @@
 package top.ribs.scguns.client.handler;
 
-import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.stats.Stats;
 import net.minecraft.util.Mth;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.ClipContext;
-import net.minecraft.world.level.GameType;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.server.ServerLifecycleHooks;
-import org.joml.Matrix4f;
-import org.joml.Vector4f;
-import top.ribs.scguns.ScorchedGuns;
-import top.ribs.scguns.client.particle.BloodParticle;
 import top.ribs.scguns.client.render.entity.BeamRenderer;
-import java.awt.*;
+
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -42,20 +20,19 @@ import java.util.UUID;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
-import top.ribs.scguns.client.util.PropertyHelper;
+import top.ribs.scguns.common.FireMode;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.item.GunItem;
-import top.ribs.scguns.item.attachment.IAttachment;
-import top.ribs.scguns.item.attachment.impl.Scope;
 
 @OnlyIn(Dist.CLIENT)
 public class BeamHandler {
     public static final Map<UUID, BeamInfo> activeBeams = new HashMap<>();
     private static final float SMOOTHING_FACTOR = 0.3f;
     private static final float INITIAL_SMOOTHING_FACTOR = 0.6f;
-    private static final long MINIMUM_BEAM_DURATION_MS = 100;
-    private static final long CLEANUP_DELAY_MS = 150;
+    private static final long CONTINUOUS_BEAM_DURATION_MS = 200;
+    private static final long SEMI_BEAM_DURATION_MS = 50;
+    private static final long CLEANUP_DELAY_MS = 50;
     private static float[] getBeamColorForWeapon(ItemStack heldItem, Gun modifiedGun) {
         boolean isEnchanted = heldItem.isEnchanted();
         String primaryColorHex = isEnchanted && modifiedGun.getGeneral().getEnchantedBeamColor() != null ?
@@ -76,16 +53,52 @@ public class BeamHandler {
         return interpolateColors(primaryColor, secondaryColor, progress);
     }
     public static void stopBeam(UUID playerId) {
-        ScorchedGuns.LOGGER.debug("Client stopping beam for player: " + playerId);
         BeamInfo beamInfo = activeBeams.get(playerId);
         if (beamInfo != null) {
             beamInfo.isBeamActive = false;
-            beamInfo.expiryTime = System.currentTimeMillis() + MINIMUM_BEAM_DURATION_MS;
+            long duration = beamInfo.isBeamFireMode ? CONTINUOUS_BEAM_DURATION_MS : SEMI_BEAM_DURATION_MS;
+            beamInfo.expiryTime = System.currentTimeMillis() + duration;
+        }
+    }
 
-            // Force remove the beam after a short delay
-            Minecraft.getInstance().executeBlocking(() -> {
-                activeBeams.remove(playerId);
-            });
+
+    private static void cleanupInactiveBeams() {
+        long currentTime = System.currentTimeMillis();
+        Iterator<Map.Entry<UUID, BeamInfo>> iterator = activeBeams.entrySet().iterator();
+
+        while (iterator.hasNext()) {
+            Map.Entry<UUID, BeamInfo> entry = iterator.next();
+            BeamInfo beamInfo = entry.getValue();
+
+            if ((!beamInfo.isBeamActive && currentTime > beamInfo.expiryTime + CLEANUP_DELAY_MS) ||
+                    (currentTime - beamInfo.lastUpdateTime > 500)) {
+                iterator.remove();
+            }
+        }
+    }
+    public static void updateBeam(UUID playerId, Vec3 startPos, Vec3 endPos) {
+        BeamInfo beamInfo = activeBeams.get(playerId);
+        if (beamInfo != null) {
+            beamInfo.updatePositions(startPos, endPos);
+            beamInfo.isBeamActive = true;
+        } else {
+            assert Minecraft.getInstance().level != null;
+            Player player = Minecraft.getInstance().level.getPlayerByUUID(playerId);
+            boolean isBeamFireMode = false;
+
+            if (player != null) {
+                ItemStack heldItem = player.getMainHandItem();
+                if (heldItem.getItem() instanceof GunItem gunItem) {
+                    Gun modifiedGun = gunItem.getModifiedGun(heldItem);
+                    if (modifiedGun != null) {
+                        isBeamFireMode = modifiedGun.getGeneral().getFireMode().equals(FireMode.BEAM);
+                    }
+                }
+            }
+
+            BeamInfo newBeamInfo = new BeamInfo(startPos, endPos, System.currentTimeMillis(), isBeamFireMode);
+            newBeamInfo.isBeamActive = true;
+            activeBeams.put(playerId, newBeamInfo);
         }
     }
     @SubscribeEvent
@@ -94,122 +107,191 @@ public class BeamHandler {
 
         Minecraft mc = Minecraft.getInstance();
         if (mc.level == null) return;
-        long currentTime = System.currentTimeMillis();
 
-        Iterator<Map.Entry<UUID, BeamInfo>> iterator = activeBeams.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<UUID, BeamInfo> entry = iterator.next();
-            BeamInfo beamInfo = entry.getValue();
+        cleanupInactiveBeams();
 
-            // Only remove the beam if it's inactive AND has expired
-            if (!beamInfo.isBeamActive && currentTime > beamInfo.expiryTime + CLEANUP_DELAY_MS) {
-                ScorchedGuns.LOGGER.debug("Removing expired beam for player: " + entry.getKey());
-                iterator.remove();
-                continue;
-            }
-
-            // Check if we haven't received an update in a while (timeout)
-            if (currentTime - beamInfo.lastUpdateTime > 500) { // 500ms timeout
-                ScorchedGuns.LOGGER.debug("Removing stale beam for player: " + entry.getKey());
-                iterator.remove();
-                continue;
-            }
-        }
+        LocalPlayer player = mc.player;
+        if (player == null) return;
 
         PoseStack poseStack = event.getPoseStack();
         MultiBufferSource.BufferSource bufferSource = mc.renderBuffers().bufferSource();
+        setupRenderContext(poseStack, event.getPartialTick(), player);
 
-        LocalPlayer player = Minecraft.getInstance().player;
-        if (player == null) return;
-        float partialTicks = event.getPartialTick();
-        double x = Mth.lerp(partialTicks, player.xo, player.getX());
-        double y = Mth.lerp(partialTicks, player.yo, player.getY()) + player.getEyeHeight();
-        double z = Mth.lerp(partialTicks, player.zo, player.getZ());
-        Vec3 renderPos = new Vec3(x, y, z);
-
-        poseStack.pushPose();
-        poseStack.translate(-renderPos.x, -renderPos.y, -renderPos.z);
-//
-//        Iterator<Map.Entry<UUID, BeamInfo>> iterator = activeBeams.entrySet().iterator();
-        while (iterator.hasNext()) {
-            Map.Entry<UUID, BeamInfo> entry = iterator.next();
-            BeamInfo beamInfo = entry.getValue();
-            if (!beamInfo.isBeamActive && System.currentTimeMillis() > beamInfo.expiryTime) {
-                iterator.remove();
-            }
-        }
-        activeBeams.forEach((uuid, beamInfo) -> {
-            if (beamInfo.isBeamActive || System.currentTimeMillis() <= beamInfo.expiryTime) {
-                Player beamPlayer = mc.level.getPlayerByUUID(uuid);
-                if (beamPlayer != null && !beamPlayer.isRemoved()) {
-                    ItemStack heldItem = beamPlayer.getMainHandItem();
-                    if (heldItem.getItem() instanceof GunItem gunItem) {
-                        Gun modifiedGun = gunItem.getModifiedGun(heldItem);
-                        if (modifiedGun != null) {
-                            float[] interpolatedColor = getBeamColorForWeapon(heldItem, modifiedGun);
-                            float smoothingFactor = System.currentTimeMillis() - beamInfo.startTime < 100 ?
-                                    INITIAL_SMOOTHING_FACTOR : SMOOTHING_FACTOR;
-                            double beamX = Mth.lerp(partialTicks, beamPlayer.xo, beamPlayer.getX());
-                            double beamY = Mth.lerp(partialTicks, beamPlayer.yo, beamPlayer.getY()) + beamPlayer.getEyeHeight();
-                            double beamZ = Mth.lerp(partialTicks, beamPlayer.zo, beamPlayer.getZ());
-                            float deltaDistanceWalked = beamPlayer.walkDist - beamPlayer.walkDistO;
-                            float distanceWalked = -(beamPlayer.walkDist + deltaDistanceWalked * partialTicks);
-                            float bobbing = Mth.lerp(partialTicks, beamPlayer.oBob, beamPlayer.bob);
-                            float yRot = Mth.lerp(partialTicks, beamPlayer.yRotO, beamPlayer.getYRot());
-                            float rotationRadians = (float) Math.toRadians(yRot);
-                            float horizontalBob = (float) (Math.sin(distanceWalked * Math.PI) * bobbing * 0.65F);
-                            beamX += horizontalBob * Math.cos(rotationRadians);
-                            beamY += Math.abs(Math.cos(distanceWalked * Math.PI)) * bobbing * 0.85F;
-                            beamZ += horizontalBob * Math.sin(rotationRadians);
-                            Vec3 basePos = new Vec3(beamX, beamY, beamZ);
-                            float xRot = Mth.lerp(partialTicks, beamPlayer.xRotO, beamPlayer.getXRot());
-                            Vec3 lookVec = Vec3.directionFromRotation(xRot, yRot);
-                            Vec3 upVec = Vec3.directionFromRotation(xRot - 90.0F, yRot);
-                            Vec3 rightVec = lookVec.cross(upVec).normalize();
-
-                            float aimProgress = AimingHandler.get().getAimProgress(beamPlayer, partialTicks);
-                            Gun.Display.BeamOrigin beamOriginConfig = modifiedGun.getDisplay().getBeamOrigin();
-                            double horizontalOffset, verticalOffset, forwardOffset;
-                            if (beamOriginConfig != null) {
-                                horizontalOffset = Mth.lerp(aimProgress,
-                                        beamOriginConfig.getHorizontalOffset(),
-                                        beamOriginConfig.getAimHorizontalOffset());
-                                verticalOffset = beamOriginConfig.getVerticalOffset();
-                                forwardOffset = beamOriginConfig.getForwardOffset();
-                            } else {
-                                horizontalOffset = Mth.lerp(aimProgress, 0.1, 0.0);
-                                verticalOffset = -0.1;
-                                forwardOffset = 0.3;
-                            }
-                            Vec3 beamOrigin = basePos
-                                    .add(rightVec.scale(horizontalOffset))
-                                    .add(upVec.scale(verticalOffset))
-                                    .add(lookVec.scale(forwardOffset));
-                            beamInfo.smoothedStartPos = beamOrigin;
-                            Vec3 targetEndPos = beamOrigin.add(lookVec.scale(beamInfo.endPos.subtract(beamInfo.startPos).length()));
-                            beamInfo.smoothedEndPos = smoothPosition(beamInfo.smoothedEndPos, targetEndPos, smoothingFactor);
-
-                            beamInfo.lastStartPos = beamInfo.smoothedStartPos;
-                            beamInfo.lastEndPos = beamInfo.smoothedEndPos;
-
-                            BeamRenderer.renderBeam(
-                                    poseStack,
-                                    bufferSource,
-                                    partialTicks,
-                                    beamInfo.smoothedStartPos,
-                                    beamInfo.smoothedEndPos,
-                                    beamInfo.lastStartPos,
-                                    beamInfo.lastEndPos,
-                                    interpolatedColor
-                            );
-                        }
-                    }
-                }
-            }
-        });
+        renderActiveBeams(mc, event.getPartialTick(), poseStack, bufferSource);
 
         bufferSource.endBatch();
         poseStack.popPose();
+    }
+
+    private static void setupRenderContext(PoseStack poseStack, float partialTicks, LocalPlayer player) {
+        ItemStack heldItem = player.getMainHandItem();
+        if (heldItem.getItem() instanceof GunItem gunItem) {
+            Gun modifiedGun = gunItem.getModifiedGun(heldItem);
+            if (modifiedGun != null && modifiedGun.getGeneral().getFireMode().equals(FireMode.BEAM)) {
+                player.bob = 0;
+                player.oBob = 0;
+                player.walkDist = 0;
+                player.walkDistO = 0;
+            }
+        }
+
+        Vec3 renderPos = calculateBasePosition(player, partialTicks);
+        poseStack.pushPose();
+        poseStack.translate(-renderPos.x, -renderPos.y, -renderPos.z);
+    }
+    private static void renderActiveBeams(Minecraft mc, float partialTicks, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource) {
+        activeBeams.forEach((uuid, beamInfo) -> {
+            if (!shouldRenderBeam(beamInfo)) return;
+
+            assert mc.level != null;
+            Player beamPlayer = mc.level.getPlayerByUUID(uuid);
+            if (beamPlayer == null || beamPlayer.isRemoved()) return;
+
+            ItemStack heldItem = beamPlayer.getMainHandItem();
+            if (!(heldItem.getItem() instanceof GunItem gunItem)) return;
+
+            Gun modifiedGun = gunItem.getModifiedGun(heldItem);
+            if (modifiedGun == null) return;
+
+            renderBeam(beamPlayer, beamInfo, modifiedGun, heldItem, partialTicks, poseStack, bufferSource);
+        });
+    }
+
+    private static boolean shouldRenderBeam(BeamInfo beamInfo) {
+        return beamInfo.isBeamActive || System.currentTimeMillis() <= beamInfo.expiryTime;
+    }
+
+    private static void renderBeam(Player beamPlayer, BeamInfo beamInfo, Gun modifiedGun, ItemStack heldItem,
+                                   float partialTicks, PoseStack poseStack, MultiBufferSource.BufferSource bufferSource) {
+        float originalBob = beamPlayer.bob;
+        float originalOBob = beamPlayer.oBob;
+        float originalWalkDist = beamPlayer.walkDist;
+        float originalWalkDistO = beamPlayer.walkDistO;
+
+        if (heldItem.getItem() instanceof GunItem &&
+                ((GunItem) heldItem.getItem()).getModifiedGun(heldItem).getGeneral().getFireMode().equals(FireMode.BEAM)) {
+            beamPlayer.bob = 0;
+            beamPlayer.oBob = 0;
+            beamPlayer.walkDist = 0;
+            beamPlayer.walkDistO = 0;
+        }
+        float[] interpolatedColor = getBeamColorForWeapon(heldItem, modifiedGun);
+        float smoothingFactor = System.currentTimeMillis() - beamInfo.startTime < 100 ?
+                INITIAL_SMOOTHING_FACTOR : SMOOTHING_FACTOR;
+
+        Vec3 beamOrigin = calculateBeamOrigin(beamPlayer, modifiedGun, partialTicks);
+        beamInfo.smoothedStartPos = beamOrigin;
+
+        Vec3 lookVec = Vec3.directionFromRotation(
+                Mth.lerp(partialTicks, beamPlayer.xRotO, beamPlayer.getXRot()),
+                Mth.lerp(partialTicks, beamPlayer.yRotO, beamPlayer.getYRot())
+        );
+
+        Vec3 targetEndPos = beamOrigin.add(lookVec.scale(beamInfo.endPos.subtract(beamInfo.startPos).length()));
+        beamInfo.smoothedEndPos = smoothPosition(beamInfo.smoothedEndPos, targetEndPos, smoothingFactor);
+
+        beamInfo.lastStartPos = beamInfo.smoothedStartPos;
+        beamInfo.lastEndPos = beamInfo.smoothedEndPos;
+
+        beamInfo.updateFade(partialTicks);
+
+        BeamRenderer.renderBeam(
+                poseStack,
+                bufferSource,
+                partialTicks,
+                beamInfo.smoothedStartPos,
+                beamInfo.smoothedEndPos,
+                beamInfo.lastStartPos,
+                beamInfo.lastEndPos,
+                interpolatedColor,
+                beamInfo.fadeProgress
+        );
+        beamPlayer.bob = originalBob;
+        beamPlayer.oBob = originalOBob;
+        beamPlayer.walkDist = originalWalkDist;
+        beamPlayer.walkDistO = originalWalkDistO;
+    }
+    private static Vec3 calculateBeamOrigin(Player player, Gun modifiedGun, float partialTicks) {
+        Minecraft mc = Minecraft.getInstance();
+        boolean isThirdPerson = mc.options.getCameraType().ordinal() > 0;
+
+        if (!isThirdPerson) {
+            return calculateFirstPersonBeamOrigin(player, modifiedGun, partialTicks);
+        } else {
+            return calculateThirdPersonBeamOrigin(player, modifiedGun, partialTicks);
+        }
+    }
+
+    private static Vec3 calculateFirstPersonBeamOrigin(Player player, Gun modifiedGun, float partialTicks) {
+        Vec3 basePos = calculateBasePosition(player, partialTicks);
+        Vec3 lookVec = Vec3.directionFromRotation(
+                Mth.lerp(partialTicks, player.xRotO, player.getXRot()),
+                Mth.lerp(partialTicks, player.yRotO, player.getYRot())
+        );
+        Vec3 upVec = Vec3.directionFromRotation(
+                Mth.lerp(partialTicks, player.xRotO, player.getXRot()) - 90.0F,
+                Mth.lerp(partialTicks, player.yRotO, player.getYRot())
+        );
+        Vec3 rightVec = lookVec.cross(upVec).normalize();
+
+        float aimProgress = AimingHandler.get().getAimProgress(player, partialTicks);
+        double[] offsets = calculateBeamOffsets(modifiedGun, aimProgress);
+
+        return basePos
+                .add(rightVec.scale(offsets[0]))
+                .add(upVec.scale(offsets[1]))
+                .add(lookVec.scale(offsets[2]));
+    }
+
+    private static Vec3 calculateThirdPersonBeamOrigin(Player player, Gun modifiedGun, float partialTicks) {
+        Vec3 basePos = new Vec3(
+                Mth.lerp(partialTicks, player.xo, player.getX()),
+                Mth.lerp(partialTicks, player.yo, player.getY()) + player.getEyeHeight() - 0.2,
+                Mth.lerp(partialTicks, player.zo, player.getZ())
+        );
+
+        Vec3 lookVec = Vec3.directionFromRotation(
+                Mth.lerp(partialTicks, player.xRotO, player.getXRot()),
+                Mth.lerp(partialTicks, player.yRotO, player.getYRot())
+        );
+        Vec3 upVec = Vec3.directionFromRotation(
+                Mth.lerp(partialTicks, player.xRotO, player.getXRot()) - 90.0F,
+                Mth.lerp(partialTicks, player.yRotO, player.getYRot())
+        );
+        Vec3 rightVec = lookVec.cross(upVec).normalize();
+
+        float aimProgress = AimingHandler.get().getAimProgress(player, partialTicks);
+        calculateBeamOffsets(modifiedGun, aimProgress);
+
+        return basePos
+                .add(rightVec.scale(0.1))
+                .add(upVec.scale(-0.1))
+                .add(lookVec.scale(2.15));
+    }
+    private static Vec3 calculateBasePosition(Player player, float partialTicks) {
+        double x = Mth.lerp(partialTicks, player.xo, player.getX());
+        double y = Mth.lerp(partialTicks, player.yo, player.getY()) + player.getEyeHeight();
+        double z = Mth.lerp(partialTicks, player.zo, player.getZ());
+
+        return new Vec3(x, y, z);
+    }
+    private static double[] calculateBeamOffsets(Gun modifiedGun, float aimProgress) {
+        Gun.Display.BeamOrigin beamOriginConfig = modifiedGun.getDisplay().getBeamOrigin();
+        double horizontalOffset, verticalOffset, forwardOffset;
+
+        if (beamOriginConfig != null) {
+            horizontalOffset = Mth.lerp(aimProgress,
+                    beamOriginConfig.getHorizontalOffset(),
+                    beamOriginConfig.getAimHorizontalOffset());
+            verticalOffset = beamOriginConfig.getVerticalOffset();
+            forwardOffset = beamOriginConfig.getForwardOffset();
+        } else {
+            horizontalOffset = Mth.lerp(aimProgress, 0.1, 0.0);
+            verticalOffset = -0.1;
+            forwardOffset = 0.3;
+        }
+
+        return new double[]{horizontalOffset, verticalOffset, forwardOffset};
     }
 
     private static Vec3 smoothPosition(Vec3 previous, Vec3 current, float smoothingFactor) {
@@ -273,17 +355,6 @@ public class BeamHandler {
         }
     }
 
-    public static void updateBeam(UUID playerId, Vec3 startPos, Vec3 endPos) {
-        BeamInfo beamInfo = activeBeams.get(playerId);
-        if (beamInfo != null) {
-            beamInfo.updatePositions(startPos, endPos);
-            beamInfo.isBeamActive = true;
-        } else {
-            BeamInfo newBeamInfo = new BeamInfo(startPos, endPos, System.currentTimeMillis());
-            newBeamInfo.isBeamActive = true;
-            activeBeams.put(playerId, newBeamInfo);
-        }
-    }
 
 
     public static class BeamInfo {
@@ -298,12 +369,14 @@ public class BeamHandler {
         public Vec3 lastPlayerPos;
         public long startTime;
         public long lastDamageTime;
-        public long lastUpdateTime; // Add this field
+        public long lastUpdateTime;
         public int ticksActive;
         public boolean isBeamActive;
         public long expiryTime;
-
-        public BeamInfo(Vec3 startPos, Vec3 endPos, long startTime) {
+        public boolean isBeamFireMode;
+        public float fadeProgress = 0.0f;
+        private static final float FADE_SPEED = 2.0f;
+        public BeamInfo(Vec3 startPos, Vec3 endPos, long startTime, boolean isBeamFireMode) {
             this.startPos = startPos;
             this.endPos = endPos;
             this.lastStartPos = startPos;
@@ -318,6 +391,7 @@ public class BeamHandler {
             this.lastUpdateTime = startTime;
             this.ticksActive = 0;
             this.expiryTime = 0;
+            this.isBeamFireMode = isBeamFireMode;
         }
 
         public void updatePositions(Vec3 newStartPos, Vec3 newEndPos) {
@@ -326,6 +400,13 @@ public class BeamHandler {
             this.startPos = newStartPos;
             this.endPos = newEndPos;
             this.lastUpdateTime = System.currentTimeMillis();
+        }
+        public void updateFade(float partialTicks) {
+            if (!isBeamActive && fadeProgress < 1.0f) {
+                fadeProgress = Math.min(1.0f, fadeProgress + FADE_SPEED * partialTicks);
+            } else if (isBeamActive) {
+                fadeProgress = 0.0f;
+            }
         }
     }
 }

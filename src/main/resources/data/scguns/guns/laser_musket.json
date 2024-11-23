@@ -70,7 +70,7 @@
     "emptyMagTimer": 50,
     "maxAmmo": 15,
     "reloadItem": "scguns:energy_core",
-    "reloadByproduct": "scguns:empty_core",
+    "reloadByproduct": "scguns:depleted_energy_core",
     "reloadTimer": 27,
     "reloadType": "scguns:single_item"
   },

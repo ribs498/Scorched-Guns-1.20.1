@@ -111,8 +111,8 @@ public class ScorchedGuns {
 
         // Register the mod itself to the event bus
         MinecraftForge.EVENT_BUS.register(this);
-        MinecraftForge.EVENT_BUS.register(ArmorBoostEventHandler.class);
-        MinecraftForge.EVENT_BUS.register(ArmorRemoveEventHandler.class);
+        //MinecraftForge.EVENT_BUS.register(ArmorBoostEventHandler.class);
+       /// MinecraftForge.EVENT_BUS.register(ArmorRemoveEventHandler.class);
         MinecraftForge.EVENT_BUS.register(HeavyWeaponEventHandler.class);
         MinecraftForge.EVENT_BUS.register(OceanWeaponEventHandler.class);
         MinecraftForge.EVENT_BUS.register(PiglinWeaponEventHandler.class);

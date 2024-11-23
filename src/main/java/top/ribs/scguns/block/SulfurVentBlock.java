@@ -40,10 +40,6 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.init.ModTags;
-import top.ribs.scguns.item.AnthraliteRespiratorItem;
-import top.ribs.scguns.item.NetheriteRespiratorItem;
-
-import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 

@@ -91,7 +91,6 @@ public class ClientPlayHandler
         Vec3 startPos = message.getStartPos();
         Vec3 endPos = message.getEndPos();
 
-        // Update the beam visuals on the client side using BeamHandler
         BeamHandler.updateBeam(playerId, startPos, endPos);
     }
 
@@ -236,7 +235,6 @@ public class ClientPlayHandler
     }
 
     public static void handleStopBeam(S2CMessageStopBeam message) {
-        ScorchedGuns.LOGGER.debug("Received stop beam message for player: " + message.getPlayerId());
         BeamHandler.stopBeam(message.getPlayerId());
     }
 }

@@ -11,5 +11,6 @@ public class Constants {
     public static final Rarity SCORCHED = Rarity.create("scguns.scorched", ChatFormatting.RED);
     public static final Rarity DEEP_DARK = Rarity.create("scguns.deep_dark", ChatFormatting.DARK_AQUA);
     public static final Rarity ENDISH = Rarity.create("scguns.endish", ChatFormatting.DARK_PURPLE);
+    public static final Rarity BIZARRE = Rarity.create("scguns.bizarre", ChatFormatting.GRAY);
 }
 

@@ -44,6 +44,11 @@ public enum SpecialModels {
     PAX_STOCK_LIGHT("pax/light_stock"),
     PAX_STOCK_WOODEN("pax/wooden_stock"),
     PAX_DRUM("pax/drum"),
+    //ULTRA_KNIGHT_HAWK
+    ULTRA_KNIGHT_HAWK_MAIN("ultra_knight_hawk/main"),
+    ULTRA_KNIGHT_HAWK_HAMMER("ultra_knight_hawk/hammer"),
+    ULTRA_KNIGHT_HAWK_DRUM("ultra_knight_hawk/drum"),
+
     /// SEQUOIA
     SEQUOIA_MAIN("sequoia/main"),
     SEQUOIA_HAMMER("sequoia/hammer"),
@@ -278,6 +283,11 @@ public enum SpecialModels {
     ARC_WORKER_HEAVY_STOCK("arc_worker/heavy_stock"),
     ARC_WORKER_SIGHTS("arc_worker/sights"),
     ARC_WORKER_NO_SIGHTS("arc_worker/no_sights"),
+    //BIG_BORE
+    BIG_BORE_MAIN("big_bore/main"),
+    BIG_BORE_SIGHTS("big_bore/sights"),
+    BIG_BORE_NO_SIGHTS("big_bore/no_sights"),
+    BIG_BORE_HAMMER("big_bore/hammer"),
 
     ///SAKETINI
     SAKETINI_MAIN("saketini/main"),

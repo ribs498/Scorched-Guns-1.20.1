@@ -22,8 +22,6 @@ import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.init.ModTags;
-import top.ribs.scguns.item.AnthraliteRespiratorItem;
-import top.ribs.scguns.item.NetheriteRespiratorItem;
 
 import java.util.List;
 

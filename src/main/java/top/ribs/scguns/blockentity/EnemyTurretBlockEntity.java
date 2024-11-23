@@ -121,7 +121,6 @@ public class EnemyTurretBlockEntity extends BlockEntity {
             disableCooldown = 0;
             disabledRotationOffset = 0.0F;
         } else {
-            // Add a wobbling effect when disabled
             disabledRotationOffset = (float) Math.sin(disableCooldown * 0.1) * 5.0F;
         }
         resetToRestPosition();
@@ -133,7 +132,11 @@ public class EnemyTurretBlockEntity extends BlockEntity {
         AABB searchBox = new AABB(pos).inflate(TARGETING_RADIUS, TARGETING_RADIUS, TARGETING_RADIUS);
 
         List<Player> potentialTargets = level.getEntitiesOfClass(Player.class, searchBox,
-                player -> player != null && player.isAlive() && !player.isCreative() && hasLineOfSight(level, turretPos, player));
+                player -> player != null
+                        && player.isAlive()
+                        && !player.isCreative()
+                        && !player.isSpectator()
+                        && hasLineOfSight(level, turretPos, player));
 
         if (!potentialTargets.isEmpty()) {
             target = potentialTargets.stream()
@@ -193,13 +196,8 @@ public class EnemyTurretBlockEntity extends BlockEntity {
 
             float targetPitch = (float) (Math.atan2(dy, horizontalDistance) * (180 / Math.PI));
             targetPitch = Mth.clamp(targetPitch, MIN_PITCH, MAX_PITCH);
-
             float pitchDifference = targetPitch - pitch;
-
-            // Apply smooth rotation
             pitch += pitchDifference * ROTATION_SPEED;
-
-            // Ensure pitch stays within bounds
             pitch = Mth.clamp(pitch, MIN_PITCH, MAX_PITCH);
         }
     }

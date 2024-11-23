@@ -1,0 +1,20 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 15,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "item": "scguns:large_iron_casing"
+    },
+    {
+      "item": "scguns:nitro_powder_dust"
+    },
+    {
+      "item": "scguns:nether_star_fragment"
+    }
+  ],
+  "result": {
+    "item": "scguns:osborne_slug",
+    "count": 1
+  }
+}

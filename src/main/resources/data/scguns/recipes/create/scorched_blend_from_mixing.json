@@ -18,10 +18,10 @@
   "results": [
     {
       "item": "scguns:scorched_blend",
-      "count": 3
+      "count": 4
     },
     {
-      "chance": 0.1,
+      "chance": 0.15,
       "item": "scguns:scorched_blend"
     }
   ]

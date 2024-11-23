@@ -52,6 +52,9 @@ public class RarityUtils {
 
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "felix_memorial"), Constants.PIGLISH);
 
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "ultra_knight_hawk"), Constants.BIZARRE);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "big_bore"), Constants.BIZARRE);
+
     }
 
 

@@ -28,7 +28,7 @@ public record GripType(ResourceLocation id, IHeldAnimation heldAnimation) {
      */
     public static final GripType TWO_HANDED = new GripType(new ResourceLocation(Reference.MOD_ID, "two_handed"), new TwoHandedPose());
     public static final GripType TWO_HANDED_SHOTGUN = new GripType(new ResourceLocation(Reference.MOD_ID, "two_handed_shotgun"), new TwoHandedShotgunPose());
-
+    public static final GripType TWO_HANDED_SMG = new GripType(new ResourceLocation(Reference.MOD_ID, "two_handed_smg"), new TwoHandedSmgPose());
     /**
      * A grip type designed for pistols that are held with two hands, like a magnum
      */
@@ -98,6 +98,7 @@ public record GripType(ResourceLocation id, IHeldAnimation heldAnimation) {
         registerType(ONE_HANDED);
         registerType(ONE_HANDED_2);
         registerType(TWO_HANDED);
+        registerType(TWO_HANDED_SMG);
         registerType(TWO_HANDED_SHOTGUN);
         registerType(TWO_HANDED_ONE_HANDED);
         registerType(DUAL_WIELD);

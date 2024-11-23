@@ -6,7 +6,7 @@
   },
   "ingredients": {
     "blueprint": {
-      "item": "scguns:scorched_ingot"
+      "item": "scguns:scorched_blueprint"
     },
     "gun_internal_1": {
       "item": "scguns:energy_core"
@@ -24,7 +24,7 @@
       "item": "scguns:gun_barrel"
     },
     "gun_grip": {
-      "item": "scguns:diamond_steel_gun_frame"
+      "item": "scguns:scorched_ingot"
     },
     "gun_barrel_1": {
       "item": "scguns:heavy_gun_barrel"

@@ -16,10 +16,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
 import net.minecraft.world.item.Item;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.RegisterClientReloadListenersEvent;
-import net.minecraftforge.client.event.ScreenEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -206,6 +203,7 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.REPEATING_MUSKET.get(), new RepeatingMusketModel());
         ModelOverrides.register(ModItems.LASER_MUSKET.get(), new LaserMusketModel());
         ModelOverrides.register(ModItems.PLASMABUSS.get(), new PlasmabussModel());
+        ModelOverrides.register(ModItems.BIG_BORE.get(), new BigBoreModel());
         ModelOverrides.register(ModItems.ARC_WORKER.get(), new ArcWorkerModel());
         ModelOverrides.register(ModItems.FLOUNDERGAT.get(), new FloundergatModel());
         ModelOverrides.register(ModItems.SAKETINI.get(), new SaketiniModel());
@@ -283,6 +281,7 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.UMAX_PISTOL.get(), new UmaxPistolModel());
         ModelOverrides.register(ModItems.VENTURI.get(), new VenturiModel());
         ModelOverrides.register(ModItems.SCRATCHES.get(), new ScratchesModel());
+        ModelOverrides.register(ModItems.ULTRA_KNIGHT_HAWK.get(), new UltraKnightHawkModel());
 
     }
 

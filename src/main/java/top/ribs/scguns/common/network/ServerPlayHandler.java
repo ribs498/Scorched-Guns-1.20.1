@@ -245,7 +245,10 @@ public class ServerPlayHandler {
         Vec3 hitPos = finalHitResult.getLocation();
 
         long currentTime = System.currentTimeMillis();
-        BeamHandler.BeamInfo beamInfo = activeBeams.computeIfAbsent(playerId, k -> new BeamHandler.BeamInfo(beamOrigin, hitPos, currentTime));
+        // Make sure we're correctly identifying beam vs semi-beam
+        boolean isBeamFireMode = modifiedGun.getGeneral().getFireMode() == FireMode.BEAM;
+        BeamHandler.BeamInfo beamInfo = activeBeams.computeIfAbsent(playerId,
+                k -> new BeamHandler.BeamInfo(beamOrigin, hitPos, currentTime, isBeamFireMode));
         beamInfo.startPos = beamOrigin;
         beamInfo.endPos = hitPos;
 

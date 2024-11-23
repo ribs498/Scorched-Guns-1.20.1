@@ -1,0 +1,13 @@
+{
+	"type":"createaddition:charging",
+	"input": {
+      	"item": "scguns:depleted_energy_core",
+		"count": 1
+	},
+	"result": {
+		"item": "scguns:energy_core",
+		"count": 1
+	},
+	"energy": 4800,
+	"maxChargeRate": 400
+}

@@ -18,7 +18,7 @@ import java.util.Objects;
 public class HeavyWeaponEventHandler {
 
     private static final int HEAVY_WEAPON_SLOWNESS_AMPLIFIER = 0;
-    private static final int HEAVY_WEAPON_SLOWNESS_DURATION = 80;
+    private static final int HEAVY_WEAPON_SLOWNESS_DURATION = 40;
 
     @SubscribeEvent
     public static void onEquipmentChange(LivingEquipmentChangeEvent event) {

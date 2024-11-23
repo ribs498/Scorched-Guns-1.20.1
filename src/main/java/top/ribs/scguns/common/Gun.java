@@ -230,6 +230,11 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         private boolean hasCameraShake = true;
         @Optional
         private float criticalChance = 0.0F;
+        @Optional
+        private boolean playerKnockBack = false;
+        @Optional
+        private float playerKnockBackStrength = 0.0F;
+
         @Override
         public CompoundTag serializeNBT() {
             CompoundTag tag = new CompoundTag();
@@ -276,6 +281,8 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             tag.putFloat("MiningSpeed", this.miningSpeed);
             tag.putBoolean("HasCameraShake", this.hasCameraShake);
             tag.putFloat("CriticalChance", this.criticalChance);
+            tag.putBoolean("PlayerKnockBack", this.playerKnockBack);
+            tag.putFloat("PlayerKnockBackStrength", this.playerKnockBackStrength);
             return tag;
         }
 
@@ -377,6 +384,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("CriticalChance", Tag.TAG_ANY_NUMERIC)) {
                 this.criticalChance = tag.getFloat("CriticalChance");
             }
+            if (tag.contains("PlayerKnockBack", Tag.TAG_ANY_NUMERIC)) {
+                this.playerKnockBack = tag.getBoolean("PlayerKnockBack");
+            }
+            if (tag.contains("PlayerKnockBackStrength", Tag.TAG_ANY_NUMERIC)) {
+                this.playerKnockBackStrength = tag.getFloat("PlayerKnockBackStrength");
+            }
         }
 
         public JsonObject toJsonObject() {
@@ -448,6 +461,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (this.criticalChance != 0.0F) {
                 object.addProperty("criticalChance", this.criticalChance);
             }
+            if (this.playerKnockBack) {
+                object.addProperty("playerKnockBack", true);
+            }
+            if (this.playerKnockBackStrength != 0.0F) {
+                object.addProperty("playerKnockBackStrength", this.playerKnockBackStrength);
+            }
             return object;
         }
 
@@ -489,8 +508,17 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             general.miningSpeed = this.miningSpeed;
             general.hasCameraShake = this.hasCameraShake;
             general.criticalChance = this.criticalChance;
+            general.playerKnockBack = this.playerKnockBack;
+            general.playerKnockBackStrength = this.playerKnockBackStrength;
             return general;
         }
+        public boolean hasPlayerKnockBack() {
+            return this.playerKnockBack;
+        }
+        public float getPlayerKnockBackStrength() {
+            return this.playerKnockBackStrength;
+        }
+
 
         public float getCriticalChance() {return this.criticalChance;}
         public boolean hasCameraShake() {

@@ -26,8 +26,8 @@ import top.ribs.scguns.network.message.S2CMessageProjectileHitEntity;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 
 public class RamrodProjectileEntity extends ProjectileEntity {
-    private static final float SHIELD_DISABLE_CHANCE = 0.40f; // 40% chance to disable shield, slightly higher than standard
-    private static final float SHIELD_DAMAGE_PENETRATION = 0.35f; // 35% of damage passes through shield
+    private static final float SHIELD_DISABLE_CHANCE = 0.40f;
+    private static final float SHIELD_DAMAGE_PENETRATION = 0.35f;
 
     public RamrodProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -101,7 +101,7 @@ public class RamrodProjectileEntity extends ProjectileEntity {
     private void spawnExplosionParticles(Vec3 position) {
         if (!this.level().isClientSide) {
             ServerLevel serverLevel = (ServerLevel) this.level();
-            int particleCount = 5; // Adjust the number of particles
+            int particleCount = 5;
             serverLevel.sendParticles(ModParticleTypes.RAMROD_IMPACT.get(), position.x, position.y, position.z, particleCount, 0, 0, 0, 0.1);
             for (int i = 0; i < particleCount; i++) {
                 double offsetX = (this.random.nextDouble() - 0.5) * 0.2;

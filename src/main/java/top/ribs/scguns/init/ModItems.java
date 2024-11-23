@@ -15,6 +15,7 @@ import top.ribs.scguns.common.GunModifiers;
 import top.ribs.scguns.item.*;
 import top.ribs.scguns.item.ammo_boxes.*;
 
+import top.ribs.scguns.item.animated.*;
 import top.ribs.scguns.item.attachment.impl.Barrel;
 import top.ribs.scguns.item.attachment.impl.Magazine;
 import top.ribs.scguns.item.attachment.impl.Stock;
@@ -81,7 +82,7 @@ public class ModItems {
     public static final RegistryObject<GunItem> WINNIE = REGISTER.register("winnie", () -> new GunItem(new Item.Properties().stacksTo(1).durability(256)));
     public static final RegistryObject<GunItem> LASER_MUSKET = REGISTER.register("laser_musket", () -> new GunItem(new Item.Properties().stacksTo(1).durability(512)));
     public static final RegistryObject<GunItem> PLASMABUSS = REGISTER.register("plasmabuss", () -> new GunItem(new Item.Properties().stacksTo(1).durability(512)));
-
+    public static final RegistryObject<GunItem> BIG_BORE = REGISTER.register("big_bore", () -> new GunItem(new Item.Properties().stacksTo(1).durability(5)));
     ///COPPER
     public static final RegistryObject<GunItem> ARC_WORKER = REGISTER.register("arc_worker", () -> new GunItem(new Item.Properties().stacksTo(1).durability(400)));
     public static final RegistryObject<GunItem> BOOMSTICK = REGISTER.register("boomstick", () -> new GunItem(new Item.Properties().stacksTo(1).durability(400)));
@@ -159,7 +160,7 @@ public class ModItems {
     public static final RegistryObject<GunItem> WHISPERS = REGISTER.register("whispers", () -> new SilencedFirearm(new Item.Properties().stacksTo(1).durability(900)));
     public static final RegistryObject<GunItem> ECHOES_2 = REGISTER.register("echoes_2", () -> new SilencedFirearm(new Item.Properties().stacksTo(1).durability(900)));
     public static final RegistryObject<GunItem> CARAPICE = REGISTER.register("carapice", () -> new GunItem(new Item.Properties().stacksTo(1).durability(1500).rarity(Rarity.UNCOMMON)));
-
+    public static final RegistryObject<GunItem> ULTRA_KNIGHT_HAWK = REGISTER.register("ultra_knight_hawk", () -> new GunItem(new Item.Properties().stacksTo(1).durability(3).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<GunItem> SHELLURKER = REGISTER.register("shellurker", () -> new GunItem(new Item.Properties().stacksTo(1).durability(1500).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<GunItem> DARK_MATTER = REGISTER.register("dark_matter", () -> new GunItem(new Item.Properties().stacksTo(1).durability(1500).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<PickaxeItem> ANTHRALITE_PICKAXE = REGISTER.register("anthralite_pickaxe", () -> new PickaxeItem(ModTiers.ANTHRALITE, 1, -2.8F, new Item.Properties()));
@@ -168,18 +169,18 @@ public class ModItems {
     public static final RegistryObject<ShovelItem> ANTHRALITE_SHOVEL = REGISTER.register("anthralite_shovel", () -> new ShovelItem(ModTiers.ANTHRALITE, 1.5F, -3.0F, new Item.Properties()));
     public static final RegistryObject<HoeItem> ANTHRALITE_HOE = REGISTER.register("anthralite_hoe", () -> new HoeItem(ModTiers.ANTHRALITE, -3, -3.0F, new Item.Properties()));
     public static final RegistryObject<Item> RANGE_FINDER = REGISTER.register("range_finder", () -> new RangeFinderItem(new Item.Properties().stacksTo(1)));
-    public static final RegistryObject<Item> ANTHRALITE_HELMET = REGISTER.register("anthralite_helmet", () -> new ArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.HELMET, new Item.Properties()));
-    public static final RegistryObject<Item> ANTHRALITE_CHESTPLATE = REGISTER.register("anthralite_chestplate", () -> new ArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
-    public static final RegistryObject<Item> ANTHRALITE_LEGGINGS = REGISTER.register("anthralite_leggings", () -> new ArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.LEGGINGS, new Item.Properties()));
-    public static final RegistryObject<Item> ANTHRALITE_BOOTS = REGISTER.register("anthralite_boots", () -> new ArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.BOOTS, new Item.Properties()));
-    public static final RegistryObject<Item> RIDGETOP = REGISTER.register("ridgetop", () -> new RidgetopItem(new Item.Properties().stacksTo(1).durability(128), 2, 0.0F, 128, 10, 0.0F));
-    public static final RegistryObject<Item> BRASS_MASK = REGISTER.register("brass_mask", () -> new BrassMaskItem(new Item.Properties().stacksTo(1).durability(256), 3, 2.0F, 256, 15, 0.1F));
-    public static final RegistryObject<Item> ADRIEN_HELM = REGISTER.register("adrien_helm", () -> new AdrienHelmItem(new Item.Properties().stacksTo(1).durability(256), 2, 0.5F, 256, 10, 0.0F));
-    public static final RegistryObject<Item> ADRIEN_CHESTPLATE = REGISTER.register("adrien_chestplate", () -> new ArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
-    public static final RegistryObject<Item> ADRIEN_LEGGINGS = REGISTER.register("adrien_leggings", () -> new ArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.LEGGINGS, new Item.Properties()));
-    public static final RegistryObject<Item> ADRIEN_BOOTS = REGISTER.register("adrien_boots", () -> new ArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.BOOTS, new Item.Properties()));
-    public static final RegistryObject<Item> ANTHRALITE_RESPIRATOR = REGISTER.register("anthralite_respirator", () -> new AnthraliteRespiratorItem(new Item.Properties().stacksTo(1).durability(256), 2, 0.5F, 256, 10, 0.0F));
-    public static final RegistryObject<Item> NETHERITE_RESPIRATOR = REGISTER.register("netherite_respirator", () -> new NetheriteRespiratorItem(new Item.Properties().stacksTo(1).durability(407), 3, 3F, 407, 10, 0.0F));
+    public static final RegistryObject<Item> ANTHRALITE_HELMET = REGISTER.register("anthralite_helmet", () -> new AnthraliteArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> ANTHRALITE_CHESTPLATE = REGISTER.register("anthralite_chestplate", () -> new AnthraliteArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<Item> ANTHRALITE_LEGGINGS = REGISTER.register("anthralite_leggings", () -> new AnthraliteArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    public static final RegistryObject<Item> ANTHRALITE_BOOTS = REGISTER.register("anthralite_boots", () -> new AnthraliteArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.BOOTS, new Item.Properties()));
+    public static final RegistryObject<Item> RIDGETOP = REGISTER.register("ridgetop", () -> new RidgetopArmorItem(ArmorMaterials.LEATHER, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> BRASS_MASK = REGISTER.register("brass_mask", () -> new BrassMaskArmorItem(ModArmorMaterials.TREATED_BRASS, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> ADRIEN_HELM = REGISTER.register("adrien_helm", () -> new AdrienArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> ADRIEN_CHESTPLATE = REGISTER.register("adrien_chestplate", () -> new AdrienArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<Item> ADRIEN_LEGGINGS = REGISTER.register("adrien_leggings", () -> new AdrienArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    public static final RegistryObject<Item> ADRIEN_BOOTS = REGISTER.register("adrien_boots", () -> new AdrienArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.BOOTS, new Item.Properties()));
+    public static final RegistryObject<Item> ANTHRALITE_RESPIRATOR = REGISTER.register("anthralite_respirator", () -> new AnthraliteGasMaskArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> NETHERITE_RESPIRATOR = REGISTER.register("netherite_respirator", () -> new NetheriteGasMaskArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> DIAMOND_STEEL_HELMET = REGISTER.register("diamond_steel_helmet", () -> new ArmorItem(ModArmorMaterials.DIAMOND_STEEL, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> DIAMOND_STEEL_CHESTPLATE = REGISTER.register("diamond_steel_chestplate", () -> new ArmorItem(ModArmorMaterials.DIAMOND_STEEL, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<Item> DIAMOND_STEEL_LEGGINGS = REGISTER.register("diamond_steel_leggings", () -> new ArmorItem(ModArmorMaterials.DIAMOND_STEEL, ArmorItem.Type.LEGGINGS, new Item.Properties()));
@@ -248,6 +249,7 @@ public class ModItems {
     public static final RegistryObject<Item> EMPTY_TANK = REGISTER.register("empty_tank", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> EMPTY_CORE = REGISTER.register("empty_core", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ENERGY_CORE = REGISTER.register("energy_core", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> DEPLETED_ENERGY_CORE = REGISTER.register("depleted_energy_core", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> PLASMA_CORE = REGISTER.register("plasma_core", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> NETHER_STAR_FRAGMENT = REGISTER.register("nether_star_fragment", () -> new NetherStarFragmentItem(new Item.Properties()));
     public static final RegistryObject<Item> EMPTY_BLASPHEMY = REGISTER.register("empty_blasphemy", () -> new EmptyBlasphemyItem(new Item.Properties().stacksTo(1)));
@@ -338,9 +340,9 @@ public class ModItems {
     public static final RegistryObject<Item> UNFINISHED_GUN_PARTS = REGISTER.register("unfinished_gun_parts", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> UNFINISHED_HEAVY_GUN_PARTS = REGISTER.register("unfinished_heavy_gun_parts", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> UNFINISHED_PLASMA_CORE = REGISTER.register("unfinished_plasma_core", () -> new Item(new Item.Properties()));
-
+    public static final RegistryObject<Item> UNFINISHED_OSBORNE_SLUG = REGISTER.register("unfinished_osborne_slug", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ROCKET = REGISTER.register("rocket", () -> new AmmoItem(new Item.Properties()));
-    public static final RegistryObject<Item> OSBORNE_SLUG = REGISTER.register("osborne_slug", () -> new AmmoItem(new Item.Properties()));
+    public static final RegistryObject<Item> OSBORNE_SLUG = REGISTER.register("osborne_slug", () -> new AmmoItem(new Item.Properties().stacksTo(4)));
     public static final RegistryObject<Item> PEBBLES = REGISTER.register("pebbles", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> HARDENED_PEBBLES = REGISTER.register("hardened_pebbles", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> NETHERITE_SCRAP_CHUNK = REGISTER.register("netherite_scrap_chunk", () -> new ScorchedItem(new Item.Properties()));

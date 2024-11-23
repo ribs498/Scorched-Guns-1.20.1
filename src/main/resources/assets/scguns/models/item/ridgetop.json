@@ -1,30 +1,6 @@
 {
-	"parent": "minecraft:item/generated",
-	"loader": "forge:separate_transforms",
-	"base": {
-		"parent": "scguns:item/ridgetop_3d"
-	},
-	"perspectives": {
-		"gui": {
-			"parent": "scguns:item/ridgetop_2d"
-		},
-		"ground": {
-			"parent": "scguns:item/ridgetop_2d"
-		},
-		"fixed": {
-			"parent": "scguns:item/ridgetop_2d"
-		},
-		"firstperson_righthand": {
-			"parent": "scguns:item/ridgetop_2d"
-		},
-		"firstperson_lefthand": {
-			"parent": "scguns:item/ridgetop_2d"
-		},
-		"thirdperson_righthand": {
-			"parent": "scguns:item/ridgetop_2d"
-		},
-		"thirdperson_lefthand": {
-			"parent": "scguns:item/ridgetop_2d"
-		}
+	"parent": "minecraft:item/handheld",
+	"textures": {
+		"layer0": "scguns:item/ridgetop"
 	}
 }

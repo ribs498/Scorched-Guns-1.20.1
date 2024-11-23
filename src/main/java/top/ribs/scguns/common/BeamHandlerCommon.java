@@ -8,6 +8,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import top.ribs.scguns.Config;
 
 import java.util.HashMap;
 import java.util.Iterator;
@@ -40,6 +41,11 @@ public class BeamHandlerCommon {
         }
 
         public static void updateBlockMining(Level world, BlockPos pos, ServerPlayer player, Gun modifiedGun) {
+            // First check if block breaking is enabled in config
+            if (!Config.COMMON.gameplay.griefing.enableBlockBreaking.get()) {
+                return;
+            }
+
             if (!modifiedGun.getGeneral().canMine()) {
                 return;
             }

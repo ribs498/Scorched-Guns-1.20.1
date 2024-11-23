@@ -1,0 +1,35 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "minecraft:iron_block"
+    },
+    "S": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "I": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "X": {
+      "item": "scguns:treated_iron_ingot"
+    },
+    "O": {
+      "item": "scguns:iron_blueprint"
+    }
+  },
+  "pattern": [
+    "XIRO",
+    "LRSS",
+    "Q   "
+  ],
+  "result": {
+    "item": "scguns:ultra_knight_hawk"
+  }
+}

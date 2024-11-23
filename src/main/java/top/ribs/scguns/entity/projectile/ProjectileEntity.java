@@ -78,7 +78,7 @@ import java.util.function.Predicate;
 
 public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnData {
     static final Predicate<Entity> PROJECTILE_TARGETS = input -> input != null && input.isPickable() && !input.isSpectator();
-    private static final Predicate<BlockState> IGNORE_LEAVES = input -> input != null && Config.COMMON.gameplay.ignoreLeaves.get() && input.getBlock() instanceof LeavesBlock;
+    public static final Predicate<BlockState> IGNORE_LEAVES = input -> input != null && Config.COMMON.gameplay.ignoreLeaves.get() && input.getBlock() instanceof LeavesBlock;
 
     private long worldDay;
     protected int shooterId;
@@ -108,7 +108,9 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.modifiedGun = modifiedGun;
         this.general = modifiedGun.getGeneral();
         this.projectile = modifiedGun.getProjectile();
-        if (shooter instanceof Player player) {
+        if (shooter instanceof ServerPlayer player) {
+            this.chargeProgress = player.getPersistentData().getFloat("ChargeProgress");
+        } else if (shooter instanceof Player player) {
             this.chargeProgress = ChargeHandler.getChargeProgress(player, weapon);
         } else {
             this.chargeProgress = 0f;
@@ -186,11 +188,11 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     }
 
     private Vec3 getDirection(LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
-
         float gunSpread = GunModifierHelper.getModifiedSpread(weapon, modifiedGun.getGeneral().getSpread());
         if (gunSpread == 0F) {
             return getVectorFromRotation(shooter.getXRot(), shooter.getYRot());
         }
+
         if (shooter instanceof Player) {
             if (!modifiedGun.getGeneral().isAlwaysSpread()) {
                 gunSpread *= SpreadTracker.get((Player) shooter).getSpread(item);
@@ -200,12 +202,25 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 gunSpread *= 0.7F;
             }
         }
+
         AttributeInstance spreadAttr = shooter.getAttribute(SCAttributes.SPREAD_MULTIPLIER.get());
         gunSpread *= spreadAttr != null ? (float) spreadAttr.getValue() : 1.0F;
-        return getVectorFromRotation(
-                shooter.getXRot() - (gunSpread / 2.0F) + random.nextFloat() * gunSpread,
-                shooter.getYHeadRot() - (gunSpread / 2.0F) + random.nextFloat() * gunSpread
+        Vec3 forward = getVectorFromRotation(shooter.getXRot(), shooter.getYRot());
+        float spreadRadius = gunSpread * 0.017453292F;
+        float angle = random.nextFloat() * 2 * (float)Math.PI;
+        float distance = random.nextFloat() * spreadRadius;
+        Vec3 right = new Vec3(
+                Mth.cos(shooter.getYRot() * 0.017453292F),
+                0,
+                -Mth.sin(shooter.getYRot() * 0.017453292F)
         );
+
+        Vec3 up = forward.cross(right);
+        Vec3 spreadDirection = forward
+                .add(right.scale(Mth.cos(angle) * distance))
+                .add(up.scale(Mth.sin(angle) * distance));
+
+        return spreadDirection.normalize();
     }
 
     public float getaFloat() {
@@ -853,7 +868,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
      * @param ignorePredicate the block state predicate
      * @return a result of the raytrace
      */
-    private static BlockHitResult rayTraceBlocks(Level world, ClipContext context, Predicate<BlockState> ignorePredicate) {
+    static BlockHitResult rayTraceBlocks(Level world, ClipContext context, Predicate<BlockState> ignorePredicate) {
         return performRayTrace(context, (rayTraceContext, blockPos) -> {
             if (ScorchedGuns.valkyrienSkiesLoaded)
                 return RaycastUtilsKt.clipIncludeShips(world, context); ///Thanks Miga!

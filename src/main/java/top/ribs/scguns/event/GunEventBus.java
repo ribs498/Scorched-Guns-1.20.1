@@ -7,9 +7,11 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -26,6 +28,9 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.TickEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.level.LevelEvent;
+import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandlerModifiable;
@@ -56,6 +61,7 @@ public class GunEventBus {
             MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
             if (server != null) {
                 for (ServerLevel world : server.getAllLevels()) {
+                    TemporaryLightManager.tickLights(world);
                     BeamHandlerCommon.BeamMiningManager.tickMiningProgress(world);
                 }
             }
@@ -147,7 +153,30 @@ public class GunEventBus {
         if (heldItem.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(heldItem);
             int hotBarrelLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), heldItem);
+            if (gun.getGeneral().hasPlayerKnockBack()) {
+                Vec3 lookVec = player.getLookAngle();
+                float strength = gun.getGeneral().getPlayerKnockBackStrength();
 
+                double verticalBoost = 0;
+                if (lookVec.y < -0.5 && !player.onGround() && player.getDeltaMovement().y > 0) {
+                    verticalBoost = strength * 1.25;
+                } else {
+                    verticalBoost = 0.1 * strength;
+                }
+
+                player.setDeltaMovement(player.getDeltaMovement().add(
+                        -lookVec.x * strength,
+                        verticalBoost,
+                        -lookVec.z * strength
+                ));
+                if (verticalBoost > 0.5) {
+                    player.fallDistance = 0;
+                }
+
+                if (player instanceof ServerPlayer) {
+                    ((ServerPlayer) player).connection.send(new ClientboundSetEntityMotionPacket(player));
+                }
+            }
             if (hotBarrelLevel > 0) {
                 int hotBarrelFillRate = gun.getGeneral().getHotBarrelRate();
                 HotBarrelHandler.increaseHotBarrel(heldItem, hotBarrelFillRate);
@@ -157,6 +186,11 @@ public class GunEventBus {
                     triggerExplosion(player.level(), player.blockPosition());
                 }
             }
+            Vec3 lookVec = player.getLookAngle();
+            BlockPos lightPos = player.blockPosition()
+                    .offset((int)(lookVec.x * 2), 2, (int)(lookVec.z * 2));
+            boolean isBeamWeapon = gun.getGeneral().getFireMode() == FireMode.BEAM;
+            TemporaryLightManager.addTemporaryLight(level, lightPos, isBeamWeapon);
             int shotCount = RatKingAndQueenModel.GunFireEventRatHandler.getShotCount();
             boolean mirror = (heldItem.getItem() instanceof DualWieldGunItem && (shotCount % 2 == 1));
 
@@ -383,7 +417,7 @@ public class GunEventBus {
         ResourceLocation sculkCell = ForgeRegistries.ITEMS.getKey(ModItems.SCULK_CELL.get());
         ResourceLocation shockCell = ForgeRegistries.ITEMS.getKey(ModItems.SHOCK_CELL.get());
         ResourceLocation shulkshot = ForgeRegistries.ITEMS.getKey(ModItems.SHULKSHOT.get());
-        ResourceLocation blazeFuel = ForgeRegistries.ITEMS.getKey(ModItems.BLAZE_FUEL.get());
+        ResourceLocation osborne = ForgeRegistries.ITEMS.getKey(ModItems.OSBORNE_SLUG.get());
         ResourceLocation beowulfRound = ForgeRegistries.ITEMS.getKey(ModItems.BEOWULF_ROUND.get());
         ResourceLocation gibbsRound = ForgeRegistries.ITEMS.getKey(ModItems.GIBBS_ROUND.get());
         ResourceLocation shotgunShellLocation = ForgeRegistries.ITEMS.getKey(ModItems.SHOTGUN_SHELL.get());
@@ -396,7 +430,7 @@ public class GunEventBus {
             if (projectileLocation.equals(compactCopperRound) || projectileLocation.equals(standardCopperRound)) {
                 casingType = ModParticleTypes.COPPER_CASING_PARTICLE.get();
             }
-            if (projectileLocation.equals(hogRound) || projectileLocation.equals(ramrodRound)|| projectileLocation.equals(shockCell)|| projectileLocation.equals(energyCell) ||projectileLocation.equals(sculkCell)) {
+            if (projectileLocation.equals(hogRound) || projectileLocation.equals(osborne)||projectileLocation.equals(ramrodRound)|| projectileLocation.equals(shockCell)|| projectileLocation.equals(energyCell) ||projectileLocation.equals(sculkCell)) {
                 casingType = ModParticleTypes.IRON_CASING_PARTICLE.get();
             } if ( projectileLocation.equals(gibbsRound) ||projectileLocation.equals(beowulfRound)) {
                 casingType = ModParticleTypes.DIAMOND_STEEL_CASING_PARTICLE.get();
@@ -455,4 +489,5 @@ public class GunEventBus {
 
         return result.get();
     }
+
 }

@@ -1,7 +1,7 @@
 {
   "type": "scguns:lightning_battery",
   "processingTime": 400,
-  "requiredEnergy": 32000,
+  "requiredEnergy": 42000,
   "ingredients": [
     {
       "item": "minecraft:redstone_block"

@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "scguns:large_iron_casing"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "scguns:osborne_slug"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_osborne_slug"
+        },
+        [
+          {
+            "item": "scguns:nitro_powder_dust"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_osborne_slug"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_osborne_slug"
+        },
+        [
+          {
+            "item": "scguns:nether_star_fragment"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_osborne_slug"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_osborne_slug"
+        }
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_osborne_slug"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "scguns:unfinished_osborne_slug"
+  }
+}

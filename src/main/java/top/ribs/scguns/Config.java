@@ -89,6 +89,7 @@ public class Config
         public final ForgeConfigSpec.BooleanValue restrictCameraRollToWeapons;
         public final ForgeConfigSpec.BooleanValue sprintAnimation;
         public final ForgeConfigSpec.DoubleValue bobbingIntensity;
+        public final ForgeConfigSpec.BooleanValue fireLights;
 
 
         public Display(ForgeConfigSpec.Builder builder)
@@ -108,6 +109,7 @@ public class Config
                 this.displayGunInfo = builder.comment("If enabled, renders a HUD element displaying the gun's ammo count and ammo capacity, as well as pulse weapon charge.").define("displayGunInfo", true);
                 this.bobbingIntensity = builder.comment("The intensity of the custom bobbing animation while holding a gun").defineInRange("bobbingIntensity", 1.0, 0.0, 2.0);
                 this.cinematicGunEffects = builder.comment("If enabled, enables cinematic camera effects on guns ").define("cinematicGunEffects", true);
+                this.fireLights = builder.comment("If enabled, enables light sources when firing guns").define("fireLights", true);
             }
             builder.pop();
         }
@@ -262,6 +264,7 @@ public class Config
         public final ForgeConfigSpec.BooleanValue fragileBlockDrops;
         public final ForgeConfigSpec.DoubleValue fragileBaseBreakChance;
         public final ForgeConfigSpec.BooleanValue setFireToBlocks;
+        public final ForgeConfigSpec.BooleanValue enableBlockBreaking;
 
         public Griefing(ForgeConfigSpec.Builder builder)
         {
@@ -272,6 +275,7 @@ public class Config
                 this.fragileBlockDrops = builder.comment("If enabled, fragile blocks will drop their loot when broken").define("fragileBlockDrops", true);
                 this.fragileBaseBreakChance = builder.comment("The base chance that a fragile block is broken when impacted by a bullet. The hardness of a block will scale this value; the harder the block, the lower the final calculated chance will be.").defineInRange("fragileBlockBreakChance", 1.0, 0.0, 1.0);
                 this.setFireToBlocks = builder.comment("If true, allows guns enchanted with Fire Starter to light and spread fires on blocks").define("setFireToBlocks", true);
+                this.enableBlockBreaking = builder.comment("If true, allows guns/lasers to break blocks").define("enableBlockBreaking", true);
             }
             builder.pop();
         }

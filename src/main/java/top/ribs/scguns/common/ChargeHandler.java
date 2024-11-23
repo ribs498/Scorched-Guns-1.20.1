@@ -4,6 +4,8 @@ package top.ribs.scguns.common;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.network.PacketHandler;
+import top.ribs.scguns.network.message.C2SMessageChargeSync;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -39,11 +41,19 @@ public class ChargeHandler {
 
             float progress = maxChargeTime > 0 ? Math.min(1.0f, (float)currentCharge / maxChargeTime) : 0f;
             lastChargeProgress.put(playerId, progress);
-        } else {
-            int previousCharge = playerChargeTime.getOrDefault(playerId, 0);
-            if (previousCharge > 0) {
+
+            // Send sync packet when on client
+            if (player.level().isClientSide()) {
+                PacketHandler.getPlayChannel().sendToServer(new C2SMessageChargeSync(progress));
             }
+        } else {
             playerChargeTime.remove(playerId);
+            lastChargeProgress.remove(playerId);
+
+            // Send zero progress when stopping charge
+            if (player.level().isClientSide()) {
+                PacketHandler.getPlayChannel().sendToServer(new C2SMessageChargeSync(0f));
+            }
         }
     }
 

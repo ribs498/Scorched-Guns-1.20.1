@@ -24,7 +24,9 @@
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 15,
-    "criticalChance": 0.05
+    "criticalChance": 0.05,
+    "playerKnockBack": true,
+    "playerKnockBackStrength": 0.25
   },
   "modules": {
     "attachments": {

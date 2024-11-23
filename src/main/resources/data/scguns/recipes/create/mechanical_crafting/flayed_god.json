@@ -12,6 +12,9 @@
       "item": "scguns:heavy_gun_parts"
     },
     "S": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "B": {
       "item": "scguns:gun_barrel"
     },
     "X": {
@@ -20,22 +23,19 @@
     "K": {
       "item": "scguns:scorched_ingot"
     },
-    "J": {
-      "item": "scguns:nether_star_fragment"
-    },
-    "O": {
+    "P": {
       "item": "scguns:scorched_gun_frame"
     },
-    "G": {
-      "item": "scguns:heavy_gun_barrel"
-    },
-    "pattern": [
-      "QOJX",
-      "LRGS",
-      "K K "
-    ],
-    "result": {
-      "item": "scguns:flayed_god"
+    "J": {
+      "item": "scguns:nether_star_fragment"
     }
+  },
+  "pattern": [
+    "QPJX",
+    "LRSB",
+    "K K "
+  ],
+  "result": {
+    "item": "scguns:flayed_god"
   }
 }

@@ -1,0 +1,29 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "C": {
+      "tag": "minecraft:planks"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:heavy_gun_barrel"
+    }
+  },
+  "pattern": [
+    "LSSS",
+    "RSSS",
+    "Q C "
+  ],
+  "result": {
+    "item": "scguns:big_bore"
+  }
+}

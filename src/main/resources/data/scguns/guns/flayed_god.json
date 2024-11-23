@@ -33,7 +33,7 @@
     "spread": 3.0,
     "meleeDamage": 4.0,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 12,
+    "hotBarrelRate": 22,
     "beamAmmoConsumptionDelay": 8000,
     "beamDamageDelay": 0,
     "enableMining": false,
@@ -57,7 +57,7 @@
     "emptyMagTimer": 50,
     "maxAmmo": 70,
     "reloadItem": "scguns:energy_core",
-    "reloadByproduct": "scguns:empty_core",
+    "reloadByproduct": "scguns:depleted_energy_core",
     "reloadTimer": 30,
     "reloadType": "scguns:single_item"
   },

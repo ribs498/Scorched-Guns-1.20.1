@@ -10,8 +10,8 @@
   "general": {
     "alwaysSpread": false,
     "fireMode": "scguns:automatic",
-    "gripType": "scguns:two_handed",
-    "baseGripType": "scguns:two_handed",
+    "gripType": "scguns:two_handed_smg",
+    "baseGripType": "scguns:two_handed_smg",
     "rate": 3,
     "recoilAngle": 6.0,
     "recoilKick": 1.0,

@@ -10,6 +10,7 @@ import top.ribs.scguns.init.ModItems;
 import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
+
     ADRIEN("adrien", 22, new int[]{ 5, 6, 6, 4 }, 8,
             SoundEvents.ARMOR_EQUIP_LEATHER, 0.5f, 0f, () -> Ingredient.of(ModItems.TREATED_IRON_INGOT.get())),
     ANTHRALITE("anthralite", 32, new int[]{ 4, 5, 5, 4 }, 10,

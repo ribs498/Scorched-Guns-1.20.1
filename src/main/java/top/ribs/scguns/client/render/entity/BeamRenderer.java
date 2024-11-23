@@ -6,7 +6,6 @@ import com.mojang.math.Axis;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
@@ -24,7 +23,7 @@ public class BeamRenderer {
     public BeamRenderer() {
     }
 
-    public static void renderBeam(PoseStack pPoseStack, MultiBufferSource pBuffer, float partialTicks, Vec3 start, Vec3 end, Vec3 lastStart, Vec3 lastEnd, float[] color) {
+    public static void renderBeam(PoseStack pPoseStack, MultiBufferSource pBuffer, float partialTicks, Vec3 start, Vec3 end, Vec3 lastStart, Vec3 lastEnd, float[] color, float fadeProgress) {
         Vec3 interpolatedStart = lerpVec3(partialTicks, lastStart, start);
         Vec3 interpolatedEnd = lerpVec3(partialTicks, lastEnd, end);
 
@@ -46,7 +45,7 @@ public class BeamRenderer {
 
         pPoseStack.popPose();
     }
-    private static Vec3 lerpVec3(float partialTicks, Vec3 lastPos, Vec3 currentPos) {
+    public static Vec3 lerpVec3(float partialTicks, Vec3 lastPos, Vec3 currentPos) {
         double x = Mth.lerp(partialTicks, lastPos.x, currentPos.x);
         double y = Mth.lerp(partialTicks, lastPos.y, currentPos.y);
         double z = Mth.lerp(partialTicks, lastPos.z, currentPos.z);

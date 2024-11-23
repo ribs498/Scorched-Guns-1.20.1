@@ -43,7 +43,7 @@ public class RangeFinderItem extends Item {
         private static int tickCounter = 0;
         private static final int TICK_DELAY = 2;
         private static final double OFFSET = 0.1;
-        private static final int MAX_RANGE = 100;
+        private static final int MAX_RANGE = 200;
 
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event) {

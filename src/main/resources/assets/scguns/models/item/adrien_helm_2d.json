@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:item/handheld",
-  "textures": {
-    "layer0": "scguns:item/adrien_helm_2d"
-  }
-}

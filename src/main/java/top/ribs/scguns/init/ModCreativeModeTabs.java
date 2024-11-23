@@ -31,6 +31,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SAWED_OFF_CALLWELL.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.CALLWELL.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SAKETINI.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BIG_BORE.get());
                         CreativeTabHelper.addGunOrEnergyWeaponWithFullResources(pOutput, ModItems.LASER_MUSKET.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.PLASMABUSS.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.FLOUNDERGAT.get());
@@ -64,6 +65,8 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.MARLIN.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BOMB_LANCE.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SEQUOIA.get());
+
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.ULTRA_KNIGHT_HAWK.get());
 
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.KRAUSER.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SOUL_DRUMMER.get());
@@ -244,6 +247,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.SHULKSHOT.get());
                         pOutput.accept(ModItems.MICROJET.get());
                         pOutput.accept(ModItems.ROCKET.get());
+                        pOutput.accept(ModItems.OSBORNE_SLUG.get());
 
 //                        pOutput.accept(ModItems.UNFINISHED_COMPACT_COPPER_ROUND.get());
 //                        pOutput.accept(ModItems.UNFINISHED_STANDARD_COPPER_ROUND.get());
@@ -297,6 +301,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.EMPTY_TANK.get());
                         pOutput.accept(ModItems.EMPTY_CORE.get());
                         pOutput.accept(ModItems.ENERGY_CORE.get());
+                        pOutput.accept(ModItems.DEPLETED_ENERGY_CORE.get());
                         pOutput.accept(ModItems.PLASMA_CORE.get());
                         pOutput.accept(ModItems.EMPTY_BLASPHEMY.get());
                         pOutput.accept(ModItems.COPPER_DISC.get());

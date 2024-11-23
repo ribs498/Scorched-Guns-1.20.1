@@ -1,5 +1,7 @@
 package top.ribs.scguns.event;
 
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
@@ -16,34 +18,32 @@ import java.util.Objects;
 @Mod.EventBusSubscriber(modid = "scguns")
 public class ArmorBoostEventHandler {
 
+    private static final int RESISTANCE_LEVEL = 1;
+    private static final int EFFECT_DURATION = 40;
+
     @SubscribeEvent
     public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
         if (event.getEntity() instanceof Player player) {
-            applyArmorBoost(player);
+            applyResistanceBoost(player);
         }
     }
 
     @SubscribeEvent
     public static void onPlayerTick(LivingEvent.LivingTickEvent event) {
         if (event.getEntity() instanceof Player player) {
-            applyArmorBoost(player);
+            applyResistanceBoost(player);
         }
     }
 
-    private static void applyArmorBoost(Player player) {
-        AttributeInstance armorAttribute = player.getAttributes().getInstance(Attributes.ARMOR);
-        if (armorAttribute == null) return;
-        double currentArmorValue = armorAttribute.getBaseValue();
+    private static void applyResistanceBoost(Player player) {
         boolean holdingSpecialItem = isSpecialItem(player.getMainHandItem()) || isSpecialItem(player.getOffhandItem());
-        if (holdingSpecialItem && currentArmorValue != 4) {
-            armorAttribute.setBaseValue(4);
-        } else if (!holdingSpecialItem && currentArmorValue != 0) {
-            armorAttribute.setBaseValue(0);
+
+        if (holdingSpecialItem) {
+            player.addEffect(new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, EFFECT_DURATION, RESISTANCE_LEVEL, false, false));
         }
     }
 
     private static boolean isSpecialItem(ItemStack itemStack) {
         return itemStack.getItem() == ModItems.SHELLURKER.get();
     }
-
 }
