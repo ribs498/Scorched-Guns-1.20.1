@@ -1,9 +1,81 @@
 {
-  "block.macerator_wheel": {
-    "subtitle": "subtitle.block.macerator_wheel",
+  "item.lever.lever": {
+    "subtitle": "subtitle.scguns.mag_in",
     "sounds": [
       {
-        "name": "scguns:block/macerator_wheel"
+        "name": "scguns:item/lever/lever"
+      }
+    ]
+  },
+  "item.gun_sounds.metal": {
+    "subtitle": "subtitle.scguns.mag_in",
+    "sounds": [
+      {
+        "name": "scguns:item/gun_sounds/metal"
+      }
+    ]
+  },
+  "item.mag_in.mag_in": {
+    "subtitle": "subtitle.scguns.mag_in",
+    "sounds": [
+      {
+        "name": "scguns:item/mag_in/mag_in"
+      }
+    ]
+  },
+    "item.mag_out.mag_out": {
+        "subtitle": "subtitle.scguns.mag_out",
+        "sounds": [
+        {
+            "name": "scguns:item/mag_out/mag_out"
+        }
+        ]
+    },
+    "item.reload_end.reload_end": {
+        "subtitle": "subtitle.scguns.reload_end",
+        "sounds": [
+        {
+            "name": "scguns:item/reload_end/reload_end"
+        }
+        ]
+    },
+  "item.gun_rustle.gun_rustle": {
+    "subtitle": "subtitle.scguns.gun_rustle",
+    "sounds": [
+      {
+        "name": "scguns:item/gun_rustle/gun_rustle"
+      }
+    ]
+  },
+  "item.bolt_pull.bolt_pull": {
+    "subtitle": "subtitle.scguns.bolt_pull",
+    "sounds": [
+      {
+        "name": "scguns:item/bolt_pull/bolt_pull"
+      }
+    ]
+  },
+  "item.bolt_release.bolt_release": {
+    "subtitle": "subtitle.scguns.bolt_release",
+    "sounds": [
+      {
+        "name": "scguns:item/bolt_release/bolt_release"
+      }
+    ]
+  },
+  "item.bolt.bolt": {
+    "subtitle": "subtitle.scguns.bolt",
+    "sounds": [
+      {
+        "name": "scguns:item/bolt/bolt"
+      }
+    ]
+  },
+  "item.rack.rack": {
+    "subtitle": "subtitle.scguns.rack",
+    "sounds": [
+      {
+        "name": "scguns:item/rack/rack"
       }
     ]
   },
@@ -490,4 +562,4 @@
       }
     ]
   }
-}
+},

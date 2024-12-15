@@ -6,10 +6,10 @@
       "zOffset": -6.5,
       "textureLocation": "muzzle_flash_1",
       "spawnParticles": true,
-      "particleType": "minecraft:smoke",
-      "particleCount": 10,
-      "particleSpread": 0.1,
-      "particleRingRadius": 0.2
+      "particleType": "minecraft:campfire_cosy_smoke",
+      "particleCount": 25,
+      "particleSpread": 0.7,
+      "particleRingRadius": 0.7
     }
   },
   "general": {
@@ -17,7 +17,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "projectileAmount": 10,
+    "projectileAmount": 15,
     "rate": 6,
     "recoilAngle": 17.0,
     "recoilKick": 2.0,
@@ -61,7 +61,7 @@
     "emptyMagTimer": 50,
     "maxAmmo": 1,
     "reloadItem": "scguns:grapeshot",
-    "reloadTimer": 50,
+    "reloadTimer": 100,
     "reloadType": "scguns:mag_fed"
   },
   "sounds": {

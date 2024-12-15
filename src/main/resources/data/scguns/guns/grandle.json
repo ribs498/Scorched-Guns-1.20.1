@@ -55,6 +55,7 @@
     "gravity": false,
     "item": "scguns:compact_advanced_round",
     "casingType": "scguns:small_brass_casing",
+    "casingParticle": "scguns:brass_casing",
     "life": 50,
     "size": 0.1,
     "speed": 15.0,
@@ -62,9 +63,9 @@
   },
   "reloads": {
     "emptyMagTimer": 20,
-    "maxAmmo": 16,
+    "maxAmmo": 18,
     "reloadItem": "scguns:compact_advanced_round",
-    "reloadTimer": 20,
+    "reloadTimer": 40,
     "reloadType": "scguns:mag_fed"
   },
   "sounds": {

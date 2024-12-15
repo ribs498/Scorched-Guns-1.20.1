@@ -33,10 +33,100 @@ public class ModItems {
     public static RegistryObject<Item> SCRATCHES;
 
     public static void registerItems() {
-        GALE = REGISTER.register("gale", () -> createGunItem(900, 6400));
-        SCRATCHES = REGISTER.register("scratches", () -> createGunItem(900, 6400));
-        UMAX_PISTOL = REGISTER.register("umax_pistol", () -> createGunItem(400, 3200));
-        VENTURI = REGISTER.register("venturi", () -> createGunItem(560, 4800));
+        SCRATCHES = REGISTER.register("scratches", () -> {
+            Item.Properties properties = new Item.Properties().stacksTo(1).durability(560);
+            if (!ScorchedGuns.shouldUseEnergyGuns()) {
+                return new AnimatedAirGunItem(properties,
+                        "scratches",
+                        ModSounds.MAG_OUT.get(),
+                        ModSounds.MAG_IN.get(),
+                        ModSounds.RELOAD_END.get(),
+                        ModSounds.COPPER_GUN_JAM.get(),
+                        ModSounds.COPPER_GUN_JAM.get()
+                );
+            } else {
+                return new AnimatedEnergyGunItem(properties,
+                        "scratches",
+                        ModSounds.MAG_OUT.get(),
+                        ModSounds.MAG_IN.get(),
+                        ModSounds.RELOAD_END.get(),
+                        ModSounds.COPPER_GUN_JAM.get(),
+                        ModSounds.COPPER_GUN_JAM.get(),
+                        4800
+                );
+            }
+        });
+        GALE = REGISTER.register("gale", () -> {
+            Item.Properties properties = new Item.Properties().stacksTo(1).durability(560);
+            if (!ScorchedGuns.shouldUseEnergyGuns()) {
+                return new AnimatedAirGunItem(properties,
+                        "gale",
+                        ModSounds.MAG_OUT.get(),
+                        ModSounds.MAG_IN.get(),
+                        ModSounds.RELOAD_END.get(),
+                        ModSounds.COPPER_GUN_JAM.get(),
+                        ModSounds.COPPER_GUN_JAM.get()
+                );
+            } else {
+                return new AnimatedEnergyGunItem(properties,
+                        "gale",
+                        ModSounds.MAG_OUT.get(),
+                        ModSounds.MAG_IN.get(),
+                        ModSounds.RELOAD_END.get(),
+                        ModSounds.COPPER_GUN_JAM.get(),
+                        ModSounds.COPPER_GUN_JAM.get(),
+                        4800
+                );
+            }
+        });
+        UMAX_PISTOL = REGISTER.register("umax_pistol", () -> {
+            Item.Properties properties = new Item.Properties().stacksTo(1).durability(560);
+            if (!ScorchedGuns.shouldUseEnergyGuns()) {
+                return new AnimatedAirGunItem(properties,
+                        "umax_pistol",
+                        ModSounds.MAG_OUT.get(),
+                        ModSounds.MAG_IN.get(),
+                        ModSounds.RELOAD_END.get(),
+                        ModSounds.COPPER_GUN_JAM.get(),
+                        ModSounds.COPPER_GUN_JAM.get()
+                );
+            } else {
+                return new AnimatedEnergyGunItem(properties,
+                        "umax_pistol",
+                        ModSounds.MAG_OUT.get(),
+                        ModSounds.MAG_IN.get(),
+                        ModSounds.RELOAD_END.get(),
+                        ModSounds.COPPER_GUN_JAM.get(),
+                        ModSounds.COPPER_GUN_JAM.get(),
+                        4800
+                );
+            }
+        });
+
+
+        VENTURI = REGISTER.register("venturi", () -> {
+            Item.Properties properties = new Item.Properties().stacksTo(1).durability(560);
+            if (!ScorchedGuns.shouldUseEnergyGuns()) {
+                return new AnimatedAirGunItem(properties,
+                        "venturi",
+                        ModSounds.MAG_OUT.get(),
+                        ModSounds.MAG_IN.get(),
+                        ModSounds.RELOAD_END.get(),
+                        ModSounds.COPPER_GUN_JAM.get(),
+                        ModSounds.COPPER_GUN_JAM.get()
+                );
+            } else {
+                return new AnimatedEnergyGunItem(properties,
+                        "venturi",
+                        ModSounds.MAG_OUT.get(),
+                        ModSounds.MAG_IN.get(),
+                        ModSounds.RELOAD_END.get(),
+                        ModSounds.COPPER_GUN_JAM.get(),
+                        ModSounds.COPPER_GUN_JAM.get(),
+                        4800
+                );
+            }
+        });
 
 
         if (ScorchedGuns.farmersDelightLoaded) {
@@ -60,110 +150,965 @@ public class ModItems {
     private static GunItem createGunItem(int durability, int energyCapacity) {
         Item.Properties properties = new Item.Properties().stacksTo(1).durability(durability);
 
-        if (ScorchedGuns.createLoaded) {
+        if (!ScorchedGuns.shouldUseEnergyGuns()) {
             return new AirGunItem(properties);
         } else {
             return new EnergyGunItem(properties, energyCapacity);
         }
     }
-    //public static final RegistryObject<GunItem> WALTZ_CONVERSION = REGISTER.register("waltz_conversion", () -> new EnergyGunItem(new Item.Properties().stacksTo(1).durability(900), 6400));
 
-    ////BLACK POWDER
-    public static final RegistryObject<GunItem> FLINTLOCK_PISTOL = REGISTER.register("flintlock_pistol", () -> new NonUnderwaterGunItem(new Item.Properties().stacksTo(1).durability(256)));
-    public static final RegistryObject<GunItem> HANDCANNON = REGISTER.register("handcannon", () -> new NonUnderwaterGunItem(new Item.Properties().stacksTo(1).durability(256)));
-    public static final RegistryObject<GunItem> MUSKET = REGISTER.register("musket", () -> new NonUnderwaterGunItem(new Item.Properties().stacksTo(1).durability(256)));
-    public static final RegistryObject<GunItem> BLUNDERBUSS = REGISTER.register("blunderbuss", () -> new NonUnderwaterGunItem(new Item.Properties().stacksTo(1).durability(256)));
-    public static final RegistryObject<GunItem> REPEATING_MUSKET = REGISTER.register("repeating_musket", () -> new NonUnderwaterGunItem(new Item.Properties().stacksTo(1).durability(256)));
-    public static final RegistryObject<GunItem> FLOUNDERGAT = REGISTER.register("floundergat", () -> new UnderwaterGunItem(new Item.Properties().stacksTo(1).durability(256).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> SAKETINI = REGISTER.register("saketini", () -> new GunItem(new Item.Properties().stacksTo(1).durability(256)));
-    public static final RegistryObject<GunItem> CALLWELL = REGISTER.register("callwell", () -> new GunItem(new Item.Properties().stacksTo(1).durability(256)));
-    public static final RegistryObject<GunItem> SAWED_OFF_CALLWELL = REGISTER.register("sawed_off_callwell", () -> new GunItem(new Item.Properties().stacksTo(1).durability(256)));
-    public static final RegistryObject<GunItem> PAX = REGISTER.register("pax", () -> new GunItem(new Item.Properties().stacksTo(1).durability(256)));
-    public static final RegistryObject<GunItem> WINNIE = REGISTER.register("winnie", () -> new GunItem(new Item.Properties().stacksTo(1).durability(256)));
-    public static final RegistryObject<GunItem> LASER_MUSKET = REGISTER.register("laser_musket", () -> new GunItem(new Item.Properties().stacksTo(1).durability(512)));
-    public static final RegistryObject<GunItem> PLASMABUSS = REGISTER.register("plasmabuss", () -> new GunItem(new Item.Properties().stacksTo(1).durability(512)));
-    public static final RegistryObject<GunItem> BIG_BORE = REGISTER.register("big_bore", () -> new GunItem(new Item.Properties().stacksTo(1).durability(5)));
-    ///COPPER
-    public static final RegistryObject<GunItem> ARC_WORKER = REGISTER.register("arc_worker", () -> new GunItem(new Item.Properties().stacksTo(1).durability(400)));
-    public static final RegistryObject<GunItem> BOOMSTICK = REGISTER.register("boomstick", () -> new GunItem(new Item.Properties().stacksTo(1).durability(400)));
-    public static final RegistryObject<GunItem> SCRAPPER = REGISTER.register("scrapper", () -> new GunItem(new Item.Properties().stacksTo(1).durability(400)));
-    public static final RegistryObject<GunItem> MAKESHIFT_RIFLE = REGISTER.register("makeshift_rifle", () -> new GunItem(new Item.Properties().stacksTo(1).durability(400)));
-    public static final RegistryObject<GunItem> RUSTY_GNAT = REGISTER.register("rusty_gnat", () -> new GunItem(new Item.Properties().stacksTo(1).durability(400)));
-    public static final RegistryObject<GunItem> BRUISER = REGISTER.register("bruiser", () -> new GunItem(new Item.Properties().stacksTo(1).durability(400)));
+    public static final RegistryObject<AnimatedGunItem> M3_CARABINE = REGISTER.register("m3_carabine",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "m3_carabine",                               // Model path
+                    ModSounds.MAG_OUT.get(),        // Reload sound mag out
+                    ModSounds.MAG_IN.get(),         // Reload sound mag in
+                    ModSounds.RELOAD_END.get(),           // Reload sound end
+                    ModSounds.COPPER_GUN_JAM.get(),      // Ejector sound pull
+                    ModSounds.COPPER_GUN_JAM.get()    // Ejector sound release
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> MAKESHIFT_RIFLE = REGISTER.register("makeshift_rifle",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "makeshift_rifle",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> LOCKEWOOD = REGISTER.register("lockewood",
+            () -> new AnimatedDiamondSteelGunItem(
+                    new Item.Properties().stacksTo(1).durability(800),
+                    "lockewood",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> GRANDLE = REGISTER.register("grandle",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "grandle",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> DEFENDER_PISTOL = REGISTER.register("defender_pistol",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "defender_pistol",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> TRENCHUR = REGISTER.register("trenchur",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "trenchur",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> AUVTOMAG = REGISTER.register("auvtomag",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "auvtomag",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> GREASER_SMG = REGISTER.register("greaser_smg",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "greaser_smg",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> BOOMSTICK = REGISTER.register("boomstick",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(400),
+                    "boomstick",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> INERTIAL = REGISTER.register("inertial",
+            () -> new AnimatedDiamondSteelGunItem(
+                    new Item.Properties().stacksTo(1).durability(800),
+                    "inertial",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> M22_WALTZ = REGISTER.register("m22_waltz",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "m22_waltz",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedUnderWaterGunItem> FLOUNDERGAT = REGISTER.register("floundergat",
+            () -> new AnimatedUnderWaterGunItem(
+                    new Item.Properties().stacksTo(1).durability(256),
+                    "floundergat",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedDiamondSteelGunItem> KRAUSER = REGISTER.register("krauser",
+            () -> new AnimatedDiamondSteelGunItem(
+                    new Item.Properties().stacksTo(1).durability(800),
+                    "krauser",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedDiamondSteelGunItem> UPPERCUT = REGISTER.register("uppercut",
+            () -> new AnimatedDiamondSteelGunItem(
+                    new Item.Properties().stacksTo(1).durability(800),
+                    "uppercut",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedDiamondSteelGunItem> PRUSH_GUN = REGISTER.register("prush_gun",
+            () -> new AnimatedDiamondSteelGunItem(
+                    new Item.Properties().stacksTo(1).durability(800),
+                    "prush_gun",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedDiamondSteelGunItem> SOUL_DRUMMER = REGISTER.register("soul_drummer",
+            () -> new AnimatedDiamondSteelGunItem(
+                    new Item.Properties().stacksTo(1).durability(800),
+                    "soul_drummer",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedSilencedDiamondSteelFirearm> VALORA = REGISTER.register("valora",
+            () -> new AnimatedSilencedDiamondSteelFirearm(
+                    new Item.Properties().stacksTo(1).durability(800),
+                    "valora",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> RUSTY_GNAT = REGISTER.register("rusty_gnat",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(400),
+                    "rusty_gnat",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> CALLWELL = REGISTER.register("callwell",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(256),
+                    "callwell",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> CALLWELL_CONVERSION = REGISTER.register("callwell_conversion",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(256),
+                    "callwell_conversion",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> COMBAT_SHOTGUN = REGISTER.register("combat_shotgun",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "combat_shotgun",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> FLINTLOCK_PISTOL = REGISTER.register("flintlock_pistol",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "flintlock_pistol",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<NonUnderwaterAnimatedGunItem> HANDCANNON = REGISTER.register("handcannon",
+            () -> new NonUnderwaterAnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(256),
+                    "handcannon",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<NonUnderwaterAnimatedGunItem> MUSKET = REGISTER.register("musket",
+            () -> new NonUnderwaterAnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(256),
+                    "musket",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<NonUnderwaterAnimatedGunItem> REPEATING_MUSKET = REGISTER.register("repeating_musket",
+            () -> new NonUnderwaterAnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(256),
+                    "repeating_musket",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<NonUnderwaterAnimatedGunItem> BLUNDERBUSS = REGISTER.register("blunderbuss",
+            () -> new NonUnderwaterAnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(256),
+                    "blunderbuss",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedDiamondSteelGunItem> MAS_55 = REGISTER.register("mas_55",
+            () -> new AnimatedDiamondSteelGunItem(
+                    new Item.Properties().stacksTo(1).durability(800),
+                    "mas_55",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> COGLOADER = REGISTER.register("cogloader",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "cogloader",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> SAKETINI = REGISTER.register("saketini",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(256),
+                    "saketini",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> SCRAPPER = REGISTER.register("scrapper",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(400),
+                    "scrapper",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> BRAWLER = REGISTER.register("brawler",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "brawler",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> WINNIE = REGISTER.register("winnie",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(256),
+                    "winnie",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> BRUISER = REGISTER.register("bruiser",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(400),
+                    "bruiser",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedDiamondSteelGunItem> CYCLONE = REGISTER.register("cyclone",
+            () -> new AnimatedDiamondSteelGunItem(
+                    new Item.Properties().stacksTo(1).durability(800),
+                    "cyclone",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedDiamondSteelGunItem> PLASGUN = REGISTER.register("plasgun",
+            () -> new AnimatedDiamondSteelGunItem(
+                    new Item.Properties().stacksTo(1).durability(800),
+                    "plasgun",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> ROCKET_RIFLE = REGISTER.register("rocket_rifle",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "rocket_rifle",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> MARLIN = REGISTER.register("marlin",
+            () -> new AnimatedUnderWaterGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "marlin",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> GAUSS_RIFLE = REGISTER.register("gauss_rifle",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "gauss_rifle",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> NIAMI = REGISTER.register("niami",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "niami",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> IRON_SPEAR = REGISTER.register("iron_spear",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "iron_spear",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> IRON_JAVELIN = REGISTER.register("iron_javelin",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "iron_javelin",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
 
-    public static final RegistryObject<GunItem> LLR_DIRECTOR = REGISTER.register("llr_director", () -> new GunItem(new Item.Properties().stacksTo(1).durability(400)));
-    public static final RegistryObject<GunItem> M3_CARABINE = REGISTER.register("m3_carabine", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
-    public static final RegistryObject<GunItem> GREASER_SMG = REGISTER.register("greaser_smg", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
-    public static final RegistryObject<GunItem> IRON_SPEAR = REGISTER.register("iron_spear", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
-    public static final RegistryObject<GunItem> IRON_JAVELIN = REGISTER.register("iron_javelin", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
-    public static final RegistryObject<GunItem> DEFENDER_PISTOL = REGISTER.register("defender_pistol", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
-    public static final RegistryObject<GunItem> COMBAT_SHOTGUN = REGISTER.register("combat_shotgun", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
-    public static final RegistryObject<GunItem> AUVTOMAG = REGISTER.register("auvtomag", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
-    public static final RegistryObject<GunItem> PULSAR = REGISTER.register("pulsar", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
-    public static final RegistryObject<GunItem> BRAWLER = REGISTER.register("brawler", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
+    public static final RegistryObject<AnimatedGunItem> LLR_DIRECTOR = REGISTER.register("llr_director",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(400),
+                    "llr_director",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> PAX = REGISTER.register("pax",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(256),
+                    "pax",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> BIG_BORE = REGISTER.register("big_bore",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(6),
+                    "big_bore",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> HOWLER = REGISTER.register("howler",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "howler",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> HOWLER_CONVERSION = REGISTER.register("howler_conversion",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "howler_conversion",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> PULSAR = REGISTER.register("pulsar",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(256),
+                    "pulsar",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> ARC_WORKER = REGISTER.register("arc_worker",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(400),
+                    "arc_worker",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> LASER_MUSKET = REGISTER.register("laser_musket",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(512),
+                    "laser_musket",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> PLASMABUSS = REGISTER.register("plasmabuss",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(512),
+                    "plasmabuss",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> JACKHAMMER = REGISTER.register("jackhammer",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "jackhammer",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> SEQUOIA = REGISTER.register("sequoia",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "sequoia",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> ULTRA_KNIGHT_HAWK = REGISTER.register("ultra_knight_hawk",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(7),
+                    "ultra_knight_hawk",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> SUPER_SHOTGUN = REGISTER.register("super_shotgun",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "super_shotgun",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> BOMB_LANCE = REGISTER.register("bomb_lance",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "bomb_lance",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> DOZIER_RL = REGISTER.register("dozier_rl",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(512),
+                    "dozier_rl",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> DARK_MATTER = REGISTER.register("dark_matter",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(1500),
+                    "dark_matter",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> MK43_RIFLE = REGISTER.register("mk43_rifle",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "mk43_rifle",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> GYROJET_PISTOL = REGISTER.register("gyrojet_pistol",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(560),
+                    "gyrojet_pistol",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> THUNDERHEAD = REGISTER.register("thunderhead",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(600),
+                    "thunderhead",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> GATTALER = REGISTER.register("gattaler",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(1000),
+                    "gattaler",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> CR4K_MINING_LASER = REGISTER.register("cr4k_mining_laser",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(1200),
+                    "cr4k_mining_laser",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> SHARD_CULLER = REGISTER.register("shard_culler",
+            () -> new AnimatedDiamondSteelGunItem(
+                    new Item.Properties().stacksTo(1).durability(1000),
+                    "shard_culler",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> SPITFIRE = REGISTER.register("spitfire",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "spitfire",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> WALTZ_CONVERSION = REGISTER.register("waltz_conversion",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "waltz_conversion",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> OSGOOD_50 = REGISTER.register("osgood_50",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "osgood_50",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> FREYR = REGISTER.register("freyr",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(700),
+                    "freyr",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> VULCANIC_REPEATER = REGISTER.register("vulcanic_repeater",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(700),
+                    "vulcanic_repeater",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> PYROCLASTIC_FLOW = REGISTER.register("pyroclastic_flow",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(700),
+                    "pyroclastic_flow",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> MANGALITSA = REGISTER.register("mangalitsa",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(700),
+                    "mangalitsa",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> BLASPHEMY = REGISTER.register("blasphemy",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(700),
+                    "blasphemy",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> WHISPERS = REGISTER.register("whispers",
+            () -> new AnimatedSilencedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "whispers",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> SCULK_RESONATOR = REGISTER.register("sculk_resonator",
+            () -> new AnimatedSilencedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "sculk_resonator",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> ECHOES_2 = REGISTER.register("echoes_2",
+            () -> new AnimatedSilencedGunItem(
+                    new Item.Properties().stacksTo(1).durability(900),
+                    "echoes_2",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> RAYGUN = REGISTER.register("raygun",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(1200),
+                    "raygun",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> CARAPICE = REGISTER.register("carapice",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(1200),
+                    "carapice",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> SHELLURKER = REGISTER.register("shellurker",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(1200),
+                    "shellurker",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> LONE_WONDER = REGISTER.register("lone_wonder",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(1200),
+                    "lone_wonder",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> RAT_KING_AND_QUEEN = REGISTER.register("rat_king_and_queen",
+            () -> new AnimatedDualWieldGunItem(
+                    new Item.Properties().stacksTo(1).durability(1500),
+                    "rat_king_and_queen",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> LOCUST = REGISTER.register("locust",
+            () -> new AnimatedScorchedGunItem(
+                    new Item.Properties().stacksTo(1).durability(1500),
+                    "locust",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> NEWBORN_CYST = REGISTER.register("newborn_cyst",
+            () -> new AnimatedScorchedGunItem(
+                    new Item.Properties().stacksTo(1).durability(1500),
+                    "newborn_cyst",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+
+    public static final RegistryObject<AnimatedScorchedGunItem> ASTELLA = REGISTER.register("astella",
+            () -> new AnimatedScorchedGunItem(
+                    new Item.Properties().stacksTo(1).durability(1500),
+                    "astella",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedScorchedGunItem> PRIMA_MATERIA = REGISTER.register("prima_materia",
+            () -> new AnimatedScorchedGunItem(
+                    new Item.Properties().stacksTo(1).durability(1500),
+                    "prima_materia",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedScorchedEnergyGunItem> NERVEPINCH = REGISTER.register("nervepinch",
+            () -> new AnimatedScorchedEnergyGunItem(
+                    new Item.Properties().stacksTo(1).durability(1500),
+                    "nervepinch",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    5000
+            )
+    );
+    public static final RegistryObject<AnimatedScorchedGunItem> EARTHS_CORPSE = REGISTER.register("earths_corpse",
+            () -> new AnimatedScorchedGunItem(
+                    new Item.Properties().stacksTo(1).durability(1500),
+                    "earths_corpse",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedScorchedGunItem> FLAYED_GOD = REGISTER.register("flayed_god",
+            () -> new AnimatedScorchedGunItem(
+                    new Item.Properties().stacksTo(1).durability(1500),
+                    "flayed_god",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
 
 
-    public static final RegistryObject<GunItem> GYROJET_PISTOL = REGISTER.register("gyrojet_pistol", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
-    public static final RegistryObject<GunItem> MK43_RIFLE = REGISTER.register("mk43_rifle", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
-    public static final RegistryObject<GunItem> ROCKET_RIFLE = REGISTER.register("rocket_rifle", () -> new GunItem(new Item.Properties().stacksTo(1).durability(560)));
-    public static final RegistryObject<GunItem> MARLIN = REGISTER.register("marlin", () -> new UnderwaterGunItem(new Item.Properties().stacksTo(1).durability(560)));
-
-    public static final RegistryObject<GunItem> PRUSH_GUN = REGISTER.register("prush_gun", () -> new DiamondSteelGunItem(new Item.Properties().stacksTo(1).durability(800)));
-    public static final RegistryObject<GunItem> INERTIAL = REGISTER.register("inertial", () -> new DiamondSteelGunItem(new Item.Properties().stacksTo(1).durability(800)));
-    public static final RegistryObject<GunItem> COGLOADER = REGISTER.register("cogloader", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
-    public static final RegistryObject<GunItem> GRANDLE = REGISTER.register("grandle", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
-    public static final RegistryObject<GunItem> PLASGUN = REGISTER.register("plasgun", () -> new DiamondSteelGunItem(new Item.Properties().stacksTo(1).durability(800)));
-    public static final RegistryObject<GunItem> GAUSS_RIFLE = REGISTER.register("gauss_rifle", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
-    public static final RegistryObject<GunItem> MAS_55 = REGISTER.register("mas_55", () -> new DiamondSteelGunItem(new Item.Properties().stacksTo(1).durability(800)));
-    public static final RegistryObject<GunItem> DOZIER_RL = REGISTER.register("dozier_rl", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
-    public static final RegistryObject<GunItem> SPITFIRE = REGISTER.register("spitfire", () -> new NonUnderwaterGunItem(new Item.Properties().stacksTo(1).durability(900)));
-    public static final RegistryObject<GunItem> CYCLONE = REGISTER.register("cyclone", () -> new DiamondSteelGunItem(new Item.Properties().stacksTo(1).durability(800)));
-    public static final RegistryObject<GunItem> SHARD_CULLER = REGISTER.register("shard_culler", () -> new DiamondSteelGunItem(new Item.Properties().stacksTo(1).durability(1000)));
-    public static final RegistryObject<GunItem> SOUL_DRUMMER = REGISTER.register("soul_drummer", () -> new DiamondSteelGunItem(new Item.Properties().stacksTo(1).durability(800)));
-    public static final RegistryObject<GunItem> VALORA = REGISTER.register("valora", () -> new SilencedDiamondSteelFirearm(new Item.Properties().stacksTo(1).durability(800)));
-
-    public static final RegistryObject<GunItem> OSGOOD_50 = REGISTER.register("osgood_50", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
-    public static final RegistryObject<GunItem> JACKHAMMER = REGISTER.register("jackhammer", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
-    public static final RegistryObject<GunItem> M22_WALTZ = REGISTER.register("m22_waltz", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
-
-    public static final RegistryObject<GunItem> WALTZ_CONVERSION = REGISTER.register("waltz_conversion", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
-    public static final RegistryObject<GunItem> CR4K_MINING_LASER = REGISTER.register("cr4k_mining_laser", () -> new GunItem(new Item.Properties().stacksTo(1).durability(1400)));
-    public static final RegistryObject<GunItem> HOWLER = REGISTER.register("howler", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
-    public static final RegistryObject<GunItem> HOWLER_CONVERSION = REGISTER.register("howler_conversion", () -> new GunItem(new Item.Properties().stacksTo(1).durability(800)));
-    public static final RegistryObject<GunItem> LOCKEWOOD = REGISTER.register("lockewood", () -> new DiamondSteelGunItem(new Item.Properties().stacksTo(1).durability(800)));
-    public static final RegistryObject<GunItem> ASTELLA = REGISTER.register("astella", () -> new ScorchedWeapon(new Item.Properties().stacksTo(1).durability(800)));
-
-    public static final RegistryObject<GunItem> KRAUSER = REGISTER.register("krauser", () -> new DiamondSteelGunItem(new Item.Properties().stacksTo(1).durability(800)));
-
-    public static final RegistryObject<GunItem> UPPERCUT = REGISTER.register("uppercut", () -> new DiamondSteelGunItem(new Item.Properties().stacksTo(1).durability(800)));
-    public static final RegistryObject<GunItem> GATTALER = REGISTER.register("gattaler", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
-    public static final RegistryObject<GunItem> THUNDERHEAD = REGISTER.register("thunderhead", () -> new GunItem(new Item.Properties().stacksTo(1).durability(900)));
-   public static final RegistryObject<GunItem> RAYGUN = REGISTER.register("raygun", () -> new GunItem(new Item.Properties().stacksTo(1).durability(1500).rarity(Rarity.EPIC)));
-    public static final RegistryObject<GunItem> SUPER_SHOTGUN = REGISTER.register("super_shotgun", () -> new GunItem(new Item.Properties().stacksTo(1).durability(500).rarity(Rarity.UNCOMMON)));
-
-    public static final RegistryObject<GunItem> BLASPHEMY = REGISTER.register("blasphemy", () -> new NonUnderwaterGunItem(new Item.Properties().stacksTo(1).durability(700).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> PYROCLASTIC_FLOW = REGISTER.register("pyroclastic_flow", () -> new GunItem(new Item.Properties().stacksTo(1).durability(700).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> SEQUOIA = REGISTER.register("sequoia", () -> new GunItem(new Item.Properties().stacksTo(1).durability(400).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> LONE_WONDER = REGISTER.register("lone_wonder", () -> new GunItem(new Item.Properties().stacksTo(1).durability(1500).rarity(Rarity.UNCOMMON)));
-
-    public static final RegistryObject<GunItem> FREYR = REGISTER.register("freyr", () -> new GunItem(new Item.Properties().stacksTo(1).durability(700).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> VULCANIC_REPEATER = REGISTER.register("vulcanic_repeater", () -> new GunItem(new Item.Properties().stacksTo(1).durability(700).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> BOMB_LANCE = REGISTER.register("bomb_lance", () -> new UnderwaterGunItem(new Item.Properties().stacksTo(1).durability(560).rarity(Rarity.UNCOMMON)));
-
-    public static final RegistryObject<GunItem> EARTHS_CORPSE = REGISTER.register("earths_corpse", () -> new ScorchedWeapon(new Item.Properties().stacksTo(1).durability(1500).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> RAT_KING_AND_QUEEN = REGISTER.register("rat_king_and_queen", () -> new DualWieldGunItem(new Item.Properties().stacksTo(1).durability(1500).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> LOCUST = REGISTER.register("locust", () -> new ScorchedWeapon(new Item.Properties().stacksTo(1).durability(1500).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> NEWBORN_CYST = REGISTER.register("newborn_cyst", () -> new ScorchedWeapon(new Item.Properties().stacksTo(1).durability(1500).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> FLAYED_GOD = REGISTER.register("flayed_god", () -> new ScorchedWeapon(new Item.Properties().stacksTo(1).durability(1500).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> NERVEPINCH = REGISTER.register("nervepinch", () -> new ScorchedEnergyGunItem(new Item.Properties().stacksTo(1).durability(1500), 5000));
-    public static final RegistryObject<GunItem> SCULK_RESONATOR = REGISTER.register("sculk_resonator", () -> new SilencedFirearm(new Item.Properties().stacksTo(1).durability(900)));
-    public static final RegistryObject<GunItem> WHISPERS = REGISTER.register("whispers", () -> new SilencedFirearm(new Item.Properties().stacksTo(1).durability(900)));
-    public static final RegistryObject<GunItem> ECHOES_2 = REGISTER.register("echoes_2", () -> new SilencedFirearm(new Item.Properties().stacksTo(1).durability(900)));
-    public static final RegistryObject<GunItem> CARAPICE = REGISTER.register("carapice", () -> new GunItem(new Item.Properties().stacksTo(1).durability(1500).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> ULTRA_KNIGHT_HAWK = REGISTER.register("ultra_knight_hawk", () -> new GunItem(new Item.Properties().stacksTo(1).durability(3).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> SHELLURKER = REGISTER.register("shellurker", () -> new GunItem(new Item.Properties().stacksTo(1).durability(1500).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<GunItem> DARK_MATTER = REGISTER.register("dark_matter", () -> new GunItem(new Item.Properties().stacksTo(1).durability(1500).rarity(Rarity.UNCOMMON)));
-    public static final RegistryObject<PickaxeItem> ANTHRALITE_PICKAXE = REGISTER.register("anthralite_pickaxe", () -> new PickaxeItem(ModTiers.ANTHRALITE, 1, -2.8F, new Item.Properties()));
+   public static final RegistryObject<PickaxeItem> ANTHRALITE_PICKAXE = REGISTER.register("anthralite_pickaxe", () -> new PickaxeItem(ModTiers.ANTHRALITE, 1, -2.8F, new Item.Properties()));
     public static final RegistryObject<SwordItem> ANTHRALITE_SWORD = REGISTER.register("anthralite_sword", () -> new SwordItem(ModTiers.ANTHRALITE, 3, -2.4F, new Item.Properties()));
     public static final RegistryObject<AxeItem> ANTHRALITE_AXE = REGISTER.register("anthralite_axe", () -> new AxeItem(ModTiers.ANTHRALITE, 5, -3.0F, new Item.Properties()));
     public static final RegistryObject<ShovelItem> ANTHRALITE_SHOVEL = REGISTER.register("anthralite_shovel", () -> new ShovelItem(ModTiers.ANTHRALITE, 1.5F, -3.0F, new Item.Properties()));
@@ -348,6 +1293,7 @@ public class ModItems {
     public static final RegistryObject<Item> NETHERITE_SCRAP_CHUNK = REGISTER.register("netherite_scrap_chunk", () -> new ScorchedItem(new Item.Properties()));
 
     public static final RegistryObject<Item> PLASMA = REGISTER.register("plasma", () -> new FuelItem(new Item.Properties(), 2400));
+    public static final RegistryObject<Item> PLASMA_NUGGET = REGISTER.register("plasma_nugget", () -> new FuelItem(new Item.Properties(), 480));
     public static final RegistryObject<Item> PISTOL_AMMO_BOX = REGISTER.register("pistol_ammo_box", () -> new PistolAmmoBoxItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> RIFLE_AMMO_BOX = REGISTER.register("rifle_ammo_box", () -> new RifleAmmoBoxItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> SHOTGUN_AMMO_BOX = REGISTER.register("shotgun_ammo_box", () -> new ShotgunAmmoBoxItem(new Item.Properties().stacksTo(1)));
@@ -402,10 +1348,10 @@ public class ModItems {
     public static final RegistryObject<Item> LIGHT_GRIP = REGISTER.register("light_grip", () -> new UnderBarrelItem(UnderBarrel.create(GunModifiers.LIGHT_RECOIL), new Item.Properties().stacksTo(1).durability(1400)));
     public static final RegistryObject<Item> VERTICAL_GRIP = REGISTER.register("vertical_grip", () -> new UnderBarrelItem(UnderBarrel.create(GunModifiers.REDUCED_RECOIL), new Item.Properties().stacksTo(1).durability(1600)));
 
-    public static final RegistryObject<Item> IRON_BAYONET = REGISTER.register("iron_bayonet", () -> new BayonetItem(UnderBarrel.create(GunModifiers.IRON_BAYONET_DAMAGE), new Item.Properties().stacksTo(1).durability(560), 2.0f, -3.0f));
-    public static final RegistryObject<Item> ANTHRALITE_BAYONET = REGISTER.register("anthralite_bayonet", () -> new BayonetItem(UnderBarrel.create(GunModifiers.ANTHRALITE_BAYONET_DAMAGE), new Item.Properties().stacksTo(1).durability(512), 3.0f, -3.0f));
-    public static final RegistryObject<Item> DIAMOND_BAYONET = REGISTER.register("diamond_bayonet", () -> new BayonetItem(UnderBarrel.create(GunModifiers.DIAMOND_BAYONET_DAMAGE), new Item.Properties().stacksTo(1).durability(1024), 4.0f, -3.0f));
-    public static final RegistryObject<Item> NETHERITE_BAYONET = REGISTER.register("netherite_bayonet", () -> new BayonetItem(UnderBarrel.create(GunModifiers.NETHERITE_BAYONET_DAMAGE), new Item.Properties().stacksTo(1).durability(1500), 5.0f, -3.0f));
+    public static final RegistryObject<Item> IRON_BAYONET = REGISTER.register("iron_bayonet", () -> new BayonetItem(UnderBarrel.create(GunModifiers.IRON_BAYONET_DAMAGE), new Item.Properties().stacksTo(1).durability(560), 1.5f, -3.0f));
+    public static final RegistryObject<Item> ANTHRALITE_BAYONET = REGISTER.register("anthralite_bayonet", () -> new BayonetItem(UnderBarrel.create(GunModifiers.ANTHRALITE_BAYONET_DAMAGE), new Item.Properties().stacksTo(1).durability(512), 2.0f, -3.0f));
+    public static final RegistryObject<Item> DIAMOND_BAYONET = REGISTER.register("diamond_bayonet", () -> new BayonetItem(UnderBarrel.create(GunModifiers.DIAMOND_BAYONET_DAMAGE), new Item.Properties().stacksTo(1).durability(1024), 3.0f, -3.0f));
+    public static final RegistryObject<Item> NETHERITE_BAYONET = REGISTER.register("netherite_bayonet", () -> new BayonetItem(UnderBarrel.create(GunModifiers.NETHERITE_BAYONET_DAMAGE), new Item.Properties().stacksTo(1).durability(1500), 4.0f, -3.0f));
 
     //Magazines
     public static final RegistryObject<Item> EXTENDED_MAG = REGISTER.register("extended_mag", () -> new MagazineItem(Magazine.create(GunModifiers.EXTENDED_MAG_MODIFIER), new Item.Properties().stacksTo(1).durability(1700)));

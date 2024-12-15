@@ -29,7 +29,7 @@
       "scope": {
         "size": 0.8,
         "yOffset": 6.0,
-        "zOffset": 5.2
+        "zOffset": 4.6
       }
     },
     "zoom": {
@@ -45,6 +45,7 @@
     "gravity": false,
     "item": "scguns:ramrod_round",
     "casingType": "scguns:small_iron_casing",
+    "casingParticle": "scguns:iron_casing",
     "life": 45,
     "size": 0.1,
     "speed": 5.5,

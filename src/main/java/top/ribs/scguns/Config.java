@@ -6,9 +6,10 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.loading.FMLPaths;
 import org.apache.commons.lang3.tuple.Pair;
 import top.ribs.scguns.client.SwayType;
-import top.ribs.scguns.client.render.crosshair.Crosshair;
+import top.ribs.scguns.client.render.crosshair.DotRenderMode;
 import top.ribs.scguns.client.screen.ButtonAlignment;
 import top.ribs.scguns.entity.projectile.turret.TurretProjectileEntity;
+
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -90,6 +91,15 @@ public class Config
         public final ForgeConfigSpec.BooleanValue sprintAnimation;
         public final ForgeConfigSpec.DoubleValue bobbingIntensity;
         public final ForgeConfigSpec.BooleanValue fireLights;
+        public final ForgeConfigSpec.BooleanValue puritySeals;
+        public final ForgeConfigSpec.DoubleValue dynamicCrosshairBaseSpread;
+        public final ForgeConfigSpec.DoubleValue dynamicCrosshairSpreadMultiplier;
+        public final ForgeConfigSpec.DoubleValue dynamicCrosshairReactivity;
+        public final ForgeConfigSpec.EnumValue<DotRenderMode> dynamicCrosshairDotMode;
+        public final ForgeConfigSpec.BooleanValue onlyRenderDotWhileAiming;
+        public final ForgeConfigSpec.DoubleValue dynamicCrosshairDotThreshold;
+        public final ForgeConfigSpec.DoubleValue dynamicCrosshairMaxScale;
+
 
 
         public Display(ForgeConfigSpec.Builder builder)
@@ -97,7 +107,7 @@ public class Config
             builder.comment("Configuration for display related options").push("display");
             {
                 this.oldAnimations = builder.comment("If true, uses the old animation poses for weapons. This is only for nostalgic reasons and not recommended to switch back.").define("oldAnimations", false);
-                this.crosshair = builder.comment("The custom crosshair to use for weapons. Go to (Options > Controls > Mouse Settings > Crosshair) in game to change this!").define("crosshair", Crosshair.DEFAULT.getLocation().toString());
+                this.crosshair = builder.comment("The custom crosshair to use for weapons. Go to (Options > Controls > Mouse Settings > Crosshair) in game to change this!").define("crosshair", "scguns:dynamic");
                 this.cooldownIndicator = builder.comment("If enabled, renders a cooldown indicator to make it easier to learn when you fire again.").define("cooldownIndicator", true);
                 this.weaponSway = builder.comment("If enabled, the weapon will sway when the player moves their look direction. This does not affect aiming and is only visual.").define("weaponSway", true);
                 this.swaySensitivity = builder.comment("The sensistivity of the visual weapon sway when the player moves their look direciton. The higher the value the more sway.").defineInRange("swaySensitivity", 0.3, 0.0, 1.0);
@@ -110,6 +120,16 @@ public class Config
                 this.bobbingIntensity = builder.comment("The intensity of the custom bobbing animation while holding a gun").defineInRange("bobbingIntensity", 1.0, 0.0, 2.0);
                 this.cinematicGunEffects = builder.comment("If enabled, enables cinematic camera effects on guns ").define("cinematicGunEffects", true);
                 this.fireLights = builder.comment("If enabled, enables light sources when firing guns").define("fireLights", true);
+                this.puritySeals = builder.comment("If enabled, enables purity seals on weapons").define("puritySeals", true);
+                this.dynamicCrosshairBaseSpread = builder.comment("The resting size of the Dynamic Crosshair when spread is zero.").defineInRange("dynamicCrosshairBaseSpread", 1.0, 0.0, 5.0);
+                this.dynamicCrosshairSpreadMultiplier = builder.comment("The bloom factor of the Dynamic Crosshair when spread increases.").defineInRange("dynamicCrosshairSpreadMultiplier", 1.0, 1.0, 1.5);
+                this.dynamicCrosshairReactivity = builder.comment("How reactive the Dynamic Crosshair is to shooting.").defineInRange("dynamicCrosshairReactivity", 2.0, 0.0, 10.0);
+                this.dynamicCrosshairDotMode = builder.comment("The rendering mode used for the Dynamic Crosshair's center dot. At Min Spread will only render the dot when gun spread is stable.").defineEnum("dynamicCrosshairDotMode", DotRenderMode.AT_MIN_SPREAD);
+                this.onlyRenderDotWhileAiming = builder.comment("If true, the Dynamic Crosshair's center dot will only render while aiming. Obeys dynamicCrosshairDotMode, and has no effect when mode is set to Never.").define("onlyRenderDotWhileAiming", true);
+                this.dynamicCrosshairDotThreshold = builder.comment("The threshold of spread (including modifiers) below which the Dynamic Crosshair's center dot is rendered. Affects the At Min Spread and Threshold modes only.").defineInRange("dynamicCrosshairDotThreshold", 0.8, 0.0, 90.0);
+                this.dynamicCrosshairMaxScale = builder
+                        .comment("The maximum scale factor for the dynamic crosshair when spread is high")
+                        .defineInRange("dynamicCrosshairMaxScale", 8.0, 1.0, 20.0);
             }
             builder.pop();
         }
@@ -226,12 +246,16 @@ public class Config
         public final ForgeConfigSpec.DoubleValue enemyBulletDamage;
         public final ForgeConfigSpec.DoubleValue ammoBoxCapacityMultiplier;
         public final ForgeConfigSpec.IntValue energyProductionRate;
+        public final ForgeConfigSpec.BooleanValue drawAnimation;
+        public final ForgeConfigSpec.BooleanValue forceEnergyGuns;
+
 
         public Gameplay(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Properties relating to gameplay").push("gameplay");
             {
                 this.griefing = new Griefing(builder);
+                this.drawAnimation = builder.comment("If true, enables the draw animation for weapons").define("drawAnimation", true);
                 this.ammoBoxCapacityMultiplier = builder.comment("Multiplier to adjust the capacity of all ammo boxes.").defineInRange("ammoBoxCapacityMultiplier", 1.0, 0.1, 100.0);
                 this.enableGunDamage = builder.comment("If true, guns will be damageable and can break, coward if you toggle this").define("enableGunDamage", true);
                 this.enableAttachmentDamage = builder.comment("If true, gun attachments will be damageable and can break, also a coward").define("enableAttachmentDamage", true);
@@ -249,6 +273,9 @@ public class Config
                 this.energyProductionRate = builder
                         .comment("Energy produced per tick by the Polar Generator. Adjust this value to balance the generator's output.")
                         .defineInRange("energyProductionRate", 50, 1, Integer.MAX_VALUE);
+                this.forceEnergyGuns = builder
+                        .comment("If true, guns will always use energy system even if Create mod is loaded NOT WORKING.")
+                        .define("forceEnergyGuns", false);
             }
             builder.pop();
         }
@@ -265,6 +292,7 @@ public class Config
         public final ForgeConfigSpec.DoubleValue fragileBaseBreakChance;
         public final ForgeConfigSpec.BooleanValue setFireToBlocks;
         public final ForgeConfigSpec.BooleanValue enableBlockBreaking;
+        public final ForgeConfigSpec.BooleanValue enableBeamMining;
 
         public Griefing(ForgeConfigSpec.Builder builder)
         {
@@ -275,7 +303,8 @@ public class Config
                 this.fragileBlockDrops = builder.comment("If enabled, fragile blocks will drop their loot when broken").define("fragileBlockDrops", true);
                 this.fragileBaseBreakChance = builder.comment("The base chance that a fragile block is broken when impacted by a bullet. The hardness of a block will scale this value; the harder the block, the lower the final calculated chance will be.").defineInRange("fragileBlockBreakChance", 1.0, 0.0, 1.0);
                 this.setFireToBlocks = builder.comment("If true, allows guns enchanted with Fire Starter to light and spread fires on blocks").define("setFireToBlocks", true);
-                this.enableBlockBreaking = builder.comment("If true, allows guns/lasers to break blocks").define("enableBlockBreaking", true);
+                this.enableBlockBreaking = builder.comment("If true, allows heavy rounds to break blocks").define("enableBlockBreaking", true);
+                this.enableBeamMining = builder.comment("If true, allows beam weapons to mine blocks").define("enableBeamMining", true);
             }
             builder.pop();
         }

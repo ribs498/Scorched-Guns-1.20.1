@@ -17,7 +17,8 @@
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 10,
     "hotBarrelRate": 21,
-    "criticalChance": 0.05
+    "criticalChance": 0.05,
+    "isRevolver": true
   },
   "modules": {
     "attachments": {
@@ -37,7 +38,7 @@
     "zoom": {
       "fovModifier": 0.6,
       "yOffset": 6.6,
-      "zOffset": 0.75
+      "zOffset": 0.5
     }
   },
   "projectile": {
@@ -46,6 +47,9 @@
     "gravity": false,
     "item": "scguns:beowulf_round",
     "casingType": "scguns:small_diamond_steel_casing",
+    "casingParticle": "scguns:diamond_steel_casing",
+    "ejectDuringReload": true,
+    "ejectsCasing": true,
     "life": 60,
     "size": 0.1,
     "speed": 5.5,

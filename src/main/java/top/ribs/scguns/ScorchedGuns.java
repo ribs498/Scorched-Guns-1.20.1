@@ -12,15 +12,14 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.client.CustomGunManager;
-import top.ribs.scguns.client.handler.BeamHandler;
-import top.ribs.scguns.client.handler.GunRenderingHandler;
-import top.ribs.scguns.client.handler.HUDRenderHandler;
+import top.ribs.scguns.client.handler.*;
 import top.ribs.scguns.client.screen.*;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.NetworkGunManager;
@@ -58,7 +57,7 @@ public class ScorchedGuns {
     public static boolean ieLoaded;
     public static boolean valkyrienSkiesLoaded;
     public static boolean marjLoaded;
-
+    private static boolean useEnergyGuns = false;
 
     public ScorchedGuns() {
         // Common setup
@@ -69,7 +68,7 @@ public class ScorchedGuns {
 
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-
+        modEventBus.addListener(this::onConfigLoad);
         // Initialize the deferred register for items
         ModItems.REGISTER.register(bus);
         ModRecipes.register(modEventBus);
@@ -103,6 +102,7 @@ public class ScorchedGuns {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
             ClientHandler.registerClientHandlers(bus);
             MinecraftForge.EVENT_BUS.register(HUDRenderHandler.class);
+            MinecraftForge.EVENT_BUS.register(InspectHandler.get());
             CraftingHelper.register(CreateModCondition.Serializer.INSTANCE);
             CraftingHelper.register(FarmersDelightModCondition.Serializer.INSTANCE);
             CraftingHelper.register(IEModCondition.Serializer.INSTANCE);
@@ -117,7 +117,17 @@ public class ScorchedGuns {
         MinecraftForge.EVENT_BUS.register(OceanWeaponEventHandler.class);
         MinecraftForge.EVENT_BUS.register(PiglinWeaponEventHandler.class);
     }
+    private void onConfigLoad(ModConfigEvent.Loading event) {
+        if (event.getConfig().getType() == ModConfig.Type.SERVER) {
+            RecoilHandler.get().updateConfig();
+        }
+    }
 
+    private void onConfigReload(ModConfigEvent.Reloading event) {
+        if (event.getConfig().getType() == ModConfig.Type.SERVER) {
+            RecoilHandler.get().updateConfig();
+        }
+    }
     private void initializeModDependencies() {
         // Check for optional mod dependencies
         valkyrienSkiesLoaded = ModList.get().isLoaded("valkyrienskies");
@@ -132,6 +142,10 @@ public class ScorchedGuns {
         marjLoaded = ModList.get().isLoaded("majruszsdifficulty");
     }
 
+
+    public static boolean shouldUseEnergyGuns() {
+        return !createLoaded || useEnergyGuns;
+    }
     private void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             PacketHandler.init();
@@ -141,7 +155,7 @@ public class ScorchedGuns {
             FrameworkAPI.registerSyncedDataKey(ModSyncedDataKeys.BURSTCOUNT);
             FrameworkAPI.registerSyncedDataKey(ModSyncedDataKeys.ONBURSTCOOLDOWN);
             FrameworkAPI.registerSyncedDataKey(ModSyncedDataKeys.MELEE);
-
+            MinecraftForge.EVENT_BUS.register(TemporaryLightManager.class);
             // Register login data
             FrameworkAPI.registerLoginData(new ResourceLocation(Reference.MOD_ID, "network_gun_manager"), NetworkGunManager.LoginData::new);
             FrameworkAPI.registerLoginData(new ResourceLocation(Reference.MOD_ID, "custom_gun_manager"), CustomGunManager.LoginData::new);
@@ -156,7 +170,7 @@ public class ScorchedGuns {
             ProjectileManager.getInstance().registerFactory(ModItems.ADVANCED_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new AdvancedRoundProjectileEntity(ModEntities.ADVANCED_ROUND_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.KRAHG_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new KrahgRoundProjectileEntity(ModEntities.KRAHG_ROUND_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.BEOWULF_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new BeowulfProjectileEntity(ModEntities.BEOWULF_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
-            ProjectileManager.getInstance().registerFactory(ModItems.GIBBS_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new AdvancedRoundProjectileEntity(ModEntities.ADVANCED_ROUND_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
+            ProjectileManager.getInstance().registerFactory(ModItems.GIBBS_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new AdvancedRoundProjectileEntity(ModEntities.GIBBS_ROUND_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.SHOTGUN_SHELL.get(), (worldIn, entity, weapon, item, modifiedGun) -> new ProjectileEntity(ModEntities.PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.BEARPACK_SHELL.get(), (worldIn, entity, weapon, item, modifiedGun) -> new BearPackShellProjectileEntity(ModEntities.BEARPACK_SHELL_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.BLAZE_FUEL.get(), (worldIn, entity, weapon, item, modifiedGun) -> new FireRoundEntity(ModEntities.FIRE_ROUND_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
@@ -173,6 +187,7 @@ public class ScorchedGuns {
             ProjectileManager.getInstance().registerFactory(ModItems.ROCKET.get(), (worldIn, entity, weapon, item, modifiedGun) -> new RocketEntity(ModEntities.ROCKET.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.MICROJET.get(), (worldIn, entity, weapon, item, modifiedGun) -> new MicroJetEntity(ModEntities.MICROJET.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.GRENADE.get(), (worldIn, entity, weapon, item, modifiedGun) -> new GrenadeEntity(ModEntities.GRENADE.get(), worldIn, entity, weapon, item, modifiedGun));
+            useEnergyGuns = Config.COMMON.gameplay.forceEnergyGuns.get();
 
           if (Config.COMMON.gameplay.improvedHitboxes.get()) {
                 MinecraftForge.EVENT_BUS.register(new BoundingBoxManager());

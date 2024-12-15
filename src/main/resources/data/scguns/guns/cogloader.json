@@ -30,7 +30,7 @@
       "scope": {
         "size": 0.8,
         "yOffset": 7.7,
-        "zOffset": 4.8
+        "zOffset": 3.5
       },
       "stock": {
         "scale": 0.0
@@ -48,11 +48,12 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 8.5,
+    "damage": 9.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:advanced_round",
     "casingType": "scguns:medium_brass_casing",
+    "casingParticle": "scguns:brass_casing",
     "life": 50,
     "size": 0.1,
     "speed": 6.5,

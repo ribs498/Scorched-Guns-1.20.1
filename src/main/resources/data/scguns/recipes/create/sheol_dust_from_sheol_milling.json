@@ -1,0 +1,15 @@
+{
+  "type": "create:milling",
+  "ingredients": [
+    {
+      "item": "scguns:sheol"
+    }
+  ],
+  "processingTime": 20,
+  "results": [
+    {
+      "count": 6,
+      "item": "scguns:sheol_dust"
+    }
+  ]
+}

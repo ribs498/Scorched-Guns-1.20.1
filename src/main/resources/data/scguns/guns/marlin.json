@@ -12,14 +12,14 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 11,
+    "rate": 12.0,
     "recoilAngle": 3.0,
     "recoilKick": 1.0,
     "spread": 3.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 22,
-    "criticalChance": 0.1
+    "criticalChance": 0.2
   },
   "modules": {
     "attachments": {
@@ -42,7 +42,7 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 4.7,
+      "yOffset": 4.9,
       "zOffset": 1.2
     }
   },
@@ -53,6 +53,7 @@
     "gravity": false,
     "item": "scguns:advanced_round",
     "casingType": "scguns:medium_brass_casing",
+    "casingParticle": "scguns:brass_casing",
     "life": 55,
     "size": 0.1,
     "speed": 9.0,
@@ -60,7 +61,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 8,
+    "maxAmmo": 9,
     "reloadItem": "scguns:advanced_round",
     "reloadTimer": 15,
     "reloadType": "scguns:manual"

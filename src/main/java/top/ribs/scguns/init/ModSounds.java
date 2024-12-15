@@ -9,8 +9,17 @@ import top.ribs.scguns.Reference;
 
 public class ModSounds {
     public static final DeferredRegister<SoundEvent> REGISTER = DeferredRegister.create(ForgeRegistries.SOUND_EVENTS, Reference.MOD_ID);
-
-
+    public static final RegistryObject<SoundEvent> LEVER = register("item.lever.lever");
+    public static final RegistryObject<SoundEvent> MAG_IN = register("item.mag_in.mag_in");
+    public static final RegistryObject<SoundEvent> MAG_OUT = register("item.mag_out.mag_out");
+    public static final RegistryObject<SoundEvent> RELOAD_END = register("item.reload_end.reload_end");
+    public static final RegistryObject<SoundEvent> GUN_RUSTLE = register("item.gun_rustle.gun_rustle");
+    public static final RegistryObject<SoundEvent> METAL = register("item.gun_sounds.metal");
+    public static final RegistryObject<SoundEvent> BOLT_PULL = register("item.bolt_pull.bolt_pull");
+    public static final RegistryObject<SoundEvent> BOLT_RELEASE = register("item.bolt_release.bolt_release");
+    public static final RegistryObject<SoundEvent> RACK = register("item.rack.rack");
+    public static final RegistryObject<SoundEvent> BOLT = register("item.bolt.bolt");
+    public static final RegistryObject<SoundEvent> SLAP = register("item.slap.slap");
     public static final RegistryObject<SoundEvent> MASS_PRODUCTION = register("mass_production");
     public static final RegistryObject<SoundEvent> MASS_DESTRUCTION = register("mass_destruction");
     public static final RegistryObject<SoundEvent> MASS_DESTRUCTION_EXTENDED = register("mass_destruction_extended");

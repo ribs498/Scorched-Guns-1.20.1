@@ -22,7 +22,7 @@ import top.ribs.scguns.network.PacketHandler;
 
 public class C2SMessageMeleeAttack extends PlayMessage<C2SMessageMeleeAttack> {
 	private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
+	private static final int BANZAI_CHECK_INTERVAL_MS = 50;
 	@Override
 	public void encode(C2SMessageMeleeAttack message, FriendlyByteBuf buffer) {
 		// No data to encode
@@ -37,43 +37,52 @@ public class C2SMessageMeleeAttack extends PlayMessage<C2SMessageMeleeAttack> {
 	public void handle(C2SMessageMeleeAttack message, MessageContext context) {
 		context.execute(() -> {
 			ServerPlayer player = context.getPlayer();
-			if (player != null && !player.isSpectator()) {
-				if (MeleeAttackHandler.isBanzaiActive()) {
-					MeleeAttackHandler.stopBanzai();
-				} else if (player.isSprinting()) {
-					ItemStack heldItem = player.getItemInHand(InteractionHand.MAIN_HAND);
-					if (!(heldItem.getItem() instanceof GunItem gunItem)) {
-						return;
-					}
-					if (gunItem.hasBayonet(heldItem)) {
-						MeleeAttackHandler.startBanzai(player);
-						scheduler.scheduleAtFixedRate(() -> {
-							if (MeleeAttackHandler.isBanzaiActive() && player.isSprinting()) {
-								MeleeAttackHandler.handleBanzaiMode(player);
-							} else if (MeleeAttackHandler.isBanzaiActive() && !player.isSprinting()) {
-								MeleeAttackHandler.stopBanzai();
-							}
-						}, 0, 1, TimeUnit.SECONDS);
-					} else {
-						MeleeAttackHandler.performNormalMeleeAttack(player);
-					}
+			if (player == null || player.isSpectator()) return;
+
+			if (MeleeAttackHandler.isBanzaiActive()) {
+				MeleeAttackHandler.stopBanzai();
+			} else if (player.isSprinting()) {
+				ItemStack heldItem = player.getItemInHand(InteractionHand.MAIN_HAND);
+				if (!(heldItem.getItem() instanceof GunItem gunItem)) return;
+
+				if (gunItem.hasBayonet(heldItem)) {
+					MeleeAttackHandler.startBanzai(player);
+					scheduler.scheduleAtFixedRate(() -> {
+						if (!MeleeAttackHandler.isBanzaiActive()) {
+							return;
+						}
+						if (player.isRemoved() || !player.isAlive()) {
+							MeleeAttackHandler.stopBanzai();
+							return;
+						}
+						if (!player.isSprinting()) {
+							MeleeAttackHandler.stopBanzai();
+							return;
+						}
+						MeleeAttackHandler.handleBanzaiMode(player);
+					}, 0, BANZAI_CHECK_INTERVAL_MS, TimeUnit.MILLISECONDS);
 				} else {
-					if (ModSyncedDataKeys.MELEE.getValue(player) || player.getCooldowns().isOnCooldown(player.getMainHandItem().getItem())) {
-						return;
-					}
-					ModSyncedDataKeys.MELEE.setValue(player, true);
-					MeleeAttackHandler.performMeleeAttack(player);
-
-					// Send S2CMessageMeleeAttack to the client
-					//System.out.println("Sending S2CMessageMeleeAttack to client.");
-					PacketHandler.getPlayChannel().sendToPlayer(() -> player, new S2CMessageMeleeAttack(player.getItemInHand(InteractionHand.MAIN_HAND)));
-
-					scheduler.schedule(() -> {
-						ModSyncedDataKeys.MELEE.setValue(player, false);
-					}, (long) GunRenderingHandler.MELEE_DURATION, TimeUnit.MILLISECONDS);
+					MeleeAttackHandler.performNormalMeleeAttack(player);
 				}
+			} else {
+				handleNormalMeleeAttack(player);
 			}
 		});
 		context.setHandled(true);
+	}
+
+	private void handleNormalMeleeAttack(ServerPlayer player) {
+		if (ModSyncedDataKeys.MELEE.getValue(player) ||
+				player.getCooldowns().isOnCooldown(player.getMainHandItem().getItem())) {
+			return;
+		}
+
+		ModSyncedDataKeys.MELEE.setValue(player, true);
+		MeleeAttackHandler.performMeleeAttack(player);
+		PacketHandler.getPlayChannel().sendToPlayer(() -> player,
+				new S2CMessageMeleeAttack(player.getItemInHand(InteractionHand.MAIN_HAND)));
+
+		scheduler.schedule(() -> ModSyncedDataKeys.MELEE.setValue(player, false),
+                (long) GunRenderingHandler.MELEE_DURATION, TimeUnit.MILLISECONDS);
 	}
 }

@@ -46,6 +46,7 @@
     "gravity": false,
     "item": "scguns:sculk_cell",
     "casingType": "scguns:empty_cell",
+    "casingParticle": "scguns:iron_casing",
     "life": 100,
     "size": 2.0,
     "speed": 11.0,
@@ -53,7 +54,7 @@
   },
   "reloads": {
     "emptyMagTimer": 30,
-    "maxAmmo": 5,
+    "maxAmmo": 6,
     "reloadItem": "scguns:sculk_cell",
     "reloadTimer": 30,
     "reloadType": "scguns:mag_fed"

@@ -3,7 +3,7 @@
     "flash": {
       "size": 1.0,
       "yOffset": 4.6,
-      "zOffset": -10.5,
+      "zOffset": -11.0,
       "textureLocation": "muzzle_flash_1"
     }
   },
@@ -12,7 +12,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 15,
+    "rate": 20,
     "recoilAngle": 4.7,
     "recoilKick": 2.22,
     "spread": 1.0,
@@ -32,7 +32,7 @@
       "scope": {
         "size": 0.7,
         "yOffset": 6.3,
-        "zOffset": 5.2
+        "zOffset": 4.6
       },
       "stock": {
         "scale": 0.0
@@ -52,11 +52,13 @@
   },
   "projectile": {
     "advantage": "scguns:heavy",
-    "damage": 21.0,
+    "damage": 20.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:krahg_round",
     "casingType": "scguns:large_brass_casing",
+    "casingParticle": "scguns:brass_casing",
+
     "life": 75,
     "size": 0.1,
     "speed": 15.0,
@@ -64,7 +66,7 @@
   },
   "reloads": {
     "emptyMagTimer": 20,
-    "maxAmmo": 6,
+    "maxAmmo": 5,
     "reloadItem": "scguns:krahg_round",
     "reloadTimer": 40,
     "reloadType": "scguns:mag_fed"

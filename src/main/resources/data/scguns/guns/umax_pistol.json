@@ -3,11 +3,9 @@
   },
   "general": {
     "alwaysSpread": false,
-    "fireMode": "scguns:pulse",
-    "fireTimer": 16,
-    "gripType": "scguns:two_handed",
-    "baseGripType": "scguns:two_handed",
-    "rate": 6,
+    "fireMode": "scguns:semi_automatic",
+    "gripType": "scguns:one_handed",
+    "rate": 8,
     "recoilAngle": 1.0,
     "recoilKick": 1.0,
     "spread": 0.1,
@@ -36,9 +34,9 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 8.0,
+    "damage": 6.0,
     "ejectsCasing": false,
-    "gravity": false,
+    "gravity": true,
     "item": "scguns:standard_bullet",
     "life": 40,
     "size": 1.0,
@@ -47,7 +45,7 @@
   },
   "reloads": {
     "emptyMagTimer": 30,
-    "maxAmmo": 4,
+    "maxAmmo": 6,
     "reloadItem": "scguns:standard_bullet",
     "reloadTimer": 15,
     "reloadType": "scguns:manual"

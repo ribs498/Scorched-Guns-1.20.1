@@ -28,7 +28,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.REPEATING_MUSKET.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.PAX.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.WINNIE.get());
-                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SAWED_OFF_CALLWELL.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.CALLWELL_CONVERSION.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.CALLWELL.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SAKETINI.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BIG_BORE.get());
@@ -48,6 +48,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.ARC_WORKER.get());
 
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.DEFENDER_PISTOL.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.TRENCHUR.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.GREASER_SMG.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.M3_CARABINE.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.COMBAT_SHOTGUN.get());
@@ -90,6 +91,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.HOWLER.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.HOWLER_CONVERSION.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.GAUSS_RIFLE.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.NIAMI.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SPITFIRE.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.GATTALER.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.THUNDERHEAD.get());
@@ -100,6 +102,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BLASPHEMY.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.PYROCLASTIC_FLOW.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.FREYR.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.MANGALITSA.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.VULCANIC_REPEATER.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SUPER_SHOTGUN.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.WHISPERS.get());
@@ -112,6 +115,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.LONE_WONDER.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.RAYGUN.get());
 
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.PRIMA_MATERIA.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.RAT_KING_AND_QUEEN.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.LOCUST.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.NEWBORN_CYST.get());
@@ -119,6 +123,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.FLAYED_GOD.get());
                         CreativeTabHelper.addGunOrEnergyWeaponWithFullResources(pOutput, ModItems.NERVEPINCH.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.ASTELLA.get());
+
                         pOutput.accept(ModItems.ANTHRALITE_PICKAXE.get());
                         pOutput.accept(ModItems.ANTHRALITE_AXE.get());
                         pOutput.accept(ModItems.ANTHRALITE_SHOVEL.get());
@@ -170,6 +175,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.NITRO_POWDER.get());
                         pOutput.accept(ModItems.NITRO_POWDER_DUST.get());
                         pOutput.accept(ModItems.PLASMA.get());
+                        pOutput.accept(ModItems.PLASMA_NUGGET.get());
                         pOutput.accept(ModItems.SCORCHED_BLEND.get());
                         pOutput.accept(ModItems.SCORCHED_INGOT.get());
                         pOutput.accept(ModItems.RAW_ANTHRALITE.get());

@@ -172,8 +172,8 @@ public class GunItem extends Item implements IColored, IMeta {
 
     @Override
     public int getBarWidth(ItemStack stack) {
-        CompoundTag tagCompound = stack.getOrCreateTag();
-        Gun modifiedGun = this.getModifiedGun(stack);
+        stack.getOrCreateTag();
+        this.getModifiedGun(stack);
         return Math.round(13.0F - (float) stack.getDamageValue() * 13.0F / (float) this.getMaxDamage(stack));
     }
 
@@ -247,11 +247,9 @@ public class GunItem extends Item implements IColored, IMeta {
     }
 
     public boolean hasBayonet(ItemStack gunStack) {
-        // Check if the gun has a built-in bayonet via tag
         if (isBuiltInBayonetGun(gunStack)) {
             return true;
         }
-        // Check for attached bayonet items
         for (IAttachment.Type type : IAttachment.Type.values()) {
             ItemStack attachmentStack = Gun.getAttachment(type, gunStack);
             if (attachmentStack != null && attachmentStack.getItem() instanceof BayonetItem) {
@@ -260,8 +258,6 @@ public class GunItem extends Item implements IColored, IMeta {
         }
         return false;
     }
-
-    // Updated isBuiltInBayonetGun method that uses tags only
     public boolean isBuiltInBayonetGun(ItemStack gunStack) {
         return gunStack.is(ModTags.Items.BUILT_IN_BAYONET);
     }
@@ -279,7 +275,10 @@ public class GunItem extends Item implements IColored, IMeta {
     public boolean isOneHandedCarbineCandidate(ItemStack gunStack) {
         return gunStack.is(ModTags.Items.ONE_HANDED_CARBINE);
     }
-
+    public void onAttachmentChanged(ItemStack stack) {
+        CompoundTag tag = stack.getOrCreateTag();
+        tag.putBoolean("AttachmentChanged", true);
+    }
 
     public boolean hasMendingInAttachments(ItemStack gunStack) {
         for (IAttachment.Type type : IAttachment.Type.values()) {
@@ -302,5 +301,9 @@ public class GunItem extends Item implements IColored, IMeta {
             }
         }
         return 0;
+    }
+
+    public Gun getGunProperties() {
+        return this.gun;
     }
 }

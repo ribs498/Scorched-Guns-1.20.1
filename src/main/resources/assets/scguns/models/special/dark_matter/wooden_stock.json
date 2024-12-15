@@ -127,5 +127,13 @@
 			"translation": [-3, 10.5, 0],
 			"scale": [2, 2, 2]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "woodenstock",
+			"origin": [7.8242, 1.20151, 19.26087],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4, 5, 6]
+		}
+	]
 }

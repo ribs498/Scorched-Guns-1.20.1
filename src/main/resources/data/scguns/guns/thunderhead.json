@@ -17,7 +17,7 @@
     "fireMode": "scguns:automatic",
     "gripType": "scguns:mini_gun",
     "baseGripType": "scguns:mini_gun",
-    "rate": 5,
+    "rate": 8,
     "recoilAngle": 6.0,
     "recoilKick": 2.0,
     "spread": 5.0,
@@ -26,7 +26,8 @@
     "hotBarrelRate": 15,
     "criticalChance": 0.05,
     "playerKnockBack": true,
-    "playerKnockBackStrength": 0.25
+    "playerKnockBackStrength": 0.25,
+    "speedModifier": 0.8
   },
   "modules": {
     "attachments": {
@@ -39,6 +40,7 @@
     "item": "scguns:krahg_round",
     "ejectsCasing": true,
     "casingType": "scguns:large_brass_casing",
+    "casingParticle": "scguns:brass_casing",
     "life": 60,
     "size": 0.1,
     "speed": 5.0,
@@ -46,7 +48,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 32,
+    "maxAmmo": 25,
     "reloadItem": "scguns:krahg_round",
     "reloadTimer": 60,
     "reloadType": "scguns:mag_fed"

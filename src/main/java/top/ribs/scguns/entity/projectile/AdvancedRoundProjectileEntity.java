@@ -24,9 +24,7 @@ import top.ribs.scguns.network.message.S2CMessageProjectileHitEntity;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 
 public class AdvancedRoundProjectileEntity extends ProjectileEntity {
-
-    private static final int ARMOR_BYPASS_AMOUNT = 2;
-    private static final float ADVANCED_SHIELD_DISABLE_CHANCE = 0.45f; // 45% chance, increased from the default 30%
+    private static final float ADVANCED_SHIELD_DISABLE_CHANCE = 0.45f;
 
     public AdvancedRoundProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -34,6 +32,7 @@ public class AdvancedRoundProjectileEntity extends ProjectileEntity {
 
     public AdvancedRoundProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
+        this.setArmorBypassAmount(3.0F);
     }
 
     @Override
@@ -49,8 +48,8 @@ public class AdvancedRoundProjectileEntity extends ProjectileEntity {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
 
-        if (entity instanceof LivingEntity livingEntity) {
-            damage = applyArmorBypass(livingEntity, damage);
+        if (entity instanceof LivingEntity livingTarget) {
+            damage = calculateArmorBypassDamage(livingTarget, damage);
         }
 
         boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, ADVANCED_SHIELD_DISABLE_CHANCE);
@@ -75,14 +74,6 @@ public class AdvancedRoundProjectileEntity extends ProjectileEntity {
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
     }
 
-    private float applyArmorBypass(LivingEntity entity, float damage) {
-        int armorValue = entity.getArmorValue();
-        int bypassedArmorValue = Math.max(0, armorValue - ARMOR_BYPASS_AMOUNT);
-        float armorReduction = bypassedArmorValue * 0.04f;
-        float damageMultiplier = 1.0f + Math.min(armorReduction, 0.75f);
-        float finalDamage = damage * damageMultiplier;
-        return Math.min(finalDamage, damage);
-    }
 
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {

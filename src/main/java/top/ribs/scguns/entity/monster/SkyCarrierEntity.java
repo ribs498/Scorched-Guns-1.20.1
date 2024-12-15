@@ -190,6 +190,9 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
                 }
             }
         }
+        if (level.getRawBrightness(pos, 0) > 0) {
+            return false;
+        }
         long timeOfDay = level.getLevelData().getDayTime() % 24000;
         if (timeOfDay < 13000 || timeOfDay > 23000) {
             return false;

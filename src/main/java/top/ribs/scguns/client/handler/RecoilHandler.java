@@ -35,19 +35,24 @@ public class RecoilHandler {
     private float gunRecoilRandom;
     private float cameraRecoil;
     private float progressCameraRecoil;
-
+    private boolean enableRecoil = true;
     private RecoilHandler() {}
 
-    // Our variable, currently null but will be assigned either a 1 or 0 every time a gun is shot.
     private static int recoilRand;
-
-    // This method is called every time a gun is shot.
+    public void updateConfig() {
+        try {
+            if(Config.SERVER != null && Config.SERVER.enableCameraRecoil != null) {
+                this.enableRecoil = Config.SERVER.enableCameraRecoil.get();
+            }
+        } catch(IllegalStateException e) {
+            // Config not ready yet
+        }
+    }
     @SubscribeEvent
     public void preShoot(GunFireEvent.Pre event) {
         if(!event.isClient())
             return;
-
-        if(!Config.SERVER.enableCameraRecoil.get())
+        if(!this.enableRecoil)
             return;
 
         recoilRand = random.nextInt(2);
@@ -58,7 +63,7 @@ public class RecoilHandler {
         if(!event.isClient())
             return;
 
-        if(!Config.SERVER.enableCameraRecoil.get())
+        if(!this.enableRecoil)  // Use cached value instead
             return;
 
         ItemStack heldItem = event.getStack();
@@ -76,11 +81,11 @@ public class RecoilHandler {
         if(event.phase != TickEvent.Phase.END || this.cameraRecoil <= 0)
             return;
 
-        Minecraft mc = Minecraft.getInstance();
-        if(mc.player == null)
+        if(!this.enableRecoil)
             return;
 
-        if(!Config.SERVER.enableCameraRecoil.get())
+        Minecraft mc = Minecraft.getInstance();
+        if(mc.player == null)
             return;
 
         float recoilAmount = this.cameraRecoil * mc.getDeltaFrameTime() * 0.15F;

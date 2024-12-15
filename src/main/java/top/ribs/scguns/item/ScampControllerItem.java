@@ -24,90 +24,79 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.entity.monster.SupplyScampEntity;
 import top.ribs.scguns.init.ModEntities;
+import top.ribs.scguns.util.PlayerScampManager;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.UUID;
 
 public class ScampControllerItem extends Item {
-    private static final String LINKED_SCAMP_UUID = "LinkedScampUUID";
-    private static final int SEARCH_RANGE = 64;
+    private static final int GLOWING_DURATION = 5;
 
     public ScampControllerItem(Properties pProperties) {
         super(pProperties);
     }
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.literal("Right-click to link a Supply Scamp.")
-                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x00FF00))));
-        tooltip.add(Component.literal("Shift + Right-click to set patrol or link a container.")
-                .setStyle(Style.EMPTY.withColor(TextColor.fromRgb(0x00FF00))));
 
-        super.appendHoverText(stack, level, tooltip, flag);
+    @Override
+    public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean selected) {
+        if (!level.isClientSide && entity instanceof Player player && selected) {
+            PlayerScampManager.PlayerScampData playerData = PlayerScampManager.getOrCreatePlayerData(player);
+            UUID linkedScampId = playerData.getLinkedScampId();
+
+            if (linkedScampId != null) {
+                SupplyScampEntity linkedScamp = findScamp(level, linkedScampId);
+                if (linkedScamp != null) {
+                    // Apply glowing effect to linked scamp
+                    linkedScamp.addEffect(new MobEffectInstance(MobEffects.GLOWING, GLOWING_DURATION, 0, false, false));
+                }
+            }
+        }
     }
+
     @Override
     public InteractionResult useOn(UseOnContext context) {
         Level level = context.getLevel();
         Player player = context.getPlayer();
-        ItemStack itemStack = context.getItemInHand();
         BlockPos clickedPos = context.getClickedPos();
 
-        if (player != null && !level.isClientSide() && player.isShiftKeyDown()) {
-            UUID linkedScampUUID = getLinkedScampUUID(itemStack);
-            if (linkedScampUUID != null) {
-                SupplyScampEntity linkedScamp = findLinkedScamp(level, linkedScampUUID);
+        if (player == null || level.isClientSide()) {
+            return InteractionResult.PASS;
+        }
 
+        PlayerScampManager.PlayerScampData playerData = PlayerScampManager.getOrCreatePlayerData(player);
+
+        if (player.isShiftKeyDown()) {
+            UUID linkedScampId = playerData.getLinkedScampId();
+            if (linkedScampId != null) {
+                SupplyScampEntity linkedScamp = findScamp(level, linkedScampId);
                 if (linkedScamp != null) {
-                    // Check if the clicked block is a container
                     BlockEntity blockEntity = level.getBlockEntity(clickedPos);
                     if (blockEntity instanceof Container) {
-                        // Link the scamp to the container
+                        playerData.setContainerPos(clickedPos);
                         linkedScamp.setLinkedContainer(clickedPos);
                         player.displayClientMessage(Component.translatable("message.supply_scamp.container_linked"), true);
                         return InteractionResult.SUCCESS;
                     } else {
-                        // Set the new patrol origin to the clicked block position
                         linkedScamp.setPatrolOrigin(clickedPos);
-                        linkedScamp.spawnPatrolOriginParticles(); // Show particles at the new patrol point
-
-                        // Notify the player
+                        linkedScamp.spawnPatrolOriginParticles();
                         player.displayClientMessage(Component.translatable("message.supply_scamp.new_patrol_origin"), true);
-
                         return InteractionResult.SUCCESS;
                     }
                 }
             }
         } else {
-            // Fall back to the existing behavior of interacting with scamps via ray tracing
-            assert player != null;
-            Vec3 from = player.getEyePosition(1.0F);
-            Vec3 look = player.getLookAngle();
-            Vec3 to = from.add(look.x * 3.0D, look.y * 3.0D, look.z * 3.0D);
-
-            AABB boundingBox = new AABB(from, to).inflate(0.5);
-            List<SupplyScampEntity> nearbyScamps = level.getEntitiesOfClass(SupplyScampEntity.class, boundingBox);
-
-            if (!nearbyScamps.isEmpty()) {
-                SupplyScampEntity closestScamp = nearbyScamps.get(0);
-
-                if (closestScamp.isTame() && closestScamp.isOwnedBy(player)) {
-                    UUID currentLinkedUUID = getLinkedScampUUID(itemStack);
-                    UUID newScampUUID = closestScamp.getUUID();
-
-                    if (currentLinkedUUID == null || !currentLinkedUUID.equals(newScampUUID)) {
-                        linkScamp(itemStack, closestScamp);
-                        player.displayClientMessage(Component.translatable("message.supply_scamp.linked"), true);
+            // Handle scamp state cycling
+            UUID linkedScampId = playerData.getLinkedScampId();
+            if (linkedScampId != null) {
+                SupplyScampEntity linkedScamp = findScamp(level, linkedScampId);
+                if (linkedScamp != null) {
+                    if (linkedScamp.isOrderedToSit()) {
+                        setScampPatrolling(linkedScamp, player);
+                    } else if (linkedScamp.isPatrolling()) {
+                        setScampFollowing(linkedScamp, player);
                     } else {
-                        if (closestScamp.isOrderedToSit()) {
-                            setScampPatrolling(closestScamp, player);
-                        } else if (closestScamp.isPatrolling()) {
-                            setScampFollowing(closestScamp, player);
-                        } else if (!closestScamp.isPatrolling()) {
-                            setScampSitting(closestScamp, player);
-                        }
-
+                        setScampSitting(linkedScamp, player);
                     }
-
                     return InteractionResult.SUCCESS;
                 }
             }
@@ -115,67 +104,34 @@ public class ScampControllerItem extends Item {
 
         return InteractionResult.PASS;
     }
-    public void linkScamp(ItemStack itemStack, SupplyScampEntity scampEntity) {
-        CompoundTag nbt = itemStack.getOrCreateTag();
-        nbt.putUUID(LINKED_SCAMP_UUID, scampEntity.getUUID());
-        scampEntity.setLinkedToController(true);
-    }
 
-    public UUID getLinkedScampUUID(ItemStack itemStack) {
-        CompoundTag nbt = itemStack.getTag();
-        return nbt != null && nbt.hasUUID(LINKED_SCAMP_UUID) ? nbt.getUUID(LINKED_SCAMP_UUID) : null;
-    }
-
-    public void unlinkScamp(Level level, UUID scampUUID) {
-        SupplyScampEntity scamp = findLinkedScamp(level, scampUUID);
-        if (scamp != null) {
-            scamp.setLinkedToController(false);
-        }
-    }
-
-    private SupplyScampEntity findLinkedScamp(Level level, UUID scampUUID) {
-        List<SupplyScampEntity> scamps = level.getEntitiesOfClass(SupplyScampEntity.class,
-                new AABB(level.getSharedSpawnPos()).inflate(SEARCH_RANGE),
-                scamp -> scamp.getUUID().equals(scampUUID));
-
+    private SupplyScampEntity findScamp(Level level, UUID scampId) {
+        List<SupplyScampEntity> scamps = level.getEntitiesOfClass(
+                SupplyScampEntity.class,
+                new AABB(level.getSharedSpawnPos()).inflate(64),
+                scamp -> scamp.getUUID().equals(scampId)
+        );
         return scamps.isEmpty() ? null : scamps.get(0);
     }
 
-    private void setScampPatrolling(SupplyScampEntity scampEntity, Player player) {
-        scampEntity.setOrderedToSit(false);
-        scampEntity.setSitting(false);
-        scampEntity.setPatrolling(true);
-        scampEntity.setPatrolOrigin(scampEntity.blockPosition());
-        scampEntity.spawnPatrolOriginParticles();
+    private void setScampPatrolling(SupplyScampEntity scamp, Player player) {
+        scamp.setOrderedToSit(false);
+        scamp.setSitting(false);
+        scamp.setPatrolling(true);
+        scamp.setPatrolOrigin(scamp.blockPosition());
+        scamp.spawnPatrolOriginParticles();
         player.displayClientMessage(Component.translatable("message.supply_scamp.patrolling"), true);
     }
 
-    private void setScampFollowing(SupplyScampEntity scampEntity, Player player) {
-        scampEntity.setPatrolling(false);
-        scampEntity.setPatrolOrigin(null);
+    private void setScampFollowing(SupplyScampEntity scamp, Player player) {
+        scamp.setPatrolling(false);
+        scamp.setPatrolOrigin(null);
         player.displayClientMessage(Component.translatable("message.supply_scamp.following"), true);
     }
 
-    private void setScampSitting(SupplyScampEntity scampEntity, Player player) {
-        scampEntity.setOrderedToSit(true);
-        scampEntity.setSitting(true);
+    private void setScampSitting(SupplyScampEntity scamp, Player player) {
+        scamp.setOrderedToSit(true);
+        scamp.setSitting(true);
         player.displayClientMessage(Component.translatable("message.supply_scamp.sitting"), true);
-    }
-
-    @Override
-    public void inventoryTick(ItemStack pStack, Level pLevel, Entity pEntity, int pSlotId, boolean pIsSelected) {
-        super.inventoryTick(pStack, pLevel, pEntity, pSlotId, pIsSelected);
-
-        if (pIsSelected && pEntity instanceof Player player && !pLevel.isClientSide()) {
-            UUID linkedScampUUID = getLinkedScampUUID(pStack);
-            if (linkedScampUUID != null) {
-                SupplyScampEntity linkedScamp = findLinkedScamp(pLevel, linkedScampUUID);
-                if (linkedScamp != null) {
-                    MobEffectInstance glowingEffect = new MobEffectInstance(MobEffects.GLOWING, 5, 0, false, false);
-                    linkedScamp.addEffect(glowingEffect);
-
-                }
-            }
-        }
     }
 }

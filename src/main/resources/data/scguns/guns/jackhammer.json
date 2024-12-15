@@ -12,7 +12,7 @@
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 7,
+    "rate": 6,
     "recoilAngle": 9.5,
     "recoilKick": 2.5,
     "spread": 16.0,
@@ -42,7 +42,7 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 6.65,
+      "yOffset": 7.3,
       "zOffset": 0.75
     }
   },
@@ -53,6 +53,7 @@
     "gravity": false,
     "item": "scguns:shotgun_shell",
     "casingType": "scguns:small_copper_casing",
+    "casingParticle": "scguns:shell",
     "life": 24,
     "size": 0.1,
     "speed": 4.0,

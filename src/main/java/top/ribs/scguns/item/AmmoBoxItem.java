@@ -1,6 +1,7 @@
 package top.ribs.scguns.item;
 import net.minecraft.ChatFormatting;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.inventory.tooltip.BundleTooltip;
@@ -20,14 +21,17 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.SlotAccess;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.Config;
+import top.ribs.scguns.item.ammo_boxes.CreativeAmmoBoxItem;
 import top.theillusivec4.curios.api.CuriosCapability;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -104,7 +108,7 @@ public abstract class AmmoBoxItem extends Item {
     }
 
     public static int add(ItemStack pouchStack, ItemStack insertedStack) {
-        if (!insertedStack.isEmpty() && insertedStack.is(ItemTags.create(new ResourceLocation("scguns", "ammo")))) {
+        if (!insertedStack.isEmpty() && insertedStack.is(ItemTags.create(((AmmoBoxItem)pouchStack.getItem()).getAmmoTag()))) {
             CompoundTag compoundTag = pouchStack.getOrCreateTag();
             if (!compoundTag.contains(TAG_ITEMS)) {
                 compoundTag.put(TAG_ITEMS, new ListTag());
@@ -193,7 +197,7 @@ public abstract class AmmoBoxItem extends Item {
         entity.playSound(SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
 
-    private void playInsertSound(Entity entity) {
+    protected void playInsertSound(Entity entity) {
         entity.playSound(SoundEvents.BUNDLE_INSERT, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }
 
@@ -211,12 +215,17 @@ public abstract class AmmoBoxItem extends Item {
 
 
     public static Stream<ItemStack> getContents(ItemStack stack) {
+        if (stack.getItem() instanceof CreativeAmmoBoxItem) {
+            TagKey<Item> ammoTag = ItemTags.create(((CreativeAmmoBoxItem)stack.getItem()).getAmmoTag());
+            return ForgeRegistries.ITEMS.getValues().stream()
+                    .filter(item -> item.builtInRegistryHolder().is(ammoTag))
+                    .map(item -> new ItemStack(item, Integer.MAX_VALUE));
+        }
         CompoundTag compoundTag = stack.getTag();
         if (compoundTag == null) {
             return Stream.empty();
-        } else {
-            ListTag listTag = compoundTag.getList(TAG_ITEMS, 10);
-            return listTag.stream().map(CompoundTag.class::cast).map(ItemStack::of);
         }
+        ListTag listTag = compoundTag.getList(TAG_ITEMS, 10);
+        return listTag.stream().map(CompoundTag.class::cast).map(ItemStack::of);
     }
 }

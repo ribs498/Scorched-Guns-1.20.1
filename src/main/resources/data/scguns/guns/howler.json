@@ -12,7 +12,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 13,
+    "rate": 17,
     "recoilAngle": 4.5,
     "recoilKick": 2.5,
     "spread": 0.0,
@@ -47,7 +47,7 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 6.25,
+      "yOffset": 6.35,
       "zOffset": -0.75
     }
   },
@@ -58,6 +58,7 @@
     "gravity": false  ,
     "item": "scguns:krahg_round",
     "casingType": "scguns:large_brass_casing",
+    "casingParticle": "scguns:brass_casing",
     "life": 70,
     "size": 0.1,
     "speed": 13.0,

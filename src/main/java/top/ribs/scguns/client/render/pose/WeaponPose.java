@@ -28,14 +28,13 @@ public abstract class WeaponPose implements IHeldAnimation
     private final AimPose forwardPose;
     private final AimPose downPose;
     private final AimPose meleePose;
-    private final AimPose banzaiPose;
 
     public WeaponPose() {
         this.upPose = this.getUpPose();
         this.forwardPose = this.getForwardPose();
         this.downPose = this.getDownPose();
         this.meleePose = this.getMeleePose();
-        this.banzaiPose = this.getBanzaiPose();
+        this.getBanzaiPose();
     }
 
     /**

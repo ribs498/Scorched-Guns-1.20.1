@@ -15,11 +15,11 @@
     "rate": 6,
     "recoilAngle": 4.0,
     "recoilKick": 2.0,
-    "spread": 1.0,
+    "spread": 0.5,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 100,
-    "criticalChance": 0.2
+    "criticalChance": 0.15
   },
   "modules": {
     "attachments": {
@@ -29,7 +29,7 @@
       },
       "scope": {
         "yOffset": 4.8,
-        "zOffset": 5.2
+        "zOffset": 4.2
       },
       "stock": {
         "scale": 0.0
@@ -47,11 +47,13 @@
   },
   "projectile": {
     "advantage": "scguns:illager",
-    "damage": 13.0,
+    "damage": 12.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:standard_copper_round",
     "casingType": "scguns:medium_copper_casing",
+    "casingParticle": "scguns:copper_casing",
+    "ejectDuringReload": true,
     "life": 55,
     "size": 1.0,
     "speed": 7.0,
@@ -61,7 +63,7 @@
     "emptyMagTimer": 50,
     "maxAmmo": 1,
     "reloadItem": "scguns:standard_copper_round",
-    "reloadTimer": 38,
+    "reloadTimer": 50,
     "reloadType": "scguns:mag_fed"
   },
   "sounds": {

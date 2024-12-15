@@ -3,7 +3,7 @@
     "flash": {
       "size": 1.0,
       "yOffset": 4.6,
-      "zOffset": -8.75,
+      "zOffset": -9.75,
       "textureLocation": "muzzle_flash_1"
     }
   },
@@ -12,7 +12,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed_shotgun",
     "baseGripType": "scguns:two_handed_shotgun",
-    "rate": 11,
+    "rate": 16,
     "recoilAngle": 3.5,
     "recoilKick": 2.0,
     "spread": 2.0,
@@ -25,12 +25,12 @@
     "attachments": {
       "barrel": {
         "yOffset": 4.6,
-        "zOffset": -11.0
+        "zOffset": -12.0
       },
       "scope": {
         "size": 0.7,
-        "yOffset": 5.85,
-        "zOffset": 6.5
+        "yOffset": 6.0,
+        "zOffset": 5.0
       },
       "stock": {
         "scale": 0.0
@@ -51,11 +51,12 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 10.0,
+    "damage": 11.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:standard_copper_round",
     "casingType": "scguns:medium_copper_casing",
+    "casingParticle": "scguns:copper_casing",
     "life": 50,
     "size": 0.05,
     "speed": 10.0,
@@ -63,7 +64,7 @@
   },
   "reloads": {
     "emptyMagTimer": 5,
-    "maxAmmo": 6,
+    "maxAmmo": 7,
     "reloadItem": "scguns:standard_copper_round",
     "reloadTimer": 40,
     "reloadType": "scguns:mag_fed"

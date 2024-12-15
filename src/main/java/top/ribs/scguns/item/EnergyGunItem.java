@@ -11,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
+import top.ribs.scguns.interfaces.IEnergyGun;
 import top.ribs.scguns.item.GunItem;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
@@ -18,7 +19,7 @@ import javax.annotation.Nullable;
 
 import java.util.List;
 
-public class EnergyGunItem extends GunItem {
+public class EnergyGunItem extends GunItem implements IEnergyGun {
     private final int capacity;
 
     public EnergyGunItem(Properties properties, int capacity) {

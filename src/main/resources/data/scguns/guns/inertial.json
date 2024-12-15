@@ -59,6 +59,7 @@
     "gravity": false,
     "item": "scguns:bearpack_shell",
     "casingType": "scguns:medium_brass_casing",
+    "casingParticle": "scguns:bearpack_shell",
     "life": 25,
     "size": 0.05,
     "speed": 4.0,

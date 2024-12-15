@@ -1,9 +1,11 @@
 package top.ribs.scguns.common;
 
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -11,6 +13,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.LogicalSide;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.headshot.*;
 import top.ribs.scguns.init.ModEntities;
@@ -22,6 +25,8 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.WeakHashMap;
 
+import static top.ribs.scguns.ScorchedGuns.LOGGER;
+
 /**
  * Author: MrCrayfish
  */
@@ -29,6 +34,7 @@ public class BoundingBoxManager
 {
     private static final Map<EntityType<?>, IHeadshotBox<?>> headshotBoxes = new HashMap<>();
     private static final WeakHashMap<Player, LinkedList<AABB>> playerBoxes = new WeakHashMap<>();
+    private static final Map<EntityType<?>, IHeadshotBox<?>> dynamicHeadshotBoxes = new HashMap<>();
 
     static
     {
@@ -110,11 +116,28 @@ public class BoundingBoxManager
 
     @Nullable
     @SuppressWarnings("unchecked")
-    public static <T extends Entity> IHeadshotBox<T> getHeadshotBoxes(EntityType<T> type)
-    {
-        return (IHeadshotBox<T>) headshotBoxes.get(type);
+    public static IHeadshotBox<LivingEntity> getHeadshotBoxes(EntityType<?> type) {
+        IHeadshotBox<?> box = headshotBoxes.get(type);
+        if (box != null) {
+            return (IHeadshotBox<LivingEntity>) box;
+        }
+        box = dynamicHeadshotBoxes.get(type);
+        if (box != null) {
+            return (IHeadshotBox<LivingEntity>) box;
+        }
+        if (type.getCategory() == MobCategory.MONSTER ||
+                type.getCategory() == MobCategory.CREATURE ||
+                type.getCategory() == MobCategory.AMBIENT) {
+            DynamicHeadshotBox<LivingEntity> dynamicBox = new DynamicHeadshotBox<>();
+            dynamicHeadshotBoxes.put(type, dynamicBox);
+            return dynamicBox;
+        }
+        return null;
     }
 
+    public static void clearDynamicBoxCache() {
+        dynamicHeadshotBoxes.clear();
+    }
     @SubscribeEvent(receiveCanceled = true)
     public void onPlayerTick(TickEvent.PlayerTickEvent event)
     {

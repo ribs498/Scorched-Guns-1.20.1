@@ -86,5 +86,13 @@
 			"translation": [-3, 10.5, 0],
 			"scale": [2, 2, 2]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "sielcner",
+			"origin": [9.69688, 3.28788, -5.86406],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
 }

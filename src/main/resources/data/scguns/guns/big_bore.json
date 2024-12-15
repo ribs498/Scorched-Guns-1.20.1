@@ -4,7 +4,12 @@
       "size": 2.0,
       "yOffset": 3.8,
       "zOffset": -25.0,
-      "textureLocation": "muzzle_flash_5"
+      "textureLocation": "muzzle_flash_5",
+      "spawnParticles": true,
+      "particleType": "minecraft:campfire_cosy_smoke",
+      "particleCount": 25,
+      "particleSpread": 0.7,
+      "particleRingRadius": 0.7
     }
   },
   "general": {
@@ -12,7 +17,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 10,
+    "rate": 20,
     "recoilAngle": 20.0,
     "recoilKick": 20.0,
     "spread": 0.0,
@@ -27,8 +32,8 @@
     "attachments": {
       "scope": {
         "size": 0.7,
-        "yOffset": 5.3,
-        "zOffset": 4.4
+        "yOffset": 6.4,
+        "zOffset": 2.0
       },
       "stock": {
         "scale": 0.0
@@ -36,7 +41,7 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 5.7,
+      "yOffset": 6.7,
       "zOffset": 0.75
     }
   },
@@ -47,6 +52,8 @@
     "gravity": false  ,
     "item": "scguns:osborne_slug",
     "casingType": "scguns:large_iron_casing",
+    "casingParticle": "scguns:iron_casing",
+    "ejectDuringReload": true,
     "life": 100,
     "size": 1.0,
     "speed": 14.0,

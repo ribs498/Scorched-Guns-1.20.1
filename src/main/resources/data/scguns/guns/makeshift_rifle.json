@@ -56,6 +56,7 @@
     "gravity": false,
     "item": "scguns:standard_copper_round",
     "casingType": "scguns:medium_copper_casing",
+    "casingParticle": "scguns:copper_casing",
     "life": 40,
     "size": 0.05,
     "speed": 8.0,
@@ -63,9 +64,9 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 10,
+    "maxAmmo": 15,
     "reloadItem": "scguns:standard_copper_round",
-    "reloadTimer": 30,
+    "reloadTimer": 90,
     "reloadType": "scguns:mag_fed"
   },
   "sounds": {

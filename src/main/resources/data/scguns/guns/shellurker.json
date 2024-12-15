@@ -46,6 +46,7 @@
     "gravity": false,
     "item": "scguns:shulkshot",
     "casingType": "scguns:shulker_casing",
+    "casingParticle": "scguns:shulk_casing",
     "life": 120,
     "size": 0.00001,
     "speed":  0.75,

@@ -50,6 +50,7 @@
     "item": "scguns:compact_advanced_round",
     "ejectsCasing": true,
     "casingType": "scguns:small_brass_casing",
+    "casingParticle": "scguns:brass_casing",
     "life": 50,
     "size": 0.05,
     "speed": 11.0,

@@ -32,6 +32,7 @@ import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.block.LightningBattery;
 import top.ribs.scguns.client.screen.LightningBatteryMenu;
 import top.ribs.scguns.client.screen.LightningBatteryRecipe;
+import top.ribs.scguns.interfaces.IEnergyGun;
 import top.ribs.scguns.item.EnergyGunItem;
 import top.ribs.scguns.init.ModBlockEntities;
 
@@ -263,8 +264,7 @@ public class LightningBatteryBlockEntity extends BlockEntity implements MenuProv
         ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
 
         if (!inputStack.isEmpty()) {
-            // Check if the item in the input slot is an EnergyGunItem
-            if (inputStack.getItem() instanceof EnergyGunItem) {
+            if (inputStack.getItem() instanceof IEnergyGun) {
                 LazyOptional<IEnergyStorage> gunEnergyCap = inputStack.getCapability(ForgeCapabilities.ENERGY);
                 gunEnergyCap.ifPresent(gunEnergy -> {
                     int energyToTransfer = Math.min(energyStorage.extractEnergy(100, true), gunEnergy.receiveEnergy(100, true));

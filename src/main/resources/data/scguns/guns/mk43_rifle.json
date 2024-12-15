@@ -8,10 +8,10 @@
     }
   },
   "general": {
-    "fireMode": "scguns:semi_automatic",
+    "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 8,
+    "rate": 10,
     "recoilAngle": 4.0,
     "recoilKick": 0.33,
     "spread": 3.0,
@@ -49,8 +49,9 @@
     "damage": 11.5,
     "gravity": false,
     "item": "scguns:microjet",
-    "ejectsCasing": false,
+    "ejectsCasing": true,
     "casingType": "scguns:small_iron_casing",
+    "casingParticle": "scguns:iron_casing",
     "life": 50,
     "size": 1.0,
     "speed": 1.8,

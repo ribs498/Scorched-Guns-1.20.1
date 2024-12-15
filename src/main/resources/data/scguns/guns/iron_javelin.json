@@ -3,7 +3,7 @@
     "flash": {
       "size": 1.0,
       "yOffset": 4.6,
-      "zOffset": -10.5,
+      "zOffset": -11.5,
       "textureLocation": "muzzle_flash_1"
     }
   },
@@ -12,7 +12,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 11,
+    "rate": 14,
     "recoilAngle": 3.7,
     "recoilKick": 1.8,
     "spread": 1.0,
@@ -25,7 +25,7 @@
     "attachments": {
       "barrel": {
         "yOffset": 4.6,
-        "zOffset": -12.5
+        "zOffset": -13.5
       },
       "scope": {
         "size": 0.7,
@@ -50,11 +50,12 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 12.5,
+    "damage": 13.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:advanced_round",
     "casingType": "scguns:medium_brass_casing",
+    "casingParticle": "scguns:brass_casing",
     "life": 50,
     "size": 0.1,
     "speed": 15.0,

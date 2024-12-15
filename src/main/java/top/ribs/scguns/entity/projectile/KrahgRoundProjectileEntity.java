@@ -39,11 +39,11 @@ import java.util.Objects;
 
 public class KrahgRoundProjectileEntity extends ProjectileEntity {
 
-    private static final int ARMOR_BYPASS_AMOUNT = 4;
     private static final float KRAHG_SHIELD_DISABLE_CHANCE = 0.60f;
     private static final float SHIELD_DAMAGE_PENETRATION = 0.4f;
     private static final float MAX_BREAKABLE_HARDNESS = 4.0f;
     private boolean hasPassedThroughBlock = false;
+
     private static final List<Block> UNBREAKABLE_BLOCKS = Arrays.asList(
             Blocks.BEDROCK,
             Blocks.OBSIDIAN,
@@ -60,6 +60,7 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
 
     public KrahgRoundProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
+        this.setArmorBypassAmount(5.0F);
     }
 
     private boolean canBreakBlock(BlockState state, BlockPos pos) {
@@ -195,9 +196,8 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
-
-        if (entity instanceof LivingEntity livingEntity) {
-            damage = applyArmorBypass(livingEntity, damage);
+        if (entity instanceof LivingEntity livingTarget) {
+            damage = calculateArmorBypassDamage(livingTarget, damage);
         }
 
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
@@ -224,14 +224,6 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
     }
 
-    private float applyArmorBypass(LivingEntity entity, float damage) {
-        int armorValue = entity.getArmorValue();
-        int bypassedArmorValue = Math.max(0, armorValue - ARMOR_BYPASS_AMOUNT);
-        float armorReduction = bypassedArmorValue * 0.04f;
-        float damageMultiplier = 1.0f + Math.min(armorReduction, 0.75f);
-        float finalDamage = damage * damageMultiplier;
-        return Math.min(finalDamage, damage);
-    }
 
     @Override
     public void onExpired() {

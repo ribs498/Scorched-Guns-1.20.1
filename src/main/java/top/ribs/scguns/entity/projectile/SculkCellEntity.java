@@ -25,10 +25,8 @@ import top.ribs.scguns.network.message.S2CMessageProjectileHitEntity;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 
 public class SculkCellEntity extends ProjectileEntity {
-
-    private static final int ARMOR_BYPASS_AMOUNT = 6;
-    private static final float SHIELD_DISABLE_CHANCE = 0.30f; // Standard 30% chance to disable shield
-    private static final float SHIELD_DAMAGE_PENETRATION = 0.70f; // 70% of damage passes through shield
+    private static final float SHIELD_DISABLE_CHANCE = 0.30f;
+    private static final float SHIELD_DAMAGE_PENETRATION = 0.70f;
 
     public SculkCellEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -36,8 +34,8 @@ public class SculkCellEntity extends ProjectileEntity {
 
     public SculkCellEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
+        this.setArmorBypassAmount(9.0F);
     }
-
 
     @Override
     protected void onProjectileTick() {
@@ -66,9 +64,8 @@ public class SculkCellEntity extends ProjectileEntity {
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
-
-        if (entity instanceof LivingEntity livingEntity) {
-            damage = applyArmorBypass(livingEntity, damage);
+        if (entity instanceof LivingEntity livingTarget) {
+            damage = calculateArmorBypassDamage(livingTarget, damage);
         }
 
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
@@ -92,16 +89,6 @@ public class SculkCellEntity extends ProjectileEntity {
         }
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
     }
-
-    private float applyArmorBypass(LivingEntity entity, float damage) {
-        int armorValue = entity.getArmorValue();
-        int bypassedArmorValue = Math.max(0, armorValue - ARMOR_BYPASS_AMOUNT);
-        float armorReduction = bypassedArmorValue * 0.04f;
-        float damageMultiplier = 1.0f + Math.min(armorReduction, 0.75f);
-        float finalDamage = damage * damageMultiplier;
-        return Math.min(finalDamage, damage);
-    }
-
 
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {

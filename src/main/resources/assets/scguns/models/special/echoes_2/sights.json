@@ -87,5 +87,13 @@
 			"translation": [5, 6, -0.75],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "sights",
+			"origin": [8.3, 5.82267, 13.61483],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
 }

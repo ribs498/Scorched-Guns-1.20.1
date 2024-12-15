@@ -18,7 +18,8 @@
     "meleeDamage": 4.0,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 12,
-    "criticalChance": 0.05
+    "criticalChance": 0.05,
+    "speedModifier": 0.9
   },
   "modules": {
   },
@@ -26,9 +27,10 @@
     "advantage": "scguns:none",
     "damage": 15.5,
     "gravity": false,
-    "ejectsCasing": false,
+    "ejectsCasing": true,
     "casingType": "scguns:small_iron_casing",
     "item": "scguns:microjet",
+    "casingParticle": "scguns:iron_casing",
     "life": 50,
     "size": 1.0,
     "speed": 1.5,
@@ -36,6 +38,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
+    "reloadAmount": 3,
     "maxAmmo": 18,
     "reloadItem": "scguns:microjet",
     "reloadTimer": 15,

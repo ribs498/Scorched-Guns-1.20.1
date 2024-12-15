@@ -1,0 +1,38 @@
+{
+  "parent": "scguns:main/cowboy/winnie",
+  "criteria": {
+    "callwell_conversion": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "scguns:callwell_conversion"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "display": {
+    "announce_to_chat": false,
+    "description": {
+      "translate": "scguns.advancement.callwell_conversion.desc"
+    },
+    "frame": "task",
+    "hidden": false,
+    "icon": {
+      "item": "scguns:callwell_conversion"
+    },
+    "show_toast": true,
+    "title": {
+      "translate": "scguns.advancement.callwell_conversion"
+    }
+  },
+  "requirements": [
+    [
+      "callwell_conversion"
+    ]
+  ],
+  "sends_telemetry_event": true
+}

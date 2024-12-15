@@ -2,8 +2,8 @@
   "display": {
     "flash": {
       "size": 1.0,
-      "yOffset": 3.4,
-      "zOffset": -2.4,
+      "yOffset": 4.2,
+      "zOffset": -2.5,
       "textureLocation": "muzzle_flash_1"
     }
   },
@@ -24,12 +24,12 @@
   "modules": {
     "attachments": {
       "barrel": {
-        "yOffset": 3.4,
-        "zOffset": -3.6
+        "yOffset": 4.2,
+        "zOffset": -3.7
       },
       "scope": {
         "size": 0.7,
-        "yOffset": 4.6,
+        "yOffset": 5.9,
         "zOffset": 5.5
       },
       "stock": {
@@ -41,7 +41,7 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 4.7,
+      "yOffset": 5.9,
       "zOffset": -1.25
     }
   },
@@ -51,6 +51,7 @@
     "ejectsCasing": true,
     "item": "scguns:compact_copper_round",
     "casingType": "scguns:small_copper_casing",
+    "casingParticle": "scguns:copper_casing",
     "life": 35,
     "size": 0.05,
     "speed": 5.0,

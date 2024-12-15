@@ -58,6 +58,7 @@ public class OsborneSlugProjectileEntity extends ProjectileEntity {
     public OsborneSlugProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
         this.remainingPenetrations = 3;
+        this.setArmorBypassAmount(5.0F);
     }
 
     public OsborneSlugProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
@@ -171,7 +172,6 @@ public class OsborneSlugProjectileEntity extends ProjectileEntity {
         }
     }
     private boolean canBreakBlock(BlockState state, BlockPos pos) {
-        // First check if block breaking is enabled in config
         if (!Config.COMMON.gameplay.griefing.enableBlockBreaking.get()) {
             return false;
         }
@@ -199,6 +199,9 @@ public class OsborneSlugProjectileEntity extends ProjectileEntity {
         damage *= advantageMultiplier(entity);
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
+        }
+        if (entity instanceof LivingEntity livingTarget) {
+            damage = calculateArmorBypassDamage(livingTarget, damage);
         }
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
         boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, SHIELD_DISABLE_CHANCE);

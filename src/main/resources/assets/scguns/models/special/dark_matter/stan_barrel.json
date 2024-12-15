@@ -65,7 +65,7 @@
 	},
 	"groups": [
 		{
-			"name": "group",
+			"name": "stanbarrel",
 			"origin": [8, 4.06243, 0.41628],
 			"color": 0,
 			"children": [0, 1]

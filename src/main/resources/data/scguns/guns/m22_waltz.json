@@ -48,6 +48,7 @@
     "gravity": false,
     "item": "scguns:ramrod_round",
     "casingType": "scguns:small_iron_casing",
+    "casingParticle": "scguns:iron_casing",
     "life": 60,
     "size": 0.1,
     "speed": 6.0,

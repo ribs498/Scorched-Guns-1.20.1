@@ -26,7 +26,6 @@ import top.ribs.scguns.network.message.S2CMessageProjectileHitEntity;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 
 public class BeowulfProjectileEntity extends ProjectileEntity {
-    private static final int ARMOR_BYPASS_AMOUNT = 2;
     private static final float SHIELD_DISABLE_CHANCE = 0.50f;
     private static final float SHIELD_DAMAGE_PENETRATION = 0.3f;
 
@@ -36,6 +35,7 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
 
     public BeowulfProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
+        this.setArmorBypassAmount(3.0F);
     }
 
     @Override
@@ -76,10 +76,9 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
-        if (entity instanceof LivingEntity livingEntity) {
-            damage = applyArmorBypass(livingEntity, damage);
+        if (entity instanceof LivingEntity livingTarget) {
+            damage = calculateArmorBypassDamage(livingTarget, damage);
         }
-
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
 
         // Handle shield interaction
@@ -105,14 +104,7 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
         spawnExplosionParticles(hitVec);
     }
 
-    private float applyArmorBypass(LivingEntity entity, float damage) {
-        int armorValue = entity.getArmorValue();
-        int bypassedArmorValue = Math.max(0, armorValue - ARMOR_BYPASS_AMOUNT);
-        float armorReduction = bypassedArmorValue * 0.04f;
-        float damageMultiplier = 1.0f + Math.min(armorReduction, 0.75f);
-        float finalDamage = damage * damageMultiplier;
-        return Math.min(finalDamage, damage);
-    }
+
 
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {

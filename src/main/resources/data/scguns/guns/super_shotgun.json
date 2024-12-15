@@ -35,10 +35,11 @@
     }
   },
   "projectile": {
-    "advantage": "scguns:none",
+    "advantage": "scguns:wither",
     "damage": 20.0,
     "item": "scguns:shotgun_shell",
     "casingType": "scguns:small_copper_casing",
+    "casingParticle": "scguns:shell",
     "life": 20,
     "size": 0.05,
     "speed": 4.0,

@@ -19,6 +19,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import top.ribs.scguns.client.handler.GunRenderingHandler;
 import top.ribs.scguns.client.render.IHeldAnimation;
 import top.ribs.scguns.client.util.RenderUtil;
+import top.ribs.scguns.item.animated.AnimatedGunItem;
 
 /**
  * Author: MrCrayfish
@@ -66,6 +67,9 @@ public class OneHandedPose implements IHeldAnimation {
     @Override
     @OnlyIn(Dist.CLIENT)
     public void renderFirstPersonArms(Player player, HumanoidArm hand, ItemStack stack, PoseStack poseStack, MultiBufferSource buffer, int light, float partialTicks) {
+        if (stack.getItem() instanceof AnimatedGunItem) {
+            return;
+        }
         poseStack.mulPose(Axis.YP.rotationDegrees(180F));
 
         BakedModel model = Minecraft.getInstance().getItemRenderer().getModel(stack, player.level(), player, 0);

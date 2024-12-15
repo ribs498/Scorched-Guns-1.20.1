@@ -27,6 +27,7 @@ import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModDamageTypes;
 import top.ribs.scguns.init.ModEnchantments;
+import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.interfaces.IDamageable;
 import top.ribs.scguns.item.GunItem;
@@ -134,7 +135,9 @@ public class BearPackShellProjectileEntity extends ProjectileEntity {
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
-
+        if (entity instanceof LivingEntity livingTarget) {
+            damage = calculateArmorBypassDamage(livingTarget, damage);
+        }
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, this.shooter);
         boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, SHIELD_DISABLE_CHANCE);
 
@@ -216,21 +219,21 @@ public class BearPackShellProjectileEntity extends ProjectileEntity {
 
     @Override
     protected void onProjectileTick() {
-        super.onProjectileTick();
-
-        if (this.level().isClientSide && this.tickCount > 2 && this.tickCount < this.life) {
-            for (int i = 0; i < 5; i++) {
-                double offsetX = (this.random.nextDouble() - 0.5) * 0.2;
-                double offsetY = (this.random.nextDouble() - 0.5) * 0.2;
-                double offsetZ = (this.random.nextDouble() - 0.5) * 0.2;
+        if (this.level().isClientSide && (this.tickCount > 1 && this.tickCount < this.life)) {
+            if (this.tickCount % 5 == 0) {
+                double offsetX = (this.random.nextDouble() - 0.5) * 0.5;
+                double offsetY = (this.random.nextDouble() - 0.5) * 0.5;
+                double offsetZ = (this.random.nextDouble() - 0.5) * 0.5;
                 double velocityX = (this.random.nextDouble() - 0.5) * 0.1;
                 double velocityY = (this.random.nextDouble() - 0.5) * 0.1;
                 double velocityZ = (this.random.nextDouble() - 0.5) * 0.1;
-                this.level().addParticle(ParticleTypes.SMALL_FLAME, true,
+                this.level().addParticle(ParticleTypes.SOUL_FIRE_FLAME, true,
                         this.getX() + offsetX,
                         this.getY() + offsetY,
                         this.getZ() + offsetZ,
-                        velocityX, velocityY, velocityZ);
+                        velocityX,
+                        velocityY,
+                        velocityZ);
             }
         }
     }

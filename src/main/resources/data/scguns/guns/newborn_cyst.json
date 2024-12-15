@@ -27,7 +27,8 @@
     "hotBarrelRate": 24,
     "criticalChance": 0.15,
     "playerKnockBack": true,
-    "playerKnockBackStrength": 0.15
+    "playerKnockBackStrength": 0.15,
+    "isRevolver": true
   },
   "modules": {
     "attachments": {
@@ -57,6 +58,8 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 35,
+    "casingParticle": "scguns:bearpack_shell",
+    "ejectDuringReload": true,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:bearpack_shell",

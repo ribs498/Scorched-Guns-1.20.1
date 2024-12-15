@@ -19,7 +19,9 @@
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 90,
-    "criticalChance": 0.05
+    "criticalChance": 0.05,
+    "playerKnockBack": true,
+    "playerKnockBackStrength": 0.25
   },
   "modules": {
     "attachments": {
@@ -43,9 +45,11 @@
     "advantage": "scguns:none",
     "damage": 20.5,
     "ejectsCasing": true,
+    "ejectDuringReload": true,
     "gravity": false,
     "item": "scguns:bearpack_shell",
     "casingType": "scguns:medium_brass_casing",
+    "casingParticle": "scguns:bearpack_shell",
     "life": 25,
     "size": 0.05,
     "speed": 4.0,
@@ -55,7 +59,7 @@
     "emptyMagTimer": 10,
     "maxAmmo": 1,
     "reloadTimer": 20,
-    "reloadType": "scguns:manual"
+    "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",

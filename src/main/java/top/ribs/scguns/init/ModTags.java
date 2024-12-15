@@ -63,6 +63,7 @@ public class ModTags
         public static final TagKey<EntityType<?>> VERY_HEAVY = tag("very_heavy");
         public static final TagKey<EntityType<?>> UNDEAD = tag("undead");
         public static final TagKey<EntityType<?>> GHOST = tag("ghost");
+        public static final TagKey<EntityType<?>> WITHER = tag("wither");
         public static final TagKey<EntityType<?>> FIRE = tag("fire");
         public static final TagKey<EntityType<?>> ILLAGER = tag("illager");
         public static final TagKey<EntityType<?>> TURRET_BLACKLIST = tag("turret_blacklist");

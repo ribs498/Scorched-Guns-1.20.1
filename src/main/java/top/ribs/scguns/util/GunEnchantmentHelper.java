@@ -261,4 +261,11 @@ public class GunEnchantmentHelper
             level.addParticle(ParticleTypes.ENTITY_EFFECT, position.x + offsetX, position.y + offsetY, position.z + offsetZ, red, green, blue);
         }
     }
+
+    public static int getQuickHands(ItemStack stack) {
+        return EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.QUICK_HANDS.get(), stack);
+    }
+    public static int getLightweight(ItemStack stack) {
+        return EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.LIGHTWEIGHT.get(), stack);
+    }
 }

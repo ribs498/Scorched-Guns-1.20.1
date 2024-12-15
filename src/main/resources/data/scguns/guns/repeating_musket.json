@@ -6,21 +6,21 @@
       "zOffset": -4.5,
       "textureLocation": "muzzle_flash_1",
       "spawnParticles": true,
-      "particleType": "minecraft:smoke",
-      "particleCount": 10,
-      "particleSpread": 0.1,
-      "particleRingRadius": 0.2
+      "particleType": "minecraft:campfire_cosy_smoke",
+      "particleCount": 15,
+      "particleSpread": 0.7,
+      "particleRingRadius": 0.7
     }
   },
   "general": {
-    "alwaysSpread": true,
-    "fireMode": "scguns:automatic",
+    "alwaysSpread": false,
+    "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 13,
     "recoilAngle": 10.0,
     "recoilKick": 3.0,
-    "spread": 7.0,
+    "spread": 3.0,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 20,
@@ -59,10 +59,10 @@
   },
   "reloads": {
     "emptyMagTimer": 40,
-    "maxAmmo": 5,
+    "maxAmmo": 4,
     "reloadItem": "scguns:powder_and_ball",
     "reloadTimer": 45,
-    "reloadType": "scguns:manual"
+    "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",

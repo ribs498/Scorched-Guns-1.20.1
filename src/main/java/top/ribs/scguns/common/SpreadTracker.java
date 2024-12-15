@@ -80,4 +80,8 @@ public class SpreadTracker
             server.execute(() -> TRACKER_MAP.remove(event.getEntity()));
         }
     }
+
+    public float getNextSpread(GunItem gun, float finalSpreadTranslate) {
+        return 0;
+    }
 }

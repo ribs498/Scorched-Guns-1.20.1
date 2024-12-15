@@ -3,13 +3,13 @@
     "flash": {
       "size": 1.0,
       "yOffset": 4.7,
-      "zOffset": -5.9,
+      "zOffset": -11.5,
       "textureLocation": "muzzle_flash_9"
     },
     "beamOrigin": {
       "horizontalOffset": 0.1,
       "verticalOffset": -0.05,
-      "forwardOffset": 0.3,
+      "forwardOffset": 0.6,
       "aimHorizontalOffset": 0.0
     }
   },

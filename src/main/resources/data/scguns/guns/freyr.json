@@ -50,11 +50,12 @@
     }
   },
   "projectile": {
-    "advantage": "scguns:none",
+    "advantage": "scguns:wither",
     "damage": 9.5,
     "ejectsCasing": true,
     "item": "scguns:hog_round",
     "casingType": "scguns:small_iron_casing",
+    "casingParticle": "scguns:iron_casing",
     "life": 30,
     "size": 0.1,
     "speed": 4.0,

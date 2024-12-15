@@ -41,6 +41,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 import org.valkyrienskies.mod.common.world.RaycastUtilsKt;
 import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.attributes.SCAttributes;
@@ -96,6 +97,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     protected int life;
     private int soundTime = 0;
     private float chargeProgress;
+    protected float armorBypassAmount = 2.0F;
 
     public ProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -165,6 +167,24 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     @Override
     protected void defineSynchedData() {
     }
+    public void setArmorBypassAmount(float amount) {
+        this.armorBypassAmount = amount;
+    }
+    protected float calculateArmorBypassDamage(LivingEntity target, float damage) {
+        int armorValue = target.getArmorValue();
+
+        float baseReduction = Math.min(0.75f, armorValue * 0.004f);
+
+        if (armorBypassAmount <= 0) {
+            return damage * (1.0f - baseReduction);
+        }
+
+        float bypassPercent = armorBypassAmount / 10.0f;
+        float effectiveArmor = armorValue * (1.0f - bypassPercent);
+        float finalReduction = Math.min(0.75f, effectiveArmor * 0.004f);
+
+        return damage * (1.0f - finalReduction);
+    }
     public float getDamage() {
         float damage = getaFloat();
         damage = GunModifierHelper.getModifiedDamage(this.weapon, this.modifiedGun, damage);
@@ -205,24 +225,47 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
         AttributeInstance spreadAttr = shooter.getAttribute(SCAttributes.SPREAD_MULTIPLIER.get());
         gunSpread *= spreadAttr != null ? (float) spreadAttr.getValue() : 1.0F;
+
+        // Convert to radians
+        float spreadRadians = gunSpread * 0.017453292F;
+
+        // Generate random angles
+        float angleY = random.nextFloat() * 2 * (float)Math.PI;
+        float angleX = random.nextFloat() * spreadRadians;
+
+        // Get the initial forward vector
         Vec3 forward = getVectorFromRotation(shooter.getXRot(), shooter.getYRot());
-        float spreadRadius = gunSpread * 0.017453292F;
-        float angle = random.nextFloat() * 2 * (float)Math.PI;
-        float distance = random.nextFloat() * spreadRadius;
-        Vec3 right = new Vec3(
-                Mth.cos(shooter.getYRot() * 0.017453292F),
-                0,
-                -Mth.sin(shooter.getYRot() * 0.017453292F)
-        );
 
-        Vec3 up = forward.cross(right);
-        Vec3 spreadDirection = forward
-                .add(right.scale(Mth.cos(angle) * distance))
-                .add(up.scale(Mth.sin(angle) * distance));
+        // Create an arbitrary right vector that's perpendicular to forward
+        Vec3 right;
+        if (Math.abs(forward.y) < 0.999) { // Not looking straight up or down
+            right = new Vec3(0, 1, 0).cross(forward).normalize();
+        } else {
+            right = new Vec3(1, 0, 0); // Use X-axis for straight up/down cases
+        }
 
-        return spreadDirection.normalize();
+        // Create up vector
+        Vec3 up = forward.cross(right).normalize();
+
+        // Apply the spread using both angles
+        Vec3 spreadVector = forward;
+        spreadVector = rotateVector(spreadVector, right, angleX);
+        spreadVector = rotateVector(spreadVector, forward, angleY);
+
+        return spreadVector.normalize();
     }
 
+    private Vec3 rotateVector(Vec3 vector, Vec3 axis, float angle) {
+        float sin = Mth.sin(angle);
+        float cos = Mth.cos(angle);
+        float dot = (float) vector.dot(axis);
+
+        return new Vec3(
+                vector.x * cos + (axis.y * vector.z - axis.z * vector.y) * sin + axis.x * dot * (1 - cos),
+                vector.y * cos + (axis.z * vector.x - axis.x * vector.z) * sin + axis.y * dot * (1 - cos),
+                vector.z * cos + (axis.x * vector.y - axis.y * vector.x) * sin + axis.z * dot * (1 - cos)
+        );
+    }
     public float getaFloat() {
         float initialDamage = (this.projectile.getDamage() + this.additionalDamage + this.attributeAdditionalDamage);
         initialDamage *= (float) this.attributeDamageMultiplier;
@@ -632,7 +675,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if (!advantage.equals(ModTags.Entities.NONE.location())) {
             // Deal extra damage to undead entities
             if (advantage.equals(ModTags.Entities.UNDEAD.location())) {
-                if (entity.getType().is(ModTags.Entities.UNDEAD) || entity.getType().is(ModTags.Entities.GHOST)) {
+                if (entity.getType().is(ModTags.Entities.UNDEAD) ||entity.getType().is(ModTags.Entities.WITHER) ||  entity.getType().is(ModTags.Entities.GHOST)) {
                     advantageMultiplier = 1.25F;
                     entity.setSecondsOnFire(2);
                 }
@@ -666,27 +709,21 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         float newDamage = this.getCriticalDamage(this.weapon, this.random, damage);
         boolean critical = damage != newDamage;
         damage = newDamage;
-        ResourceLocation advantage = this.getProjectile().getAdvantage();
         damage *= advantageMultiplier(entity);
-
 
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
-
-        //Disabled due to difficulty of testing without my server up.
-        //if (entity.getType() == EntityType.PLAYER){
-        //    damage*=1-(((LivingEntity) entity).getAttribute(SCAttributes.BULLET_RESISTANCE.get()).getValue()/100);
-        //}
+        if (entity instanceof LivingEntity livingTarget) {
+            damage = calculateArmorBypassDamage(livingTarget, damage);
+        }
 
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, this.shooter);
-
-        // Handle shield interaction
         boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage);
 
         if (!blocked) {
             if (!(entity.getType().is(ModTags.Entities.GHOST) &&
-                    !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
+                    !this.getProjectile().getAdvantage().equals(ModTags.Entities.UNDEAD.location()))) {
                 entity.hurt(source, damage);
             }
         }
@@ -700,7 +737,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             PacketHandler.getPlayChannel().sendToPlayer(() -> (ServerPlayer) this.shooter, new S2CMessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
         }
 
-        // Send blood particle to tracking clients.
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
     }
 
@@ -1169,7 +1205,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             return true;
         }
 
-        // Overloaded method for backward compatibility
         public static boolean handleShieldHit(Entity target, Entity projectile, float damage) {
             return handleShieldHit(target, projectile, damage, DEFAULT_SHIELD_DISABLE_CHANCE);
         }

@@ -10,6 +10,7 @@ import net.minecraftforge.eventbus.api.Cancelable;
  *
  * @author Ocelot
  */
+//scguns
 public class GunReloadEvent extends PlayerEvent
 {
     private final ItemStack stack;

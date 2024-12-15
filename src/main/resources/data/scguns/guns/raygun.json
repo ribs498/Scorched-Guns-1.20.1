@@ -39,6 +39,7 @@
     "gravity": false,
     "item": "scguns:energy_cell",
     "casingType": "scguns:empty_cell",
+    "casingParticle": "scguns:iron_casing",
     "life": 50,
     "size": 100.0,
     "speed": 5.0,

@@ -3,7 +3,7 @@
   "biomes": "#forge:is_general",
   "spawners": {
     "type": "scguns:sky_carrier",
-    "weight":30,
+    "weight":5,
     "minCount": 1,
     "maxCount": 1
   }

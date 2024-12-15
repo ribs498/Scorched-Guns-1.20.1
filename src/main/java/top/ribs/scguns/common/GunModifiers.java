@@ -1,6 +1,5 @@
 package top.ribs.scguns.common;
 
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.interfaces.IGunModifier;
 import top.ribs.scguns.item.GunItem;
@@ -49,7 +48,7 @@ public class GunModifiers
 
         @Override
         public boolean isMeleeOnly() {
-            return true;
+            return false;
         }
     };
 
@@ -61,7 +60,7 @@ public class GunModifiers
 
         @Override
         public boolean isMeleeOnly() {
-            return true;
+            return false;
         }
     };
     public static final IGunModifier DIAMOND_BAYONET_DAMAGE = new IGunModifier() {
@@ -71,7 +70,7 @@ public class GunModifiers
         }
         @Override
         public boolean isMeleeOnly() {
-            return true;
+            return false;
         }
     };
 
@@ -82,7 +81,7 @@ public class GunModifiers
         }
         @Override
         public boolean isMeleeOnly() {
-            return true;
+            return false;
         }
     };
     public static final IGunModifier EXTENDED_BARREL = new IGunModifier()
@@ -144,65 +143,6 @@ public class GunModifiers
         public double modifyAimDownSightSpeed(double speed)
         {
             return speed * 1.2F;
-        }
-    };
-    public static final IGunModifier SLOWEST_ADS = new IGunModifier()
-    {
-        @Override
-        public double modifyAimDownSightSpeed(double speed)
-        {
-            return speed * 0.65F;
-        }
-        @Override
-        public float recoilModifier()
-        {
-            return 1.2F;
-        }
-    };
-    public static final IGunModifier BETTER_CONTROL = new IGunModifier()
-    {
-        @Override
-        public float recoilModifier()
-        {
-            return 0.85F;
-        }
-
-        @Override
-        public float kickModifier()
-        {
-            return 0.95F;
-        }
-
-        @Override
-        public float modifyProjectileSpread(float spread)
-        {
-            return spread * 0.85F;
-        }
-
-        @Override
-        public double modifyAimDownSightSpeed(double speed)
-        {
-            return speed * 0.97F;
-        }
-    };
-  public static final IGunModifier SLIGHTLY_STABILISED = new IGunModifier()
-    {
-        @Override
-        public float kickModifier()
-        {
-            return 0.95F;
-        }
-
-        @Override
-        public float modifyProjectileSpread(float spread)
-        {
-            return spread * 0.85F;
-        }
-
-        @Override
-        public double modifyAimDownSightSpeed(double speed)
-        {
-            return speed * 0.98F;
         }
     };
 
@@ -269,6 +209,10 @@ public class GunModifiers
         public double modifyAimDownSightSpeed(double speed) {
             return speed * 1.1F;
         }
+        @Override
+        public double modifyDrawSpeed(double speed) {
+            return speed * 1.2F;
+        }
     };
 
     public static final IGunModifier WEIGHTED_STOCK_MODIFIER = new IGunModifier() {
@@ -285,6 +229,10 @@ public class GunModifiers
         @Override
         public float kickModifier() {
             return 0.9F;
+        }
+        @Override
+        public double modifyDrawSpeed(double speed) {
+            return speed * 0.85F;  // 15% slower draw speed
         }
     };
 
@@ -345,6 +293,10 @@ public class GunModifiers
         private boolean isCarbineCandidate(ItemStack weapon) {
             return ((GunItem) weapon.getItem()).isOneHandedCarbineCandidate(weapon);
         }
+        @Override
+        public double modifyDrawSpeed(double speed) {
+            return speed * 0.95F;
+        }
     };
 
         public static final IGunModifier SILENCER_MODIFIER = new IGunModifier() {
@@ -395,6 +347,10 @@ public class GunModifiers
         public float kickModifier() {
             return 0.9F;
         }
+        @Override
+        public double modifyDrawSpeed(double speed) {
+            return speed * 0.95F;
+        }
     };
 
     public static final IGunModifier SPEED_MAG_MODIFIER = new IGunModifier() {
@@ -416,6 +372,10 @@ public class GunModifiers
         @Override
         public float kickModifier() {
             return 0.95F;
+        }
+        @Override
+        public double modifyDrawSpeed(double speed) {
+            return speed * 1.15F;  // 15% faster draw speed
         }
     };
 

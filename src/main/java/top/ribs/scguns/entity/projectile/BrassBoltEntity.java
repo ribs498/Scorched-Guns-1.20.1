@@ -2,6 +2,7 @@ package top.ribs.scguns.entity.projectile;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvent;
@@ -65,14 +66,15 @@ public class BrassBoltEntity extends AbstractArrow {
 
     @Override
     public void tick() {
+        if (!this.level().isClientSide && (this.inGround || this.tickCount > 300)) {
+            this.discard();
+            return;
+        }
+
         super.tick();
 
         if (this.level().isClientSide) {
             spawnTrailParticles();
-        }
-
-        if (this.inGround || this.tickCount > 300) {
-            this.discard();
         }
     }
 
@@ -103,7 +105,19 @@ public class BrassBoltEntity extends AbstractArrow {
     public void playSound(SoundEvent soundEvent, float volume, float pitch) {
         // Empty to disable sounds
     }
+    @Override
+    public void addAdditionalSaveData(CompoundTag compound) {
+        super.addAdditionalSaveData(compound);
+        compound.putDouble("damage", this.getBaseDamage());
+    }
 
+    @Override
+    public void readAdditionalSaveData(CompoundTag compound) {
+        super.readAdditionalSaveData(compound);
+        if (compound.contains("damage")) {
+            this.setBaseDamage(compound.getDouble("damage"));
+        }
+    }
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);

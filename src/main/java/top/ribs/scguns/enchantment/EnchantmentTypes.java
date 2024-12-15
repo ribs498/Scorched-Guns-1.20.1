@@ -7,6 +7,7 @@ import top.ribs.scguns.item.BayonetItem;
 import top.ribs.scguns.item.GunItem;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import top.ribs.scguns.item.NonUnderwaterGunItem;
+import top.ribs.scguns.item.animated.NonUnderwaterAnimatedGunItem;
 
 /**
  * Author: MrCrayfish
@@ -18,12 +19,12 @@ public class EnchantmentTypes {
 
     public static final EnchantmentCategory TRIGGER_FINGER_COMPATIBLE = EnchantmentCategory.create(
             Reference.MOD_ID + ":trigger_finger_compatible",
-            item -> item instanceof GunItem && !isSingleShotGun((GunItem) item)
+            item -> item instanceof GunItem && isSingleShotGun((GunItem) item)
     );
 
     public static final EnchantmentCategory SINGLE_SHOT_GUN = EnchantmentCategory.create(
             Reference.MOD_ID + ":single_shot_gun",
-            item -> item instanceof GunItem && !isSingleShotGun((GunItem) item)
+            item -> item instanceof GunItem && isSingleShotGun((GunItem) item)
     );
     public static final EnchantmentCategory WATER_PROOF_COMPATIBLE = EnchantmentCategory.create(
             Reference.MOD_ID + ":water_proof_compatible",
@@ -40,14 +41,14 @@ public class EnchantmentTypes {
     );
 
     private static boolean isSingleShotGun(GunItem gunItem) {
-        return gunItem == ModItems.FLINTLOCK_PISTOL.get() ||
-                gunItem == ModItems.HANDCANNON.get() ||
-                gunItem == ModItems.MUSKET.get() ||
-                gunItem == ModItems.BLUNDERBUSS.get()||
-                gunItem == ModItems.ROCKET_RIFLE.get()||
-                gunItem == ModItems.BOMB_LANCE.get()||
-                gunItem == ModItems.BRAWLER.get()||
-                gunItem == ModItems.SAKETINI.get();
+        return gunItem != ModItems.FLINTLOCK_PISTOL.get() &&
+                gunItem != ModItems.HANDCANNON.get() &&
+                gunItem != ModItems.MUSKET.get() &&
+                gunItem != ModItems.BLUNDERBUSS.get() &&
+                gunItem != ModItems.ROCKET_RIFLE.get() &&
+                gunItem != ModItems.BOMB_LANCE.get() &&
+                gunItem != ModItems.BRAWLER.get() &&
+                gunItem != ModItems.SAKETINI.get();
     }
     private static boolean isNonCollateral(GunItem gunItem) {
         return gunItem == ModItems.ROCKET_RIFLE.get() ||
@@ -59,9 +60,9 @@ public class EnchantmentTypes {
                 gunItem == ModItems.CARAPICE.get();
     }
     private static boolean isNonUnderwaterGun(GunItem gunItem) {
-        // Check if the gun is an instance of NonUnderwaterGunItem
-        return gunItem instanceof NonUnderwaterGunItem;
+        return gunItem instanceof NonUnderwaterGunItem || gunItem instanceof NonUnderwaterAnimatedGunItem;
     }
+
 
     private static boolean doesNotEjectCasings(GunItem gunItem) {
         return gunItem == ModItems.FLINTLOCK_PISTOL.get() ||

@@ -11,21 +11,22 @@
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
-    "rate": 10,
+    "rate": 13,
     "recoilAngle": 5.0,
     "recoilKick": 2.0,
     "spread": 3.0,
     "meleeDamage": 2.0,
     "meleeCooldownTicks": 10,
     "hotBarrelRate": 24,
-    "criticalChance": 0.15
+    "criticalChance": 0.15,
+    "isRevolver": true
   },
   "modules": {
     "attachments": {
       "scope": {
         "size": 0.8,
-        "yOffset": 5.3,
-        "zOffset": 3.5
+        "yOffset": 5.0,
+        "zOffset": 3.3
       },
       "barrel": {
         "yOffset": 3.9,
@@ -37,17 +38,19 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 5.4,
+      "yOffset": 5.1,
       "zOffset": 0.75
     }
   },
   "projectile": {
     "advantage": "scguns:illager",
-    "damage": 6.5,
-    "ejectsCasing": false,
+    "damage": 7.5,
+    "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:compact_copper_round",
     "casingType": "scguns:small_copper_casing",
+    "casingParticle": "scguns:copper_casing",
+    "ejectDuringReload": true,
     "life": 35,
     "size": 1.0,
     "speed": 5.0,

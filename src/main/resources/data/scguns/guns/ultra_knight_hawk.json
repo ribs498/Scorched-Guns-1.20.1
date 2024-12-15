@@ -4,7 +4,12 @@
       "size": 1.5,
       "yOffset": 4.2,
       "zOffset": -11.0,
-      "textureLocation": "muzzle_flash_5"
+      "textureLocation": "muzzle_flash_5",
+      "spawnParticles": true,
+      "particleType": "minecraft:campfire_cosy_smoke",
+      "particleCount": 15,
+      "particleSpread": 0.6,
+      "particleRingRadius": 0.6
     }
   },
   "general": {
@@ -20,7 +25,8 @@
     "hotBarrelRate": 37,
     "criticalChance": 0.05,
     "playerKnockBack": true,
-    "playerKnockBackStrength": 2.25
+    "playerKnockBackStrength": 2.25,
+    "isRevolver": true
   },
   "modules": {
     "attachments": {
@@ -32,17 +38,19 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 5.8,
+      "yOffset": 6.0,
       "zOffset": 0.75
     }
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 68.0,
-    "ejectsCasing": false,
+    "damage": 65.0,
+    "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:osborne_slug",
     "casingType": "scguns:large_iron_casing",
+    "casingParticle": "scguns:iron_casing",
+    "ejectDuringReload": true,
     "life": 80,
     "size": 1.0,
     "speed": 7.0,

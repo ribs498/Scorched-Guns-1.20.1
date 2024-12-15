@@ -22,6 +22,7 @@ import top.ribs.scguns.client.handler.AimingHandler;
 import top.ribs.scguns.client.handler.GunRenderingHandler;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.animated.AnimatedGunItem;
 
 /**
  * Author: MrCrayfish
@@ -64,6 +65,9 @@ public class ItemInHandLayerMixin {
         GunRenderingHandler.get().applyWeaponScale(stack, poseStack);
         Gun gun = item.getModifiedGun(stack);
         gun.getGeneral().getGripType(stack).heldAnimation().applyHeldItemTransforms(player, hand, AimingHandler.get().getAimProgress(player, deltaTicks), poseStack, source);
+        if (stack.getItem() instanceof AnimatedGunItem) {
+            poseStack.scale(1.0F, 1.0F, 1.0F);
+        }
         GunRenderingHandler.get().renderWeapon(player, stack, display, poseStack, source, light, deltaTicks);
         poseStack.popPose();
     }

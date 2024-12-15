@@ -59,6 +59,7 @@
     "gravity": false,
     "item": "scguns:gibbs_round",
     "casingType": "scguns:medium_diamond_steel_casing",
+    "casingParticle": "scguns:diamond_steel_casing",
     "life": 70,
     "size": 0.05,
     "speed": 10.0,

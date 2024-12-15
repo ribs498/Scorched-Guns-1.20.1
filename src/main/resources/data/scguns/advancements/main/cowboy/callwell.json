@@ -1,5 +1,5 @@
 {
-  "parent": "scguns:main/cowboy/sawed_off_callwell",
+  "parent": "scguns:main/cowboy/callwell_conversion",
   "criteria": {
     "callwell": {
       "conditions": {

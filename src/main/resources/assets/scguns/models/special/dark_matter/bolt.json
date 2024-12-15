@@ -48,5 +48,13 @@
 			"translation": [1.5, 8.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "bolt",
+			"origin": [0.77, -0.57419, -0.14872],
+			"color": 0,
+			"children": [0]
+		}
+	]
 }

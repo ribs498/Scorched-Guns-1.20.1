@@ -2,7 +2,7 @@
   "display": {
     "flash": {
       "size": 1.0,
-      "yOffset": 5.4,
+      "yOffset": 5.5,
       "zOffset": -4.7,
       "textureLocation": "muzzle_flash_1"
     }
@@ -25,7 +25,7 @@
   "modules": {
     "attachments": {
       "barrel": {
-        "yOffset": 5.4,
+        "yOffset": 5.5,
         "zOffset": -6.2
       },
       "stock": {
@@ -37,7 +37,7 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 6.7,
+      "yOffset": 6.9,
       "zOffset": 0.75
     }
   },
@@ -47,6 +47,7 @@
     "ejectsCasing": true,
     "item": "scguns:compact_advanced_round",
     "casingType": "scguns:small_brass_casing",
+    "casingParticle": "scguns:brass_casing",
     "life": 35,
     "size": 0.05,
     "speed": 4.0,
@@ -56,7 +57,7 @@
     "emptyMagTimer": 30,
     "maxAmmo": 18,
     "reloadItem": "scguns:compact_advanced_round",
-    "reloadTimer": 30,
+    "reloadTimer": 100,
     "reloadType": "scguns:mag_fed"
   },
   "sounds": {

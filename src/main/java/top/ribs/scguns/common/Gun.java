@@ -34,7 +34,6 @@ import top.ribs.scguns.debug.client.screen.widget.DebugButton;
 import top.ribs.scguns.debug.client.screen.widget.DebugSlider;
 import top.ribs.scguns.debug.client.screen.widget.DebugToggle;
 import top.ribs.scguns.item.*;
-import top.ribs.scguns.item.ammo_boxes.CreativeAmmoBoxItem;
 import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.item.attachment.impl.Scope;
 import top.ribs.scguns.util.GunJsonUtil;
@@ -48,8 +47,6 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
-
-import static top.ribs.scguns.ScorchedGuns.LOGGER;
 
 public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
     protected General general = new General();
@@ -84,10 +81,11 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
 
     public GripType determineGripType(ItemStack stack) {
         GripType baseGripType = this.general.getBaseGripType();
-        if (Gun.hasExtendedBarrel(stack) && ((GunItem) stack.getItem()).isOneHandedCarbineCandidate(stack)) {
+        if (stack.getItem() instanceof GunItem gunItem &&
+                gunItem.isOneHandedCarbineCandidate(stack) &&
+                (Gun.hasExtendedBarrel(stack) || Gun.hasStock(stack))) {
             return GripType.TWO_HANDED;
         }
-
         return baseGripType;
     }
 
@@ -100,6 +98,15 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         for (IAttachment.Type type : IAttachment.Type.values()) {
             ItemStack attachmentStack = Gun.getAttachment(type, stack);
             if (attachmentStack.getItem() instanceof ExtendedBarrelItem) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public static boolean hasStock(ItemStack stack) {
+        for (IAttachment.Type type : IAttachment.Type.values()) {
+            ItemStack attachmentStack = Gun.getAttachment(type, stack);
+            if (attachmentStack.getItem() instanceof StockItem) {
                 return true;
             }
         }
@@ -234,6 +241,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         private boolean playerKnockBack = false;
         @Optional
         private float playerKnockBackStrength = 0.0F;
+        @Optional
+        private boolean isRevolver = false;
+        @Optional
+        private float speedModifier = 1.0F;
 
         @Override
         public CompoundTag serializeNBT() {
@@ -283,6 +294,8 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             tag.putFloat("CriticalChance", this.criticalChance);
             tag.putBoolean("PlayerKnockBack", this.playerKnockBack);
             tag.putFloat("PlayerKnockBackStrength", this.playerKnockBackStrength);
+            tag.putBoolean("IsRevolver", this.isRevolver);
+            tag.putFloat("SpeedModifier", this.speedModifier);
             return tag;
         }
 
@@ -390,6 +403,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("PlayerKnockBackStrength", Tag.TAG_ANY_NUMERIC)) {
                 this.playerKnockBackStrength = tag.getFloat("PlayerKnockBackStrength");
             }
+            if (tag.contains("IsRevolver", Tag.TAG_ANY_NUMERIC)) {
+                this.isRevolver = tag.getBoolean("IsRevolver");
+            }
+            if (tag.contains("SpeedModifier", Tag.TAG_ANY_NUMERIC)) {
+                this.speedModifier = tag.getFloat("SpeedModifier");
+            }
         }
 
         public JsonObject toJsonObject() {
@@ -467,6 +486,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (this.playerKnockBackStrength != 0.0F) {
                 object.addProperty("playerKnockBackStrength", this.playerKnockBackStrength);
             }
+            if (this.isRevolver) {
+                object.addProperty("isRevolver", true);
+            }
+            if (this.speedModifier != 1.0F) {
+                object.addProperty("speedModifier", this.speedModifier);
+            }
             return object;
         }
 
@@ -510,7 +535,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             general.criticalChance = this.criticalChance;
             general.playerKnockBack = this.playerKnockBack;
             general.playerKnockBackStrength = this.playerKnockBackStrength;
+            general.isRevolver = this.isRevolver;
+            general.speedModifier = this.speedModifier;
             return general;
+        }
+        public float getSpeedModifier() {
+            return this.speedModifier;
         }
         public boolean hasPlayerKnockBack() {
             return this.playerKnockBack;
@@ -519,7 +549,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             return this.playerKnockBackStrength;
         }
 
-
+        public boolean isRevolver() {
+            return this.isRevolver;
+        }
         public float getCriticalChance() {return this.criticalChance;}
         public boolean hasCameraShake() {
             return this.hasCameraShake;
@@ -874,7 +906,13 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         private int trailColor = 0xFFD289;
         @Optional
         private double trailLengthMultiplier = 1.0;
-
+        @Optional
+        @Nullable
+        private ResourceLocation casingParticle;
+        @Optional
+        private boolean ejectDuringReload;
+        @Optional
+        private boolean firesArrows = false;
 
         @Override
         public CompoundTag serializeNBT() {
@@ -892,8 +930,13 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             tag.putInt("TrailColor", this.trailColor);
             tag.putDouble("TrailLengthMultiplier", this.trailLengthMultiplier);
             if (this.casingType != null) {
-                tag.putString("CasingType", this.casingType.toString()); // Serialize casingType
+                tag.putString("CasingType", this.casingType.toString());
             }
+            if (this.casingParticle != null) {
+                tag.putString("CasingParticle", this.casingParticle.toString());
+            }
+            tag.putBoolean("EjectDuringReload", this.ejectDuringReload);
+            tag.putBoolean("FiresArrows", this.firesArrows);
             return tag;
         }
 
@@ -938,6 +981,15 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("TrailLengthMultiplier", Tag.TAG_ANY_NUMERIC)) {
                 this.trailLengthMultiplier = tag.getDouble("TrailLengthMultiplier");
             }
+            if (tag.contains("CasingParticle", Tag.TAG_STRING)) {
+                this.casingParticle = new ResourceLocation(tag.getString("CasingParticle"));
+            }
+            if (tag.contains("EjectDuringReload", Tag.TAG_ANY_NUMERIC)) {
+                this.ejectDuringReload = tag.getBoolean("EjectDuringReload");
+            }
+            if (tag.contains("FiresArrows", Tag.TAG_ANY_NUMERIC)) {
+                this.firesArrows = tag.getBoolean("FiresArrows");
+            }
         }
 
         public JsonObject toJsonObject() {
@@ -961,6 +1013,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (this.trailLengthMultiplier != 1.0)
                 object.addProperty("trailLengthMultiplier", this.trailLengthMultiplier);
             if (this.casingType != null) object.addProperty("casingType", this.casingType.toString());
+            if (this.casingParticle != null) object.addProperty("casingParticle", this.casingParticle.toString());
+            if (this.ejectDuringReload) object.addProperty("ejectDuringReload", true);
+            if (this.firesArrows) object.addProperty("firesArrows", true);
             return object;
         }
 
@@ -979,6 +1034,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             projectile.trailColor = this.trailColor;
             projectile.trailLengthMultiplier = this.trailLengthMultiplier;
             projectile.casingType = this.casingType;
+            projectile.casingParticle = this.casingParticle;
+            projectile.ejectDuringReload = this.ejectDuringReload;
+            projectile.firesArrows = this.firesArrows;
             return projectile;
         }
 
@@ -989,6 +1047,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             return ForgeRegistries.ITEMS.getValue(this.item);
         }
 
+        public boolean firesArrows() {
+            return this.firesArrows;
+        }
 
         /**
          * @return If this projectile ejects a casing/shell when fired
@@ -1000,12 +1061,17 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         public void setCasingType(ResourceLocation casingType) {
             this.casingType = casingType;
         }
-
+        public ResourceLocation getCasingType() {
+            return this.casingType;
+        }
+        public boolean ejectDuringReload() {
+            return this.ejectDuringReload;
+        }
         /**
          * @return If this projectile should be visible when rendering
          */
         public boolean isVisible() {
-            return this.visible;
+            return !this.visible;
         }
 
         /**
@@ -1077,6 +1143,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
 
         public float getSpread() {
             return 0.0F;
+        }
+
+        public ResourceLocation getCasingParticle() {
+            return this.casingParticle;
         }
     }
 
@@ -2307,13 +2377,6 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             return new AmmoContext(ammo, null);
         }
 
-        // Check player's main inventory for the CreativeAmmoBoxItem
-        for (ItemStack itemStack : player.getInventory().items) {
-            if (itemStack.getItem() instanceof CreativeAmmoBoxItem) {
-                ItemStack ammo = new ItemStack(item, Integer.MAX_VALUE); // Infinite ammo
-                return new AmmoContext(ammo, null); // Returning infinite ammo
-            }
-        }
 
         // Check player's main inventory for regular ammo
         for (int i = 0; i < player.getInventory().getContainerSize(); ++i) {
@@ -2334,19 +2397,11 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
                 }
             }
         }
-
-        // Check Curios slots for the CreativeAmmoBoxItem and other ammo
         AtomicReference<AmmoContext> ammoContextRef = new AtomicReference<>(AmmoContext.NONE);
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
             for (int i = 0; i < curios.getSlots(); i++) {
                 ItemStack stack = curios.getStackInSlot(i);
-                // Check for the CreativeAmmoBoxItem
-                if (stack.getItem() instanceof CreativeAmmoBoxItem) {
-                    ItemStack ammo = new ItemStack(item, Integer.MAX_VALUE); // Infinite ammo
-                    ammoContextRef.set(new AmmoContext(ammo, null));
-                    return;
-                }
                 // Check for ammo pouches
                 if (stack.getItem() instanceof AmmoBoxItem pouch) {
                     List<ItemStack> contents = AmmoBoxItem.getContents(stack).toList();
@@ -2399,11 +2454,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
             for (int i = 0; i < curios.getSlots(); i++) {
                 ItemStack stack = curios.getStackInSlot(i);
-                if (stack.getItem() instanceof CreativeAmmoBoxItem) {
-                    ammoStacks.add(new ItemStack(item, Integer.MAX_VALUE)); // Infinite ammo
-                    return;
-                }
-                if (stack.getItem() instanceof AmmoBoxItem pouch) {
+                if (stack.getItem() instanceof AmmoBoxItem) {
                     List<ItemStack> contents = AmmoBoxItem.getContents(stack).toList();
                     for (ItemStack ammoStack : contents) {
                         if (ammoStack.getItem() == item) {
@@ -2443,16 +2494,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
                 }
             }
         }
-
-        // Check Curios slots for the CreativeAmmoBoxItem and other ammo
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
             for (int i = 0; i < curios.getSlots(); i++) {
                 ItemStack stack = curios.getStackInSlot(i);
-                if (stack.getItem() instanceof CreativeAmmoBoxItem) {
-                    ammoCount.set(Integer.MAX_VALUE); // Infinite ammo
-                    return;
-                }
                 if (stack.getItem() instanceof AmmoBoxItem pouch) {
                     List<ItemStack> contents = AmmoBoxItem.getContents(stack).toList();
                     for (ItemStack ammoStack : contents) {

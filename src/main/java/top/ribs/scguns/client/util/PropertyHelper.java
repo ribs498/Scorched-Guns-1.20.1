@@ -330,7 +330,7 @@ public final class PropertyHelper
         return Optional.empty();
     }
 
-    private static DataObject getObjectByPath(ItemStack stack, String ... path)
+    public static DataObject getObjectByPath(ItemStack stack, String... path)
     {
         DataObject result = PropertyHelper.getCustomData(stack);
         for(String key : path)
@@ -345,7 +345,7 @@ public final class PropertyHelper
         return result;
     }
 
-    private static Vec3 arrayToVec3(DataArray array, Vec3 defaultValue)
+    public static Vec3 arrayToVec3(DataArray array, Vec3 defaultValue)
     {
         // Ignore immediately if not correct length
         if(array.length() != 3)

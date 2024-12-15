@@ -91,5 +91,13 @@
 			"translation": [2.75, 6.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "extmag",
+			"origin": [8, 0.825, 10.55775],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
 }

@@ -6,7 +6,7 @@ import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.item.AmmoBoxItem;
 
 public class EmptyCasingPouchItem extends AmmoBoxItem {
-    private static final int CASING_MAX_ITEM_COUNT = 1024;
+    private static final int CASING_MAX_ITEM_COUNT = 2048;
     private static final int CASING_BAR_COLOR = Mth.color(0.4F, 0.4F, 0.7F);
 
     public EmptyCasingPouchItem(Properties properties) {

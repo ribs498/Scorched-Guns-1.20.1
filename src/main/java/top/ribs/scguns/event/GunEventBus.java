@@ -4,6 +4,7 @@ package top.ribs.scguns.event;
 import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -18,24 +19,27 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemCooldowns;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.level.LevelEvent;
+import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animation.AnimationController;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.ScorchedGuns;
@@ -44,14 +48,26 @@ import top.ribs.scguns.client.handler.MeleeAttackHandler;
 import top.ribs.scguns.client.render.gun.model.RatKingAndQueenModel;
 import top.ribs.scguns.common.*;
 import top.ribs.scguns.init.*;
+import top.ribs.scguns.interfaces.IAirGun;
+import top.ribs.scguns.interfaces.IEnergyGun;
 import top.ribs.scguns.item.*;
 import top.ribs.scguns.item.ammo_boxes.EmptyCasingPouchItem;
+import top.ribs.scguns.item.animated.AnimatedDualWieldGunItem;
+import top.ribs.scguns.item.animated.AnimatedGunItem;
+import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
+import top.ribs.scguns.item.animated.NonUnderwaterAnimatedGunItem;
 import top.ribs.scguns.item.attachment.IAttachment;
+import top.ribs.scguns.network.PacketHandler;
+import top.ribs.scguns.network.message.C2SMessageReload;
 import top.theillusivec4.curios.api.CuriosApi;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
+
+import static top.ribs.scguns.event.TemporaryLightManager.temporaryLights;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class GunEventBus {
@@ -68,6 +84,37 @@ public class GunEventBus {
         }
     }
     @SubscribeEvent
+    public static void onServerStopping(ServerStoppingEvent event) {
+        MinecraftServer server = event.getServer();
+        for (ServerLevel world : server.getAllLevels()) {
+            TemporaryLightManager.cleanup(world);
+        }
+    }
+    @SubscribeEvent
+    public static void onChunkUnload(ChunkEvent.Unload event) {
+        if (!event.getLevel().isClientSide()) {
+            ChunkPos chunkPos = event.getChunk().getPos();
+            Iterator<Map.Entry<Long, TemporaryLightManager.LightData>> iterator = temporaryLights.entrySet().iterator();
+            while (iterator.hasNext()) {
+                Map.Entry<Long, TemporaryLightManager.LightData> entry = iterator.next();
+                BlockPos pos = BlockPos.of(entry.getKey());
+                if (chunkPos.equals(new ChunkPos(pos))) {
+                    TemporaryLightManager.LightData data = entry.getValue();
+                    Level level = (Level) event.getLevel();
+                    if (data.dimension == level.dimension()) {
+                        if (level.hasChunkAt(pos)) {
+                            BlockState currentState = level.getBlockState(pos);
+                            if (currentState.is(Blocks.LIGHT)) {
+                                level.setBlock(pos, data.previousState, 3);
+                            }
+                        }
+                        iterator.remove();
+                    }
+                }
+            }
+        }
+    }
+    @SubscribeEvent
     public static void preShoot(GunFireEvent.Pre event) {
         Player player = event.getEntity();
         Level level = event.getEntity().level();
@@ -77,54 +124,105 @@ public class GunEventBus {
         if (MeleeAttackHandler.isBanzaiActive()) {
             MeleeAttackHandler.stopBanzai();
         }
+        if (level.isClientSide() && heldItem.getItem() instanceof AnimatedGunItem animatedGunItem) {
+            try {
+                long id = GeoItem.getId(heldItem);
+                AnimationController<GeoAnimatable> animationController = animatedGunItem.getAnimatableInstanceCache()
+                        .getManagerForId(id)
+                        .getAnimationControllers()
+                        .get("controller");
 
+                if (animationController != null) {
+                    if (animatedGunItem.isAnimationPlaying(animationController, "reload_stop")) {
+                        event.setCanceled(true);
+                        return;
+                    }
+
+                    if (tag != null && tag.getBoolean("scguns:IsReloading")) {
+                        if (animatedGunItem.isAnimationPlaying(animationController, "reload_loop") ||
+                                animatedGunItem.isAnimationPlaying(animationController, "reload_start")) {
+                            tag.putBoolean("scguns:ReloadComplete", true);
+                            animationController.tryTriggerAnimation("reload_stop");
+                            tag.remove("scguns:IsReloading");
+                            ModSyncedDataKeys.RELOADING.setValue(player, false);
+                            PacketHandler.getPlayChannel().sendToServer(new C2SMessageReload(false));
+                        }
+                        event.setCanceled(true);
+                        return;
+                    }
+                }
+            } catch (Exception e) {
+                ScorchedGuns.LOGGER.error("Error in preShoot animation handling: " + e.getMessage());
+            }
+        }
         if (heldItem.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(heldItem);
             GripType gripType = gun.determineGripType(heldItem);
+
             if (player.isUsingItem() && player.getOffhandItem().getItem() == Items.SHIELD
                     && (gripType == GripType.ONE_HANDED || gripType == GripType.ONE_HANDED_2)) {
                 event.setCanceled(true);
                 return;
             }
+            if (heldItem.getTag() != null && tag != null && tag.contains("DrawnTick") &&
+                    tag.getInt("DrawnTick") < 15) {
+                event.setCanceled(true);
+                return;
+            }
+
             int energyUse = gun.getGeneral().getEnergyUse();
             if (!player.isCreative()) {
-                if (heldItem.getItem() instanceof EnergyGunItem) {
-                    IEnergyStorage energyStorage = heldItem.getCapability(ForgeCapabilities.ENERGY).orElseThrow(IllegalStateException::new);
+                if (heldItem.getItem() instanceof IEnergyGun) {
+                    IEnergyStorage energyStorage = heldItem.getCapability(ForgeCapabilities.ENERGY)
+                            .orElseThrow(IllegalStateException::new);
                     if (energyStorage.getEnergyStored() >= energyUse) {
                         energyStorage.extractEnergy(energyUse, false);
                     } else {
-                        player.displayClientMessage(Component.translatable("message.energy_gun.no_energy").withStyle(ChatFormatting.RED), true);
+                        player.displayClientMessage(Component.translatable("message.energy_gun.no_energy")
+                                .withStyle(ChatFormatting.RED), true);
                         event.setCanceled(true);
                         return;
                     }
                 }
-                if (ScorchedGuns.createLoaded && heldItem.getItem() instanceof AirGunItem) {
+
+                if (ScorchedGuns.createLoaded && heldItem.getItem() instanceof IAirGun) {
                     List<ItemStack> backtanks = BacktankUtil.getAllWithAir(player);
                     if (backtanks.isEmpty()) {
-                        player.displayClientMessage(Component.translatable("message.airgun.no_air").withStyle(ChatFormatting.RED), true);
+                        player.displayClientMessage(Component.translatable("message.airgun.no_air")
+                                .withStyle(ChatFormatting.RED), true);
                         event.setCanceled(true);
                         return;
                     }
                     float airCostPerShot = calculateAirCostPerShot(gun);
                     BacktankUtil.consumeAir(player, backtanks.get(0), airCostPerShot);
                     if (!BacktankUtil.hasAirRemaining(backtanks.get(0))) {
-                        player.displayClientMessage(Component.translatable("message.airgun.no_air").withStyle(ChatFormatting.RED), true);
+                        player.displayClientMessage(Component.translatable("message.airgun.no_air")
+                                .withStyle(ChatFormatting.RED), true);
                         event.setCanceled(true);
                         return;
                     }
                 }
             }
-            if (heldItem.getItem() instanceof NonUnderwaterGunItem && player.isUnderWater()) {
+
+            // Underwater checks
+            if ((heldItem.getItem() instanceof NonUnderwaterGunItem ||
+                    heldItem.getItem() instanceof NonUnderwaterAnimatedGunItem) &&
+                    player.isUnderWater()) {
                 event.setCanceled(true);
+                return;
             }
 
-
+            // Damage checks
             if (heldItem.isDamageableItem() && tag != null) {
                 if (heldItem.getDamageValue() == (heldItem.getMaxDamage() - 1)) {
-                    level.playSound(player, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);
-                    event.getEntity().getCooldowns().addCooldown(event.getStack().getItem(), gun.getGeneral().getRate());
+                    level.playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK,
+                            SoundSource.PLAYERS, 1.0F, 1.0F);
+                    event.getEntity().getCooldowns().addCooldown(event.getStack().getItem(),
+                            gun.getGeneral().getRate());
                     event.setCanceled(true);
+                    return;
                 }
+
                 int maxDamage = heldItem.getMaxDamage();
                 int currentDamage = heldItem.getDamageValue();
                 if (currentDamage >= maxDamage / 1.5) {
@@ -150,6 +248,46 @@ public class GunEventBus {
         ItemStack heldItem = player.getMainHandItem();
         CompoundTag tag = heldItem.getOrCreateTag();
 
+        if (heldItem.getItem() instanceof AnimatedGunItem gunItem) {
+            Gun gun = gunItem.getModifiedGun(heldItem);
+            if (gun.getGeneral().isRevolver()) {
+                ((AnimatedGunItem)heldItem.getItem()).getRotationHandler().incrementCylinderRotation(30.0f);
+            }
+            if (heldItem.getItem().toString().contains("cogloader")) {
+                ((AnimatedGunItem)heldItem.getItem()).getRotationHandler().incrementMagazineRotation(15.0f);
+            }
+            if (heldItem.getItem().toString().contains("scrapper")) {
+                float maxAmmo = Gun.getMaxAmmo(heldItem);
+                float currentAmmo = Gun.getAmmoCount(heldItem);
+                float slidePosition = Math.min((maxAmmo - currentAmmo) / maxAmmo, 1.0f);
+                tag.putFloat("MagazinePosition", slidePosition);
+            }
+            long id = GeoItem.getId(heldItem);
+            AnimationController<GeoAnimatable> controller = gunItem.getAnimatableInstanceCache()
+                    .getManagerForId(id)
+                    .getAnimationControllers()
+                    .get("controller");
+
+            controller.forceAnimationReset();
+            boolean isCarbine = gunItem.isInCarbineMode(heldItem);
+
+            if (gunItem instanceof AnimatedDualWieldGunItem) {
+                RatKingAndQueenModel.GunFireEventRatHandler.incrementShotCount();
+                boolean useAlternate = RatKingAndQueenModel.GunFireEventRatHandler.shouldUseAlternateAnimation();
+
+                if (ModSyncedDataKeys.AIMING.getValue(player)) {
+                    controller.tryTriggerAnimation(useAlternate ? "aim_shoot1" : "aim_shoot");
+                } else {
+                    controller.tryTriggerAnimation(useAlternate ? "shoot1" : "shoot");
+                }
+            } else {
+                if (ModSyncedDataKeys.AIMING.getValue(player)) {
+                    controller.tryTriggerAnimation(isCarbine ? "carbine_aim_shoot" : "aim_shoot");
+                } else {
+                    controller.tryTriggerAnimation(isCarbine ? "carbine_shoot" : "shoot");
+                }
+            }
+        }
         if (heldItem.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(heldItem);
             int hotBarrelLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), heldItem);
@@ -192,38 +330,35 @@ public class GunEventBus {
             boolean isBeamWeapon = gun.getGeneral().getFireMode() == FireMode.BEAM;
             TemporaryLightManager.addTemporaryLight(level, lightPos, isBeamWeapon);
             int shotCount = RatKingAndQueenModel.GunFireEventRatHandler.getShotCount();
-            boolean mirror = (heldItem.getItem() instanceof DualWieldGunItem && (shotCount % 2 == 1));
+            boolean mirror = (heldItem.getItem() instanceof AnimatedDualWieldGunItem && (shotCount % 2 == 1));
 
             if (Config.COMMON.gameplay.spawnCasings.get()) {
-                if (gun.getProjectile().ejectsCasing()) {
+                if (gun.getProjectile().ejectsCasing() && !gun.getProjectile().ejectDuringReload()) {
                     if (tag.getInt("AmmoCount") >= 1 || player.getAbilities().instabuild) {
                         ejectCasing(level, player, mirror);
                     }
                 }
-                if (gun.getProjectile().casingType != null && !player.getAbilities().instabuild) {
+                if (gun.getProjectile().casingType != null && !player.getAbilities().instabuild && !gun.getProjectile().ejectDuringReload()) {
                     ItemStack casingStack = new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(gun.getProjectile().casingType)));
                     double baseChance = 0.4;
                     int enchantmentLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SHELL_CATCHER.get(), heldItem);
                     double finalChance = baseChance + (enchantmentLevel * 0.15);
                     if (Math.random() < finalChance) {
-                        if (!addCasingToPouch(player, casingStack)) {
+                        if (addCasingToPouch(player, casingStack)) {
                             spawnCasingInWorld(level, player, casingStack);
                         }
                     }
                 }
             }
 
-            // Damage logic for the gun and attachments
-            if (heldItem.isDamageableItem() && tag != null) {
-                if (tag.getInt("AmmoCount") >= 1) {
-                    if (Config.COMMON.gameplay.enableGunDamage.get()) {
-                        damageGun(heldItem, level, player);
-                    }
-                    if (Config.COMMON.gameplay.enableAttachmentDamage.get()) {
-                        damageAttachments(heldItem, level, player);
-                    }
+            if (heldItem.isDamageableItem()) {
+                if (Config.COMMON.gameplay.enableGunDamage.get()) {
+                    damageGun(heldItem, level, player);
                 }
-                if (heldItem.getDamageValue() >= (heldItem.getMaxDamage() / 1.5)) {
+                if (Config.COMMON.gameplay.enableAttachmentDamage.get()) {
+                    damageAttachments(heldItem, level, player);
+                }
+                if (heldItem.getDamageValue() >= (heldItem.getMaxDamage() / 1.5) && Math.random() < 0.15) {
                     level.playSound(player, player.blockPosition(), ModSounds.COPPER_GUN_JAM.get(), SoundSource.PLAYERS, 1.0F, 1.0f);
                 }
             }
@@ -291,7 +426,9 @@ public class GunEventBus {
                 int maxDamage = stack.getMaxDamage();
                 int currentDamage = stack.getDamageValue();
                 boolean isUnderwater = player.isUnderWater();
-                boolean isUnderwaterGun = stack.getItem() instanceof UnderwaterGunItem;
+                boolean isUnderwaterGun = stack.getItem() instanceof UnderwaterGunItem
+                        || stack.getItem() instanceof AnimatedUnderWaterGunItem;
+
 
                 int damageAmount = 1;
                 int waterProofLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WATER_PROOF.get(), stack);
@@ -391,6 +528,8 @@ public class GunEventBus {
     }
 
     public static void ejectCasing(Level level, LivingEntity livingEntity, boolean mirror) {
+        if (!level.isClientSide()) return;
+
         Player playerEntity = (Player) livingEntity;
         ItemStack heldItem = playerEntity.getMainHandItem();
         Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
@@ -399,73 +538,38 @@ public class GunEventBus {
         Vec3 rightVec = new Vec3(-lookVec.z, 0, lookVec.x).normalize();
         Vec3 forwardVec = new Vec3(lookVec.x, 0, lookVec.z).normalize();
 
-        // Adjust offset based on mirroring
         double offsetX = (mirror ? -rightVec.x : rightVec.x) * 0.5 + forwardVec.x * 0.5;
         double offsetY = playerEntity.getEyeHeight() - 0.4;
         double offsetZ = (mirror ? -rightVec.z : rightVec.z) * 0.5 + forwardVec.z * 0.5;
 
         Vec3 particlePos = playerEntity.getPosition(1).add(offsetX, offsetY, offsetZ);
+        ResourceLocation particleLocation = gun.getProjectile().getCasingParticle();
 
-        ResourceLocation compactCopperRound = ForgeRegistries.ITEMS.getKey(ModItems.COMPACT_COPPER_ROUND.get());
-        ResourceLocation standardCopperRound = ForgeRegistries.ITEMS.getKey(ModItems.STANDARD_COPPER_ROUND.get());
-        ResourceLocation ramrodRound = ForgeRegistries.ITEMS.getKey(ModItems.RAMROD_ROUND.get());
-        ResourceLocation hogRound = ForgeRegistries.ITEMS.getKey(ModItems.HOG_ROUND.get());
-        ResourceLocation compactAdvancedRound = ForgeRegistries.ITEMS.getKey(ModItems.COMPACT_ADVANCED_ROUND.get());
-        ResourceLocation advancedRound = ForgeRegistries.ITEMS.getKey(ModItems.ADVANCED_ROUND.get());
-        ResourceLocation heavyRound = ForgeRegistries.ITEMS.getKey(ModItems.KRAHG_ROUND.get());
-        ResourceLocation energyCell = ForgeRegistries.ITEMS.getKey(ModItems.ENERGY_CELL.get());
-        ResourceLocation sculkCell = ForgeRegistries.ITEMS.getKey(ModItems.SCULK_CELL.get());
-        ResourceLocation shockCell = ForgeRegistries.ITEMS.getKey(ModItems.SHOCK_CELL.get());
-        ResourceLocation shulkshot = ForgeRegistries.ITEMS.getKey(ModItems.SHULKSHOT.get());
-        ResourceLocation osborne = ForgeRegistries.ITEMS.getKey(ModItems.OSBORNE_SLUG.get());
-        ResourceLocation beowulfRound = ForgeRegistries.ITEMS.getKey(ModItems.BEOWULF_ROUND.get());
-        ResourceLocation gibbsRound = ForgeRegistries.ITEMS.getKey(ModItems.GIBBS_ROUND.get());
-        ResourceLocation shotgunShellLocation = ForgeRegistries.ITEMS.getKey(ModItems.SHOTGUN_SHELL.get());
-        ResourceLocation bearpackShellLocation = ForgeRegistries.ITEMS.getKey(ModItems.BEARPACK_SHELL.get());
-        ResourceLocation projectileLocation = ForgeRegistries.ITEMS.getKey(gun.getProjectile().getItem());
-
-        SimpleParticleType casingType = ModParticleTypes.COPPER_CASING_PARTICLE.get();
-
-        if (projectileLocation != null) {
-            if (projectileLocation.equals(compactCopperRound) || projectileLocation.equals(standardCopperRound)) {
-                casingType = ModParticleTypes.COPPER_CASING_PARTICLE.get();
+        if (particleLocation != null) {
+            ParticleType<?> particleType = ForgeRegistries.PARTICLE_TYPES.getValue(particleLocation);
+            if (particleType instanceof SimpleParticleType simpleParticleType) {
+                level.addParticle(simpleParticleType,
+                        particlePos.x, particlePos.y, particlePos.z,
+                        0, 0, 0);
             }
-            if (projectileLocation.equals(hogRound) || projectileLocation.equals(osborne)||projectileLocation.equals(ramrodRound)|| projectileLocation.equals(shockCell)|| projectileLocation.equals(energyCell) ||projectileLocation.equals(sculkCell)) {
-                casingType = ModParticleTypes.IRON_CASING_PARTICLE.get();
-            } if ( projectileLocation.equals(gibbsRound) ||projectileLocation.equals(beowulfRound)) {
-                casingType = ModParticleTypes.DIAMOND_STEEL_CASING_PARTICLE.get();
-            }else if (projectileLocation.equals(compactAdvancedRound) || projectileLocation.equals(advancedRound) || projectileLocation.equals(heavyRound)) {
-                casingType = ModParticleTypes.BRASS_CASING_PARTICLE.get();
-            } else if (projectileLocation.equals(shotgunShellLocation)) {
-                casingType = ModParticleTypes.SHELL_PARTICLE.get();
-            } else if (projectileLocation.equals(bearpackShellLocation)) {
-                casingType = ModParticleTypes.BEARPACK_PARTICLE.get();
-            }else if (projectileLocation.equals(shulkshot)) {
-                casingType = ModParticleTypes.SHULK_CASING_PARTICLE.get();
-            }
-
-        }
-
-        if (level instanceof ServerLevel serverLevel) {
-            serverLevel.sendParticles(casingType,
-                    particlePos.x, particlePos.y, particlePos.z, 1, 0, 0, 0, 0);
         }
     }
-    private static void spawnCasingInWorld(Level level, Player player, ItemStack casingStack) {
+
+
+    public static void spawnCasingInWorld(Level level, Player player, ItemStack casingStack) {
         ItemEntity casingEntity = new ItemEntity(level, player.getX(), player.getY() + 1.5, player.getZ(), casingStack);
         casingEntity.setPickUpDelay(40);
         casingEntity.setDeltaMovement(0, 0.2, 0);
         level.addFreshEntity(casingEntity);
     }
 
-    private static boolean addCasingToPouch(Player player, ItemStack casingStack) {
-        // Check player's inventory for the empty casing pouch
+    public static boolean addCasingToPouch(Player player, ItemStack casingStack) {
         for (ItemStack itemStack : player.getInventory().items) {
             if (itemStack.getItem() instanceof EmptyCasingPouchItem) {
                 int insertedItems = EmptyCasingPouchItem.add(itemStack, casingStack);
                 if (insertedItems > 0) {
                     casingStack.shrink(insertedItems);
-                    return true;
+                    return false;
                 }
             }
         }
@@ -487,7 +591,23 @@ public class GunEventBus {
             }
         });
 
-        return result.get();
+        return !result.get();
     }
+    public static class RatKingAndQueenModel {
+        public static class GunFireEventRatHandler {
+            private static int shotCount = 0;
 
+            public static int getShotCount() {
+                return shotCount;
+            }
+
+            public static void incrementShotCount() {
+                shotCount++;
+            }
+
+            public static boolean shouldUseAlternateAnimation() {
+                return shotCount % 2 == 1;
+            }
+        }
+    }
 }

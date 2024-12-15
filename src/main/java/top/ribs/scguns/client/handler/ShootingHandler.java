@@ -11,13 +11,19 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animation.AnimationController;
 import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.client.KeyBinds;
 import top.ribs.scguns.common.*;
 import top.ribs.scguns.compat.PlayerReviveHelper;
+import top.ribs.scguns.event.GunEventBus;
 import top.ribs.scguns.event.GunFireEvent;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.animated.AnimatedDualWieldGunItem;
+import top.ribs.scguns.item.animated.AnimatedGunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.C2SMessagePreFireSound;
 import top.ribs.scguns.network.message.C2SMessageShoot;
@@ -48,7 +54,7 @@ public class ShootingHandler
     private int burstCounter = 0;
 
     private ShootingHandler() {
-        fireTimer = 0;  // Initialize to 0 instead of MAX_VALUE
+        fireTimer = 0;
     }
 
     private boolean isInGame()
@@ -205,11 +211,15 @@ public class ShootingHandler
 
             if (!isSameWeapon(player)) {
                 ModSyncedDataKeys.BURSTCOUNT.setValue(player, 0);
-                if (player.getMainHandItem().getItem() instanceof GunItem gunItem) {
+                if (player.getMainHandItem().getItem() instanceof GunItem) {
                     burstCounter = 0;
                     burstCooldownTimer = 0;
                     fireTimer = 0;
                 }
+            }
+            if (ModSyncedDataKeys.RELOADING.getValue(player)) {
+                burstCounter = 0;
+                burstCooldownTimer = 0;
             }
             ItemStack heldItem = player.getMainHandItem();
             if (heldItem.getItem() instanceof GunItem) {
@@ -269,18 +279,14 @@ public class ShootingHandler
             slot = player.getInventory().selected;
         }
     }
-    public void fire(Player player, ItemStack heldItem)
-    {
+    public void fire(Player player, ItemStack heldItem) {
         if(!(heldItem.getItem() instanceof GunItem))
             return;
 
-        if(isEmpty(player, heldItem))
-        {
+        if(isEmpty(player, heldItem)) {
             ItemCooldowns tracker = player.getCooldowns();
-            if(!tracker.isOnCooldown(heldItem.getItem()))
-            {
-                if (doEmptyClick && heldItem.getItem() instanceof GunItem gunItem && canUseTrigger(player, heldItem))
-                {
+            if(!tracker.isOnCooldown(heldItem.getItem())) {
+                if (doEmptyClick && heldItem.getItem() instanceof GunItem gunItem && canUseTrigger(player, heldItem)) {
                     doEmptyClick = false;
                 }
             }
@@ -295,27 +301,50 @@ public class ShootingHandler
             return;
 
         ItemCooldowns tracker = player.getCooldowns();
-        if(!tracker.isOnCooldown(heldItem.getItem()))
-        {
+        if(!tracker.isOnCooldown(heldItem.getItem())) {
             GunItem gunItem = (GunItem) heldItem.getItem();
             Gun modifiedGun = gunItem.getModifiedGun(heldItem);
 
             if(MinecraftForge.EVENT_BUS.post(new GunFireEvent.Pre(player, heldItem)))
                 return;
 
+            if (gunItem instanceof AnimatedGunItem animatedGunItem) {
+                long id = GeoItem.getId(heldItem);
+                AnimationController<GeoAnimatable> controller = animatedGunItem.getAnimatableInstanceCache()
+                        .getManagerForId(id)
+                        .getAnimationControllers()
+                        .get("controller");
+
+                controller.forceAnimationReset();
+
+                if (gunItem instanceof AnimatedDualWieldGunItem) {
+                    boolean useAlternate = GunEventBus.RatKingAndQueenModel.GunFireEventRatHandler.shouldUseAlternateAnimation();
+                    if (ModSyncedDataKeys.AIMING.getValue(player)) {
+                        controller.tryTriggerAnimation(useAlternate ? "aim_shoot1" : "aim_shoot");
+                    } else {
+                        controller.tryTriggerAnimation(useAlternate ? "shoot1" : "shoot");
+                    }
+                    GunEventBus.RatKingAndQueenModel.GunFireEventRatHandler.incrementShotCount();
+                } else {
+                    boolean isCarbine = animatedGunItem.isInCarbineMode(heldItem);
+                    if (ModSyncedDataKeys.AIMING.getValue(player)) {
+                        controller.tryTriggerAnimation(isCarbine ? "carbine_aim_shoot" : "aim_shoot");
+                    } else {
+                        controller.tryTriggerAnimation(isCarbine ? "carbine_shoot" : "shoot");
+                    }
+                }
+            }
+
             int rate = GunCompositeStatHelper.getCompositeRate(heldItem, modifiedGun, player);
             tracker.addCooldown(heldItem.getItem(), rate);
 
-            if (Gun.hasBurstFire(heldItem))
-            {
-                if (burstCounter == 0)
-                {
+            if (Gun.hasBurstFire(heldItem)) {
+                if (burstCounter == 0) {
                     burstCounter = Gun.getBurstCount(heldItem);
                 }
                 burstCounter--;
 
-                if (burstCounter == 0)
-                {
+                if (burstCounter == 0) {
                     burstCooldownTimer = Gun.getBurstCooldown(heldItem);
                 }
             }
@@ -362,5 +391,9 @@ public class ShootingHandler
         if (slot == -1)
             return true;
         return player.getInventory().selected == slot;
+    }
+
+    public boolean isShooting() {
+        return shooting;
     }
 }

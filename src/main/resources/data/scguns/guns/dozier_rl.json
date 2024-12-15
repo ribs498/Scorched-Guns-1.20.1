@@ -12,7 +12,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:bazooka",
     "baseGripType": "scguns:bazooka",
-    "rate": 7,
+    "rate": 12,
     "recoilAngle": 6.7,
     "recoilKick": 2.22,
     "spread": 4.0,
@@ -20,8 +20,8 @@
     "meleeCooldownTicks": 25,
     "hotBarrelRate": 18,
     "criticalChance": 0.05,
-    "playerKnockBack": true,
-    "playerKnockBackStrength": 0.25
+    "isRevolver": true,
+    "speedModifier": 0.95
   },
   "modules": {
     "attachments": {

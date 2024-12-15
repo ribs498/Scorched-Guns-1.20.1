@@ -2,7 +2,7 @@
   "display": {
     "flash": {
       "size": 1.3,
-      "yOffset": 4.7,
+      "yOffset": 4.5,
       "zOffset": -8.0,
       "textureLocation": "muzzle_flash_1"
     }
@@ -27,8 +27,8 @@
     "attachments": {
       "scope": {
         "size": 0.7,
-        "yOffset": 6.2,
-        "zOffset": 5.4
+        "yOffset": 5.8,
+        "zOffset":4.6
       },
       "stock": {
         "scale": 0.0
@@ -40,16 +40,19 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 6.4,
+      "yOffset": 5.9,
       "zOffset": 0.75
     }
   },
   "projectile": {
     "advantage": "scguns:none",
     "damage": 12.0,
-    "ejectsCasing": false,
+    "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:rocket",
+    "ejectDuringReload": true,
+    "casingType": "scguns:large_iron_casing",
+    "casingParticle": "scguns:iron_casing",
     "life": 55,
     "size": 0.05,
     "speed": 4.0,
@@ -60,7 +63,7 @@
     "maxAmmo": 1,
     "reloadItem": "scguns:rocket",
     "reloadTimer": 40,
-    "reloadType": "scguns:manual"
+    "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",

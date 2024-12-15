@@ -2,7 +2,7 @@
   "display": {
     "flash": {
       "size": 1.0,
-      "yOffset": 3.8,
+      "yOffset": 4.1,
       "zOffset": -3.2,
       "textureLocation": "muzzle_flash_1"
     }
@@ -23,12 +23,12 @@
   "modules": {
     "attachments": {
       "barrel": {
-        "yOffset": 3.8,
+        "yOffset": 4.1,
         "zOffset": -4.8
       },
       "scope": {
         "size": 0.7,
-        "yOffset": 5.5,
+        "yOffset": 6.0,
         "zOffset": 4.6
       },
       "magazine": {
@@ -37,7 +37,7 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 5.5,
+      "yOffset": 6.0,
       "zOffset": -0.45
     }
   },
@@ -48,6 +48,7 @@
     "gravity": false,
     "item": "scguns:ramrod_round",
     "casingType": "scguns:small_iron_casing",
+    "casingParticle": "scguns:iron_casing",
     "life":50,
     "size": 0.1,
     "speed": 6.0,
@@ -57,7 +58,7 @@
     "emptyMagTimer": 10,
     "maxAmmo": 6,
     "reloadItem": "scguns:ramrod_round",
-    "reloadTimer": 35,
+    "reloadTimer": 50,
     "reloadType": "scguns:mag_fed"
   },
   "sounds": {

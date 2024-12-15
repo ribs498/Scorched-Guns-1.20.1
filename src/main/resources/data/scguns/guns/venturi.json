@@ -11,7 +11,7 @@
     "rate": 9,
     "recoilAngle": 1.5,
     "recoilKick": 1.0,
-    "spread": 8.5,
+    "spread": 6.5,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
     "energyUse": 30.0,

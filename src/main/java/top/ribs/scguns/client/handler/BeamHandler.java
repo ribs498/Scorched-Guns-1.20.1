@@ -13,10 +13,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.ribs.scguns.client.render.entity.BeamRenderer;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -33,7 +30,7 @@ public class BeamHandler {
     private static final long CONTINUOUS_BEAM_DURATION_MS = 200;
     private static final long SEMI_BEAM_DURATION_MS = 50;
     private static final long CLEANUP_DELAY_MS = 50;
-    private static float[] getBeamColorForWeapon(ItemStack heldItem, Gun modifiedGun) {
+    public static float[] getBeamColorForWeapon(ItemStack heldItem, Gun modifiedGun) {
         boolean isEnchanted = heldItem.isEnchanted();
         String primaryColorHex = isEnchanted && modifiedGun.getGeneral().getEnchantedBeamColor() != null ?
                 modifiedGun.getGeneral().getEnchantedBeamColor() :
@@ -194,23 +191,30 @@ public class BeamHandler {
         beamInfo.lastEndPos = beamInfo.smoothedEndPos;
 
         beamInfo.updateFade(partialTicks);
+        Vec3 currentStart = beamInfo.smoothedStartPos;
+        List<Vec3> renderPoints = new ArrayList<>(beamInfo.glassPenetrationPoints);
+        renderPoints.add(beamInfo.smoothedEndPos);
 
-        BeamRenderer.renderBeam(
-                poseStack,
-                bufferSource,
-                partialTicks,
-                beamInfo.smoothedStartPos,
-                beamInfo.smoothedEndPos,
-                beamInfo.lastStartPos,
-                beamInfo.lastEndPos,
-                interpolatedColor,
-                beamInfo.fadeProgress
-        );
+        for (Vec3 nextPoint : renderPoints) {
+            BeamRenderer.renderBeam(
+                    poseStack,
+                    bufferSource,
+                    partialTicks,
+                    currentStart,
+                    nextPoint,
+                    currentStart,
+                    nextPoint,
+                    interpolatedColor,
+                    beamInfo.fadeProgress
+            );
+            currentStart = nextPoint;
+        }
         beamPlayer.bob = originalBob;
         beamPlayer.oBob = originalOBob;
         beamPlayer.walkDist = originalWalkDist;
         beamPlayer.walkDistO = originalWalkDistO;
     }
+
     private static Vec3 calculateBeamOrigin(Player player, Gun modifiedGun, float partialTicks) {
         Minecraft mc = Minecraft.getInstance();
         boolean isThirdPerson = mc.options.getCameraType().ordinal() > 0;
@@ -376,6 +380,7 @@ public class BeamHandler {
         public boolean isBeamFireMode;
         public float fadeProgress = 0.0f;
         private static final float FADE_SPEED = 2.0f;
+        public List<Vec3> glassPenetrationPoints;
         public BeamInfo(Vec3 startPos, Vec3 endPos, long startTime, boolean isBeamFireMode) {
             this.startPos = startPos;
             this.endPos = endPos;
@@ -392,6 +397,7 @@ public class BeamHandler {
             this.ticksActive = 0;
             this.expiryTime = 0;
             this.isBeamFireMode = isBeamFireMode;
+            this.glassPenetrationPoints = new ArrayList<>();
         }
 
         public void updatePositions(Vec3 newStartPos, Vec3 newEndPos) {

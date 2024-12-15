@@ -23,10 +23,11 @@ public class RarityUtils {
 
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "super_shotgun"), Constants.PIGLISH);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "blasphemy"), Constants.PIGLISH);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "freyr"), Constants.PIGLISH);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "pyroclastic_flow"), Constants.PIGLISH);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "vulcanic_repeater"), Constants.PIGLISH);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "piglin_blueprint"), Constants.PIGLISH);
-
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "mangalitsa"), Constants.PIGLISH);
 
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "whispers"), Constants.DEEP_DARK);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "echoes_2"), Constants.DEEP_DARK);
@@ -49,6 +50,7 @@ public class RarityUtils {
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "astella"), Constants.SCORCHED);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "flayed_god"), Constants.SCORCHED);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "nervepinch"), Constants.SCORCHED);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "prima_materia"), Constants.SCORCHED);
 
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "felix_memorial"), Constants.PIGLISH);
 

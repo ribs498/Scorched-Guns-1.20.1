@@ -13,7 +13,7 @@
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 3,
-    "recoilAngle": 3.5,
+    "recoilAngle": 2.5,
     "recoilKick": 1.5,
     "spread": 4.0,
     "meleeDamage": 2.5,
@@ -50,6 +50,7 @@
     "ejectsCasing": true,
     "item": "scguns:compact_advanced_round",
     "casingType": "scguns:small_brass_casing",
+    "casingParticle": "scguns:brass_casing",
     "life": 30,
     "size": 0.1,
     "speed": 5.0,
@@ -57,7 +58,7 @@
   },
   "reloads": {
     "emptyMagTimer": 30,
-    "maxAmmo": 17,
+    "maxAmmo": 21,
     "reloadItem": "scguns:compact_advanced_round",
     "reloadTimer": 35,
     "reloadType": "scguns:mag_fed"

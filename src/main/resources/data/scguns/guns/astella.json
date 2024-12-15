@@ -2,8 +2,8 @@
   "display": {
     "flash": {
       "size": 1.2,
-      "yOffset": 4.6,
-      "zOffset": -19.0,
+      "yOffset": 5.2,
+      "zOffset": -20.0,
       "textureLocation": "muzzle_flash_5",
       "spawnParticles": true,
       "particleType": "minecraft:small_flame",
@@ -17,7 +17,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 18,
+    "rate": 24,
     "recoilAngle": 6.0,
     "recoilKick": 4.0,
     "spread": 0.0,
@@ -36,7 +36,7 @@
       },
       "scope": {
         "size": 0.7,
-        "yOffset": 6.1,
+        "yOffset": 6.5,
         "zOffset": 5.0
       },
       "stock": {
@@ -48,7 +48,7 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 6.4,
+      "yOffset": 6.8,
       "zOffset": 0.75
     }
   },
@@ -59,6 +59,7 @@
     "gravity": false  ,
     "item": "scguns:krahg_round",
     "casingType": "scguns:large_brass_casing",
+    "casingParticle": "scguns:brass_casing",
     "life": 100,
     "size": 0.1,
     "speed": 14.0,

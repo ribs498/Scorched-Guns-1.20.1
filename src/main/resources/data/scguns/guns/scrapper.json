@@ -45,8 +45,10 @@
     "advantage": "scguns:none",
     "damage": 5.5,
     "gravity": false,
+    "ejectsCasing": true,
     "item": "scguns:compact_copper_round",
     "casingType": "scguns:small_copper_casing",
+    "casingParticle": "scguns:copper_casing",
     "life": 30,
     "size": 0.05,
     "speed": 6.0,
@@ -56,8 +58,8 @@
     "emptyMagTimer": 10,
     "maxAmmo": 8,
     "reloadItem": "scguns:compact_copper_round",
-    "reloadTimer": 10,
-    "reloadType": "scguns:manual"
+    "reloadTimer": 40,
+    "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",

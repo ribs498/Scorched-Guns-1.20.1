@@ -6,9 +6,14 @@
     " S "
   ],
   "key": {
-    "I": {
-      "item": "minecraft:iron_ingot"
-    },
+    "I":     [
+      {
+        "item": "minecraft:iron_ingot"
+      },
+      {
+        "item": "scguns:treated_iron_ingot"
+      }
+    ],
     "L": {
       "item": "minecraft:leather"
     },

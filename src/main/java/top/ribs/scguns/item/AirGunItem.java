@@ -15,12 +15,13 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import top.ribs.scguns.common.Gun;
+import top.ribs.scguns.interfaces.IAirGun;
 
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
 
-public class AirGunItem extends GunItem {
+public class AirGunItem extends GunItem implements IAirGun {
 
     public AirGunItem(Properties properties) {
         super(properties);
@@ -93,5 +94,7 @@ public class AirGunItem extends GunItem {
     private static Player getClientPlayer() {
         return Minecraft.getInstance().player;
     }
-
+    public interface IAirGun {
+        // Empty interface just for type checking
+    }
 }

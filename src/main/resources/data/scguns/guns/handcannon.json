@@ -6,17 +6,17 @@
       "zOffset": -6.2,
       "textureLocation": "muzzle_flash_1",
       "spawnParticles": true,
-      "particleType": "minecraft:smoke",
-      "particleCount": 10,
-      "particleSpread": 0.1,
-      "particleRingRadius": 0.2
+      "particleType": "minecraft:campfire_cosy_smoke",
+      "particleCount": 15,
+      "particleSpread": 0.7,
+      "particleRingRadius": 0.7
     }
   },
   "general": {
     "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
-    "projectileAmount": 8,
+    "projectileAmount": 13,
     "rate": 6,
     "recoilAngle": 25.0,
     "recoilKick": 3.0,

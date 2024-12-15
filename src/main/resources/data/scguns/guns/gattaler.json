@@ -19,13 +19,15 @@
     "gripType": "scguns:mini_gun",
     "baseGripType": "scguns:mini_gun",
     "rate": 2,
-    "recoilAngle": 2.4,
+    "recoilAngle": 2.0,
     "recoilKick": 0.5,
     "spread": 5.0,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 3,
-    "criticalChance": 0.025
+    "criticalChance": 0.025,
+    "isRevolver": true,
+    "speedModifier": 0.85
   },
   "modules": {
     "attachments": {
@@ -38,6 +40,7 @@
     "item": "scguns:compact_advanced_round",
     "ejectsCasing": true,
     "casingType": "scguns:small_brass_casing",
+    "casingParticle": "scguns:brass_casing",
     "life": 40,
     "size": 0.1,
     "speed": 5.0,

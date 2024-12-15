@@ -229,7 +229,12 @@ public interface IGunModifier
 
 
     default boolean isMeleeOnly() {
-        return false;
+        return true;
+    }
+
+    default double modifyDrawSpeed(double speed)
+    {
+        return speed;
     }
 
 }

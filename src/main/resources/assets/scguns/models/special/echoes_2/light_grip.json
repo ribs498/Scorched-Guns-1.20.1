@@ -61,5 +61,13 @@
 			"translation": [5, 6, -0.75],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "lightgri",
+			"origin": [6.75, 0.3, 3.075],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
 }

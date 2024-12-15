@@ -170,7 +170,9 @@ public class AttachmentScreen extends AbstractContainerScreen<AttachmentContaine
         modelStack.pushPose();
         modelStack.mulPoseMatrix(pGuiGraphics.pose().last().pose());
         RenderSystem.applyModelViewMatrix();
+        assert this.minecraft != null;
         MultiBufferSource.BufferSource buffer = this.minecraft.renderBuffers().bufferSource();
+        assert this.minecraft.player != null;
         GunRenderingHandler.get().renderWeapon(this.minecraft.player, this.minecraft.player.getMainHandItem(), ItemDisplayContext.GROUND, new PoseStack(), buffer, 15728880, 0F);
         buffer.endBatch();
         pGuiGraphics.pose().popPose();
@@ -299,14 +301,14 @@ public class AttachmentScreen extends AbstractContainerScreen<AttachmentContaine
             if(this.mouseGrabbedButton == 0 && button == GLFW.GLFW_MOUSE_BUTTON_LEFT)
             {
                 this.mouseGrabbed = false;
-                this.windowX += (mouseX - this.mouseClickedX - 1);
-                this.windowY += (mouseY - this.mouseClickedY);
+                this.windowX += (int) (mouseX - this.mouseClickedX - 1);
+                this.windowY += (int) (mouseY - this.mouseClickedY);
             }
             else if(mouseGrabbedButton == 1 && button == GLFW.GLFW_MOUSE_BUTTON_RIGHT)
             {
                 this.mouseGrabbed = false;
-                this.windowRotationX += (mouseX - this.mouseClickedX);
-                this.windowRotationY -= (mouseY - this.mouseClickedY);
+                this.windowRotationX += (float) (mouseX - this.mouseClickedX);
+                this.windowRotationY -= (float) (mouseY - this.mouseClickedY);
             }
         }
         return super.mouseReleased(mouseX, mouseY, button);

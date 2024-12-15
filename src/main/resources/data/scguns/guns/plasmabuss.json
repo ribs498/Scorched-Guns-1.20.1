@@ -31,7 +31,7 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 5.8,
+      "yOffset": 5.3,
       "zOffset": 1.5
     }
   },
@@ -42,6 +42,7 @@
     "gravity": false,
     "item": "scguns:energy_cell",
     "casingType": "scguns:empty_cell",
+    "casingParticle": "scguns:iron_casing",
     "life": 45,
     "size": 6.0,
     "speed": 2.0,

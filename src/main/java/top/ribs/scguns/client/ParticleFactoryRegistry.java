@@ -28,6 +28,7 @@ public class ParticleFactoryRegistry
         event.registerSpriteSet(ModParticleTypes.BRASS_CASING_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.IRON_CASING_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.DIAMOND_STEEL_CASING_PARTICLE.get(), CasingParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.SHULK_CASING_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.SHELL_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.BEARPACK_PARTICLE.get(), CasingParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.GREEN_FLAME.get(), GreenFlameParticle.Provider::new);

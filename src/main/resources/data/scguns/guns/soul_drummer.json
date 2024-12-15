@@ -51,6 +51,7 @@
     "item": "scguns:compact_advanced_round",
     "ejectsCasing": true,
     "casingType": "scguns:small_brass_casing",
+    "casingParticle": "scguns:brass_casing",
     "life": 45,
     "size": 0.05,
     "speed": 7.0,
@@ -58,7 +59,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 25,
+    "maxAmmo": 22,
     "reloadItem": "scguns:compact_copper_round",
     "reloadTimer": 20,
     "reloadType": "scguns:mag_fed"

@@ -38,8 +38,8 @@
   "modules": {
     "attachments": {
       "scope": {
-        "yOffset": 4.9,
-        "zOffset": 4.5
+        "yOffset": 5.2,
+        "zOffset": 4.0
       },
       "stock": {
         "scale": 0.0
@@ -51,7 +51,7 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 5.2,
+      "yOffset": 5.4,
       "zOffset": 0.75
     }
   },
@@ -68,7 +68,7 @@
   },
   "reloads": {
     "emptyMagTimer": 50,
-    "maxAmmo": 15,
+    "maxAmmo": 12,
     "reloadItem": "scguns:energy_core",
     "reloadByproduct": "scguns:depleted_energy_core",
     "reloadTimer": 27,

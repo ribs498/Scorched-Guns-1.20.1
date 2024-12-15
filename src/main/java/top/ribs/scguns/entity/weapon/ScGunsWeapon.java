@@ -126,7 +126,7 @@ public class ScGunsWeapon implements IWeapon {
             projectileEntity.tick();
         }
         consumeAmmoInGun();
-        if (!projectileProps.isVisible()) {
+        if (projectileProps.isVisible()) {
             int radius = (int) shooter.getX();
             int y1 = (int) (shooter.getY() + 1.0);
             int z1 = (int) shooter.getZ();

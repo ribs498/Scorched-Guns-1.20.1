@@ -3,7 +3,7 @@
     "flash": {
       "size": 1.24,
       "yOffset": 3.5,
-      "zOffset": -6.0,
+      "zOffset": -7.0,
       "textureLocation": "muzzle_flash_1"
     }
   },
@@ -13,7 +13,7 @@
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "projectileAmount": 22,
-    "rate": 11,
+    "rate": 12,
     "recoilAngle": 10.0,
     "recoilKick": 0.5,
     "spread": 14.0,
@@ -42,7 +42,7 @@
   },
   "projectile": {
     "advantage": "scguns:fire",
-    "damage": 16.0,
+    "damage": 15.0,
     "item": "scguns:grapeshot",
     "life": 30,
     "size": 0.05,

@@ -17,11 +17,8 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
-import top.ribs.scguns.client.render.crosshair.Crosshair;
-import top.ribs.scguns.client.render.crosshair.SpecialHitMarker;
-import top.ribs.scguns.client.render.crosshair.TechCrosshair;
-import top.ribs.scguns.client.render.crosshair.TexturedCrosshair;
-import top.ribs.scguns.common.Gun;
+import top.ribs.scguns.client.render.crosshair.*;
+
 import top.ribs.scguns.event.GunFireEvent;
 import top.ribs.scguns.item.GunItem;
 
@@ -56,6 +53,7 @@ public class CrosshairHandler {
         this.register(new TexturedCrosshair(new ResourceLocation(Reference.MOD_ID, "t")));
         this.register(new TexturedCrosshair(new ResourceLocation(Reference.MOD_ID, "smiley")));
         this.register(new TechCrosshair());
+        this.register(new DynamicCrosshair());
     }
 
     /**
@@ -172,5 +170,7 @@ public class CrosshairHandler {
             }
         }
     }
+
+
 }
 

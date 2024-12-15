@@ -73,6 +73,7 @@ public class ClientHandler {
             //BeamHandler.clientTick();
         }
     }
+
     private static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             Minecraft.getInstance().getTextureManager().register(
@@ -196,92 +197,94 @@ public class ClientHandler {
         // Implement render layer setup here
     }
     private static void registerModelOverrides() {
-        ModelOverrides.register(ModItems.FLINTLOCK_PISTOL.get(), new FlintlockPistolModel());
-        ModelOverrides.register(ModItems.HANDCANNON.get(), new HandcannonPistolModel());
-        ModelOverrides.register(ModItems.MUSKET.get(), new MusketModel());
-        ModelOverrides.register(ModItems.BLUNDERBUSS.get(), new BlunderbussModel());
-        ModelOverrides.register(ModItems.REPEATING_MUSKET.get(), new RepeatingMusketModel());
-        ModelOverrides.register(ModItems.LASER_MUSKET.get(), new LaserMusketModel());
-        ModelOverrides.register(ModItems.PLASMABUSS.get(), new PlasmabussModel());
-        ModelOverrides.register(ModItems.BIG_BORE.get(), new BigBoreModel());
-        ModelOverrides.register(ModItems.ARC_WORKER.get(), new ArcWorkerModel());
-        ModelOverrides.register(ModItems.FLOUNDERGAT.get(), new FloundergatModel());
-        ModelOverrides.register(ModItems.SAKETINI.get(), new SaketiniModel());
-        ModelOverrides.register(ModItems.CALLWELL.get(), new CallwellModel());
-        ModelOverrides.register(ModItems.SAWED_OFF_CALLWELL.get(), new SawedOffCallwellModel());
-        ModelOverrides.register(ModItems.WINNIE.get(), new WinnieModel());
-        ModelOverrides.register(ModItems.SCRAPPER.get(), new ScrapperModel());
-        ModelOverrides.register(ModItems.MAKESHIFT_RIFLE.get(), new MakeshiftRifleModel());
-        ModelOverrides.register(ModItems.BOOMSTICK.get(), new BoomstickModel());
-        ModelOverrides.register(ModItems.MK43_RIFLE.get(), new Mk43RifleModel());
-        ModelOverrides.register(ModItems.RUSTY_GNAT.get(), new RustyGnatModel());
-        ModelOverrides.register(ModItems.PAX.get(), new PaxModel());
-        ModelOverrides.register(ModItems.BRUISER.get(), new BruiserModel());
-        ModelOverrides.register(ModItems.LLR_DIRECTOR.get(), new LlrDirectorModel());
-        ModelOverrides.register(ModItems.MARLIN.get(), new MarlinModel());
-        ModelOverrides.register(ModItems.IRON_SPEAR.get(), new IronSpearModel());
-        ModelOverrides.register(ModItems.IRON_JAVELIN.get(), new IronJavelinModel());
-        ModelOverrides.register(ModItems.M3_CARABINE.get(), new M3CarabineModel());
-        ModelOverrides.register(ModItems.LOCKEWOOD.get(), new LockewoodModel());
-        ModelOverrides.register(ModItems.GREASER_SMG.get(), new GreaserSmgModel());
-        ModelOverrides.register(ModItems.DEFENDER_PISTOL.get(), new DefenderPistolModel());
-        ModelOverrides.register(ModItems.COMBAT_SHOTGUN.get(), new CombatShotgunModel());
-        ModelOverrides.register(ModItems.AUVTOMAG.get(), new AuvtomagModel());
-        ModelOverrides.register(ModItems.PULSAR.get(), new PulsarModel());
-        ModelOverrides.register(ModItems.BRAWLER.get(), new BrawlerModel());
-        ModelOverrides.register(ModItems.EARTHS_CORPSE.get(), new EarthsCorpseModel());
-        ModelOverrides.register(ModItems.ASTELLA.get(), new AstellaModel());
-        ModelOverrides.register(ModItems.RAT_KING_AND_QUEEN.get(), new RatKingAndQueenModel());
-        ModelOverrides.register(ModItems.LOCUST.get(), new LocustModel());
-        ModelOverrides.register(ModItems.GYROJET_PISTOL.get(), new GyrojetPistolModel());
-        ModelOverrides.register(ModItems.ROCKET_RIFLE.get(), new RocketRifleModel());
-        ModelOverrides.register(ModItems.PRUSH_GUN.get(), new PrushGunModel());
-        ModelOverrides.register(ModItems.INERTIAL.get(), new InertialModel());
-        ModelOverrides.register(ModItems.COGLOADER.get(), new CogloaderModel());
-        ModelOverrides.register(ModItems.GRANDLE.get(), new GrandleModel());
-        ModelOverrides.register(ModItems.PLASGUN.get(), new PlasgunModel());
-        ModelOverrides.register(ModItems.GAUSS_RIFLE.get(), new GaussRifleModel());
-        ModelOverrides.register(ModItems.OSGOOD_50.get(), new Osgood50Model());
-        ModelOverrides.register(ModItems.NEWBORN_CYST.get(), new NewbornCystModel());
-        ModelOverrides.register(ModItems.FLAYED_GOD.get(), new FlayedGodModel());
-        ModelOverrides.register(ModItems.NERVEPINCH.get(), new NervepinchModel());
-        ModelOverrides.register(ModItems.WHISPERS.get(), new WhispersModel());
-        ModelOverrides.register(ModItems.ECHOES_2.get(), new Echoes2Model());
-        ModelOverrides.register(ModItems.SCULK_RESONATOR.get(), new SculkResonatorModel());
-        ModelOverrides.register(ModItems.CARAPICE.get(), new CarapiceModel());
-        ModelOverrides.register(ModItems.SHELLURKER.get(), new ShellurkerModel());
-        ModelOverrides.register(ModItems.DARK_MATTER.get(), new DarkMatterModel());
-        ModelOverrides.register(ModItems.JACKHAMMER.get(), new JackhammerModel());
-        ModelOverrides.register(ModItems.GATTALER.get(), new GattalerModel());
-        ModelOverrides.register(ModItems.THUNDERHEAD.get(), new ThunderheadModel());
-        ModelOverrides.register(ModItems.KRAUSER.get(), new KrauserModel());
-        ModelOverrides.register(ModItems.HOWLER.get(), new HowlerModel());
-        ModelOverrides.register(ModItems.HOWLER_CONVERSION.get(), new HowlerConversionModel());
-        ModelOverrides.register(ModItems.M22_WALTZ.get(), new M22WaltzModel());
-        ModelOverrides.register(ModItems.WALTZ_CONVERSION.get(), new WaltzConversionModel());
-        ModelOverrides.register(ModItems.UPPERCUT.get(), new UppercutModel());
-        ModelOverrides.register(ModItems.MAS_55.get(), new Mas55Model());
-        ModelOverrides.register(ModItems.DOZIER_RL.get(), new DozierRLModel());
-        ModelOverrides.register(ModItems.SPITFIRE.get(), new SpitfireModel());
-        ModelOverrides.register(ModItems.CYCLONE.get(), new CycloneModel());
-        ModelOverrides.register(ModItems.SOUL_DRUMMER.get(), new SoulDrummerModel());
-        ModelOverrides.register(ModItems.VALORA.get(), new ValoraModel());
-        ModelOverrides.register(ModItems.BLASPHEMY.get(), new BlasphemyModel());
-        ModelOverrides.register(ModItems.PYROCLASTIC_FLOW.get(), new PyroclasticFlowModel());
-        ModelOverrides.register(ModItems.SEQUOIA.get(), new SequoiaModel());
-        ModelOverrides.register(ModItems.SHARD_CULLER.get(), new ShardCullerModel());
-        ModelOverrides.register(ModItems.LONE_WONDER.get(), new LoneWonderModel());
-        ModelOverrides.register(ModItems.RAYGUN.get(), new RaygunModel());
-        ModelOverrides.register(ModItems.SUPER_SHOTGUN.get(), new SuperShotgunModel());
-        ModelOverrides.register(ModItems.FREYR.get(), new FreyrModel());
-        ModelOverrides.register(ModItems.VULCANIC_REPEATER.get(), new VulcanicRepeaterModel());
-        ModelOverrides.register(ModItems.CR4K_MINING_LASER.get(), new Cr4kMiningLaserModel());
-        ModelOverrides.register(ModItems.BOMB_LANCE.get(), new BombLanceModel());
-        ModelOverrides.register(ModItems.GALE.get(), new GaleModel());
-        ModelOverrides.register(ModItems.UMAX_PISTOL.get(), new UmaxPistolModel());
-        ModelOverrides.register(ModItems.VENTURI.get(), new VenturiModel());
-        ModelOverrides.register(ModItems.SCRATCHES.get(), new ScratchesModel());
-        ModelOverrides.register(ModItems.ULTRA_KNIGHT_HAWK.get(), new UltraKnightHawkModel());
+
+        //ModelOverrides.register(ModItems.EARTHS_CORPSE.get(), new EarthsCorpseModel());
+        //ModelOverrides.register(ModItems.FLAYED_GOD.get(), new FlayedGodModel());
+      //  ModelOverrides.register(ModItems.NERVEPINCH.get(), new NervepinchModel());
+
+        //ModelOverrides.register(ModItems.RAT_KING_AND_QUEEN.get(), new RatKingAndQueenModel());
+        //ModelOverrides.register(ModItems.LOCUST.get(), new LocustModel());
+        // ModelOverrides.register(ModItems.NEWBORN_CYST.get(), new NewbornCystModel());
+        //ModelOverrides.register(ModItems.LONE_WONDER.get(), new LoneWonderModel());
+        // ModelOverrides.register(ModItems.CARAPICE.get(), new CarapiceModel());
+        //ModelOverrides.register(ModItems.SHELLURKER.get(), new ShellurkerModel());
+        // ModelOverrides.register(ModItems.ECHOES_2.get(), new Echoes2Model());
+        //ModelOverrides.register(ModItems.RAYGUN.get(), new RaygunModel());
+        //ModelOverrides.register(ModItems.SCULK_RESONATOR.get(), new SculkResonatorModel());
+        //ModelOverrides.register(ModItems.BLASPHEMY.get(), new BlasphemyModel());
+        //ModelOverrides.register(ModItems.WHISPERS.get(), new WhispersModel());
+        //ModelOverrides.register(ModItems.PYROCLASTIC_FLOW.get(), new PyroclasticFlowModel());
+        //ModelOverrides.register(ModItems.FREYR.get(), new FreyrModel());
+        //ModelOverrides.register(ModItems.VULCANIC_REPEATER.get(), new VulcanicRepeaterModel());
+        //ModelOverrides.register(ModItems.SCRATCHES.get(), new ScratchesModel());
+        //ModelOverrides.register(ModItems.OSGOOD_50.get(), new Osgood50Model());
+        //ModelOverrides.register(ModItems.GALE.get(), new GaleModel());
+        //ModelOverrides.register(ModItems.WALTZ_CONVERSION.get(), new WaltzConversionModel());
+        //ModelOverrides.register(ModItems.UMAX_PISTOL.get(), new UmaxPistolModel());
+        //ModelOverrides.register(ModItems.SPITFIRE.get(), new SpitfireModel());
+        //ModelOverrides.register(ModItems.SHARD_CULLER.get(), new ShardCullerModel());
+        //ModelOverrides.register(ModItems.GATTALER.get(), new GattalerModel());
+        //ModelOverrides.register(ModItems.CR4K_MINING_LASER.get(), new Cr4kMiningLaserModel());
+        //ModelOverrides.register(ModItems.THUNDERHEAD.get(), new ThunderheadModel());
+        //ModelOverrides.register(ModItems.GYROJET_PISTOL.get(), new GyrojetPistolModel());
+        //ModelOverrides.register(ModItems.DARK_MATTER.get(), new DarkMatterModel());
+        //ModelOverrides.register(ModItems.DOZIER_RL.get(), new DozierRLModel());
+        // ModelOverrides.register(ModItems.SUPER_SHOTGUN.get(), new SuperShotgunModel());
+        //ModelOverrides.register(ModItems.BOMB_LANCE.get(), new BombLanceModel());
+        //ModelOverrides.register(ModItems.VENTURI.get(), new VenturiModel());
+        //ModelOverrides.register(ModItems.MK43_RIFLE.get(), new Mk43RifleModel());
+        //ModelOverrides.register(ModItems.PLASGUN.get(), new PlasgunModel());
+        //ModelOverrides.register(ModItems.REPEATING_MUSKET.get(), new RepeatingMusketModel());
+        //ModelOverrides.register(ModItems.ULTRA_KNIGHT_HAWK.get(), new UltraKnightHawkModel());
+        //ModelOverrides.register(ModItems.SEQUOIA.get(), new SequoiaModel());
+        //ModelOverrides.register(ModItems.LASER_MUSKET.get(), new LaserMusketModel());
+        //ModelOverrides.register(ModItems.PLASMABUSS.get(), new PlasmabussModel());
+        //ModelOverrides.register(ModItems.JACKHAMMER.get(), new JackhammerModel());
+        //ModelOverrides.register(ModItems.PAX.get(), new PaxModel());
+        // ModelOverrides.register(ModItems.PULSAR.get(), new PulsarModel());
+        //ModelOverrides.register(ModItems.HOWLER.get(), new HowlerModel());
+        //ModelOverrides.register(ModItems.HOWLER_CONVERSION.get(), new HowlerConversionModel());
+        //ModelOverrides.register(ModItems.BIG_BORE.get(), new BigBoreModel());
+        //ModelOverrides.register(ModItems.ARC_WORKER.get(), new ArcWorkerModel());
+        //ModelOverrides.register(ModItems.FLINTLOCK_PISTOL.get(), new FlintlockPistolModel());
+        //ModelOverrides.register(ModItems.HANDCANNON.get(), new HandcannonPistolModel());
+        //ModelOverrides.register(ModItems.MUSKET.get(), new MusketModel());
+        //ModelOverrides.register(ModItems.BLUNDERBUSS.get(), new BlunderbussModel());
+        //ModelOverrides.register(ModItems.ASTELLA.get(), new AstellaModel());
+        //ModelOverrides.register(ModItems.BRAWLER.get(), new BrawlerModel());
+        //ModelOverrides.register(ModItems.FLOUNDERGAT.get(), new FloundergatModel());
+        //ModelOverrides.register(ModItems.SAKETINI.get(), new SaketiniModel());
+        //ModelOverrides.register(ModItems.CALLWELL.get(), new CallwellModel());
+        //ModelOverrides.register(ModItems.WINNIE.get(), new WinnieModel());
+        //ModelOverrides.register(ModItems.SCRAPPER.get(), new ScrapperModel());
+       // ModelOverrides.register(ModItems.MAKESHIFT_RIFLE.get(), new MakeshiftRifleModel());
+        //ModelOverrides.register(ModItems.BOOMSTICK.get(), new BoomstickModel());
+        //ModelOverrides.register(ModItems.RUSTY_GNAT.get(), new RustyGnatModel());
+        //ModelOverrides.register(ModItems.BRUISER.get(), new BruiserModel());
+        //ModelOverrides.register(ModItems.LLR_DIRECTOR.get(), new LlrDirectorModel());
+        //ModelOverrides.register(ModItems.MARLIN.get(), new MarlinModel());
+        //ModelOverrides.register(ModItems.IRON_SPEAR.get(), new IronSpearModel());
+        //ModelOverrides.register(ModItems.IRON_JAVELIN.get(), new IronJavelinModel());
+        //ModelOverrides.register(ModItems.M3_CARABINE.get(), new M3CarabineModel());
+        //ModelOverrides.register(ModItems.LOCKEWOOD.get(), new LockewoodModel());
+        //ModelOverrides.register(ModItems.GREASER_SMG.get(), new GreaserSmgModel());
+       // ModelOverrides.register(ModItems.DEFENDER_PISTOL.get(), new DefenderPistolModel());
+        //ModelOverrides.register(ModItems.COMBAT_SHOTGUN.get(), new CombatShotgunModel());
+        //ModelOverrides.register(ModItems.AUVTOMAG.get(), new AuvtomagModel());
+        // ModelOverrides.register(ModItems.GAUSS_RIFLE.get(), new GaussRifleModel());
+        //ModelOverrides.register(ModItems.ROCKET_RIFLE.get(), new RocketRifleModel());
+        //ModelOverrides.register(ModItems.PRUSH_GUN.get(), new PrushGunModel());
+       // ModelOverrides.register(ModItems.INERTIAL.get(), new InertialModel());
+       // ModelOverrides.register(ModItems.COGLOADER.get(), new CogloaderModel());
+        //ModelOverrides.register(ModItems.GRANDLE.get(), new GrandleModel());
+        //ModelOverrides.register(ModItems.UPPERCUT.get(), new UppercutModel());
+        //ModelOverrides.register(ModItems.MAS_55.get(), new Mas55Model());
+        // ModelOverrides.register(ModItems.CYCLONE.get(), new CycloneModel());
+        // ModelOverrides.register(ModItems.SOUL_DRUMMER.get(), new SoulDrummerModel());
+        //ModelOverrides.register(ModItems.VALORA.get(), new ValoraModel());
+       // ModelOverrides.register(ModItems.KRAUSER.get(), new KrauserModel());
+        //ModelOverrides.register(ModItems.M22_WALTZ.get(), new M22WaltzModel());
+
 
     }
 
@@ -321,6 +324,7 @@ public class ClientHandler {
 
             }
         }
+
     }
 
     public static void onRegisterReloadListener(RegisterClientReloadListenersEvent event) {

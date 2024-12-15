@@ -61,5 +61,13 @@
 			"translation": [2.75, 6.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "stangrip",
+			"origin": [7.875, 1.09348, 16.77726],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
 }

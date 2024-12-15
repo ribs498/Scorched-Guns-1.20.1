@@ -3,7 +3,7 @@
     "flash": {
       "size": 1.0,
       "yOffset": 4.6,
-      "zOffset": -11.4,
+      "zOffset": -13.4,
       "textureLocation": "muzzle_flash_5",
       "spawnParticles": true,
       "particleType": "minecraft:small_flame",
@@ -68,9 +68,9 @@
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",
-    "enchantedFire": "scguns:item.airgun.fire",
-    "fire": "scguns:item.airgun.fire",
-    "preFire": "scguns:item.flamethrower.pre_fire",
+    "enchantedFire": "scguns:item.gauss.fire",
+    "preFire": "scguns:item.gauss.pre_fire",
+    "fire": "scguns:item.gauss.fire",
     "reload": "scguns:item.gauss.reload",
     "flyby": "scguns:bullet.flyby1"
   }

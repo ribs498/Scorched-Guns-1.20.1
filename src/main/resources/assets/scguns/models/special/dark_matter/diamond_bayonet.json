@@ -88,5 +88,13 @@
 			"translation": [-3, 10.5, 0],
 			"scale": [2, 2, 2]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "diamondbayo",
+			"origin": [8, 2.15, -5],
+			"color": 0,
+			"children": [0, 1, 2, 3]
+		}
+	]
 }

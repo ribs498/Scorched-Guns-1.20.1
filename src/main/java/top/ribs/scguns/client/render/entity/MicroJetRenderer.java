@@ -32,7 +32,7 @@ public class MicroJetRenderer extends EntityRenderer<MicroJetEntity>
     @Override
     public void render(MicroJetEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource renderTypeBuffer, int light)
     {
-        if(!entity.getProjectile().isVisible() || entity.tickCount <= 1)
+        if(entity.getProjectile().isVisible() || entity.tickCount <= 1)
         {
             return;
         }

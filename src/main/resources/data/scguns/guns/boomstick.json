@@ -57,6 +57,7 @@
     "ejectsCasing": true,
     "item": "scguns:shotgun_shell",
     "casingType": "scguns:small_copper_casing",
+    "casingParticle": "scguns:shell",
     "life": 25,
     "size": 0.5,
     "speed": 5.0,
@@ -64,9 +65,9 @@
   },
   "reloads": {
     "emptyMagTimer": 0,
-    "maxAmmo": 2,
+    "maxAmmo": 4,
     "reloadItem": "scguns:shotgun_shell",
-    "reloadTimer": 20,
+    "reloadTimer": 60,
     "reloadType": "scguns:manual"
   },
   "sounds": {

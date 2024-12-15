@@ -12,7 +12,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 11,
+    "rate": 13,
     "recoilAngle": 4.0,
     "recoilKick": 2.0,
     "spread": 1.0,
@@ -41,17 +41,18 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 5.0,
-      "zOffset": 0.75
+      "yOffset": 5.2,
+      "zOffset": 0.25
     }
   },
   "projectile": {
     "advantage": "scguns:illager",
-    "damage": 7.0,
+    "damage": 7.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:standard_copper_round",
     "casingType": "scguns:medium_copper_casing",
+    "casingParticle": "scguns:copper_casing",
     "life": 50,
     "size": 1.0,
     "speed": 6.0,

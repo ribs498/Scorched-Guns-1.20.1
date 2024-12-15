@@ -61,5 +61,13 @@
 			"translation": [2.75, 6.5, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "stanamg",
+			"origin": [8.075, -0.02299, 8.42182],
+			"color": 0,
+			"children": [0, 1]
+		}
+	]
 }

@@ -3,10 +3,12 @@ package top.ribs.scguns.util;
 import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.common.Gun;
-import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.interfaces.IGunModifier;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.item.attachment.IAttachment;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Author: MrCrayfish
@@ -15,7 +17,7 @@ import top.ribs.scguns.item.attachment.IAttachment;
     {
         private static final IGunModifier[] EMPTY = {};
 
-        private static IGunModifier[] getModifiers(ItemStack weapon, IAttachment.Type type)
+        public static IGunModifier[] getModifiers(ItemStack weapon, IAttachment.Type type)
         {
             ItemStack stack = Gun.getAttachment(type, weapon);
             if(!stack.isEmpty() && stack.getItem() instanceof IAttachment<?> attachment)
@@ -180,7 +182,7 @@ import top.ribs.scguns.item.attachment.IAttachment;
             for (IAttachment.Type type : IAttachment.Type.values()) {
                 IGunModifier[] modifiers = getModifiers(weapon, type);
                 for (IGunModifier modifier : modifiers) {
-                    if (meleeOnly || !modifier.isMeleeOnly()) {
+                    if (meleeOnly || modifier.isMeleeOnly()) {
                         additionalDamage += modifier.additionalDamage();
                     }
                 }
@@ -194,7 +196,7 @@ import top.ribs.scguns.item.attachment.IAttachment;
             for (int i = 0; i < IAttachment.Type.values().length; i++) {
                 IGunModifier[] modifiers = getModifiers(weapon, IAttachment.Type.values()[i]);
                 for (IGunModifier modifier : modifiers) {
-                    if (!modifier.isMeleeOnly()) {
+                    if (modifier.isMeleeOnly()) {
                         finalDamage = modifier.modifyProjectileDamage(finalDamage);
                     }
                 }
@@ -206,7 +208,7 @@ import top.ribs.scguns.item.attachment.IAttachment;
             for (int i = 0; i < IAttachment.Type.values().length; i++) {
                 IGunModifier[] modifiers = getModifiers(weapon, IAttachment.Type.values()[i]);
                 for (IGunModifier modifier : modifiers) {
-                    if (!modifier.isMeleeOnly()) {
+                    if (modifier.isMeleeOnly()) {
                         finalDamage = modifier.modifyProjectileDamage(finalDamage);
                     }
                 }
@@ -214,7 +216,7 @@ import top.ribs.scguns.item.attachment.IAttachment;
             for (int i = 0; i < IAttachment.Type.values().length; i++) {
                 IGunModifier[] modifiers = getModifiers(weapon, IAttachment.Type.values()[i]);
                 for (IGunModifier modifier : modifiers) {
-                    if (!modifier.isMeleeOnly()) {
+                    if (modifier.isMeleeOnly()) {
                         finalDamage += modifier.additionalDamage();
                     }
                 }
@@ -282,4 +284,16 @@ import top.ribs.scguns.item.attachment.IAttachment;
         return reloadSpeed;
     }
 
-}
+        public static double getModifiedDrawSpeed(ItemStack weapon, double speed)
+        {
+            for(int i = 0; i < IAttachment.Type.values().length; i++)
+            {
+                IGunModifier[] modifiers = getModifiers(weapon, IAttachment.Type.values()[i]);
+                for(IGunModifier modifier : modifiers)
+                {
+                    speed = modifier.modifyDrawSpeed(speed);
+                }
+            }
+            return Mth.clamp(speed, 0.01, Double.MAX_VALUE);
+        }
+    }

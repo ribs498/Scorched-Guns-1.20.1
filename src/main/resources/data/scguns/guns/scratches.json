@@ -15,7 +15,8 @@
     "meleeCooldownTicks": 20,
     "energyUse": 25.0,
     "hotBarrelRate": 40,
-    "criticalChance": 0.05
+    "criticalChance": 0.05,
+    "speedModifier": 0.95
   },
   "modules": {
     "attachments": {

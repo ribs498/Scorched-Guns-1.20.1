@@ -51,12 +51,14 @@ import top.ribs.scguns.client.util.PropertyHelper;
 import top.ribs.scguns.client.util.RenderUtil;
 import top.ribs.scguns.common.GripType;
 import top.ribs.scguns.common.Gun;
+import top.ribs.scguns.common.ReloadType;
 import top.ribs.scguns.common.properties.SightAnimation;
 import top.ribs.scguns.event.GunFireEvent;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GrenadeItem;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.animated.AnimatedGunItem;
 import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.item.attachment.impl.Scope;
 import top.ribs.scguns.util.GunEnchantmentHelper;
@@ -281,8 +283,6 @@ public class GunRenderingHandler {
 
         ItemStack heldItem = mc.player.getMainHandItem();
         boolean isGun = heldItem.getItem() instanceof GunItem;
-
-        // Check if we restrict to weapons only
         if (Config.CLIENT.display.restrictCameraRollToWeapons.get() && !isGun) {
             this.immersiveRoll = 0.0F;
             return;
@@ -303,7 +303,6 @@ public class GunRenderingHandler {
 
 
     private void updateMelee() {
-        float prevBanzaiProgress = banzaiProgress;
         prevSprintToBanzaiProgress = sprintToBanzaiProgress;
         prevBanzaiImpactProgress = banzaiImpactProgress;
 
@@ -354,16 +353,23 @@ public class GunRenderingHandler {
         }
     }
     private void applySprintingTransforms(Gun modifiedGun, ItemStack stack, HumanoidArm hand, PoseStack poseStack, float partialTicks) {
-        GripType gripType = modifiedGun.determineGripType(stack); // Ensure 'stack' is passed here
+        GripType gripType = modifiedGun.determineGripType(stack);
         if (Config.CLIENT.display.sprintAnimation.get() && gripType.heldAnimation().canApplySprintingAnimation()) {
             float leftHanded = hand == HumanoidArm.LEFT ? -1 : 1;
             float transition = (this.prevSprintTransition + (this.sprintTransition - this.prevSprintTransition) * partialTicks) / 5F;
             transition = (float) Math.sin((transition * Math.PI) / 2);
             float sprintToBanzai = Mth.lerp(partialTicks, prevSprintToBanzaiProgress, sprintToBanzaiProgress);
             transition *= (1.0f - sprintToBanzai);
-            poseStack.translate(-0.25 * leftHanded * transition, -0.1 * transition, 0);
-            poseStack.mulPose(Axis.YP.rotationDegrees(45F * leftHanded * transition));
-            poseStack.mulPose(Axis.XP.rotationDegrees(-25F * transition));
+
+            if (!(stack.getItem() instanceof AnimatedGunItem)) {
+                poseStack.translate(-0.25 * leftHanded * transition, -0.1 * transition, 0);
+                poseStack.mulPose(Axis.YP.rotationDegrees(45F * leftHanded * transition));
+                poseStack.mulPose(Axis.XP.rotationDegrees(-25F * transition));
+            } else {
+                poseStack.translate(-0.25 * leftHanded * transition, -0.1 * transition, 0);
+                poseStack.mulPose(Axis.YP.rotationDegrees(45F * leftHanded * transition));
+                poseStack.mulPose(Axis.XP.rotationDegrees(-25F * transition));
+            }
         }
     }
 
@@ -431,7 +437,7 @@ public class GunRenderingHandler {
             if (heldItem.getItem() instanceof GunItem gunItem) {
                 Gun gun = gunItem.getModifiedGun(heldItem);
                 if (Config.CLIENT.display.cinematicGunEffects.get() && gun.getGeneral().hasCameraShake()) {
-                    addCameraShake(gun, 0.5f * (1 - progress), 5);
+                    addCameraShake(gun, 0.5f * (1 - progress), 0);
                 }
                 boolean isBayonetEquipped = gunItem.hasBayonet(heldItem);
                 if (isBayonetEquipped) {
@@ -475,10 +481,6 @@ public class GunRenderingHandler {
             }
         }
     }
-
-
-
-
     @SubscribeEvent
     public void onRenderOverlay(RenderHandEvent event) {
         PoseStack poseStack = event.getPoseStack();
@@ -638,23 +640,14 @@ public class GunRenderingHandler {
         }
     }
     private void addCameraShake(Gun gun, float baseIntensity, int durationTicks) {
-        // Check if the gun has camera shake enabled
         if (!gun.getGeneral().hasCameraShake()) {
-            return; // Skip camera shake if not enabled
+            return;
         }
-
-        // Add randomness to the intensity
-        float randomIntensity = baseIntensity + (random.nextFloat() - 0.5f) * 0.2f; // Adjust ±0.2f as needed
-
-        // Add randomness to the duration (optional)
-        int randomDuration = durationTicks + random.nextInt(5) - 2; // Random ±2 ticks
-
-        // Apply the shake
+        float randomIntensity = baseIntensity + (random.nextFloat() - 0.5f) * 0.2f;
+        int randomDuration = durationTicks + random.nextInt(5) - 2;
         this.immersiveRoll = randomIntensity;
-        this.sprintCooldown = Math.max(randomDuration, 1); // Ensure duration is at least 1 tick
+        this.sprintCooldown = Math.max(randomDuration, 1);
     }
-
-
 
     public void showMuzzleFlashForPlayer(int entityId) {
         entityIdForMuzzleFlash.add(entityId);
@@ -743,13 +736,29 @@ public class GunRenderingHandler {
             poseStack.translate(-x, -y, -z);
         }
     }
-
-
     private void applyReloadTransforms(PoseStack poseStack, float partialTicks) {
+        Player player = Minecraft.getInstance().player;
+        if (player == null) return;
+
+        ItemStack stack = player.getMainHandItem();
+        if (!(stack.getItem() instanceof GunItem)) return;
+        if (stack.getItem() instanceof AnimatedGunItem) {
+            return;
+        }
+
         float reloadProgress = ReloadHandler.get().getReloadProgress(partialTicks);
-        poseStack.translate(0, -0.35 * reloadProgress, 0);
-        poseStack.translate(0, 0, -0.1 * reloadProgress);
-        poseStack.mulPose(Axis.XP.rotationDegrees(-35F * reloadProgress));
+
+        if (((GunItem) stack.getItem()).getGun().getReloads().getReloadType() == ReloadType.MANUAL) {
+            if (reloadProgress > 0) {
+                poseStack.translate(0, -0.2 * reloadProgress, 0);
+                poseStack.translate(0, 0, -0.1 * reloadProgress);
+                poseStack.mulPose(Axis.XP.rotationDegrees(-35F * reloadProgress));
+            }
+        } else {
+            poseStack.translate(0, -0.35 * reloadProgress, 0);
+            poseStack.translate(0, 0, -0.1 * reloadProgress);
+            poseStack.mulPose(Axis.XP.rotationDegrees(-35F * reloadProgress));
+        }
     }
     private void applyRecoilTransforms(PoseStack poseStack, ItemStack item, Gun gun)
     {
@@ -809,6 +818,9 @@ public class GunRenderingHandler {
     }
 
     private void renderAttachments(@Nullable LivingEntity entity, ItemDisplayContext display, ItemStack stack, PoseStack poseStack, MultiBufferSource renderTypeBuffer, int light, float partialTicks) {
+        if (stack.getItem() instanceof AnimatedGunItem) {
+            return;
+        }
         if (stack.getItem() instanceof GunItem) {
             Gun modifiedGun = ((GunItem) stack.getItem()).getModifiedGun(stack);
             CompoundTag gunTag = stack.getOrCreateTag();
@@ -1093,4 +1105,7 @@ public class GunRenderingHandler {
         return this.thirdPersonMeleeProgress;
     }
 
+    public float getSprintTransition(float frameTime) {
+        return Mth.lerp(frameTime, this.prevSprintTransition, this.sprintTransition);
+    }
 }
