@@ -78,11 +78,9 @@ public class FireRoundEntity extends ProjectileEntity {
 
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
 
-        // Handle shield interaction
         boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage);
 
         if (blocked) {
-            // If blocked, attempt to set the shield on fire
             if (entity instanceof Player player && this.random.nextFloat() < SHIELD_IGNITE_CHANCE) {
                 ItemStack shield = player.getUseItem();
                 if (shield.getItem() instanceof ShieldItem) {

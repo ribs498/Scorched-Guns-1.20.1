@@ -1,0 +1,6 @@
+{
+	"parent": "minecraft:item/handheld",
+	"textures": {
+		"layer0": "scguns:item/cog_knight_helmet"
+	}
+}

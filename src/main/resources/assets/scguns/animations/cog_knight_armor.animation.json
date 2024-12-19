@@ -1,0 +1,17 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.cog_knight_armor.idle": {
+			"loop": true,
+			"animation_length": 10,
+			"bones": {
+				"cog": {
+					"rotation": {
+						"0.0": [0, 0, 0],
+						"10.0": [0, 0, -360]
+					}
+				}
+			}
+		}
+	}
+}

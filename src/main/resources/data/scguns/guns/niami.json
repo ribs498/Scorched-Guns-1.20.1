@@ -3,10 +3,10 @@
   },
   "general": {
     "alwaysSpread": false,
-    "fireMode": "scguns:automatic",
+    "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 15,
+    "rate": 13,
     "recoilAngle": 1.0,
     "recoilKick": 0.2,
     "spread": 1.0,
@@ -37,9 +37,9 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 15.0,
+    "damage": 12.0,
     "ejectsCasing": false,
-    "gravity": false  ,
+    "gravity": true  ,
     "item": "minecraft:arrow",
     "firesArrows": true,
     "life": 20,
@@ -49,7 +49,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 10,
+    "maxAmmo": 7,
     "reloadItem": "minecraft:arrow",
     "reloadTimer": 30,
     "reloadType": "scguns:mag_fed"

@@ -23,6 +23,7 @@
     "recoilKick": 0.5,
     "spread": 5.0,
     "meleeDamage": 3.0,
+    "meleeReach": 2.5,
     "meleeCooldownTicks": 10,
     "hotBarrelRate": 12,
     "criticalChance": 0.05

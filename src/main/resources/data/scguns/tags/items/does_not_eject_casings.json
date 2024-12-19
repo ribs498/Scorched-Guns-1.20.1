@@ -1,0 +1,23 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:pyroclastic_flow",
+    "scguns:flintlock_pistol",
+    "scguns:handcannon",
+    "scguns:musket",
+    "scguns:blunderbuss",
+    "scguns:spitfire",
+    "scguns:blasphemy",
+    "scguns:cr4k_mining_laser",
+    "scguns:shard_culler",
+    "scguns:flayed_god",
+    "scguns:waltz_conversion",
+    "scguns:laser_musket",
+    "scguns:nervepinch",
+    "scguns:venturi",
+    "scguns:umax_pistol",
+    "scguns:gale",
+    "scguns:scratches",
+    "scguns:niami"
+  ]
+}

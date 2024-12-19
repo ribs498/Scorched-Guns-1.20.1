@@ -23,6 +23,7 @@
     "spread": 0.0,
     "meleeDamage": 4.0,
     "meleeCooldownTicks": 20,
+    "meleeReach": 4.5,
     "hotBarrelRate": 37,
     "criticalChance": 0.05,
     "playerKnockBack": true,

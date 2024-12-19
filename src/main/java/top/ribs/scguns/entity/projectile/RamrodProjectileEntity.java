@@ -6,6 +6,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -14,6 +16,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.effect.PlasmaExplosion;
@@ -28,6 +31,7 @@ import top.ribs.scguns.util.GunEnchantmentHelper;
 public class RamrodProjectileEntity extends ProjectileEntity {
     private static final float SHIELD_DISABLE_CHANCE = 0.40f;
     private static final float SHIELD_DAMAGE_PENETRATION = 0.35f;
+    private static final float HEADSHOT_EFFECT_DURATION_MULTIPLIER = 1.5f;
 
     public RamrodProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -72,24 +76,62 @@ public class RamrodProjectileEntity extends ProjectileEntity {
         if (entity instanceof LivingEntity livingTarget) {
             damage = calculateArmorBypassDamage(livingTarget, damage);
         }
+
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
         boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, SHIELD_DISABLE_CHANCE);
+
         if (blocked) {
             float penetratingDamage = damage * SHIELD_DAMAGE_PENETRATION;
             entity.hurt(source, penetratingDamage);
+            if (entity instanceof LivingEntity livingEntity) {
+                applyEffect(livingEntity, SHIELD_DAMAGE_PENETRATION, headshot);
+            }
         } else {
             entity.hurt(source, damage);
+            if (entity instanceof LivingEntity livingEntity) {
+                applyEffect(livingEntity, 1.0f, headshot);
+            }
         }
+
         if(entity instanceof LivingEntity) {
             GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
         }
+
         if (this.shooter instanceof Player) {
             int hitType = critical ? S2CMessageProjectileHitEntity.HitType.CRITICAL : headshot ? S2CMessageProjectileHitEntity.HitType.HEADSHOT : S2CMessageProjectileHitEntity.HitType.NORMAL;
             PacketHandler.getPlayChannel().sendToPlayer(() -> (ServerPlayer) this.shooter, new S2CMessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
         }
+
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
         spawnExplosionParticles(hitVec);
     }
+
+    private void applyEffect(LivingEntity target, float powerMultiplier, boolean headshot) {
+        ResourceLocation effectLocation = this.getProjectile().getImpactEffect();
+        if (effectLocation != null) {
+            float effectChance = this.getProjectile().getImpactEffectChance() * powerMultiplier;
+            if (headshot) {
+                effectChance = Math.min(1.0f, effectChance * 1.25f);
+            }
+
+            if (this.random.nextFloat() < effectChance) {
+                MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectLocation);
+                if (effect != null) {
+                    int duration = this.getProjectile().getImpactEffectDuration();
+                    if (headshot) {
+                        duration = (int)(duration * HEADSHOT_EFFECT_DURATION_MULTIPLIER);
+                    }
+                    duration = (int)(duration * powerMultiplier);
+                    target.addEffect(new MobEffectInstance(
+                            effect,
+                            duration,
+                            this.getProjectile().getImpactEffectAmplifier()
+                    ));
+                }
+            }
+        }
+    }
+
 
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {

@@ -505,7 +505,7 @@ public class ServerPlayHandler {
         }
     }
 
-    private static boolean hasCreativeAmmoBoxInCurios(ServerPlayer player) {
+    public static boolean hasCreativeAmmoBoxInCurios(ServerPlayer player) {
         AtomicBoolean found = new AtomicBoolean(false);
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();

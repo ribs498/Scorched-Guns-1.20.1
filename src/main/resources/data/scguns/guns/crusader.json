@@ -1,0 +1,58 @@
+{
+  "display": {
+  },
+  "general": {
+    "alwaysSpread": false,
+    "fireMode": "scguns:semi_automatic",
+    "gripType": "scguns:two_handed",
+    "baseGripType": "scguns:two_handed",
+    "rate": 19,
+    "recoilAngle": 1.0,
+    "recoilKick": 0.2,
+    "spread": 1.0,
+    "meleeDamage": 3.0,
+    "meleeCooldownTicks": 20,
+    "hotBarrelRate": 37,
+    "criticalChance": 0.05
+  },
+  "modules": {
+    "attachments": {
+      "stock": {
+        "scale": 0.0
+      }
+    },
+    "zoom": {
+      "fovModifier": 0.6,
+      "yOffset": 6.8,
+      "zOffset": 0.75
+    }
+  },
+  "projectile": {
+    "advantage": "scguns:none",
+    "damage": 0.0,
+    "ejectsCasing": false,
+    "gravity": true  ,
+    "item": "scguns:syringe",
+    "life": 20,
+    "size": 2.0,
+    "speed": 4.0,
+    "trailLengthMultiplier": 2.0,
+    "impactEffect": "minecraft:instant_health",
+    "impactEffectDuration": 1,
+    "impactEffectChance": 1.0,
+    "impactEffectAmplifier": 1
+  },
+  "reloads": {
+    "emptyMagTimer": 10,
+    "maxAmmo": 3,
+    "reloadItem": "scguns:syringe",
+    "reloadTimer": 30,
+    "reloadType": "scguns:mag_fed"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.airgun.fire",
+    "fire": "scguns:item.airgun.fire",
+    "reload": "scguns:item.gauss.reload"
+  }
+}

@@ -89,7 +89,7 @@ public class GunEnchantmentHelper
     public static double getAimDownSightSpeed(ItemStack weapon)
     {
         int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.LIGHTWEIGHT.get(), weapon);
-        return level > 0 ? 1.5 : 1.0;
+        return level > 0 ? 1.2 : 1.0;
     }
 
     public static double getProjectileSpeedModifier(ItemStack weapon) {

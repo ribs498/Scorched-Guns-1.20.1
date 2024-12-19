@@ -7,6 +7,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.ExperienceOrb;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -20,6 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
 import net.minecraftforge.event.entity.player.PlayerXpEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.client.GunItemStackRenderer;
@@ -92,7 +94,6 @@ public class GunItem extends Item implements IColored, IMeta {
             tooltip.add(Component.translatable("info.scguns.advantage").withStyle(ChatFormatting.GRAY)
                     .append(Component.translatable("advantage." + advantage).withStyle(ChatFormatting.GOLD)));
         }
-        // Add other tooltip information (fire mode, ammo type, etc.)
         String fireMode = modifiedGun.getGeneral().getFireMode().id().toString();
         tooltip.add(Component.translatable("info.scguns.fire_mode").withStyle(ChatFormatting.GRAY)
                 .append(Component.translatable("fire_mode." + fireMode).withStyle(ChatFormatting.WHITE)));
@@ -115,7 +116,6 @@ public class GunItem extends Item implements IColored, IMeta {
                         .append(Component.literal(ammoCount + "/" + GunModifierHelper.getModifiedAmmoCapacity(stack, modifiedGun)).withStyle(ChatFormatting.WHITE)));
             }
         }
-        // Add melee damage information to the tooltip
         float totalMeleeDamage = getTotalMeleeDamage(stack);
         if (totalMeleeDamage > 0) {
             String meleeDamageText = (totalMeleeDamage % 1.0 == 0) ? String.format("%d", (int) totalMeleeDamage) : String.format("%.1f", totalMeleeDamage);
@@ -123,8 +123,15 @@ public class GunItem extends Item implements IColored, IMeta {
                     .append(": ").withStyle(ChatFormatting.GRAY)
                     .append(Component.literal(meleeDamageText).withStyle(ChatFormatting.WHITE)));
         }
-
-        // Add the attachment help information
+        ResourceLocation effectLocation = modifiedGun.getProjectile().getImpactEffect();
+        if (effectLocation != null) {
+            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectLocation);
+            if (effect != null) {
+                tooltip.add(Component.translatable("info.scguns.impact_effect").withStyle(ChatFormatting.GRAY)
+                        .append(": ")
+                        .append(Component.translatable(effect.getDescriptionId()).withStyle(ChatFormatting.BLUE)));
+            }
+        }
         tooltip.add(Component.translatable("info.scguns.attachment_help", KeyBinds.KEY_ATTACHMENTS.getTranslatedKeyMessage().getString().toUpperCase(Locale.ENGLISH)).withStyle(ChatFormatting.YELLOW));
     }
 

@@ -3,7 +3,7 @@
     "flash": {
       "size": 0.8,
       "yOffset": 4.8,
-      "zOffset": -7.7,
+      "zOffset": -8.5,
       "textureLocation": "muzzle_flash_1"
     }
   },

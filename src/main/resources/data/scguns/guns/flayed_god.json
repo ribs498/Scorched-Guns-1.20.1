@@ -31,7 +31,7 @@
     "recoilAngle": 0.0,
     "recoilKick": 0.0,
     "spread": 3.0,
-    "meleeDamage": 4.0,
+    "meleeDamage": 6.0,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 10,
     "beamAmmoConsumptionDelay": 8000,

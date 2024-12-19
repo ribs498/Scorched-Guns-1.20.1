@@ -4,13 +4,14 @@
 	"scguns:handcannon",
 	"scguns:blunderbuss",
 	"scguns:repeating_musket",
-	"scguns:winnie",
 
+	"scguns:winnie",
 	"scguns:pax",
 	"scguns:saketini",
 	"scguns:callwell",
-	"scguns:sawed_off_callwell",
+	"scguns:callwell_conversion",
 	"scguns:laser_musket",
+	"scguns:plasmabuss",
 	"scguns:floundergat",
 
 	"scguns:scrapper",
@@ -30,6 +31,7 @@
 	"scguns:auvtomag",
 	"scguns:pulsar",
 	"scguns:gyrojet_pistol",
+	"scguns:mk43_rifle",
 	"scguns:rocket_rifle",
 
 	"scguns:marlin",
@@ -45,6 +47,7 @@
 	"scguns:mas_55",
 	"scguns:plasgun",
 	"scguns:cyclone",
+	"scguns:valora",
 
 
 	"scguns:m22_waltz",
@@ -58,12 +61,16 @@
 	"scguns:gattaler",
 	"scguns:thunderhead",
 	"scguns:dozier_rl",
+	"scguns:niami",
+	"scguns:cr4k_mining_laser",
 
 	"scguns:blasphemy",
 	"scguns:freyr",
 	"scguns:pyroclastic_flow",
+	"scguns:mangalitsa",
 	"scguns:vulcanic_repeater",
 	"scguns:super_shotgun",
+
 
 	"scguns:whispers",
 	"scguns:echoes_2",
@@ -79,7 +86,7 @@
 	"scguns:locust",
 	"scguns:newborn_cyst",
 	"scguns:earths_corpse",
-	"scguns:astella"
-
-
+	"scguns:astella",
+	"scguns:prima_materia",
+	"scguns:nervepinch"
 ]

@@ -3,6 +3,7 @@ package top.ribs.scguns.enchantment;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.common.FireMode;
 import top.ribs.scguns.init.ModItems;
+import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.item.BayonetItem;
 import top.ribs.scguns.item.GunItem;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
@@ -19,25 +20,31 @@ public class EnchantmentTypes {
 
     public static final EnchantmentCategory TRIGGER_FINGER_COMPATIBLE = EnchantmentCategory.create(
             Reference.MOD_ID + ":trigger_finger_compatible",
-            item -> item instanceof GunItem && isSingleShotGun((GunItem) item)
+            item -> item instanceof GunItem && !item.builtInRegistryHolder().is(ModTags.Items.SINGLE_SHOT)
     );
 
+    // Single shot guns
     public static final EnchantmentCategory SINGLE_SHOT_GUN = EnchantmentCategory.create(
             Reference.MOD_ID + ":single_shot_gun",
-            item -> item instanceof GunItem && isSingleShotGun((GunItem) item)
-    );
-    public static final EnchantmentCategory WATER_PROOF_COMPATIBLE = EnchantmentCategory.create(
-            Reference.MOD_ID + ":water_proof_compatible",
-            item -> item instanceof GunItem && !isNonUnderwaterGun((GunItem) item)
+            item -> item instanceof GunItem && item.builtInRegistryHolder().is(ModTags.Items.SINGLE_SHOT)
     );
 
+    // Water-proof compatible guns
+    public static final EnchantmentCategory WATER_PROOF_COMPATIBLE = EnchantmentCategory.create(
+            Reference.MOD_ID + ":water_proof_compatible",
+            item -> item instanceof GunItem && !item.builtInRegistryHolder().is(ModTags.Items.NON_UNDERWATER)
+    );
+
+    // Shell catcher compatible
     public static final EnchantmentCategory SHELL_CATCHER_COMPATIBLE = EnchantmentCategory.create(
             Reference.MOD_ID + ":shell_catcher_compatible",
-            item -> item instanceof GunItem && !doesNotEjectCasings((GunItem) item)
+            item -> item instanceof GunItem && !item.builtInRegistryHolder().is(ModTags.Items.DOES_NOT_EJECT_CASINGS)
     );
+
+    // Collateral compatible
     public static final EnchantmentCategory COLLATERAL_COMPATIBLE = EnchantmentCategory.create(
             Reference.MOD_ID + ":collateral_compatible",
-            item -> item instanceof GunItem && !isNonCollateral((GunItem) item)
+            item -> item instanceof GunItem && !item.builtInRegistryHolder().is(ModTags.Items.NON_COLLATERAL)
     );
 
     private static boolean isSingleShotGun(GunItem gunItem) {
@@ -59,11 +66,6 @@ public class EnchantmentTypes {
                 gunItem == ModItems.SHELLURKER.get() ||
                 gunItem == ModItems.CARAPICE.get();
     }
-    private static boolean isNonUnderwaterGun(GunItem gunItem) {
-        return gunItem instanceof NonUnderwaterGunItem || gunItem instanceof NonUnderwaterAnimatedGunItem;
-    }
-
-
     private static boolean doesNotEjectCasings(GunItem gunItem) {
         return gunItem == ModItems.FLINTLOCK_PISTOL.get() ||
                 gunItem == ModItems.HANDCANNON.get() ||
@@ -75,6 +77,9 @@ public class EnchantmentTypes {
                 gunItem == ModItems.ROCKET_RIFLE.get() ||
                 gunItem == ModItems.MK43_RIFLE.get() ||
                 gunItem == ModItems.GYROJET_PISTOL.get();
+    }
+    private static boolean isNonUnderwaterGun(GunItem gunItem) {
+        return gunItem instanceof NonUnderwaterGunItem || gunItem instanceof NonUnderwaterAnimatedGunItem;
     }
 }
 

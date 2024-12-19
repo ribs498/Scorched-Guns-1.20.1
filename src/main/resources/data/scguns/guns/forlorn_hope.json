@@ -1,0 +1,71 @@
+{
+  "display": {
+    "flash": {
+      "size": 1.0,
+      "yOffset": 4.7,
+      "zOffset": -17.5,
+      "textureLocation": "muzzle_flash_11"
+    }
+  },
+  "general": {
+    "alwaysSpread": false,
+    "fireMode": "scguns:semi_automatic",
+    "gripType": "scguns:two_handed",
+    "baseGripType": "scguns:two_handed",
+    "rate": 21,
+    "recoilAngle": 1.5,
+    "recoilKick": 0.53,
+    "spread": 2.0,
+    "meleeDamage": 3.5,
+    "meleeCooldownTicks": 20,
+    "meleeReach": 4.0,
+    "hotBarrelRate": 16,
+    "criticalChance": 0.05
+  },
+  "modules": {
+    "attachments": {
+      "scope": {
+        "size": 0.7,
+        "yOffset": 6.2,
+        "zOffset": 4.0
+      },
+      "stock": {
+        "scale": 0.0
+      }
+    },
+    "zoom": {
+      "fovModifier": 0.6,
+      "yOffset": 6.5,
+      "zOffset": 0.75
+    }
+  },
+  "projectile": {
+    "advantage": "scguns:none",
+    "damage": 16.0,
+    "ejectsCasing": true,
+    "item": "scguns:sculk_cell",
+    "casingType": "scguns:empty_cell",
+    "casingParticle": "scguns:iron_casing",
+    "life": 65,
+    "size": 2.0,
+    "speed": 9.0,
+    "trailLengthMultiplier": 0.5,
+    "impactEffect": "minecraft:darkness",
+    "impactEffectDuration": 100,
+    "impactEffectChance": 0.25,
+    "impactEffectAmplifier": 1
+  },
+  "reloads": {
+    "emptyMagTimer": 30,
+    "maxAmmo": 5,
+    "reloadItem": "scguns:sculk_cell",
+    "reloadTimer": 35,
+    "reloadType": "scguns:mag_fed"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.sculk.fire",
+    "fire": "scguns:item.sculk.fire",
+    "reload": "scguns:item.gauss.reload"
+  }
+}

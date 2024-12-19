@@ -52,7 +52,7 @@
   },
   "projectile": {
     "advantage": "scguns:heavy",
-    "damage": 20.0,
+    "damage": 18.5,
     "ejectsCasing": true,
     "gravity": false  ,
     "item": "scguns:gibbs_round",

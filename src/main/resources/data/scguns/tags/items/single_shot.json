@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:flintlock_pistol",
+    "scguns:handcannon",
+    "scguns:musket",
+    "scguns:blunderbuss",
+    "scguns:rocket_rifle",
+    "scguns:bomb_lance",
+    "scguns:brawler",
+    "scguns:saketini",
+    "scguns:big_bore"
+  ]
+}

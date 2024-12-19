@@ -228,13 +228,10 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
             boolean isSprinting = player.isSprinting();
             boolean isAiming = ModSyncedDataKeys.AIMING.getValue(player);
             boolean sReloading = ModSyncedDataKeys.RELOADING.getValue(player);
-            if (isAiming) {
-                assert animationController != null;
-                if (isAnimationPlaying(animationController, "draw") ||
-                        isAnimationPlaying(animationController, "carbine_draw")) {
-                    ModSyncedDataKeys.AIMING.setValue(player, false);
-                    isAiming = false;
-                }
+            if (isAiming && nbtCompound.getBoolean("IsDrawing") && nbtCompound.getInt("DrawnTick") < 15) {
+                ModSyncedDataKeys.AIMING.setValue(player, false);
+                isAiming = false;
+                this.updateBooleanTag(nbtCompound, "IsAiming", false);
             }
             if (sReloading && !nbtCompound.getBoolean("scguns:IsReloading")) {
                 nbtCompound.putBoolean("scguns:IsReloading", true);
@@ -326,11 +323,11 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
 
         int quickHandsLevel = GunEnchantmentHelper.getQuickHands(stack);
         if (quickHandsLevel > 0) {
-            drawSpeedMultiplier += 0.15 * quickHandsLevel;
+            drawSpeedMultiplier += 0.12 * quickHandsLevel;
         }
         int lightweightLevel = GunEnchantmentHelper.getLightweight(stack);
         if (lightweightLevel > 0) {
-            drawSpeedMultiplier += 0.2 * lightweightLevel;
+            drawSpeedMultiplier += 0.05 * lightweightLevel;
         }
         drawSpeedMultiplier = GunModifierHelper.getModifiedDrawSpeed(stack, drawSpeedMultiplier);
 
@@ -443,6 +440,11 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
 
     @OnlyIn(Dist.CLIENT)
     private void handleAimingState(CompoundTag nbt, AnimationController<GeoAnimatable> animationController) {
+
+        if (nbt.getBoolean("IsDrawing") && nbt.getInt("DrawnTick") < 15) {
+            return;
+        }
+
         animationController.setAnimationSpeed(1.0);
         nbt.remove("IsInspecting");
         assert Minecraft.getInstance().player != null;

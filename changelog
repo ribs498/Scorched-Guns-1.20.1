@@ -1,0 +1,21 @@
+- Adjusted Dark Matter recipe to not use Dragon Egg anymore
+- Tweaked Earths Corpse recipe
+- Added Melee reach to gun json instead of hard coded value
+- Player knockback resistance/ attribute now affects knockback from guns
+- Fixed Missing callwell stocks
+- Fixed issues with Leawinds Third Person mod
+- Added Cog Knight Armor set
+- Tweaked mending on attachments to be more flexible
+- Added built in weaker mending to sculk guns
+- Added Forlorn Hope, a new sculk rifle
+- Added Crusader, a med gun
+- Fixed beam weapons not respecting Fragile blocks
+- Enchantment groups now use tags instead of coded lists
+- Added optional potion effect impact to guns, used by Dark Matter
+-More adjustments to creative ammo box, all ammo is now available in it
+- Added config to toggle ADS
+- Added Immersive HUD config, only rendering Gun info when inspecting
+- Added config to disable rendering of player arms
+- Tweaked Ancient Brass block to just be storage block for Ancient Brass
+- Plasgun reanimation stuff
+

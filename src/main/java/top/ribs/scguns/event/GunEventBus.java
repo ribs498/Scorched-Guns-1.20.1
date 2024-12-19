@@ -17,8 +17,11 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
@@ -292,28 +295,7 @@ public class GunEventBus {
             Gun gun = gunItem.getModifiedGun(heldItem);
             int hotBarrelLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), heldItem);
             if (gun.getGeneral().hasPlayerKnockBack()) {
-                Vec3 lookVec = player.getLookAngle();
-                float strength = gun.getGeneral().getPlayerKnockBackStrength();
-
-                double verticalBoost = 0;
-                if (lookVec.y < -0.5 && !player.onGround() && player.getDeltaMovement().y > 0) {
-                    verticalBoost = strength * 1.25;
-                } else {
-                    verticalBoost = 0.1 * strength;
-                }
-
-                player.setDeltaMovement(player.getDeltaMovement().add(
-                        -lookVec.x * strength,
-                        verticalBoost,
-                        -lookVec.z * strength
-                ));
-                if (verticalBoost > 0.5) {
-                    player.fallDistance = 0;
-                }
-
-                if (player instanceof ServerPlayer) {
-                    ((ServerPlayer) player).connection.send(new ClientboundSetEntityMotionPacket(player));
-                }
+                applyGunKnockback(player, gun);
             }
             if (hotBarrelLevel > 0) {
                 int hotBarrelFillRate = gun.getGeneral().getHotBarrelRate();
@@ -361,6 +343,45 @@ public class GunEventBus {
                 if (heldItem.getDamageValue() >= (heldItem.getMaxDamage() / 1.5) && Math.random() < 0.15) {
                     level.playSound(player, player.blockPosition(), ModSounds.COPPER_GUN_JAM.get(), SoundSource.PLAYERS, 1.0F, 1.0f);
                 }
+            }
+        }
+    }
+    private static void applyGunKnockback(Player player, Gun gun) {
+        Vec3 lookVec = player.getLookAngle();
+        float baseStrength = gun.getGeneral().getPlayerKnockBackStrength();
+        float totalKnockbackResistance = 0.0F;
+        totalKnockbackResistance += (float) player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * 0.5f;
+
+        for (ItemStack armorPiece : player.getArmorSlots()) {
+            if (armorPiece.getItem() instanceof ArmorItem armor) {
+                if (armor.getMaterial() instanceof ArmorMaterial) {
+                    ArmorMaterial material = armor.getMaterial();
+                    totalKnockbackResistance += material.getKnockbackResistance() * 0.25f;
+                }
+            }
+        }
+        totalKnockbackResistance = Math.min(0.75F, totalKnockbackResistance);
+        float effectiveStrength = baseStrength * (1.0F - totalKnockbackResistance);
+        if (effectiveStrength > 0) {
+            double verticalBoost;
+            if (lookVec.y < -0.5 && !player.onGround() && player.getDeltaMovement().y > 0) {
+                verticalBoost = effectiveStrength * 1.25;
+            } else {
+                verticalBoost = 0.1 * effectiveStrength;
+            }
+
+            player.setDeltaMovement(player.getDeltaMovement().add(
+                    -lookVec.x * effectiveStrength,
+                    verticalBoost,
+                    -lookVec.z * effectiveStrength
+            ));
+
+            if (verticalBoost > 0.5) {
+                player.fallDistance = 0;
+            }
+
+            if (player instanceof ServerPlayer) {
+                ((ServerPlayer) player).connection.send(new ClientboundSetEntityMotionPacket(player));
             }
         }
     }

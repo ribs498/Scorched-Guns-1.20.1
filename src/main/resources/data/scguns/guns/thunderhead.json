@@ -27,6 +27,7 @@
     "criticalChance": 0.05,
     "playerKnockBack": true,
     "playerKnockBackStrength": 0.25,
+    "meleeReach": 3.5,
     "speedModifier": 0.8
   },
   "modules": {

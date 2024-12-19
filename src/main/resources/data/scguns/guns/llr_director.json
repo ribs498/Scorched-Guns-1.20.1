@@ -18,6 +18,7 @@
     "spread": 2.0,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
+    "meleeReach": 3.5,
     "hotBarrelRate": 22,
     "criticalChance": 0.05
   },
@@ -51,7 +52,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 11.5,
+    "damage": 12.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:standard_copper_round",

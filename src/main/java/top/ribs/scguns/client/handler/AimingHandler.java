@@ -21,6 +21,7 @@ import net.minecraftforge.client.event.ViewportEvent;
 import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import top.ribs.scguns.Config;
 import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.client.KeyBinds;
 import top.ribs.scguns.client.util.PropertyHelper;
@@ -61,6 +62,7 @@ public class AimingHandler
     private final Map<Player, AimTracker> aimingMap = new WeakHashMap<>();
     private double normalisedAdsProgress;
     private boolean aiming = false;
+    private boolean wasKeyPressed = false;
 
     private AimingHandler() {}
 
@@ -117,23 +119,114 @@ public class AimingHandler
         if(player == null)
             return;
 
-        if(this.isAiming())
+        boolean currentKeyPressed = KeyBinds.getAimMapping().isDown();
+        boolean toggleAdsEnabled = Config.COMMON.gameplay.toggleADS.get();
+
+        if(toggleAdsEnabled)
         {
-            if(!this.aiming)
+            if(currentKeyPressed && !wasKeyPressed)
+            {
+                this.aiming = !this.aiming;
+            }
+        }
+        else
+        {
+            this.aiming = currentKeyPressed;
+        }
+        wasKeyPressed = currentKeyPressed;
+
+        if(ScorchedGuns.controllableLoaded)
+        {
+            boolean controllerAiming = ControllerHandler.isAiming();
+            if(toggleAdsEnabled)
+            {
+                if(controllerAiming && !wasKeyPressed)
+                {
+                    this.aiming = !this.aiming;
+                }
+            }
+            else
+            {
+                this.aiming |= controllerAiming;
+            }
+        }
+        boolean shouldBeAiming = this.isAiming();
+        if(shouldBeAiming)
+        {
+            if(!ModSyncedDataKeys.AIMING.getValue(player))
             {
                 ModSyncedDataKeys.AIMING.setValue(player, true);
                 PacketHandler.getPlayChannel().sendToServer(new C2SMessageAim(true));
-                this.aiming = true;
             }
         }
-        else if(this.aiming)
+        else if(ModSyncedDataKeys.AIMING.getValue(player))
         {
             ModSyncedDataKeys.AIMING.setValue(player, false);
             PacketHandler.getPlayChannel().sendToServer(new C2SMessageAim(false));
-            this.aiming = false;
         }
 
         this.localTracker.handleAiming(player, player.getItemInHand(InteractionHand.MAIN_HAND));
+    }
+
+    public boolean isAiming()
+    {
+        Minecraft mc = Minecraft.getInstance();
+        if(mc.player == null)
+            return false;
+
+        if(mc.player.isSpectator())
+            return false;
+
+        if(Debug.isForceAim())
+            return true;
+
+        if(mc.screen != null)
+        {
+            this.aiming = false;
+            return false;
+        }
+
+        if(PlayerReviveHelper.isBleeding(mc.player))
+        {
+            this.aiming = false;
+            return false;
+        }
+
+        ItemStack heldItem = mc.player.getMainHandItem();
+        if(!(heldItem.getItem() instanceof GunItem))
+        {
+            this.aiming = false;
+            return false;
+        }
+
+        Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
+        if(!gun.canAimDownSight())
+        {
+            this.aiming = false;
+            return false;
+        }
+
+        if(mc.player.getOffhandItem().getItem() == Items.SHIELD &&
+                (gun.getGeneral().getGripType(heldItem) == GripType.ONE_HANDED ||
+                        gun.getGeneral().getGripType(heldItem) == GripType.ONE_HANDED_2))
+        {
+            this.aiming = false;
+            return false;
+        }
+
+        if(!this.localTracker.isAiming() && this.isLookingAtInteractableBlock())
+        {
+            this.aiming = false;
+            return false;
+        }
+
+        if(ModSyncedDataKeys.RELOADING.getValue(mc.player))
+        {
+            this.aiming = false;
+            return false;
+        }
+
+        return this.aiming;
     }
 
     @SubscribeEvent
@@ -186,49 +279,7 @@ public class AimingHandler
         return this.aiming;
     }
 
-    public boolean isAiming()
-    {
-        Minecraft mc = Minecraft.getInstance();
-        if(mc.player == null)
-            return false;
 
-        if(mc.player.isSpectator())
-            return false;
-
-        if(Debug.isForceAim())
-            return true;
-
-        if(mc.screen != null)
-            return false;
-
-        if(PlayerReviveHelper.isBleeding(mc.player))
-            return false;
-
-        ItemStack heldItem = mc.player.getMainHandItem();
-        if(!(heldItem.getItem() instanceof GunItem))
-            return false;
-
-        Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
-        if(!gun.canAimDownSight())
-            return false;
-
-        if(mc.player.getOffhandItem().getItem() == Items.SHIELD && gun.getGeneral().getGripType(heldItem) == GripType.ONE_HANDED ||gun.getGeneral().getGripType(heldItem) == GripType.ONE_HANDED_2 )
-            return false;
-
-        if(!this.localTracker.isAiming() && this.isLookingAtInteractableBlock())
-            return false;
-
-        if(ModSyncedDataKeys.RELOADING.getValue(mc.player))
-            return false;
-
-        boolean zooming = KeyBinds.getAimMapping().isDown();
-        if(ScorchedGuns.controllableLoaded)
-        {
-            zooming |= ControllerHandler.isAiming();
-        }
-
-        return zooming;
-    }
 
     public boolean isLookingAtInteractableBlock()
     {

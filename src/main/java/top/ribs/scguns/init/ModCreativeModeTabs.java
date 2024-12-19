@@ -61,6 +61,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.PULSAR.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.GYROJET_PISTOL.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BRAWLER.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.CRUSADER.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.MK43_RIFLE.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.ROCKET_RIFLE.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.MARLIN.get());
@@ -108,6 +109,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.WHISPERS.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.ECHOES_2.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SCULK_RESONATOR.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.FORLORN_HOPE.get());
 
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.CARAPICE.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.SHELLURKER.get());
@@ -143,6 +145,10 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.ADRIEN_LEGGINGS.get());
                         pOutput.accept(ModItems.ADRIEN_BOOTS.get());
                         pOutput.accept(ModItems.BRASS_MASK.get());
+                        pOutput.accept(ModItems.COG_KNIGHT_HELMET.get());
+                        pOutput.accept(ModItems.COG_KNIGHT_CHESTPLATE.get());
+                        pOutput.accept(ModItems.COG_KNIGHT_LEGGINGS.get());
+                        pOutput.accept(ModItems.COG_KNIGHT_BOOTS.get());
                         pOutput.accept(ModItems.NETHERITE_RESPIRATOR.get());
                         pOutput.accept(ModItems.DIAMOND_STEEL_HELMET.get());
                         pOutput.accept(ModItems.DIAMOND_STEEL_CHESTPLATE.get());
@@ -251,6 +257,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.ENERGY_CELL.get());
                         pOutput.accept(ModItems.SCULK_CELL.get());
                         pOutput.accept(ModItems.SHULKSHOT.get());
+                        pOutput.accept(ModItems.SYRINGE.get());
                         pOutput.accept(ModItems.MICROJET.get());
                         pOutput.accept(ModItems.ROCKET.get());
                         pOutput.accept(ModItems.OSBORNE_SLUG.get());

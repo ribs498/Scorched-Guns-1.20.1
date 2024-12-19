@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:rocket_rifle",
+    "scguns:gyrojet_pistol",
+    "scguns:mk43_rifle",
+    "scguns:dozier_rl",
+    "scguns:shellurker",
+    "scguns:carapice"
+  ]
+}

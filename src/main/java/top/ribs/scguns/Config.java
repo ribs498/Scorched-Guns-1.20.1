@@ -80,6 +80,7 @@ public class Config
         public final ForgeConfigSpec.BooleanValue oldAnimations;
         public final ForgeConfigSpec.ConfigValue<String> crosshair;
         public final ForgeConfigSpec.BooleanValue displayGunInfo;
+        public final ForgeConfigSpec.BooleanValue immersiveGunInfo;
         public final ForgeConfigSpec.BooleanValue cinematicGunEffects;
         public final ForgeConfigSpec.BooleanValue cooldownIndicator;
         public final ForgeConfigSpec.BooleanValue weaponSway;
@@ -99,6 +100,7 @@ public class Config
         public final ForgeConfigSpec.BooleanValue onlyRenderDotWhileAiming;
         public final ForgeConfigSpec.DoubleValue dynamicCrosshairDotThreshold;
         public final ForgeConfigSpec.DoubleValue dynamicCrosshairMaxScale;
+        public final ForgeConfigSpec.BooleanValue renderArms;
 
 
 
@@ -117,6 +119,7 @@ public class Config
                 this.restrictCameraRollToWeapons = builder.comment("When enabled, the Camera Roll Effect is only applied when holding a weapon.").define("restrictCameraRollToWeapons", true);
                 this.sprintAnimation = builder.comment("Enables the sprinting animation on weapons for better immersion. This only applies to weapons that support a sprinting animation.").define("sprintingAnimation", true);
                 this.displayGunInfo = builder.comment("If enabled, renders a HUD element displaying the gun's ammo count and ammo capacity, as well as pulse weapon charge.").define("displayGunInfo", true);
+                this.immersiveGunInfo = builder.comment("If enabled, the HUD will display when inspecting the gun.").define("immersiveGunInfo", false);
                 this.bobbingIntensity = builder.comment("The intensity of the custom bobbing animation while holding a gun").defineInRange("bobbingIntensity", 1.0, 0.0, 2.0);
                 this.cinematicGunEffects = builder.comment("If enabled, enables cinematic camera effects on guns ").define("cinematicGunEffects", true);
                 this.fireLights = builder.comment("If enabled, enables light sources when firing guns").define("fireLights", true);
@@ -130,6 +133,7 @@ public class Config
                 this.dynamicCrosshairMaxScale = builder
                         .comment("The maximum scale factor for the dynamic crosshair when spread is high")
                         .defineInRange("dynamicCrosshairMaxScale", 8.0, 1.0, 20.0);
+                this.renderArms = builder.comment("If true, renders the player's arms when holding a gun").define("renderArms", true);
             }
             builder.pop();
         }
@@ -248,6 +252,7 @@ public class Config
         public final ForgeConfigSpec.IntValue energyProductionRate;
         public final ForgeConfigSpec.BooleanValue drawAnimation;
         public final ForgeConfigSpec.BooleanValue forceEnergyGuns;
+        public final ForgeConfigSpec.BooleanValue toggleADS;
 
 
         public Gameplay(ForgeConfigSpec.Builder builder)
@@ -276,6 +281,9 @@ public class Config
                 this.forceEnergyGuns = builder
                         .comment("If true, guns will always use energy system even if Create mod is loaded NOT WORKING.")
                         .define("forceEnergyGuns", false);
+                this.toggleADS = builder
+                        .comment("If true, guns will toggle ADS mode.")
+                        .define("toggleADS", false);
             }
             builder.pop();
         }

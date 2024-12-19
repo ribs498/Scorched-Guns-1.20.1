@@ -22,6 +22,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.registries.ForgeRegistries;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animation.AnimationController;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.common.ChargeHandler;
@@ -32,6 +35,7 @@ import top.ribs.scguns.init.ModEnchantments;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.item.ammo_boxes.CreativeAmmoBoxItem;
+import top.ribs.scguns.item.animated.AnimatedGunItem;
 import top.ribs.scguns.util.GunModifierHelper;
 import top.theillusivec4.curios.api.CuriosApi;
 
@@ -156,20 +160,33 @@ public class HUDRenderHandler {
         CompoundTag tagCompound = heldItem.getTag();
         Player player = mc.player;
 
+        // Check if we should show HUD based on inspection state
+        if (Config.CLIENT.display.immersiveGunInfo.get()) {
+            // Get the animation controller to check current animation
+            if (heldItem.getItem() instanceof AnimatedGunItem animatedGun) {
+                long id = GeoItem.getId(heldItem);
+                AnimationController<GeoAnimatable> controller = animatedGun.getAnimatableInstanceCache()
+                        .getManagerForId(id)
+                        .getAnimationControllers()
+                        .get("controller");
+
+                if (controller == null ||
+                        (!animatedGun.isAnimationPlaying(controller, "inspect") &&
+                                !animatedGun.isAnimationPlaying(controller, "carbine_inspect"))) {
+                    return;
+                }
+            }
+        }
+
         if (tagCompound != null && player != null) {
             int currentAmmo = tagCompound.getInt("AmmoCount");
             int maxAmmo = GunModifierHelper.getModifiedAmmoCapacity(heldItem, gun);
             MutableComponent ammoCountValue;
             MutableComponent reserveAmmoValue;
 
-            // Check if the player is in creative mode
             boolean isCreative = player.isCreative();
-
-            // Check if the player has a CreativeAmmoBoxItem in their inventory
             AtomicBoolean hasCreativeAmmoBox = new AtomicBoolean(player.getInventory().items.stream()
                     .anyMatch(itemStack -> itemStack.getItem() instanceof CreativeAmmoBoxItem));
-
-            // If not found in inventory, check Curios slots
             if (!hasCreativeAmmoBox.get()) {
                 CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
                     IItemHandlerModifiable curios = handler.getEquippedCurios();
@@ -182,15 +199,11 @@ public class HUDRenderHandler {
                     }
                 });
             }
-
-            // Determine ammo count display
             if (isCreative) {
                 ammoCountValue = Component.literal("∞ / ∞").withStyle(ChatFormatting.BOLD);
                 reserveAmmoValue = Component.literal("∞").withStyle(ChatFormatting.BOLD);
             } else {
                 ammoCountValue = Component.literal(currentAmmo + " / " + maxAmmo).withStyle(ChatFormatting.BOLD);
-
-                // Display infinity for reserve ammo if the player has a CreativeAmmoBoxItem
                 if (hasCreativeAmmoBox.get()) {
                     reserveAmmoValue = Component.literal("∞").withStyle(ChatFormatting.BOLD);
                 } else {
@@ -213,14 +226,9 @@ public class HUDRenderHandler {
                 }
             }
 
-            // Draw the current ammo value
             guiGraphics.drawString(mc.font, ammoCountValue, ammoPosX, ammoPosY, (currentAmmo > 0 || isCreative ? 0xFFFFFF : 0xFF5555));
-
-            // Draw the reserve ammo value
             int reserveAmmoPosY = ammoPosY + 10;
             guiGraphics.drawString(mc.font, reserveAmmoValue, ammoPosX, reserveAmmoPosY, (reserveAmmo <= 0 && !Gun.hasUnlimitedReloads(heldItem) ? 0x555555 : 0xAAAAAA));
-
-            // Render the ammo type texture
             ItemStack ammoItemStack = new ItemStack(Objects.requireNonNull(gun.getProjectile().getItem()));
             renderAmmoTypeTexture(ammoItemStack, ammoPosX - 20, ammoPosY, guiGraphics, mc);
 

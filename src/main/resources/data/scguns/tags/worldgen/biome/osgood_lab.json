@@ -12,6 +12,7 @@
         "minecraft:snowy_taiga",
         "minecraft:old_growth_spruce_taiga",
         "minecraft:savanna",
-        "minecraft:plains"
+        "minecraft:plains",
+        "#forge:is_cold"
     ]
 }

@@ -5,6 +5,8 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -13,6 +15,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModDamageTypes;
@@ -25,6 +28,7 @@ import top.ribs.scguns.util.GunEnchantmentHelper;
 
 public class GibbsRoundProjectileEntity extends ProjectileEntity {
     private static final float ADVANCED_SHIELD_DISABLE_CHANCE = 0.45f;
+    private static final float HEADSHOT_EFFECT_DURATION_MULTIPLIER = 1.35f;
 
     public GibbsRoundProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -59,6 +63,28 @@ public class GibbsRoundProjectileEntity extends ProjectileEntity {
 
             if (!(entity.getType().is(ModTags.Entities.GHOST) && !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
                 entity.hurt(source, damage);
+
+                if (entity instanceof LivingEntity livingEntity) {
+                    ResourceLocation effectLocation = this.getProjectile().getImpactEffect();
+                    if (effectLocation != null) {
+                        float effectChance = this.getProjectile().getImpactEffectChance();
+                        if (this.random.nextFloat() < effectChance) {
+                            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectLocation);
+                            if (effect != null) {
+                                int duration = this.getProjectile().getImpactEffectDuration();
+                                if (headshot) {
+                                    duration = (int)(duration * HEADSHOT_EFFECT_DURATION_MULTIPLIER);
+                                }
+
+                                livingEntity.addEffect(new MobEffectInstance(
+                                        effect,
+                                        duration,
+                                        this.getProjectile().getImpactEffectAmplifier()
+                                ));
+                            }
+                        }
+                    }
+                }
             }
 
             if(entity instanceof LivingEntity) {
@@ -73,6 +99,7 @@ public class GibbsRoundProjectileEntity extends ProjectileEntity {
 
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
     }
+
 
 
     @Override

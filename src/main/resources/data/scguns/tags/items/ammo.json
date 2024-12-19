@@ -22,6 +22,12 @@
     "scguns:shock_cell",
     "scguns:sculk_cell",
     "scguns:shulkshot",
-    "scguns:energy_core"
+    "scguns:energy_core",
+    "scguns:standard_bullet",
+    "scguns:hardened_bullet",
+    "scguns:buckshot",
+    "scguns:nitro_buckshot",
+    "minecraft:blaze_rod",
+    "minecraft:arrow"
   ]
 }

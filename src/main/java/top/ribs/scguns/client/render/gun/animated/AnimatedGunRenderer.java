@@ -242,6 +242,7 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
     }
 
     private boolean shouldRenderArms() {
+        if (!Config.CLIENT.display.renderArms.get()) return false;
         if (this.currentRenderStack == null) return false;
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return false;

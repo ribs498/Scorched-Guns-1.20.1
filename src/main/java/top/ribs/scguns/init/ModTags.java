@@ -19,16 +19,19 @@ public class ModTags
 
     public static class Blocks
     {
-        public static final TagKey<Block> FRAGILE = tag("fragile");
-        public static final TagKey<Block> ANTHRALITE_ORE = tag("anthralite_ore");
+        public static final TagKey<Block> FRAGILE = tag();
 
-        private static TagKey<Block> tag(String name)
+        private static TagKey<Block> tag()
         {
-            return BlockTags.create(new ResourceLocation(Reference.MOD_ID, name));
+            return BlockTags.create(new ResourceLocation(Reference.MOD_ID, "fragile"));
         }
     }
     public static class Items
     {
+        public static final TagKey<Item> DOES_NOT_EJECT_CASINGS = tag("does_not_eject_casings");
+        public static final TagKey<Item> SINGLE_SHOT = tag("single_shot");
+        public static final TagKey<Item> NON_COLLATERAL = tag("non_collateral");
+        public static final TagKey<Item> NON_UNDERWATER = tag("non_underwater");
         public static final TagKey<Item> ONE_HANDED_CARBINE  = tag("one_handed_carbine");
         public static final TagKey<Item> HEAVY_WEAPON = tag("heavy_weapon");
         public static final TagKey<Item> OCEAN_GUN = tag("ocean_gun");
@@ -72,16 +75,5 @@ public class ModTags
         {
             return TagKey.create(Registries.ENTITY_TYPE,new ResourceLocation(Reference.MOD_ID, name));
         }
-    }
-
-    public static TagKey<Block> getBlockTag(String name) {
-        return getBlockTag(new ResourceLocation(Reference.MOD_ID, name));
-    }
-
-    public static TagKey<Block> getBlockTag(ResourceLocation resourceLocation) {
-        if (!blockTagCache.containsKey(resourceLocation)) {
-            blockTagCache.put(resourceLocation, BlockTags.create(resourceLocation));
-        }
-        return blockTagCache.get(resourceLocation);
     }
 }

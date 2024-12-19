@@ -20,6 +20,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.Config;
+import top.ribs.scguns.init.ModTags;
 
 import java.util.*;
 
@@ -158,22 +159,45 @@ public class BeamHandlerCommon {
                     state.is(Blocks.GLASS_PANE) ||
                     state.is(Blocks.TINTED_GLASS);
         }
-
-        // Keep the existing updateBlockMining method exactly as it was
         public static void updateBlockMining(Level world, BlockPos pos, ServerPlayer player, Gun modifiedGun) {
-            if (!Config.COMMON.gameplay.griefing.enableBeamMining.get()) {
-                return;
-            }
-
-            if (!modifiedGun.getGeneral().canMine()) {
-                return;
-            }
-
             BlockState state = world.getBlockState(pos);
             if (state.isAir() || isGlassBlock(state)) {
                 return;
             }
+            if (handleFragileBlock(world, pos, state, modifiedGun)) {
+                return;
+            }
 
+            if (!Config.COMMON.gameplay.griefing.enableBeamMining.get() || !modifiedGun.getGeneral().canMine()) {
+                return;
+            }
+
+            handleBeamMining(world, pos, state, player, modifiedGun);
+        }
+
+        private static boolean handleFragileBlock(Level world, BlockPos pos, BlockState state, Gun modifiedGun) {
+            if (!Config.COMMON.gameplay.griefing.enableGlassBreaking.get() || !state.is(ModTags.Blocks.FRAGILE)) {
+                return false;
+            }
+
+            float destroySpeed = state.getDestroySpeed(world, pos);
+            if (destroySpeed < 0) {
+                return false;
+            }
+
+            float baseChance = Config.COMMON.gameplay.griefing.fragileBaseBreakChance.get().floatValue();
+            float beamModifier = modifiedGun.getGeneral().getFireMode() == FireMode.BEAM ? 2.0f : 1.5f;
+            float chance = (baseChance * beamModifier) / (destroySpeed + 1);
+
+            if (world.random.nextFloat() < chance) {
+                world.destroyBlock(pos, Config.COMMON.gameplay.griefing.fragileBlockDrops.get());
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void handleBeamMining(Level world, BlockPos pos, BlockState state, ServerPlayer player, Gun modifiedGun) {
             float hardness = state.getDestroySpeed(world, pos);
             if (hardness < 0) {
                 return;

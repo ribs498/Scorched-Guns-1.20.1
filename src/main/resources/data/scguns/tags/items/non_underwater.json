@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:flintlock_pistol",
+    "scguns:handcannon",
+    "scguns:musket",
+    "scguns:blunderbuss",
+    "scguns:repeating_musket",
+    "scguns:spitfire",
+    "scguns:blasphemy",
+    "scguns:pyroclastic_flow"
+  ]
+}

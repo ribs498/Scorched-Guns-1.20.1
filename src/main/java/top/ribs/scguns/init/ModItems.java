@@ -796,6 +796,17 @@ public class ModItems {
                     ModSounds.COPPER_GUN_JAM.get()
             )
     );
+    public static final RegistryObject<AnimatedGunItem> CRUSADER = REGISTER.register("crusader",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(256),
+                    "crusader",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
     public static final RegistryObject<AnimatedGunItem> GYROJET_PISTOL = REGISTER.register("gyrojet_pistol",
             () -> new AnimatedGunItem(
                     new Item.Properties().stacksTo(1).durability(560),
@@ -939,9 +950,9 @@ public class ModItems {
                     ModSounds.COPPER_GUN_JAM.get()
             )
     );
-    public static final RegistryObject<AnimatedGunItem> WHISPERS = REGISTER.register("whispers",
-            () -> new AnimatedSilencedGunItem(
-                    new Item.Properties().stacksTo(1).durability(900),
+    public static final RegistryObject<AnimatedSculkGunItem> WHISPERS = REGISTER.register("whispers",
+            () -> new AnimatedSculkGunItem(
+                    new Item.Properties().stacksTo(1).durability(700),
                     "whispers",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
@@ -950,9 +961,9 @@ public class ModItems {
                     ModSounds.COPPER_GUN_JAM.get()
             )
     );
-    public static final RegistryObject<AnimatedGunItem> SCULK_RESONATOR = REGISTER.register("sculk_resonator",
-            () -> new AnimatedSilencedGunItem(
-                    new Item.Properties().stacksTo(1).durability(900),
+    public static final RegistryObject<AnimatedSculkGunItem> SCULK_RESONATOR = REGISTER.register("sculk_resonator",
+            () -> new AnimatedSculkGunItem(
+                    new Item.Properties().stacksTo(1).durability(700),
                     "sculk_resonator",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
@@ -961,10 +972,21 @@ public class ModItems {
                     ModSounds.COPPER_GUN_JAM.get()
             )
     );
-    public static final RegistryObject<AnimatedGunItem> ECHOES_2 = REGISTER.register("echoes_2",
-            () -> new AnimatedSilencedGunItem(
-                    new Item.Properties().stacksTo(1).durability(900),
+    public static final RegistryObject<AnimatedSculkGunItem> ECHOES_2 = REGISTER.register("echoes_2",
+            () -> new AnimatedSculkGunItem(
+                    new Item.Properties().stacksTo(1).durability(700),
                     "echoes_2",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedSculkGunItem> FORLORN_HOPE = REGISTER.register("forlorn_hope",
+            () -> new AnimatedSculkGunItem(
+                    new Item.Properties().stacksTo(1).durability(700),
+                    "forlorn_hope",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
                     ModSounds.RELOAD_END.get(),
@@ -1124,6 +1146,10 @@ public class ModItems {
     public static final RegistryObject<Item> ADRIEN_CHESTPLATE = REGISTER.register("adrien_chestplate", () -> new AdrienArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<Item> ADRIEN_LEGGINGS = REGISTER.register("adrien_leggings", () -> new AdrienArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.LEGGINGS, new Item.Properties()));
     public static final RegistryObject<Item> ADRIEN_BOOTS = REGISTER.register("adrien_boots", () -> new AdrienArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.BOOTS, new Item.Properties()));
+    public static final RegistryObject<Item> COG_KNIGHT_HELMET = REGISTER.register("cog_knight_helmet", () -> new CogKnightArmorItem(ModArmorMaterials.ANCIENT_BRASS, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> COG_KNIGHT_CHESTPLATE = REGISTER.register("cog_knight_chestplate", () -> new CogKnightArmorItem(ModArmorMaterials.ANCIENT_BRASS, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<Item> COG_KNIGHT_LEGGINGS = REGISTER.register("cog_knight_leggings", () -> new CogKnightArmorItem(ModArmorMaterials.ANCIENT_BRASS, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    public static final RegistryObject<Item> COG_KNIGHT_BOOTS = REGISTER.register("cog_knight_boots", () -> new CogKnightArmorItem(ModArmorMaterials.ANCIENT_BRASS, ArmorItem.Type.BOOTS, new Item.Properties()));
     public static final RegistryObject<Item> ANTHRALITE_RESPIRATOR = REGISTER.register("anthralite_respirator", () -> new AnthraliteGasMaskArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> NETHERITE_RESPIRATOR = REGISTER.register("netherite_respirator", () -> new NetheriteGasMaskArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> DIAMOND_STEEL_HELMET = REGISTER.register("diamond_steel_helmet", () -> new ArmorItem(ModArmorMaterials.DIAMOND_STEEL, ArmorItem.Type.HELMET, new Item.Properties()));
@@ -1144,6 +1170,7 @@ public class ModItems {
     public static final RegistryObject<Item> END_BLUEPRINT = REGISTER.register("end_blueprint", () -> new BlueprintItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
     public static final RegistryObject<Item> STANDARD_BULLET = REGISTER.register("standard_bullet", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ADVANCED_BULLET = REGISTER.register("hardened_bullet", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> SYRINGE = REGISTER.register("syringe", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> SCORCHED_BLUEPRINT = REGISTER.register("scorched_blueprint", () -> new GlintedBlueprintItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
     public static final RegistryObject<Item> NITRO_POWDER = REGISTER.register("nitro_powder", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> NITRO_POWDER_DUST = REGISTER.register("nitro_powder_dust", () -> new Item(new Item.Properties()));

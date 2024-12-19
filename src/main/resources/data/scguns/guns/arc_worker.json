@@ -20,6 +20,7 @@
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 20,
+    "meleeReach": 2.5,
     "criticalChance": 0.05
   },
   "modules": {

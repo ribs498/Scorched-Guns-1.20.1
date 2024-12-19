@@ -15,8 +15,9 @@
     "recoilAngle": 5.0,
     "recoilKick": 2.0,
     "spread": 3.0,
-    "meleeDamage": 5.0,
+    "meleeDamage": 6.5,
     "meleeCooldownTicks": 10,
+    "meleeReach": 2.5,
     "hotBarrelRate": 24,
     "criticalChance": 0.15,
     "isRevolver": true
@@ -40,7 +41,7 @@
     }
   },
   "projectile": {
-    "advantage": "scguns:illager",
+    "advantage": "scguns:none",
     "damage": 8.5,
     "ejectsCasing": true,
     "gravity": false,

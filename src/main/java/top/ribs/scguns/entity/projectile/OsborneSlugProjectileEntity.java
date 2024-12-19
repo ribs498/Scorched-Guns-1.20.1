@@ -4,10 +4,13 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,6 +25,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
@@ -40,10 +44,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class OsborneSlugProjectileEntity extends ProjectileEntity {
-
     private static final float SHIELD_DISABLE_CHANCE = 0.90f;
     private static final float SHIELD_DAMAGE_PENETRATION = 0.75f;
     private static final float MAX_BREAKABLE_HARDNESS = 6.0f;
+    private static final float HEADSHOT_EFFECT_DURATION_MULTIPLIER = 1.5f;
+    private static final float PENETRATION_EFFECT_REDUCTION = 0.8f;
     private static final List<Block> UNBREAKABLE_BLOCKS = Arrays.asList(
             Blocks.BEDROCK,
             Blocks.OBSIDIAN,
@@ -194,6 +199,7 @@ public class OsborneSlugProjectileEntity extends ProjectileEntity {
         if (entity.getId() == this.shooterId) {
             return;
         }
+
         float damage = this.getDamage();
         damage = this.getCriticalDamage(this.getWeapon(), this.random, damage);
         damage *= advantageMultiplier(entity);
@@ -203,14 +209,24 @@ public class OsborneSlugProjectileEntity extends ProjectileEntity {
         if (entity instanceof LivingEntity livingTarget) {
             damage = calculateArmorBypassDamage(livingTarget, damage);
         }
+
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
         boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, SHIELD_DISABLE_CHANCE);
+
         if (blocked) {
             float penetratingDamage = damage * SHIELD_DAMAGE_PENETRATION;
             entity.hurt(source, penetratingDamage);
+            if (entity instanceof LivingEntity livingEntity) {
+                applyEffect(livingEntity, SHIELD_DAMAGE_PENETRATION, headshot);
+            }
         } else {
             entity.hurt(source, damage);
+            if (entity instanceof LivingEntity livingEntity) {
+                float effectPower = (float)Math.pow(PENETRATION_EFFECT_REDUCTION, 3 - remainingPenetrations);
+                applyEffect(livingEntity, effectPower, headshot);
+            }
         }
+
         if (this.shooter instanceof Player) {
             PacketHandler.getPlayChannel().sendToPlayer(
                     () -> (ServerPlayer) this.shooter,
@@ -218,10 +234,12 @@ public class OsborneSlugProjectileEntity extends ProjectileEntity {
                             S2CMessageProjectileHitEntity.HitType.NORMAL, entity instanceof Player)
             );
         }
+
         PacketHandler.getPlayChannel().sendToTracking(
                 () -> entity,
                 new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType())
         );
+
         if (this.remainingPenetrations > 0) {
             this.remainingPenetrations--;
             entity.invulnerableTime = 0;
@@ -232,6 +250,37 @@ public class OsborneSlugProjectileEntity extends ProjectileEntity {
                     this.getZ() + motion.z * 0.2
             );
             this.setDeltaMovement(motion.multiply(0.8D, 0.8D, 0.8D));
+        }
+    }
+    private void applyEffect(LivingEntity target, float powerMultiplier, boolean headshot) {
+        ResourceLocation effectLocation = this.getProjectile().getImpactEffect();
+        if (effectLocation != null) {
+            float effectChance = this.getProjectile().getImpactEffectChance() * powerMultiplier;
+            if (headshot) {
+                effectChance = Math.min(1.0f, effectChance * 1.25f);
+            }
+            double distanceToShooter = target.distanceTo(this.getOwner());
+            if (distanceToShooter < 10.0) {
+                effectChance = Math.min(1.0f, effectChance * (1.0f + 0.2f * (1.0f - (float)(distanceToShooter / 10.0))));
+            }
+            if (this.random.nextFloat() < effectChance) {
+                MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectLocation);
+                if (effect != null) {
+                    int duration = this.getProjectile().getImpactEffectDuration();
+                    if (headshot) {
+                        duration = (int)(duration * HEADSHOT_EFFECT_DURATION_MULTIPLIER);
+                    }
+                    duration = (int)(duration * powerMultiplier);
+                    int baseAmplifier = this.getProjectile().getImpactEffectAmplifier();
+                    int reducedAmplifier = Math.max(0, (int)(baseAmplifier * powerMultiplier));
+
+                    target.addEffect(new MobEffectInstance(
+                            effect,
+                            duration,
+                            reducedAmplifier
+                    ));
+                }
+            }
         }
     }
     @Override

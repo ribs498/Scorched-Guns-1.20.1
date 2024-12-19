@@ -95,7 +95,6 @@ public class MeleeAttackHandler {
             return;
         }
 
-        // Handle reload cancellation for animated guns
         if (heldItem.getItem() instanceof AnimatedGunItem animatedGunItem) {
             CompoundTag tag = heldItem.getTag();
             long id = GeoItem.getId(heldItem);
@@ -107,7 +106,6 @@ public class MeleeAttackHandler {
             if (tag != null && tag.getBoolean("scguns:IsReloading")) {
                 Gun gun = gunItem.getModifiedGun(heldItem);
                 if (gun.getReloads().getReloadType() == ReloadType.MAG_FED) {
-                    // For mag-fed weapons, completely reset the reload
                     tag.remove("scguns:IsReloading");
                     ModSyncedDataKeys.RELOADING.setValue(player, false);
                     PacketHandler.getPlayChannel().sendToServer(new C2SMessageReload(false));
@@ -115,7 +113,6 @@ public class MeleeAttackHandler {
                         animationController.forceAnimationReset();
                     }
                 } else if (gun.getReloads().getReloadType() == ReloadType.MANUAL) {
-                    // For manual reload weapons, trigger reload stop
                     if (animationController != null &&
                             (animatedGunItem.isAnimationPlaying(animationController, "reload_loop") ||
                                     animatedGunItem.isAnimationPlaying(animationController, "reload_start"))) {
@@ -151,12 +148,12 @@ public class MeleeAttackHandler {
         }
 
         PacketHandler.getPlayChannel().sendToPlayer(() -> player, new S2CMessageMeleeAttack(heldItem));
-        LivingEntity target = findTargetWithinReach(player);
+        LivingEntity target = findTargetWithinReach(player, heldItem);
         if (target != null && target != player) {
             performMeleeAttackOnTarget(player, target, false);
             damageGunAndAttachments(heldItem, player);
         } else {
-            HitResult hitResult = rayTraceBlocks(player);
+            HitResult hitResult = rayTraceBlocks(player, heldItem);
             if (hitResult.getType() == HitResult.Type.BLOCK) {
                 BlockHitResult blockHitResult = (BlockHitResult) hitResult;
                 BlockPos pos = blockHitResult.getBlockPos();
@@ -185,10 +182,13 @@ public class MeleeAttackHandler {
                 10
         );
     }
-    private static HitResult rayTraceBlocks(Player player) {
+    private static HitResult rayTraceBlocks(Player player, ItemStack heldItem) {
+        GunItem gunItem = (GunItem)heldItem.getItem();
+        float reach = gunItem.getModifiedGun(heldItem).getGeneral().getMeleeReach();
+
         Vec3 eyePosition = player.getEyePosition(1.0F);
         Vec3 lookVector = player.getLookAngle();
-        Vec3 reachVector = eyePosition.add(lookVector.scale(MeleeAttackHandler.REACH_DISTANCE));
+        Vec3 reachVector = eyePosition.add(lookVector.scale(reach));
         return player.level().clip(new ClipContext(
                 eyePosition,
                 reachVector,
@@ -196,6 +196,26 @@ public class MeleeAttackHandler {
                 ClipContext.Fluid.NONE,
                 player
         ));
+    }
+    private static LivingEntity findTargetWithinReach(Player player, ItemStack heldItem) {
+        GunItem gunItem = (GunItem)heldItem.getItem();
+        float reach = gunItem.getModifiedGun(heldItem).getGeneral().getMeleeReach();
+
+        AABB boundingBox = player.getBoundingBox().inflate(reach, reach, reach);
+        return player.level().getEntitiesOfClass(LivingEntity.class, boundingBox,
+                        entity -> entity != player && entity.isAlive())
+                .stream()
+                .min(Comparator.comparingDouble(player::distanceToSqr))
+                .orElse(null);
+    }
+
+    private static List<LivingEntity> findTargetsWithinReach(Player player, ItemStack heldItem) {
+        GunItem gunItem = (GunItem)heldItem.getItem();
+        float reach = gunItem.getModifiedGun(heldItem).getGeneral().getMeleeReach();
+
+        AABB boundingBox = player.getBoundingBox().inflate(reach, reach, reach);
+        return player.level().getEntitiesOfClass(LivingEntity.class, boundingBox,
+                entity -> entity != player && entity.isAlive());
     }
 
     public static boolean isMeleeOnCooldown(Player player, ItemStack heldItem) {
@@ -257,7 +277,7 @@ public class MeleeAttackHandler {
                 }
             }
         } else {
-            LivingEntity raycastTarget = raycastForMeleeAttack(player, 2.5);
+            LivingEntity raycastTarget = raycastForMeleeAttack(player, heldItem);
             if (raycastTarget != null && raycastTarget.hurt(damageSource, attackDamage)) {
                 applyKnockback(player, raycastTarget, heldItem);
                 applySpecialEnchantmentsFromBayonet(heldItem, raycastTarget, player, gunItem);
@@ -465,13 +485,17 @@ public class MeleeAttackHandler {
         Vec3 direction = target.position().subtract(player.position()).normalize();
         target.knockback(0.4F + (knockbackLevel * 0.5F), -direction.x(), -direction.z());
     }
-    private static LivingEntity raycastForMeleeAttack(Player player, double reachDistance) {
+    private static LivingEntity raycastForMeleeAttack(Player player, ItemStack heldItem) {
+        GunItem gunItem = (GunItem)heldItem.getItem();
+        float reach = gunItem.getModifiedGun(heldItem).getGeneral().getMeleeReach();
+
         Vec3 startVec = player.getEyePosition(1.0F);
         Vec3 lookVec = player.getLookAngle();
-        Vec3 endVec = startVec.add(lookVec.scale(reachDistance));
+        Vec3 endVec = startVec.add(lookVec.scale(reach));
         AABB boundingBox = new AABB(startVec, endVec);
 
-        return player.level().getEntitiesOfClass(LivingEntity.class, boundingBox, entity -> entity != player && entity.isAlive())
+        return player.level().getEntitiesOfClass(LivingEntity.class, boundingBox,
+                        entity -> entity != player && entity.isAlive())
                 .stream()
                 .min(Comparator.comparingDouble(player::distanceToSqr))
                 .orElse(null);
@@ -482,20 +506,6 @@ public class MeleeAttackHandler {
 
         return player.level().getEntitiesOfClass(LivingEntity.class, boundingBox, entity -> entity != player && entity.isAlive());
     }
-
-    private static LivingEntity findTargetWithinReach(Player player) {
-        AABB boundingBox = player.getBoundingBox().inflate(REACH_DISTANCE, REACH_DISTANCE, REACH_DISTANCE);
-        return player.level().getEntitiesOfClass(LivingEntity.class, boundingBox, entity -> entity != player && entity.isAlive())
-                .stream()
-                .min(Comparator.comparingDouble(player::distanceToSqr))
-                .orElse(null);
-    }
-
-    private static List<LivingEntity> findTargetsWithinReach(Player player) {
-        AABB boundingBox = player.getBoundingBox().inflate(REACH_DISTANCE, REACH_DISTANCE, REACH_DISTANCE);
-        return player.level().getEntitiesOfClass(LivingEntity.class, boundingBox, entity -> entity != player && entity.isAlive());
-    }
-
     private static void damageGunAndAttachments(ItemStack stack, Player player) {
         Level level = player.level();
         GunEventBus.damageGun(stack, level, player);

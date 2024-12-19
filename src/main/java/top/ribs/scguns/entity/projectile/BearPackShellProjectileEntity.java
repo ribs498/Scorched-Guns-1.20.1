@@ -8,6 +8,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,6 +24,7 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
@@ -148,9 +151,30 @@ public class BearPackShellProjectileEntity extends ProjectileEntity {
             if (!(entity.getType().is(ModTags.Entities.GHOST) &&
                     !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
                 entity.hurt(source, damage);
+
+                if (entity instanceof LivingEntity livingEntity) {
+                    ResourceLocation effectLocation = this.getProjectile().getImpactEffect();
+                    if (effectLocation != null) {
+                        float effectChance = this.getProjectile().getImpactEffectChance();
+                        if (this.random.nextFloat() < effectChance) {
+                            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectLocation);
+                            if (effect != null) {
+                                int duration = this.getProjectile().getImpactEffectDuration();
+                                if (remainingPenetrations < 2) {
+                                    duration = (int)(duration * 0.75f);
+                                }
+
+                                livingEntity.addEffect(new MobEffectInstance(
+                                        effect,
+                                        duration,
+                                        this.getProjectile().getImpactEffectAmplifier()
+                                ));
+                            }
+                        }
+                    }
+                }
             }
         }
-
         if (entity instanceof LivingEntity) {
             GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
         }

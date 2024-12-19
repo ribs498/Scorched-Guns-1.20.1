@@ -16,6 +16,7 @@
     "spread": 3.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 15,
+    "meleeReach": 2.5,
     "hotBarrelRate": 15,
     "criticalChance": 0.05
   },

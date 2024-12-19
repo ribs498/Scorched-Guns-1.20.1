@@ -29,6 +29,7 @@
     "spread": 0.1,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
+    "meleeReach": 3.5,
     "hotBarrelRate": 20,
     "beamAmmoConsumptionDelay": 6000,
     "beamDamageDelay": 10,

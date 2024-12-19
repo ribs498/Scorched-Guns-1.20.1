@@ -29,6 +29,9 @@
     "gun_barrel_1": {
       "item": "scguns:heavy_gun_barrel"
     },
+    "gun_top_barrel_1": {
+      "item": "scguns:scorched_ingot"
+    },
     "gun_magazine": {
       "item": "scguns:gun_magazine"
     }

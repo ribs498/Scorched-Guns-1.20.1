@@ -4,8 +4,11 @@ package top.ribs.scguns.entity.projectile;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,6 +18,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.ribs.scguns.block.AutoTurretBlock;
 import top.ribs.scguns.block.BasicTurretBlock;
 import top.ribs.scguns.block.EnemyTurretBlock;
@@ -38,6 +42,8 @@ import static top.ribs.scguns.blockentity.AutoTurretBlockEntity.MAX_DISABLE_TIME
 public class LightningProjectileEntity extends ProjectileEntity {
     private static final int MAX_BOUNCES = 3;
     private static final double BOUNCE_RANGE = 10.0;
+    private static final float HEADSHOT_EFFECT_DURATION_MULTIPLIER = 1.5f;
+    private static final float BOUNCE_EFFECT_REDUCTION = 0.55f;
     private int bouncesLeft;
     private float currentDamage;
 
@@ -60,11 +66,43 @@ public class LightningProjectileEntity extends ProjectileEntity {
         }
 
         livingEntity.hurt(ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner()), currentDamage);
-        Vec3 entityPosition = new Vec3(entity.getX(), entity.getY() + entity.getEyeHeight() * 0.5, entity.getZ()); // Adjust to chest height
+        Vec3 entityPosition = new Vec3(entity.getX(), entity.getY() + entity.getEyeHeight() * 0.5, entity.getZ());
         spawnLightningArc(this.position(), entityPosition);
-        if(entity instanceof LivingEntity) {
-            GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
+
+        if (entity instanceof LivingEntity) {
+            ResourceLocation effectLocation = this.getProjectile().getImpactEffect();
+            if (effectLocation != null) {
+                float effectChance = this.getProjectile().getImpactEffectChance();
+                if (headshot) {
+                    effectChance = Math.min(1.0f, effectChance * 1.25f);
+                }
+
+                float bounceChanceMultiplier = (float)Math.pow(BOUNCE_EFFECT_REDUCTION, MAX_BOUNCES - bouncesLeft);
+                effectChance *= bounceChanceMultiplier;
+
+                if (this.random.nextFloat() < effectChance) {
+                    MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectLocation);
+                    if (effect != null) {
+                        int duration = this.getProjectile().getImpactEffectDuration();
+                        if (headshot) {
+                            duration = (int)(duration * HEADSHOT_EFFECT_DURATION_MULTIPLIER);
+                        }
+                        float bounceMultiplier = (float)Math.pow(BOUNCE_EFFECT_REDUCTION, MAX_BOUNCES - bouncesLeft);
+                        duration = (int)(duration * bounceMultiplier);
+                        int amplifier = Math.max(0, this.getProjectile().getImpactEffectAmplifier() - (MAX_BOUNCES - bouncesLeft));
+
+                        livingEntity.addEffect(new MobEffectInstance(
+                                effect,
+                                duration,
+                                amplifier
+                        ));
+                    }
+                }
+            }
+
+            GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), livingEntity);
         }
+
         if (bouncesLeft > 0) {
             bouncesLeft--;
             currentDamage *= 0.75F;
@@ -77,7 +115,7 @@ public class LightningProjectileEntity extends ProjectileEntity {
         } else {
             this.discard();
         }
-        /* Send blood particle to tracking clients. */
+
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
     }
 
@@ -98,7 +136,6 @@ public class LightningProjectileEntity extends ProjectileEntity {
 
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
-        // Check if the block hit is an Auto Turret
         if (state.getBlock() instanceof AutoTurretBlock) {
             BlockEntity blockEntity = level().getBlockEntity(pos);
             if (blockEntity instanceof AutoTurretBlockEntity turret) {
@@ -140,7 +177,7 @@ public class LightningProjectileEntity extends ProjectileEntity {
             Vec3 direction = end.subtract(start);
             double distance = direction.length();
             direction = direction.normalize();
-            double stepSize = 0.1; // Distance between each particle
+            double stepSize = 0.1;
             for (double d = 0; d < distance; d += stepSize) {
                 Vec3 particlePos = start.add(direction.scale(d));
                 serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK, particlePos.x, particlePos.y, particlePos.z, 1, 0, 0, 0, 0);

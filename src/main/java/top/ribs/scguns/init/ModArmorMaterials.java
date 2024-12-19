@@ -12,13 +12,15 @@ import java.util.function.Supplier;
 public enum ModArmorMaterials implements ArmorMaterial {
 
     ADRIEN("adrien", 22, new int[]{ 3, 6, 6, 4 }, 8,
-            SoundEvents.ARMOR_EQUIP_IRON, 0.5f, 0f, () -> Ingredient.of(ModItems.TREATED_IRON_INGOT.get())),
+            SoundEvents.ARMOR_EQUIP_IRON, 0.5f, 0.1f, () -> Ingredient.of(ModItems.TREATED_IRON_INGOT.get())),
     ANTHRALITE("anthralite", 32, new int[]{ 2, 4, 3, 2 }, 12,
-            SoundEvents.ARMOR_EQUIP_GOLD, 1.0f, 0f, () -> Ingredient.of(ModItems.ANTHRALITE_INGOT.get())),
+            SoundEvents.ARMOR_EQUIP_GOLD, 1.0f, 0.05f, () -> Ingredient.of(ModItems.ANTHRALITE_INGOT.get())),
     DIAMOND_STEEL("diamond_steel", 36, new int[]{ 3, 6, 5, 3 }, 16,
-            SoundEvents.ARMOR_EQUIP_DIAMOND, 2.0f, 0f, () -> Ingredient.of(ModItems.DIAMOND_STEEL_INGOT.get())),
+            SoundEvents.ARMOR_EQUIP_DIAMOND, 2.0f, 0.05f, () -> Ingredient.of(ModItems.DIAMOND_STEEL_INGOT.get())),
     TREATED_BRASS("treated_brass", 30, new int[]{ 4, 6, 5, 4 }, 10,
-            SoundEvents.ARMOR_EQUIP_IRON, 0.0f, 0.2f, () -> Ingredient.of(ModItems.TREATED_BRASS_INGOT.get()));
+            SoundEvents.ARMOR_EQUIP_IRON, 0.0f, 0.2f, () -> Ingredient.of(ModItems.TREATED_BRASS_INGOT.get())),
+   ANCIENT_BRASS("ancient_brass", 16, new int[]{ 3, 5, 4, 3 }, 10,
+            SoundEvents.ARMOR_EQUIP_IRON, 0.0f, 0.15f, () -> Ingredient.of(ModItems.ANCIENT_BRASS.get()));
     private final String name;
     private final int durabilityMultiplier;
     private final int[] protectionAmounts;

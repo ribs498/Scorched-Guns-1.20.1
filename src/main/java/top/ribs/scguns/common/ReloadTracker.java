@@ -4,6 +4,7 @@ import com.mrcrayfish.framework.api.network.LevelLocation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -20,12 +21,12 @@ import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animation.AnimationController;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
-import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.client.handler.ReloadHandler;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.AmmoBoxItem;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.ammo_boxes.CreativeAmmoBoxItem;
 import top.ribs.scguns.item.animated.AnimatedGunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageGunSound;
@@ -38,6 +39,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.WeakHashMap;
 import java.util.stream.Collectors;
+
+import static top.ribs.scguns.common.network.ServerPlayHandler.hasCreativeAmmoBoxInCurios;
 
 /**
  * Author: MrCrayfish
@@ -211,21 +214,25 @@ public class ReloadTracker {
         }
         ammoPouch.getOrCreateTag().put(AmmoBoxItem.TAG_ITEMS, listTag);
     }
-
     public void increaseMagAmmo(Player player) {
         ItemStack[] ammoStack = Gun.findAmmoStack(player, this.gun.getProjectile().getItem());
         if (ammoStack.length > 0) {
             CompoundTag tag = this.stack.getTag();
             if (tag != null) {
-                int currentAmmo = tag.getInt("AmmoCount");
                 int maxAmmo = GunModifierHelper.getModifiedAmmoCapacity(this.stack, this.gun);
+                boolean hasCreativeBox = player.getInventory().items.stream()
+                        .anyMatch(i -> i.getItem() instanceof CreativeAmmoBoxItem) ||
+                        hasCreativeAmmoBoxInCurios((ServerPlayer) player);
+                if (hasCreativeBox) {
+                    tag.putInt("AmmoCount", maxAmmo);
+                    return;
+                }
+                int currentAmmo = tag.getInt("AmmoCount");
                 if (currentAmmo < 0 || currentAmmo > maxAmmo) {
                     currentAmmo = 0;
                 }
-
                 int ammoAmount = Math.min(ammoInInventory(ammoStack), maxAmmo);
                 int amount = maxAmmo - currentAmmo;
-
                 if (ammoAmount < amount) {
                     tag.putInt("AmmoCount", currentAmmo + ammoAmount);
                     this.shrinkFromAmmoPool(ammoStack, player, ammoAmount);

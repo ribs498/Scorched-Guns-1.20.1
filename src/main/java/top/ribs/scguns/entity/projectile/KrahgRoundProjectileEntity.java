@@ -9,6 +9,8 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -22,6 +24,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModTags;
@@ -38,10 +41,11 @@ import java.util.List;
 import java.util.Objects;
 
 public class KrahgRoundProjectileEntity extends ProjectileEntity {
-
     private static final float KRAHG_SHIELD_DISABLE_CHANCE = 0.60f;
     private static final float SHIELD_DAMAGE_PENETRATION = 0.4f;
     private static final float MAX_BREAKABLE_HARDNESS = 4.0f;
+    private static final float BLOCK_BREAK_CHANCE = 0.65f;
+    private static final float HEADSHOT_EFFECT_DURATION_MULTIPLIER = 1.5f;
     private boolean hasPassedThroughBlock = false;
 
     private static final List<Block> UNBREAKABLE_BLOCKS = Arrays.asList(
@@ -63,23 +67,6 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
         this.setArmorBypassAmount(5.0F);
     }
 
-    private boolean canBreakBlock(BlockState state, BlockPos pos) {
-        if (!Config.COMMON.gameplay.griefing.enableBlockBreaking.get()) {
-            return false;
-        }
-
-        if (UNBREAKABLE_BLOCKS.contains(state.getBlock())) {
-            return false;
-        }
-        float hardness = state.getDestroySpeed(this.level(), pos);
-        if (hardness < 0 || hardness > MAX_BREAKABLE_HARDNESS) {
-            return false;
-        }
-        if (state.hasBlockEntity()) {
-            return false;
-        }
-        return state.getFluidState().isEmpty();
-    }
     @Override
     public void tick() {
         if (!this.level().isClientSide()) {
@@ -184,6 +171,30 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
             this.remove(RemovalReason.KILLED);
         }
     }
+    private boolean canBreakBlock(BlockState state, BlockPos pos) {
+        if (!Config.COMMON.gameplay.griefing.enableBlockBreaking.get()) {
+            return false;
+        }
+
+        if (UNBREAKABLE_BLOCKS.contains(state.getBlock())) {
+            return false;
+        }
+
+        float hardness = state.getDestroySpeed(this.level(), pos);
+        if (hardness < 0 || hardness > MAX_BREAKABLE_HARDNESS) {
+            return false;
+        }
+
+        if (state.hasBlockEntity()) {
+            return false;
+        }
+
+        if (!state.getFluidState().isEmpty()) {
+            return false;
+        }
+        return this.random.nextFloat() < BLOCK_BREAK_CHANCE;
+    }
+
     @Override
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
         float damage = this.getDamage();
@@ -206,9 +217,59 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
         if (blocked) {
             float penetratingDamage = damage * SHIELD_DAMAGE_PENETRATION;
             entity.hurt(source, penetratingDamage);
+
+            if (entity instanceof LivingEntity livingEntity) {
+                ResourceLocation effectLocation = this.getProjectile().getImpactEffect();
+                if (effectLocation != null) {
+                    float effectChance = this.getProjectile().getImpactEffectChance() * SHIELD_DAMAGE_PENETRATION;
+                    if (this.random.nextFloat() < effectChance) {
+                        MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectLocation);
+                        if (effect != null) {
+                            int reducedDuration = (int)(this.getProjectile().getImpactEffectDuration() * SHIELD_DAMAGE_PENETRATION);
+                            livingEntity.addEffect(new MobEffectInstance(
+                                    effect,
+                                    reducedDuration,
+                                    this.getProjectile().getImpactEffectAmplifier()
+                            ));
+                        }
+                    }
+                }
+            }
         } else {
             if (!(entity.getType().is(ModTags.Entities.GHOST) && !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
                 entity.hurt(source, damage);
+
+                if (entity instanceof LivingEntity livingEntity) {
+                    ResourceLocation effectLocation = this.getProjectile().getImpactEffect();
+                    if (effectLocation != null) {
+                        float effectChance = this.getProjectile().getImpactEffectChance();
+                        if (headshot) {
+                            effectChance = Math.min(1.0f, effectChance * 1.25f);
+                        }
+                        if (hasPassedThroughBlock) {
+                            effectChance = Math.min(1.0f, effectChance * 1.15f);
+                        }
+
+                        if (this.random.nextFloat() < effectChance) {
+                            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectLocation);
+                            if (effect != null) {
+                                int duration = this.getProjectile().getImpactEffectDuration();
+                                if (headshot) {
+                                    duration = (int)(duration * HEADSHOT_EFFECT_DURATION_MULTIPLIER);
+                                }
+                                if (hasPassedThroughBlock) {
+                                    duration = (int)(duration * 1.25f);
+                                }
+
+                                livingEntity.addEffect(new MobEffectInstance(
+                                        effect,
+                                        duration,
+                                        this.getProjectile().getImpactEffectAmplifier()
+                                ));
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -223,7 +284,6 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
 
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
     }
-
 
     @Override
     public void onExpired() {

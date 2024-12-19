@@ -17,6 +17,7 @@
     "recoilKick": 1.0,
     "spread": 3.0,
     "meleeDamage": 3.0,
+    "meleeReach": 3.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 14,
     "criticalChance": 0.1
@@ -53,7 +54,11 @@
     "life": 60,
     "size": 0.23,
     "speed": 11.0,
-    "trailLengthMultiplier": 4.0
+    "trailLengthMultiplier": 4.0,
+    "impactEffect": "minecraft:slowness",
+    "impactEffectDuration": 100,
+    "impactEffectChance": 0.4,
+    "impactEffectAmplifier": 0
   },
   "reloads": {
     "emptyMagTimer": 10,

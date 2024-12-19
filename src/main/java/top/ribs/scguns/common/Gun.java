@@ -214,6 +214,8 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         @Optional
         public int meleeCooldownTicks = 15;
         @Optional
+        private float meleeReach = 3.0F;
+        @Optional
         private int energyUse = 0;
         @Optional
         private String beamColor;
@@ -267,6 +269,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             tag.putFloat("RestingSpread", this.restingSpread);
             tag.putFloat("MeleeDamage", this.meleeDamage);
             tag.putFloat("MeleeCooldownTicks", this.meleeCooldownTicks);
+            tag.putFloat("MeleeReach", this.meleeReach);
             tag.putBoolean("InfiniteAmmo", this.infiniteAmmo);
             tag.putInt("EnergyUse", this.energyUse);
             if (this.beamColor != null && !this.beamColor.isEmpty()) {
@@ -358,6 +361,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("MeleeCooldownTicks", Tag.TAG_ANY_NUMERIC)) {
                 this.meleeCooldownTicks = tag.getInt("MeleeCooldownTicks");
             }
+            if (tag.contains("MeleeReach", Tag.TAG_ANY_NUMERIC)) {
+                this.meleeReach = tag.getFloat("MeleeReach");
+            }
             if (tag.contains("InfiniteAmmo", Tag.TAG_ANY_NUMERIC)) {
                 this.infiniteAmmo = tag.getBoolean("InfiniteAmmo");
             }
@@ -444,6 +450,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (this.spreadAdsReduction != 0.5F) object.addProperty("spreadAdsReduction", this.spread);
             if (this.meleeDamage != 0.0F) object.addProperty("meleeDamage", this.meleeDamage);
             if (this.meleeCooldownTicks != 15) object.addProperty("meleeCooldownTicks", this.meleeCooldownTicks);
+            if (this.meleeReach != 3.0F) object.addProperty("meleeReach", this.meleeReach);
             if (this.energyUse != 0) object.addProperty("energyUse", this.energyUse);
             if (this.beamColor != null && !this.beamColor.isEmpty()) {
                 object.addProperty("beamColor", this.beamColor);
@@ -520,6 +527,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             general.infiniteAmmo = this.infiniteAmmo;
             general.meleeDamage = this.meleeDamage;
             general.meleeCooldownTicks = this.meleeCooldownTicks;
+            general.meleeReach = this.meleeReach;
             general.energyUse = this.energyUse;
 
             general.beamMaxDistance = this.beamMaxDistance;
@@ -602,6 +610,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
 
         public void setMeleeDamage(float meleeDamage) {
             this.meleeDamage = meleeDamage;
+        }
+        public float getMeleeReach() {
+            return this.meleeReach;
         }
 
         /**
@@ -913,6 +924,17 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         private boolean ejectDuringReload;
         @Optional
         private boolean firesArrows = false;
+        @Optional
+        @Nullable
+        private ResourceLocation impactEffect;
+
+        @Optional
+        private int impactEffectDuration = 100;
+
+        @Optional
+        private int impactEffectAmplifier = 0;
+        @Optional
+        private float impactEffectChance = 1.0F;
 
         @Override
         public CompoundTag serializeNBT() {
@@ -937,6 +959,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             }
             tag.putBoolean("EjectDuringReload", this.ejectDuringReload);
             tag.putBoolean("FiresArrows", this.firesArrows);
+            if (this.impactEffect != null) {
+                tag.putString("ImpactEffect", this.impactEffect.toString());
+                tag.putInt("ImpactEffectDuration", this.impactEffectDuration);
+                tag.putInt("ImpactEffectAmplifier", this.impactEffectAmplifier);
+                tag.putFloat("ImpactEffectChance", this.impactEffectChance);
+            }
             return tag;
         }
 
@@ -990,6 +1018,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("FiresArrows", Tag.TAG_ANY_NUMERIC)) {
                 this.firesArrows = tag.getBoolean("FiresArrows");
             }
+            if (tag.contains("ImpactEffect", Tag.TAG_STRING)) {
+                this.impactEffect = new ResourceLocation(tag.getString("ImpactEffect"));
+                this.impactEffectDuration = tag.getInt("ImpactEffectDuration");
+                this.impactEffectAmplifier = tag.getInt("ImpactEffectAmplifier");
+                this.impactEffectChance = tag.getFloat("ImpactEffectChance");
+            }
         }
 
         public JsonObject toJsonObject() {
@@ -1016,6 +1050,15 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (this.casingParticle != null) object.addProperty("casingParticle", this.casingParticle.toString());
             if (this.ejectDuringReload) object.addProperty("ejectDuringReload", true);
             if (this.firesArrows) object.addProperty("firesArrows", true);
+            if (this.impactEffect != null) {
+                object.addProperty("impactEffect", this.impactEffect.toString());
+                if (this.impactEffectDuration != 100)
+                    object.addProperty("impactEffectDuration", this.impactEffectDuration);
+                if (this.impactEffectAmplifier != 0)
+                    object.addProperty("impactEffectAmplifier", this.impactEffectAmplifier);
+                if (this.impactEffectChance != 1.0F)
+                    object.addProperty("impactEffectChance", this.impactEffectChance);
+            }
             return object;
         }
 
@@ -1037,7 +1080,26 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             projectile.casingParticle = this.casingParticle;
             projectile.ejectDuringReload = this.ejectDuringReload;
             projectile.firesArrows = this.firesArrows;
+            projectile.impactEffect = this.impactEffect;
+            projectile.impactEffectDuration = this.impactEffectDuration;
+            projectile.impactEffectAmplifier = this.impactEffectAmplifier;
+            projectile.impactEffectChance = this.impactEffectChance;
             return projectile;
+        }
+        @Nullable
+        public ResourceLocation getImpactEffect() {
+            return this.impactEffect;
+        }
+
+        public int getImpactEffectDuration() {
+            return this.impactEffectDuration;
+        }
+
+        public int getImpactEffectAmplifier() {
+            return this.impactEffectAmplifier;
+        }
+        public float getImpactEffectChance() {
+            return this.impactEffectChance;
         }
 
         /**
@@ -2169,8 +2231,6 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
     public static Gun create(CompoundTag tag) {
         Gun gun = new Gun();
         gun.deserializeNBT(tag);
-
-        // Ensure melee damage is set properly from the JSON
         if (tag.contains("MeleeDamage", Tag.TAG_ANY_NUMERIC)) {
             gun.getGeneral().setMeleeDamage(tag.getFloat("MeleeDamage"));
         }

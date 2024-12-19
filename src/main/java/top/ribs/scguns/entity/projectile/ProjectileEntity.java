@@ -22,6 +22,8 @@ import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.player.Player;
@@ -41,7 +43,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.entity.IEntityAdditionalSpawnData;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.jetbrains.annotations.NotNull;
 import org.valkyrienskies.mod.common.world.RaycastUtilsKt;
 import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.attributes.SCAttributes;
@@ -624,17 +625,12 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     protected void onWaterImpact(Vec3 impactPos) {
         if (!this.level().isClientSide()) {
             ServerLevel serverLevel = (ServerLevel) this.level();
-
-            // Check if the projectile is submerged in water
             boolean isSubmerged = this.isInWater();
-
-            // Reduce particle count if submerged
             int splashParticles = isSubmerged ? 10 : 40;
             int bubbleParticles = isSubmerged ? 10 : 30;
             int snowflakeParticles = isSubmerged ? 5 : 15;
             int fallingWaterParticles = isSubmerged ? 5 : 20;
 
-            // Falling water particles
             for (int i = 0; i < fallingWaterParticles; i++) {
                 double ySpeed = 0.5 + (random.nextDouble() * 0.5);
                 serverLevel.sendParticles(ParticleTypes.FALLING_WATER,
@@ -642,7 +638,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                         1, 0.05, 0, 0.05, ySpeed);
             }
 
-            // Snowflake particles
             for (int i = 0; i < snowflakeParticles; i++) {
                 double xSpeed = (random.nextDouble() - 0.5) * 0.2;
                 double ySpeed = 0.3 + (random.nextDouble() * 0.3);
@@ -652,7 +647,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                         1, xSpeed, ySpeed, zSpeed, 0.1);
             }
 
-            // Splash particles
             serverLevel.sendParticles(ParticleTypes.SPLASH,
                     impactPos.x, impactPos.y + 0.1, impactPos.z,
                     splashParticles, 0.2, 0.2, 0.2, 0.4);
@@ -661,7 +655,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                     impactPos.x, impactPos.y, impactPos.z,
                     bubbleParticles, 0.5, 0.3, 0.5, 0.2);
 
-            // Sound effect
             this.level().playSound(null, impactPos.x, impactPos.y, impactPos.z,
                     SoundEvents.PLAYER_SPLASH, SoundSource.NEUTRAL,
                     1.2F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
@@ -673,15 +666,12 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         float advantageMultiplier = 1F;
 
         if (!advantage.equals(ModTags.Entities.NONE.location())) {
-            // Deal extra damage to undead entities
             if (advantage.equals(ModTags.Entities.UNDEAD.location())) {
                 if (entity.getType().is(ModTags.Entities.UNDEAD) ||entity.getType().is(ModTags.Entities.WITHER) ||  entity.getType().is(ModTags.Entities.GHOST)) {
                     advantageMultiplier = 1.25F;
                     entity.setSecondsOnFire(2);
                 }
             }
-
-            // Apply positive modifiers for heavy and very heavy entities
             if (entity.getType().is(ModTags.Entities.HEAVY)) {
                 if (advantage.equals(ModTags.Entities.HEAVY.location()) || advantage.equals(ModTags.Entities.VERY_HEAVY.location())) {
                     advantageMultiplier = 1.25F;
@@ -724,7 +714,26 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if (!blocked) {
             if (!(entity.getType().is(ModTags.Entities.GHOST) &&
                     !this.getProjectile().getAdvantage().equals(ModTags.Entities.UNDEAD.location()))) {
-                entity.hurt(source, damage);
+                if (damage > 0) {
+                    entity.hurt(source, damage);
+                }
+
+                if (entity instanceof LivingEntity livingEntity) {
+                    ResourceLocation effectLocation = this.projectile.getImpactEffect();
+                    if (effectLocation != null) {
+                        float effectChance = this.projectile.getImpactEffectChance();
+                        if (this.random.nextFloat() < effectChance) {
+                            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectLocation);
+                            if (effect != null) {
+                                livingEntity.addEffect(new MobEffectInstance(
+                                        effect,
+                                        this.projectile.getImpactEffectDuration(),
+                                        this.projectile.getImpactEffectAmplifier()
+                                ));
+                            }
+                        }
+                    }
+                }
             }
         }
 
@@ -1125,7 +1134,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     }
 
 
-    public Object getOwner() {
+    public Entity getOwner() {
         return this.shooter;
     }
 
