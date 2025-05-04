@@ -1523,6 +1523,23 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             private double particleSpread = 0.1;
             private double particleRingRadius = 0.0;
 
+            public Flash copy() {
+                Flash flash = new Flash();
+                flash.xOffset = this.xOffset;
+                flash.yOffset = this.yOffset;
+                flash.zOffset = this.zOffset;
+                flash.size = this.size;
+                flash.textureLocation = this.textureLocation;
+                flash.spawnParticles = this.spawnParticles;
+                flash.alternateMuzzleFlash = this.alternateMuzzleFlash;
+                flash.alternatePosition = this.alternatePosition;
+                flash.particleCount = this.particleCount;
+                flash.particleType = this.particleType;
+                flash.particleSpread = this.particleSpread;
+                flash.particleRingRadius = this.particleRingRadius;
+                return flash;
+            }
+
             @Override
             public CompoundTag serializeNBT() {
                 CompoundTag tag = super.serializeNBT();
@@ -1718,7 +1735,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         public Display copy() {
             Display display = new Display();
             if (this.flash != null) {
-                display.flash = (Flash) this.flash.copy();
+                display.flash = this.flash.copy();
             }
             display.muzzleFlashType = this.muzzleFlashType;
             return display;
