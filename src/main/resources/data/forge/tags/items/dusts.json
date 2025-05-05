@@ -1,0 +1,9 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:anthralite_dust",
+    "scguns:phosphor_dust",
+    "scguns:niter_dust",
+    "scguns:sulfur_dust"
+  ]
+}
