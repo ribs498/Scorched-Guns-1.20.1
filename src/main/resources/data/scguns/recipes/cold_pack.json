@@ -3,7 +3,7 @@
   "category": "equipment",
   "key": {
     "H": {
-      "item": "scguns:niter_dust"
+      "tag": "forge:dusts/saltpeter"
     },
     "Q": {
       "item": "minecraft:paper"

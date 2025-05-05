@@ -14,7 +14,7 @@
       "item": "scguns:netherite_scrap_chunk"
     },
     "M": {
-      "item": "scguns:niter_dust"
+      "tag": "forge:dusts/saltpeter"
     },
     "L": {
       "tag": "forge:dusts/phosphorus"

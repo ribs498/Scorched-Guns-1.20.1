@@ -22,7 +22,7 @@
       "item": "minecraft:charcoal"
     },
     {
-      "item": "scguns:niter_dust"
+      "tag": "forge:dusts/saltpeter"
     }
   ],
   "result": {

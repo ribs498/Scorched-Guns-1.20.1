@@ -5,7 +5,7 @@
       "tag": "minecraft:wooden_slabs"
     },
     "L": {
-      "item": "scguns:niter_dust"
+      "tag": "forge:dusts/saltpeter"
     },
     "R": {
       "item": "minecraft:tnt"
