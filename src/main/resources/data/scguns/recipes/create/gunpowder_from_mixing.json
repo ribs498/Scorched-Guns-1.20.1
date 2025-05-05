@@ -6,7 +6,7 @@
         "item": "scguns:sulfur_chunk"
       },
       {
-        "item": "scguns:sulfur_dust"
+        "tag": "forge:dusts/sulfur"
       }
     ],
     {
