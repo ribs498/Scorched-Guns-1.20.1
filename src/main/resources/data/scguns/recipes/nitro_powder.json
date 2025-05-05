@@ -17,7 +17,7 @@
       "item": "scguns:niter_dust"
     },
     "L": {
-      "item": "scguns:phosphor_dust"
+      "tag": "forge:dusts/phosphorus"
     }
   },
   "pattern": [

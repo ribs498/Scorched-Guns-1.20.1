@@ -26,7 +26,7 @@
       "item": "scguns:niter_dust"
     },
     {
-      "item": "scguns:phosphor_dust"
+      "tag": "forge:dusts/phosphorus"
     }
   ],
   "results": [

@@ -19,7 +19,7 @@
         "item": "scguns:raw_phosphor"
       },
       {
-        "item": "scguns:phosphor_dust"
+        "tag": "forge:dusts/phosphorus"
       }
     ],
     {

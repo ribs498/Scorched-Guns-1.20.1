@@ -11,7 +11,7 @@
       "item": "minecraft:tnt"
     },
     "X": {
-      "item": "scguns:phosphor_dust"
+      "tag": "forge:dusts/phosphorus"
     },
     "P": {
       "item": "scguns:buckshot"

@@ -16,7 +16,7 @@
       "item": "minecraft:charcoal"
     },
     {
-      "item": "scguns:phosphor_dust"
+      "tag": "forge:dusts/phosphorus"
     }
   ],
   "results": [

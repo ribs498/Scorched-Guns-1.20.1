@@ -3,7 +3,7 @@
   "category": "building",
   "key": {
     "X": {
-      "item": "scguns:phosphor_dust"
+      "tag": "forge:dusts/phosphorus"
     },
     "Q": {
       "item": "minecraft:stone_bricks"
