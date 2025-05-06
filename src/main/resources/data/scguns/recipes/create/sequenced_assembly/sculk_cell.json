@@ -1,7 +1,7 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "scguns:peal"
+    "item": "scguns:empty_cell"
   },
   "loops": 1,
   "results": [
@@ -18,7 +18,7 @@
         },
         [
           {
-            "item": "scguns:empty_cell"
+            "item": "scguns:peal"
           }
         ]
       ],

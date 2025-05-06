@@ -1,7 +1,7 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "minecraft:paper"
+    "item": "scguns:small_copper_casing"
   },
   "loops": 1,
   "results": [
@@ -18,7 +18,7 @@
         },
         [
           {
-            "item": "scguns:small_copper_casing"
+            "item": "minecraft:paper"
           }
         ]
       ],

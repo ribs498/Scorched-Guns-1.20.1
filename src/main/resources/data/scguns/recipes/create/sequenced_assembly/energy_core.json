@@ -1,7 +1,7 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "minecraft:redstone_block"
+    "item": "scguns:empty_core"
   },
   "loops": 1,
   "results": [
@@ -18,7 +18,7 @@
         },
         [
           {
-            "item": "scguns:empty_core"
+            "item": "minecraft:redstone_block"
           }
         ]
       ],

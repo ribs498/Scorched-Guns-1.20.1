@@ -1,7 +1,7 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "scguns:sheol"
+    "item": "scguns:large_iron_casing"
   },
   "loops": 1,
   "results": [
@@ -18,7 +18,7 @@
         },
         [
           {
-            "item": "scguns:large_iron_casing"
+            "item": "scguns:sheol"
           }
         ]
       ],

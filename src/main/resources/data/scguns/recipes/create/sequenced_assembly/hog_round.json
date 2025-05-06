@@ -1,7 +1,7 @@
 {
   "type": "create:sequenced_assembly",
   "ingredient": {
-    "item": "minecraft:gold_nugget"
+    "item": "scguns:small_iron_casing"
   },
   "loops": 1,
   "results": [
@@ -36,7 +36,7 @@
         },
         [
           {
-            "item": "scguns:small_iron_casing"
+            "item": "minecraft:gold_nugget"
           }
         ]
       ],
