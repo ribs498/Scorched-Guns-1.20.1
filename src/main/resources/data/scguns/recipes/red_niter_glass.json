@@ -3,7 +3,7 @@
   "category": "building",
   "key": {
     "X": {
-      "item": "scguns:niter_dust"
+      "tag": "forge:dusts/saltpeter"
     },
     "Q": {
       "item": "minecraft:red_stained_glass"

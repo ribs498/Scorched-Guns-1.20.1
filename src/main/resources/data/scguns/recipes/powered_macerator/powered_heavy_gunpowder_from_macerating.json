@@ -11,14 +11,19 @@
         "tag": "forge:dusts/sulfur"
       }
     ],
-    {
-      "item": "scguns:phosphor_dust"
-    },
+    [
+      {
+        "item": "scguns:raw_phosphor"
+      },
+      {
+        "tag": "forge:dusts/phosphorus"
+      }
+    ],
     {
       "item": "minecraft:charcoal"
     },
     {
-      "item": "scguns:niter_dust"
+      "tag": "forge:dusts/saltpeter"
     }
   ],
   "result": {

@@ -10,13 +10,13 @@
       }
     ],
     {
-      "item": "scguns:niter_dust"
+      "tag": "forge:dusts/saltpeter"
     },
     {
       "item": "minecraft:charcoal"
     },
     {
-      "item": "scguns:phosphor_dust"
+      "tag": "forge:dusts/phosphorus"
     }
   ],
   "results": [

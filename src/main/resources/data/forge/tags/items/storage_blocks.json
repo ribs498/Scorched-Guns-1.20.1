@@ -2,6 +2,15 @@
   "replace": false,
   "values": [
     "scguns:anthralite_block",
-    "scguns:sulfur_block"
+    "scguns:treated_iron_block",
+    "scguns:treated_brass_block",
+    "scguns:ancient_brass_block",
+    "scguns:diamond_steel_block",
+    "scguns:vehement_coal_block",
+    "scguns:plasma_block",
+    "scguns:raw_anthralite_block",
+    "scguns:raw_phosphor_block",
+    "scguns:sulfur_block",
+    "scguns:niter_block"
   ]
 }

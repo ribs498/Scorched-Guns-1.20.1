@@ -6,11 +6,11 @@
         "item": "scguns:sulfur_chunk"
       },
       {
-        "item": "scguns:sulfur_dust"
+        "tag": "forge:dusts/sulfur"
       }
     ],
     {
-      "item": "scguns:niter_dust"
+      "tag": "forge:dusts/saltpeter"
     },
     {
       "item": "minecraft:flint"

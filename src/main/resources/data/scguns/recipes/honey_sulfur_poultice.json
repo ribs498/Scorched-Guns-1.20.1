@@ -9,7 +9,7 @@
       "item": "minecraft:dandelion"
     },
     {
-      "item": "scguns:sulfur_dust"
+      "tag": "forge:dusts/sulfur"
     },
     {
       "item": "minecraft:paper"
