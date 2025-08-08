@@ -20,6 +20,7 @@ import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.init.ModEntities;
+import top.ribs.scguns.init.ModSounds;
 
 public class TurretProjectileEntity extends AbstractArrow {
 
@@ -124,7 +125,7 @@ public class TurretProjectileEntity extends AbstractArrow {
 
     @Override
     protected @NotNull SoundEvent getDefaultHitGroundSoundEvent() {
-        return null;
+        return ModSounds.BULLET_FLYBY.get();
     }
 
     @Override

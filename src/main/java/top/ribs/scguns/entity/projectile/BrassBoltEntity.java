@@ -17,8 +17,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.network.NetworkHooks;
+import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.init.ModEntities;
+import top.ribs.scguns.init.ModSounds;
 
 public class BrassBoltEntity extends AbstractArrow {
     public BrassBoltEntity(EntityType<? extends AbstractArrow> type, Level world) {
@@ -97,8 +99,8 @@ public class BrassBoltEntity extends AbstractArrow {
     }
 
     @Override
-    protected SoundEvent getDefaultHitGroundSoundEvent() {
-        return null;
+    protected @NotNull SoundEvent getDefaultHitGroundSoundEvent() {
+        return ModSounds.BULLET_FLYBY.get();
     }
 
     @Override
