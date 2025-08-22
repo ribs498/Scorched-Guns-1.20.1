@@ -171,6 +171,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.PHOSPHOR_DUST.get());
                         pOutput.accept(ModItems.NITER_DUST.get());
                         pOutput.accept(ModItems.GUNPOWDER_DUST.get());
+                        pOutput.accept(ModItems.AUREOUS_SLAG.get());
                         pOutput.accept(ModItems.SHEOL.get());
                         pOutput.accept(ModItems.SHEOL_DUST.get());
                         pOutput.accept(ModItems.PEAL.get());

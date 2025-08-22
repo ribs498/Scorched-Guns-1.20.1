@@ -48,7 +48,7 @@
   },
   "projectile": {
     "advantage": "scguns:heavy",
-    "damage": 80.0,
+    "damage": 74.0,
     "ejectsCasing": true,
     "gravity": false  ,
     "item": "scguns:osborne_slug",

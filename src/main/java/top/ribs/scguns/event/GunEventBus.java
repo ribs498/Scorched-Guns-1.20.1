@@ -127,6 +127,7 @@ public class GunEventBus {
         if (MeleeAttackHandler.isBanzaiActive()) {
             MeleeAttackHandler.stopBanzai();
         }
+
         if (level.isClientSide() && heldItem.getItem() instanceof AnimatedGunItem animatedGunItem) {
             try {
                 long id = GeoItem.getId(heldItem);
@@ -136,6 +137,14 @@ public class GunEventBus {
                         .get("controller");
 
                 if (animationController != null) {
+                    // **ADD THIS DURABILITY CHECK BEFORE ANIMATION LOGIC**
+                    if (heldItem.isDamageableItem() &&
+                            heldItem.getDamageValue() >= (heldItem.getMaxDamage() - 1)) {
+                        // Gun is broken - don't allow any shooting animations
+                        event.setCanceled(true);
+                        return;
+                    }
+
                     if (animatedGunItem.isAnimationPlaying(animationController, "reload_stop")) {
                         event.setCanceled(true);
                         return;

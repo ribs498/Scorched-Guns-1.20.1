@@ -143,7 +143,7 @@ public class ModBlocks {
     public static final RegistryObject<Block> PLASMA_BLOCK = registerBurnable("plasma_block",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                     .requiresCorrectToolForDrops()
-                    .strength(3.0F)), 21600);
+                    .strength(3.0F)), 16200);
 
     public static final RegistryObject<Block> DIAMOND_STEEL_BLOCK = register("diamond_steel_block",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)

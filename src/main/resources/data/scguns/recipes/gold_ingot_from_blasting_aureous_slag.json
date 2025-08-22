@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "group": "aureous_slag",
+  "cookingtime": 100,
+  "experience": 0.7,
+  "ingredient": {
+    "item": "scguns:aureous_slag"
+  },
+  "result": "minecraft:gold_ingot",
+  "count": 1
+}

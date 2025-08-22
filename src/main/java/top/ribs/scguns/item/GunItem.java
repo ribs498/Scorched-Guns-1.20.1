@@ -186,6 +186,10 @@ public class GunItem extends Item implements IColored, IMeta {
 
     @Override
     public int getBarColor(ItemStack stack) {
+        if (stack.getDamageValue() >= (stack.getMaxDamage() - 1)) {
+            return 0x808080;
+        }
+
         if (stack.getDamageValue() >= (stack.getMaxDamage() / 1.5)) {
             return Objects.requireNonNull(ChatFormatting.RED.getColor());
         }

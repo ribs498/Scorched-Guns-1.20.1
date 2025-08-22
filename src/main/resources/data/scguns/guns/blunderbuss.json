@@ -21,7 +21,7 @@
     "rate": 6,
     "recoilAngle": 17.0,
     "recoilKick": 2.0,
-    "spread": 19.0,
+    "spread": 16.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 100,
@@ -52,7 +52,7 @@
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:grapeshot",
-    "life": 30,
+    "life": 35,
     "size": 1.0,
     "speed": 5.0,
     "trailLengthMultiplier": 2.0

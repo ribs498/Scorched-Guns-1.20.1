@@ -282,7 +282,10 @@ public class ShootingHandler
     public void fire(Player player, ItemStack heldItem) {
         if(!(heldItem.getItem() instanceof GunItem))
             return;
-
+        if (heldItem.isDamageableItem() &&
+                heldItem.getDamageValue() >= (heldItem.getMaxDamage() - 1)) {
+            return;
+        }
         if(isEmpty(player, heldItem)) {
             ItemCooldowns tracker = player.getCooldowns();
             if(!tracker.isOnCooldown(heldItem.getItem())) {

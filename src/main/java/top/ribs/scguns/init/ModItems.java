@@ -1203,7 +1203,9 @@ public class ModItems {
             () -> new RecordItem(20, ModSounds.MASS_DESTRUCTION_EXTENDED, new Item.Properties().stacksTo(1).rarity(Rarity.RARE), 8320));
 
     public static final RegistryObject<Item> TEAM_LOG = REGISTER.register("team_log", () -> new TeamLogItem(new Item.Properties().stacksTo(1)));
+
     public static final RegistryObject<Item> ENEMY_LOG = REGISTER.register("enemy_log", () -> new EnemyLogItem(new Item.Properties().stacksTo(1)));
+    public static final RegistryObject<Item> AUREOUS_SLAG = REGISTER.register("aureous_slag", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ANTHRALITE_INGOT = REGISTER.register("anthralite_ingot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ANTHRALITE_NUGGET = REGISTER.register("anthralite_nugget", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ANCIENT_BRASS = REGISTER.register("ancient_brass", () -> new Item(new Item.Properties()));
@@ -1319,8 +1321,8 @@ public class ModItems {
     public static final RegistryObject<Item> HARDENED_PEBBLES = REGISTER.register("hardened_pebbles", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> NETHERITE_SCRAP_CHUNK = REGISTER.register("netherite_scrap_chunk", () -> new ScorchedItem(new Item.Properties()));
 
-    public static final RegistryObject<Item> PLASMA = REGISTER.register("plasma", () -> new FuelItem(new Item.Properties(), 2400));
-    public static final RegistryObject<Item> PLASMA_NUGGET = REGISTER.register("plasma_nugget", () -> new FuelItem(new Item.Properties(), 480));
+    public static final RegistryObject<Item> PLASMA = REGISTER.register("plasma", () -> new FuelItem(new Item.Properties(), 1800));
+    public static final RegistryObject<Item> PLASMA_NUGGET = REGISTER.register("plasma_nugget", () -> new FuelItem(new Item.Properties(), 360));
     public static final RegistryObject<Item> PISTOL_AMMO_BOX = REGISTER.register("pistol_ammo_box", () -> new PistolAmmoBoxItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> RIFLE_AMMO_BOX = REGISTER.register("rifle_ammo_box", () -> new RifleAmmoBoxItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> SHOTGUN_AMMO_BOX = REGISTER.register("shotgun_ammo_box", () -> new ShotgunAmmoBoxItem(new Item.Properties().stacksTo(1)));

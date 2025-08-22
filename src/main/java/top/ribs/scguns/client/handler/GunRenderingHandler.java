@@ -801,30 +801,45 @@ public class GunRenderingHandler {
             }
         }
     }
-
-
-
     private void renderGun(@Nullable LivingEntity entity, ItemDisplayContext display, ItemStack stack, PoseStack poseStack, MultiBufferSource renderTypeBuffer, int light, float partialTicks) {
         if (ModelOverrides.hasModel(stack)) {
             IOverrideModel model = ModelOverrides.getModel(stack);
             if (model != null) {
-                model.render(partialTicks, display, stack, ItemStack.EMPTY, entity, poseStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY);
+                if (display == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND ||
+                        display == ItemDisplayContext.THIRD_PERSON_LEFT_HAND ||
+                        display == ItemDisplayContext.FIXED ||
+                        display == ItemDisplayContext.GUI) {
+                    model.render(partialTicks, display, stack, ItemStack.EMPTY, entity, poseStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY);
+
+
+                    if (display == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND || display == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
+                        return;
+                    }
+                }
             }
-        } else {
-            Level level = entity != null ? entity.level() : null;
-            BakedModel bakedModel = Minecraft.getInstance().getItemRenderer().getModel(stack, level, entity, 0);
-            Minecraft.getInstance().getItemRenderer().render(stack, ItemDisplayContext.NONE, false, poseStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, bakedModel);
         }
+        if (stack.getItem() instanceof AnimatedGunItem &&
+                (display == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND || display == ItemDisplayContext.THIRD_PERSON_LEFT_HAND)) {
+            return;
+        }
+
+        Level level = entity != null ? entity.level() : null;
+        BakedModel bakedModel = Minecraft.getInstance().getItemRenderer().getModel(stack, level, entity, 0);
+        Minecraft.getInstance().getItemRenderer().render(stack, ItemDisplayContext.NONE, false, poseStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY, bakedModel);
     }
 
     private void renderAttachments(@Nullable LivingEntity entity, ItemDisplayContext display, ItemStack stack, PoseStack poseStack, MultiBufferSource renderTypeBuffer, int light, float partialTicks) {
-        if (stack.getItem() instanceof AnimatedGunItem) {
+
+        if (stack.getItem() instanceof AnimatedGunItem &&
+                (display == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND || display == ItemDisplayContext.FIRST_PERSON_LEFT_HAND)) {
             return;
         }
+
         if (stack.getItem() instanceof GunItem) {
             Gun modifiedGun = ((GunItem) stack.getItem()).getModifiedGun(stack);
             CompoundTag gunTag = stack.getOrCreateTag();
             CompoundTag attachments = gunTag.getCompound("Attachments");
+
 
             Set<Item> customAttachments = Set.of(
                     ModItems.SILENCER.get(),
@@ -841,12 +856,16 @@ public class GunRenderingHandler {
 
             for (String tagKey : attachments.getAllKeys()) {
                 IAttachment.Type type = IAttachment.Type.byTagKey(tagKey);
+
                 if (type != null && modifiedGun.canAttachType(type)) {
                     ItemStack attachmentStack = Gun.getAttachment(type, stack);
+
                     if (customAttachments.contains(attachmentStack.getItem())) {
                         continue;
                     }
+
                     if (!attachmentStack.isEmpty()) {
+
                         poseStack.pushPose();
                         Vec3 origin = PropertyHelper.getModelOrigin(attachmentStack, PropertyHelper.ATTACHMENT_DEFAULT_ORIGIN);
                         poseStack.translate(-origin.x * 0.0625, -origin.y * 0.0625, -origin.z * 0.0625);
@@ -859,6 +878,7 @@ public class GunRenderingHandler {
                         poseStack.translate(center.x, center.y, center.z);
                         poseStack.scale((float) scale.x, (float) scale.y, (float) scale.z);
                         poseStack.translate(-center.x, -center.y, -center.z);
+
                         IOverrideModel model = ModelOverrides.getModel(attachmentStack);
                         if (model != null) {
                             model.render(partialTicks, display, attachmentStack, stack, entity, poseStack, renderTypeBuffer, light, OverlayTexture.NO_OVERLAY);

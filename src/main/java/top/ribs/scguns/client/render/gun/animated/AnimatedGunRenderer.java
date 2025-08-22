@@ -134,9 +134,14 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
     public void renderByItem(ItemStack stack, ItemDisplayContext transformType,
                              PoseStack poseStack, MultiBufferSource bufferSource,
                              int packedLight, int packedOverlay) {
+
+
         this.currentDisplayContext = transformType;
         this.currentRenderStack = stack;
         this.bufferSource = bufferSource;
+
+
+
         if (stack.getItem() instanceof AnimatedGunItem) {
             if (transformType == ItemDisplayContext.NONE &&
                     Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON) {
@@ -159,9 +164,9 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
         float translateX = model.getTransforms().firstPersonRightHand.translation.x();
         float translateY = model.getTransforms().firstPersonRightHand.translation.y();
         float translateZ = model.getTransforms().firstPersonRightHand.translation.z();
-        if (stack.getItem() instanceof AnimatedGunItem && transformType == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND) {
-            poseStack.translate(0.0, -0.5, 0.0);
-        }
+//        if (stack.getItem() instanceof AnimatedGunItem && transformType == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND) {
+//            poseStack.translate(0.0, -0.5, 0.0);
+//        }
 
         if (stack.getItem() instanceof AnimatedGunItem && transformType == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND) {
             Gun modifiedGun = ((GunItem) stack.getItem()).getModifiedGun(stack);
@@ -246,7 +251,7 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
         if (this.currentRenderStack == null) return false;
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return false;
-        if (mc.screen != null) return false;
+        if (mc.screen instanceof AttachmentScreen) return false;
         if (this.currentDisplayContext != ItemDisplayContext.FIRST_PERSON_RIGHT_HAND &&
                 this.currentDisplayContext != ItemDisplayContext.FIRST_PERSON_LEFT_HAND) {
             return false;
@@ -261,6 +266,11 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
                                   VertexConsumer buffer, boolean isReRender, float partialTick,
                                   int packedLight, int packedOverlay, float red, float green,
                                   float blue, float alpha) {
+
+//        if (this.currentDisplayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND ||
+//                this.currentDisplayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
+//            return;
+//        }
 
         Minecraft client = Minecraft.getInstance();
         boolean shouldRenderCustomArms = false;

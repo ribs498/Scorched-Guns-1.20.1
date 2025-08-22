@@ -64,7 +64,7 @@
     "gravity": false,
     "item": "scguns:bearpack_shell",
     "casingType": "scguns:medium_brass_casing",
-    "life": 30,
+    "life": 40,
     "size": 0.05,
     "speed": 6.0,
     "trailLengthMultiplier": 2.0

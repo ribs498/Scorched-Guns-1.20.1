@@ -1,21 +1,24 @@
 {
+	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
-	"textures": {
-		"10": "scguns:item/marlin"
-	},
+  "textures": {
+    "0": "scguns:item/dark_matter",
+    "particle": "scguns:item/dark_matter"
+  },
 	"elements": [
 		{
-			"from": [7.75, 3.74831, 13.53378],
-			"to": [8.25, 4.24831, 15.78378],
-			"rotation": {"angle": 0, "axis": "y", "origin": [0.77, -0.57419, -0.14872]},
+			"name": "bolt",
+			"from": [7.73875, 4.12692, 14.60074],
+			"to": [8.26125, 4.91067, 16.95199],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 11]},
 			"faces": {
-				"north": {"uv": [1.5, 8.25, 1.625, 8.375], "texture": "#10"},
-				"east": {"uv": [0, 8.5, 0.625, 8.625], "texture": "#10"},
-				"south": {"uv": [8, 8.25, 8.125, 8.375], "texture": "#10", "cullface": "south"},
-				"west": {"uv": [8.75, 7.25, 9.375, 7.375], "texture": "#10"},
-				"up": {"uv": [8.375, 8.375, 8.25, 7.75], "texture": "#10"},
-				"down": {"uv": [7.625, 8.75, 7.5, 9.375], "texture": "#10"}
+				"north": {"uv": [9.75, 5.5, 9.875, 5.75], "texture": "#0"},
+				"east": {"uv": [2.25, 7.25, 2.875, 7.5], "texture": "#0"},
+				"south": {"uv": [9.75, 5.75, 9.875, 6], "texture": "#0"},
+				"west": {"uv": [7.25, 2.5, 7.875, 2.75], "texture": "#0"},
+				"up": {"uv": [2.625, 9.375, 2.5, 8.75], "texture": "#0"},
+				"down": {"uv": [2.875, 8.75, 2.75, 9.375], "texture": "#0"}
 			}
 		}
 	],
@@ -52,8 +55,8 @@
 	"groups": [
 		{
 			"name": "bolt",
-			"origin": [0.77, -0.57419, -0.14872],
-			"color": 0,
+			"origin": [8.62646, 3.94816, 14.38542],
+			"color": 6,
 			"children": [0]
 		}
 	]

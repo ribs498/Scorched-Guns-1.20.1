@@ -16,13 +16,13 @@
     "rate": 3,
     "recoilAngle": 12.0,
     "recoilKick": 8.0,
-    "spread": 12.0,
+    "spread": 11.0,
     "meleeDamage": 6.0,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 25,
     "criticalChance": 0.1,
     "playerKnockBack": true,
-    "playerKnockBackStrength": 0.25
+    "playerKnockBackStrength": 0.6
   },
   "modules": {
     "attachments": {
@@ -40,7 +40,7 @@
     "item": "scguns:shotgun_shell",
     "casingType": "scguns:small_copper_casing",
     "casingParticle": "scguns:shell",
-    "life": 20,
+    "life": 40,
     "size": 0.05,
     "speed": 4.0,
     "trailLengthMultiplier": 2.0

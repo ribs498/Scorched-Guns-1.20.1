@@ -54,7 +54,7 @@
     "item": "scguns:shotgun_shell",
     "casingType": "scguns:small_copper_casing",
     "casingParticle": "scguns:shell",
-    "life": 24,
+    "life": 33,
     "size": 0.1,
     "speed": 4.0,
     "trailLengthMultiplier": 2.0

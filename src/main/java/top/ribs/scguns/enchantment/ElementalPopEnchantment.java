@@ -9,7 +9,7 @@ public class ElementalPopEnchantment extends GunEnchantment
 {
     public ElementalPopEnchantment()
     {
-        super(Rarity.VERY_RARE, EnchantmentTypes.TRIGGER_FINGER_COMPATIBLE , new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.WEAPON);
+        super(Rarity.VERY_RARE, EnchantmentTypes.GUN , new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.WEAPON);
 
     }
 
