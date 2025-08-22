@@ -10,13 +10,14 @@
     "rate": 6,
     "recoilAngle": 3.5,
     "recoilKick": 4.0,
-    "spread": 10.5,
+    "spread": 9.25,
     "meleeDamage": 4.5,
     "meleeCooldownTicks": 20,
     "energyUse": 25.0,
     "hotBarrelRate": 40,
     "criticalChance": 0.05,
-    "speedModifier": 0.95
+    "speedModifier": 0.95,
+    "enableGunLight": false
   },
   "modules": {
     "attachments": {

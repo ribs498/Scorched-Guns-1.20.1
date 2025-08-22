@@ -35,7 +35,7 @@ public class MobTrapBlockEntity extends BlockEntity {
 
     public MobTrapBlockEntity(BlockPos pPos, BlockState pBlockState) {
         super(ModBlockEntities.MOB_TRAP.get(), pPos, pBlockState);
-        this.radius = 7;
+        this.radius = 10;
         this.heightRadius = 3;
         this.tickCounter = 0;
     }
@@ -43,7 +43,7 @@ public class MobTrapBlockEntity extends BlockEntity {
     public boolean addMob(EntityType<?> mobType) {
         if (storedMobs.size() < MAX_MOBS) {
             storedMobs.add(mobType);
-            setChanged(); // Mark the BlockEntity as dirty
+            setChanged();
             return true;
         }
         return false;

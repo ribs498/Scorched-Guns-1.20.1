@@ -1,74 +1,35 @@
 package top.ribs.scguns.entity.projectile;
 
-import com.google.common.collect.Lists;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
-import net.minecraft.network.protocol.game.ClientboundAddEntityPacket;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.*;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.*;
-import net.minecraftforge.network.NetworkHooks;
-import org.jetbrains.annotations.NotNull;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.item.GunItem;
 
-import javax.annotation.Nullable;
-import java.util.*;
-
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.util.Mth;
-import net.minecraft.core.Direction;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.core.particles.ParticleTypes;
-import net.minecraftforge.event.ForgeEventFactory;
-
-import javax.annotation.Nullable;
+import java.util.Comparator;
 import java.util.List;
-
-import net.minecraft.world.entity.*;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import java.util.List;
-
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import java.util.List;
-
 
 public class ShulkshotProjectileEntity extends ProjectileEntity {
+    private static final int DEFAULT_HOMING_DELAY = 10; // Ticks before homing starts
+    private static final double INITIAL_SPEED = 1.5;
+    private static final double MAX_SPEED = 2.5;
+    private static final double ACCELERATION = 0.05;
+    private static final double TURN_SPEED = 0.08;
+    private static final double PREDICTION_FACTOR = 0.7;
 
-    private LivingEntity target;
-    private int homingDelay;
-    private static final int DEFAULT_HOMING_DELAY = 15;
-    private static final double MAX_TURN_RATE = 0.25;
-    private static final double ACCELERATION = 0.15;
-    private static final double MAX_HOMING_SPEED = 0.8;
-    private static final double INITIAL_SPEED = 1.2;
-    private static final double PREDICTION_FACTOR = 0.8;
-    private static final double MIN_DISTANCE_FOR_SHARP_TURN = 10.0;
-    private Vec3 currentDirection;
+    private Mob target;
     private Vec3 lastTargetPos;
     private Vec3 targetVelocity = Vec3.ZERO;
+    private int homingDelay;
+    private Vec3 currentDirection;
 
     public ShulkshotProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -80,6 +41,15 @@ public class ShulkshotProjectileEntity extends ProjectileEntity {
         this.homingDelay = DEFAULT_HOMING_DELAY;
 
         Vec3 shooterDirection = shooter.getLookAngle();
+
+        if (modifiedGun.getGeneral().getProjectileAmount() > 1) {
+            float spread = modifiedGun.getGeneral().getSpread();
+            float yawSpread = (this.random.nextFloat() - 0.5F) * spread;
+            float pitchSpread = (this.random.nextFloat() - 0.5F) * spread;
+
+            shooterDirection = applySpread(shooterDirection, yawSpread, pitchSpread);
+        }
+
         this.currentDirection = shooterDirection.normalize();
 
         double offsetDistance = 1.5;
@@ -90,6 +60,28 @@ public class ShulkshotProjectileEntity extends ProjectileEntity {
         );
 
         this.setDeltaMovement(shooterDirection.scale(INITIAL_SPEED));
+    }
+
+    /**
+     * Apply spread to the direction vector for multiple pellet support
+     */
+    private Vec3 applySpread(Vec3 direction, float yawSpread, float pitchSpread) {
+        double currentYaw = Math.atan2(-direction.x, direction.z);
+        double currentPitch = Math.asin(-direction.y);
+
+        double newYaw = currentYaw + Math.toRadians(yawSpread);
+        double newPitch = currentPitch + Math.toRadians(pitchSpread);
+
+        double cosYaw = Math.cos(newYaw);
+        double sinYaw = Math.sin(newYaw);
+        double cosPitch = Math.cos(newPitch);
+        double sinPitch = Math.sin(newPitch);
+
+        return new Vec3(
+                -sinYaw * cosPitch,
+                -sinPitch,
+                cosYaw * cosPitch
+        );
     }
 
     @Override
@@ -154,34 +146,14 @@ public class ShulkshotProjectileEntity extends ProjectileEntity {
 
         Vec3 predictedTargetPos = getPredictedTargetPosition();
         if (predictedTargetPos == null) return;
+
         Vec3 toTarget = predictedTargetPos.subtract(this.position()).normalize();
-        double angle = Math.acos(this.currentDirection.dot(toTarget));
+        Vec3 currentDirectionNorm = currentVelocity.normalize();
 
-        double distanceToTarget = this.position().distanceTo(predictedTargetPos);
-        double adjustedTurnRate = MAX_TURN_RATE;
-        if (distanceToTarget < MIN_DISTANCE_FOR_SHARP_TURN) {
-            adjustedTurnRate = MAX_TURN_RATE * (1.0 + (MIN_DISTANCE_FOR_SHARP_TURN - distanceToTarget) / MIN_DISTANCE_FOR_SHARP_TURN);
+        this.currentDirection = currentDirectionNorm.add(toTarget.scale(TURN_SPEED)).normalize();
 
-            if (angle > Math.PI / 2) {
-                adjustedTurnRate *= 1.5;
-            }
-        }
-
-        Vec3 newDirection;
-        if (angle > adjustedTurnRate) {
-            double turnAmount = adjustedTurnRate / angle;
-            newDirection = this.currentDirection.scale(1 - turnAmount)
-                    .add(toTarget.scale(turnAmount))
-                    .normalize();
-        } else {
-            newDirection = toTarget;
-        }
-        this.currentDirection = newDirection;
-        double targetSpeed = MAX_HOMING_SPEED;
-        if (angle > Math.PI / 3) {
-            targetSpeed *= 0.8;
-        }
-        double newSpeed = currentSpeed + (currentSpeed < targetSpeed ? ACCELERATION : -ACCELERATION);
+        double targetSpeed = Math.min(MAX_SPEED, currentSpeed + ACCELERATION);
+        double newSpeed = currentSpeed + (targetSpeed > currentSpeed ? ACCELERATION : -ACCELERATION);
         newSpeed = Mth.clamp(newSpeed, 0, targetSpeed);
         this.setDeltaMovement(this.currentDirection.scale(newSpeed));
     }

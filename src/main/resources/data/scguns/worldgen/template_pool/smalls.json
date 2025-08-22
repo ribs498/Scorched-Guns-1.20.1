@@ -1,0 +1,42 @@
+{
+  "name": "scguns:spawners",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 12,
+      "element": {
+        "location": "scguns:spawners/small/slime",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 7,
+      "element": {
+        "location": "scguns:spawners/small/cave_spider",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 7,
+      "element": {
+        "location": "scguns:spawners/small/swarm",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 7,
+      "element": {
+        "location": "scguns:spawners/small/zombie",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

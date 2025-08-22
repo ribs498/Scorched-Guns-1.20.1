@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "redstone",
+  "key": {
+    "#": {
+      "item": "scguns:charged_amethyst_shard"
+    },
+    "Q": {
+      "item": "minecraft:stone"
+    },
+    "M": {
+      "item": "minecraft:redstone_torch"
+    }
+  },
+  "pattern": [
+   "M #",
+    "QQQ"
+  ],
+  "result": {
+    "item": "scguns:charged_amethyst_relay"
+  }
+}

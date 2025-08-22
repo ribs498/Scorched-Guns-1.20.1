@@ -7,6 +7,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -35,9 +36,12 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
+import top.ribs.scguns.common.SulfurGasCloud;
+import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.init.ModTags;
 import java.util.List;
@@ -186,10 +190,6 @@ public class SulfurVentBlock extends Block {
     public void animateTick(BlockState state, @NotNull Level level, @NotNull BlockPos pos, @NotNull RandomSource random) {
         boolean isTop = state.getValue(VENT_TYPE) == SulfurVentType.TOP;
         boolean isBaseWithoutTop = state.getValue(VENT_TYPE) == SulfurVentType.BASE && !isVentAbove(level, pos);
-        if (state.getValue(ACTIVE) && state.getValue(VENT_TYPE) == SulfurVentType.BASE) {
-            spawnSulfurCloud(level, pos, random);
-            spawnSulfurDust(level, pos, random);
-        }
 
         if ((isTop || isBaseWithoutTop) && state.getValue(ACTIVE)) {
             if (random.nextInt(20) == 0) {
@@ -209,57 +209,13 @@ public class SulfurVentBlock extends Block {
                 double offsetZ = random.nextDouble() * 0.2 - 0.1;
                 level.addParticle(ParticleTypes.SMOKE, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, offsetX, offsetY, offsetZ);
             }
+
             for (int i = 0; i < random.nextInt(2) + 1; ++i) {
                 double offsetX = random.nextDouble() * 0.05 - 0.025;
                 double offsetY = 0.2 + random.nextDouble() * 0.2;
                 double offsetZ = random.nextDouble() * 0.05 - 0.025;
                 level.addParticle(ParticleTypes.LAVA, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, offsetX, offsetY, offsetZ);
             }
-        }
-    }
-    private void spawnSulfurCloud(Level level, BlockPos pos, RandomSource random) {
-        if (random.nextInt(100) >= CLOUD_SPAWN_CHANCE) return;
-
-        int particlesToSpawn = random.nextInt(MAX_CLOUD_PARTICLES_PER_TICK) + 20;
-
-        for (int i = 0; i < particlesToSpawn; i++) {
-            double angle = random.nextDouble() * 2 * Math.PI;
-            double radius = Math.sqrt(random.nextDouble()) * (CLOUD_RADIUS);
-            double x = pos.getX() + 0.5 + Math.cos(angle) * radius;
-            double z = pos.getZ() + 0.5 + Math.sin(angle) * radius;
-            double y = pos.getY() + random.nextDouble() * CLOUD_HEIGHT;
-            double speed = 0.002 + random.nextDouble() * 0.005;
-            double xSpeed = (random.nextDouble() - 0.5) * speed;
-            double ySpeed = random.nextDouble() * speed * 0.5;
-            double zSpeed = (random.nextDouble() - 0.5) * speed;
-            level.addParticle(ModParticleTypes.SULFUR_SMOKE.get(), true, x, y, z, xSpeed, ySpeed, zSpeed);
-        }
-        if (random.nextFloat() < 0.2) {
-            double x = pos.getX() + 0.5 + (random.nextDouble() - 0.5) * 2.0;
-            double y = pos.getY() + 0.5 + random.nextDouble();
-            double z = pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 2.0;
-            level.addParticle(ParticleTypes.SMALL_FLAME, true, x, y, z, 0, 0.05, 0);
-        }
-    }
-
-    private void spawnSulfurDust(Level level, BlockPos pos, RandomSource random) {
-        if (random.nextInt(100) >= DUST_SPAWN_CHANCE) return;
-
-        int particlesToSpawn = random.nextInt(MAX_DUST_PARTICLES_PER_TICK) + 5;
-
-        for (int i = 0; i < particlesToSpawn; i++) {
-            double angle = random.nextDouble() * 2 * Math.PI;
-            double radius = Math.sqrt(random.nextDouble()) * (CLOUD_RADIUS * 1.2);
-            double x = pos.getX() + 0.5 + Math.cos(angle) * radius;
-            double z = pos.getZ() + 0.5 + Math.sin(angle) * radius;
-            double y = pos.getY() + 0.1 + random.nextDouble() * 0.3;
-
-            double speed = 0.001 + random.nextDouble() * 0.002;
-            double xSpeed = (random.nextDouble() - 0.5) * speed;
-            double ySpeed = random.nextDouble() * speed * 0.5;
-            double zSpeed = (random.nextDouble() - 0.5) * speed;
-
-            level.addParticle(ModParticleTypes.SULFUR_DUST.get(), x, y, z, xSpeed, ySpeed, zSpeed);
         }
     }
     @Override
@@ -273,7 +229,13 @@ public class SulfurVentBlock extends Block {
                     return;
                 }
 
+                if (state.getValue(VENT_TYPE) == SulfurVentType.BASE) {
+                    spawnSulfurCloud(world, pos, random);
+                    spawnSulfurDust(world, pos, random);
+                }
+
                 applyEffectsToEntities(world, pos);
+
                 world.sendParticles(ModParticleTypes.SULFUR_SMOKE.get(),
                         pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
                         1, 0.5, 0.5, 0.5, 0.01);
@@ -287,6 +249,40 @@ public class SulfurVentBlock extends Block {
             }
         }
     }
+    private void spawnSulfurCloud(Level level, BlockPos pos, RandomSource random) {
+        if (random.nextInt(100) >= CLOUD_SPAWN_CHANCE) return;
+
+        Vec3 center = Vec3.atCenterOf(pos);
+        float intensity = random.nextFloat() * 0.5f + 0.5f;
+        SulfurGasCloud.spawnEnhancedGasCloud(level, center, CLOUD_RADIUS, intensity, random);
+
+        if (random.nextFloat() < 0.2) {
+            double x = pos.getX() + 0.5 + (random.nextDouble() - 0.5) * 2.0;
+            double y = pos.getY() + 0.5 + random.nextDouble();
+            double z = pos.getZ() + 0.5 + (random.nextDouble() - 0.5) * 2.0;
+
+            if (level instanceof ServerLevel serverLevel) {
+                List<ServerPlayer> nearbyPlayers = serverLevel.getEntitiesOfClass(ServerPlayer.class,
+                        new AABB(pos.getX() - 256, pos.getY() - 256, pos.getZ() - 256,
+                                pos.getX() + 256, pos.getY() + 256, pos.getZ() + 256));
+
+                for (ServerPlayer player : nearbyPlayers) {
+                    serverLevel.sendParticles(player, ParticleTypes.SMOKE,
+                            true, x, y, z, 1, 0, 0.05, 0, 0.1);
+                }
+            }
+        }
+    }
+    private void spawnSulfurDust(Level level, BlockPos pos, RandomSource random) {
+        if (random.nextInt(100) >= DUST_SPAWN_CHANCE) return;
+
+        if (level instanceof ServerLevel serverLevel) {
+            Vec3 center = Vec3.atCenterOf(pos);
+            int particlesToSpawn = random.nextInt(MAX_DUST_PARTICLES_PER_TICK) + 5;
+            SulfurGasCloud.spawnDustParticlesForced(serverLevel, center, CLOUD_RADIUS * 1.2, particlesToSpawn, random);
+        }
+    }
+
     private boolean isFireInCloudArea(Level world, BlockPos ventPos) {
         for (BlockPos checkPos : BlockPos.betweenClosed(ventPos.offset(-EFFECT_RADIUS, -1, -EFFECT_RADIUS), ventPos.offset(EFFECT_RADIUS, 1, EFFECT_RADIUS))) {
             BlockState blockState = world.getBlockState(checkPos);
@@ -304,45 +300,7 @@ public class SulfurVentBlock extends Block {
     }
 
     private void applyEffectsToEntities(ServerLevel world, BlockPos pos) {
-        List<LivingEntity> entities = world.getEntitiesOfClass(LivingEntity.class,
-                new AABB(pos).inflate(EFFECT_INTERVAL),
-                entity -> entity.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= EFFECT_RADIUS_SQUARED);
-
-        for (LivingEntity entity : entities) {
-            if (entity instanceof Player player) {
-                if (player.isCreative() || player.isSpectator()) {
-                    continue;
-                }
-            }
-            ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
-            if (helmet.is(ModTags.Items.GAS_MASK)) {
-                int unbreakingLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, helmet);
-                if (entity.getPersistentData().getLong("LastHelmetDamageTick") + HELMET_DAMAGE_INTERVAL <= entity.tickCount) {
-                    entity.getPersistentData().putLong("LastHelmetDamageTick", entity.tickCount);
-
-                    if (shouldDamageItem(unbreakingLevel, entity.getRandom())) {
-                        helmet.hurtAndBreak(1, entity, (e) -> e.broadcastBreakEvent(EquipmentSlot.HEAD));
-                    }
-                }
-
-                continue;
-            }
-            // Apply effects if the entity is not wearing a gas mask
-            entity.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 3));
-            entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 60, 2));
-            entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 100, 1));
-            entity.hurt(entity.damageSources().magic(), 2.0F);
-            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 2));
-        }
-    }
-
-
-    private boolean shouldDamageItem(int unbreakingLevel, RandomSource random) {
-        if (unbreakingLevel > 0) {
-            int chance = 1 + unbreakingLevel;
-            return random.nextInt(chance) == 0;
-        }
-        return true;
+        SulfurGasCloud.applyGasEffects(world, pos, EFFECT_RADIUS, 400, 1);
     }
     private void scheduleParticleSpawn(ServerLevel world, BlockPos pos) {
         world.sendBlockUpdated(pos, world.getBlockState(pos), world.getBlockState(pos), 2);

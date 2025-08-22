@@ -52,16 +52,6 @@ public class BuckshotProjectileEntity extends ProjectileEntity {
     }
 
     @Override
-    public float getDamage() {
-        float damage = getaFloat();
-        damage = GunModifierHelper.getModifiedDamage(this.getWeapon(), this.modifiedGun, damage);
-        damage = GunEnchantmentHelper.getAcceleratorDamage(this.getWeapon(), damage);
-        damage = GunEnchantmentHelper.getHeavyShotDamage(this.getWeapon(), damage);
-        damage = GunEnchantmentHelper.getHotBarrelDamage(this.getWeapon(), damage);
-        return Math.max(0F, damage);
-    }
-
-    @Override
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
         entity.invulnerableTime = 0;
 

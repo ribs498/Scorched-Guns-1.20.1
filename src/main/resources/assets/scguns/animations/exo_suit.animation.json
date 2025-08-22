@@ -1,0 +1,11 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.exo_suit.idle": {
+			"loop": true,
+			"animation_length": 1.0,
+			"bones": {}
+		}
+	},
+	"geckolib_format_version": 2
+}

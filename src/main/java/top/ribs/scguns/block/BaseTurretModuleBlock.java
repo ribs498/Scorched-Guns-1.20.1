@@ -19,7 +19,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 
 public abstract class BaseTurretModuleBlock extends BaseEntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty CONNECTED = BooleanProperty.create("connected");
 
     protected static final VoxelShape SHAPE_CENTERED = Block.box(2.0, 0.0, 2.0, 14.0, 7.0, 14.0);
@@ -91,19 +91,19 @@ public abstract class BaseTurretModuleBlock extends BaseEntityBlock {
     }
 
     protected Direction getCorrectFacingForTurret(BlockGetter world, BlockPos pos) {
-        for (Direction direction : Direction.values()) {
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
             BlockPos neighborPos = pos.relative(direction);
             if (world.getBlockState(neighborPos).getBlock() instanceof BasicTurretBlock ||
                     world.getBlockState(neighborPos).getBlock() instanceof ShotgunTurretBlock ||
                     world.getBlockState(neighborPos).getBlock() instanceof AutoTurretBlock) {
-                return direction.getOpposite(); // Face towards the turret
+                return direction.getOpposite();
             }
         }
-        return Direction.NORTH; // Default to North if no turret found
+        return Direction.NORTH;
     }
 
     protected boolean isAdjacentToTurret(BlockGetter world, BlockPos pos) {
-        for (Direction direction : Direction.values()) {
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
             BlockPos neighborPos = pos.relative(direction);
             if (world.getBlockState(neighborPos).getBlock() instanceof BasicTurretBlock ||
                     world.getBlockState(neighborPos).getBlock() instanceof ShotgunTurretBlock ||

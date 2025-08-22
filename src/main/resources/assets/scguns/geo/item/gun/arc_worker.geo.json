@@ -481,6 +481,37 @@
 					]
 				},
 				{
+					"name": "Bolt",
+					"parent": "gun_body",
+					"pivot": [1.25, -4.1, 1.05],
+					"cubes": [
+						{
+							"origin": [0.4, -4.45, 0.8],
+							"size": [0.75, 0.5, 0.5],
+							"uv": {
+								"north": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
+								"east": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
+								"south": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
+								"west": {"uv": [2, 3], "uv_size": [0.5, 0.5]},
+								"up": {"uv": [0.5, 0.5], "uv_size": [-0.5, -0.5]},
+								"down": {"uv": [0.5, 0.5], "uv_size": [-0.5, -0.5]}
+							}
+						},
+						{
+							"origin": [1.15, -4.95, 0.3],
+							"size": [0, 1.5, 1.5],
+							"uv": {
+								"north": {"uv": [0, 0], "uv_size": [0, 2]},
+								"east": {"uv": [15, 62], "uv_size": [2, 2]},
+								"south": {"uv": [0, 0], "uv_size": [0, 2]},
+								"west": {"uv": [60, 18], "uv_size": [4, 4]},
+								"up": {"uv": [0, 0], "uv_size": [0, 2]},
+								"down": {"uv": [0, 2], "uv_size": [0, -2]}
+							}
+						}
+					]
+				},
+				{
 					"name": "body",
 					"parent": "gun_body",
 					"pivot": [0, -6.25, 0]
@@ -908,36 +939,52 @@
 				"thirdperson_righthand": {
 					"rotation": [114, 0, 0],
 					"translation": [0, 5.25, 2],
-					"scale": [2, 2, 2]
+					"scale": [2, 2, 2],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0]
 				},
 				"thirdperson_lefthand": {
 					"rotation": [114, 0, 0],
 					"translation": [0, 5.25, 2],
-					"scale": [2, 2, 2]
+					"scale": [2, 2, 2],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0]
 				},
 				"firstperson_righthand": {
 					"rotation": [53.25, 0, 0],
 					"translation": [2.25, 5.75, -1.75],
-					"scale": [2, 2, 2]
+					"scale": [2, 2, 2],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0]
 				},
 				"firstperson_lefthand": {
 					"rotation": [53.25, 0, 0],
 					"translation": [2.25, 5.75, -1.75],
-					"scale": [2, 2, 2]
+					"scale": [2, 2, 2],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0]
 				},
 				"ground": {
+					"rotation": [0, 0, 0],
 					"translation": [0, -0.75, -2.55],
-					"scale": [2, 2, 2]
+					"scale": [2, 2, 2],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0]
 				},
 				"gui": {
-					"rotation": [30, 225, 0],
+					"rotation": [30, -135, 0],
 					"translation": [3, -1.75, 0],
-					"scale": [2.5, 2.5, 2.5]
+					"scale": [2.5, 2.5, 2.5],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0],
+					"fit_to_frame": true
 				},
 				"fixed": {
 					"rotation": [0, 90, 0],
 					"translation": [-5.5, 0, -1.75],
-					"scale": [3, 3, 3]
+					"scale": [3, 3, 3],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0]
 				}
 			}
 		}

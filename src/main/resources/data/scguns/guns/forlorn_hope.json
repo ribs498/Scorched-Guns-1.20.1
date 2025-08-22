@@ -20,7 +20,8 @@
     "meleeCooldownTicks": 20,
     "meleeReach": 4.0,
     "hotBarrelRate": 16,
-    "criticalChance": 0.05
+    "criticalChance": 0.15,
+    "isSilenced": true
   },
   "modules": {
     "attachments": {
@@ -41,7 +42,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 16.0,
+    "damage": 17.0,
     "ejectsCasing": true,
     "item": "scguns:sculk_cell",
     "casingType": "scguns:empty_cell",

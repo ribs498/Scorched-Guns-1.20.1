@@ -1,0 +1,17 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 10,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "item": "scguns:depleted_diamond_steel_ingot"
+    },
+    {
+      "item": "create:experience_nugget"
+    }
+  ],
+  "result": {
+    "item": "scguns:diamond_steel_ingot",
+    "count": 1
+  }
+}

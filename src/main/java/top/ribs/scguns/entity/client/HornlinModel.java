@@ -77,27 +77,61 @@ public class HornlinModel<T extends Entity> extends HierarchicalModel<T> {
 		return LayerDefinition.create(meshdefinition, 128, 128);
 	}
 
-	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.root().getAllParts().forEach(ModelPart::resetPose);
 
-		if (entity instanceof HornlinEntity) {
-			HornlinEntity hornlin = (HornlinEntity) entity;
-			this.animateWalk(ModAnimationDefinitions.HORNLIN_WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
-			this.animate(hornlin.idleAnimationState, ModAnimationDefinitions.HORNLIN_IDLE, ageInTicks, 1f);
-			this.animate(hornlin.attackAnimationState, ModAnimationDefinitions.HORNLIN_IDLE, ageInTicks, 1f);
+    @Override
+    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.root().getAllParts().forEach(ModelPart::resetPose);
 
-			float clampedYaw = Mth.clamp(netHeadYaw, -45.0F, 45.0F);
-			float clampedPitch = Mth.clamp(headPitch, -20.0F, 20.0F);
+        if (entity instanceof HornlinEntity) {
+            HornlinEntity hornlin = (HornlinEntity) entity;
+            this.animateWalk(ModAnimationDefinitions.HORNLIN_WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
+            this.animate(hornlin.idleAnimationState, ModAnimationDefinitions.HORNLIN_IDLE, ageInTicks, 1f);
+            this.animate(hornlin.attackAnimationState, ModAnimationDefinitions.HORNLIN_IDLE, ageInTicks, 1f);
 
-			this.head.yRot = clampedYaw * ((float)Math.PI / 180F);
-			this.head.xRot = clampedPitch * ((float)Math.PI / 180F);
+            // Handle head movement based on what the Hornlin is doing
+            float finalYaw = netHeadYaw;
+            float finalPitch = headPitch;
 
-			boolean muzzleFlashVisible = hornlin.isMuzzleFlashVisible();
-			this.Flash.visible = muzzleFlashVisible;
-		}
-	}
+            // If eating or preparing to eat gold, override head movement to look at gold
+            if ((hornlin.isEatingGold() || hornlin.isPreparingToEat()) && hornlin.getTargetGoldItem() != null) {
+                // Calculate look direction to gold item
+                double deltaX = hornlin.getTargetGoldItem().getX() - hornlin.getX();
+                double deltaZ = hornlin.getTargetGoldItem().getZ() - hornlin.getZ();
+                double deltaY = hornlin.getTargetGoldItem().getY() - hornlin.getEyeY();
 
+                // Convert to angles
+                double horizontalDistance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
+                float goldYaw = (float) (Math.atan2(deltaZ, deltaX) * 180.0 / Math.PI) - 90.0F;
+                float goldPitch = (float) (Math.atan2(deltaY, horizontalDistance) * 180.0 / Math.PI);
+
+                // Use gold-looking angles instead of normal head tracking
+                finalYaw = goldYaw - hornlin.getYRot(); // Convert to relative angle
+                finalPitch = -goldPitch; // Negative because model pitch is inverted
+
+                // Add head bobbing while eating
+                if (hornlin.isEatingGold()) {
+                    float bobAmount = 0.15F; // How much to bob (in radians)
+                    float bobSpeed = 0.8F;   // How fast to bob
+                    float bob = Mth.sin(ageInTicks * bobSpeed) * bobAmount;
+                    finalPitch += bob * (180.0F / (float)Math.PI); // Convert to degrees
+
+                    // Also add slight side-to-side movement
+                    float sideAmount = 0.05F;
+                    float sideBob = Mth.cos(ageInTicks * bobSpeed * 0.7F) * sideAmount;
+                    finalYaw += sideBob * (180.0F / (float)Math.PI);
+                }
+            }
+
+            // Clamp the final angles to reasonable limits
+            float clampedYaw = Mth.clamp(finalYaw, -45.0F, 45.0F);
+            float clampedPitch = Mth.clamp(finalPitch, -30.0F, 30.0F);
+
+            this.head.yRot = clampedYaw * ((float)Math.PI / 180F);
+            this.head.xRot = clampedPitch * ((float)Math.PI / 180F);
+
+            this.Flash.visible = hornlin.isMuzzleFlashVisible();
+        }
+    }
 
 
 	@Override

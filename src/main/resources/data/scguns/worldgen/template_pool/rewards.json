@@ -1,0 +1,24 @@
+{
+  "name": "scguns:rewards",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 12,
+      "element": {
+        "location": "scguns:rewards/reward_chest",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 12,
+      "element": {
+        "location": "scguns:rewards/reward_chest_2",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

@@ -14,7 +14,7 @@
     "rate": 7,
     "recoilAngle": 8.0,
     "recoilKick": 2.0,
-    "spread": 1.25,
+    "spread": 1.2,
     "meleeDamage": 2.5,
     "meleeReach": 2.5,
     "meleeCooldownTicks": 10,
@@ -54,7 +54,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 3,
+    "maxAmmo": 4,
     "reloadTimer": 10,
     "reloadType": "scguns:manual"
   },

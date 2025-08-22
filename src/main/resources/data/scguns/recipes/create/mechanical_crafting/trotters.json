@@ -1,0 +1,44 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "X": {
+      "item": "scguns:firing_unit"
+    },
+    "B": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "A": {
+      "item": "minecraft:gold_ingot"
+    },
+    "P": {
+      "item": "scguns:piglin_blueprint"
+    },
+    "L": {
+      "item": "scguns:vehement_coal"
+    },
+    "Q": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "C": {
+      "item": "scguns:gun_barrel"
+    },
+    "K": {
+      "item": "scguns:gun_grip"
+    },
+    "S": {
+      "item": "minecraft:crimson_planks"
+    }
+  },
+  "pattern": [
+   "XBAP",
+   "LQRC",
+    "K S "
+  ],
+  "result": {
+    "item": "scguns:trotters"
+  }
+}

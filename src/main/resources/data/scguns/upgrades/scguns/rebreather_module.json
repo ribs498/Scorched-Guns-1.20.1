@@ -1,0 +1,10 @@
+{
+  "item": "scguns:rebreather_module",
+  "type": "breathing",
+  "effects": {
+    "energyUse": 15
+  },
+  "display": {
+    "model": "breathing_unit_1"
+  }
+}

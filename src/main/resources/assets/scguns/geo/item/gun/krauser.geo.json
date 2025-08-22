@@ -12,7 +12,12 @@
 			},
 			"bones": [
 				{
+					"name": "gun_body2",
+					"pivot": [-0.475, -5.225, 0]
+				},
+				{
 					"name": "gun_body",
+					"parent": "gun_body2",
 					"pivot": [-0.475, -5.225, 0],
 					"cubes": [
 						{
@@ -122,8 +127,8 @@
 							}
 						},
 						{
-							"origin": [-0.63447, -4.625, 1.4616],
-							"size": [1.25, 2.475, 2.5],
+							"origin": [-0.63447, -4.625, 1.4366],
+							"size": [1.25, 2.475, 2.55],
 							"uv": {
 								"north": {"uv": [24, 2], "uv_size": [1.5, 2.5]},
 								"east": {"uv": [16, 2], "uv_size": [2.5, 2.5]},
@@ -134,8 +139,8 @@
 							}
 						},
 						{
-							"origin": [-0.63447, -6.125, 1.4616],
-							"size": [1.25, 1.5, 2],
+							"origin": [-0.63447, -6.125, 1.4366],
+							"size": [1.25, 1.5, 2.05],
 							"uv": {
 								"north": {"uv": [27, 18], "uv_size": [1.5, 1.5]},
 								"east": {"uv": [25, 18], "uv_size": [2, 1.5]},
@@ -234,8 +239,8 @@
 							}
 						},
 						{
-							"origin": [-0.63447, -4.9, 3.9616],
-							"size": [1.25, 2, 2],
+							"origin": [-0.63447, -4.9, 3.9866],
+							"size": [1.25, 2, 1.975],
 							"uv": {
 								"north": {"uv": [3, 27], "uv_size": [1.5, 2]},
 								"east": {"uv": [16, 9], "uv_size": [2, 2]},
@@ -827,7 +832,38 @@
 				{
 					"name": "magazine",
 					"parent": "gun_body",
-					"pivot": [0.025, -7.88876, 7.0787]
+					"pivot": [0, -5.75, 2.5]
+				},
+				{
+					"name": "left_arm",
+					"parent": "magazine",
+					"pivot": [5.525, -1.8182, 6.00305],
+					"cubes": [
+						{
+							"origin": [4.275, -7.6182, 4.75305],
+							"size": [2.5, 10, 2.5],
+							"uv": {
+								"north": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
+								"east": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
+								"south": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
+								"west": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
+								"up": {"uv": [0.5, 0.5], "uv_size": [-0.5, -0.5]},
+								"down": {"uv": [0.5, 0.5], "uv_size": [-0.5, -0.5]}
+							}
+						},
+						{
+							"origin": [4.775, 2.1318, 5.00305],
+							"size": [1.75, 1.25, 2],
+							"uv": {
+								"north": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
+								"east": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
+								"south": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
+								"west": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
+								"up": {"uv": [0.5, 0.5], "uv_size": [-0.5, -0.5]},
+								"down": {"uv": [0.5, 0.5], "uv_size": [-0.5, -0.5]}
+							}
+						}
+					]
 				},
 				{
 					"name": "standard_mag",
@@ -946,149 +982,14 @@
 					]
 				},
 				{
-					"name": "magazine_2",
+					"name": "LeftArm",
 					"parent": "gun_body",
-					"pivot": [0, -7.875, 7]
-				},
-				{
-					"name": "standard_mag_2",
-					"parent": "magazine_2",
-					"pivot": [-0.475, -7.63876, 2.8287],
-					"cubes": [
-						{
-							"origin": [-0.63447, -6.625, 1.2116],
-							"size": [1.25, 0.5, 2.25],
-							"uv": {
-								"north": {"uv": [33, 32], "uv_size": [1.5, 0.5]},
-								"east": {"uv": [2, 32], "uv_size": [2.5, 0.5]},
-								"south": {"uv": [2, 34], "uv_size": [1.5, 0.5]},
-								"west": {"uv": [32, 2], "uv_size": [2.5, 0.5]},
-								"up": {"uv": [20, 24], "uv_size": [1.5, 2.5]},
-								"down": {"uv": [24, 24.5], "uv_size": [1.5, -2.5]}
-							}
-						},
-						{
-							"origin": [-0.5, -6.125, 1.4616],
-							"size": [1, 3.5, 2],
-							"uv": {
-								"north": {"uv": [26, 2], "uv_size": [1, 3.5]},
-								"east": {"uv": [14, 1], "uv_size": [2, 3.5]},
-								"south": {"uv": [26, 6], "uv_size": [1, 3.5]},
-								"west": {"uv": [11, 15], "uv_size": [2, 3.5]},
-								"up": {"uv": [26, 29], "uv_size": [1, 2]},
-								"down": {"uv": [27, 31], "uv_size": [1, -2]}
-							}
-						}
-					]
-				},
-				{
-					"name": "extended_mag_2",
-					"parent": "magazine_2",
-					"pivot": [-1.1, -7.7, 2.8369],
-					"cubes": [
-						{
-							"origin": [-0.63447, -8.125, 1.2116],
-							"size": [1.25, 0.5, 2.25],
-							"uv": {
-								"north": {"uv": [33, 14], "uv_size": [1.5, 0.5]},
-								"east": {"uv": [31, 30], "uv_size": [2.5, 0.5]},
-								"south": {"uv": [33, 15], "uv_size": [1.5, 0.5]},
-								"west": {"uv": [31, 31], "uv_size": [2.5, 0.5]},
-								"up": {"uv": [7, 24], "uv_size": [1.5, 2.5]},
-								"down": {"uv": [24, 10.5], "uv_size": [1.5, -2.5]}
-							}
-						},
-						{
-							"origin": [-0.50947, -7.625, 1.6366],
-							"size": [1, 1.5, 1.75],
-							"uv": {
-								"north": {"uv": [1, 31], "uv_size": [1, 1.5]},
-								"east": {"uv": [7, 27], "uv_size": [2, 1.5]},
-								"south": {"uv": [31, 1], "uv_size": [1, 1.5]},
-								"west": {"uv": [27, 8], "uv_size": [2, 1.5]},
-								"up": {"uv": [18, 29], "uv_size": [1, 2]},
-								"down": {"uv": [29, 20], "uv_size": [1, -2]}
-							}
-						},
-						{
-							"origin": [-0.5, -6.125, 1.4616],
-							"size": [1, 3.5, 2],
-							"uv": {
-								"north": {"uv": [26, 2], "uv_size": [1, 3.5]},
-								"east": {"uv": [14, 1], "uv_size": [2, 3.5]},
-								"south": {"uv": [26, 6], "uv_size": [1, 3.5]},
-								"west": {"uv": [11, 15], "uv_size": [2, 3.5]},
-								"up": {"uv": [26, 29], "uv_size": [1, 2]},
-								"down": {"uv": [27, 31], "uv_size": [1, -2]}
-							}
-						}
-					]
-				},
-				{
-					"name": "speed_mag_2",
-					"parent": "magazine_2",
-					"pivot": [-0.6, -7.7, 2.8369],
-					"cubes": [
-						{
-							"origin": [-0.63447, -6.625, 1.2116],
-							"size": [1.25, 0.5, 2.25],
-							"uv": {
-								"north": {"uv": [30, 33], "uv_size": [1.5, 0.5]},
-								"east": {"uv": [32, 0], "uv_size": [2.5, 0.5]},
-								"south": {"uv": [32, 33], "uv_size": [1.5, 0.5]},
-								"west": {"uv": [32, 1], "uv_size": [2.5, 0.5]},
-								"up": {"uv": [9, 24], "uv_size": [1.5, 2.5]},
-								"down": {"uv": [11, 26.5], "uv_size": [1.5, -2.5]}
-							}
-						},
-						{
-							"origin": [-0.00947, -7.875, 1.2116],
-							"size": [0, 1.25, 2.25],
-							"uv": {
-								"north": {"uv": [0, 0], "uv_size": [0, 1.5]},
-								"east": {"uv": [24, 14], "uv_size": [2.5, 1.5]},
-								"south": {"uv": [0, 0], "uv_size": [0, 1.5]},
-								"up": {"uv": [0, 0], "uv_size": [0, 2.5]},
-								"down": {"uv": [0, 2.5], "uv_size": [0, -2.5]}
-							}
-						},
-						{
-							"origin": [-0.5, -6.125, 1.4616],
-							"size": [1, 3.5, 2],
-							"uv": {
-								"north": {"uv": [26, 2], "uv_size": [1, 3.5]},
-								"east": {"uv": [14, 1], "uv_size": [2, 3.5]},
-								"south": {"uv": [26, 6], "uv_size": [1, 3.5]},
-								"west": {"uv": [11, 15], "uv_size": [2, 3.5]},
-								"up": {"uv": [26, 29], "uv_size": [1, 2]},
-								"down": {"uv": [27, 31], "uv_size": [1, -2]}
-							}
-						}
-					]
+					"pivot": [4.5, -6.625, 6]
 				},
 				{
 					"name": "attachment_bone",
 					"parent": "gun_body",
 					"pivot": [-0.47688, -6.45375, 3.24059]
-				},
-				{
-					"name": "left_arm",
-					"parent": "gun_body",
-					"pivot": [5.525, -1.8182, 6.00305],
-					"cubes": [
-						{
-							"origin": [4.275, -7.6182, 4.75305],
-							"size": [2.5, 10, 2.5],
-							"uv": {
-								"north": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
-								"east": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
-								"south": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
-								"west": {"uv": [0, 0], "uv_size": [0.5, 0.5]},
-								"up": {"uv": [0.5, 0.5], "uv_size": [-0.5, -0.5]},
-								"down": {"uv": [0.5, 0.5], "uv_size": [-0.5, -0.5]}
-							}
-						}
-					]
 				},
 				{
 					"name": "right_arm",
@@ -1375,32 +1276,54 @@
 			],
 			"item_display_transforms": {
 				"thirdperson_righthand": {
+					"rotation": [0, 0, 0],
 					"translation": [0, 5.75, -6.25],
-					"scale": [1.3, 1.3, 1.3]
+					"scale": [1.3, 1.3, 1.3],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0]
 				},
 				"thirdperson_lefthand": {
+					"rotation": [0, 0, 0],
 					"translation": [0, 5.75, -6.25],
-					"scale": [1.3, 1.3, 1.3]
+					"scale": [1.3, 1.3, 1.3],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0]
 				},
 				"firstperson_righthand": {
-					"translation": [-4.5, 8.25, -2.25]
+					"rotation": [0, 0, 0],
+					"translation": [-4.5, 8.25, -2.25],
+					"scale": [1, 1, 1],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0]
 				},
 				"firstperson_lefthand": {
-					"translation": [-4.5, 8.25, -2.25]
+					"rotation": [0, 0, 0],
+					"translation": [-4.5, 8.25, -2.25],
+					"scale": [1, 1, 1],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0]
 				},
 				"ground": {
+					"rotation": [0, 0, 0],
 					"translation": [0, 9.5, -3.75],
-					"scale": [1.3, 1.3, 1.3]
+					"scale": [1.3, 1.3, 1.3],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0]
 				},
 				"gui": {
 					"rotation": [74.02, -53.34, 70.48],
 					"translation": [-0.25, 5, 0],
-					"scale": [1.1, 1.1, 1.1]
+					"scale": [1.1, 1.1, 1.1],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0],
+					"fit_to_frame": true
 				},
 				"fixed": {
 					"rotation": [90, 55, -90],
 					"translation": [1.5, 8.5, 0],
-					"scale": [1.5, 1.5, 1.5]
+					"scale": [1.5, 1.5, 1.5],
+					"rotation_pivot": [0, 0, 0],
+					"scale_pivot": [0, 0, 0]
 				}
 			}
 		}

@@ -12,7 +12,6 @@ import top.ribs.scguns.entity.monster.CogKnightEntity;
 public class CogKnightRenderer extends MobRenderer<CogKnightEntity, CogKnightModel<CogKnightEntity>> {
     public CogKnightRenderer(EntityRendererProvider.Context pContext) {
         super(pContext, new CogKnightModel<>(pContext.bakeLayer(ModModelLayers.COG_KNIGHT_LAYER)), 0.7f);
-        this.addLayer(new ItemInHandLayer<>(this, pContext.getItemInHandRenderer()));
 
     }
     @Override

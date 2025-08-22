@@ -17,6 +17,9 @@
     "S": {
       "item": "scguns:gun_barrel"
     },
+    "N": {
+      "item": "scguns:heavy_gun_barrel"
+    },
     "V": {
       "item": "scguns:iron_gun_frame"
     },
@@ -29,7 +32,7 @@
   },
   "pattern": [
     "CVKP ",
-    "LRSS ",
+    "LRNS ",
     "Q K  "
   ],
   "result": {

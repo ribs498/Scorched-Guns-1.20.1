@@ -1,0 +1,30 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:tl_runner",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:wrecker_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "scguns:plasma_core"
+    },
+    "gun_internal_2": {
+      "item": "scguns:gun_parts"
+    },
+    "gun_top_internal_2": {
+      "item": "scguns:treated_iron_ingot"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:gun_barrel"
+    },
+    "gun_grip": {
+      "item": "scguns:gun_grip"
+    },
+    "gun_magazine": {
+      "tag": "minecraft:planks"
+    }
+  }
+}

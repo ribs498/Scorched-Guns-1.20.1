@@ -29,8 +29,7 @@ public class ProjectileManager
     }
 
     private final IProjectileFactory DEFAULT_FACTORY = (worldIn, entity, weapon, item, modifiedGun) -> new ProjectileEntity(ModEntities.PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun);
-    //private final IProjectileFactory SPECTRE_FACTORY = (worldIn, entity, weapon, item, modifiedGun) -> new SpectreProjectileEntity(ModEntities.SPECTRE_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun);
-    //private final IProjectileFactory WATER_FACTORY = (worldIn, entity, weapon, item, modifiedGun) -> new WaterProjectileEntity(ModEntities.WATER_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun);
+
     private final Map<ResourceLocation, IProjectileFactory> projectileFactoryMap = new HashMap<>();
 
     /**

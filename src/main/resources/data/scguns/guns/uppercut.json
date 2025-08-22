@@ -10,7 +10,7 @@
   "general": {
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
-    "rate": 7,
+    "rate": 6,
     "recoilAngle": 9.0,
     "recoilKick": 5.4,
     "spread": 2.0,
@@ -43,7 +43,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 20.0,
+    "damage": 23.0,
     "gravity": false,
     "item": "scguns:beowulf_round",
     "casingType": "scguns:small_diamond_steel_casing",
@@ -56,10 +56,11 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 4,
+    "maxAmmo": 5,
+    "reloadAmount": 1,
     "reloadItem": "scguns:beowulf_round",
     "reloadTimer": 20,
-    "reloadType": "scguns:manual"
+    "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",

@@ -16,7 +16,8 @@
     "meleeReach": 3.5,
     "energyUse": 40.0,
     "hotBarrelRate": 50,
-    "criticalChance": 0.05
+    "criticalChance": 0.05,
+    "enableGunLight": false
   },
   "modules": {
     "attachments": {
@@ -41,7 +42,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 15.0,
+    "damage": 16.0,
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:hardened_bullet",

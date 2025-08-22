@@ -48,6 +48,9 @@ public static final RegistryObject<MenuType<BasicTurretMenu>> BASIC_TURRET_MENU 
     public static final RegistryObject<MenuType<PoweredMechanicalPressMenu>> POWERED_MECHANICAL_PRESS_MENU =
             MENUS.register("powered_mechanical_press_menu", () -> IForgeMenuType.create(PoweredMechanicalPressMenu::new));
 
+    public static final RegistryObject<MenuType<ExoSuitMenu>> EXOSUIT_MENU =
+            MENUS.register("exosuit_menu", () -> IForgeMenuType.create(ExoSuitMenu::new));
+
     public static final RegistryObject<MenuType<GunBenchMenu>> GUN_BENCH
             = registerMenuType("gun_bench", GunBenchMenu::new);
 

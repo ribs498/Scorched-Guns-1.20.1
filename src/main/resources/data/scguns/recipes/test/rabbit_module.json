@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "S": {
+      "item": "scguns:anthralite_nugget"
+    },
+    "Z": {
+      "item": "scguns:tension_spring"
+    },
+    "P": {
+      "item": "scguns:treated_iron_ingot"
+    }
+
+  },
+  "pattern": [
+    "SP ",
+    "ZS ",
+    " X "
+  ],
+  "result": {
+    "item": "scguns:rabbit_module"
+  }
+}

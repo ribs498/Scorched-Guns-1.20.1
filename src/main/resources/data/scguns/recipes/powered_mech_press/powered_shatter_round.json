@@ -1,0 +1,20 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 10,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "item": "scguns:medium_brass_casing"
+    },
+    {
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "scguns:flechette"
+    }
+  ],
+  "result": {
+    "item": "scguns:shatter_round",
+    "count": 1
+  }
+}

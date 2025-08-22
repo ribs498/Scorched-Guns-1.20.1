@@ -30,6 +30,7 @@ public class SulfurSmokeParticle extends TextureSheetParticle {
         this.bCol = 0.2F;
         this.alpha = 0.6F + random.nextFloat() * 0.2F;
         this.friction = 0.96F;
+        this.hasPhysics = true;
     }
 
     @Override
@@ -43,6 +44,11 @@ public class SulfurSmokeParticle extends TextureSheetParticle {
         if (this.age >= this.lifetime / 2) {
             this.setAlpha(this.alpha * (1.0F - ((float)this.age - (float)(this.lifetime / 2)) / (float)this.lifetime));
         }
+    }
+
+    @Override
+    public int getLightColor(float pPartialTick) {
+        return 15728880;
     }
 
     @Override
@@ -64,6 +70,7 @@ public class SulfurSmokeParticle extends TextureSheetParticle {
             return new SulfurSmokeParticle(level, x, y, z, xSpeed, ySpeed, zSpeed, this.sprites);
         }
     }
+
     public static class SulfurSmokeParticleOptions implements ParticleOptions {
         private final int lifetime;
 

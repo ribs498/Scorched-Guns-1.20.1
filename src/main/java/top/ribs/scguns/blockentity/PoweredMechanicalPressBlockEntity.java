@@ -68,7 +68,6 @@ public class PoweredMechanicalPressBlockEntity extends BlockEntity implements Me
                 }
             }
 
-            // Proceed with usual insertion logic
             return super.insertItem(slot, stack, simulate);
         }
     };
@@ -120,13 +119,13 @@ public class PoweredMechanicalPressBlockEntity extends BlockEntity implements Me
         this.data = new ContainerData() {
             @Override
             public int get(int index) {
-                switch (index) {
-                    case 0: return progress;
-                    case 1: return maxProgress;
-                    case 2: return energyStorage.getEnergyStored();
-                    case 3: return energyStorage.getMaxEnergyStored();
-                    default: return 0;
-                }
+                return switch (index) {
+                    case 0 -> progress;
+                    case 1 -> maxProgress;
+                    case 2 -> energyStorage.getEnergyStored();
+                    case 3 -> energyStorage.getMaxEnergyStored();
+                    default -> 0;
+                };
             }
 
             @Override
@@ -174,10 +173,8 @@ public class PoweredMechanicalPressBlockEntity extends BlockEntity implements Me
                 return lazyItemHandler.cast();
             } else if (side == Direction.DOWN) {
                 return LazyOptional.of(() -> new OutputItemHandler(itemHandler)).cast();
-            } else if (side == Direction.UP) {
-                return LazyOptional.of(() -> new TopItemHandler(itemHandler)).cast();
             } else {
-                return LazyOptional.of(() -> new InputItemHandler(itemHandler)).cast();
+                return LazyOptional.of(() -> new TopItemHandler(itemHandler)).cast();
             }
         }
         if (cap == ForgeCapabilities.ENERGY) {
@@ -312,11 +309,11 @@ public class PoweredMechanicalPressBlockEntity extends BlockEntity implements Me
         return false;
     }
     private void craftItem() {
-        SimpleContainer inventory = new SimpleContainer(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 2); // Add one for the mold slot
+        SimpleContainer inventory = new SimpleContainer(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 2);
         for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
             inventory.setItem(i - FIRST_INPUT_SLOT, itemHandler.getStackInSlot(i));
         }
-        inventory.setItem(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 1, itemHandler.getStackInSlot(MOLD_SLOT)); // Add mold slot
+        inventory.setItem(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 1, itemHandler.getStackInSlot(MOLD_SLOT));
         assert level != null;
         Optional<PoweredMechanicalPressRecipe> match = level.getRecipeManager()
                 .getRecipeFor(PoweredMechanicalPressRecipe.Type.INSTANCE, inventory, level);
@@ -325,7 +322,6 @@ public class PoweredMechanicalPressBlockEntity extends BlockEntity implements Me
             ItemStack resultItem = recipe.getResultItem(level.registryAccess());
             ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
             if (outputStack.isEmpty() || (outputStack.getItem() == resultItem.getItem() && outputStack.getCount() + resultItem.getCount() <= outputStack.getMaxStackSize())) {
-                // Consume only the required ingredients
                 for (Ingredient ingredient : recipe.getIngredients()) {
                     for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
                         if (ingredient.test(itemHandler.getStackInSlot(i))) {
@@ -335,15 +331,11 @@ public class PoweredMechanicalPressBlockEntity extends BlockEntity implements Me
                     }
                 }
 
-                // Reduce mold durability only if the recipe requires a mold
                 if (recipe.requiresMold()) {
                     ItemStack moldStack = itemHandler.getStackInSlot(MOLD_SLOT);
                     if (!moldStack.isEmpty() && moldStack.isDamageableItem()) {
-                        int newDamage = moldStack.getDamageValue() + 1;
-                        if (newDamage >= moldStack.getMaxDamage()) {
-                            moldStack.shrink(1); // Remove the item if it reaches max damage
-                        } else {
-                            moldStack.setDamageValue(newDamage); // Otherwise, set the new damage value
+                        if (moldStack.hurt(1, level.random, null)) {
+                            moldStack.shrink(1);
                         }
                         itemHandler.setStackInSlot(MOLD_SLOT, moldStack);
                     }

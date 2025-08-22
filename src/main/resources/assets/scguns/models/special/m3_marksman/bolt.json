@@ -1,0 +1,91 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+      "1": "scguns:item/m3_marksman",
+      "particle": "scguns:item/m3_marksman"
+	},
+	"elements": [
+		{
+			"name": "bolt",
+			"from": [8.65, 4.27633, 11.21106],
+			"to": [9.65, 4.77633, 11.21106],
+			"rotation": {"angle": 45, "axis": "x", "origin": [9.15, 4.52633, 11.21106]},
+			"faces": {
+				"north": {"uv": [10.25, 7.25, 10.5, 7.375], "texture": "#1"},
+				"east": {"uv": [0, 0, 0, 0.125], "texture": "#1"},
+				"south": {"uv": [7.5, 10.25, 7.75, 10.375], "texture": "#1"},
+				"west": {"uv": [0, 0, 0, 0.125], "texture": "#1"},
+				"up": {"uv": [0.25, 0, 0, 0], "texture": "#1"},
+				"down": {"uv": [0.25, 0, 0, 0], "texture": "#1"}
+			}
+		},
+		{
+			"name": "bolt",
+			"from": [8.65, 4.27633, 11.21106],
+			"to": [9.65, 4.77633, 11.21106],
+			"rotation": {"angle": -45, "axis": "x", "origin": [9.15, 4.52633, 11.21106]},
+			"faces": {
+				"north": {"uv": [7.75, 10.25, 8, 10.375], "texture": "#1"},
+				"east": {"uv": [0, 0, 0, 0.125], "texture": "#1"},
+				"south": {"uv": [8, 10.25, 8.25, 10.375], "texture": "#1"},
+				"west": {"uv": [0, 0, 0, 0.125], "texture": "#1"},
+				"up": {"uv": [0.25, 0, 0, 0], "texture": "#1"},
+				"down": {"uv": [0.25, 0, 0, 0], "texture": "#1"}
+			}
+		},
+		{
+			"name": "bolt",
+			"from": [9.65, 4.27633, 10.96106],
+			"to": [9.9, 4.77633, 11.71106],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.32633, 8.78373]},
+			"faces": {
+				"north": {"uv": [10.75, 9.5, 10.875, 9.625], "texture": "#1"},
+				"east": {"uv": [8.25, 10.25, 8.5, 10.375], "texture": "#1"},
+				"south": {"uv": [9.75, 10.75, 9.875, 10.875], "texture": "#1"},
+				"west": {"uv": [10.25, 8.25, 10.5, 8.375], "texture": "#1"},
+				"up": {"uv": [8.625, 10.5, 8.5, 10.25], "texture": "#1"},
+				"down": {"uv": [8.875, 10.25, 8.75, 10.5], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.75, -7],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.75, -7],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-4.5, 9.5, -1]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4.5, 9.5, -1]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1, 6.25, 0],
+			"scale": [1.1, 1.1, 1.1]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [1.5, 8.5, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "bolt",
+			"origin": [0.62646, -4.05184, 3.38542],
+			"color": 3,
+			"children": [0, 1, 2]
+		}
+	]
+}

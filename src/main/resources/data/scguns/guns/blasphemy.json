@@ -35,7 +35,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 8.5,
+    "damage": 10.0,
     "gravity": false,
     "ejectsCasing": false,
     "item": "scguns:blaze_fuel",
@@ -49,6 +49,7 @@
     "maxAmmo": 10,
     "reloadItem": "scguns:blaze_fuel",
     "reloadByproduct": "scguns:empty_tank",
+    "byproductChance": 0.7,
     "reloadTimer": 30,
     "reloadType": "scguns:single_item"
   },

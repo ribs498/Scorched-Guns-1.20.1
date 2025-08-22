@@ -1,0 +1,29 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": {
+      "item": "scguns:anthralite_ingot"
+    },
+    "S": {
+      "item": "scguns:anthralite_nugget"
+    },
+    "J": {
+      "item": "scguns:plasma_core"
+    },
+    "M": {
+      "item": "scguns:empty_tank"
+    },
+    "Y": {
+      "item": "scguns:treated_brass_ingot"
+    }
+  },
+  "pattern": [
+    "SYS",
+    "XJX",
+    "XMX"
+  ],
+  "result": {
+    "item": "scguns:jetpack_module"
+  }
+}

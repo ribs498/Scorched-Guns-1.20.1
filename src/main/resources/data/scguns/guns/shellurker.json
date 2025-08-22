@@ -8,15 +8,15 @@
     }
   },
   "general": {
-    "alwaysSpread": false,
+    "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "projectileAmount": 1,
+    "projectileAmount": 2,
     "rate": 10,
     "recoilAngle": 6.0,
     "recoilKick": 3.0,
-    "spread": 1.0,
+    "spread": 3.0,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 23,
@@ -41,7 +41,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 15.0,
+    "damage": 19.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:shulkshot",
@@ -50,7 +50,11 @@
     "life": 120,
     "size": 0.00001,
     "speed":  0.75,
-    "trailLengthMultiplier": 100.0
+    "trailLengthMultiplier": 100.0,
+    "impactEffect": "minecraft:levitation",
+    "impactEffectDuration": 100,
+    "impactEffectChance": 0.3,
+    "impactEffectAmplifier": 0
   },
   "reloads": {
     "emptyMagTimer": 10,

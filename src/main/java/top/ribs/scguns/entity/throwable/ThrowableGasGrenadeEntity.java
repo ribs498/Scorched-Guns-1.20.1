@@ -17,6 +17,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import top.ribs.scguns.common.SulfurGasCloud;
 import top.ribs.scguns.event.GasExplosion;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModItems;
@@ -51,10 +52,6 @@ public class ThrowableGasGrenadeEntity extends ThrowableGrenadeEntity {
     }
 
     @Override
-    protected void defineSynchedData() {
-    }
-
-    @Override
     public void tick() {
         super.tick();
 
@@ -69,55 +66,20 @@ public class ThrowableGasGrenadeEntity extends ThrowableGrenadeEntity {
             this.remove(RemovalReason.KILLED);
         }
     }
-
     private void emitGasCloudParticles() {
-        if (this.level().isClientSide) {
-            for (int i = 0; i < 15; i++) {
-                double xOffset = random.nextGaussian() * explosionRadius;
-                double yOffset = random.nextGaussian() * (explosionRadius / 2);
-                double zOffset = random.nextGaussian() * explosionRadius;
-                double x = this.getX() + xOffset;
-                double y = this.getY() + yOffset;
-                double z = this.getZ() + zOffset;
-                this.level().addParticle(ModParticleTypes.SULFUR_DUST.get(), x, y, z, 0, 0, 0);
-                this.level().addParticle(ModParticleTypes.SULFUR_SMOKE.get(), x, y, z, 0, 0, 0);
-            }
+        Vec3 center = this.position();
+        float intensity = 0.8f;
+
+        if (!this.level().isClientSide) {
+            SulfurGasCloud.spawnEnhancedGasCloud(this.level(), center, this.explosionRadius, intensity, this.random);
         }
     }
-
     private void applyGasEffects() {
-        List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, new AABB(this.blockPosition()).inflate(this.explosionRadius));
-        for (LivingEntity entity : entities) {
-            if (entity instanceof Player player && (player.isCreative() || player.isSpectator())) continue;
-
-            ItemStack helmet = entity.getItemBySlot(EquipmentSlot.HEAD);
-            if (helmet.is(ModTags.Items.GAS_MASK)) {
-                int unbreakingLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.UNBREAKING, helmet);
-                if (entity.getPersistentData().getLong("LastHelmetDamageTick") + 50 <= entity.tickCount) {
-                    entity.getPersistentData().putLong("LastHelmetDamageTick", entity.tickCount);
-
-                    if (shouldDamageItem(unbreakingLevel, entity.getRandom())) {
-                        helmet.hurtAndBreak(1, entity, (e) -> e.broadcastBreakEvent(EquipmentSlot.HEAD));
-                    }
-                }
-
-                continue;
-            }
-            entity.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 2));
-            entity.addEffect(new MobEffectInstance(MobEffects.WITHER, 60, 1));
-            entity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 60, 0));
-            entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 1));
+        if (!this.level().isClientSide) {
+            Vec3 center = this.position();
+            SulfurGasCloud.applyGasEffects(this.level(), center, this.explosionRadius, 500, 2);
         }
     }
-
-    private boolean shouldDamageItem(int unbreakingLevel, RandomSource random) {
-        if (unbreakingLevel > 0) {
-            int chance = 1 + unbreakingLevel;
-            return random.nextInt(chance) == 0;
-        }
-        return true;
-    }
-
 
     @Override
     public void onDeath() {

@@ -10,6 +10,23 @@ import top.ribs.scguns.item.GunItem;
  */
 public class GunModifiers
 {
+    public static final IGunModifier LONG_SCOPE_SENSITIVITY_COMPENSATION = new IGunModifier()
+    {
+        @Override
+        public double modifyMouseSensitivity(double sensitivity)
+        {
+            return sensitivity * 2.0;
+        }
+    };
+
+    public static final IGunModifier MEDIUM_SCOPE_SENSITIVITY_COMPENSATION = new IGunModifier()
+    {
+        @Override
+        public double modifyMouseSensitivity(double sensitivity)
+        {
+            return sensitivity * 1.5;
+        }
+    };
     public static final IGunModifier SILENCED = new IGunModifier()
     {
         @Override
@@ -77,7 +94,7 @@ public class GunModifiers
     public static final IGunModifier NETHERITE_BAYONET_DAMAGE = new IGunModifier() {
         @Override
         public float additionalDamage() {
-            return 4.5F;
+            return 4.0F;
         }
         @Override
         public boolean isMeleeOnly() {
@@ -117,13 +134,109 @@ public class GunModifiers
         {
             return speed * 0.97F;
         }
+
+    };
+    public static final IGunModifier LONG_SCOPE_RECOIL_REDUCTION = new IGunModifier()
+    {
         @Override
         public float recoilModifier()
         {
-            return 1.05F;
+            return 0.9F;
+        }
+
+        @Override
+        public float kickModifier()
+        {
+            return 0.9F;
         }
     };
 
+    public static final IGunModifier LONG_SCOPE_SPREAD_REDUCTION = new IGunModifier()
+    {
+        @Override
+        public float modifyProjectileSpread(float spread)
+        {
+            return spread * 0.8F;
+        }
+    };
+
+    public static final IGunModifier MEDIUM_SCOPE_RECOIL_REDUCTION = new IGunModifier()
+    {
+        @Override
+        public float recoilModifier()
+        {
+            return 0.9F;
+        }
+
+        @Override
+        public float kickModifier()
+        {
+            return 0.85F;
+        }
+    };
+
+    public static final IGunModifier MEDIUM_SCOPE_SPREAD_REDUCTION = new IGunModifier()
+    {
+        @Override
+        public float modifyProjectileSpread(float spread)
+        {
+            return spread * 0.85F;
+        }
+    };
+
+    public static final IGunModifier REFLEX_SIGHT_CRIT_BONUS = new IGunModifier()
+    {
+        @Override
+        public float criticalChance()
+        {
+            return 0.05F;
+        }
+    };
+
+    public static final IGunModifier REFLEX_SIGHT_ADS_BONUS = new IGunModifier()
+    {
+        @Override
+        public double modifyAimDownSightSpeed(double speed)
+        {
+            return speed * 1.1F;
+        }
+
+        @Override
+        public float modifyProjectileSpread(float spread)
+        {
+            return spread * 0.9F;
+        }
+    };
+
+    public static final IGunModifier LASER_SIGHT_SPREAD_REDUCTION = new IGunModifier()
+    {
+        @Override
+        public float modifyProjectileSpread(float spread)
+        {
+            return spread * 0.85F;
+        }
+
+        @Override
+        public float criticalChance()
+        {
+            return 0.05F;
+        }
+    };
+
+    public static final IGunModifier LASER_SIGHT_ADS_BONUS = new IGunModifier()
+    {
+        @Override
+        public double modifyAimDownSightSpeed(double speed)
+        {
+            return speed * 1.15F;
+        }
+
+        @Override
+        public float recoilModifier()
+        {
+            return 0.95F;
+        }
+    };
     public static final IGunModifier SLOWER_ADS = new IGunModifier()
     {
         @Override
@@ -171,7 +284,7 @@ public class GunModifiers
         @Override
         public float recoilModifier()
         {
-            return 0.8F;
+            return 0.7F;
         }
         @Override
         public float kickModifier()
@@ -330,12 +443,12 @@ public class GunModifiers
     public static final IGunModifier EXTENDED_MAG_MODIFIER = new IGunModifier() {
         @Override
         public double modifyReloadSpeed(double reloadSpeed) {
-            return reloadSpeed * 1.3;
+            return reloadSpeed * 1.4;
         }
 
         @Override
         public int modifyAmmoCapacity(int baseCapacity) {
-            return (int) (baseCapacity * 2.0);
+            return (int) (baseCapacity * 2.25);
         }
 
         @Override
@@ -356,7 +469,7 @@ public class GunModifiers
     public static final IGunModifier SPEED_MAG_MODIFIER = new IGunModifier() {
         @Override
         public double modifyReloadSpeed(double reloadSpeed) {
-            return reloadSpeed * 0.8;
+            return reloadSpeed * 0.45;
         }
 
         @Override
@@ -375,7 +488,7 @@ public class GunModifiers
         }
         @Override
         public double modifyDrawSpeed(double speed) {
-            return speed * 1.15F;  // 15% faster draw speed
+            return speed * 1.15F;
         }
     };
 

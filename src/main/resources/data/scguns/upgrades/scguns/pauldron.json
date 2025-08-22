@@ -1,0 +1,15 @@
+{
+  "item": "scguns:pauldron",
+  "type": "pauldron",
+  "effects": {
+    "recoilAngleReduction": 0.2,
+    "recoilKickReduction": 0.2,
+    "armorBonus": 1.5,
+    "armorToughness": 0.25,
+    "knockbackResistance": 0.15,
+    "speedModifier": -0.01
+  },
+  "display": {
+    "model": "standard_pauldron"
+  }
+}

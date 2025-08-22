@@ -26,7 +26,6 @@ import top.ribs.scguns.blockentity.PenetratorBlockEntity;
 import javax.annotation.Nullable;
 import java.util.Random;
 
-
 public class PenetratorBlock extends BaseEntityBlock {
 
     public static final DirectionProperty FACING = DirectionProperty.create("facing", Direction.values());
@@ -35,23 +34,8 @@ public class PenetratorBlock extends BaseEntityBlock {
     public PenetratorBlock(BlockBehaviour.Properties pProperties, int tunnelLength) {
         super(pProperties);
         this.tunnelLength = tunnelLength;
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.SOUTH));
     }
-
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        // Get the player's horizontal direction for placing the block
-        Direction facing = pContext.getNearestLookingDirection().getOpposite();
-
-        // If the player is crouching, it will place the block upwards or downwards
-        if (pContext.getPlayer() != null && pContext.getPlayer().isShiftKeyDown()) {
-            return this.defaultBlockState().setValue(FACING, pContext.getClickedFace());
-        }
-
-        // Otherwise, place it based on the player's horizontal facing direction
-        return this.defaultBlockState().setValue(FACING, facing);
-    }
-
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
@@ -59,14 +43,75 @@ public class PenetratorBlock extends BaseEntityBlock {
     }
 
     @Override
+    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        Direction facing;
+
+        // If the player is crouching, use the clicked face direction
+        if (pContext.getPlayer() != null && pContext.getPlayer().isShiftKeyDown()) {
+            facing = pContext.getClickedFace();
+        } else {
+            // Use the player's horizontal facing direction
+            facing = pContext.getHorizontalDirection();
+        }
+
+        return this.defaultBlockState().setValue(FACING, facing);
+    }
+
+    // Override redstone connection methods
+    @Override
+    public boolean canConnectRedstone(BlockState state, BlockGetter world, BlockPos pos, @Nullable Direction side) {
+        // Get the direction this penetrator is facing
+        Direction facing = state.getValue(FACING);
+
+        // The redstone connection point should be the visual back side (same as facing direction)
+        Direction connectionSide = facing; // Changed: removed .getOpposite()
+
+        // Debug: You can add this line temporarily to check what's happening
+        // System.out.println("Facing: " + facing + ", Connection side: " + connectionSide + ", Requested side: " + side);
+
+        // Allow connection if the side matches our connection side, or if side is null (for general queries)
+        return side == null || side == connectionSide;
+    }
+
+    @Override
+    public boolean isSignalSource(BlockState pState) {
+        return false; // This block doesn't output redstone, only receives it
+    }
+
+    // Override the neighbor change detection to be more specific about redstone
+    @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         if (!level.isClientSide) {
-            BlockEntity blockEntity = level.getBlockEntity(pos);
-            if (blockEntity instanceof PenetratorBlockEntity) {
-                PenetratorBlockEntity.tick(level, pos, state, (PenetratorBlockEntity) blockEntity);
+            // Get the direction this penetrator is facing
+            Direction facing = state.getValue(FACING);
+            Direction connectionSide = facing; // Changed: removed .getOpposite()
+
+            // Check if the changed neighbor is on our redstone connection side
+            BlockPos connectionPos = pos.relative(connectionSide);
+
+            boolean shouldActivate = false;
+
+            // Check direct redstone power from the connection side
+            if (fromPos.equals(connectionPos)) {
+                shouldActivate = level.hasNeighborSignal(pos) ||
+                        level.getSignal(connectionPos, connectionSide) > 0;
+            }
+            // Also check if any neighbor is providing signal to our connection side
+            else {
+                shouldActivate = level.getSignal(connectionPos, connectionSide) > 0 ||
+                        level.hasNeighborSignal(pos);
+            }
+
+            if (shouldActivate) {
+                BlockEntity blockEntity = level.getBlockEntity(pos);
+                if (blockEntity instanceof PenetratorBlockEntity) {
+                    PenetratorBlockEntity.tick(level, pos, state, (PenetratorBlockEntity) blockEntity);
+                }
             }
         }
     }
+
+
 
     @Nullable
     @Override

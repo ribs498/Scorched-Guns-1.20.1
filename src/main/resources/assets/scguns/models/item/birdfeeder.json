@@ -1,0 +1,36 @@
+{
+	"parent": "builtin/entity",
+	"textures": {
+		"1": "minecraft:item/copper_ingot",
+		"particle": "minecraft:item/copper_ingot"
+	},
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.25, -6.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.25, -6.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 9.25, -0.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.25, 9.25, -0.5]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-2.0, 4, 0]
+		},
+		"fixed": {
+			"rotation": [-90, 90, 90],
+			"translation": [-5.5, 7.25, 0],
+			"scale": [2.0, 2.0, 2.0]
+		}
+	}
+}

@@ -19,7 +19,6 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
@@ -28,7 +27,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
 import net.minecraftforge.common.MinecraftForge;
@@ -41,11 +39,9 @@ import top.ribs.scguns.client.handler.BeamHandler;
 import top.ribs.scguns.common.*;
 import top.ribs.scguns.common.container.AttachmentContainer;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
+import top.ribs.scguns.event.GunEventBus;
 import top.ribs.scguns.event.GunFireEvent;
-import top.ribs.scguns.init.ModDamageTypes;
-import top.ribs.scguns.init.ModEnchantments;
-import top.ribs.scguns.init.ModItems;
-import top.ribs.scguns.init.ModSyncedDataKeys;
+import top.ribs.scguns.init.*;
 import top.ribs.scguns.interfaces.IProjectileFactory;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.item.ammo_boxes.CreativeAmmoBoxItem;
@@ -55,24 +51,15 @@ import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
 import top.ribs.scguns.util.math.ExtendedEntityRayTraceResult;
 import top.theillusivec4.curios.api.CuriosApi;
-
 import java.util.*;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.function.Predicate;
 
 /**
  * Author: MrCrayfish
  */
 public class ServerPlayHandler {
-    private static final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-    private static final Predicate<LivingEntity> HOSTILE_ENTITIES = entity ->
-            (entity.getSoundSource() == SoundSource.HOSTILE || entity.getType() == EntityType.PIGLIN || entity.getType() == EntityType.ZOMBIFIED_PIGLIN || entity.getType() == EntityType.ENDERMAN) &&
-                    !Config.COMMON.aggroMobs.exemptEntities.get().contains(EntityType.getKey(entity.getType()).toString());
+
     private static final Map<UUID, BeamHandler.BeamInfo> activeBeams = new HashMap<>();
-    private static final Predicate<LivingEntity> FLEEING_ENTITIES = entity ->
-            Config.COMMON.fleeingMobs.fleeingEntities.get().contains(EntityType.getKey(entity.getType()).toString());
 
     /**
      * Fires the weapon the player is currently holding.
@@ -88,12 +75,10 @@ public class ServerPlayHandler {
         Level world = player.level();
         ItemStack heldItem = player.getItemInHand(InteractionHand.MAIN_HAND);
 
-        // Basic validation
-        if (!(heldItem.getItem() instanceof GunItem)) {
+        if (!(heldItem.getItem() instanceof GunItem item)) {
             return;
         }
 
-        GunItem item = (GunItem)heldItem.getItem();
         if (!Gun.hasAmmo(heldItem) && !player.isCreative()) {
             world.playSound(null, player.getX(), player.getY(), player.getZ(),
                     SoundEvents.LEVER_CLICK, SoundSource.BLOCKS, 0.3F, 0.8F);
@@ -102,7 +87,6 @@ public class ServerPlayHandler {
 
         Gun modifiedGun = item.getModifiedGun(heldItem);
         if (modifiedGun == null) return;
-
         if (MinecraftForge.EVENT_BUS.post(new GunFireEvent.Pre(player, heldItem)))
             return;
         player.setYRot(Mth.wrapDegrees(message.getRotationYaw()));
@@ -144,14 +128,56 @@ public class ServerPlayHandler {
                 }
             }
         }
+        // Add casing ejection logic to server-side shooting
+        if (Config.COMMON.gameplay.spawnCasings.get()) {
+            if (modifiedGun.getProjectile().casingType != null && !player.getAbilities().instabuild && !modifiedGun.getProjectile().ejectDuringReload()) {
+                ItemStack casingStack = new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile().casingType)));
+
+                double baseChance = 0.4;
+                int enchantmentLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SHELL_CATCHER.get(), heldItem);
+                double finalChance = baseChance + (enchantmentLevel * 0.15);
+
+                if (Math.random() < finalChance) {
+                    if (!GunEventBus.addCasingToPouch(player, casingStack)) {
+                        GunEventBus.spawnCasingInWorld(world, player, casingStack);
+                    }
+                }
+            }
+        }
+        if (!player.isCreative()) {
+            if (Config.COMMON.gameplay.enableGunDamage.get()) {
+                GunEventBus.damageGun(heldItem, world, player);
+            }
+            if (Config.COMMON.gameplay.enableAttachmentDamage.get()) {
+                GunEventBus.damageAttachments(heldItem, world, player);
+            }
+
+        }
         ResourceLocation fireSound = getFireSound(heldItem, modifiedGun);
         if (fireSound != null) {
             playFireSound(player, world, heldItem, modifiedGun, fireSound);
         }
+        GunEffectsHandler.handleGunEffects(player, heldItem, modifiedGun);
         MinecraftForge.EVENT_BUS.post(new GunFireEvent.Post(player, heldItem));
         player.awardStat(Stats.ITEM_USED.get(item));
     }
+    public static class RatKingAndQueenModel {
+        public static class GunFireEventRatHandler {
+            private static int shotCount = 0;
 
+            public static int getShotCount() {
+                return shotCount;
+            }
+
+            public static void incrementShotCount() {
+                shotCount++;
+            }
+
+            public static boolean shouldUseAlternateAnimation() {
+                return shotCount % 2 == 1;
+            }
+        }
+    }
     @NotNull
     private static Arrow getArrow(ServerPlayer player, Level world, Gun modifiedGun) {
         Arrow arrow = new Arrow(world, player);
@@ -243,7 +269,6 @@ public class ServerPlayHandler {
         double maxDistance = modifiedGun.getGeneral().getBeamMaxDistance();
         Vec3 endVec = beamOrigin.add(lookVec.scale(maxDistance));
 
-        // Use the new hit detection system
         HitResult finalHitResult = BeamHandlerCommon.BeamMiningManager.getBeamHitResult(
                 world, beamOrigin, endVec, player, maxDistance);
 
@@ -251,7 +276,6 @@ public class ServerPlayHandler {
         List<BlockHitResult> glassPenetrations = new ArrayList<>();
         double damageMultiplier = 1.0;
 
-        // Extract glass penetration information if available
         if (finalHitResult instanceof BeamHandlerCommon.BeamMiningManager.ExtendedBlockHitResult extendedBlock) {
             glassPenetrations = extendedBlock.getGlassPenetrations();
             damageMultiplier = extendedBlock.getDamageMultiplier();
@@ -266,7 +290,6 @@ public class ServerPlayHandler {
         beamInfo.startPos = beamOrigin;
         beamInfo.endPos = hitPos;
 
-        // Send beam update to clients
         double radius = 64.0;
         S2CMessageBeamUpdate beamUpdate = new S2CMessageBeamUpdate(playerId, beamOrigin, hitPos);
         PacketHandler.getPlayChannel().sendToNearbyPlayers(
@@ -274,7 +297,6 @@ public class ServerPlayHandler {
                 beamUpdate
         );
 
-        // Send glass penetration information if any
         if (!glassPenetrations.isEmpty()) {
             S2CMessageBeamPenetration penetrationMessage = new S2CMessageBeamPenetration(playerId, glassPenetrations);
             PacketHandler.getPlayChannel().sendToNearbyPlayers(
@@ -282,8 +304,6 @@ public class ServerPlayHandler {
                     penetrationMessage
             );
         }
-
-        // Handle damage and mining with appropriate delays
         int damageDelayMs = Math.max(1, modifiedGun.getGeneral().getBeamDamageDelay());
         if (finalHitResult.getType() == HitResult.Type.BLOCK) {
             assert finalHitResult instanceof BlockHitResult;
@@ -299,7 +319,6 @@ public class ServerPlayHandler {
             beamInfo.lastDamageTime = currentTime;
         }
 
-        // Handle ammo consumption
         if (modifiedGun.getGeneral().getFireMode() == FireMode.BEAM &&
                 currentTime - beamInfo.startTime >= modifiedGun.getGeneral().getBeamAmmoConsumptionDelay()) {
             consumeAmmo(player, heldItem);
@@ -347,6 +366,8 @@ public class ServerPlayHandler {
 
         return null;
     }
+    // Modify the handleBeamEffects method in ServerPlayHandler.java
+
     private static void handleBeamEffects(ServerPlayer player, HitResult hitResult, Gun modifiedGun, double damageMultiplier) {
         if (hitResult.getType() == HitResult.Type.ENTITY) {
             EntityHitResult entityHitResult = (EntityHitResult) hitResult;
@@ -359,7 +380,6 @@ public class ServerPlayHandler {
             }
             ItemStack weapon = player.getMainHandItem();
 
-            // Handle special effects for Flayed God weapon
             if (weapon.getItem() instanceof GunItem gunItem && gunItem.equals(ModItems.FLAYED_GOD.get())) {
                 if (hitEntity instanceof LivingEntity livingEntity) {
                     RandomSource random = player.level().random;
@@ -374,14 +394,15 @@ public class ServerPlayHandler {
                     }
                 }
             }
-
-            // Calculate damage with penetration multiplier
             float damage = modifiedGun.getProjectile().getDamage();
             damage = GunModifierHelper.getModifiedDamage(weapon, modifiedGun, damage);
             damage = GunEnchantmentHelper.getAcceleratorDamage(weapon, damage);
             damage = GunEnchantmentHelper.getHeavyShotDamage(weapon, damage);
-            damage = GunEnchantmentHelper.getHotBarrelDamage(weapon, damage);
-            damage *= damageMultiplier; // Apply glass penetration damage reduction
+            damage = GunEnchantmentHelper.getHotBarrelDamage(player, weapon, damage);
+            damage *= damageMultiplier;
+
+            // ADD THIS LINE - Apply global damage multiplier to beam weapons
+            damage *= Config.COMMON.gameplay.globalDamageMultiplier.get().floatValue();
 
             if (hitResult instanceof ExtendedEntityRayTraceResult extendedResult && extendedResult.isHeadshot()) {
                 damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
@@ -399,7 +420,7 @@ public class ServerPlayHandler {
                     GunEnchantmentHelper.applyElementalPopEffect(weapon, livingEntity);
                     EnchantmentHelper.doPostHurtEffects(livingEntity, player);
                     EnchantmentHelper.doPostDamageEffects(player, livingEntity);
-                    if (GunEnchantmentHelper.shouldSetOnFire(weapon)) {
+                    if (GunEnchantmentHelper.shouldSetOnFire(player, weapon)) {
                         hitEntity.setSecondsOnFire(5);
                     }
                 }

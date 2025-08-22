@@ -1,0 +1,66 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "scguns:medium_brass_casing"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "scguns:shatter_round"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_shatter_round"
+        },
+        [
+          {
+            "item": "minecraft:gunpowder"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_shatter_round"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_shatter_round"
+        },
+        [
+          {
+            "item": "scguns:flechette"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_shatter_round"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_shatter_round"
+        }
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_shatter_round"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "scguns:unfinished_shatter_round"
+  }
+}

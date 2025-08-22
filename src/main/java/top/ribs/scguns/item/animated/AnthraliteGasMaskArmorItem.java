@@ -13,7 +13,6 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
-import top.ribs.scguns.client.render.armor.AdrienArmorRenderer;
 import top.ribs.scguns.client.render.armor.AnthraliteGasMaskArmorRenderer;
 
 import java.util.function.Consumer;

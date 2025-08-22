@@ -2,6 +2,21 @@
   "spawnWithItemChance": 0.75,
   "items": [
     {
+      "item": "minecraft:tnt",
+      "spawnChance": 0.1,
+      "dropChance": 0.4
+    },
+    {
+      "item": "scguns:nitro_keg",
+      "spawnChance": 0.01,
+      "dropChance": 0.5
+    },
+    {
+      "item": "scguns:powder_keg",
+      "spawnChance": 0.05,
+      "dropChance": 0.5
+    },
+    {
       "item": "minecraft:stick",
       "spawnChance": 0.5,
       "dropChance": 0.2

@@ -11,7 +11,11 @@ public class LightweightEnchantment extends GunEnchantment
     {
         super(Rarity.RARE, EnchantmentTypes.GUN, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.WEAPON);
     }
-
+    @Override
+    public int getMaxLevel()
+    {
+        return 2;
+    }
     @Override
     public int getMinCost(int level)
     {

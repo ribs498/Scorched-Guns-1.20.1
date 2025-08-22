@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "scguns:block/treated_iron_grate"
+  },
+  "render_type": "cutout"
+}

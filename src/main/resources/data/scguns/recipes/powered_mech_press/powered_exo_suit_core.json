@@ -1,0 +1,20 @@
+{
+  "type": "scguns:powered_mechanical_pressing",
+  "processingTime": 60,
+  "energyUse": 500,
+  "ingredients": [
+    {
+      "item": "scguns:energy_cell"
+    },
+    {
+      "item": "scguns:plasma"
+    },
+    {
+      "item": "scguns:treated_brass_ingot"
+    }
+  ],
+  "result": {
+    "item": "scguns:exo_suit_core",
+    "count": 1
+  }
+}

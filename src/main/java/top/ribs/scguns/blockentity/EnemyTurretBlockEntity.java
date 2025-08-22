@@ -88,8 +88,8 @@ public class EnemyTurretBlockEntity extends BlockEntity {
     private static final int MAX_DISABLE_TIME = 200;
     private float disabledRotationOffset = 0.0F;
 
-    // Add a damage multiplier variable
     private float damageMultiplier = 1.0F;
+    private float fireRateMultiplier = 1.0F;
 
     public EnemyTurretBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.ENEMY_TURRET.get(), pos, state);
@@ -239,11 +239,13 @@ public class EnemyTurretBlockEntity extends BlockEntity {
         TurretProjectileEntity projectile = new TurretProjectileEntity(level, TurretProjectileEntity.BulletType.COMPACT_COPPER_ROUND);
         projectile.setPos(muzzlePos.x, muzzlePos.y, muzzlePos.z);
         projectile.shoot(direction.x, direction.y, direction.z, 3.0F, 0.0F);
-        projectile.setBaseDamage(2.5* damageMultiplier);
+        projectile.setBaseDamage(2.5 * damageMultiplier);
 
         level.addFreshEntity(projectile);
         level.playSound(null, worldPosition, ModSounds.IRON_RIFLE_FIRE.get(), SoundSource.BLOCKS, 0.7F, 0.7F);
         recoilPitchOffset = RECOIL_MAX;
+
+        cooldown = (int)(COOLDOWN * fireRateMultiplier);
     }
 
     private Vec3 getMuzzlePosition(float yaw, float pitch) {
@@ -353,7 +355,12 @@ public class EnemyTurretBlockEntity extends BlockEntity {
     public void setDamageMultiplier(float multiplier) {
         this.damageMultiplier = multiplier;
     }
-
+    public void setFireRateMultiplier(float multiplier) {
+        this.fireRateMultiplier = Math.max(0.1F, multiplier); // Prevent division by zero/negative values
+    }
+    public float getFireRateMultiplier() {
+        return fireRateMultiplier;
+    }
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
@@ -362,6 +369,7 @@ public class EnemyTurretBlockEntity extends BlockEntity {
         tag.putBoolean("Disabled", disabled);
         tag.putInt("DisableCooldown", disableCooldown);
         tag.putFloat("DamageMultiplier", damageMultiplier);
+        tag.putFloat("FireRateMultiplier", fireRateMultiplier);
         tag.putFloat("DisabledRotationOffset", disabledRotationOffset);
     }
 
@@ -375,6 +383,9 @@ public class EnemyTurretBlockEntity extends BlockEntity {
         disabled = tag.getBoolean("Disabled");
         disableCooldown = tag.getInt("DisableCooldown");
         damageMultiplier = tag.getFloat("DamageMultiplier");
+        disabledRotationOffset = tag.getFloat("DisabledRotationOffset");
+        fireRateMultiplier = tag.getFloat("FireRateMultiplier");
+        if (fireRateMultiplier <= 0) fireRateMultiplier = 1.0F;
         disabledRotationOffset = tag.getFloat("DisabledRotationOffset");
     }
 }

@@ -12,9 +12,10 @@
     "meleeDamage": 2.0,
     "meleeCooldownTicks": 15,
     "meleeReach": 2.5,
-    "energyUse": 30.0,
+    "energyUse": 25.0,
     "hotBarrelRate": 40,
-    "criticalChance": 0.05
+    "criticalChance": 0.05,
+    "enableGunLight": false
   },
   "modules": {
     "attachments": {
@@ -46,7 +47,7 @@
   },
   "reloads": {
     "emptyMagTimer": 30,
-    "maxAmmo": 6,
+    "maxAmmo": 7,
     "reloadItem": "scguns:standard_bullet",
     "reloadTimer": 15,
     "reloadType": "scguns:manual"

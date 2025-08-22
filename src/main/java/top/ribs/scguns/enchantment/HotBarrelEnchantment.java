@@ -6,7 +6,7 @@ public class HotBarrelEnchantment extends GunEnchantment
 {
     public HotBarrelEnchantment()
     {
-        super(Rarity.RARE, EnchantmentTypes.GUN, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.PROJECTILE);
+        super(Rarity.VERY_RARE, EnchantmentTypes.GUN, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.PROJECTILE);
     }
 
     @Override

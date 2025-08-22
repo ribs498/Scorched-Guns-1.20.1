@@ -1,5 +1,6 @@
 package top.ribs.scguns.blockentity;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -45,6 +46,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.block.*;
+import top.ribs.scguns.client.screen.BasicTurretMenu;
 import top.ribs.scguns.client.screen.ShotgunTurretMenu;
 import top.ribs.scguns.entity.projectile.turret.TurretProjectileEntity;
 import top.ribs.scguns.init.ModBlockEntities;
@@ -65,7 +67,7 @@ import java.util.UUID;
 public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvider {
     private static double TARGETING_RADIUS = 7.0f;
     private static final int PELLET_COUNT = 8;
-    private static final float SPREAD_ANGLE = 8.0F;
+    private static final float SPREAD_ANGLE = 6.0F;
     private int cooldown = 30;
     public final ItemStackHandler itemHandler = new ItemStackHandler(10) {
         @Override
@@ -120,6 +122,25 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
+        boolean hasTargetingModule = false;
+        if (this.level != null) {
+            for (Direction direction : Direction.values()) {
+                BlockState blockState = this.level.getBlockState(this.worldPosition.relative(direction));
+                if (blockState.getBlock() instanceof TurretTargetingBlock) {
+                    hasTargetingModule = true;
+                    break;
+                }
+            }
+        }
+
+        if (!hasTargetingModule) {
+            if (this.level != null && !this.level.isClientSide) {
+                player.sendSystemMessage(Component.translatable("message.scguns.turret_needs_targeting_module")
+                        .withStyle(ChatFormatting.YELLOW));
+            }
+            return null;
+        }
+
         return new ShotgunTurretMenu(id, playerInventory, this);
     }
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T t) {
@@ -145,7 +166,7 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
                     turret.disableCooldown = 0;
                 }
                 turret.resetToRestPosition();
-            } else if (state.getValue(ShotgunTurretBlock.POWERED)) {
+            } else if (!state.getValue(ShotgunTurretBlock.POWERED)) {
                 turret.updateTargetRange(rangeModifier);
                 if (!turret.isTargetValid()) {
                     turret.target = null;

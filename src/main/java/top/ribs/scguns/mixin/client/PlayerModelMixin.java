@@ -15,11 +15,6 @@ import top.ribs.scguns.client.handler.AimingHandler;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.item.GunItem;
 
-/**
- * I eventually want to get rid of this.
- *
- * Author: MrCrayfish
- */
 @Mixin(PlayerModel.class)
 public class PlayerModelMixin<T extends LivingEntity>
 {
@@ -46,13 +41,34 @@ public class PlayerModelMixin<T extends LivingEntity>
                 copyModelAngles(model.leftArm, model.leftSleeve);
                 return;
             }
-
+            if (player.isSwimming() || player.isFallFlying() || player.isVisuallySwimming()) {
+                applySwimmingGunPose(player, model, gunItem, heldItem);
+                return;
+            }
             Gun gun = gunItem.getModifiedGun(heldItem);
             gun.getGeneral().getGripType(heldItem).heldAnimation().applyPlayerModelRotation(player, model.rightArm, model.leftArm, model.head, InteractionHand.MAIN_HAND, AimingHandler.get().getAimProgress(player, Minecraft.getInstance().getFrameTime()));
             copyModelAngles(model.rightArm, model.rightSleeve);
             copyModelAngles(model.leftArm, model.leftSleeve);
             copyModelAngles(model.head, model.hat);
         }
+    }
+
+    private void applySwimmingGunPose(Player player, PlayerModel<T> model, GunItem gunItem, ItemStack heldItem) {
+        float aimProgress = 0.0f;
+        if (player.isLocalPlayer()) {
+            aimProgress = AimingHandler.get().getAimProgress(player, Minecraft.getInstance().getFrameTime());
+        }
+
+        model.rightArm.xRot = (float) Math.toRadians(-160F + (aimProgress * 10F));
+        model.rightArm.yRot = (float) Math.toRadians(-15F);
+        model.rightArm.zRot = (float) Math.toRadians(10F);
+
+        model.leftArm.xRot = (float) Math.toRadians(-140F);
+        model.leftArm.yRot = (float) Math.toRadians(20F);
+        model.leftArm.zRot = (float) Math.toRadians(-15F);
+
+        copyModelAngles(model.rightArm, model.rightSleeve);
+        copyModelAngles(model.leftArm, model.leftSleeve);
     }
 
     private static void copyModelAngles(ModelPart source, ModelPart target)

@@ -7,15 +7,13 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import top.ribs.scguns.ScorchedGuns;
-import top.ribs.scguns.client.handler.ReloadHandler;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.common.ReloadTracker;
 import top.ribs.scguns.common.ReloadType;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.animated.AnimatedGunItem;
 import top.ribs.scguns.network.PacketHandler;
-import top.ribs.scguns.util.GunModifierHelper;
 
 public class C2SMessageGunLoaded extends PlayMessage<C2SMessageGunLoaded> {
     public C2SMessageGunLoaded() {}
@@ -36,35 +34,35 @@ public class C2SMessageGunLoaded extends PlayMessage<C2SMessageGunLoaded> {
                     if (!heldItem.getItem().getClass().getPackageName().startsWith("top.ribs.scguns")) {
                         return;
                     }
-                    Gun gun = ((GunItem)heldItem.getItem()).getModifiedGun(heldItem);
+                    Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
                     CompoundTag tag = heldItem.getOrCreateTag();
 
                     ReloadTracker tracker = new ReloadTracker(player);
 
                     if (gun.getReloads().getReloadType() == ReloadType.MAG_FED) {
-                        tracker.increaseMagAmmo(player);  // This will properly consume ammo
-                        tag.putBoolean("scguns:ReloadComplete", true);
-                        tag.putBoolean("scguns:IsPlayingReloadStop", true);
-                        tag.putString("scguns:ReloadState", "STOPPING");
+                        tracker.increaseMagAmmo(player);
+                        ModSyncedDataKeys.RELOADING.setValue(player, false);
                         tag.remove("IsReloading");
                         tag.remove("scguns:IsReloading");
-                        ModSyncedDataKeys.RELOADING.setValue(player, false);
+                        tag.remove("InCriticalReloadPhase");
+
                         PacketHandler.getPlayChannel().sendToNearbyPlayers(
                                 () -> LevelLocation.create(player.level(), player.getX(), player.getY(), player.getZ(), 64),
                                 new S2CMessageUpdateAmmo(tag.getInt("AmmoCount"))
                         );
+
                         PacketHandler.getPlayChannel().sendToNearbyPlayers(
                                 () -> LevelLocation.create(player.level(), player.getX(), player.getY(), player.getZ(), 64),
                                 new S2CMessageReload(false)
                         );
+
                     } else if (gun.getReloads().getReloadType() == ReloadType.SINGLE_ITEM) {
                         tracker.reloadItem(player);
-                        tag.putBoolean("scguns:ReloadComplete", true);
-                        tag.putBoolean("scguns:IsPlayingReloadStop", true);
-                        tag.putString("scguns:ReloadState", "STOPPING");
+                        ModSyncedDataKeys.RELOADING.setValue(player, false);
                         tag.remove("IsReloading");
                         tag.remove("scguns:IsReloading");
-                        ModSyncedDataKeys.RELOADING.setValue(player, false);
+                        tag.remove("InCriticalReloadPhase");
+
                         PacketHandler.getPlayChannel().sendToNearbyPlayers(
                                 () -> LevelLocation.create(player.level(), player.getX(), player.getY(), player.getZ(), 64),
                                 new S2CMessageUpdateAmmo(tag.getInt("AmmoCount"))
@@ -73,6 +71,7 @@ public class C2SMessageGunLoaded extends PlayMessage<C2SMessageGunLoaded> {
                                 () -> LevelLocation.create(player.level(), player.getX(), player.getY(), player.getZ(), 64),
                                 new S2CMessageReload(false)
                         );
+
                     } else if (gun.getReloads().getReloadType() == ReloadType.MANUAL) {
                         tracker.increaseAmmo(player);
 
@@ -81,16 +80,21 @@ public class C2SMessageGunLoaded extends PlayMessage<C2SMessageGunLoaded> {
                                 new S2CMessageUpdateAmmo(tag.getInt("AmmoCount"))
                         );
 
-                        int currentAmmo = tag.getInt("AmmoCount");
-                        int maxAmmo = GunModifierHelper.getModifiedAmmoCapacity(heldItem, gun);
+                        boolean weaponFull = tracker.isWeaponFull(player);
+                        boolean hasNoAmmo = tracker.hasNoAmmo(player);
 
-                        if (currentAmmo >= maxAmmo) {
-                            tag.putBoolean("scguns:ReloadComplete", true);
-                            tag.putBoolean("scguns:IsPlayingReloadStop", true);
-                            tag.putString("scguns:ReloadState", "STOPPING");
+
+                        if (weaponFull || hasNoAmmo) {
+                            ModSyncedDataKeys.RELOADING.setValue(player, false);
                             tag.remove("IsReloading");
                             tag.remove("scguns:IsReloading");
-                            ModSyncedDataKeys.RELOADING.setValue(player, false);
+
+                            if (player.getMainHandItem().getItem() instanceof AnimatedGunItem) {
+                                tag.putString("scguns:ReloadState", "STOPPING");
+                                tag.putBoolean("scguns:IsPlayingReloadStop", true);
+                                PacketHandler.getPlayChannel().sendToPlayer(() -> player, new S2CMessageStopReload());
+                            }
+
                             PacketHandler.getPlayChannel().sendToNearbyPlayers(
                                     () -> LevelLocation.create(player.level(), player.getX(), player.getY(), player.getZ(), 64),
                                     new S2CMessageReload(false)

@@ -1,0 +1,33 @@
+{
+  "name": "scguns:hallways",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 21,
+      "element": {
+        "location": "scguns:hallways/hallway_long",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 15,
+      "element": {
+        "location": "scguns:hallways/hallway_small",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 2,
+      "element": {
+        "location": "scguns:hallways/hallway_caved",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

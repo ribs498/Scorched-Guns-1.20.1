@@ -2,6 +2,7 @@ package top.ribs.scguns.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.Containers;
@@ -11,6 +12,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -31,6 +33,7 @@ import top.ribs.scguns.init.ModBlockEntities;
 import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Random;
 
 public class VentCollectorBlockEntity extends BlockEntity implements MenuProvider {
@@ -59,13 +62,13 @@ public class VentCollectorBlockEntity extends BlockEntity implements MenuProvide
             if (slot == 0) {
                 return stack.is(ModTags.Items.WEAK_FILTER) || stack.is(ModTags.Items.STRONG_FILTER);
             }
-            return slot > 0 && (stack.getItem() == ModItems.NITER_DUST.get() || stack.getItem() == ModItems.SULFUR_DUST.get());
+            return slot > 0 && (stack.is(ModTags.Items.GEOTHERMAL_VENT_OUTPUT) || stack.is(ModTags.Items.SULFUR_VENT_OUTPUT));
         }
 
         @Override
         @NotNull
         public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            if (slot > 0 && (stack.getItem() == ModItems.NITER_DUST.get() || stack.getItem() == ModItems.SULFUR_DUST.get())) {
+            if (slot > 0 && (stack.is(ModTags.Items.GEOTHERMAL_VENT_OUTPUT) || stack.is(ModTags.Items.SULFUR_VENT_OUTPUT))) {
                 return super.insertItem(slot, stack, simulate);
             }
             return slot == 0 ? super.insertItem(slot, stack, simulate) : stack;
@@ -85,12 +88,15 @@ public class VentCollectorBlockEntity extends BlockEntity implements MenuProvide
         this.currentTickInterval = calculateNextTickInterval();
         this.filterCharge = 0;
     }
+
     public int getFilterCharge() {
         return this.filterCharge;
     }
+
     private int calculateNextTickInterval() {
         return BASE_TICK_INTERVAL + random.nextInt(TICK_WIGGLE_ROOM);
     }
+
     public static void tick(Level level, BlockPos pos, BlockState state, VentCollectorBlockEntity blockEntity) {
         if (!level.isClientSide) {
             BlockState belowState = level.getBlockState(pos.below());
@@ -116,9 +122,9 @@ public class VentCollectorBlockEntity extends BlockEntity implements MenuProvide
 
                     boolean produced;
                     if (isGeothermalVentBelow) {
-                        produced = blockEntity.produceNiterDust();
+                        produced = blockEntity.produceFromTag(ModTags.Items.GEOTHERMAL_VENT_OUTPUT);
                     } else {
-                        produced = blockEntity.produceSulfurDust();
+                        produced = blockEntity.produceFromTag(ModTags.Items.SULFUR_VENT_OUTPUT);
                     }
 
                     if (produced && blockEntity.random.nextFloat() < FILTER_CONSUMPTION_CHANCE) {
@@ -146,14 +152,19 @@ public class VentCollectorBlockEntity extends BlockEntity implements MenuProvide
         }
     }
 
-    private boolean produceNiterDust() {
-        ItemStack niterDust = new ItemStack(ModItems.NITER_DUST.get(), 1);
-        return insertProducedItem(niterDust);
-    }
+    private boolean produceFromTag(net.minecraft.tags.TagKey<Item> tag) {
+        List<Item> tagItems = new java.util.ArrayList<>();
+        for (var holder : BuiltInRegistries.ITEM.getTagOrEmpty(tag)) {
+            tagItems.add(holder.value());
+        }
 
-    private boolean produceSulfurDust() {
-        ItemStack sulfurDust = new ItemStack(ModItems.SULFUR_DUST.get(), 1);
-        return insertProducedItem(sulfurDust);
+        if (tagItems.isEmpty()) {
+            return false;
+        }
+        Item selectedItem = tagItems.get(random.nextInt(tagItems.size()));
+        ItemStack producedItem = new ItemStack(selectedItem, 1);
+
+        return insertProducedItem(producedItem);
     }
 
     private boolean insertProducedItem(ItemStack producedItem) {
@@ -184,6 +195,7 @@ public class VentCollectorBlockEntity extends BlockEntity implements MenuProvide
             }
         }
     }
+
     private void pushItemsToAdjacentInventories(Level level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
         if (!(state.getBlock() instanceof VentCollectorBlock)) {
@@ -216,6 +228,7 @@ public class VentCollectorBlockEntity extends BlockEntity implements MenuProvide
             }
         }
     }
+
     private final ContainerData data = new ContainerData() {
         @Override
         public int get(int index) {
@@ -234,7 +247,6 @@ public class VentCollectorBlockEntity extends BlockEntity implements MenuProvide
             return 1;
         }
     };
-
 
     @Override
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {

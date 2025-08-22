@@ -1,12 +1,12 @@
 {
   "type": "scguns:mechanical_pressing",
-  "processingTime": 20,
+  "processingTime": 15,
   "ingredients": [
     {
       "item": "scguns:small_iron_casing"
     },
     {
-      "item": "scguns:sheol"
+      "item": "scguns:_dust"
     },
     {
       "item": "minecraft:gold_nugget"

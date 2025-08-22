@@ -30,7 +30,8 @@ import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.block.CryoniterBlock;
 import top.ribs.scguns.client.screen.CryoniterMenu;
 import top.ribs.scguns.init.ModBlockEntities;
-
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
@@ -77,25 +78,76 @@ public class CryoniterBlockEntity extends BlockEntity implements MenuProvider {
     private void freezeRandomWaterBlock() {
         RandomSource rand = RANDOM.get();
 
-        double angle = rand.nextDouble() * 2 * Math.PI;
-        double radius = Math.sqrt(rand.nextDouble()) * FREEZE_RADIUS;
-        int dx = (int) Math.round(radius * Math.cos(angle));
-        int dz = (int) Math.round(radius * Math.sin(angle));
+        BlockPos startPos = findNearestIce();
+        if (startPos == null) {
+            startPos = worldPosition;
+        }
 
-        BlockPos targetPos = worldPosition.offset(dx, rand.nextInt(3) - 1, dz);
+        for (int radius = 1; radius <= FREEZE_RADIUS; radius++) {
+            List<BlockPos> candidatesAtRadius = new ArrayList<>();
 
-        if (level.getBlockState(targetPos).is(Blocks.WATER)) {
-            level.setBlockAndUpdate(targetPos, Blocks.ICE.defaultBlockState());
-            if (rand.nextFloat() < 0.75f) {
-                itemHandler.extractItem(0, 1, false);
+            for (int dx = -radius; dx <= radius; dx++) {
+                for (int dz = -radius; dz <= radius; dz++) {
+                    for (int dy = -1; dy <= 1; dy++) {
+                        if (Math.abs(dx) == radius || Math.abs(dz) == radius) {
+                            BlockPos targetPos = startPos.offset(dx, dy, dz);
+
+                            if (worldPosition.distSqr(targetPos) <= FREEZE_RADIUS * FREEZE_RADIUS
+                                    && level.getBlockState(targetPos).is(Blocks.WATER)) {
+                                candidatesAtRadius.add(targetPos);
+                            }
+                        }
+                    }
+                }
             }
 
-            // Send packet to spawn particles on the client
-            if (level instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(ParticleTypes.SNOWFLAKE,
-                        targetPos.getX() + 0.5, targetPos.getY() + 1.0, targetPos.getZ() + 0.5,
-                        10, 0.5, 0.5, 0.5, 0.1);
+            if (!candidatesAtRadius.isEmpty()) {
+                BlockPos targetPos = candidatesAtRadius.get(rand.nextInt(candidatesAtRadius.size()));
+                Block iceType = determineIceType(rand);
+                level.setBlockAndUpdate(targetPos, iceType.defaultBlockState());
+
+                if (rand.nextFloat() < 0.5f) {
+                    itemHandler.extractItem(0, 1, false);
+                }
+
+                if (level instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(ParticleTypes.SNOWFLAKE,
+                            targetPos.getX() + 0.5, targetPos.getY() + 1.0, targetPos.getZ() + 0.5,
+                            10, 0.5, 0.5, 0.5, 0.1);
+                }
+                return;
             }
+        }
+    }
+
+    private BlockPos findNearestIce() {
+        for (int radius = 1; radius <= FREEZE_RADIUS; radius++) {
+            for (int dx = -radius; dx <= radius; dx++) {
+                for (int dz = -radius; dz <= radius; dz++) {
+                    for (int dy = -1; dy <= 1; dy++) {
+                        if (Math.abs(dx) == radius || Math.abs(dz) == radius) {
+                            BlockPos checkPos = worldPosition.offset(dx, dy, dz);
+                            Block block = level.getBlockState(checkPos).getBlock();
+                            if (block == Blocks.ICE || block == Blocks.PACKED_ICE || block == Blocks.BLUE_ICE) {
+                                return checkPos;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private Block determineIceType(RandomSource rand) {
+        float roll = rand.nextFloat();
+
+        if (roll < 0.02f) { // 2% chance for blue ice
+            return Blocks.BLUE_ICE;
+        } else if (roll < 0.15f) { // 13% chance for packed ice (15% - 2%)
+            return Blocks.PACKED_ICE;
+        } else { // 85% chance for regular ice
+            return Blocks.ICE;
         }
     }
 
@@ -159,6 +211,7 @@ public class CryoniterBlockEntity extends BlockEntity implements MenuProvider {
         for (int i = 0; i < itemHandler.getSlots(); i++) {
             inventory.setItem(i, itemHandler.getStackInSlot(i));
         }
+        assert this.level != null;
         Containers.dropContents(this.level, this.worldPosition, inventory);
     }
 

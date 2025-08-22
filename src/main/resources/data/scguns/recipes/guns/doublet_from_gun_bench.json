@@ -1,0 +1,36 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:doublet",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:antique_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "minecraft:flint"
+    },
+    "gun_internal_2": {
+      "item": "minecraft:cobblestone"
+    },
+    "gun_barrel_1": {
+      "item": "minecraft:stone"
+    },
+    "gun_barrel_2": {
+      "item": "scguns:stone_gun_barrel"
+    },
+    "gun_top_barrel_1": {
+      "item": "minecraft:stone"
+    },
+    "gun_top_barrel_2": {
+      "item": "scguns:stone_gun_barrel"
+    },
+    "gun_grip": {
+      "tag": "minecraft:planks"
+    },
+    "gun_magazine": {
+      "tag": "minecraft:planks"
+    }
+  }
+}

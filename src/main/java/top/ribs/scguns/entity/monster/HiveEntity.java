@@ -6,6 +6,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.AnimationState;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobType;
 import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -37,7 +38,10 @@ public class HiveEntity extends Monster {
     public Level getEntityLevel() {
         return this.level();
     }
-
+    @Override
+    public @NotNull MobType getMobType() {
+        return MobType.UNDEAD;
+    }
     @Override
     public void tick() {
         super.tick();

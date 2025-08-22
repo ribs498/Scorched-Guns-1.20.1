@@ -16,6 +16,9 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -26,15 +29,16 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.client.screen.SupplyScampMenuProvider;
+import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModItems;
-import top.ribs.scguns.item.ScampControllerItem;
-import top.ribs.scguns.util.PlayerScampManager;
 
 import java.util.*;
 
@@ -49,17 +53,14 @@ public class SupplyScampEntity extends TamableAnimal {
             SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Optional<BlockPos>> PATROL_ORIGIN =
             SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
-    private static final EntityDataAccessor<Boolean> LINKED_TO_CONTROLLER =
-            SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.BOOLEAN);
-    private static final EntityDataAccessor<Optional<BlockPos>> LINKED_CONTAINER =
-            SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
 
-    private static final int PATROL_COOLDOWN = 30;
+    private static final int PATROL_COOLDOWN = 15;
     private int patrolCooldownTimer = PATROL_COOLDOWN;
 
-    private static final int ITEM_COOLDOWN = 20;
+    private static final int ITEM_COOLDOWN = 12;
     private int itemCooldownTimer = ITEM_COOLDOWN;
-
+    private BlockPos scheduledBarrelClose = null;
+    private int barrelCloseTimer = 0;
     private static final int PATROL_RADIUS = 9;
     private static final int PATROL_MOVE_INTERVAL = 100;
     private static final int PATROL_DURATION = 80;
@@ -72,8 +73,6 @@ public class SupplyScampEntity extends TamableAnimal {
     private static final int INVENTORY_SIZE = 27;
 
     public final SimpleContainer inventory = new SimpleContainer(INVENTORY_SIZE);
-    private boolean inventoryFullCached = false;
-    private boolean hasItemsToDepositCached = false;
     private static final int ANIMATION_UPDATE_INTERVAL = 5;
     private int animationUpdateTimer = ANIMATION_UPDATE_INTERVAL;
 
@@ -81,20 +80,51 @@ public class SupplyScampEntity extends TamableAnimal {
         super(entityType, level);
         this.setCanPickUpLoot(true);
     }
+    @Override
+    public boolean canBeAffected(@NotNull MobEffectInstance pPotionEffect) {
+        MobEffect effect = pPotionEffect.getEffect();
 
+        if (effect == MobEffects.POISON ||
+                effect == MobEffects.WITHER ||
+                effect == MobEffects.HUNGER ||
+                effect == MobEffects.REGENERATION ||
+                effect == MobEffects.SATURATION ||
+                effect == MobEffects.CONFUSION ||
+                effect == MobEffects.BLINDNESS ||
+                effect == MobEffects.WEAKNESS ||
+                effect == MobEffects.MOVEMENT_SLOWDOWN ||
+                effect == MobEffects.DIG_SLOWDOWN ||
+                effect == MobEffects.HARM ||
+                effect == MobEffects.HEAL) {
+            return false;
+        }
+
+        return super.canBeAffected(pPotionEffect);
+    }
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState panicAnimationState = new AnimationState();
     public final AnimationState sitAnimationState = new AnimationState();
     public int panicAnimationTimeout = 0;
     public int idleAnimationTimeout = 0;
-    private BlockPos cachedNearestContainer = null;
-    private int containerSearchCooldown = 100; // Cooldown for search
 
     @Override
     public void tick() {
         super.tick();
 
         if (!this.level().isClientSide && this.isAlive() && this.isTame()) {
+            // Handle scheduled barrel closing
+            if (scheduledBarrelClose != null && barrelCloseTimer > 0) {
+                barrelCloseTimer--;
+                if (barrelCloseTimer <= 0) {
+                    BlockState barrelState = this.level().getBlockState(scheduledBarrelClose);
+                    if (barrelState.getBlock() instanceof BarrelBlock && barrelState.getValue(BarrelBlock.OPEN)) {
+                        this.level().setBlock(scheduledBarrelClose, barrelState.setValue(BarrelBlock.OPEN, false), 3);
+                        this.playSound(SoundEvents.BARREL_CLOSE, 0.5F, 1.0F);
+                    }
+                    scheduledBarrelClose = null;
+                }
+            }
+
             if (patrolCooldownTimer <= 0) {
                 if (this.isPatrolling()) {
                     handlePatrolling();
@@ -105,18 +135,12 @@ public class SupplyScampEntity extends TamableAnimal {
             }
 
             if (itemCooldownTimer <= 0) {
-                checkForItems();
+                if (this.isPatrolling() || (!this.isOrderedToSit() && !this.isSitting())) {
+                    checkForItems();
+                }
                 itemCooldownTimer = ITEM_COOLDOWN;
             } else {
                 itemCooldownTimer--;
-            }
-
-            Optional<BlockPos> containerPosOpt = this.getLinkedContainer();
-            if (containerPosOpt.isPresent() && this.distanceToSqr(Vec3.atCenterOf(containerPosOpt.get())) < 8.0D) {
-                BlockEntity blockEntity = this.level().getBlockEntity(containerPosOpt.get());
-                if (blockEntity instanceof Container container) {
-                    depositItems(container);
-                }
             }
         }
 
@@ -124,151 +148,151 @@ public class SupplyScampEntity extends TamableAnimal {
             setupAnimationStates();
         }
     }
-
-    private boolean isInventoryFull() {
-        if (inventoryFullCached) {
-            return true;
-        }
-        for (int i = 0; i < this.inventory.getContainerSize(); i++) {
-            if (this.inventory.getItem(i).isEmpty()) {
-                inventoryFullCached = false;
-                return false;
-            }
-        }
-        inventoryFullCached = true;
-        return true;
-    }
-
-    private boolean hasItemsToDeposit() {
-        if (hasItemsToDepositCached) {
-            return true;
-        }
-        for (int i = 0; i < this.inventory.getContainerSize(); i++) {
-            if (!this.inventory.getItem(i).isEmpty()) {
-                hasItemsToDepositCached = true;
-                return true;
-            }
-        }
-        hasItemsToDepositCached = false;
-        return false;
-    }
-
     private void handlePatrolling() {
         Optional<BlockPos> patrolOrigin = this.getPatrolOrigin();
-        Optional<BlockPos> linkedContainerPos = this.getLinkedContainer();
-        if (patrolOrigin.isPresent()) {
-            boolean hasItemsToDeposit = hasItemsToDeposit();
-            boolean inventoryFull = isInventoryFull();
-            if (hasItemsToDeposit) {
-                BlockPos targetContainer = null;
-                targetContainer = linkedContainerPos.orElseGet(this::findNearestContainer);
-
-                if (targetContainer != null) {
-                    double distanceToContainer = this.distanceToSqr(Vec3.atCenterOf(targetContainer));
-
-                    if (distanceToContainer <= 2.0D) {
-                        BlockEntity blockEntity = this.level().getBlockEntity(targetContainer);
-                        if (blockEntity instanceof Container container) {
-                            depositItems(container);
-                        }
-                    } else if (inventoryFull || distanceToContainer <= 15.0) {
-                        this.getNavigation().moveTo(targetContainer.getX() + 0.5, targetContainer.getY(), targetContainer.getZ() + 0.5, 1.0);
-                        this.setStationary(false);
-                        return;
-                    }
-                }
-            }
-            if (!inventoryFull) {
-                ItemEntity nearestItem = findNearestItem();
-                if (nearestItem != null && this.distanceToSqr(nearestItem) <= ITEM_DETECTION_RANGE * ITEM_DETECTION_RANGE) {
-                    if (this.distanceToSqr(nearestItem) > ITEM_PICKUP_RANGE * ITEM_PICKUP_RANGE) {
-                        this.getNavigation().moveTo(nearestItem, 1.0);
-                        this.setStationary(false);
-                        return;
-                    } else {
-                        pickUpItem(nearestItem);
-                    }
-                }
-            }
-            if (this.patrolTimer <= 0) {
-                if (this.random.nextFloat() < 0.45) {
-                    this.currentPatrolTarget = patrolOrigin.get().offset(
-                            this.random.nextInt(PATROL_RADIUS * 2) - PATROL_RADIUS,
-                            0,
-                            this.random.nextInt(PATROL_RADIUS * 2) - PATROL_RADIUS
-                    );
-                    this.getNavigation().moveTo(this.currentPatrolTarget.getX(), this.currentPatrolTarget.getY(), this.currentPatrolTarget.getZ(), 1.0);
-                    this.setStationary(false);
-                    this.patrolTimer = PATROL_DURATION;
-                } else {
-                    this.getNavigation().stop();
-                    this.setStationary(true);
-                    this.currentPatrolTarget = null;
-                    this.patrolTimer = PATROL_MOVE_INTERVAL;
-                }
-            } else {
-                this.patrolTimer--;
-                if (this.currentPatrolTarget != null && this.distanceToSqr(Vec3.atCenterOf(this.currentPatrolTarget)) < 1.0) {
-                    this.getNavigation().stop();
-                    this.setStationary(true);
-                    this.currentPatrolTarget = null;
-                    this.patrolTimer = PATROL_MOVE_INTERVAL;
-                }
-            }
-            if (this.distanceToSqr(Vec3.atCenterOf(patrolOrigin.get())) > PATROL_RADIUS * PATROL_RADIUS) {
-                this.getNavigation().moveTo(patrolOrigin.get().getX(), patrolOrigin.get().getY(), patrolOrigin.get().getZ(), 1.0);
-                this.setStationary(false);
-                this.currentPatrolTarget = null;
-                this.patrolTimer = PATROL_MOVE_INTERVAL;
+        if (!patrolOrigin.isPresent()) {
+            return;
+        }
+        int totalItems = 0;
+        for (int i = 0; i < this.inventory.getContainerSize(); i++) {
+            ItemStack stack = this.inventory.getItem(i);
+            if (!stack.isEmpty()) {
+                totalItems += stack.getCount();
             }
         }
-    }
 
-    private void depositItems(Container container) {
+        if (totalItems >= 3) {
+            BlockPos nearestBarrel = findNearestBarrel();
+            if (nearestBarrel != null) {
+                double distanceToBarrel = this.distanceToSqr(Vec3.atCenterOf(nearestBarrel));
+
+                if (distanceToBarrel <= 9.0D) {
+                    BlockEntity blockEntity = this.level().getBlockEntity(nearestBarrel);
+                    if (blockEntity instanceof Container container) {
+                        depositAllItems(container);
+                    }
+                } else {
+                    this.getNavigation().moveTo(nearestBarrel.getX() + 0.5, nearestBarrel.getY(), nearestBarrel.getZ() + 0.5, 1.0);
+                    return;
+                }
+            }
+        }
+
+        // Priority 2: Look for items if inventory not too full
+        if (totalItems < 25) {
+            ItemEntity nearestItem = findNearestItem();
+            if (nearestItem != null && this.distanceToSqr(nearestItem) <= ITEM_DETECTION_RANGE * ITEM_DETECTION_RANGE) {
+                if (this.distanceToSqr(nearestItem) > ITEM_PICKUP_RANGE * ITEM_PICKUP_RANGE) {
+                    this.getNavigation().moveTo(nearestItem, 1.0);
+                    return; // Only return when actively moving to item
+                } else {
+                    pickUpItem(nearestItem);
+                    // DON'T return here - let it continue to patrol after picking up
+                }
+            }
+        }
+
+        // Priority 3: Normal patrol movement (this should ALWAYS execute when not moving to barrel/item)
+        if (this.patrolTimer <= 0) {
+            // 50% chance to move, 50% chance to stay still for a bit
+            if (this.random.nextFloat() < 0.5) {
+                // Pick a new random patrol target
+                this.currentPatrolTarget = patrolOrigin.get().offset(
+                        this.random.nextInt(PATROL_RADIUS * 2) - PATROL_RADIUS,
+                        0,
+                        this.random.nextInt(PATROL_RADIUS * 2) - PATROL_RADIUS
+                );
+                this.getNavigation().moveTo(this.currentPatrolTarget.getX() + 0.5, this.currentPatrolTarget.getY(), this.currentPatrolTarget.getZ() + 0.5, 0.8);
+                this.patrolTimer = PATROL_DURATION; // Set timer for how long to move
+            } else {
+                // Stay still for a moment
+                this.getNavigation().stop();
+                this.currentPatrolTarget = null;
+                this.patrolTimer = PATROL_MOVE_INTERVAL / 2; // Shorter idle time
+            }
+        } else {
+            // Timer is running, decrement it
+            this.patrolTimer--;
+
+            // Check if we reached our patrol destination
+            if (this.currentPatrolTarget != null && this.distanceToSqr(Vec3.atCenterOf(this.currentPatrolTarget)) < 4.0) {
+                this.getNavigation().stop();
+                this.currentPatrolTarget = null;
+                this.patrolTimer = 20; // Short pause before next movement
+            }
+        }
+
+        // Safety check: if too far from patrol origin, return to it
+        if (this.distanceToSqr(Vec3.atCenterOf(patrolOrigin.get())) > (PATROL_RADIUS + 3) * (PATROL_RADIUS + 3)) {
+            this.getNavigation().moveTo(patrolOrigin.get().getX() + 0.5, patrolOrigin.get().getY(), patrolOrigin.get().getZ() + 0.5, 1.0);
+            this.currentPatrolTarget = null;
+            this.patrolTimer = 40; // Reset timer after returning
+        }
+    }
+    private BlockPos findNearestBarrel() {
+        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
+        BlockPos nearestBarrel = null;
+        double nearestDistance = Double.MAX_VALUE;
+        int searchRange = 16;
+
+        for (int x = -searchRange; x <= searchRange; x++) {
+            for (int y = -4; y <= 4; y++) {
+                for (int z = -searchRange; z <= searchRange; z++) {
+                    mutablePos.set(this.blockPosition().getX() + x, this.blockPosition().getY() + y, this.blockPosition().getZ() + z);
+                    if (this.level().getBlockState(mutablePos).getBlock().toString().contains("barrel")) {
+                        BlockEntity blockEntity = this.level().getBlockEntity(mutablePos);
+                        if (blockEntity instanceof Container) {
+                            double distance = this.distanceToSqr(Vec3.atCenterOf(mutablePos));
+                            if (distance < nearestDistance) {
+                                nearestDistance = distance;
+                                nearestBarrel = mutablePos.immutable();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return nearestBarrel;
+    }
+    private void depositAllItems(Container container) {
+        BlockPos barrelPos = null;
+        for (int x = -2; x <= 2; x++) {
+            for (int y = -1; y <= 1; y++) {
+                for (int z = -2; z <= 2; z++) {
+                    BlockPos checkPos = this.blockPosition().offset(x, y, z);
+                    BlockState blockState = this.level().getBlockState(checkPos);
+                    BlockEntity blockEntity = this.level().getBlockEntity(checkPos);
+
+                    if (blockState.getBlock() instanceof BarrelBlock && blockEntity == container) {
+                        barrelPos = checkPos;
+                        break;
+                    }
+                }
+            }
+        }
+        if (barrelPos != null) {
+            BlockState barrelState = this.level().getBlockState(barrelPos);
+            if (barrelState.getBlock() instanceof BarrelBlock && !barrelState.getValue(BarrelBlock.OPEN)) {
+                this.level().setBlock(barrelPos, barrelState.setValue(BarrelBlock.OPEN, true), 3);
+
+                scheduleBarrelClose(barrelPos);
+            }
+        }
+
         for (int i = 0; i < this.inventory.getContainerSize(); i++) {
             ItemStack itemStack = this.inventory.getItem(i);
             if (!itemStack.isEmpty()) {
                 ItemStack remainingStack = tryAddItemToContainer(container, itemStack);
                 this.inventory.setItem(i, remainingStack);
-                if (remainingStack.isEmpty()) {
-                    inventoryFullCached = false;
-                    hasItemsToDepositCached = false;
-                }
-            }
-        }
-    }
-
-    private BlockPos findNearestContainer() {
-        if (containerSearchCooldown > 0 && cachedNearestContainer != null) {
-            containerSearchCooldown--;
-            return cachedNearestContainer;
-        }
-
-        BlockPos.MutableBlockPos mutablePos = new BlockPos.MutableBlockPos();
-        BlockPos nearestContainer = null;
-        double nearestDistance = Double.MAX_VALUE;
-
-        for (int x = -10; x <= 10; x++) {
-            for (int y = -5; y <= 5; y++) {
-                for (int z = -10; z <= 10; z++) {
-                    mutablePos.set(this.blockPosition().getX() + x, this.blockPosition().getY() + y, this.blockPosition().getZ() + z);
-                    BlockEntity blockEntity = this.level().getBlockEntity(mutablePos);
-                    if (blockEntity instanceof Container) {
-                        double distance = this.distanceToSqr(Vec3.atCenterOf(mutablePos));
-                        if (distance < nearestDistance) {
-                            nearestDistance = distance;
-                            nearestContainer = mutablePos.immutable();
-                        }
-                    }
-                }
             }
         }
 
-        cachedNearestContainer = nearestContainer;
-        containerSearchCooldown = 100; // Reset cooldown
-        return nearestContainer;
+        this.playSound(SoundEvents.BARREL_OPEN, 0.5F, 1.0F);
     }
-
+    private void scheduleBarrelClose(BlockPos barrelPos) {
+        this.scheduledBarrelClose = barrelPos;
+        this.barrelCloseTimer = 40;
+    }
     private ItemStack tryAddItemToContainer(Container container, ItemStack itemStack) {
         for (int j = 0; j < container.getContainerSize(); j++) {
             ItemStack containerStack = container.getItem(j);
@@ -292,6 +316,11 @@ public class SupplyScampEntity extends TamableAnimal {
     }
 
     private void checkForItems() {
+        // Only check for items if we're not already patrolling (this method is called separately)
+        if (this.isPatrolling()) {
+            return; // Let handlePatrolling deal with items during patrol
+        }
+
         ItemEntity nearestItem = findNearestItem();
         if (nearestItem != null) {
             double distance = this.distanceToSqr(nearestItem);
@@ -305,10 +334,8 @@ public class SupplyScampEntity extends TamableAnimal {
                     }
                     this.playSound(SoundEvents.ITEM_PICKUP, 0.2F, ((this.random.nextFloat() - this.random.nextFloat()) * 0.7F + 1.0F) * 2.0F);
                 }
-            } else {
+            } else if (distance <= ITEM_DETECTION_RANGE * ITEM_DETECTION_RANGE) {
                 this.getNavigation().moveTo(nearestItem, 1.0);
-                this.setStationary(false);
-                this.patrolTimer = PATROL_DURATION;
             }
         }
     }
@@ -336,14 +363,6 @@ public class SupplyScampEntity extends TamableAnimal {
 
     public void setStationary(boolean stationary) {
         this.entityData.set(STATIONARY, stationary);
-    }
-
-    public void setLinkedContainer(BlockPos pos) {
-        this.entityData.set(LINKED_CONTAINER, Optional.of(pos));
-    }
-
-    public Optional<BlockPos> getLinkedContainer() {
-        return this.entityData.get(LINKED_CONTAINER);
     }
 
     public Optional<BlockPos> getPatrolOrigin() {
@@ -400,18 +419,16 @@ public class SupplyScampEntity extends TamableAnimal {
     @Override
     public void die(DamageSource pCause) {
         super.die(pCause);
-        if (this.isLinkedToController()) {
-            this.setLinkedToController(false);
+        if (!this.level().isClientSide) {
+            float rand = this.random.nextFloat();
+            if (rand < 0.35f) {
+                SignalBeaconEntity beacon = new SignalBeaconEntity(ModEntities.SIGNAL_BEACON.get(), this.level());
+                beacon.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+                this.level().addFreshEntity(beacon);
+            }
         }
     }
 
-    public boolean isLinkedToController() {
-        return this.entityData.get(LINKED_TO_CONTROLLER);
-    }
-
-    public void setLinkedToController(boolean linked) {
-        this.entityData.set(LINKED_TO_CONTROLLER, linked);
-    }
 
     public boolean isPanicked() {
         return this.entityData.get(PANICKING);
@@ -454,15 +471,30 @@ public class SupplyScampEntity extends TamableAnimal {
         this.goalSelector.addGoal(4, new RandomLookAroundGoal(this));
     }
 
-    // In SupplyScampEntity.java, update the mobInteract method:
     @Override
-    public InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
+    public @NotNull InteractionResult mobInteract(Player player, @NotNull InteractionHand hand) {
         ItemStack itemstack = player.getItemInHand(hand);
         if (this.level().isClientSide) {
             boolean flag = this.isOwnedBy(player) || this.isTame() || itemstack.is(ModItems.ANCIENT_BRASS.get()) && !this.isTame();
             return flag ? InteractionResult.CONSUME : InteractionResult.PASS;
         } else {
             if (this.isTame()) {
+                if (itemstack.is(ModItems.ANCIENT_BRASS.get()) && this.getHealth() < this.getMaxHealth()) {
+                    if (!player.getAbilities().instabuild) {
+                        itemstack.shrink(1);
+                    }
+                    float healAmount = 6.0F;
+                    this.heal(healAmount);
+                    this.playSound(SoundEvents.GENERIC_EAT, 0.5F, 1.0F);
+                    if (this.level() instanceof ServerLevel serverLevel) {
+                        serverLevel.sendParticles(ParticleTypes.HEART,
+                                this.getX(), this.getY() + 0.5, this.getZ(),
+                                3, 0.3, 0.3, 0.3, 0.1);
+                    }
+                    return InteractionResult.SUCCESS;
+                }
+
+                // Dyeing
                 if (itemstack.getItem() instanceof DyeItem) {
                     DyeColor dyeColor = ((DyeItem) itemstack.getItem()).getDyeColor();
                     this.setMaskColor(DYE_COLOR_TO_MASK_INDEX[dyeColor.getId()]);
@@ -471,42 +503,45 @@ public class SupplyScampEntity extends TamableAnimal {
                     }
                     return InteractionResult.SUCCESS;
                 }
+
+                // Simple state cycling on shift-click
                 if (player.isShiftKeyDown()) {
-                    if (itemstack.getItem() instanceof ScampControllerItem) {
-                        // Handle linking
-                        PlayerScampManager.PlayerScampData playerData = PlayerScampManager.getOrCreatePlayerData(player);
-                        UUID previousScampId = playerData.getLinkedScampId();
-                        if (previousScampId == null || !previousScampId.equals(this.getUUID())) {
-                            playerData.setLinkedScampId(this.getUUID());
-                            player.displayClientMessage(Component.translatable("message.supply_scamp.linked"), true);
-                        }
-                        // Allow state cycling even with controller
-                        if (this.isOrderedToSit()) {
-                            setScampPatrolling(player);
-                        } else if (this.isPatrolling()) {
-                            setScampFollowing(player);
-                        } else {
-                            setScampSitting(player);
-                        }
-                        return InteractionResult.SUCCESS;
-                    }
                     if (this.isOrderedToSit()) {
-                        setScampPatrolling(player);
+                        // Start patrolling - check for nearby barrels
+                        this.setOrderedToSit(false);
+                        this.setSitting(false);
+                        this.setPatrolling(true);
+                        this.setPatrolOrigin(this.blockPosition());
+                        this.spawnPatrolOriginParticles();
+
+                        // Check if there's a barrel nearby and give feedback
+                        BlockPos nearestBarrel = findNearestBarrel();
+                        if (nearestBarrel == null) {
+                            player.displayClientMessage(Component.translatable("message.supply_scamp.patrolling_no_barrel"), true);
+                        } else {
+                            player.displayClientMessage(Component.translatable("message.supply_scamp.patrolling"), true);
+                        }
+
                     } else if (this.isPatrolling()) {
-                        setScampFollowing(player);
+                        // Start following
+                        this.setPatrolling(false);
+                        this.setOrderedToSit(false);
+                        player.displayClientMessage(Component.translatable("message.supply_scamp.following"), true);
                     } else {
-                        setScampSitting(player);
+                        // Sit
+                        this.setOrderedToSit(true);
+                        this.setSitting(true);
+                        this.setPatrolling(false);
+                        player.displayClientMessage(Component.translatable("message.supply_scamp.sitting"), true);
                     }
                 } else {
                     player.openMenu(new SupplyScampMenuProvider(this));
                 }
                 return InteractionResult.SUCCESS;
             } else if (itemstack.is(ModItems.ANCIENT_BRASS.get())) {
-                // Handle taming logic
                 if (!player.getAbilities().instabuild) {
                     itemstack.shrink(1);
                 }
-
                 if (this.random.nextInt(3) == 0 && !ForgeEventFactory.onAnimalTame(this, player)) {
                     this.tame(player);
                     this.navigation.stop();
@@ -515,35 +550,10 @@ public class SupplyScampEntity extends TamableAnimal {
                 } else {
                     this.level().broadcastEntityEvent(this, (byte) 6);
                 }
-
                 return InteractionResult.SUCCESS;
             }
-
             return super.mobInteract(player, hand);
         }
-    }
-
-
-    private void setScampPatrolling(Player player) {
-        this.setOrderedToSit(false);
-        this.setSitting(false);
-        this.setPatrolling(true);
-        this.setPatrolOrigin(this.blockPosition());
-        this.spawnPatrolOriginParticles();
-        player.displayClientMessage(Component.translatable("message.supply_scamp.patrolling"), true);
-    }
-
-    private void setScampFollowing(Player player) {
-        this.setPatrolling(false);
-        this.setOrderedToSit(false);
-        this.getNavigation().moveTo(player, 1.0);
-        player.displayClientMessage(Component.translatable("message.supply_scamp.following"), true);
-    }
-
-    private void setScampSitting(Player player) {
-        this.setOrderedToSit(true);
-        this.setSitting(true);
-        player.displayClientMessage(Component.translatable("message.supply_scamp.sitting"), true);
     }
 
     @Override
@@ -586,11 +596,9 @@ public class SupplyScampEntity extends TamableAnimal {
         this.entityData.define(PANICKING, false);
         this.entityData.define(SITTING, false);
         this.entityData.define(PATROLLING, false);
-        this.entityData.define(MASK_COLOR, 0); // Default to black
+        this.entityData.define(MASK_COLOR, 0);
         this.entityData.define(PATROL_ORIGIN, Optional.empty());
         this.entityData.define(STATIONARY, false);
-        this.entityData.define(LINKED_TO_CONTROLLER, false);
-        this.entityData.define(LINKED_CONTAINER, Optional.empty());
 
     }
 
@@ -650,11 +658,7 @@ public class SupplyScampEntity extends TamableAnimal {
                 listnbt.add(compoundnbt);
             }
         }
-        this.getLinkedContainer().ifPresent(pos -> {
-            compound.putInt("ContainerPosX", pos.getX());
-            compound.putInt("ContainerPosY", pos.getY());
-            compound.putInt("ContainerPosZ", pos.getZ());
-        });
+
         compound.putBoolean("Patrolling", this.isPatrolling());
         this.getPatrolOrigin().ifPresent(pos -> {
             compound.putInt("PatrolOriginX", pos.getX());
@@ -663,7 +667,14 @@ public class SupplyScampEntity extends TamableAnimal {
         });
         compound.put("Items", listnbt);
         compound.putInt("MaskColor", this.getMaskColor());
-        compound.putBoolean("LinkedToController", this.isLinkedToController());
+
+        // Save barrel closing state
+        if (scheduledBarrelClose != null) {
+            compound.putInt("BarrelCloseX", scheduledBarrelClose.getX());
+            compound.putInt("BarrelCloseY", scheduledBarrelClose.getY());
+            compound.putInt("BarrelCloseZ", scheduledBarrelClose.getZ());
+            compound.putInt("BarrelCloseTimer", barrelCloseTimer);
+        }
     }
 
     @Override
@@ -678,15 +689,7 @@ public class SupplyScampEntity extends TamableAnimal {
                 this.inventory.setItem(j, ItemStack.of(compoundnbt));
             }
         }
-        if (compound.contains("ContainerPosX")) {
-            BlockPos containerPos = new BlockPos(
-                    compound.getInt("ContainerPosX"),
-                    compound.getInt("ContainerPosY"),
-                    compound.getInt("ContainerPosZ")
-            );
-            this.setLinkedContainer(containerPos);
-        }
-        this.setLinkedToController(compound.getBoolean("LinkedToController"));
+
         this.setPatrolling(compound.getBoolean("Patrolling"));
         if (compound.contains("PatrolOriginX") && compound.contains("PatrolOriginY") && compound.contains("PatrolOriginZ")) {
             BlockPos patrolOrigin = new BlockPos(
@@ -698,7 +701,16 @@ public class SupplyScampEntity extends TamableAnimal {
         }
         if (compound.contains("MaskColor", 3)) {
             this.setMaskColor(compound.getInt("MaskColor"));
+        }
 
+        // Load barrel closing state
+        if (compound.contains("BarrelCloseX")) {
+            scheduledBarrelClose = new BlockPos(
+                    compound.getInt("BarrelCloseX"),
+                    compound.getInt("BarrelCloseY"),
+                    compound.getInt("BarrelCloseZ")
+            );
+            barrelCloseTimer = compound.getInt("BarrelCloseTimer");
         }
     }
 

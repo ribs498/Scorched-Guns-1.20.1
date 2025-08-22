@@ -75,22 +75,15 @@ public class DozierRLModel implements IOverrideModel {
         matrixStack.popPose();
     }
     private void renderFlame(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
-        // Always push.
         matrixStack.pushPose();
-        // Don't touch this, it's better to use the display options in Blockbench.
         matrixStack.translate(0, -5.8 * 0.0625, 0);
-        // Gets the cooldown tracker for the item. Items like swords and enderpearls also have this.
         ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
         float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
         cooldown = (float) ease(cooldown);
 
-        // Apply scaling based on cooldown to hide the flames initially
         float scale = cooldown > 0 ? 1.0f : 0.0f;
         matrixStack.scale(scale, scale, scale);
 
-        // We are moving whatever part is moving.
-        // X, Y, Z, use Z for moving back and forth.
-        // The higher the number, the shorter the distance.
         matrixStack.translate(0, 0, cooldown / 8);
         matrixStack.translate(0, 5.8 * 0.0625, 0);
         RenderUtil.renderModel(SpecialModels.DOZIER_RL_FIRE.getModel(), stack, matrixStack, buffer, light, overlay);

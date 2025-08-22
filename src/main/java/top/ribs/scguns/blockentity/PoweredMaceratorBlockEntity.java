@@ -150,8 +150,6 @@ public class PoweredMaceratorBlockEntity extends BlockEntity implements MenuProv
                 return lazyItemHandler.cast();
             } else if (side == Direction.DOWN) {
                 return LazyOptional.of(() -> new OutputItemHandler(itemHandler)).cast();
-            } else if (side == Direction.UP) {
-                return LazyOptional.of(() -> new InputItemHandler(itemHandler)).cast();
             } else {
                 return LazyOptional.of(() -> new InputItemHandler(itemHandler)).cast();
             }
@@ -335,98 +333,118 @@ public class PoweredMaceratorBlockEntity extends BlockEntity implements MenuProv
     }
 
 
-    private static class InputItemHandler implements IItemHandlerModifiable {
-        private final ItemStackHandler itemHandler;
-
-        public InputItemHandler(ItemStackHandler itemHandler) {
-            this.itemHandler = itemHandler;
-        }
+    private record InputItemHandler(ItemStackHandler itemHandler) implements IItemHandlerModifiable {
 
         @Override
-        public void setStackInSlot(int slot, ItemStack stack) {
-            itemHandler.setStackInSlot(slot, stack);
-        }
-
-        @Override
-        public int getSlots() {
-            return itemHandler.getSlots();
-        }
-
-        @Override
-        public ItemStack getStackInSlot(int slot) {
-            return itemHandler.getStackInSlot(slot);
-        }
-
-        @Override
-        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            if (slot == FIRST_INPUT_SLOT || slot == LAST_INPUT_SLOT) {
-                return itemHandler.insertItem(slot, stack, simulate);
+            public void setStackInSlot(int slot, ItemStack stack) {
+                if (slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT) {
+                    itemHandler.setStackInSlot(slot, stack);
+                }
             }
-            return stack;
-        }
 
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if (slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT) {
-                return itemHandler.extractItem(slot, amount, simulate);
+            @Override
+            public int getSlots() {
+                return LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 1;
             }
-            return ItemStack.EMPTY;
-        }
 
-        @Override
-        public int getSlotLimit(int slot) {
-            return itemHandler.getSlotLimit(slot);
-        }
-
-        @Override
-        public boolean isItemValid(int slot, ItemStack stack) {
-            return slot == FIRST_INPUT_SLOT || slot == LAST_INPUT_SLOT;
-        }
-    }
-
-    private static class OutputItemHandler implements IItemHandlerModifiable {
-        private final ItemStackHandler itemHandler;
-
-        public OutputItemHandler(ItemStackHandler itemHandler) {
-            this.itemHandler = itemHandler;
-        }
-
-        @Override
-        public void setStackInSlot(int slot, ItemStack stack) {
-            itemHandler.setStackInSlot(slot, stack);
-        }
-
-        @Override
-        public int getSlots() {
-            return itemHandler.getSlots();
-        }
-
-        @Override
-        public ItemStack getStackInSlot(int slot) {
-            return itemHandler.getStackInSlot(slot);
-        }
-
-        @Override
-        public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            return stack;
-        }
-
-        @Override
-        public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            if (slot == OUTPUT_SLOT) {
-                return itemHandler.extractItem(slot, amount, simulate);
+            @Override
+            public ItemStack getStackInSlot(int slot) {
+                if (slot >= 0 && slot < getSlots()) {
+                    return itemHandler.getStackInSlot(FIRST_INPUT_SLOT + slot);
+                }
+                return ItemStack.EMPTY;
             }
-            return ItemStack.EMPTY;
+
+            @Override
+            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+                if (slot >= 0 && slot < getSlots()) {
+                    int actualSlot = FIRST_INPUT_SLOT + slot;
+                    ItemStack result = itemHandler.insertItem(actualSlot, stack, simulate);
+                    if (!result.equals(stack)) {
+                        return result;
+                    }
+                }
+                return insertIntoNextAvailableSlot(stack, simulate);
+            }
+
+            private ItemStack insertIntoNextAvailableSlot(ItemStack stack, boolean simulate) {
+                for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
+                    ItemStack existingStack = itemHandler.getStackInSlot(i);
+                    if (!existingStack.isEmpty() && ItemStack.isSameItem(existingStack, stack)) {
+                        ItemStack result = itemHandler.insertItem(i, stack, simulate);
+                        if (!result.equals(stack)) {
+                            return result;
+                        }
+                    }
+                }
+
+                for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
+                    ItemStack existingStack = itemHandler.getStackInSlot(i);
+                    if (existingStack.isEmpty()) {
+                        return itemHandler.insertItem(i, stack, simulate);
+                    }
+                }
+
+                return stack;
+            }
+
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                return ItemStack.EMPTY;
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                if (slot >= 0 && slot < getSlots()) {
+                    return itemHandler.getSlotLimit(FIRST_INPUT_SLOT + slot);
+                }
+                return 0;
+            }
+
+            @Override
+            public boolean isItemValid(int slot, ItemStack stack) {
+                return slot >= 0 && slot < getSlots();
+            }
         }
 
-        @Override
-        public int getSlotLimit(int slot) {
-            return itemHandler.getSlotLimit(slot);
-        }
+    private record OutputItemHandler(ItemStackHandler itemHandler) implements IItemHandlerModifiable {
 
         @Override
-        public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-            return false;
+            public void setStackInSlot(int slot, ItemStack stack) {
+                itemHandler.setStackInSlot(slot, stack);
+            }
+
+            @Override
+            public int getSlots() {
+                return itemHandler.getSlots();
+            }
+
+            @Override
+            public ItemStack getStackInSlot(int slot) {
+                return itemHandler.getStackInSlot(slot);
+            }
+
+            @Override
+            public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+                return stack;
+            }
+
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                if (slot == OUTPUT_SLOT) {
+                    return itemHandler.extractItem(slot, amount, simulate);
+                }
+                return ItemStack.EMPTY;
+            }
+
+            @Override
+            public int getSlotLimit(int slot) {
+                return itemHandler.getSlotLimit(slot);
+            }
+
+            @Override
+            public boolean isItemValid(int slot, @NotNull ItemStack stack) {
+                return false;
+            }
         }
-    }
 }

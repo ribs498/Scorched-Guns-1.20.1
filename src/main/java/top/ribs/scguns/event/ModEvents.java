@@ -1,13 +1,9 @@
 package top.ribs.scguns.event;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
-import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerTrades;
-import net.minecraft.world.item.EnchantedBookItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentInstance;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.item.trading.MerchantOffer;
 import net.minecraftforge.event.village.VillagerTradesEvent;
 import net.minecraftforge.event.village.WandererTradesEvent;
@@ -121,13 +117,21 @@ public class ModEvents {
                     new ItemStack(Items.EMERALD, 32),
                     new ItemStack(ModItems.MAKESHIFT_RIFLE.get(), 1),
                     1, 25, 0.05f));
+            trades.get(4).add((pTrader, pRandom) -> new MerchantOffer(
+                    new ItemStack(Items.EMERALD, 35),
+                    new ItemStack(ModItems.BIRDFEEDER.get(), 1),
+                    1, 25, 0.05f));
             trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 25),
                     new ItemStack(ModItems.IRON_BLUEPRINT.get(), 1),
                     1, 30, 0.05f));
             trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(ModItems.NITRO_POWDER.get(), 1),
-                    new ItemStack(Items.EMERALD, 14),
+                    new ItemStack(Items.EMERALD, 28),
+                    8, 25, 0.05f));
+            trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
+                    new ItemStack(ModItems.ANCIENT_BRASS.get(), 32),
+                    new ItemStack(ModItems.WRECKER_BLUEPRINT.get(), 1),
                     8, 25, 0.05f));
         }
     }
@@ -139,11 +143,15 @@ public class ModEvents {
 
         trades.add((pTrader, pRandom) -> new MerchantOffer(
                 new ItemStack(Items.EMERALD, 24),
-                new ItemStack(ModItems.TREATED_BRASS_BLUEPRINT.get(), 1),
+                new ItemStack(ModItems.SCAMP_PACKAGE.get(), 1),
                 1, 12, 0.15f));
         trades.add((pTrader, pRandom) -> new MerchantOffer(
                 new ItemStack(Items.EMERALD, 24),
-                new ItemStack(ModItems.DIAMOND_STEEL_BLUEPRINT.get(), 1),
+                new ItemStack(ModItems.WRECKER_BLUEPRINT.get(), 1),
+                1, 12, 0.15f));
+        trades.add((pTrader, pRandom) -> new MerchantOffer(
+                new ItemStack(Items.EMERALD, 29),
+                new ItemStack(ModItems.WRECKER_BLUEPRINT.get(), 1),
                 1, 12, 0.15f));
         rareTrades.add((pTrader, pRandom) -> new MerchantOffer(
                 new ItemStack(Items.EMERALD, 23),

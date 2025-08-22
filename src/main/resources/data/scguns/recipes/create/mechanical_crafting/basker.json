@@ -1,0 +1,41 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "C": {
+      "item": "scguns:treated_iron_ingot"
+    },
+    "L": {
+      "item": "scguns:rapid_firing_unit"
+    },
+    "R": {
+      "item": "scguns:gun_parts"
+    },
+    "S": {
+      "item": "minecraft:flint_and_steel"
+    },
+    "X": {
+      "item": "scguns:empty_tank"
+    },
+    "V": {
+      "item": "scguns:treated_iron_gun_frame"
+    },
+    "P": {
+      "item": "scguns:wrecker_blueprint"
+    },
+    "K": {
+      "item": "scguns:gun_barrel"
+    }
+  },
+  "pattern": [
+    "CVP ",
+    "LRKS",
+    "Q X "
+  ],
+  "result": {
+    "item": "scguns:basker"
+  }
+}

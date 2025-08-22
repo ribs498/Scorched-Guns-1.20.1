@@ -36,9 +36,12 @@ public class AdvancedRoundProjectileEntity extends ProjectileEntity {
 
     public AdvancedRoundProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
-        this.setArmorBypassAmount(3.0F);
-    }
+        float armorBypass = 3.0F;
+        float puncturingBypass = GunEnchantmentHelper.getPuncturingArmorBypass(weapon);
+        armorBypass += puncturingBypass;
 
+        this.setArmorBypassAmount(armorBypass);
+    }
     @Override
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
         float damage = this.getDamage();
@@ -48,16 +51,17 @@ public class AdvancedRoundProjectileEntity extends ProjectileEntity {
         ResourceLocation advantage = this.getProjectile().getAdvantage();
         damage *= advantageMultiplier(entity);
 
+        boolean wasAlive = entity instanceof LivingEntity && entity.isAlive();
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
 
         if (entity instanceof LivingEntity livingTarget) {
+            damage = GunEnchantmentHelper.getPuncturingDamageReduction(this.getWeapon(), livingTarget, damage);
+            damage = applyProjectileProtection(livingTarget, damage);
             damage = calculateArmorBypassDamage(livingTarget, damage);
         }
-
         boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, ADVANCED_SHIELD_DISABLE_CHANCE);
-
         if (!blocked) {
             DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
 
@@ -75,7 +79,10 @@ public class AdvancedRoundProjectileEntity extends ProjectileEntity {
                                 if (headshot) {
                                     duration = (int)(duration * HEADSHOT_EFFECT_DURATION_MULTIPLIER);
                                 }
-
+                                if (entity instanceof LivingEntity livingTarget) {
+                                    damage = applyProjectileProtection(livingTarget, damage);
+                                    damage = calculateArmorBypassDamage(livingTarget, damage);
+                                }
                                 livingEntity.addEffect(new MobEffectInstance(
                                         effect,
                                         duration,
@@ -96,7 +103,9 @@ public class AdvancedRoundProjectileEntity extends ProjectileEntity {
             int hitType = critical ? S2CMessageProjectileHitEntity.HitType.CRITICAL : headshot ? S2CMessageProjectileHitEntity.HitType.HEADSHOT : S2CMessageProjectileHitEntity.HitType.NORMAL;
             PacketHandler.getPlayChannel().sendToPlayer(() -> (ServerPlayer) this.shooter, new S2CMessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
         }
-
+        if (wasAlive && entity instanceof LivingEntity livingEntity && !livingEntity.isAlive()) {
+            checkForDiamondSteelBonus(livingEntity, hitVec);
+        }
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
     }
 

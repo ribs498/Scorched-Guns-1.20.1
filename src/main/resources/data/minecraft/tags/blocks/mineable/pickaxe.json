@@ -60,6 +60,9 @@
        "scguns:ammo_box",
     "scguns:mob_trap",
     "scguns:felix_memorial",
-    "scguns:plasma_block"
+    "scguns:plasma_block",
+    "scguns:cut_treated_brass",
+    "scguns:treated_brass_plates",
+    "scguns:treated_iron_grate"
   ]
 }

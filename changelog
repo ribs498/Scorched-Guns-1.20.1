@@ -1,21 +1,50 @@
-- Adjusted Dark Matter recipe to not use Dragon Egg anymore
-- Tweaked Earths Corpse recipe
-- Added Melee reach to gun json instead of hard coded value
-- Player knockback resistance/ attribute now affects knockback from guns
-- Fixed Missing callwell stocks
-- Fixed issues with Leawinds Third Person mod
-- Added Cog Knight Armor set
-- Tweaked mending on attachments to be more flexible
-- Added built in weaker mending to sculk guns
-- Added Forlorn Hope, a new sculk rifle
-- Added Crusader, a med gun
-- Fixed beam weapons not respecting Fragile blocks
-- Enchantment groups now use tags instead of coded lists
-- Added optional potion effect impact to guns, used by Dark Matter
--More adjustments to creative ammo box, all ammo is now available in it
-- Added config to toggle ADS
-- Added Immersive HUD config, only rendering Gun info when inspecting
-- Added config to disable rendering of player arms
-- Tweaked Ancient Brass block to just be storage block for Ancient Brass
-- Plasgun reanimation stuff
+- Fixed Trauma Unit Spawning
+- Fixed Double durability damage to guns
+- Reworked gun light system
+- Added Trotters- New bolt action Piglin Rifle(thanks to Blumountain and Kel Cat from the discord for the design!)
+- Added the Stiletto- New single shot Krahg Pistol
+- Added New ammo type - Shatter Rounds
+- Added the M3 Marksman rifle
+- Added the RG-Jigsaw
+- Added the Micina- Burst fire revolver
+- Added the Grandle (og), renamed existing Grandle to Grandle Conversion
+- Added Saketini IronPort
+- Reworked Scamps, removed Scamp Controller, now will seek out Barrels (specifically barrels) to deposit items when it has picked up 3 items during its patrolling
+- Fixed Scamps Going for dropped items even in sit mode
+- Fixed Scamps not being able to be healed with Ancient Brass
+- Buffed Speed mag modifier so its actually useful now lmao
+- Tamed Mobs no longer are affected by gun shots
+- Fixed issue with turrets not opening
+- Fixed Bearpack issues for snow layers
+- Added Some modifiers to scopes
+- Medium And Long Scope now have slightly increased sensitivity during aiming to compensate for fov changes
+- Animated Armors now hide second skin layers when worn
+- Diamond Steel armor is now 3d (thanks again to Albatroz Feroz on the discord for the model!)
+- Added proper (kinda ugly but functional) 3rd person weapon pose for Vehicles (horse/boat/minecart/etc) as well as crawl/swim
+- Molds now properly can use Unbreaking enchantment
+- Fixed up the Diamond steel conversion process, added recipes for create compat and Create enchantment industry
+- Added ability to offhand swords and bayonets with 1 handed weapons, as well as use other offhand stuff like food and torches
+- Reworked the gun lights feature so its less buggy
+- Added the Cog Chambers Dungeon to the world
+- Added the Scamppanzer boss
+- Added the Exo Suit, blueprint drops from the Scamppanzer boss
+- Added a small speed decrease during reloads, can be negated with Light Frame and/or Swift Sneak (thanks to brandon on the discord for the idea!)
+- Light Frame now has 2 levels, for non heavy weapons it can increase movement speed by 5%-10% (5% max for heavy weapons)
+- Hypervelocity now has a chance to do double durability damage on fire, increases per level
+- Sharpshooter reworked, still has increased crit chance and increases armor penetration, but decreases base damage slightly
+- Tight Seal now gives a 15% damage boost underwater, continues to prevent double durability damage underwater.
+- Tight seal can be applied to the Ocean tier guns, have a 25% chance to not add durability damage when fired underwater alongside damage boost
+- Ramrod rounds now do 1.75x damage to undead and apply weakness
+- Gibbs Rounds drop an additional 25% xp and apply 2 level of looting on kill
+- Beowulf round drop an additional 75% xp and 2 level of looting on kill
+- Flamethrowers now clear sculk, uses sculk_block tag for what it can clear ( thank to Atobá in the discord for the idea!)
+- Attachment tooltips are clearer with what they do
+- Cog Knight now has a Charge Attack
+- Dissident now have Leap Attack
+- Added Gun Rust Curse, found on guns found in structures. Always has a chance to jam guns
+- Fixed Turret modules issues with up and down
+- Vent output is set by the tag geothermal_vent_output and sulfur_vent_output. ( data driven vents planned for later)
+- Sulfur dust can be placed like Niter
+- Niter no longer "melts" in heat sources
+
 

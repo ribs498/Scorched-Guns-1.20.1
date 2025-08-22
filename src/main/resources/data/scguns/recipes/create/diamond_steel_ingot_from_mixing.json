@@ -28,11 +28,11 @@
   "results": [
     {
       "count": 5,
-      "item": "scguns:diamond_steel_ingot"
+      "item": "scguns:depleted_diamond_steel_ingot"
     },
     {
-      "chance": 0.1,
-      "item": "scguns:diamond_steel_ingot"
+      "chance": 0.15,
+      "item": "scguns:depleted_diamond_steel_ingot"
     }
   ]
 }

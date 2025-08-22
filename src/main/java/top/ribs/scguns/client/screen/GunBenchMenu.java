@@ -2,6 +2,7 @@ package top.ribs.scguns.client.screen;
 
 import net.minecraft.core.NonNullList;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
@@ -19,6 +20,7 @@ import java.util.Optional;
 public class GunBenchMenu extends AbstractContainerMenu {
     private final Container container;
     private final ContainerLevelAccess containerAccess;
+    private final Player player;
 
     public static final int SLOT_GRIP = 8;
     public static final int SLOT_MAGAZINE = 9;
@@ -46,6 +48,7 @@ public class GunBenchMenu extends AbstractContainerMenu {
         checkContainerSize(container, 12);
         this.container = container;
         this.containerAccess = containerAccess;
+        this.player = playerInventory.player;
         container.startOpen(playerInventory.player);
 
         // Add custom slots with correct indexes
@@ -63,6 +66,13 @@ public class GunBenchMenu extends AbstractContainerMenu {
             @Override
             public boolean mayPlace(@NotNull ItemStack stack) {
                 return stack.getItem() instanceof BlueprintItem;
+            }
+
+            @Override
+            public void setChanged() {
+                super.setChanged();
+                // When blueprint slot changes, attempt auto-crafting
+                attemptAutoCrafting();
             }
         });
         this.addSlot(new Slot(container, SLOT_OUTPUT, 140, 44) {
@@ -91,6 +101,89 @@ public class GunBenchMenu extends AbstractContainerMenu {
         }
 
         this.slotsChanged(container);
+    }
+
+    /**
+     * Attempts to automatically populate the crafting grid when a blueprint with an active recipe is placed
+     */
+    private void attemptAutoCrafting() {
+        containerAccess.execute((level, pos) -> {
+            if (level.isClientSide) return;
+
+            ItemStack blueprintStack = container.getItem(SLOT_BLUEPRINT);
+            if (blueprintStack.isEmpty() || !(blueprintStack.getItem() instanceof BlueprintItem)) {
+                return;
+            }
+
+            ResourceLocation activeRecipeId = BlueprintScreen.getActiveRecipe(blueprintStack);
+            if (activeRecipeId == null) {
+                return;
+            }
+
+            Optional<GunBenchRecipe> recipeOptional = level.getRecipeManager()
+                    .getAllRecipesFor(GunBenchRecipe.Type.INSTANCE)
+                    .stream()
+                    .filter(recipe -> recipe.getId().equals(activeRecipeId))
+                    .findFirst();
+
+            if (recipeOptional.isEmpty()) {
+                return;
+            }
+
+            GunBenchRecipe recipe = recipeOptional.get();
+
+            for (int i = 0; i < 10; i++) {
+                ItemStack existing = container.getItem(i);
+                if (!existing.isEmpty()) {
+                    if (!player.getInventory().add(existing)) {
+                        player.drop(existing, false);
+                    }
+                    container.setItem(i, ItemStack.EMPTY);
+                }
+            }
+
+            NonNullList<Ingredient> ingredients = recipe.getIngredients();
+            for (int slotIndex = 0; slotIndex < Math.min(ingredients.size(), 10); slotIndex++) {
+                Ingredient ingredient = ingredients.get(slotIndex);
+                if (ingredient.isEmpty()) continue;
+
+                ItemStack foundItem = findAndRemoveIngredientFromInventory(ingredient);
+                if (!foundItem.isEmpty()) {
+                    container.setItem(slotIndex, foundItem);
+                }
+            }
+
+            slotsChanged(container);
+        });
+    }
+
+    /**
+     * Searches player inventory for an item matching the ingredient and removes one if found
+     */
+    private ItemStack findAndRemoveIngredientFromInventory(Ingredient ingredient) {
+        // Check main inventory first
+        for (int i = 9; i < player.getInventory().getContainerSize(); i++) { // Skip hotbar initially
+            ItemStack stack = player.getInventory().getItem(i);
+            if (!stack.isEmpty() && ingredient.test(stack)) {
+                ItemStack result = stack.copy();
+                result.setCount(1);
+                stack.shrink(1);
+                return result;
+            }
+        }
+
+        // Check hotbar if nothing found in main inventory
+        for (int i = 0; i < 9; i++) {
+            ItemStack stack = player.getInventory().getItem(i);
+            if (!stack.isEmpty() && ingredient.test(stack)) {
+                ItemStack result = stack.copy();
+                result.setCount(1);
+                stack.shrink(1);
+                return result;
+            }
+        }
+
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -153,18 +246,28 @@ public class GunBenchMenu extends AbstractContainerMenu {
     }
 
     @Override
-    public ItemStack quickMoveStack(Player player, int index) {
+    public @NotNull ItemStack quickMoveStack(Player player, int index) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(index);
 
-        if (slot != null && slot.hasItem()) {
+        if (slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
-            if (index < this.container.getContainerSize()) {
-                if (!this.moveItemStackTo(itemstack1, this.container.getContainerSize(), this.slots.size(), true)) {
+            if (index >= this.container.getContainerSize()) {
+                if (itemstack1.getItem() instanceof BlueprintItem) {
+                    boolean moveSuccess = this.moveItemStackTo(itemstack1, SLOT_BLUEPRINT, SLOT_BLUEPRINT + 1, false);
+
+                    if (!moveSuccess) {
+                        if (!this.moveItemStackTo(itemstack1, 0, SLOT_GRIP + 1, false)) {
+                            return ItemStack.EMPTY;
+                        }
+                    }
+                }
+                else if (!this.moveItemStackTo(itemstack1, 0, this.container.getContainerSize(), false)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!this.moveItemStackTo(itemstack1, 0, this.container.getContainerSize(), false)) {
+            }
+            else if (!this.moveItemStackTo(itemstack1, this.container.getContainerSize(), this.slots.size(), true)) {
                 return ItemStack.EMPTY;
             }
 

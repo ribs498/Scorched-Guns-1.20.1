@@ -2,9 +2,6 @@
   "type": "create:mechanical_crafting",
   "acceptMirrored": true,
   "key": {
-    "Q": {
-      "item": "scguns:gun_grip"
-    },
     "C": {
       "tag": "minecraft:planks"
     },
@@ -12,7 +9,7 @@
       "item": "minecraft:flint"
     },
     "R": {
-      "item": "minecraft:smooth_stone"
+      "item": "minecraft:cobblestone"
     },
     "S": {
       "item": "scguns:stone_gun_barrel"
@@ -20,7 +17,7 @@
   },
   "pattern": [
     "LRSS ",
-    "Q C  "
+    "C C  "
   ],
   "result": {
     "item": "scguns:musket"

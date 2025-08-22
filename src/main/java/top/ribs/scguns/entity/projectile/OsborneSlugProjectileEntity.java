@@ -207,6 +207,10 @@ public class OsborneSlugProjectileEntity extends ProjectileEntity {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
         if (entity instanceof LivingEntity livingTarget) {
+            damage = applyProjectileProtection(livingTarget, damage);
+            damage = calculateArmorBypassDamage(livingTarget, damage);
+        }
+        if (entity instanceof LivingEntity livingTarget) {
             damage = calculateArmorBypassDamage(livingTarget, damage);
         }
 

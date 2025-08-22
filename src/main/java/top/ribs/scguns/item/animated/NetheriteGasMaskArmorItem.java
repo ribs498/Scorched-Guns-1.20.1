@@ -48,7 +48,10 @@ public class NetheriteGasMaskArmorItem extends ArmorItem implements GeoItem {
     public void registerControllers(AnimatableManager.ControllerRegistrar controllerRegistrar) {
         controllerRegistrar.add(new AnimationController(this, "controller", 0, this::predicate));
     }
-
+    @Override
+    public boolean isFireResistant() {
+        return true;
+    }
     @Override
     public AnimatableInstanceCache getAnimatableInstanceCache() {
         return cache;

@@ -25,9 +25,9 @@
     }
   },
   "pattern": [
-    "QKSS",
+    "KKSS",
     "LRSS",
-    "K MX"
+    "Q MX"
   ],
   "result": {
     "item": "scguns:scratches"

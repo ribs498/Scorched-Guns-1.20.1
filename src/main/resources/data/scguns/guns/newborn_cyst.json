@@ -18,10 +18,10 @@
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "projectileAmount": 16,
-    "rate": 10,
+    "rate": 8,
     "recoilAngle": 10.0,
     "recoilKick": 3.0,
-    "spread": 8.0,
+    "spread": 7.0,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 24,
@@ -64,7 +64,7 @@
     "gravity": false,
     "item": "scguns:bearpack_shell",
     "casingType": "scguns:medium_brass_casing",
-    "life": 30,
+    "life": 40,
     "size": 0.05,
     "speed": 6.0,
     "trailLengthMultiplier": 2.0
@@ -72,6 +72,7 @@
   "reloads": {
     "emptyMagTimer": 10,
     "maxAmmo": 6,
+    "reloadAmount": 2,
     "reloadItem": "scguns:bearpack_shell",
     "reloadTimer": 6,
     "reloadType": "scguns:manual"

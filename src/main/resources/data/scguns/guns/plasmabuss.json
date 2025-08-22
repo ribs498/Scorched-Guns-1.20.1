@@ -51,7 +51,8 @@
   },
   "reloads": {
     "emptyMagTimer": 50,
-    "maxAmmo": 5,
+    "maxAmmo": 7,
+    "reloadAmount": 1,
     "reloadItem": "scguns:energy_cell",
     "reloadTimer": 15,
     "reloadType": "scguns:manual"

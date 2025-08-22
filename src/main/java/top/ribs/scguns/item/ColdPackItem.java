@@ -37,7 +37,7 @@ public class ColdPackItem extends Item {
     }
     @Override
     public int getUseDuration(ItemStack stack) {
-        return 32;
+        return 16;
     }
     @Override
     public @NotNull UseAnim getUseAnimation(ItemStack stack) {

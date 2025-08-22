@@ -29,12 +29,11 @@ public class Osgood50Model implements IOverrideModel {
     @Override
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
         RenderUtil.renderModel(SpecialModels.OSGOOD_50_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
+        RenderUtil.renderModel(SpecialModels.OSGOOD_50_DRUM.getModel(), stack, matrixStack, buffer, light, overlay);
         renderStockAttachments(matrixStack, buffer, stack, light, overlay);
         renderBarrelAttachments(matrixStack, buffer, stack, light, overlay);
 
-        if (entity.equals(Minecraft.getInstance().player)) {
-            renderBoltAndMagazine(matrixStack, buffer, stack, partialTicks, light, overlay);
-        }
+
         if (entity.equals(Minecraft.getInstance().player)) {
             matrixStack.pushPose();
             matrixStack.translate(0, -0.30, 0.33);
@@ -76,56 +75,8 @@ public class Osgood50Model implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.OSGOOD_50_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
             }
         }
-
-        // Render the standard barrel if no extended barrel is attached
         if (!hasExtendedBarrel) {
             RenderUtil.renderModel(SpecialModels.OSGOOD_50_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
-        }
-    }
-
-    private void renderBoltAndMagazine(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, float partialTicks, int light, int overlay) {
-        ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
-        float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
-        int shotCount = GunFireEventOsgoodHandler.getShotCount();
-        targetRotation = shotCount * ROTATION_INCREMENT;
-
-        // Interpolate rotation
-        currentRotation = currentRotation + (targetRotation - currentRotation) * partialTicks;
-
-        matrixStack.pushPose();
-        matrixStack.translate(0, -5.8 * 0.0625, 0);
-        if (cooldown > 0) {
-            matrixStack.translate(0, 0, cooldown / 8);
-        }
-        matrixStack.translate(0, 5.8 * 0.0625, 0);
-        matrixStack.popPose();
-        renderMagazineRotation(matrixStack, buffer, stack, light, overlay);
-    }
-
-    private void renderMagazineRotation(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
-        matrixStack.pushPose();
-        matrixStack.translate(0, -0.24, 0);
-        matrixStack.mulPose(Axis.ZP.rotationDegrees(currentRotation));
-        matrixStack.translate(0, 0.24, 0);
-        RenderUtil.renderModel(SpecialModels.OSGOOD_50_DRUM.getModel(), stack, matrixStack, buffer, light, overlay);
-        matrixStack.popPose();
-    }
-
-    @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
-    public static class GunFireEventOsgoodHandler {
-
-        private static int shotCount = 0;
-
-        @SubscribeEvent
-        public static void onGunFire(GunFireEvent.Post event) {
-            if (event.isClient()) {
-                shotCount++;
-                shotCount %= TOTAL_SHOTS; // Ensure shotCount is always within the bounds of the drum capacity
-            }
-        }
-
-        public static int getShotCount() {
-            return shotCount;
         }
     }
     private double ease(double x) {

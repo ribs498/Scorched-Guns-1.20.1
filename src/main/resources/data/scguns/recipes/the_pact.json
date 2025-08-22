@@ -1,0 +1,40 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "#": {
+      "item": "minecraft:paper"
+    },
+    "X": {
+      "item": "scguns:gibbs_round"
+    },
+    "Q": {
+      "item": "scguns:shock_cell"
+    },
+    "C": {
+      "item": "scguns:sculk_cell"
+    },
+    "A": {
+      "item": "scguns:shotgun_shell"
+    },
+    "P": {
+      "item": "scguns:advanced_round"
+    },
+    "T": {
+      "item": "scguns:hog_round"
+    },
+    "R": {
+      "item": "scguns:ramrod_round"
+    },
+    "E": {
+      "item": "scguns:energy_cell"
+    }
+  },
+  "pattern": [
+    "EPX",
+    "Q#C",
+    "ART"
+  ],
+  "result": {
+    "item": "scguns:the_pact"
+  }
+}

@@ -25,6 +25,8 @@ import java.util.function.Supplier;
 public class ModBlocks {
 
     public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Reference.MOD_ID);
+    public static final RegistryObject<Block> TEMPORARY_LIGHT = REGISTER.register("temporary_light",
+            TemporaryLightBlock::new);
     public static final RegistryObject<Block> GUN_SHELF = register("gun_shelf",
             () -> new GunShelfBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)
                     .requiresCorrectToolForDrops()
@@ -69,6 +71,10 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .strength(3.0F)
                     .noOcclusion()));
+    public static final RegistryObject<Block> CHARGED_AMETHYST_RELAY = register("charged_amethyst_relay",
+            () -> new ChargedAmethystRelayBlock(BlockBehaviour.Properties.copy(Blocks.REPEATER)
+                    .strength(0.0F)
+                    .noOcclusion()));
 
     public static final RegistryObject<Block> AUTO_TURRET = register("auto_turret",
             () -> new AutoTurretBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
@@ -82,7 +88,7 @@ public class ModBlocks {
                     .noOcclusion()));
     public static final RegistryObject<Block> POLAR_GENERATOR = register("polar_generator",
             () -> new PolarGeneratorBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.COW_BELL)
                     .strength(3.0F)
                     .noOcclusion()));
 
@@ -93,57 +99,57 @@ public class ModBlocks {
                     .noOcclusion()));
     public static final RegistryObject<Block> LIGHTNING_BATTERY = register("lightning_battery",
             () -> new LightningBattery(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.COW_BELL)
                     .strength(3.0F)
                     .noOcclusion()
                     .lightLevel((state) -> state.getValue(LightningBattery.CHARGED) ? 15 : 0)));
 
     public static final RegistryObject<Block> MACERATOR = register("macerator",
             () -> new MaceratorBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.HAT)
                     .strength(3.0F)
                     .noOcclusion()));
     public static final RegistryObject<Block> POWERED_MACERATOR = register("powered_macerator",
             () -> new PoweredMaceratorBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.HAT)
                     .strength(3.0F)
                     .noOcclusion()));
     public static final RegistryObject<Block> MECHANICAL_PRESS = register("mechanical_press",
             () -> new MechanicalPressBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BANJO)
                     .strength(3.0F)
                     .noOcclusion()));
     public static final RegistryObject<Block> POWERED_MECHANICAL_PRESS = register("powered_mechanical_press",
             () -> new PoweredMechanicalPressBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BANJO)
                     .strength(3.0F)
                     .noOcclusion()));
     public static final RegistryObject<Block> GUN_BENCH = register("gun_bench",
-            () -> new GunBenchBlock(BlockBehaviour.Properties.copy(Blocks.CRAFTING_TABLE)
+            () -> new GunBenchBlock(BlockBehaviour.Properties.copy(Blocks.CRAFTING_TABLE).instrument(NoteBlockInstrument.GUITAR)
                     .requiresCorrectToolForDrops()
                     .strength(2.5F)
                     .noOcclusion()));
     public static final RegistryObject<Block> ANTHRALITE_BLOCK = register("anthralite_block",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).instrument(NoteBlockInstrument.IRON_XYLOPHONE)
                     .requiresCorrectToolForDrops()
                     .strength(3.0F)));
     public static final RegistryObject<Block> TREATED_IRON_BLOCK = register("treated_iron_block",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).instrument(NoteBlockInstrument.IRON_XYLOPHONE)
                     .requiresCorrectToolForDrops()
                     .strength(3.0F)));
     public static final RegistryObject<Block> TREATED_BRASS_BLOCK = register("treated_brass_block",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK).instrument(NoteBlockInstrument.IRON_XYLOPHONE)
                     .requiresCorrectToolForDrops()
                     .strength(3.0F)));
     public static final RegistryObject<Block> VEHEMENT_COAL_BLOCK = registerBurnable("vehement_coal_block",
-            () -> new Block(BlockBehaviour.Properties.copy(Blocks.COAL_BLOCK)
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.COAL_BLOCK).instrument(NoteBlockInstrument.DIDGERIDOO)
                     .requiresCorrectToolForDrops()
                     .strength(3.0F)), 43200);
 
     public static final RegistryObject<Block> PLASMA_BLOCK = registerBurnable("plasma_block",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                     .requiresCorrectToolForDrops()
-                    .strength(3.0F)), 21600);
+                    .strength(3.0F)), 16200);
 
     public static final RegistryObject<Block> DIAMOND_STEEL_BLOCK = register("diamond_steel_block",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
@@ -233,9 +239,14 @@ public class ModBlocks {
             () -> new DropExperienceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.NETHER).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F).sound(SoundType.NETHER_GOLD_ORE), UniformInt.of(0, 1)));
 
     public static final RegistryObject<Block> NITER_LAYER = register("niter",
-            () -> new NiterLayerBlock(BlockBehaviour.Properties.copy(Blocks.SNOW)));
+            () -> new NiterLayerBlock(BlockBehaviour.Properties.copy(Blocks.SAND)));
+
+    public static final RegistryObject<Block> SULFUR_LAYER = register("sulfur",
+            () -> new SulfurLayerBlock(BlockBehaviour.Properties.copy(Blocks.SAND)));
+
     public static final RegistryObject<Block> NITER_BLOCK = register("niter_block",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.SAND)));
+
     public static final RegistryObject<Block> PENETRATOR = register("penetrator",
             () -> new PenetratorBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
                     .strength(1.0F), 10));
@@ -309,58 +320,73 @@ public class ModBlocks {
                     .strength(2.0F)));
     public static final RegistryObject<Block> PHOSPHORITE = register("phosphorite",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASS)
                     .strength(1.5F)));
     public static final RegistryObject<Block> POLISHED_PHOSPHORITE = register("polished_phosphorite",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASS)
                     .strength(2.0F)));
     public static final RegistryObject<Block> PHOSPHORITE_BRICKS = register("phosphorite_bricks",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASS)
                     .strength(2.0F)));
     public static final RegistryObject<Block> CRACKED_PHOSPHORITE_BRICKS = register("cracked_phosphorite_bricks",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASS)
                     .strength(2.0F)));
     public static final RegistryObject<Block> PHOSPHORITE_BRICK_SLAB = register("phosphorite_brick_slab",
             () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASS)
                     .strength(2.0F)));
     public static final RegistryObject<Block> PHOSPHORITE_BRICK_STAIRS = register("phosphorite_brick_stairs",
             () -> new StairBlock(() -> ModBlocks.PHOSPHORITE_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASS)
                     .strength(2.0F)));
     public static final RegistryObject<Block> PHOSPHORITE_BRICK_WALL = register("phosphorite_brick_wall",
             () -> new WallBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASS)
                     .strength(2.0F)));
+
     public static final RegistryObject<Block> ASGHARIAN_PILLAR = register("asgharian_pillar",
             () -> new AsgharianPillarBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
                     .strength(4.0F)));
     public static final RegistryObject<Block> ASGHARIAN_BRICKS = register("asgharian_bricks",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
                     .strength(4.0F)));
 
 
     public static final RegistryObject<Block> CRACKED_ASGHARIAN_BRICKS = register("cracked_asgharian_bricks",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
                     .strength(4.0F)));
     public static final RegistryObject<Block> ASGHARIAN_BRICK_SLAB = register("asgharian_brick_slab",
             () -> new SlabBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
                     .strength(4.0F)));
     public static final RegistryObject<Block> ASGHARIAN_BRICK_STAIRS = register("asgharian_brick_stairs",
             () -> new StairBlock(() -> ModBlocks.ASGHARIAN_BRICKS.get().defaultBlockState(), BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
                     .strength(4.0F)));
     public static final RegistryObject<Block> ASGHARIAN_BRICK_WALL = register("asgharian_brick_wall",
             () -> new WallBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
-                    .requiresCorrectToolForDrops()
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
                     .strength(4.0F)));
+
+    public static final RegistryObject<Block> TREATED_BRASS_PLATES = register("treated_brass_plates",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.FLUTE)
+                    .strength(3.0F)));
+    public static final RegistryObject<Block> CUT_TREATED_BRASS = register("cut_treated_brass",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.FLUTE)
+                    .strength(2.5F)));
+    public static final RegistryObject<Block> TREATED_IRON_GRATE = register("treated_iron_grate",
+            () -> new TreatedIronGrateBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.IRON_XYLOPHONE)
+                    .strength(3.0F)
+                    .noOcclusion()));
 
     public static final RegistryObject<Block> SANDBAG = register("sandbag",
             () -> new SandbagBlock(BlockBehaviour.Properties.copy(Blocks.SANDSTONE)
@@ -368,8 +394,7 @@ public class ModBlocks {
                     .noOcclusion()));
     public static final RegistryObject<Block> SUPPLY_CRATE = register("supply_crate",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)
-                    .requiresCorrectToolForDrops()
-                    .strength(2.0F)));
+                    .strength(1.0F)));
 
 
     private static <T extends Block> RegistryObject<T> register(String id, Supplier<T> blockSupplier) {

@@ -55,8 +55,6 @@ public class PlasmaExplosion extends CustomExplosion {
             if (this.source instanceof ProjectileEntity projectile) {
                 shooter = projectile.getShooter();
             }
-
-            // Handle damage for each affected entity
             for (LivingEntity entity : this.level.getEntitiesOfClass(LivingEntity.class, this.getBoundingBox().inflate(this.radius * 2.0))) {
                 if (!entity.isAlive()) continue;
 
@@ -68,14 +66,12 @@ public class PlasmaExplosion extends CustomExplosion {
 
                 float damage = (float) ((1.0D - distance) * exposure * this.radius * 2.0);
 
-                // Apply damage reduction if the entity is the shooter
                 if (entity == shooter) {
                     damage *= OWNER_DAMAGE_REDUCTION;
                 }
 
                 entity.hurt(damageSource, damage);
 
-                // Apply knockback
                 double deltaX = entity.getX() - this.x;
                 double deltaZ = entity.getZ() - this.z;
                 double distance2D = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);

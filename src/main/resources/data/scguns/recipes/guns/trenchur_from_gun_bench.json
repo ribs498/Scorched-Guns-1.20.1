@@ -27,7 +27,7 @@
       "item": "scguns:gun_grip"
     },
     "gun_magazine": {
-      "tag": "minecraft:planks"
+      "item": "minecraft:iron_ingot"
     }
   }
 }

@@ -241,9 +241,46 @@
             },
             {
               "function": "minecraft:enchant_randomly"
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{Enchantments:[{id:\"scguns:gun_rust\",lvl:1s}]}",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.6
+                }
+              ]
             }
           ],
           "name": "scguns:makeshift_rifle",
+          "weight": 3
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.1,
+                "max": 0.3
+              }
+            },
+            {
+              "function": "minecraft:enchant_randomly"
+            },
+            {
+              "function": "minecraft:set_nbt",
+              "tag": "{Enchantments:[{id:\"scguns:gun_rust\",lvl:1s}]}",
+              "conditions": [
+                {
+                  "condition": "minecraft:random_chance",
+                  "chance": 0.6
+                }
+              ]
+            }
+          ],
+          "name": "scguns:llr_director",
           "weight": 3
         },
         {

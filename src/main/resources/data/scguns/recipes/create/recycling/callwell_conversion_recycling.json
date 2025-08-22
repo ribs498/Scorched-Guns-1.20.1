@@ -2,7 +2,7 @@
   "type": "create:crushing",
   "ingredients": [
     {
-      "item": "scguns:sawed_off_callwell"
+      "item": "scguns:callwell_conversion"
     }
   ],
   "processingTime": 250,
@@ -17,7 +17,7 @@
     },
     {
       "chance": 0.3,
-      "item": "scguns:gun_barrel"
+      "item": "scguns:heavy_gun_barrel"
     },
     {
       "chance": 0.3,

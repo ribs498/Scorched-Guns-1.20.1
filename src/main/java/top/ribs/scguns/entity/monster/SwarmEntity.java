@@ -1,6 +1,5 @@
 package top.ribs.scguns.entity.monster;
 
-
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
@@ -19,10 +18,11 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.init.ModEntities;
+import top.ribs.scguns.init.ModTags;
 
-import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -30,24 +30,16 @@ public class SwarmEntity extends FlyingMob implements Enemy {
     private static final int LIFESPAN_TICKS = 1200;
     private int lifespan;
 
-
-    private static final List<EntityType<?>> NON_TARGETABLE_MOBS = Arrays.asList(
-            ModEntities.HIVE.get(),
-            EntityType.SKELETON,
-            ModEntities.SWARM.get(),
-            ModEntities.COG_KNIGHT.get(),
-            ModEntities.COG_MINION.get(),
-            ModEntities.SKY_CARRIER.get(),
-            ModEntities.SUPPLY_SCAMP.get(),
-            EntityType.WITHER_SKELETON,
-            EntityType.STRAY
-            // Add other non-targetable entity types here
-    );
     public SwarmEntity(EntityType<? extends SwarmEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.moveControl = new SwarmMoveGoal(this, 0.5f, 0.7f);
         this.lookControl = new SwarmLookGoal(this);
         this.lifespan = LIFESPAN_TICKS;
+    }
+
+    @Override
+    public @NotNull MobType getMobType() {
+        return MobType.ARTHROPOD;
     }
 
     public final AnimationState idleAnimationState = new AnimationState();
@@ -69,6 +61,7 @@ public class SwarmEntity extends FlyingMob implements Enemy {
     public boolean isActive() {
         return this.isActive;
     }
+
     @Override
     public boolean isAffectedByPotions() {
         return true;
@@ -81,6 +74,7 @@ public class SwarmEntity extends FlyingMob implements Enemy {
         }
         return super.canBeAffected(effect);
     }
+
     @Override
     public void tick() {
         super.tick();
@@ -116,7 +110,7 @@ public class SwarmEntity extends FlyingMob implements Enemy {
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new FollowHiveGoal(this, 1.0D, 10.0F)); // Follow the hive when idle
+        this.goalSelector.addGoal(0, new FollowHiveGoal(this, 1.0D, 10.0F));
         this.targetSelector.addGoal(0, new NearestAttackableTargetGoal<>(this, Player.class, true));
         this.targetSelector.addGoal(1, new NearestAttackableTargetGoal<>(this, Monster.class, true) {
             @Override
@@ -125,7 +119,7 @@ public class SwarmEntity extends FlyingMob implements Enemy {
             }
         });
 
-        this.goalSelector.addGoal(1, new SwarmAttackGoal(this, 1.0D)); // Adjust the speed as needed
+        this.goalSelector.addGoal(1, new SwarmAttackGoal(this, 1.0D));
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -155,12 +149,13 @@ public class SwarmEntity extends FlyingMob implements Enemy {
         return SoundEvents.BEE_DEATH;
     }
 
-    // Method to check if a target is valid
+    // Method to check if a target is valid using the tag system
     private boolean isValidTarget(LivingEntity target) {
         if (target == null) {
             return false;
         }
-        return !NON_TARGETABLE_MOBS.contains(target.getType());
+        // Check if the target's entity type is in the NON_SWARM_TARGETED tag
+        return !target.getType().is(ModTags.Entities.NON_SWARM_TARGETED);
     }
 
     public static class SwarmLookGoal extends LookControl {
@@ -248,7 +243,7 @@ public class SwarmEntity extends FlyingMob implements Enemy {
         }
 
         private boolean isValidTarget(LivingEntity target) {
-            return !NON_TARGETABLE_MOBS.contains(target.getType());
+            return !target.getType().is(ModTags.Entities.NON_SWARM_TARGETED);
         }
     }
 

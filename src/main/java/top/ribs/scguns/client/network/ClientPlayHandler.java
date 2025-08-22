@@ -3,6 +3,7 @@ package top.ribs.scguns.client.network;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleEngine;
+import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.BlockPos;
@@ -25,6 +26,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
+import software.bernie.geckolib.animatable.GeoItem;
+import software.bernie.geckolib.core.animatable.GeoAnimatable;
+import software.bernie.geckolib.core.animation.AnimationController;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.client.BulletTrail;
@@ -37,11 +41,16 @@ import top.ribs.scguns.client.handler.HUDRenderHandler;
 import top.ribs.scguns.client.particle.BloodParticle;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.common.NetworkGunManager;
+import top.ribs.scguns.common.ReloadType;
+import top.ribs.scguns.common.exosuit.ExoSuitData;
 import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.animated.AnimatedGunItem;
+import top.ribs.scguns.item.animated.ExoSuitItem;
 import top.ribs.scguns.network.message.*;
 import top.ribs.scguns.particles.BulletHoleData;
+import top.ribs.scguns.util.GunModifierHelper;
 
 import javax.annotation.Nullable;
 import java.util.Objects;
@@ -52,6 +61,37 @@ import java.util.stream.Collectors;
  * Author: MrCrayfish
  */
 public class ClientPlayHandler {
+    public static void handleSyncExoSuitUpgrades(S2CMessageSyncExoSuitUpgrades message) {
+        LocalPlayer localPlayer = Minecraft.getInstance().player;
+        if (localPlayer != null) {
+            // Find the player by UUID
+            Player targetPlayer = null;
+            if (localPlayer.getUUID().equals(message.getPlayerId())) {
+                targetPlayer = localPlayer;
+            } else {
+                for (Player player : localPlayer.level().players()) {
+                    if (player.getUUID().equals(message.getPlayerId())) {
+                        targetPlayer = player;
+                        break;
+                    }
+                }
+            }
+
+            if (targetPlayer != null) {
+                ItemStack armorPiece = targetPlayer.getItemBySlot(message.getArmorSlot());
+                if (!armorPiece.isEmpty() && armorPiece.getItem() instanceof ExoSuitItem exoSuitItem) {
+                    ExoSuitData.setUpgradeData(armorPiece, message.getUpgradeData());
+
+                    if (targetPlayer == localPlayer) {
+                        localPlayer.inventoryMenu.broadcastChanges();
+
+                        ItemStack refreshedStack = armorPiece.copy();
+                        targetPlayer.setItemSlot(message.getArmorSlot(), refreshedStack);
+                    }
+                }
+            }
+        }
+    }
     public static void handleReloadState(boolean reloading) {
         if (Minecraft.getInstance().player != null) {
             ItemStack heldItem = Minecraft.getInstance().player.getMainHandItem();
@@ -68,6 +108,46 @@ public class ClientPlayHandler {
                 }
             }
         }
+    }
+    public static void handleStopReload(S2CMessageStopReload message) {
+        Player player = Minecraft.getInstance().player;
+        if (player == null) return;
+
+        ItemStack heldItem = player.getMainHandItem();
+        if (!(heldItem.getItem() instanceof AnimatedGunItem gunItem)) return;
+
+        CompoundTag tag = heldItem.getOrCreateTag();
+        Gun modifiedGun = gunItem.getModifiedGun(heldItem);
+        boolean isManualReload = modifiedGun.getReloads().getReloadType() == ReloadType.MANUAL;
+        boolean isReloading = tag.getBoolean("scguns:IsReloading") ||
+                (tag.contains("scguns:ReloadState") && !tag.getString("scguns:ReloadState").equals("NONE"));
+
+        if (!isManualReload || !isReloading) {
+            return;
+        }
+
+        long id = GeoItem.getId(heldItem);
+        AnimationController<GeoAnimatable> animationController = gunItem.getAnimatableInstanceCache()
+                .getManagerForId(id)
+                .getAnimationControllers()
+                .get("controller");
+
+        int currentAmmo = tag.getInt("AmmoCount");
+        int maxAmmo = GunModifierHelper.getModifiedAmmoCapacity(heldItem, modifiedGun);
+        boolean hasNoAmmo = Gun.findAmmo(player, modifiedGun.getProjectile().getItem()).stack().isEmpty();
+
+        if (animationController != null && (currentAmmo >= maxAmmo || hasNoAmmo)) {
+            tag.putString("scguns:ReloadState", "STOPPING");
+            tag.putBoolean("scguns:IsPlayingReloadStop", true);
+            animationController.setAnimationSpeed(1.0);
+            animationController.forceAnimationReset();
+            animationController.tryTriggerAnimation(
+                    gunItem.isInCarbineMode(heldItem) ? "carbine_reload_stop" : "reload_stop"
+            );
+        }
+        tag.remove("scguns:IsReloading");
+        tag.remove("loaded");
+        tag.remove("scguns:ReloadComplete");
     }
     public static void handleMessageGunSound(S2CMessageGunSound message) {
         Minecraft mc = Minecraft.getInstance();

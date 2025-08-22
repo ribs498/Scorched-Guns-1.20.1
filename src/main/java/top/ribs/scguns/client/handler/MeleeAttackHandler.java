@@ -45,7 +45,6 @@ import java.util.List;
 import java.util.Map;
 
 public class MeleeAttackHandler {
-    private static final double REACH_DISTANCE = 3.0f;
     private static final float ENCHANTMENT_DAMAGE_SCALING_FACTOR = 0.70f;
     private static final float BASE_SPEED_DAMAGE_SCALING_FACTOR = 0.0f;
     private static final float[] BANZAI_SCALING_FACTORS = {3.0f, 5.5f, 7.0f};
@@ -209,14 +208,6 @@ public class MeleeAttackHandler {
                 .orElse(null);
     }
 
-    private static List<LivingEntity> findTargetsWithinReach(Player player, ItemStack heldItem) {
-        GunItem gunItem = (GunItem)heldItem.getItem();
-        float reach = gunItem.getModifiedGun(heldItem).getGeneral().getMeleeReach();
-
-        AABB boundingBox = player.getBoundingBox().inflate(reach, reach, reach);
-        return player.level().getEntitiesOfClass(LivingEntity.class, boundingBox,
-                entity -> entity != player && entity.isAlive());
-    }
 
     public static boolean isMeleeOnCooldown(Player player, ItemStack heldItem) {
         CompoundTag tag = heldItem.getOrCreateTag();
@@ -238,19 +229,23 @@ public class MeleeAttackHandler {
         }
 
         float baseDamage = (float) player.getAttributeValue(Attributes.ATTACK_DAMAGE);
+
         float additionalDamage = GunModifierHelper.getAdditionalDamage(heldItem, true);
 
         float enchantmentDamage = getEnchantmentDamageFromBayonet(heldItem, target, gunItem);
+
         Gun modifiedGun = gunItem.getModifiedGun(heldItem);
         float meleeDamage = modifiedGun.getGeneral().getMeleeDamage();
-        meleeDamage += gunItem.getBayonetAdditionalDamage(heldItem);
+
 
         float attackDamage = baseDamage + additionalDamage + enchantmentDamage + meleeDamage;
+
         if (isBanzaiAttack) {
             float speedDamageMultiplier = getBanzaiDamageMultiplier(player, heldItem);
             attackDamage *= speedDamageMultiplier;
             attackDamage = (float) (Math.round(attackDamage * 100.0) / 100.0);
         }
+
         DamageSource damageSource = player.serverLevel().damageSources().playerAttack(player);
 
         if (isBanzaiAttack) {

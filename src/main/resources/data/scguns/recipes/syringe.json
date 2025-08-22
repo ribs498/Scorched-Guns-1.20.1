@@ -7,14 +7,18 @@
     },
     "Q": {
       "item": "minecraft:iron_ingot"
+    },
+    "X": {
+      "item": "minecraft:glistering_melon_slice"
     }
   },
   "pattern": [
     " # ",
+    " X ",
     " Q "
   ],
   "result": {
     "item": "scguns:syringe",
-    "count": 6
+    "count": 3
   }
 }

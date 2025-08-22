@@ -18,6 +18,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -77,6 +79,10 @@ public class MicroJetEntity extends ProjectileEntity {
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
+        if (entity instanceof LivingEntity livingTarget) {
+            damage = applyBlastProtection(livingTarget, damage);
+        }
+        boolean wasAlive = entity instanceof LivingEntity && entity.isAlive();
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
         boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, SHIELD_DISABLE_CHANCE);
 
@@ -97,9 +103,22 @@ public class MicroJetEntity extends ProjectileEntity {
             GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
         }
         applyAreaEffects(hitVec);
+        if (wasAlive && entity instanceof LivingEntity livingEntity && !livingEntity.isAlive()) {
+            checkForDiamondSteelBonus(livingEntity, hitVec);
+        }
         createMiniExplosion(this, 1.0f);
     }
+    private float applyBlastProtection(LivingEntity target, float damage) {
+        int protectionLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.BLAST_PROTECTION, target);
 
+        if (protectionLevel > 0) {
+            float reduction = protectionLevel * 0.08f;
+            reduction = Math.min(reduction, 0.8f);
+            damage *= (1.0f - reduction);
+        }
+
+        return damage;
+    }
     private void applyEffect(LivingEntity target, float powerMultiplier, boolean headshot) {
         ResourceLocation effectLocation = this.getProjectile().getImpactEffect();
         if (effectLocation != null) {

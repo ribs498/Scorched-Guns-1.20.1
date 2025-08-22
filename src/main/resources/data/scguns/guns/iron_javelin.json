@@ -51,7 +51,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 13.0,
+    "damage": 15.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:advanced_round",

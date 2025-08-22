@@ -1,0 +1,17 @@
+{
+  "type": "create:filling",
+  "ingredients": [
+    {
+      "item": "scguns:depleted_diamond_steel_ingot"
+    },
+    {
+      "fluid": "create_enchantment_industry:experience",
+      "amount": 3
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:diamond_steel_ingot"
+    }
+  ]
+}

@@ -45,4 +45,5 @@ public class GrenadeEntity extends ProjectileEntity
     {
         createExplosion(this, this.getDamage() / 5F, true);
     }
+    
 }

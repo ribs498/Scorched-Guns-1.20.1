@@ -141,16 +141,22 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "scguns:iron_blueprint"
+          "name": "scguns:iron_blueprint",
+          "weight": 1
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:wrecker_blueprint",
+          "weight": 1
         },
         {
           "type": "minecraft:item",
           "name": "scguns:copper_blueprint",
-          "weight": 2
+          "weight": 4
         },
         {
           "type": "minecraft:empty",
-          "weight": 6
+          "weight": 12
         }
       ]
     }

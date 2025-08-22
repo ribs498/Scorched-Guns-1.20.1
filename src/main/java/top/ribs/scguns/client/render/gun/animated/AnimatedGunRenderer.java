@@ -134,9 +134,14 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
     public void renderByItem(ItemStack stack, ItemDisplayContext transformType,
                              PoseStack poseStack, MultiBufferSource bufferSource,
                              int packedLight, int packedOverlay) {
+
+
         this.currentDisplayContext = transformType;
         this.currentRenderStack = stack;
         this.bufferSource = bufferSource;
+
+
+
         if (stack.getItem() instanceof AnimatedGunItem) {
             if (transformType == ItemDisplayContext.NONE &&
                     Minecraft.getInstance().options.getCameraType() == CameraType.FIRST_PERSON) {
@@ -159,9 +164,9 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
         float translateX = model.getTransforms().firstPersonRightHand.translation.x();
         float translateY = model.getTransforms().firstPersonRightHand.translation.y();
         float translateZ = model.getTransforms().firstPersonRightHand.translation.z();
-        if (stack.getItem() instanceof AnimatedGunItem && transformType == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND) {
-            poseStack.translate(0.0, -0.5, 0.0);
-        }
+//        if (stack.getItem() instanceof AnimatedGunItem && transformType == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND) {
+//            poseStack.translate(0.0, -0.5, 0.0);
+//        }
 
         if (stack.getItem() instanceof AnimatedGunItem && transformType == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND) {
             Gun modifiedGun = ((GunItem) stack.getItem()).getModifiedGun(stack);
@@ -246,7 +251,7 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
         if (this.currentRenderStack == null) return false;
         Minecraft mc = Minecraft.getInstance();
         if (mc.player == null) return false;
-        if (mc.screen != null) return false;
+        if (mc.screen instanceof AttachmentScreen) return false;
         if (this.currentDisplayContext != ItemDisplayContext.FIRST_PERSON_RIGHT_HAND &&
                 this.currentDisplayContext != ItemDisplayContext.FIRST_PERSON_LEFT_HAND) {
             return false;
@@ -254,13 +259,21 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
         if (mc.options.getCameraType() != CameraType.FIRST_PERSON) return false;
         return !mc.player.isSpectator() && mc.player.isAlive();
     }
-
+    private boolean isMagazineBone(GeoBone bone) {
+        String name = bone.getName();
+        return name.contains("_mag") || name.contains("magazine");
+    }
     @Override
     public void renderRecursively(PoseStack poseStack, AnimatedGunItem animatable, GeoBone bone,
                                   RenderType renderType, MultiBufferSource bufferSource,
                                   VertexConsumer buffer, boolean isReRender, float partialTick,
                                   int packedLight, int packedOverlay, float red, float green,
                                   float blue, float alpha) {
+
+//        if (this.currentDisplayContext == ItemDisplayContext.THIRD_PERSON_RIGHT_HAND ||
+//                this.currentDisplayContext == ItemDisplayContext.THIRD_PERSON_LEFT_HAND) {
+//            return;
+//        }
 
         Minecraft client = Minecraft.getInstance();
         boolean shouldRenderCustomArms = false;
@@ -270,31 +283,34 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
 
         poseStack.pushPose();
 
-        if (bone.getName().equals("cogloader_magazine")) {
-            float pivotX = bone.getPivotX() * 0.0625f;
-            float pivotY = bone.getPivotY() * 0.0625f;
-            float pivotZ = bone.getPivotZ() * 0.0625f;
-            poseStack.translate(pivotX, pivotY, pivotZ);
-            poseStack.mulPose(Axis.YP.rotationDegrees(animatable.getRotationHandler().getCurrentMagazineRotation()));
-            poseStack.translate(-pivotX, -pivotY, -pivotZ);
-        } else if (bone.getName().equals("cylinder_magazine")) {
-            float pivotX = bone.getPivotX() * 0.0625f;
-            float pivotY = bone.getPivotY() * 0.0625f;
-            float pivotZ = bone.getPivotZ() * 0.0625f;
-            poseStack.translate(pivotX, pivotY, pivotZ);
-            poseStack.mulPose(Axis.ZP.rotationDegrees(animatable.getRotationHandler().getCurrentCylinderRotation()));
-            poseStack.translate(-pivotX, -pivotY, -pivotZ);
-        } else if (bone.getName().equals("sliding_magazine")) {
-            CompoundTag tag = this.currentRenderStack.getOrCreateTag();
-            if (!tag.contains("scguns:MagazineTracking")) {
-                float maxAmmo = Gun.getMaxAmmo(this.currentRenderStack);
-                float currentAmmo = Gun.getAmmoCount(this.currentRenderStack);
-                float slidePosition = Math.min((maxAmmo - currentAmmo) / maxAmmo, 1.0f);
-                tag.putFloat("MagazinePosition", slidePosition);
-                poseStack.translate(slidePosition * 0.30f, 0, 0);
-            } else {
-                float storedPosition = tag.getFloat("MagazinePosition");
-                poseStack.translate(storedPosition * 0.30f, 0, 0);
+        switch (bone.getName()) {
+            case "cogloader_magazine" -> {
+                float pivotX = bone.getPivotX() * 0.0625f;
+                float pivotY = bone.getPivotY() * 0.0625f;
+                float pivotZ = bone.getPivotZ() * 0.0625f;
+                poseStack.translate(pivotX, pivotY, pivotZ);
+                poseStack.mulPose(Axis.YP.rotationDegrees(animatable.getRotationHandler().getCurrentMagazineRotation()));
+                poseStack.translate(-pivotX, -pivotY, -pivotZ);
+            }
+            case "cylinder_magazine" -> {
+                float pivotX = bone.getPivotX() * 0.0625f;
+                float pivotY = bone.getPivotY() * 0.0625f;
+                float pivotZ = bone.getPivotZ() * 0.0625f;
+                poseStack.translate(pivotX, pivotY, pivotZ);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(animatable.getRotationHandler().getCurrentCylinderRotation()));
+                poseStack.translate(-pivotX, -pivotY, -pivotZ);
+            }
+            case "sliding_magazine" -> {
+                CompoundTag tag = this.currentRenderStack.getOrCreateTag();
+                if (tag.contains("MagazineOverride") && tag.getBoolean("MagazineOverride")) {
+                    float storedPosition = tag.getFloat("MagazinePosition");
+                    poseStack.translate(storedPosition * 0.25f, 0, 0);
+                } else {
+                    float maxAmmo = Gun.getMaxAmmo(this.currentRenderStack);
+                    float currentAmmo = Gun.getAmmoCount(this.currentRenderStack);
+                    float slidePosition = Math.min((maxAmmo - currentAmmo) / maxAmmo, 1.0f);
+                    poseStack.translate(slidePosition * 0.25f, 0, 0);
+                }
             }
         }
         if (isArmBone(bone)) {
@@ -343,7 +359,12 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
 
     private void handleBoneVisibility(GeoBone bone) {
         if (isArmBone(bone)) {
-            shouldRenderArms();
+            bone.setHidden(true);
+            return;
+        }
+
+        if (bone.getName().equals("left_arm") || bone.getName().equals("right_arm") ||
+                bone.getName().equals("fake_left_arm") || bone.getName().equals("fake_right_arm")) {
             bone.setHidden(true);
             bone.setChildrenHidden(true);
             return;
@@ -467,23 +488,31 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
                 break;
         }
     }
-
     private void handleMagazineVisibility(GeoBone bone) {
         ItemStack magazineAttachment = Gun.getAttachment(IAttachment.Type.MAGAZINE, this.currentItemStack);
 
         switch (bone.getName()) {
             case "standard_mag":
-            case "standard_mag_2":
             case "default_mag":
+                bone.setHidden(!magazineAttachment.isEmpty());
+                break;
+            case "standard_mag_2":
             case "default_mag_2":
+                // Show the correct fake standard/default mag based on attachment
                 bone.setHidden(!magazineAttachment.isEmpty());
                 break;
             case "extended_mag":
+                bone.setHidden(magazineAttachment.getItem() != ModItems.EXTENDED_MAG.get());
+                break;
             case "extended_mag_2":
+                // Show fake extended mag only when extended mag is equipped
                 bone.setHidden(magazineAttachment.getItem() != ModItems.EXTENDED_MAG.get());
                 break;
             case "speed_mag":
+                bone.setHidden(magazineAttachment.getItem() != ModItems.SPEED_MAG.get());
+                break;
             case "speed_mag_2":
+                // Show fake speed mag only when speed mag is equipped
                 bone.setHidden(magazineAttachment.getItem() != ModItems.SPEED_MAG.get());
                 break;
         }
@@ -572,18 +601,28 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
             }
         }
     }
-
     private void applyRecoilTransforms(PoseStack poseStack, ItemStack item, Gun gun) {
         double recoilNormal = GunRecoilHandler.get().getGunRecoilNormal();
         if (Gun.hasAttachmentEquipped(item, gun, IAttachment.Type.SCOPE)) {
             recoilNormal -= recoilNormal * 0.5 * AimingHandler.get().getNormalisedAdsProgress();
         }
-        float kickReduction = 1.0F - GunModifierHelper.getKickReduction(item);
-        float recoilReduction = 1.0F - GunModifierHelper.getRecoilModifier(item);
+
+        Minecraft mc = Minecraft.getInstance();
+        float kickReduction, recoilReduction;
+
+        if (mc.player != null) {
+            kickReduction = 1.0F - GunModifierHelper.getKickReduction(mc.player, item);
+            recoilReduction = 1.0F - GunModifierHelper.getRecoilModifier(mc.player, item);
+        } else {
+            kickReduction = 1.0F - GunModifierHelper.getKickReduction(item);
+            recoilReduction = 1.0F - GunModifierHelper.getRecoilModifier(item);
+        }
+
         double kick = (double) gun.getGeneral().getRecoilKick() * 0.0625 * recoilNormal * GunRecoilHandler.get().getAdsRecoilReduction(gun);
         float recoilLift = (float) ((double) gun.getGeneral().getRecoilAngle() * recoilNormal) * (float) GunRecoilHandler.get().getAdsRecoilReduction(gun);
         float recoilSwayAmount = (float) (2.0 + (1.0 - AimingHandler.get().getNormalisedAdsProgress()));
         float recoilSway = (float) ((double) (GunRecoilHandler.get().getGunRecoilRandom() * recoilSwayAmount - recoilSwayAmount / 2.0F) * recoilNormal);
+
         poseStack.translate(0.0, 0.0, kick * (double) kickReduction);
         poseStack.translate(0.0, 0.0, 0.15);
         poseStack.mulPose(Axis.YP.rotationDegrees(recoilSway * recoilReduction / 5.0F));

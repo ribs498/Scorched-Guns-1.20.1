@@ -58,6 +58,10 @@ public class RedcoatEntity extends Monster implements RangedAttackMob {
                 .add(Attributes.ATTACK_KNOCKBACK, 0.8f)
                 .add(Attributes.ATTACK_DAMAGE, 2f);
     }
+    @Override
+    public @NotNull MobType getMobType() {
+        return MobType.UNDEAD;
+    }
 
     public void triggerMuzzleFlash() {
         this.entityData.set(MUZZLE_FLASH_TIMER, 10);
@@ -82,7 +86,7 @@ public class RedcoatEntity extends Monster implements RangedAttackMob {
 
         if (this.isAttacking()) {
             if (--this.attackTime <= 0) {
-                this.attackTime = 40; // Cooldown between shots
+                this.attackTime = 120; // Cooldown between shots
                 LivingEntity target = this.getTarget();
                 if (target != null) {
                     this.performRangedAttack(target, 1.0F);
@@ -207,7 +211,7 @@ public class RedcoatEntity extends Monster implements RangedAttackMob {
         double d1 = target.getEyeY() - (this.getY() + offsetY);
         double d2 = target.getZ() - (this.getZ() + offsetZ);
         projectile.setPos(this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ);
-        projectile.shoot(d0, d1, d2, 2.6F, 0.0F);
+        projectile.shoot(d0, d1, d2, 2.5F, 0.0F);
         this.level().addFreshEntity(projectile);
         this.playSound(ModSounds.BLACKPOWDER_FIRE.get(), 1.0F, 1.0F);
         this.triggerMuzzleFlash();

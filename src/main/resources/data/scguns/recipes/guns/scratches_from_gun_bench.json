@@ -15,7 +15,7 @@
       "item": "scguns:heavy_gun_parts"
     },
     "gun_top_internal_1": {
-      "item": "scguns:gun_grip"
+      "item": "scguns:treated_brass_gun_frame"
     },
     "gun_top_internal_2": {
       "item": "scguns:treated_brass_gun_frame"
@@ -33,7 +33,7 @@
       "item": "scguns:gun_barrel"
     },
     "gun_grip": {
-      "item": "scguns:treated_brass_gun_frame"
+      "item": "scguns:gun_grip"
     },
     "gun_magazine": {
       "item": "scguns:empty_tank"

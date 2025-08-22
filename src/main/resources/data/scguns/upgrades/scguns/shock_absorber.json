@@ -1,0 +1,12 @@
+{
+  "item": "scguns:shock_absorber",
+  "type": "mobility",
+  "effects": {
+    "fallDamageReduction": 0.85,
+    "recoilAngleReduction": 0.1,
+    "recoilKickReduction": 0.1
+  },
+  "display": {
+    "model": "shock_absorber_module"
+  }
+}

@@ -70,11 +70,16 @@ public class BearPackShellProjectileEntity extends ProjectileEntity {
             BlockHitResult blockResult = rayTraceBlocks(this.level(),
                     new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this),
                     IGNORE_LEAVES);
+
+            boolean hitBlock = false;
             if (blockResult.getType() != HitResult.Type.MISS) {
                 endVec = blockResult.getLocation();
+                hitBlock = true;
             }
+
             List<EntityResult> hitEntities = this.findEntitiesOnPath(startVec, endVec);
             boolean hitSomething = false;
+
             while (remainingPenetrations > 0 && hitEntities != null && !hitEntities.isEmpty()) {
                 EntityResult closestEntity = null;
                 double closestEntityDist = Double.MAX_VALUE;
@@ -95,21 +100,24 @@ public class BearPackShellProjectileEntity extends ProjectileEntity {
                     break;
                 }
             }
-            if (blockResult.getType() != HitResult.Type.MISS) {
+
+            if (hitBlock) {
                 BlockState state = this.level().getBlockState(blockResult.getBlockPos());
                 this.onHitBlock(state, blockResult.getBlockPos(), blockResult.getDirection(),
                         blockResult.getLocation().x, blockResult.getLocation().y, blockResult.getLocation().z);
-                this.remove(RemovalReason.KILLED);
                 return;
             }
+
             if (hitSomething && remainingPenetrations <= 0) {
                 this.remove(RemovalReason.KILLED);
                 return;
             }
         }
+
         this.setPos(this.getX() + this.getDeltaMovement().x,
                 this.getY() + this.getDeltaMovement().y,
                 this.getZ() + this.getDeltaMovement().z);
+
         if (this.projectile.isGravity()) {
             this.setDeltaMovement(this.getDeltaMovement().add(0, this.modifiedGravity, 0));
         }
@@ -135,15 +143,18 @@ public class BearPackShellProjectileEntity extends ProjectileEntity {
         ResourceLocation advantage = this.getProjectile().getAdvantage();
         damage *= advantageMultiplier(entity);
 
+        boolean wasAlive = entity instanceof LivingEntity && entity.isAlive();
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
+
         if (entity instanceof LivingEntity livingTarget) {
+            damage = applyProjectileProtection(livingTarget, damage);
             damage = calculateArmorBypassDamage(livingTarget, damage);
         }
+
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, this.shooter);
         boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, SHIELD_DISABLE_CHANCE);
-
         if (blocked) {
             float penetratingDamage = damage * SHIELD_DAMAGE_PENETRATION;
             entity.hurt(source, penetratingDamage);
@@ -183,7 +194,9 @@ public class BearPackShellProjectileEntity extends ProjectileEntity {
             int hitType = critical ? S2CMessageProjectileHitEntity.HitType.CRITICAL : headshot ? S2CMessageProjectileHitEntity.HitType.HEADSHOT : S2CMessageProjectileHitEntity.HitType.NORMAL;
             PacketHandler.getPlayChannel().sendToPlayer(() -> (ServerPlayer) this.shooter, new S2CMessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
         }
-
+        if (wasAlive && entity instanceof LivingEntity livingEntity && !livingEntity.isAlive()) {
+            checkForDiamondSteelBonus(livingEntity, hitVec);
+        }
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
 
         if (this.remainingPenetrations > 0) {
@@ -216,10 +229,13 @@ public class BearPackShellProjectileEntity extends ProjectileEntity {
                     this.getDamage(), (int) Math.ceil(this.getDamage() / 2.0) + 1);
         }
 
+        // Handle penetration for blocks
         if (!state.canBeReplaced()) {
             this.remainingPenetrations--;
             if (this.remainingPenetrations <= 0) {
-                this.remove(RemovalReason.KILLED);
+                // Force removal by setting penetrations to 0
+                this.remainingPenetrations = 0;
+                super.remove(RemovalReason.KILLED); // Call super to bypass our custom remove logic
             } else {
                 Vec3 motion = this.getDeltaMovement();
                 this.setDeltaMovement(motion.multiply(0.8D, 0.8D, 0.8D));
@@ -229,6 +245,9 @@ public class BearPackShellProjectileEntity extends ProjectileEntity {
                         this.getZ() + motion.z * 0.2
                 );
             }
+        } else {
+            this.remainingPenetrations = 0;
+            super.remove(RemovalReason.KILLED);
         }
     }
     @Override

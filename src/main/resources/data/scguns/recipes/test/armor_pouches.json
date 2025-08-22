@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "S": {
+      "item": "scguns:anthralite_nugget"
+    },
+    "X": {
+      "item": "minecraft:leather"
+    }
+  },
+  "pattern": [
+    " SX",
+    " XX"
+  ],
+  "result": {
+    "item": "scguns:armor_pouches"
+  }
+}

@@ -21,15 +21,12 @@
     "M": {
       "item": "scguns:scorched_ingot"
     },
-    "P": {
-      "tag": "minecraft:planks"
-    },
     "X": {
       "item": "scguns:scorched_blueprint"
     }
   },
   "pattern": [
-    "XMM ",
+    "XMM  ",
     "LRS  ",
     "Q C  "
   ],

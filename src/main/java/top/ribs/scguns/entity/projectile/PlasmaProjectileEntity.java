@@ -14,6 +14,8 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
@@ -69,11 +71,13 @@ public class PlasmaProjectileEntity extends ProjectileEntity {
         boolean critical = damage != newDamage;
         damage = newDamage;
         damage *= advantageMultiplier(entity);
-
+        boolean wasAlive = entity instanceof LivingEntity && entity.isAlive();
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
-
+        if (entity instanceof LivingEntity livingTarget) {
+            damage = applyProjectileProtection(livingTarget, damage);
+        }
         DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getOwner());
         boolean blocked = ProjectileHelper.handleShieldHit(entity, this, damage, SHIELD_DISABLE_CHANCE);
 
@@ -81,14 +85,12 @@ public class PlasmaProjectileEntity extends ProjectileEntity {
             float penetratingDamage = damage * SHIELD_DAMAGE_PENETRATION;
             entity.hurt(source, penetratingDamage);
 
-            // Apply reduced effect on shield penetration
             if (entity instanceof LivingEntity livingEntity) {
                 applyEffect(livingEntity, SHIELD_DAMAGE_PENETRATION, headshot);
             }
         } else {
             entity.hurt(source, damage);
 
-            // Apply full effect on direct hit
             if (entity instanceof LivingEntity livingEntity) {
                 applyEffect(livingEntity, 1.0f, headshot);
             }
@@ -105,9 +107,22 @@ public class PlasmaProjectileEntity extends ProjectileEntity {
 
         applyAreaEffects(hitVec);
         createPlasmaExplosion(this, 0.5f);
+        if (wasAlive && entity instanceof LivingEntity livingEntity && !livingEntity.isAlive()) {
+            checkForDiamondSteelBonus(livingEntity, hitVec);
+        }
         spawnExplosionParticles(hitVec);
     }
+    public float applyProjectileProtection(LivingEntity target, float damage) {
+        int protectionLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, target);
 
+        if (protectionLevel > 0) {
+            float reduction = protectionLevel * 0.07f;
+            reduction = Math.min(reduction, 0.56f);
+            damage *= (1.0f - reduction);
+        }
+
+        return damage;
+    }
     private void applyEffect(LivingEntity target, float powerMultiplier, boolean headshot) {
         ResourceLocation effectLocation = this.getProjectile().getImpactEffect();
         if (effectLocation != null) {

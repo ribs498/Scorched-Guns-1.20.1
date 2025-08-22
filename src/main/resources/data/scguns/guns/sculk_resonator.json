@@ -10,17 +10,18 @@
   "general": {
     "alwaysSpread": false,
     "fireMode": "scguns:pulse",
-    "fireTimer": 15,
+    "fireTimer": 18,
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 8,
     "recoilAngle": 3.5,
     "recoilKick": 1.0,
-    "spread": 0.1,
+    "spread": 3.0,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 46,
-    "criticalChance": 0.15
+    "criticalChance": 0.15,
+    "isSilenced": true
   },
   "modules": {
     "attachments": {
@@ -54,7 +55,7 @@
   },
   "reloads": {
     "emptyMagTimer": 30,
-    "maxAmmo": 6,
+    "maxAmmo": 8,
     "reloadItem": "scguns:sculk_cell",
     "reloadTimer": 30,
     "reloadType": "scguns:mag_fed"

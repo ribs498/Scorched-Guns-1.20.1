@@ -19,13 +19,19 @@ public class ModTags
 
     public static class Blocks
     {
-        public static final TagKey<Block> FRAGILE = tag();
+        public static final TagKey<Block> FRAGILE = tag("fragile");
+        public static final TagKey<Block> SCULK_BLOCKS = tag("sculk_blocks");
 
+        private static TagKey<Block> tag(String name)
+        {
+            return BlockTags.create(new ResourceLocation(Reference.MOD_ID, name));
+        }
         private static TagKey<Block> tag()
         {
             return BlockTags.create(new ResourceLocation(Reference.MOD_ID, "fragile"));
         }
     }
+
     public static class Items
     {
         public static final TagKey<Item> DOES_NOT_EJECT_CASINGS = tag("does_not_eject_casings");
@@ -44,6 +50,9 @@ public class ModTags
         public static final TagKey<Item> STRONG_COMPOST = tag("strong_compost");
         public static final TagKey<Item> COMPOST_DROPS= tag("compost_drops");
         public static final TagKey<Item> GAS_MASK = tag("gas_mask");
+        public static final TagKey<Item> EXPLOSIVE_BLOCK = tag("explosive_block");
+        public static final TagKey<Item> GEOTHERMAL_VENT_OUTPUT = tag("geothermal_vent_output");
+        public static final TagKey<Item> SULFUR_VENT_OUTPUT = tag("sulfur_vent_output");
 
         private static TagKey<Item> tag(String name)
         {
@@ -61,6 +70,11 @@ public class ModTags
         public static final TagKey<EntityType<?>> PURPLE_BLOOD = tag("purple_blood");
         public static final TagKey<EntityType<?>> BLACK_BLOOD = tag("black_blood");
 
+        public static final TagKey<EntityType<?>> NON_SWARM_TARGETED = tag("non_swarm_targeted");
+        public static final TagKey<EntityType<?>> FLEEING_FROM_GUNS = tag("fleeing_from_guns");
+        public static final TagKey<EntityType<?>> AGGRO_FROM_GUNS = tag("aggro_from_guns");
+
+
         public static final TagKey<EntityType<?>> NONE = tag("none");
         public static final TagKey<EntityType<?>> HEAVY = tag("heavy");
         public static final TagKey<EntityType<?>> VERY_HEAVY = tag("very_heavy");
@@ -69,6 +83,8 @@ public class ModTags
         public static final TagKey<EntityType<?>> WITHER = tag("wither");
         public static final TagKey<EntityType<?>> FIRE = tag("fire");
         public static final TagKey<EntityType<?>> ILLAGER = tag("illager");
+        public static final TagKey<EntityType<?>> BOT = tag("bot");
+        public static final TagKey<EntityType<?>> WATER = tag("water");
         public static final TagKey<EntityType<?>> TURRET_BLACKLIST = tag("turret_blacklist");
 
         public static TagKey<EntityType<?>> tag(String name)

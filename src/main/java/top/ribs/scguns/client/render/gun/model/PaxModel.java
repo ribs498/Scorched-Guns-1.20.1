@@ -25,16 +25,12 @@ import top.ribs.scguns.item.attachment.IAttachment;
  * This also allows us to replace the model for the different stocks.
  */
 public class PaxModel implements IOverrideModel {
-    private static final int TOTAL_SHOTS = 7;
-    private static final float ROTATION_INCREMENT = 360.0f / TOTAL_SHOTS;
-    private float currentRotation = 0.0f;
-    private float targetRotation = 0.0f;
 
     @SuppressWarnings("resource")
     @Override
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
         RenderUtil.renderModel(SpecialModels.PAX_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
-
+        RenderUtil.renderModel(SpecialModels.PAX_DRUM.getModel(), stack, matrixStack, buffer, light, overlay);
         // Render stock attachments
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
@@ -59,8 +55,6 @@ public class PaxModel implements IOverrideModel {
             matrixStack.translate(0, 0.30, -0.33);
             RenderUtil.renderModel(SpecialModels.PAX_HAMMER.getModel(), stack, matrixStack, buffer, light, overlay);
             matrixStack.popPose();
-
-            renderDrumRotation(matrixStack, buffer, stack, partialTicks, light, overlay);
         }
     }
 
@@ -79,45 +73,14 @@ public class PaxModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.PAX_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
             }
         }
-
-        // Render the standard barrel if no extended barrel is attached
         if (!hasExtendedBarrel) {
             RenderUtil.renderModel(SpecialModels.PAX_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
         }
     }
 
-    private void renderDrumRotation(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, float partialTicks, int light, int overlay) {
-        ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
-        float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
-        int shotCount = GunFireEventPaxHandler.getShotCount();
-        targetRotation = shotCount * ROTATION_INCREMENT;
-        currentRotation = currentRotation + (targetRotation - currentRotation) * partialTicks;
-        matrixStack.pushPose();
-        matrixStack.translate(0, -0.265, 0);
-        matrixStack.mulPose(Axis.ZP.rotationDegrees(currentRotation));
-        matrixStack.translate(-0, 0.265, -0);
-        RenderUtil.renderModel(SpecialModels.PAX_DRUM.getModel(), stack, matrixStack, buffer, light, overlay);
-        matrixStack.popPose();
-    }
 
     private double ease(double x) {
         return 1 - Math.pow(1 - x, 4);
     }
 
-    @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
-    public static class GunFireEventPaxHandler {
-        private static int shotCount = 0;
-
-        @SubscribeEvent
-        public static void onGunFire(GunFireEvent.Post event) {
-            if (event.isClient()) {
-                shotCount++;
-                shotCount %= TOTAL_SHOTS; // Ensure shotCount is always within the bounds of the drum capacity
-            }
-        }
-
-        public static int getShotCount() {
-            return shotCount;
-        }
-    }
 }

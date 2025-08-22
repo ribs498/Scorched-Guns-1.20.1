@@ -1,0 +1,31 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "C": {
+      "item": "scguns:treated_iron_ingot"
+    },
+    "R": {
+      "item": "scguns:firing_unit"
+    },
+    "K": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "P": {
+      "item": "scguns:wrecker_blueprint"
+    }
+  },
+  "pattern": [
+    "CRKS",
+    "  QP"
+  ],
+  "result": {
+    "item": "scguns:stiletto"
+  }
+}

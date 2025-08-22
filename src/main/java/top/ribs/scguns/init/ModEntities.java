@@ -58,18 +58,21 @@ public class ModEntities
     public static final RegistryObject<EntityType<MicroJetEntity>> MICROJET = registerBasic("microjet", MicroJetEntity::new);
     public static final RegistryObject<EntityType<ShulkshotProjectileEntity>> SHULKSHOT = registerBasic("shulkshot_projectile", ShulkshotProjectileEntity::new);
     public static final RegistryObject<EntityType<SculkCellEntity>> SCULK_CELL = registerBasic("sculk_cell", SculkCellEntity::new);
+    public static final RegistryObject<EntityType<ShatterRoundProjectileEntity>> SHATTER_ROUND_PROJECTILE = registerBasic("shatter_round_projectile", ShatterRoundProjectileEntity::new);
     public static final RegistryObject<EntityType<SyringeProjectileEntity>> SYRINGE_PROJECTILE = registerBasic("syringe_projectile", SyringeProjectileEntity::new);
     public static final RegistryObject<EntityType<KrahgRoundProjectileEntity>> KRAHG_ROUND_PROJECTILE = registerBasic("krahg_round_projectile", KrahgRoundProjectileEntity::new);
     public static final RegistryObject<EntityType<AdvancedRoundProjectileEntity>> ADVANCED_ROUND_PROJECTILE = registerBasic("advanced_round_projectile", AdvancedRoundProjectileEntity::new);
     public static final RegistryObject<EntityType<GibbsRoundProjectileEntity>> GIBBS_ROUND_PROJECTILE = registerBasic("gibbs_round_projectile", GibbsRoundProjectileEntity::new);
+    public static final RegistryObject<EntityType<ShotballProjectileEntity>> SHOTBALL_PROJECTILE = registerBasic("shotball_projectile", ShotballProjectileEntity::new);
     public static final RegistryObject<EntityType<ThrowableGrenadeEntity>> THROWABLE_GRENADE = registerBasic("throwable_grenade", ThrowableGrenadeEntity::new);
     public static final RegistryObject<EntityType<ThrowableStunGrenadeEntity>> THROWABLE_STUN_GRENADE = registerBasic("throwable_stun_grenade", ThrowableStunGrenadeEntity::new);
     public static final RegistryObject<EntityType<ThrowableMolotovCocktailEntity>> THROWABLE_MOLOTOV_COCKTAIL = registerBasic("throwable_molotov_cocktail", ThrowableMolotovCocktailEntity::new);
     public static final RegistryObject<EntityType<ThrowableGasGrenadeEntity>> THROWABLE_GAS_GRENADE = registerBasic("throwable_gas_grenade", ThrowableGasGrenadeEntity::new);
-
+    public static final RegistryObject<EntityType<ThrowableBeaconGrenadeEntity>> THROWABLE_BEACON_GRENADE = registerBasic("throwable_beacon_grenade", ThrowableBeaconGrenadeEntity::new);
     public static final RegistryObject<EntityType<ThrowableChokeBombEntity>> THROWABLE_CHOKE_BOMB = registerBasic("throwable_choke_bomb", ThrowableChokeBombEntity::new);
     public static final RegistryObject<EntityType<ThrowableSwarmBombEntity>> THROWABLE_SWARM_BOMB = registerBasic("throwable_swarm_bomb", ThrowableSwarmBombEntity::new);
-
+    public static final RegistryObject<EntityType<ThrowableShotballEntity>> THROWABLE_SHOTBALL = registerBasic("throwable_shotball", ThrowableShotballEntity::new);
+    public static final RegistryObject<EntityType<ThrowableNailBombEntity>> THROWABLE_NAIL_BOMB = registerBasic("throwable_nail_bomb", ThrowableNailBombEntity::new);
     /* Mobs */
     public static final RegistryObject<EntityType<CogMinionEntity>> COG_MINION = REGISTER.register("cog_minion", () -> EntityType.Builder.of(CogMinionEntity::new, MobCategory.MONSTER).sized(0.8F, 2.0F).build("cog_minion"));
     public static final RegistryObject<EntityType<CogKnightEntity>> COG_KNIGHT = REGISTER.register("cog_knight", () -> EntityType.Builder.of(CogKnightEntity::new, MobCategory.MONSTER).sized(0.8F, 2.2F).build("cog_knight"));
@@ -81,7 +84,26 @@ public class ModEntities
     public static final RegistryObject<EntityType<DissidentEntity>> DISSIDENT = REGISTER.register("dissident", () -> EntityType.Builder.of(DissidentEntity::new, MobCategory.MONSTER).sized(1.4F, 1.7F).build("dissident"));
     public static final RegistryObject<EntityType<HornlinEntity>> HORNLIN = REGISTER.register("hornlin", () -> EntityType.Builder.of(HornlinEntity::new, MobCategory.MONSTER).sized(1.4F, 1.7F).build("hornlin"));
     public static final RegistryObject<EntityType<ZombifiedHornlinEntity>> ZOMBIFIED_HORNLIN = REGISTER.register("zombified_hornlin", () -> EntityType.Builder.of(ZombifiedHornlinEntity::new, MobCategory.MONSTER).sized(1.4F, 1.7F).build("zombified_hornlin"));
-    public static final RegistryObject<EntityType<BlundererEntity>> BLUNDERER = REGISTER.register("blunderer", () -> EntityType.Builder.of(BlundererEntity::new, MobCategory.MONSTER).sized(1.4F, 1.7F).build("blunderer"));
+    public static final RegistryObject<EntityType<TheMerchantEntity>> THE_MERCHANT = REGISTER.register("the_merchant", () -> EntityType.Builder.of(TheMerchantEntity::new, MobCategory.MONSTER).sized(1.5F, 2.25F).build("the_merchant"));
+    public static final RegistryObject<EntityType<BlundererEntity>> BLUNDERER = REGISTER.register("blunderer", () -> EntityType.Builder.of(BlundererEntity::new, MobCategory.MONSTER).sized(0.8F, 1.7F).build("blunderer"));
+    public static final RegistryObject<EntityType<TraumaUnitEntity>> TRAUMA_UNIT = REGISTER.register("trauma_unit", () -> EntityType.Builder.of(TraumaUnitEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F).build("trauma_unit"));
+    public static final RegistryObject<EntityType<ScampTankEntity>> SCAMP_TANK = REGISTER.register("scamp_tank", () -> EntityType.Builder.of(ScampTankEntity::new, MobCategory.MONSTER).sized(5.0F, 4F).build("scamp_tank"));
+    public static final RegistryObject<EntityType<SignalBeaconEntity>> SIGNAL_BEACON = REGISTER.register("signal_beacon", () -> EntityType.Builder.of(SignalBeaconEntity::new, MobCategory.MISC).sized(1.0F, 1.0F).build("signal_beacon"));
+    public static final RegistryObject<EntityType<ScamplerEntity>> SCAMPLER = REGISTER.register("scampler", () -> EntityType.Builder.of(ScamplerEntity::new, MobCategory.MONSTER).sized(1.0F, 1.0F).build("scampler"));
+    public static final RegistryObject<EntityType<BeaconProjectileEntity>> BEACON_PROJECTILE = REGISTER.register("beacon_projectile", () ->
+            EntityType.Builder.<BeaconProjectileEntity>of(BeaconProjectileEntity::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(1)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build("beacon_projectile"));
+    public static final RegistryObject<EntityType<TraumaHookEntity>> TRAUMA_HOOK = REGISTER.register("trauma_hook", () -> EntityType.Builder.<TraumaHookEntity>of(TraumaHookEntity::new, MobCategory.MISC)
+            .sized(0.25F, 0.25F)
+            .setTrackingRange(64)
+            .setUpdateInterval(3)
+            .setShouldReceiveVelocityUpdates(true)
+            .build("trauma_hook"));
+
     public static final RegistryObject<EntityType<BrassBoltEntity>> BRASS_BOLT = REGISTER.register("brass_bolt", () ->
             EntityType.Builder.<BrassBoltEntity>of(BrassBoltEntity::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F)
@@ -89,7 +111,13 @@ public class ModEntities
                     .setUpdateInterval(1)
                     .setShouldReceiveVelocityUpdates(true)
                     .build("brass_bolt"));
-
+    public static final RegistryObject<EntityType<ScampRocketEntity>> SCAMP_ROCKET = REGISTER.register("scamp_rocket", () ->
+            EntityType.Builder.<ScampRocketEntity>of(ScampRocketEntity::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .setTrackingRange(64)
+                    .setUpdateInterval(1)
+                    .setShouldReceiveVelocityUpdates(true)
+                    .build("scamp_rocket"));
     private static <T extends Entity> RegistryObject<EntityType<T>> registerBasic(String id, BiFunction<EntityType<T>, Level, T> function)
     {
         return REGISTER.register(id, () -> EntityType.Builder.of(function::apply, MobCategory.MISC)
@@ -102,18 +130,6 @@ public class ModEntities
                 .setShouldReceiveVelocityUpdates(true).build(id));
     }
 
-    /**
-     * Entity registration that prevents the entity from being sent and tracked by clients. Projectiles
-     * are rendered separately from Minecraft's entity rendering system and their logic is handled
-     * exclusively by the server, why send them to the client. Projectiles also have very short time
-     * in the world and are spawned many times a tick. There is no reason to send unnecessary packets
-     * when it can be avoided to drastically improve the performance of the game.
-     *
-     * @param id       the id of the projectile
-     * @param function the factory to spawn the projectile for the server
-     * @param <T>      an entity that is a projectile entity
-     * @return A registry object containing the new entity type
-     */
     private static <T extends ProjectileEntity> RegistryObject<EntityType<T>> registerProjectile(String id, BiFunction<EntityType<T>, Level, T> function)
     {
         return REGISTER.register(id, () -> EntityType.Builder.of(function::apply, MobCategory.MISC)

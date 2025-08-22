@@ -39,7 +39,7 @@
   "reloads": {
     "emptyMagTimer": 10,
     "reloadAmount": 3,
-    "maxAmmo": 18,
+    "maxAmmo": 21,
     "reloadItem": "scguns:microjet",
     "reloadTimer": 15,
     "reloadType": "scguns:manual"

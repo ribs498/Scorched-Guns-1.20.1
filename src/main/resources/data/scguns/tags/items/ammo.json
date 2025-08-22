@@ -28,6 +28,9 @@
     "scguns:buckshot",
     "scguns:nitro_buckshot",
     "minecraft:blaze_rod",
-    "minecraft:arrow"
+    "minecraft:arrow",
+    "scguns:syringe",
+    "scguns:shotball",
+    "scguns:shatter_round"
   ]
 }

@@ -13,6 +13,9 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
@@ -29,11 +32,14 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.entity.config.CogMinionConfig;
 import top.ribs.scguns.entity.weapon.ScGunsWeapon;
+import top.ribs.scguns.init.ModEntities;
+import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.interfaces.IEntityCanReload;
 import top.ribs.scguns.item.GunItem;
 
@@ -72,7 +78,16 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
     public void setTicksUntilNextAttack(int ticksUntilNextAttack) {
         this.ticksUntilNextAttack = ticksUntilNextAttack;
     }
-
+    private boolean isHoldingExplosiveBlock() {
+        ItemStack mainHandItem = this.getMainHandItem();
+        return mainHandItem.is(ModTags.Items.EXPLOSIVE_BLOCK);
+    }
+    private void explodeIfHoldingExplosive() {
+        if (isHoldingExplosiveBlock() && !this.level().isClientSide) {
+            this.level().explode(this, this.getX(), this.getY(), this.getZ(), 5.0F, false, Level.ExplosionInteraction.MOB);
+            this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+        }
+    }
     public int getTicksUntilNextAttack() {
         return this.ticksUntilNextAttack;
     }
@@ -111,7 +126,27 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
             this.shotCount++;
         }
     }
+    @Override
+    public boolean canBeAffected(@NotNull MobEffectInstance pPotionEffect) {
+        MobEffect effect = pPotionEffect.getEffect();
 
+        if (effect == MobEffects.POISON ||
+                effect == MobEffects.WITHER ||
+                effect == MobEffects.HUNGER ||
+                effect == MobEffects.REGENERATION ||
+                effect == MobEffects.SATURATION ||
+                effect == MobEffects.CONFUSION ||
+                effect == MobEffects.BLINDNESS ||
+                effect == MobEffects.WEAKNESS ||
+                effect == MobEffects.MOVEMENT_SLOWDOWN ||
+                effect == MobEffects.DIG_SLOWDOWN ||
+                effect == MobEffects.HARM ||
+                effect == MobEffects.HEAL) {
+            return false;
+        }
+
+        return super.canBeAffected(pPotionEffect);
+    }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
@@ -124,7 +159,20 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
                 .add(Attributes.ATTACK_KNOCKBACK, 0.8D)
                 .add(Attributes.ATTACK_DAMAGE, 4.0D);
     }
-
+    @Override
+    public void die(DamageSource source) {
+        super.die(source);
+        if (!this.level().isClientSide) {
+            if (source.getEntity() instanceof Player) {
+                float rand = this.random.nextFloat();
+                if (rand < 0.15f) {
+                    SignalBeaconEntity beacon = new SignalBeaconEntity(ModEntities.SIGNAL_BEACON.get(), this.level());
+                    beacon.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+                    this.level().addFreshEntity(beacon);
+                }
+            }
+        }
+    }
     @Override
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
         super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
@@ -235,6 +283,14 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
         this.walkAnimation.update(f, 0.2f);
     }
     @Override
+    public boolean doHurtTarget(Entity pEntity) {
+        boolean didHurt = super.doHurtTarget(pEntity);
+        if (didHurt) {
+            this.explodeIfHoldingExplosive();
+        }
+        return didHurt;
+    }
+    @Override
     protected Vec3i getPickupReach() {
         return new Vec3i(3, 3, 3);
     }
@@ -283,108 +339,7 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
     }
 
     public float getAttackSoundVolume() {
-        float attackSoundVolume = 1.0F;
-        return attackSoundVolume;
-    }
-
-
-    public static class CogMinionAttackGoal extends MeleeAttackGoal {
-        private final CogMinionEntity entity;
-        private int attackDelay = 10;
-        private int ticksUntilNextAttack = 10;
-        private boolean shouldCountTillNextAttack = false;
-
-        public CogMinionAttackGoal(PathfinderMob pMob, double pSpeedModifier, boolean pFollowingTargetEvenIfNotSeen) {
-            super(pMob, pSpeedModifier, pFollowingTargetEvenIfNotSeen);
-            entity = ((CogMinionEntity) pMob);
-        }
-
-        @Override
-        public void start() {
-            super.start();
-            attackDelay = 10;
-            ticksUntilNextAttack = 10;
-        }
-
-        @Override
-        protected void checkAndPerformAttack(LivingEntity pEnemy, double pDistToEnemySqr) {
-            if (isEnemyWithinAttackDistance(pEnemy, pDistToEnemySqr)) {
-                shouldCountTillNextAttack = true;
-
-                if (isTimeToStartAttackAnimation()) {
-                    entity.setAttacking(true);
-                }
-
-                if (isTimeToAttack()) {
-                    this.mob.getLookControl().setLookAt(pEnemy.getX(), pEnemy.getEyeY(), pEnemy.getZ());
-                    performAttack(pEnemy);
-                }
-            } else {
-                resetAttackCooldown();
-                shouldCountTillNextAttack = false;
-                entity.setAttacking(false);
-                entity.attackAnimationTimeout = 0;
-            }
-        }
-
-        private boolean isEnemyWithinAttackDistance(LivingEntity pEnemy, double pDistToEnemySqr) {
-            double adjustedAttackDistance = this.getAttackReachSqr(pEnemy) * 1.1; // Increase attack distance by 10%
-            return pDistToEnemySqr <= adjustedAttackDistance;
-        }
-
-
-        protected void resetAttackCooldown() {
-            this.ticksUntilNextAttack = this.adjustedTickDelay(attackDelay * 2);
-        }
-
-        protected boolean isTimeToAttack() {
-            return this.ticksUntilNextAttack <= 0;
-        }
-
-        protected boolean isTimeToStartAttackAnimation() {
-            return this.ticksUntilNextAttack <= attackDelay;
-        }
-
-        protected int getTicksUntilNextAttack() {
-            return this.ticksUntilNextAttack;
-        }
-
-
-        protected void performAttack(LivingEntity pEnemy) {
-            this.resetAttackCooldown();
-            this.mob.swing(InteractionHand.MAIN_HAND);
-            this.mob.doHurtTarget(pEnemy);
-            if (this.mob instanceof CogMinionEntity) {
-                CogMinionEntity cogMinion = (CogMinionEntity) this.mob;
-                this.mob.level().playSound(null, cogMinion.getX(), cogMinion.getY(), cogMinion.getZ(),
-                        SoundEvents.PISTON_EXTEND, SoundSource.HOSTILE,
-                        cogMinion.getAttackSoundVolume(), 1.0F);
-            }
-        }
-
-        public void tick() {
-            super.tick();
-            LivingEntity target = this.mob.getTarget();
-            if (target != null) {
-                double distanceToTarget = this.mob.distanceToSqr(target.getX(), target.getY(), target.getZ());
-                if (shouldCountTillNextAttack) {
-                    this.ticksUntilNextAttack = Math.max(this.ticksUntilNextAttack - 1, 0);
-                }
-
-                if (!isEnemyWithinAttackDistance(target, distanceToTarget)) {
-                    this.mob.getNavigation().moveTo(target, 1.2);
-                    resetAttackCooldown();
-                    shouldCountTillNextAttack = false;
-                    entity.setAttacking(false);
-                    entity.attackAnimationTimeout = 0;
-                }
-            }
-        }
-        @Override
-        public void stop() {
-            entity.setAttacking(false);
-            super.stop();
-        }
+        return 1.0F;
     }
     public static class CogMinionGunAttackGoal extends Goal {
         private final CogMinionEntity shooter;

@@ -9,7 +9,7 @@ public class AcceleratorEnchantment extends GunEnchantment
 {
     public AcceleratorEnchantment()
     {
-        super(Rarity.RARE, EnchantmentTypes.GUN, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.PROJECTILE);
+        super(Rarity.UNCOMMON, EnchantmentTypes.GUN, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.PROJECTILE);
     }
 
     @Override

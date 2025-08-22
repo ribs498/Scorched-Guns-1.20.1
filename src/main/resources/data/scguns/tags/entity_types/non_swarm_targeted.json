@@ -1,0 +1,19 @@
+{
+  "values": [
+    "scguns:hive",
+    "minecraft:skeleton",
+    "scguns:swarm",
+    "scguns:cog_knight",
+    "scguns:cog_minion",
+    "scguns:sky_carrier",
+    "scguns:supply_scamp",
+    "scguns:trauma_unit",
+    "scguns:scamp_tank",
+    "scguns:scamp_rocket",
+    "minecraft:iron_golem",
+    "minecraft:armor_stand",
+    "minecraft:wither_skeleton",
+    "minecraft:stray",
+    "minecraft:creeper"
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "0": "scguns:items/shotball",
+    "particle": "scguns:item/shotball"
+  },
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "scguns:item/shotball_3d"
+  },
+  "perspectives": {
+    "firstperson_righthand": {
+      "parent": "scguns:item/shotball_2d"
+    },
+    "firstperson_lefthand": {
+      "parent": "scguns:item/shotball_2d"
+    },
+    "thirdperson_righthand": {
+      "parent": "scguns:item/shotball_2d"
+    },
+    "thirdperson_lefthand": {
+      "parent": "scguns:item/shotball_2d"
+    },
+    "fixed": {
+      "parent": "scguns:item/shotball_2d"
+    },
+    "gui": {
+      "parent": "scguns:item/shotball_2d"
+    },
+    "ground": {
+      "parent": "scguns:item/shotball_2d"
+    }
+  }
+}

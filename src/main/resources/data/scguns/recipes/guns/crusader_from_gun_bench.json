@@ -14,14 +14,8 @@
     "gun_internal_2": {
       "item": "scguns:gun_parts"
     },
-    "gun_top_internal_1": {
-      "item": "scguns:enchanted_bandage"
-    },
     "gun_top_internal_2": {
       "item": "scguns:iron_gun_frame"
-    },
-    "gun_barrel_2": {
-      "item": "scguns:gun_barrel"
     },
     "gun_grip": {
       "item": "scguns:gun_grip"

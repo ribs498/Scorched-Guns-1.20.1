@@ -8,6 +8,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -32,6 +33,11 @@ public class RamrodProjectileEntity extends ProjectileEntity {
     private static final float SHIELD_DISABLE_CHANCE = 0.40f;
     private static final float SHIELD_DAMAGE_PENETRATION = 0.35f;
     private static final float HEADSHOT_EFFECT_DURATION_MULTIPLIER = 1.5f;
+
+    // New weakness effect constants
+    private static final float WEAKNESS_CHANCE = 0.75f;
+    private static final int WEAKNESS_DURATION_TICKS = 100;
+    private static final int WEAKNESS_AMPLIFIER = 0;
 
     public RamrodProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -74,6 +80,10 @@ public class RamrodProjectileEntity extends ProjectileEntity {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
         if (entity instanceof LivingEntity livingTarget) {
+            damage = applyProjectileProtection(livingTarget, damage);
+            damage = calculateArmorBypassDamage(livingTarget, damage);
+        }
+        if (entity instanceof LivingEntity livingTarget) {
             damage = calculateArmorBypassDamage(livingTarget, damage);
         }
 
@@ -85,11 +95,13 @@ public class RamrodProjectileEntity extends ProjectileEntity {
             entity.hurt(source, penetratingDamage);
             if (entity instanceof LivingEntity livingEntity) {
                 applyEffect(livingEntity, SHIELD_DAMAGE_PENETRATION, headshot);
+                applyWeaknessEffect(livingEntity, SHIELD_DAMAGE_PENETRATION, headshot);
             }
         } else {
             entity.hurt(source, damage);
             if (entity instanceof LivingEntity livingEntity) {
                 applyEffect(livingEntity, 1.0f, headshot);
+                applyWeaknessEffect(livingEntity, 1.0f, headshot);
             }
         }
 
@@ -104,6 +116,31 @@ public class RamrodProjectileEntity extends ProjectileEntity {
 
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
         spawnExplosionParticles(hitVec);
+    }
+
+    private void applyWeaknessEffect(LivingEntity target, float powerMultiplier, boolean headshot) {
+
+        float effectiveChance = WEAKNESS_CHANCE * powerMultiplier;
+
+        if (headshot) {
+            effectiveChance = Math.min(1.0f, effectiveChance * 1.1f);
+        }
+
+        if (this.random.nextFloat() < effectiveChance) {
+            int duration = WEAKNESS_DURATION_TICKS;
+
+            if (headshot) {
+                duration = (int)(duration * HEADSHOT_EFFECT_DURATION_MULTIPLIER);
+            }
+
+            duration = (int)(duration * powerMultiplier);
+
+            target.addEffect(new MobEffectInstance(
+                    MobEffects.WEAKNESS,
+                    duration,
+                    WEAKNESS_AMPLIFIER
+            ));
+        }
     }
 
     private void applyEffect(LivingEntity target, float powerMultiplier, boolean headshot) {
@@ -132,7 +169,6 @@ public class RamrodProjectileEntity extends ProjectileEntity {
         }
     }
 
-
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
         spawnExplosionParticles(new Vec3(x, y + 0.1, z));
@@ -160,4 +196,3 @@ public class RamrodProjectileEntity extends ProjectileEntity {
         }
     }
 }
-

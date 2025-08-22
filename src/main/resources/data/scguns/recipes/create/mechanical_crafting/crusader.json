@@ -5,20 +5,11 @@
     "Q": {
       "item": "scguns:gun_grip"
     },
-    "C": {
-      "item": "scguns:enchanted_bandage"
-    },
     "L": {
       "item": "minecraft:crossbow"
     },
     "R": {
       "item": "scguns:gun_parts"
-    },
-    "S": {
-      "item": "scguns:gun_barrel"
-    },
-    "X": {
-      "item": "scguns:gun_magazine"
     },
     "V": {
       "item": "scguns:iron_gun_frame"
@@ -31,9 +22,9 @@
     }
   },
   "pattern": [
-    "CVP ",
-    "LRKS",
-    "Q X "
+    " VP",
+    "LRK",
+    "Q  "
   ],
   "result": {
     "item": "scguns:crusader"

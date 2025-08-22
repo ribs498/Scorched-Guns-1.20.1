@@ -28,7 +28,7 @@ public class ThrowableGrenadeEntity extends ThrowableItemEntity
         this.setShouldBounce(true);
         this.setGravityVelocity(0.05F);
         this.setItem(new ItemStack(ModItems.GRENADE.get()));
-        this.setMaxLife(20 * 3);
+        this.setMaxLife(2 * 2);
     }
 
     public ThrowableGrenadeEntity(Level world, LivingEntity entity, int timeLeft)

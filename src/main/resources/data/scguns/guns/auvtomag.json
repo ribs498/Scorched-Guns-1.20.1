@@ -44,7 +44,7 @@
   },
   "projectile": {
     "advantage": "scguns:undead",
-    "damage": 14.0,
+    "damage": 15.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:ramrod_round",

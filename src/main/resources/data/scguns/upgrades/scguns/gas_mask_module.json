@@ -1,0 +1,10 @@
+{
+  "item": "scguns:gas_mask_module",
+  "type": "breathing",
+  "effects": {
+    "energyUse": 10
+  },
+  "display": {
+    "model": "breathing_unit_2"
+  }
+}

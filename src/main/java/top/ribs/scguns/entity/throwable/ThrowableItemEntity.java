@@ -26,7 +26,7 @@ import net.minecraftforge.network.NetworkHooks;
 public abstract class ThrowableItemEntity extends ThrowableProjectile implements IEntityAdditionalSpawnData
 {
     private ItemStack item = ItemStack.EMPTY;
-    private boolean shouldBounce;
+    boolean shouldBounce;
     private float gravityVelocity = 0.03F;
 
     /* The max life of the entity. If -1, will stay alive forever and will need to be explicitly removed. */
@@ -140,7 +140,7 @@ public abstract class ThrowableItemEntity extends ThrowableProjectile implements
         }
     }
 
-    private void bounce(Direction direction)
+    void bounce(Direction direction)
     {
         switch(direction.getAxis())
         {

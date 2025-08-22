@@ -14,8 +14,8 @@
   },
   "general": {
     "fireMode": "scguns:automatic",
-    "gripType": "scguns:mini_gun_4",
-    "baseGripType": "scguns:mini_gun_4",
+    "gripType": "scguns:two_handed",
+    "baseGripType": "scguns:two_handed",
     "rate": 2,
     "recoilAngle": 2.25,
     "recoilKick": 1.25,
@@ -56,7 +56,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 12.0,
+    "damage": 13.5,
     "gravity": false,
     "item": "scguns:advanced_round",
     "ejectsCasing": true,

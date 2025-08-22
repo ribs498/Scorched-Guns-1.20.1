@@ -136,18 +136,22 @@ public class MaceratorBlockEntity extends BlockEntity implements MenuProvider {
         super.invalidateCaps();
         lazyItemHandler.invalidate();
     }
-
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
             if (side == null) {
                 return lazyItemHandler.cast();
-            } else if (side == Direction.DOWN) {
+            }
+            Direction blockFacing = getBlockState().getValue(MaceratorBlock.FACING);
+
+            if (side == Direction.DOWN) {
                 return LazyOptional.of(() -> new OutputItemHandler(itemHandler)).cast();
             } else if (side == Direction.UP) {
                 return LazyOptional.of(() -> new InputItemHandler(itemHandler)).cast();
-            } else {
+            } else if (side == blockFacing.getOpposite()) {
                 return LazyOptional.of(() -> new FuelItemHandler(itemHandler)).cast();
+            } else {
+                return LazyOptional.of(() -> new InputItemHandler(itemHandler)).cast();
             }
         }
         return super.getCapability(cap, side);
@@ -329,40 +333,73 @@ public class MaceratorBlockEntity extends BlockEntity implements MenuProvider {
 
         @Override
         public void setStackInSlot(int slot, ItemStack stack) {
-            itemHandler.setStackInSlot(slot, stack);
+            if (slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT) {
+                itemHandler.setStackInSlot(slot, stack);
+            }
         }
 
         @Override
         public int getSlots() {
-            return itemHandler.getSlots();
+            return LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 1;
         }
 
         @Override
         public ItemStack getStackInSlot(int slot) {
-            return itemHandler.getStackInSlot(slot);
+            if (slot >= 0 && slot < getSlots()) {
+                return itemHandler.getStackInSlot(FIRST_INPUT_SLOT + slot);
+            }
+            return ItemStack.EMPTY;
         }
 
         @Override
         public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-            if (slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT) {
-                return itemHandler.insertItem(slot, stack, simulate);
+            if (slot >= 0 && slot < getSlots()) {
+                int actualSlot = FIRST_INPUT_SLOT + slot;
+                ItemStack result = itemHandler.insertItem(actualSlot, stack, simulate);
+                if (!result.equals(stack)) {
+                    return result;
+                }
             }
-            return stack; // Prevent insertion into non-input slots
+            return insertIntoNextAvailableSlot(stack, simulate);
+        }
+
+        private ItemStack insertIntoNextAvailableSlot(ItemStack stack, boolean simulate) {
+            for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
+                ItemStack existingStack = itemHandler.getStackInSlot(i);
+                if (!existingStack.isEmpty() && ItemStack.isSameItem(existingStack, stack)) {
+                    ItemStack result = itemHandler.insertItem(i, stack, simulate);
+                    if (!result.equals(stack)) {
+                        return result;
+                    }
+                }
+            }
+
+            for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
+                ItemStack existingStack = itemHandler.getStackInSlot(i);
+                if (existingStack.isEmpty()) {
+                    return itemHandler.insertItem(i, stack, simulate);
+                }
+            }
+
+            return stack;
         }
 
         @Override
         public ItemStack extractItem(int slot, int amount, boolean simulate) {
-            return ItemStack.EMPTY; // Prevent extraction from input slots
+            return ItemStack.EMPTY;
         }
 
         @Override
         public int getSlotLimit(int slot) {
-            return itemHandler.getSlotLimit(slot);
+            if (slot >= 0 && slot < getSlots()) {
+                return itemHandler.getSlotLimit(FIRST_INPUT_SLOT + slot);
+            }
+            return 0;
         }
 
         @Override
         public boolean isItemValid(int slot, ItemStack stack) {
-            return slot >= FIRST_INPUT_SLOT && slot <= LAST_INPUT_SLOT; // Only input slots are valid
+            return slot >= 0 && slot < getSlots();
         }
     }
 

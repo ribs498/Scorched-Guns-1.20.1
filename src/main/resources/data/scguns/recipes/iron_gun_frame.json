@@ -3,15 +3,12 @@
   "key": {
     "Q": {
       "item": "minecraft:iron_ingot"
-    },
-    "X": {
-      "item": "scguns:treated_iron_ingot"
     }
   },
   "pattern": [
     " Q ",
-    "X X",
-    "QXQ"
+    "Q Q",
+    "QQQ"
   ],
   "result": {
     "item": "scguns:iron_gun_frame"

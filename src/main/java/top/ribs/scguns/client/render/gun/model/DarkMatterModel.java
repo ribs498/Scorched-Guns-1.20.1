@@ -35,7 +35,6 @@ public class DarkMatterModel implements IOverrideModel {
 
         renderStockAttachments(stack, matrixStack, buffer, light, overlay);
         renderBarrelAndAttachments(stack, matrixStack, buffer, light, overlay);
-        renderUnderBarrelAttachments(stack, matrixStack, buffer, light, overlay);
         if (entity.equals(Minecraft.getInstance().player)) {
 
             //Always push.
@@ -92,22 +91,6 @@ public class DarkMatterModel implements IOverrideModel {
         }
     }
 
-    private void renderUnderBarrelAttachments(ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
-        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.UNDER_BARREL)) {
-            if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.VERTICAL_GRIP.get())
-                RenderUtil.renderModel(SpecialModels.DARK_MATTER_VERTICAL_GRIP.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.LIGHT_GRIP.get())
-                RenderUtil.renderModel(SpecialModels.DARK_MATTER_LIGHT_GRIP.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.IRON_BAYONET.get())
-                RenderUtil.renderModel(SpecialModels.DARK_MATTER_IRON_BAYONET.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.ANTHRALITE_BAYONET.get())
-                RenderUtil.renderModel(SpecialModels.DARK_MATTER_ANTHRALITE_BAYONET.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.DIAMOND_BAYONET.get())
-                RenderUtil.renderModel(SpecialModels.DARK_MATTER_DIAMOND_BAYONET.getModel(), stack, matrixStack, buffer, light, overlay);
-            else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.NETHERITE_BAYONET.get())
-                RenderUtil.renderModel(SpecialModels.DARK_MATTER_NETHERITE_BAYONET.getModel(), stack, matrixStack, buffer, light, overlay);
-        }
-    }
     private double ease(double x) {
 
         return 1 - Math.pow(1 - (2 * x), 4);

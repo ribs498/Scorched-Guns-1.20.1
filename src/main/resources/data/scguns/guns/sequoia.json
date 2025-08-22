@@ -42,8 +42,8 @@
     }
   },
   "projectile": {
-    "advantage": "scguns:none",
-    "damage": 18.0,
+    "advantage": "scguns:fire",
+    "damage": 20.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:beowulf_round",

@@ -26,7 +26,6 @@
     "meleeCooldownTicks": 20,
     "meleeReach": 4.0,
     "hotBarrelRate": 55,
-    "energyUse": 30.0,
     "criticalChance": 0.1
   },
   "modules": {
@@ -34,7 +33,7 @@
       "scope": {
         "size": 0.8,
         "yOffset": 6.1,
-        "zOffset": 5.6
+        "zOffset": 4.9
       },
       "stock": {
         "scale": 0.0

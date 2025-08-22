@@ -113,7 +113,6 @@ public class CrosshairHandler {
         int scaledWidth = event.getWindow().getGuiScaledWidth();
         int scaledHeight = event.getWindow().getGuiScaledHeight();
 
-        // Render the special hit marker if applicable
         if (HUDRenderHandler.isRenderingHitMarker()) {
             Crosshair hitMarker = new SpecialHitMarker();
             hitMarker.render(mc, stack, scaledWidth, scaledHeight, event.getPartialTick());
@@ -138,7 +137,6 @@ public class CrosshairHandler {
         stack.popPose();
     }
 
-
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END)
@@ -153,6 +151,11 @@ public class CrosshairHandler {
 
     @SubscribeEvent
     public void onGunFired(GunFireEvent.Post event) {
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player == null || event.getEntity() != mc.player) {
+            return;
+        }
+
         Crosshair crosshair = this.getCurrentCrosshair();
         if (crosshair == null || crosshair.isDefault())
             return;
@@ -160,7 +163,6 @@ public class CrosshairHandler {
         crosshair.onGunFired();
     }
 
-    /* Updates the crosshair if the config is reloaded. */
     public static void onConfigReload(ModConfigEvent.Reloading event) {
         ModConfig config = event.getConfig();
         if (config.getType() == ModConfig.Type.CLIENT && config.getModId().equals(Reference.MOD_ID)) {
@@ -170,7 +172,4 @@ public class CrosshairHandler {
             }
         }
     }
-
-
 }
-

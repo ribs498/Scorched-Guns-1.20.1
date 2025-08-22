@@ -22,11 +22,14 @@
     },
     "P": {
       "item": "scguns:end_blueprint"
+    },
+    "B": {
+      "item": "scguns:gun_barrel"
     }
   },
   "pattern": [
     "CCXX",
-    "LRSS",
+    "LRSB",
     "Q XP"
   ],
   "result": {

@@ -18,6 +18,7 @@ public class ModClientEventsBus {
     public static void registerLayer(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(ModModelLayers.COG_MINION_LAYER, CogMinionModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.COG_KNIGHT_LAYER, CogKnightModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.TRAUMA_UNIT_LAYER, TraumaUnitModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.SKY_CARRIER_LAYER, SkyCarrierModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.SUPPLY_SCAMP_LAYER, SupplyScampModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.REDCOAT_LAYER, RedcoatModel::createBodyLayer);
@@ -27,6 +28,11 @@ public class ModClientEventsBus {
         event.registerLayerDefinition(ModModelLayers.SWARM_LAYER, SwarmModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.HORNLIN_LAYER, HornlinModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.ZOMBIFIED_HORNLIN_LAYER, ZombifiedHornlinModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.THE_MERCHANT_LAYER, TheMerchantModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.SIGNAL_BEACON_LAYER, SignalBeaconModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.SCAMP_TANK_LAYER, ScampTankModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.SCAMP_ROCKET_LAYER, ScampRocketModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.SCAMPLER_LAYER, ScamplerModel::createBodyLayer);
     }
 }
 

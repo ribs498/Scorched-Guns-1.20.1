@@ -1,0 +1,72 @@
+{
+  "advantages": {
+    "scguns:undead": {
+      "multiplier": 1.75,
+      "causes_fire": true,
+      "fire_duration": 2,
+      "target_tags": [
+        "scguns:undead",
+        "scguns:wither",
+        "scguns:ghost"
+      ]
+    },
+    "scguns:heavy": {
+      "multiplier": 1.25,
+      "causes_fire": false,
+      "fire_duration": 0,
+      "target_tags": [
+        "scguns:heavy",
+        "scguns:very_heavy"
+      ]
+    },
+    "scguns:very_heavy": {
+      "multiplier": 1.25,
+      "causes_fire": false,
+      "fire_duration": 0,
+      "target_tags": [
+        "scguns:heavy",
+        "scguns:very_heavy"
+      ]
+    },
+    "scguns:fire": {
+      "multiplier": 1.25,
+      "causes_fire": false,
+      "fire_duration": 0,
+      "target_tags": [
+        "scguns:fire"
+      ]
+    },
+    "scguns:illager": {
+      "multiplier": 1.5,
+      "causes_fire": false,
+      "fire_duration": 0,
+      "target_tags": [
+        "scguns:illager"
+      ]
+    },
+    "scguns:water": {
+      "multiplier": 1.65,
+      "causes_fire": false,
+      "fire_duration": 0,
+      "target_tags": [
+        "scguns:water"
+      ]
+    },
+    "scguns:bot": {
+      "multiplier": 1.15,
+      "causes_fire": false,
+      "fire_duration": 0,
+      "target_tags": [
+        "scguns:bot"
+      ]
+    },
+    "scguns:wither": {
+      "multiplier": 1.25,
+      "causes_fire": false,
+      "fire_duration": 0,
+      "target_tags": [
+        "scguns:wither"
+      ]
+    }
+  }
+}

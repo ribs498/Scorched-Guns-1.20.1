@@ -42,5 +42,6 @@ public class ParticleFactoryRegistry
         event.registerSpriteSet(ModParticleTypes.SMALL_LASER.get(), SmallLaserParticle.Provider::new);
 
         event.registerSpriteSet(ModParticleTypes.PLASMA_EXPLOSION.get(), PlasmaExplosionParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.ROCKET_EXPLOSION.get(), RocketExplosionParticle.Provider::new);
     }
 }

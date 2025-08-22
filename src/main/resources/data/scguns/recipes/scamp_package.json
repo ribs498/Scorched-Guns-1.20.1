@@ -3,23 +3,19 @@
   "category": "building",
   "key": {
     "X": {
-      "item": "create:precision_mechanism"
+      "item": "scguns:beacon_grenade"
     },
     "L": {
       "item": "scguns:treated_iron_ingot"
     },
     "R": {
-      "item": "create:brass_block"
+      "item": "scguns:treated_brass_block"
     },
     "M": {
       "item": "scguns:anthralite_ingot"
-    },
-    "K": {
-      "item": "create:cogwheel"
     }
   },
   "pattern": [
-    " K ",
     "LXL",
     "MRM"
   ],

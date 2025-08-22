@@ -5,6 +5,7 @@ import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,6 +19,7 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.stats.Stats;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -31,6 +33,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
@@ -48,18 +51,19 @@ import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.block.NitroKegBlock;
 import top.ribs.scguns.block.PowderKegBlock;
-import top.ribs.scguns.common.ChargeHandler;
+import top.ribs.scguns.cache.HotBarrelCache;
+import top.ribs.scguns.common.*;
 import top.ribs.scguns.common.Gun.Projectile;
 import top.ribs.scguns.Config;
-import top.ribs.scguns.common.BoundingBoxManager;
-import top.ribs.scguns.common.Gun;
+import top.ribs.scguns.effect.RocketExplosion;
+import top.ribs.scguns.config.ProjectileAdvantageConfig;
 import top.ribs.scguns.init.*;
-import top.ribs.scguns.common.SpreadTracker;
 import top.ribs.scguns.event.GunProjectileHitEvent;
 import top.ribs.scguns.interfaces.IDamageable;
 import top.ribs.scguns.interfaces.IExplosionDamageable;
 import top.ribs.scguns.interfaces.IHeadshotBox;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.animated.AnimatedDiamondSteelGunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageBlood;
 import top.ribs.scguns.network.message.S2CMessageProjectileHitBlock;
@@ -121,6 +125,10 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if (shooter instanceof Player player) {
             ChargeHandler.clearLastChargeProgress(player.getUUID());
         }
+        float puncturingBypass = GunEnchantmentHelper.getPuncturingArmorBypass(weapon);
+        if (puncturingBypass > 0) {
+            this.setArmorBypassAmount(this.armorBypassAmount + puncturingBypass);
+        }
         AttributeInstance additionalDamageAttr = shooter.getAttribute(SCAttributes.ADDITIONAL_BULLET_DAMAGE.get());
         this.attributeAdditionalDamage = additionalDamageAttr != null ? (float) additionalDamageAttr.getValue() : 0.0F;
 
@@ -131,10 +139,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.modifiedGravity = modifiedGun.getProjectile().isGravity() ? GunModifierHelper.getModifiedProjectileGravity(weapon, -0.04) : 0.0;
         this.life = GunModifierHelper.getModifiedProjectileLife(weapon, this.projectile.getLife());
         this.worldDay = worldIn.getDayTime() / 24000L;
+
         /* Get speed and set motion */
         Vec3 dir = this.getDirection(shooter, weapon, item, modifiedGun);
         double speedModifier = GunEnchantmentHelper.getProjectileSpeedModifier(weapon);
         double speed = GunModifierHelper.getModifiedProjectileSpeed(weapon, this.projectile.getSpeed() * speedModifier);
+        if (modifiedGun.getGeneral().getFireMode() == FireMode.PULSE) {
+            float chargeSpeedMultiplier = calculateChargeSpeedMultiplier(this.chargeProgress);
+            speed *= chargeSpeedMultiplier;
+        }
+
         AttributeInstance speedAttr = shooter.getAttribute(SCAttributes.PROJECTILE_SPEED.get());
         speed *= speedAttr != null ? speedAttr.getValue() : 1.0;
         this.setDeltaMovement(dir.x * speed, dir.y * speed, dir.z * speed);
@@ -164,7 +178,14 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             this.item = ammoStack;
         }
     }
+    private float calculateChargeSpeedMultiplier(float chargeProgress) {
+        chargeProgress = Mth.clamp(chargeProgress, 0.0f, 1.0f);
 
+        float minChargeSpeedMultiplier = 0.4f;
+        float maxChargeSpeedMultiplier = 1.0f;
+
+        return minChargeSpeedMultiplier + (maxChargeSpeedMultiplier - minChargeSpeedMultiplier) * chargeProgress;
+    }
     @Override
     protected void defineSynchedData() {
     }
@@ -191,7 +212,10 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         damage = GunModifierHelper.getModifiedDamage(this.weapon, this.modifiedGun, damage);
         damage = GunEnchantmentHelper.getAcceleratorDamage(this.weapon, damage);
         damage = GunEnchantmentHelper.getHeavyShotDamage(this.weapon, damage);
-        damage = GunEnchantmentHelper.getHotBarrelDamage(this.weapon, damage);
+
+        if (this.shooter instanceof Player player) {
+            damage = GunEnchantmentHelper.getHotBarrelDamage(player, this.weapon, damage);
+        }
 
         damage = GunEnchantmentHelper.getChargeDamage(this.weapon, damage, this.chargeProgress);
 
@@ -201,6 +225,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             damage *= (float) Math.min(scaledDamage, Config.GunScalingConfig.getInstance().getMaxDamage());
         }
 
+        damage *= Config.COMMON.gameplay.globalDamageMultiplier.get().floatValue();
+
         return Math.max(0F, damage);
     }
     @Override
@@ -209,51 +235,65 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     }
 
     private Vec3 getDirection(LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
-        float gunSpread = GunModifierHelper.getModifiedSpread(weapon, modifiedGun.getGeneral().getSpread());
+
+        float baseSpread = modifiedGun.getGeneral().getSpread();
+
+        float gunSpread;
+        if (shooter instanceof Player player) {
+            gunSpread = GunModifierHelper.getModifiedSpread(player, weapon, baseSpread);
+        } else {
+            gunSpread = GunModifierHelper.getModifiedSpread(weapon, baseSpread);
+        }
+
+        if (modifiedGun.getGeneral().getFireMode() == FireMode.PULSE) {
+            float chargeSpreadMultiplier = calculateChargeSpreadMultiplier(this.chargeProgress);
+            gunSpread *= chargeSpreadMultiplier;
+        }
+
         if (gunSpread == 0F) {
             return getVectorFromRotation(shooter.getXRot(), shooter.getYRot());
         }
 
-        if (shooter instanceof Player) {
+        if (shooter instanceof Player player) {
             if (!modifiedGun.getGeneral().isAlwaysSpread()) {
-                gunSpread *= SpreadTracker.get((Player) shooter).getSpread(item);
+                float spreadTrackerMultiplier = SpreadTracker.get(player).getSpread(item);
+                gunSpread *= spreadTrackerMultiplier;
             }
-
-            if (ModSyncedDataKeys.AIMING.getValue((Player) shooter)) {
+            if (ModSyncedDataKeys.AIMING.getValue(player)) {
                 gunSpread *= 0.7F;
             }
         }
 
         AttributeInstance spreadAttr = shooter.getAttribute(SCAttributes.SPREAD_MULTIPLIER.get());
-        gunSpread *= spreadAttr != null ? (float) spreadAttr.getValue() : 1.0F;
-
-        // Convert to radians
+        float attrMultiplier = spreadAttr != null ? (float) spreadAttr.getValue() : 1.0F;
+        gunSpread *= attrMultiplier;
         float spreadRadians = gunSpread * 0.017453292F;
-
-        // Generate random angles
         float angleY = random.nextFloat() * 2 * (float)Math.PI;
         float angleX = random.nextFloat() * spreadRadians;
 
-        // Get the initial forward vector
         Vec3 forward = getVectorFromRotation(shooter.getXRot(), shooter.getYRot());
-
-        // Create an arbitrary right vector that's perpendicular to forward
         Vec3 right;
-        if (Math.abs(forward.y) < 0.999) { // Not looking straight up or down
+        if (Math.abs(forward.y) < 0.999) {
             right = new Vec3(0, 1, 0).cross(forward).normalize();
         } else {
-            right = new Vec3(1, 0, 0); // Use X-axis for straight up/down cases
+            right = new Vec3(1, 0, 0);
         }
 
-        // Create up vector
         Vec3 up = forward.cross(right).normalize();
-
-        // Apply the spread using both angles
         Vec3 spreadVector = forward;
         spreadVector = rotateVector(spreadVector, right, angleX);
         spreadVector = rotateVector(spreadVector, forward, angleY);
 
         return spreadVector.normalize();
+    }
+
+    private float calculateChargeSpreadMultiplier(float chargeProgress) {
+        chargeProgress = Mth.clamp(chargeProgress, 0.0f, 1.0f);
+
+        float minChargeSpreadMultiplier = 2.0f;
+        float maxChargeSpreadMultiplier = 0.3f;
+
+        return minChargeSpreadMultiplier - (minChargeSpreadMultiplier - maxChargeSpreadMultiplier) * (chargeProgress * chargeProgress);
     }
 
     private Vec3 rotateVector(Vec3 vector, Vec3 axis, float angle) {
@@ -301,12 +341,10 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         return this.modifiedGravity;
     }
 
-    @Override
     public void tick() {
         super.tick();
         this.updateHeading();
         this.onProjectileTick();
-
 
         if (!this.level().isClientSide()) {
             Vec3 startVec = this.position();
@@ -318,11 +356,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
             ResourceLocation flybySound = modifiedGun.getSounds().getFlybySound();
 
-
-            //Only play if there's a nearby player. Also ignore weapons that shoot more than 1 proj to prevent deafening players irl.
-//            System.out.println(this.tickCount);
-//            System.out.println(this.soundTime);
-//            System.out.println(soundTime < this.tickCount - 3);
             if (!players.isEmpty() && flybySound != null && modifiedGun.getGeneral().getProjectileAmount() == 1 && this.tickCount > 3 && soundTime < this.tickCount - 3) {
                 this.level().playSound(null, startVec.x,startVec.y,startVec.z, Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getValue(flybySound)), SoundSource.NEUTRAL, (float) 0.5F + this.level().getRandom().nextFloat() * 0.4F, 0.8F + this.level().getRandom().nextFloat() * 0.4F);
                 this.soundTime = this.tickCount;
@@ -334,22 +367,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 FluidState fluidState = blockState.getFluidState();
 
                 if (fluidState.is(FluidTags.WATER)) {
-                    if (Config.CLIENT.particle.enableWaterImpactParticles.get()) {
-                        this.onWaterImpact(fluidResult.getLocation());
-                    } else {
-                        this.level().playSound(null, fluidResult.getLocation().x, fluidResult.getLocation().y, fluidResult.getLocation().z,
-                                SoundEvents.PLAYER_SPLASH, SoundSource.NEUTRAL,
-                                1.2F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.4F);
-                    }
+                    this.onWaterImpact(fluidResult.getLocation());
                 } else if (fluidState.is(FluidTags.LAVA)) {
                     this.onLavaImpact(fluidResult.getLocation());
                 }
             }
+
             HitResult result = rayTraceBlocks(this.level(), new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this), IGNORE_LEAVES);
             if (result.getType() != HitResult.Type.MISS) {
                 endVec = result.getLocation();
             }
-
 
             List<EntityResult> hitEntities = null;
             int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.COLLATERAL.get(), this.weapon);
@@ -366,7 +393,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 for (EntityResult entityResult : hitEntities) {
                     result = new ExtendedEntityRayTraceResult(entityResult);
                     if (((EntityHitResult) result).getEntity() instanceof Player player) {
-
                         if (this.shooter instanceof Player && !((Player) this.shooter).canHarmPlayer(player)) {
                             result = null;
                         }
@@ -436,24 +462,25 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         return hitEntity != null ? new EntityResult(hitEntity, hitVec, headshot) : null;
     }
 
-    @Nullable
+
     protected List<EntityResult> findEntitiesOnPath(Vec3 startVec, Vec3 endVec) {
         List<EntityResult> hitEntities = new ArrayList<>();
         List<Entity> entities = this.level().getEntities(this, this.getBoundingBox().expandTowards(this.getDeltaMovement()).inflate(1.0), PROJECTILE_TARGETS);
+
         for (Entity entity : entities) {
-            if (!entity.equals(this.shooter)) {
-                EntityResult result = this.getHitResult(entity, startVec, endVec);
-                if (result == null)
-                    continue;
-                hitEntities.add(result);
+
+            EntityResult result = this.getHitResult(entity, startVec, endVec);
+            if (result == null) {
+                continue;
             }
+            hitEntities.add(result);
         }
         return hitEntities;
     }
 
     @Nullable
     @SuppressWarnings("unchecked")
-    private EntityResult getHitResult(Entity entity, Vec3 startVec, Vec3 endVec) {
+    public EntityResult getHitResult(Entity entity, Vec3 startVec, Vec3 endVec) {
         double expandHeight = entity instanceof Player && !entity.isCrouching() ? 0.0625 : 0.0;
         AABB boundingBox = entity.getBoundingBox();
         if (Config.COMMON.gameplay.improvedHitboxes.get() && entity instanceof ServerPlayer && this.shooter != null) {
@@ -500,7 +527,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         return new EntityResult(entity, hitPos, headshot);
     }
 
-    private void onHit(HitResult result, Vec3 startVec, Vec3 endVec) {
+    public void onHit(HitResult result, Vec3 startVec, Vec3 endVec) {
         if (MinecraftForge.EVENT_BUS.post(new GunProjectileHitEvent(result, this))) {
             return;
         }
@@ -560,10 +587,18 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 if (entity.hasIndirectPassenger(player)) {
                     return;
                 }
+                HotBarrelCache.getHotBarrelLevel(player, this.weapon);
+                boolean shouldFire = GunEnchantmentHelper.shouldSetOnFire(player, this.weapon);
+
+                if (shouldFire) {
+                    entity.setSecondsOnFire(5);
+                }
+            } else {
+                if (EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), this.weapon) > 0) {
+                    entity.setSecondsOnFire(5);
+                }
             }
-            if (GunEnchantmentHelper.shouldSetOnFire(this.weapon)) {
-                entity.setSecondsOnFire(5);
-            }
+
             this.onHitEntity(entity, result.getLocation(), startVec, endVec, entityHitResult.isHeadshot());
 
             int collateralLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.COLLATERAL.get(), weapon);
@@ -582,8 +617,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     protected void onLavaImpact(Vec3 impactPos) {
         if (!this.level().isClientSide() && Config.CLIENT.particle.enableLavaImpactParticles.get()) {
             ServerLevel serverLevel = (ServerLevel) this.level();
-
-            // Lava splash particles
             for (int i = 0; i < 5; i++) {
                 double ySpeed = 0.2 + (random.nextDouble() * 0.3);
                 serverLevel.sendParticles(ParticleTypes.LAVA,
@@ -607,7 +640,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                 );
             }
 
-            // Large lava particles
             serverLevel.sendParticles(ParticleTypes.LAVA,
                     impactPos.x, impactPos.y + 0.05, impactPos.z,
                     3,
@@ -615,8 +647,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                     0.2
             );
         }
-
-        // Play a lava sound (outside the particle check to always play the sound)
         this.level().playSound(null, impactPos.x, impactPos.y, impactPos.z,
                 SoundEvents.LAVA_POP, SoundSource.NEUTRAL,
                 0.6F, 1.0F + (this.random.nextFloat() - this.random.nextFloat()) * 0.2F);
@@ -624,36 +654,45 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
     protected void onWaterImpact(Vec3 impactPos) {
         if (!this.level().isClientSide()) {
-            ServerLevel serverLevel = (ServerLevel) this.level();
-            boolean isSubmerged = this.isInWater();
-            int splashParticles = isSubmerged ? 10 : 40;
-            int bubbleParticles = isSubmerged ? 10 : 30;
-            int snowflakeParticles = isSubmerged ? 5 : 15;
-            int fallingWaterParticles = isSubmerged ? 5 : 20;
-
-            for (int i = 0; i < fallingWaterParticles; i++) {
-                double ySpeed = 0.5 + (random.nextDouble() * 0.5);
-                serverLevel.sendParticles(ParticleTypes.FALLING_WATER,
-                        impactPos.x, impactPos.y, impactPos.z,
-                        1, 0.05, 0, 0.05, ySpeed);
+            boolean enableParticles = true;
+            try {
+                enableParticles = Config.CLIENT.particle.enableWaterImpactParticles.get();
+            } catch (IllegalStateException e) {
+                enableParticles = true;
             }
 
-            for (int i = 0; i < snowflakeParticles; i++) {
-                double xSpeed = (random.nextDouble() - 0.5) * 0.2;
-                double ySpeed = 0.3 + (random.nextDouble() * 0.3);
-                double zSpeed = (random.nextDouble() - 0.5) * 0.2;
-                serverLevel.sendParticles(ParticleTypes.SNOWFLAKE,
+            if (enableParticles) {
+                ServerLevel serverLevel = (ServerLevel) this.level();
+                boolean isSubmerged = this.isInWater();
+                int splashParticles = isSubmerged ? 10 : 40;
+                int bubbleParticles = isSubmerged ? 10 : 30;
+                int snowflakeParticles = isSubmerged ? 5 : 15;
+                int fallingWaterParticles = isSubmerged ? 5 : 20;
+
+                for (int i = 0; i < fallingWaterParticles; i++) {
+                    double ySpeed = 0.5 + (random.nextDouble() * 0.5);
+                    serverLevel.sendParticles(ParticleTypes.FALLING_WATER,
+                            impactPos.x, impactPos.y, impactPos.z,
+                            1, 0.05, 0, 0.05, ySpeed);
+                }
+
+                for (int i = 0; i < snowflakeParticles; i++) {
+                    double xSpeed = (random.nextDouble() - 0.5) * 0.2;
+                    double ySpeed = 0.3 + (random.nextDouble() * 0.3);
+                    double zSpeed = (random.nextDouble() - 0.5) * 0.2;
+                    serverLevel.sendParticles(ParticleTypes.SNOWFLAKE,
+                            impactPos.x, impactPos.y, impactPos.z,
+                            1, xSpeed, ySpeed, zSpeed, 0.1);
+                }
+
+                serverLevel.sendParticles(ParticleTypes.SPLASH,
+                        impactPos.x, impactPos.y + 0.1, impactPos.z,
+                        splashParticles, 0.2, 0.2, 0.2, 0.4);
+
+                serverLevel.sendParticles(ParticleTypes.BUBBLE_POP,
                         impactPos.x, impactPos.y, impactPos.z,
-                        1, xSpeed, ySpeed, zSpeed, 0.1);
+                        bubbleParticles, 0.5, 0.3, 0.5, 0.2);
             }
-
-            serverLevel.sendParticles(ParticleTypes.SPLASH,
-                    impactPos.x, impactPos.y + 0.1, impactPos.z,
-                    splashParticles, 0.2, 0.2, 0.2, 0.4);
-
-            serverLevel.sendParticles(ParticleTypes.BUBBLE_POP,
-                    impactPos.x, impactPos.y, impactPos.z,
-                    bubbleParticles, 0.5, 0.3, 0.5, 0.2);
 
             this.level().playSound(null, impactPos.x, impactPos.y, impactPos.z,
                     SoundEvents.PLAYER_SPLASH, SoundSource.NEUTRAL,
@@ -663,35 +702,35 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
     public float advantageMultiplier(Entity entity) {
         ResourceLocation advantage = this.getProjectile().getAdvantage();
-        float advantageMultiplier = 1F;
+        if (advantage.equals(ModTags.Entities.NONE.location())) {
+            return 1.0f;
+        }
 
-        if (!advantage.equals(ModTags.Entities.NONE.location())) {
-            if (advantage.equals(ModTags.Entities.UNDEAD.location())) {
-                if (entity.getType().is(ModTags.Entities.UNDEAD) ||entity.getType().is(ModTags.Entities.WITHER) ||  entity.getType().is(ModTags.Entities.GHOST)) {
-                    advantageMultiplier = 1.25F;
-                    entity.setSecondsOnFire(2);
-                }
-            }
-            if (entity.getType().is(ModTags.Entities.HEAVY)) {
-                if (advantage.equals(ModTags.Entities.HEAVY.location()) || advantage.equals(ModTags.Entities.VERY_HEAVY.location())) {
-                    advantageMultiplier = 1.25F;
-                }
-            } else if (entity.getType().is(ModTags.Entities.VERY_HEAVY)) {
-                if (advantage.equals(ModTags.Entities.HEAVY.location()) || advantage.equals(ModTags.Entities.VERY_HEAVY.location())) {
-                    advantageMultiplier = 1.25F;
-                }
-            } else if (entity.getType().is(ModTags.Entities.FIRE)) {
-                if (advantage.equals(ModTags.Entities.FIRE.location())) {
-                    advantageMultiplier = 1.25F;
-                }
-            } else if (entity.getType().is(ModTags.Entities.ILLAGER)) {
-                if (advantage.equals(ModTags.Entities.ILLAGER.location())) {
-                    advantageMultiplier = 1.5F;
-                }
+        ProjectileAdvantageConfig.AdvantageData advantageData =
+                ProjectileAdvantageConfig.getAdvantageData(advantage.toString());
+
+        if (advantageData == null) {
+            return 1.0f;
+        }
+        boolean hasMatchingTag = false;
+        for (String targetTag : advantageData.targetTags()) {
+            ResourceLocation tagLocation = new ResourceLocation(targetTag);
+            TagKey<EntityType<?>> entityTag = TagKey.create(Registries.ENTITY_TYPE, tagLocation);
+            if (entity.getType().is(entityTag)) {
+                hasMatchingTag = true;
+                break;
             }
         }
 
-        return advantageMultiplier;
+        if (hasMatchingTag) {
+            if (advantageData.causesFire() && advantageData.fireDuration() > 0) {
+                entity.setSecondsOnFire(advantageData.fireDuration());
+            }
+
+            return advantageData.multiplier();
+        }
+
+        return 1.0f;
     }
 
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
@@ -700,11 +739,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         boolean critical = damage != newDamage;
         damage = newDamage;
         damage *= advantageMultiplier(entity);
-
+        boolean wasAlive = entity instanceof LivingEntity && entity.isAlive();
+        if (this.shooter instanceof Player player) {
+            damage = GunEnchantmentHelper.getWaterProofDamage(this.weapon, player, damage);
+        }
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
         if (entity instanceof LivingEntity livingTarget) {
+            damage = GunEnchantmentHelper.getPuncturingDamageReduction(this.weapon, livingTarget, damage);
+            damage = applyProjectileProtection(livingTarget, damage);
             damage = calculateArmorBypassDamage(livingTarget, damage);
         }
 
@@ -745,8 +789,37 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             int hitType = critical ? S2CMessageProjectileHitEntity.HitType.CRITICAL : headshot ? S2CMessageProjectileHitEntity.HitType.HEADSHOT : S2CMessageProjectileHitEntity.HitType.NORMAL;
             PacketHandler.getPlayChannel().sendToPlayer(() -> (ServerPlayer) this.shooter, new S2CMessageProjectileHitEntity(hitVec.x, hitVec.y, hitVec.z, hitType, entity instanceof Player));
         }
-
+        if (wasAlive && entity instanceof LivingEntity livingEntity && !livingEntity.isAlive()) {
+            checkForDiamondSteelBonus(livingEntity, hitVec);
+        }
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
+
+    }
+    void checkForDiamondSteelBonus(LivingEntity killedEntity, Vec3 position) {
+        if (!this.level().isClientSide && this.getShooter() instanceof Player player) {
+            ItemStack weapon = player.getMainHandItem();
+
+            if (weapon.getItem() instanceof AnimatedDiamondSteelGunItem) {
+                int baseXP = killedEntity.getExperienceReward();
+                int bonusXP = Math.round(baseXP * 0.2f);
+
+                if (bonusXP > 0) {
+                    ExperienceOrb xpOrb = new ExperienceOrb(this.level(), position.x, position.y, position.z, bonusXP);
+                    this.level().addFreshEntity(xpOrb);
+                }
+            }
+        }
+    }
+    public float applyProjectileProtection(LivingEntity target, float damage) {
+        int protectionLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.PROJECTILE_PROTECTION, target);
+
+        if (protectionLevel > 0) {
+            float reduction = protectionLevel * 0.10f;
+            reduction = Math.min(reduction, 0.8f);
+            damage *= (1.0f - reduction);
+        }
+
+        return damage;
     }
 
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
@@ -771,7 +844,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         }
     }
 
-    private boolean primeTNT(BlockState state, BlockPos pos) {
+    boolean primeTNT(BlockState state, BlockPos pos) {
         Block block = state.getBlock();
         if (block == Blocks.TNT) {
             if (!this.level().isClientSide()) {
@@ -895,7 +968,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         }
     }
 
-    private LevelLocation getDeathTargetPoint() {
+    LevelLocation getDeathTargetPoint() {
         return LevelLocation.create(this.level(), this.getX(), this.getY(), this.getZ(), 256);
     }
 
@@ -1010,7 +1083,12 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
         DamageSource source = entity instanceof ProjectileEntity projectile ? entity.damageSources().explosion(entity, projectile.getShooter()) : null;
         Explosion.BlockInteraction mode = Config.COMMON.gameplay.griefing.enableBlockRemovalOnExplosions.get() && !forceNone ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP;
-        Explosion explosion = new ProjectileExplosion(world, entity, source, null, entity.getX(), entity.getY(), entity.getZ(), radius, false, mode);
+        Explosion explosion = new ProjectileExplosion(world, entity, source, null, entity.getX(), entity.getY(), entity.getZ(), radius, false, mode) {
+            @Override
+            protected float getEntityDamageAmount(Entity entity, double distance) {
+                return 0;
+            }
+        };
 
         if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, explosion))
             return;
@@ -1037,36 +1115,36 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         }
     }
 
-    public static void createFragExplosion(Entity entity, float radius, boolean forceNone) {
+    public static void createRocketExplosion(Entity entity, float radius, float damage, boolean forceNone) {
         Level world = entity.level();
         if (world.isClientSide())
             return;
 
-        DamageSource source = entity instanceof ProjectileEntity projectile ? entity.damageSources().explosion(entity, projectile.getShooter()) : null;
-        Explosion.BlockInteraction mode = Config.COMMON.gameplay.griefing.enableBlockRemovalOnExplosions.get() && !forceNone ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP;
-        Explosion explosion = new ProjectileExplosion(world, entity, source, null, entity.getX(), entity.getY(), entity.getZ(), radius, false, mode);
+        DamageSource source = entity instanceof ProjectileEntity projectile ?
+                entity.damageSources().explosion(entity, projectile.getShooter()) : null;
+        Explosion.BlockInteraction mode = Config.COMMON.gameplay.griefing.enableBlockRemovalOnExplosions.get() && !forceNone ?
+                Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP;
+
+        Explosion explosion = new RocketExplosion(world, entity, source, null, entity.getX(), entity.getY(), entity.getZ(), radius, damage, false, mode);
 
         if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, explosion))
             return;
+
         explosion.explode();
         explosion.finalizeExplosion(true);
 
-        explosion.getToBlow().forEach(pos ->
-        {
+        explosion.getToBlow().forEach(pos -> {
             if (world.getBlockState(pos).getBlock() instanceof IExplosionDamageable) {
                 ((IExplosionDamageable) world.getBlockState(pos).getBlock()).onProjectileExploded(world, world.getBlockState(pos), pos, entity);
             }
         });
+
         if (!explosion.interactsWithBlocks()) {
             explosion.clearToBlow();
         }
 
-        for (ServerPlayer player : ((ServerLevel) world).players()) {
-            if (player.distanceToSqr(entity.getX(), entity.getY(), entity.getZ()) < 4096) {
-                player.connection.send(new ClientboundExplodePacket(entity.getX(), entity.getY(), entity.getZ(), radius, explosion.getToBlow(), explosion.getHitPlayers().get(player)));
-            }
-        }
     }
+
 
     public static void createFireExplosion(Entity entity, float radius, boolean forceNone) {
         Level world = entity.level();
@@ -1075,12 +1153,15 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
         DamageSource source = entity instanceof ProjectileEntity projectile ? entity.damageSources().explosion(entity, projectile.getShooter()) : null;
         Explosion.BlockInteraction mode = Explosion.BlockInteraction.KEEP;
-        Explosion explosion = new ProjectileExplosion(world, entity, source, null, entity.getX(), entity.getY(), entity.getZ(), radius, true, mode);
+        Explosion explosion = new ProjectileExplosion(world, entity, source, null, entity.getX(), entity.getY(), entity.getZ(), radius, true, mode) {
+            @Override
+            protected float getEntityDamageAmount(Entity entity, double distance) {
+                return 0;
+            }
+        };
 
         if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, explosion))
             return;
-
-        // Do explosion logic
         explosion.explode();
         explosion.finalizeExplosion(true);
 

@@ -15,14 +15,17 @@
       "item": "scguns:gun_parts"
     },
     "S": {
-      "item": "scguns:gun_barrel"
+      "item": "scguns:heavy_gun_barrel"
     },
     "M": {
       "tag": "minecraft:planks"
+    },
+    "O": {
+      "item": "minecraft:iron_ingot"
     }
   },
   "pattern": [
-    "CMS",
+    "MO ",
     "LRS",
     "Q C"
   ],

@@ -12,7 +12,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 13,
+    "rate": 12,
     "recoilAngle": 4.0,
     "recoilKick": 2.0,
     "spread": 1.0,
@@ -47,7 +47,7 @@
   },
   "projectile": {
     "advantage": "scguns:illager",
-    "damage": 7.5,
+    "damage": 8,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:standard_copper_round",
@@ -60,7 +60,7 @@
   },
   "reloads": {
     "emptyMagTimer": 50,
-    "maxAmmo": 6,
+    "maxAmmo": 8,
     "reloadItem": "scguns:standard_copper_round",
     "reloadTimer": 22,
     "reloadType": "scguns:manual"

@@ -1,0 +1,12 @@
+{
+  "item": "scguns:rabbit_module",
+  "type": "mobility",
+  "effects": {
+    "speedModifier": 0.3,
+    "jumpBoost": 0.4,
+    "energyUse": 5
+  },
+  "display": {
+    "model": "rabbit_module"
+  }
+}

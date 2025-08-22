@@ -31,7 +31,10 @@ public class ModBlockEntities {
             BLOCK_ENTITIES.register("nitro_keg", () ->
                     BlockEntityType.Builder.of(NitroKegBlockEntity::new,
                             ModBlocks.NITRO_KEG.get()).build(null));
-
+    public static final RegistryObject<BlockEntityType<ChargedAmethystRelayBlockEntity>> CHARGED_AMETHYST_RELAY =
+            BLOCK_ENTITIES.register("charged_amethyst_relay", () ->
+                    BlockEntityType.Builder.of(ChargedAmethystRelayBlockEntity::new,
+                            ModBlocks.CHARGED_AMETHYST_RELAY.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<GunBenchBlockEntity>> GUN_BENCH =
             BLOCK_ENTITIES.register("gun_bench", () ->

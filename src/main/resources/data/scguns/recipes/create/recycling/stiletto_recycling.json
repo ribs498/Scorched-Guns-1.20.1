@@ -1,0 +1,27 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:stiletto"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "scguns:treated_iron_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:heavy_gun_parts"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:firing_unit"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:heavy_gun_barrel"
+    }
+  ]
+}

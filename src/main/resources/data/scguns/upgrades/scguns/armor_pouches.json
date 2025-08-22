@@ -1,0 +1,13 @@
+{
+  "type": "pouches",
+  "effects": {
+    "speedModifier": -0.005
+  },
+  "display": {
+    "model": "standard_pouches",
+    "storageSize": 9,
+    "gridWidth": 3,
+    "gridHeight": 3,
+    "containerType": "dispenser"
+  }
+}

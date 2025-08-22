@@ -3,7 +3,7 @@
   "processingTime": 50,
   "ingredients": [
     {
-      "item": "scguns:diamond_steel_ingot"
+      "item": "scguns:depleted_diamond_steel_ingot"
     }
   ],
   "mold": {
@@ -11,6 +11,6 @@
   },
   "result": {
     "item": "scguns:medium_diamond_steel_casing",
-    "count": 8
+    "count": 10
   }
 }

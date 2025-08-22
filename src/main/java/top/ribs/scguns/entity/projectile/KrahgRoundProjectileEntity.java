@@ -64,7 +64,10 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
 
     public KrahgRoundProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
-        this.setArmorBypassAmount(5.0F);
+        float armorBypass = 5.0F;
+        float puncturingBypass = GunEnchantmentHelper.getPuncturingArmorBypass(weapon);
+        armorBypass += puncturingBypass;
+        this.setArmorBypassAmount(armorBypass);
     }
 
     @Override
@@ -208,6 +211,12 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
         }
         if (entity instanceof LivingEntity livingTarget) {
+            damage = applyProjectileProtection(livingTarget, damage);
+            damage = calculateArmorBypassDamage(livingTarget, damage);
+        }
+        if (entity instanceof LivingEntity livingTarget) {
+            damage = GunEnchantmentHelper.getPuncturingDamageReduction(this.getWeapon(), livingTarget, damage);
+            damage = applyProjectileProtection(livingTarget, damage);
             damage = calculateArmorBypassDamage(livingTarget, damage);
         }
 

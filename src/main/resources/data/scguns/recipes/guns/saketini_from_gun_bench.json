@@ -5,7 +5,9 @@
     "count": 1
   },
   "ingredients": {
-
+    "blueprint": {
+      "item": "scguns:frontier_blueprint"
+    },
     "gun_internal_1": {
       "item": "scguns:firing_unit"
     },

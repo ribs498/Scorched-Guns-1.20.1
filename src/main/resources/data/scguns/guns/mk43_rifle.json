@@ -11,10 +11,10 @@
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 10,
-    "recoilAngle": 4.0,
+    "rate": 9,
+    "recoilAngle": 0.70,
     "recoilKick": 0.33,
-    "spread": 3.0,
+    "spread": 2.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 15,
     "hotBarrelRate": 15,
@@ -46,7 +46,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 11.5,
+    "damage": 14.0,
     "gravity": false,
     "item": "scguns:microjet",
     "ejectsCasing": true,
@@ -54,12 +54,12 @@
     "casingParticle": "scguns:iron_casing",
     "life": 50,
     "size": 1.0,
-    "speed": 1.8,
+    "speed": 3.2,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 8,
+    "maxAmmo": 10,
     "reloadItem": "scguns:microjet",
     "reloadTimer": 25,
     "reloadType": "scguns:mag_fed"

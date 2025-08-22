@@ -27,7 +27,7 @@
     "enchantedSecondaryBeamColor": "#670505",
     "gripType": "scguns:mini_gun_2",
     "baseGripType": "scguns:mini_gun_2",
-    "rate": 4,
+    "rate": 3,
     "recoilAngle": 0.0,
     "recoilKick": 0.0,
     "spread": 3.0,
@@ -59,6 +59,7 @@
     "maxAmmo": 55,
     "reloadItem": "scguns:energy_core",
     "reloadByproduct": "scguns:depleted_energy_core",
+    "byproductChance": 0.6,
     "reloadTimer": 30,
     "reloadType": "scguns:single_item"
   },

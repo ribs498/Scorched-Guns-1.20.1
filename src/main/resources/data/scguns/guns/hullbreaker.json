@@ -1,0 +1,60 @@
+{
+  "display": {
+    "flash": {
+      "size": 2.0,
+      "yOffset": 8.0,
+      "zOffset": -13.5,
+      "textureLocation": "muzzle_flash_1",
+      "spawnParticles": true,
+      "particleType": "minecraft:campfire_cosy_smoke",
+      "particleCount": 12,
+      "particleSpread": 0.7,
+      "particleRingRadius": 0.7
+    }
+  },
+  "general": {
+    "fireMode": "scguns:pulse",
+    "fireTimer": 18,
+    "gripType": "scguns:mini_gun",
+    "baseGripType": "scguns:mini_gun",
+    "rate": 8,
+    "recoilAngle": 8.0,
+    "recoilKick": 3.0,
+    "spread": 5.0,
+    "meleeDamage": 3.5,
+    "meleeCooldownTicks": 20,
+    "hotBarrelRate": 100,
+    "criticalChance": 0.05,
+    "playerKnockBack": true,
+    "playerKnockBackStrength": 0.5,
+    "meleeReach": 3.5,
+    "speedModifier": 0.85
+  },
+  "modules": {
+    "attachments": {
+    }
+  },
+  "projectile": {
+    "advantage": "scguns:heavy",
+    "damage": 23.0,
+    "gravity": true,
+    "item": "scguns:shotball",
+    "life": 90,
+    "size": 100.0,
+    "speed": 3.0,
+    "trailLengthMultiplier": 0.5
+  },
+  "reloads": {
+    "emptyMagTimer": 10,
+    "maxAmmo": 1,
+    "reloadTimer": 60,
+    "reloadType": "scguns:mag_fed"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.cannon.fire",
+    "fire": "scguns:item.cannon.fire",
+    "reload": "scguns:item.gauss.reload",
+    "flyby": "scguns:bullet.flyby1"
+  }
+}

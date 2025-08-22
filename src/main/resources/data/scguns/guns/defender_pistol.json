@@ -10,10 +10,10 @@
   "general": {
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
-    "rate": 5,
-    "recoilAngle": 3.5,
-    "recoilKick": 2.0,
-    "spread": 2.0,
+    "rate": 4,
+    "recoilAngle": 2.5,
+    "recoilKick": 1.5,
+    "spread": 1.5,
     "meleeDamage": 2.5,
     "meleeReach": 2.5,
     "meleeCooldownTicks": 10,
@@ -43,7 +43,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 7.5,
+    "damage": 8.5,
     "gravity": false,
     "item": "scguns:compact_advanced_round",
     "ejectsCasing": true,
@@ -56,7 +56,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 9,
+    "maxAmmo": 12,
     "reloadItem": "scguns:compact_advanced_round",
     "reloadTimer": 50,
     "reloadType": "scguns:mag_fed"

@@ -28,9 +28,9 @@
     }
   },
   "pattern": [
-    "CVKP ",
-    "LRKSS",
-    "Q K  "
+    "CVKP",
+    "LRSS",
+    "Q K "
   ],
   "result": {
     "item": "scguns:llr_director"

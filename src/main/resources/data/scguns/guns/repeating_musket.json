@@ -48,7 +48,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 6.5,
+    "damage": 7.5,
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:powder_and_ball",
@@ -58,10 +58,10 @@
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
-    "emptyMagTimer": 40,
-    "maxAmmo": 4,
+    "emptyMagTimer": 0,
+    "maxAmmo": 5,
     "reloadItem": "scguns:powder_and_ball",
-    "reloadTimer": 45,
+    "reloadTimer": 60,
     "reloadType": "scguns:mag_fed"
   },
   "sounds": {

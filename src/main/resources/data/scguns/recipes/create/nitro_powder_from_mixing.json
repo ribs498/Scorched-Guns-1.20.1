@@ -31,8 +31,13 @@
   ],
   "results": [
     {
-      "count": 8,
+      "count": 9,
       "item": "scguns:nitro_powder"
+    },
+    {
+      "chance": 0.5,
+      "count": 1,
+      "item": "scguns:nitro_powder_dust"
     }
   ]
 }

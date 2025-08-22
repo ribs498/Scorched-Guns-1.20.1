@@ -2,17 +2,14 @@
   "type": "create:mechanical_crafting",
   "acceptMirrored": true,
   "key": {
-    "Q": {
-      "item": "scguns:gun_grip"
-    },
     "C": {
       "tag": "minecraft:planks"
     },
     "L": {
-      "item": "minecraft:flint_and_steel"
+      "item": "minecraft:flint"
     },
     "R": {
-      "item": "minecraft:smooth_stone"
+      "item": "minecraft:cobblestone"
     },
     "S": {
       "item": "scguns:stone_gun_barrel"
@@ -21,13 +18,13 @@
       "item": "scguns:gun_parts"
     },
     "X": {
-      "item": "scguns:rapid_firing_unit"
+      "item": "scguns:firing_unit"
     }
   },
   "pattern": [
     "XI   ",
     "LRSS ",
-    "Q C  "
+    "C C  "
   ],
   "result": {
     "item": "scguns:repeating_musket"

@@ -32,25 +32,33 @@ public class ChargeHandler {
         playerMaxChargeTime.put(playerId, maxChargeTime);
 
         if (isCharging) {
-            int currentCharge = playerChargeTime.getOrDefault(playerId, 0);
-            currentCharge++;
-            if (currentCharge > maxChargeTime) {
-                currentCharge = maxChargeTime;
-            }
-            playerChargeTime.put(playerId, currentCharge);
+            boolean hasAmmo = Gun.hasAmmo(weapon) || player.isCreative();
 
-            float progress = maxChargeTime > 0 ? Math.min(1.0f, (float)currentCharge / maxChargeTime) : 0f;
-            lastChargeProgress.put(playerId, progress);
+            if (!hasAmmo) {
+                playerChargeTime.remove(playerId);
+                lastChargeProgress.remove(playerId);
 
-            // Send sync packet when on client
-            if (player.level().isClientSide()) {
-                PacketHandler.getPlayChannel().sendToServer(new C2SMessageChargeSync(progress));
+                if (player.level().isClientSide()) {
+                    PacketHandler.getPlayChannel().sendToServer(new C2SMessageChargeSync(0f));
+                }
+            } else {
+                int currentCharge = playerChargeTime.getOrDefault(playerId, 0);
+                currentCharge++;
+                if (currentCharge > maxChargeTime) {
+                    currentCharge = maxChargeTime;
+                }
+                playerChargeTime.put(playerId, currentCharge);
+
+                float progress = maxChargeTime > 0 ? Math.min(1.0f, (float)currentCharge / maxChargeTime) : 0f;
+                lastChargeProgress.put(playerId, progress);
+                if (player.level().isClientSide()) {
+                    PacketHandler.getPlayChannel().sendToServer(new C2SMessageChargeSync(progress));
+                }
             }
         } else {
             playerChargeTime.remove(playerId);
             lastChargeProgress.remove(playerId);
 
-            // Send zero progress when stopping charge
             if (player.level().isClientSide()) {
                 PacketHandler.getPlayChannel().sendToServer(new C2SMessageChargeSync(0f));
             }

@@ -52,11 +52,12 @@
   },
   "projectile": {
     "advantage": "scguns:heavy",
-    "damage": 18.5,
+    "damage": 19.5,
     "ejectsCasing": true,
     "gravity": false  ,
     "item": "scguns:gibbs_round",
     "casingType": "scguns:medium_diamond_steel_casing",
+    "casingParticle": "scguns:diamond_steel_casing",
     "life": 90,
     "size": 0.1,
     "speed": 10.0,

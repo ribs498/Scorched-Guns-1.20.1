@@ -1,0 +1,16 @@
+{
+  "type": "scguns:cogchambers",
+  "start_pool": "scguns:entrance",
+  "biomes": "#minecraft:is_overworld",
+  "step": "underground_structures",
+  "start_height": {
+    "type": "minecraft:uniform",
+    "min_inclusive": {
+      "absolute": -32
+    },
+    "max_inclusive": {
+      "absolute": -12
+    }
+  },
+  "spawn_overrides": {}
+}

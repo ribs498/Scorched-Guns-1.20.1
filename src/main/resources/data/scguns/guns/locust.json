@@ -15,8 +15,8 @@
   "general": {
     "alwaysSpread": false,
     "fireMode": "scguns:burst",
-    "burstAmount": 4,
-    "burstCooldown": 8,
+    "burstAmount": 3,
+    "burstCooldown": 10,
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 2,
@@ -55,7 +55,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 22,
+    "damage": 21.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:gibbs_round",
@@ -67,7 +67,7 @@
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
-    "maxAmmo": 28,
+    "maxAmmo": 24,
     "reloadTimer": 15,
     "reloadType": "scguns:mag_fed"
   },

@@ -1,6 +1,6 @@
 {
   "type": "scguns:mechanical_pressing",
-  "processingTime": 20,
+  "processingTime": 15,
   "ingredients": [
     {
       "item": "scguns:small_diamond_steel_casing"

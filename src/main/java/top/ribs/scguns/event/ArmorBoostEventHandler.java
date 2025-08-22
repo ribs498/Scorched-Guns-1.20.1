@@ -19,7 +19,7 @@ import java.util.Objects;
 public class ArmorBoostEventHandler {
 
     private static final int RESISTANCE_LEVEL = 1;
-    private static final int EFFECT_DURATION = 40;
+    private static final int EFFECT_DURATION = 80;
 
     @SubscribeEvent
     public static void onEquipmentChange(LivingEquipmentChangeEvent event) {

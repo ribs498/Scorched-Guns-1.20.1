@@ -38,16 +38,23 @@ public class GunEntityRenderers
         event.registerEntityRenderer(ModEntities.ROCKET.get(), RocketRenderer::new);
         event.registerEntityRenderer(ModEntities.MICROJET.get(), MicroJetRenderer::new);
         event.registerEntityRenderer(ModEntities.SCULK_CELL.get(), ProjectileRenderer::new);
+        event.registerEntityRenderer(ModEntities.SHATTER_ROUND_PROJECTILE.get(), ProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.SYRINGE_PROJECTILE.get(), ProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.SHULKSHOT.get(), ShulkshotRenderer::new);
         event.registerEntityRenderer(ModEntities.KRAHG_ROUND_PROJECTILE.get(), ProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.ADVANCED_ROUND_PROJECTILE.get(), ProjectileRenderer::new);
+        event.registerEntityRenderer(ModEntities.SHATTER_ROUND_PROJECTILE.get(), ProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.GIBBS_ROUND_PROJECTILE.get(), ProjectileRenderer::new);
+        event.registerEntityRenderer(ModEntities.SHOTBALL_PROJECTILE.get(), ProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.THROWABLE_GRENADE.get(), ThrowableGrenadeRenderer::new);
         event.registerEntityRenderer(ModEntities.THROWABLE_STUN_GRENADE.get(), ThrowableGrenadeRenderer::new);
         event.registerEntityRenderer(ModEntities.THROWABLE_MOLOTOV_COCKTAIL.get(), ThrowableGrenadeRenderer::new);
+        event.registerEntityRenderer(ModEntities.THROWABLE_BEACON_GRENADE.get(), ThrowableGrenadeRenderer::new);
         event.registerEntityRenderer(ModEntities.THROWABLE_GAS_GRENADE.get(), ThrowableGrenadeRenderer::new);
         event.registerEntityRenderer(ModEntities.THROWABLE_CHOKE_BOMB.get(), ThrowableGrenadeRenderer::new);
         event.registerEntityRenderer(ModEntities.THROWABLE_SWARM_BOMB.get(), ThrowableGrenadeRenderer::new);
+        event.registerEntityRenderer(ModEntities.THROWABLE_SHOTBALL.get(), ThrowableShotballRenderer::new);
+        event.registerEntityRenderer(ModEntities.THROWABLE_NAIL_BOMB.get(), ThrowableGrenadeRenderer::new);
+
     }
 }

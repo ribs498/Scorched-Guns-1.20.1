@@ -5,18 +5,20 @@
     "count": 1
   },
   "ingredients": {
-
+    "blueprint": {
+      "item": "scguns:antique_blueprint"
+    },
     "gun_internal_1": {
       "item": "minecraft:flint"
     },
     "gun_internal_2": {
-      "item": "minecraft:smooth_stone"
+      "item": "minecraft:cobblestone"
     },
     "gun_barrel_1": {
       "item": "scguns:stone_gun_barrel"
     },
     "gun_grip": {
-      "item": "scguns:gun_grip"
+      "tag": "minecraft:planks"
     },
     "gun_magazine": {
       "tag": "minecraft:planks"

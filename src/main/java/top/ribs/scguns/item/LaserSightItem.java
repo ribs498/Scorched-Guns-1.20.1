@@ -63,7 +63,7 @@ public class LaserSightItem extends ScopeItem {
                     if (heldItem.getItem() instanceof LaserSightItem || (heldItem.getItem() instanceof GunItem && Gun.hasLaserSight(heldItem))) {
                         Vec3 start = player.getEyePosition(1.0F);
                         Vec3 direction = player.getLookAngle();
-                        Vec3 end = start.add(direction.scale(30));
+                        Vec3 end = start.add(direction.scale(50));
                         HitResult hitResult = player.level().clip(new ClipContext(start, end, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, player));
                         Vec3 finalEnd = hitResult.getType() != HitResult.Type.MISS ? hitResult.getLocation() : end;
                         AABB aabb = new AABB(start, finalEnd).inflate(0.5);
@@ -86,12 +86,8 @@ public class LaserSightItem extends ScopeItem {
                         if (entityHitResult != null) {
                             finalEnd = entityHitResult.getLocation();
                         }
-
-                        if (finalEnd != null) {
-                            // Apply the offset to bring the particle closer to the player
-                            Vec3 adjustedPosition = finalEnd.subtract(direction.scale(OFFSET));
-                            world.addParticle(ModParticleTypes.LASER.get(), adjustedPosition.x, adjustedPosition.y, adjustedPosition.z, 0.0D, 0.0D, 0.0D);
-                        }
+                        Vec3 adjustedPosition = finalEnd.subtract(direction.scale(OFFSET));
+                        world.addParticle(ModParticleTypes.LASER.get(), adjustedPosition.x, adjustedPosition.y, adjustedPosition.z, 0.0D, 0.0D, 0.0D);
                     }
                 }
             }

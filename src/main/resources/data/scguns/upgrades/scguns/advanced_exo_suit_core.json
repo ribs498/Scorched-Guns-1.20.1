@@ -1,0 +1,10 @@
+{
+  "item": "scguns:advanced_exo_suit_core",
+  "type": "power_core",
+  "effects": {
+    "speedModifier": -0.02
+  },
+  "display": {
+    "model": "power_core"
+  }
+}

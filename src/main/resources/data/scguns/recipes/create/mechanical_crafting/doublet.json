@@ -1,0 +1,29 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "C": {
+      "tag": "minecraft:planks"
+    },
+    "L": {
+      "item": "minecraft:flint"
+    },
+    "R": {
+      "item": "minecraft:cobblestone"
+    },
+    "S": {
+      "item": "scguns:stone_gun_barrel"
+    },
+    "O": {
+      "item": "minecraft:stone"
+    }
+  },
+  "pattern": [
+    "  OS",
+    "LROS",
+    "C C "
+  ],
+  "result": {
+    "item": "scguns:doublet"
+  }
+}

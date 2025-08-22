@@ -43,7 +43,7 @@
   },
   "projectile": {
     "advantage": "scguns:water",
-    "damage": 6.0,
+    "damage": 8.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:shock_cell",

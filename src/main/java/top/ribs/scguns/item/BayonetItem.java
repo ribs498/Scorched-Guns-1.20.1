@@ -28,14 +28,14 @@ public class BayonetItem extends UnderBarrelItem {
         super(underBarrel, properties);
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
-        this.modifier = underBarrel.getModifier(); // Assuming UnderBarrel has a getModifier method
+        this.modifier = underBarrel.getModifier();
     }
 
     public BayonetItem(UnderBarrel underBarrel, Properties properties, boolean colored, float attackDamage, float attackSpeed) {
         super(underBarrel, properties, colored);
         this.attackDamage = attackDamage;
         this.attackSpeed = attackSpeed;
-        this.modifier = underBarrel.getModifier(); // Assuming UnderBarrel has a getModifier method
+        this.modifier = underBarrel.getModifier();
     }
 
     public float getAdditionalDamage() {

@@ -6,7 +6,7 @@
       "item": "scguns:gun_grip"
     },
     "C": {
-      "tag": "minecraft:planks"
+      "minecraft": "minecraft:iron_ingot"
     },
     "L": {
       "item": "scguns:firing_unit"

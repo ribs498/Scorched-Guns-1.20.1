@@ -1,0 +1,14 @@
+{
+  "type": "pouches",
+  "effects": {
+    "speedModifier": -0.01,
+    "armorBonus": 0.5
+  },
+  "display": {
+    "model": "heavy_pouches",
+    "storageSize": 27,
+    "gridWidth": 9,
+    "gridHeight": 3,
+    "containerType": "chest"
+  }
+}

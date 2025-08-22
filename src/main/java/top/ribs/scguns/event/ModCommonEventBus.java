@@ -21,11 +21,16 @@ public class ModCommonEventBus {
         event.put(ModEntities.SKY_CARRIER.get(), SkyCarrierEntity.createAttributes().build());
         event.put(ModEntities.DISSIDENT.get(), DissidentEntity.createAttributes().build());
         event.put(ModEntities.REDCOAT.get(), RedcoatEntity.createAttributes().build());
+        event.put(ModEntities.SCAMP_TANK.get(), ScampTankEntity.createAttributes().build());
         event.put(ModEntities.BLUNDERER.get(), BlundererEntity.createAttributes().build());
         event.put(ModEntities.HIVE.get(), HiveEntity.createAttributes().build());
         event.put(ModEntities.SWARM.get(), SwarmEntity.createAttributes().build());
+        event.put(ModEntities.SIGNAL_BEACON.get(), SignalBeaconEntity.createAttributes().build());
         event.put(ModEntities.HORNLIN.get(), HornlinEntity.createAttributes().build());
         event.put(ModEntities.ZOMBIFIED_HORNLIN.get(), ZombifiedHornlinEntity.createAttributes().build());
+        event.put(ModEntities.THE_MERCHANT.get(), TheMerchantEntity.createAttributes().build());
+        event.put(ModEntities.TRAUMA_UNIT.get(), TraumaUnitEntity.createAttributes().build());
+        event.put(ModEntities.SCAMPLER.get(), ScamplerEntity.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -60,12 +65,13 @@ public class ModCommonEventBus {
                 SpawnPlacementRegisterEvent.Operation.OR
         );
         event.register(
-                ModEntities.SKY_CARRIER.get(),
+                ModEntities.TRAUMA_UNIT.get(),
                 SpawnPlacements.Type.ON_GROUND,
                 Heightmap.Types.WORLD_SURFACE,
-                SkyCarrierEntity::checkMonsterSpawnRules,
+                CogKnightEntity::checkMonsterSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.OR
         );
+
         event.register(
                 ModEntities.DISSIDENT.get(),
                 SpawnPlacements.Type.ON_GROUND,

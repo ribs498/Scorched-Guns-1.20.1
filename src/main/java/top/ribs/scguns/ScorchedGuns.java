@@ -6,7 +6,9 @@ import net.minecraft.world.item.Items;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.crafting.CraftingHelper;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -24,9 +26,12 @@ import top.ribs.scguns.client.screen.*;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.NetworkGunManager;
 import top.ribs.scguns.common.ProjectileManager;
+import top.ribs.scguns.common.exosuit.ExoSuitUpgradeManager;
 import top.ribs.scguns.compat.CreateModCondition;
 import top.ribs.scguns.compat.FarmersDelightModCondition;
 import top.ribs.scguns.compat.IEModCondition;
+import top.ribs.scguns.config.MerchantTradeConfig;
+import top.ribs.scguns.config.ProjectileAdvantageConfig;
 import top.ribs.scguns.entity.config.ConfigLoader;
 import top.ribs.scguns.entity.projectile.*;
 import top.ribs.scguns.entity.throwable.GrenadeEntity;
@@ -65,11 +70,9 @@ public class ScorchedGuns {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.commonSpec);
         Config.GunScalingConfig.setup();
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.serverSpec);
-
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::onConfigLoad);
-        // Initialize the deferred register for items
         ModItems.REGISTER.register(bus);
         ModRecipes.register(modEventBus);
 
@@ -96,6 +99,7 @@ public class ScorchedGuns {
         ModPointOfInterestTypes.REGISTER.register(bus);
         ModRecipes.register(modEventBus);
 
+        ModStructures.REGISTRY.register(bus);
         bus.addListener(this::onCommonSetup);
 
         // Ensure client-specific code is run only on the client side
@@ -113,19 +117,18 @@ public class ScorchedGuns {
         MinecraftForge.EVENT_BUS.register(this);
         //MinecraftForge.EVENT_BUS.register(ArmorBoostEventHandler.class);
        /// MinecraftForge.EVENT_BUS.register(ArmorRemoveEventHandler.class);
-        MinecraftForge.EVENT_BUS.register(HeavyWeaponEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(WeaponMovementEventHandler.class);
         MinecraftForge.EVENT_BUS.register(OceanWeaponEventHandler.class);
         MinecraftForge.EVENT_BUS.register(PiglinWeaponEventHandler.class);
+        MinecraftForge.EVENT_BUS.register(MerchantTradeConfig.class);
+        MinecraftForge.EVENT_BUS.register(ProjectileAdvantageConfig.class);
     }
     private void onConfigLoad(ModConfigEvent.Loading event) {
         if (event.getConfig().getType() == ModConfig.Type.SERVER) {
-            RecoilHandler.get().updateConfig();
-        }
-    }
-
-    private void onConfigReload(ModConfigEvent.Reloading event) {
-        if (event.getConfig().getType() == ModConfig.Type.SERVER) {
-            RecoilHandler.get().updateConfig();
+            // Only call RecoilHandler on client side
+            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
+                RecoilHandler.get().updateConfig();
+            });
         }
     }
     private void initializeModDependencies() {
@@ -141,11 +144,15 @@ public class ScorchedGuns {
         mekanismLoaded = ModList.get().isLoaded("mekanism");
         marjLoaded = ModList.get().isLoaded("majruszsdifficulty");
     }
-
+    @SubscribeEvent
+    public void onAddReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(new ExoSuitUpgradeManager());
+    }
 
     public static boolean shouldUseEnergyGuns() {
         return !createLoaded || useEnergyGuns;
     }
+
     private void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
             PacketHandler.init();
@@ -168,6 +175,7 @@ public class ScorchedGuns {
             ProjectileManager.getInstance().registerFactory(ModItems.COMPACT_ADVANCED_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new ProjectileEntity(ModEntities.PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.RAMROD_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new RamrodProjectileEntity(ModEntities.RAMROD_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.ADVANCED_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new AdvancedRoundProjectileEntity(ModEntities.ADVANCED_ROUND_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
+            ProjectileManager.getInstance().registerFactory(ModItems.SHATTER_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new ShatterRoundProjectileEntity(ModEntities.SHATTER_ROUND_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.KRAHG_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new KrahgRoundProjectileEntity(ModEntities.KRAHG_ROUND_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.BEOWULF_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new BeowulfProjectileEntity(ModEntities.BEOWULF_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.GIBBS_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new GibbsRoundProjectileEntity(ModEntities.GIBBS_ROUND_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
@@ -185,6 +193,7 @@ public class ScorchedGuns {
             ProjectileManager.getInstance().registerFactory(ModItems.ADVANCED_BULLET.get(), (worldIn, entity, weapon, item, modifiedGun) -> new HardenedBulletProjectileEntity(ModEntities.HARDENED_BULLET_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.BUCKSHOT.get(), (worldIn, entity, weapon, item, modifiedGun) -> new BuckshotProjectileEntity(ModEntities.BUCKSHOT_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.NITRO_BUCKSHOT.get(), (worldIn, entity, weapon, item, modifiedGun) -> new BuckshotProjectileEntity(ModEntities.BUCKSHOT_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
+            ProjectileManager.getInstance().registerFactory(ModItems.SHOTBALL.get(), (worldIn, entity, weapon, item, modifiedGun) -> new ShotballProjectileEntity(ModEntities.SHOTBALL_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.ROCKET.get(), (worldIn, entity, weapon, item, modifiedGun) -> new RocketEntity(ModEntities.ROCKET.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.MICROJET.get(), (worldIn, entity, weapon, item, modifiedGun) -> new MicroJetEntity(ModEntities.MICROJET.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.GRENADE.get(), (worldIn, entity, weapon, item, modifiedGun) -> new GrenadeEntity(ModEntities.GRENADE.get(), worldIn, entity, weapon, item, modifiedGun));

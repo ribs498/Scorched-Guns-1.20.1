@@ -12,9 +12,11 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
+import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -27,12 +29,14 @@ import top.ribs.scguns.Reference;
 import top.ribs.scguns.annotation.Ignored;
 import top.ribs.scguns.annotation.Optional;
 import top.ribs.scguns.client.ClientHandler;
+import top.ribs.scguns.common.exosuit.ExoSuitAmmoHelper;
 import top.ribs.scguns.debug.Debug;
 import top.ribs.scguns.debug.IDebugWidget;
 import top.ribs.scguns.debug.IEditorMenu;
 import top.ribs.scguns.debug.client.screen.widget.DebugButton;
 import top.ribs.scguns.debug.client.screen.widget.DebugSlider;
 import top.ribs.scguns.debug.client.screen.widget.DebugToggle;
+import top.ribs.scguns.init.ModEnchantments;
 import top.ribs.scguns.item.*;
 import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.item.attachment.impl.Scope;
@@ -247,7 +251,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         private boolean isRevolver = false;
         @Optional
         private float speedModifier = 1.0F;
-
+        @Optional
+        private boolean isSilenced = false;
+        @Optional
+        private boolean enableGunLight = true;
         @Override
         public CompoundTag serializeNBT() {
             CompoundTag tag = new CompoundTag();
@@ -272,6 +279,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             tag.putFloat("MeleeReach", this.meleeReach);
             tag.putBoolean("InfiniteAmmo", this.infiniteAmmo);
             tag.putInt("EnergyUse", this.energyUse);
+
             if (this.beamColor != null && !this.beamColor.isEmpty()) {
                 tag.putString("BeamColor", this.beamColor);
             }
@@ -299,6 +307,8 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             tag.putFloat("PlayerKnockBackStrength", this.playerKnockBackStrength);
             tag.putBoolean("IsRevolver", this.isRevolver);
             tag.putFloat("SpeedModifier", this.speedModifier);
+            tag.putBoolean("IsSilenced", this.isSilenced);
+            tag.putBoolean("EnableGunLight", this.enableGunLight);
             return tag;
         }
 
@@ -415,6 +425,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("SpeedModifier", Tag.TAG_ANY_NUMERIC)) {
                 this.speedModifier = tag.getFloat("SpeedModifier");
             }
+            if (tag.contains("IsSilenced", Tag.TAG_ANY_NUMERIC)) {
+                this.isSilenced = tag.getBoolean("IsSilenced");
+            }
+            if (tag.contains("EnableGunLight", Tag.TAG_ANY_NUMERIC)) {
+                this.enableGunLight = tag.getBoolean("EnableGunLight");
+            }
         }
 
         public JsonObject toJsonObject() {
@@ -499,6 +515,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (this.speedModifier != 1.0F) {
                 object.addProperty("speedModifier", this.speedModifier);
             }
+            if (this.isSilenced) {
+                object.addProperty("isSilenced", true);
+            }
+            if (!this.enableGunLight) {
+                object.addProperty("enableGunLight", false);
+            }
             return object;
         }
 
@@ -545,7 +567,13 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             general.playerKnockBackStrength = this.playerKnockBackStrength;
             general.isRevolver = this.isRevolver;
             general.speedModifier = this.speedModifier;
+            general.isSilenced = this.isSilenced;
+            general.enableGunLight = this.enableGunLight;
             return general;
+        }
+
+        public boolean isEnableGunLight() {
+            return this.enableGunLight;
         }
         public float getSpeedModifier() {
             return this.speedModifier;
@@ -748,6 +776,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         public GripType getBaseGripType() {
             return this.baseGripType;
         }
+        public boolean isSilenced() {
+            return this.isSilenced;
+        }
+
     }
 
     public static int getFireTimer(ItemStack stack) {
@@ -767,8 +799,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         @Optional
         private boolean infiniteAmmo = false;
         @Optional
-        @Ignored
         private ResourceLocation reloadByproduct;
+        @Optional
+        private float byproductChance = 0.0F;
 
         @Override
         public CompoundTag serializeNBT() {
@@ -779,6 +812,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             tag.putInt("ReloadTimer", this.reloadTimer);
             tag.putInt("EmptyMagTimer", this.emptyMagTimer);
             tag.putInt("ReloadAmount", this.reloadAmount);
+            tag.putFloat("ByproductChance", this.byproductChance);
             if (this.reloadByproduct != null) {
                 tag.putString("ReloadByproduct", this.reloadByproduct.toString());
             }
@@ -805,6 +839,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("ReloadAmount", Tag.TAG_ANY_NUMERIC)) {
                 this.reloadAmount = tag.getInt("ReloadAmount");
             }
+            if (tag.contains("ByproductChance", Tag.TAG_ANY_NUMERIC)) {
+                this.byproductChance = tag.getFloat("ByproductChance");
+            }
             if (tag.contains("ReloadByproduct", Tag.TAG_STRING)) {
                 this.reloadByproduct = new ResourceLocation(tag.getString("ReloadByproduct"));
             }
@@ -822,6 +859,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             object.addProperty("reloadTimer", this.reloadTimer);
             object.addProperty("emptyMagTimer", this.emptyMagTimer);
             if (this.reloadAmount != 1) object.addProperty("reloadAmount", this.reloadAmount);
+            if (this.byproductChance != 0.0F) object.addProperty("byproductChance", this.byproductChance);
             if (this.reloadByproduct != null) {
                 object.addProperty("reloadByproduct", this.reloadByproduct.toString());
             }
@@ -836,6 +874,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             reloads.reloadTimer = this.reloadTimer;
             reloads.emptyMagTimer = this.emptyMagTimer;
             reloads.reloadAmount = this.reloadAmount;
+            reloads.byproductChance = this.byproductChance;
             reloads.reloadByproduct = this.reloadByproduct;
             return reloads;
         }
@@ -852,6 +891,29 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         @Nullable
         public Item getReloadByproduct() {
             return this.reloadByproduct != null ? ForgeRegistries.ITEMS.getValue(this.reloadByproduct) : null;
+        }
+        public float getByproductChance() {
+            return this.byproductChance;
+        }
+
+        public void setByproductChance(float chance) {
+            this.byproductChance = Mth.clamp(chance, 0.0F, 1.0F);
+        }
+
+        public boolean shouldGiveByproduct(RandomSource random, ItemStack gunStack) {
+            if (this.reloadByproduct == null || this.byproductChance <= 0.0F) {
+                return false;
+            }
+
+            float finalChance = this.byproductChance;
+
+            int shellCatcherLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SHELL_CATCHER.get(), gunStack);
+            if (shellCatcherLevel > 0) {
+                finalChance += (shellCatcherLevel * 0.05F);
+                finalChance = Math.min(finalChance, 1.0F);
+            }
+
+            return random.nextFloat() < finalChance;
         }
 
         /**
@@ -2454,7 +2516,6 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             return new AmmoContext(ammo, null);
         }
 
-
         // Check player's main inventory for regular ammo
         for (int i = 0; i < player.getInventory().getContainerSize(); ++i) {
             ItemStack stack = player.getInventory().getItem(i);
@@ -2474,6 +2535,14 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
                 }
             }
         }
+
+        // Check exo suit pouches
+        ItemStack exoSuitAmmo = ExoSuitAmmoHelper.findAmmoInExoSuit(player, item);
+        if (!exoSuitAmmo.isEmpty()) {
+            return new AmmoContext(exoSuitAmmo, null);
+        }
+
+        // Check Curios slots
         AtomicReference<AmmoContext> ammoContextRef = new AtomicReference<>(AmmoContext.NONE);
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
@@ -2526,6 +2595,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             }
         }
 
+        // Check exo suit pouches
+        List<ItemStack> exoSuitAmmo = ExoSuitAmmoHelper.findAllAmmoInExoSuit(player, item);
+        ammoStacks.addAll(exoSuitAmmo);
+
         // Check Curios slots for the CreativeAmmoBoxItem and other ammo
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
@@ -2571,6 +2644,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
                 }
             }
         }
+
+        // Check exo suit pouches
+        int exoSuitAmmoCount = ExoSuitAmmoHelper.getAmmoCountInExoSuit(player, item);
+        ammoCount.addAndGet(exoSuitAmmoCount);
+
+        // Check Curios slots
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
             for (int i = 0; i < curios.getSlots(); i++) {

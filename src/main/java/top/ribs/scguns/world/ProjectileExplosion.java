@@ -25,7 +25,7 @@ import java.util.Set;
 /**
  * Author: MrCrayfish
  */
-public class ProjectileExplosion extends Explosion
+public abstract class ProjectileExplosion extends Explosion
 {
     private static final ExplosionDamageCalculator DEFAULT_CONTEXT = new ExplosionDamageCalculator();
 
@@ -161,4 +161,6 @@ public class ProjectileExplosion extends Explosion
             }
         }
     }
+
+    protected abstract float getEntityDamageAmount(Entity entity, double distance);
 }

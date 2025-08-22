@@ -16,6 +16,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -107,6 +108,7 @@ public class PenetratorBlockEntity extends BlockEntity {
 
         dropItemsAfterExplosion((ServerLevel) level, pos);
     }
+
     private void dropItemsAfterExplosion(ServerLevel level, BlockPos pos) {
         TagKey<Item> tagKey = ItemTags.create(new ResourceLocation("scguns", "penetrator_drops"));
         List<Item> items = new ArrayList<>();
@@ -122,6 +124,7 @@ public class PenetratorBlockEntity extends BlockEntity {
             }
         }
     }
+
     private void applyDamageToEntities(Level level, BlockPos pos) {
         List<Entity> entities = level.getEntities(null, new AABB(
                 pos.getX() - 2.0, pos.getY() - 2.0, pos.getZ() - 2.0,
@@ -132,12 +135,15 @@ public class PenetratorBlockEntity extends BlockEntity {
             DamageSource explosionDamage = serverLevel.damageSources().explosion(null);
 
             for (Entity entity : entities) {
+                if (entity instanceof ItemEntity) {
+                    continue;
+                }
+
                 float damage = entity instanceof Player ? 20.0F : 9.0F;
 
-                // Check if the entity is a player and if they are in Survival mode
                 if (entity instanceof ServerPlayer player) {
                     if (player.gameMode.getGameModeForPlayer() != GameType.SURVIVAL) {
-                        continue; // Skip damage application for non-Survival players
+                        continue;
                     }
                     player.hurt(explosionDamage, damage);
                     player.causeFoodExhaustion(damage * 0.1F);
@@ -163,6 +169,4 @@ public class PenetratorBlockEntity extends BlockEntity {
             }
         }
     }
-
-
 }

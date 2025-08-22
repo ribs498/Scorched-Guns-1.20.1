@@ -1,0 +1,35 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "L": {
+      "item": "scguns:plasma_core"
+    },
+    "R": {
+      "item": "scguns:gun_parts"
+    },
+    "S": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "M": {
+      "item": "scguns:treated_iron_ingot"
+    },
+    "P": {
+      "tag": "minecraft:planks"
+    },
+    "X": {
+      "item": "scguns:wrecker_blueprint"
+    }
+  },
+  "pattern": [
+    "XM  ",
+    "LRS ",
+    "Q P "
+  ],
+  "result": {
+    "item": "scguns:tl_runner"
+  }
+}

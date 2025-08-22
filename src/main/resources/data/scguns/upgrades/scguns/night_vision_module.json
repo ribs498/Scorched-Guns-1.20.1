@@ -1,0 +1,11 @@
+{
+  "item": "scguns:night_vision_module",
+  "type": "hud",
+  "effects": {
+    "nightVision": true,
+    "energyUse": 20
+  },
+  "display": {
+    "model": "night_vision"
+  }
+}

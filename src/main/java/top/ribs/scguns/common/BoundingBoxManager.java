@@ -93,12 +93,15 @@ public class BoundingBoxManager
         registerHeadshotBox(EntityType.PIGLIN, new ChildHeadshotBox<>(8.0, 24.0, 0.75, 0.5));
         registerHeadshotBox(ModEntities.HORNLIN.get(), new BasicHeadshotBox<>(8.0, 24.0));
         registerHeadshotBox(ModEntities.ZOMBIFIED_HORNLIN.get(), new BasicHeadshotBox<>(8.0, 24.0));
+        registerHeadshotBox(ModEntities.THE_MERCHANT.get(), new BasicHeadshotBox<>(8.0, 29.0));
         registerHeadshotBox(ModEntities.COG_MINION.get(), new BasicHeadshotBox<>(8.0, 24.0));
         registerHeadshotBox(ModEntities.COG_KNIGHT.get(), new BasicHeadshotBox<>(8.0, 24.0));
+        registerHeadshotBox(ModEntities.TRAUMA_UNIT.get(), new BasicHeadshotBox<>(8.0, 24.0));
         registerHeadshotBox(ModEntities.REDCOAT.get(), new BasicHeadshotBox<>(8.0, 24.0));
         registerHeadshotBox(ModEntities.BLUNDERER.get(), new BasicHeadshotBox<>(8.0, 24.0));
         registerHeadshotBox(ModEntities.HIVE.get(), new BasicHeadshotBox<>(8.0, 18.0));
         registerHeadshotBox(ModEntities.DISSIDENT.get(), new BasicHeadshotBox<>(8.0, 18.0));
+        registerHeadshotBox(ModEntities.SCAMP_TANK.get(), new BasicHeadshotBox<>(8.0, 30.0));
 
     }
 

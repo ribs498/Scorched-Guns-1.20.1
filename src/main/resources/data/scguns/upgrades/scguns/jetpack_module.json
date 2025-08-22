@@ -1,0 +1,12 @@
+{
+  "type": "utility",
+  "effects": {
+    "flight": true,
+    "flightSpeed": 0.1,
+    "energyUse": 80,
+    "speedModifier": -0.05
+  },
+  "display": {
+    "model": "jetpack"
+  }
+}

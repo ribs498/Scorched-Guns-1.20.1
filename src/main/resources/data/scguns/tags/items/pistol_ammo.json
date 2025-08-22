@@ -3,6 +3,8 @@
   "values": [
     "scguns:compact_copper_round",
     "scguns:compact_advanced_round",
-    "scguns:hog_round"
+    "scguns:hog_round",
+    "scguns:standard_bullet",
+    "scguns:hardened_bullet"
   ]
 }

@@ -47,7 +47,7 @@ public class AnimatedEnergyGunItem extends AnimatedGunItem implements IEnergyGun
 
     @Override
     public boolean isBarVisible(ItemStack stack) {
-        return true; // Always show the energy bar
+        return true;
     }
 
     @Override

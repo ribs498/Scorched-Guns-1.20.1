@@ -8,15 +8,15 @@
     }
   },
   "general": {
-    "alwaysSpread": false,
+    "alwaysSpread": true,
     "fireMode": "scguns:pulse",
     "fireTimer": 30,
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 6,
+    "rate": 7,
     "recoilAngle": 3.5,
     "recoilKick": 1.0,
-    "spread": 0.1,
+    "spread": 3.5,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
     "meleeReach": 3.5,
@@ -49,7 +49,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 22.0,
+    "damage": 22.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:energy_cell",

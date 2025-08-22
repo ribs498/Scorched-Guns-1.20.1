@@ -18,7 +18,8 @@
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 10,
     "hotBarrelRate": 16,
-    "criticalChance": 0.18
+    "criticalChance": 0.25,
+    "isSilenced": true
   },
   "modules": {
     "attachments": {
@@ -45,7 +46,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 8.0,
+    "damage": 9.0,
     "gravity": false,
     "item": "scguns:compact_advanced_round",
     "ejectsCasing": true,

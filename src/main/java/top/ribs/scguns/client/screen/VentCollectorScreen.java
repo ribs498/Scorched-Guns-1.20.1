@@ -29,8 +29,6 @@ public class VentCollectorScreen extends AbstractContainerScreen<VentCollectorMe
         int x = (this.width - this.imageWidth) / 2;
         int y = (this.height - this.imageHeight) / 2;
         guiGraphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
-
-        // Render filter charge bar
         int filterCharge = menu.getFilterCharge();
         int barWidth = (int)(((float)filterCharge / 64) * 52);
         guiGraphics.blit(TEXTURE, x + 62, y + 37, 176, 0, barWidth, 8);
@@ -51,7 +49,7 @@ public class VentCollectorScreen extends AbstractContainerScreen<VentCollectorMe
         int startY = (this.height - this.imageHeight) / 2 + 37;
         if (x >= startX && x < startX + 52 && y >= startY && y < startY + 8) {
             int filterCharge = menu.getFilterCharge();
-            guiGraphics.renderTooltip(this.font, Component.literal("Filter Charge: " + filterCharge + "/64"), x, y);
+            guiGraphics.renderTooltip(this.font, Component.translatable("gui.scguns.vent_collector.filter_charge", filterCharge, 64), x, y);
         }
     }
 }

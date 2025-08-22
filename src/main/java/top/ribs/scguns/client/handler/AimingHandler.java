@@ -2,23 +2,19 @@ package top.ribs.scguns.client.handler;
 
 import net.minecraft.client.CameraType;
 import net.minecraft.client.Minecraft;
-import net.minecraft.tags.BlockTags;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.decoration.ItemFrame;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.EntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
 import net.minecraftforge.client.event.ViewportEvent;
-import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import top.ribs.scguns.Config;
@@ -27,9 +23,9 @@ import top.ribs.scguns.client.KeyBinds;
 import top.ribs.scguns.client.util.PropertyHelper;
 import top.ribs.scguns.common.GripType;
 import top.ribs.scguns.common.Gun;
+import top.ribs.scguns.common.ReloadType;
 import top.ribs.scguns.compat.PlayerReviveHelper;
 import top.ribs.scguns.debug.Debug;
-import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.network.PacketHandler;
@@ -109,6 +105,7 @@ public class AimingHandler
         return 0F;
     }
 
+
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event)
     {
@@ -119,7 +116,41 @@ public class AimingHandler
         if(player == null)
             return;
 
+        boolean isReloading = ModSyncedDataKeys.RELOADING.getValue(player);
+        ItemStack heldItem = player.getMainHandItem();
+        boolean inCriticalPhase;
+
+        if (heldItem.getItem() instanceof GunItem) {
+            CompoundTag tag = heldItem.getOrCreateTag();
+            inCriticalPhase = tag.getBoolean("InCriticalReloadPhase");
+            Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
+            if (inCriticalPhase && gun.getReloads().getReloadType() != ReloadType.MANUAL) {
+                this.aiming = false;
+                wasKeyPressed = KeyBinds.getAimMapping().isDown();
+                if(ModSyncedDataKeys.AIMING.getValue(player)) {
+                    ModSyncedDataKeys.AIMING.setValue(player, false);
+                    PacketHandler.getPlayChannel().sendToServer(new C2SMessageAim(false));
+                }
+
+                this.localTracker.handleAiming(player, player.getItemInHand(InteractionHand.MAIN_HAND));
+                return;
+            }
+        }
+
         boolean currentKeyPressed = KeyBinds.getAimMapping().isDown();
+
+        if(isReloading) {
+            this.aiming = false;
+            wasKeyPressed = currentKeyPressed;
+            if(ModSyncedDataKeys.AIMING.getValue(player)) {
+                ModSyncedDataKeys.AIMING.setValue(player, false);
+                PacketHandler.getPlayChannel().sendToServer(new C2SMessageAim(false));
+            }
+
+            this.localTracker.handleAiming(player, player.getItemInHand(InteractionHand.MAIN_HAND));
+            return;
+        }
+
         boolean toggleAdsEnabled = Config.COMMON.gameplay.toggleADS.get();
 
         if(toggleAdsEnabled)
@@ -132,6 +163,7 @@ public class AimingHandler
         else
         {
             this.aiming = currentKeyPressed;
+
         }
         wasKeyPressed = currentKeyPressed;
 
@@ -150,7 +182,29 @@ public class AimingHandler
                 this.aiming |= controllerAiming;
             }
         }
-        boolean shouldBeAiming = this.isAiming();
+
+        boolean shouldBeAiming = this.aiming;
+
+        if(shouldBeAiming) {
+            if(heldItem.getItem() instanceof GunItem) {
+                Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
+                GripType gripType = gun.getGeneral().getGripType(heldItem);
+
+                if(!gun.canAimDownSight()) {
+                    shouldBeAiming = false;
+                    this.aiming = false;
+                }
+                else if(gripType == GripType.ONE_HANDED && !player.getOffhandItem().isEmpty()) {
+                    shouldBeAiming = false;
+                    this.aiming = false;
+                }
+            }
+            else {
+                shouldBeAiming = false;
+                this.aiming = false;
+            }
+        }
+
         if(shouldBeAiming)
         {
             if(!ModSyncedDataKeys.AIMING.getValue(player))
@@ -168,8 +222,8 @@ public class AimingHandler
         this.localTracker.handleAiming(player, player.getItemInHand(InteractionHand.MAIN_HAND));
     }
 
-    public boolean isAiming()
-    {
+
+    public boolean isAiming() {
         Minecraft mc = Minecraft.getInstance();
         if(mc.player == null)
             return false;
@@ -180,52 +234,43 @@ public class AimingHandler
         if(Debug.isForceAim())
             return true;
 
-        if(mc.screen != null)
-        {
+        if(mc.screen != null) {
             this.aiming = false;
             return false;
         }
 
-        if(PlayerReviveHelper.isBleeding(mc.player))
-        {
+        if(PlayerReviveHelper.isBleeding(mc.player)) {
             this.aiming = false;
             return false;
         }
 
         ItemStack heldItem = mc.player.getMainHandItem();
-        if(!(heldItem.getItem() instanceof GunItem))
-        {
+        if(!(heldItem.getItem() instanceof GunItem)) {
             this.aiming = false;
             return false;
         }
 
         Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
-        if(!gun.canAimDownSight())
-        {
+        if(!gun.canAimDownSight()) {
             this.aiming = false;
             return false;
         }
 
-        if(mc.player.getOffhandItem().getItem() == Items.SHIELD &&
-                (gun.getGeneral().getGripType(heldItem) == GripType.ONE_HANDED ||
-                        gun.getGeneral().getGripType(heldItem) == GripType.ONE_HANDED_2))
-        {
+        GripType gripType = gun.getGeneral().getGripType(heldItem);
+        if(gripType == GripType.ONE_HANDED && !mc.player.getOffhandItem().isEmpty()) {
             this.aiming = false;
             return false;
         }
 
-        if(!this.localTracker.isAiming() && this.isLookingAtInteractableBlock())
-        {
+        if(!this.localTracker.isAiming() && this.isLookingAtInteractableBlock()) {
             this.aiming = false;
             return false;
         }
 
-        if(ModSyncedDataKeys.RELOADING.getValue(mc.player))
-        {
+        if(ModSyncedDataKeys.RELOADING.getValue(mc.player)) {
             this.aiming = false;
             return false;
         }
-
         return this.aiming;
     }
 
@@ -263,6 +308,7 @@ public class AimingHandler
     public void onClientTick(ClientPlayerNetworkEvent.LoggingOut event)
     {
         this.aimingMap.clear();
+
     }
 
     /**
@@ -291,7 +337,6 @@ public class AimingHandler
                 BlockState state = mc.level.getBlockState(result.getBlockPos());
                 Block block = state.getBlock();
                 // Forge should add a tag for intractable blocks so modders can know which blocks can be interacted with :)
-                return block instanceof EntityBlock || block == ModBlocks.GUN_BENCH .get()||block == ModBlocks.POWERED_MACERATOR .get()||block == ModBlocks.POWERED_MECHANICAL_PRESS .get()||block == ModBlocks.POLAR_GENERATOR .get()||block == ModBlocks.LIGHTNING_BATTERY .get()||block == ModBlocks.MECHANICAL_PRESS .get()|| block == ModBlocks.MACERATOR .get()|| block == Blocks.CRAFTING_TABLE ||  state.is(BlockTags.DOORS) || state.is(BlockTags.TRAPDOORS) || state.is(Tags.Blocks.CHESTS) || state.is(Tags.Blocks.FENCE_GATES);
             }
             else if(mc.hitResult instanceof EntityHitResult result)
             {

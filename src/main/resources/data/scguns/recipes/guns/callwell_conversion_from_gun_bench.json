@@ -5,7 +5,9 @@
     "count": 1
   },
   "ingredients": {
-
+    "blueprint": {
+      "item": "scguns:frontier_blueprint"
+    },
     "gun_internal_1": {
       "item": "scguns:firing_unit"
     },
@@ -13,13 +15,13 @@
       "item": "scguns:gun_parts"
     },
     "gun_barrel_1": {
-      "item": "scguns:gun_barrel"
+      "item": "scguns:heavy_gun_barrel"
     },
     "gun_top_internal_1": {
       "tag": "minecraft:planks"
     },
-    "gun_top_barrel_1": {
-      "item": "scguns:gun_barrel"
+    "gun_top_internal_2": {
+      "tag": "minecraft:planks"
     },
     "gun_grip": {
       "item": "scguns:gun_grip"

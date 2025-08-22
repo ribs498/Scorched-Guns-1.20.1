@@ -1,0 +1,11 @@
+{
+  "item": "scguns:target_tracker_module",
+  "type": "hud",
+  "effects": {
+    "spreadReduction": 0.4,
+    "energyUse": 30
+  },
+  "display": {
+    "model": "target_tracker"
+  }
+}

@@ -1,0 +1,91 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+      "1": "scguns:item/m3_marksman",
+      "particle": "scguns:item/m3_marksman"
+	},
+	"elements": [
+		{
+			"name": "vertical_grip",
+			"from": [7.25, 2.53133, 5.41998],
+			"to": [8.75, 3.53133, 6.91998],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.32633, 7.53373]},
+			"faces": {
+				"north": {"uv": [9, 1.25, 9.375, 1.5], "texture": "#1"},
+				"east": {"uv": [3.5, 9, 3.875, 9.25], "texture": "#1"},
+				"south": {"uv": [9, 3.5, 9.375, 3.75], "texture": "#1"},
+				"west": {"uv": [9, 3.75, 9.375, 4], "texture": "#1"},
+				"up": {"uv": [8.375, 3.875, 8, 3.5], "texture": "#1"},
+				"down": {"uv": [4.125, 8, 3.75, 8.375], "texture": "#1"}
+			}
+		},
+		{
+			"name": "vertical_grip",
+			"from": [7.55, 0.53133, 5.64927],
+			"to": [8.55, 2.53133, 6.64927],
+			"rotation": {"angle": -45, "axis": "y", "origin": [8, 0.91883, 6.09927]},
+			"faces": {
+				"north": {"uv": [0.5, 3.5, 0.75, 4], "texture": "#1"},
+				"east": {"uv": [4, 1.5, 4.25, 2], "texture": "#1"},
+				"south": {"uv": [4.75, 8, 5, 8.5], "texture": "#1"},
+				"west": {"uv": [1.75, 8.25, 2, 8.75], "texture": "#1"},
+				"up": {"uv": [9.5, 3.5, 9.25, 3.25], "texture": "#1"},
+				"down": {"uv": [3.75, 9.25, 3.5, 9.5], "texture": "#1"}
+			}
+		},
+		{
+			"name": "vertical_grip",
+			"from": [7.46, 0.03133, 5.50977],
+			"to": [8.71, 0.53133, 6.75977],
+			"rotation": {"angle": -45, "axis": "y", "origin": [8, 0.86883, 6.04977]},
+			"faces": {
+				"north": {"uv": [9.75, 3.75, 10.125, 3.875], "texture": "#1"},
+				"east": {"uv": [4, 9.75, 4.375, 9.875], "texture": "#1"},
+				"south": {"uv": [9.75, 4, 10.125, 4.125], "texture": "#1"},
+				"west": {"uv": [9.75, 4.25, 10.125, 4.375], "texture": "#1"},
+				"up": {"uv": [8.375, 4.375, 8, 4], "texture": "#1"},
+				"down": {"uv": [4.625, 8, 4.25, 8.375], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.75, -7],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.75, -7],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-4.5, 9.5, -1]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4.5, 9.5, -1]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1, 6.25, 0],
+			"scale": [1.1, 1.1, 1.1]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [1.5, 8.5, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "vertical_grip",
+			"origin": [0, 0.25, -1.25],
+			"color": 5,
+			"children": [0, 1, 2]
+		}
+	]
+}

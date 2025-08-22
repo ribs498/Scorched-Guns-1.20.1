@@ -15,14 +15,14 @@
     "rate": 13,
     "recoilAngle": 26.0,
     "recoilKick": 8.0,
-    "spread": 15.5,
+    "spread": 12.25,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
     "meleeReach": 2.5,
     "hotBarrelRate": 90,
     "criticalChance": 0.05,
     "playerKnockBack": true,
-    "playerKnockBackStrength": 0.25
+    "playerKnockBackStrength": 0.8
   },
   "modules": {
     "attachments": {
@@ -32,26 +32,26 @@
       },
       "scope": {
         "size": 0.8,
-        "yOffset": 5.71,
-        "zOffset": 4.5
+        "yOffset": 5.8,
+        "zOffset": 2.8
       }
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 6.3,
+      "yOffset": 6.1,
       "zOffset": 0.85
     }
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 20.5,
+    "damage": 25.5,
     "ejectsCasing": true,
     "ejectDuringReload": true,
     "gravity": false,
     "item": "scguns:bearpack_shell",
     "casingType": "scguns:medium_brass_casing",
     "casingParticle": "scguns:bearpack_shell",
-    "life": 25,
+    "life": 35,
     "size": 0.05,
     "speed": 4.0,
     "trailLengthMultiplier": 2.0

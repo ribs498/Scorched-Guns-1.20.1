@@ -1,0 +1,15 @@
+{
+  "item": "scguns:heavy_pauldron",
+  "type": "pauldron",
+  "effects": {
+    "recoilAngleReduction": 0.35,
+    "recoilKickReduction": 0.35,
+    "armorBonus": 2.0,
+    "armorToughness": 0.5,
+    "knockbackResistance": 0.15,
+    "speedModifier": -0.02
+  },
+  "display": {
+    "model": "heavy_pauldron"
+  }
+}

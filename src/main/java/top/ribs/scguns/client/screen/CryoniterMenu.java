@@ -11,30 +11,26 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
-import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.blockentity.CryoniterBlockEntity;
-import top.ribs.scguns.item.BlueprintItem;
 
 import java.util.Objects;
 import java.util.Optional;
 
 public class CryoniterMenu extends AbstractContainerMenu {
     private final CryoniterBlockEntity blockEntity;
-    private final ItemStackHandler itemHandler;
 
     public CryoniterMenu(int id, Inventory playerInventory, FriendlyByteBuf extraData) {
-        this(id, playerInventory, Objects.requireNonNull(Minecraft.getInstance().level.getBlockEntity(extraData.readBlockPos())));
+        this(id, playerInventory, Objects.requireNonNull(Minecraft.getInstance().level != null ? Minecraft.getInstance().level.getBlockEntity(extraData.readBlockPos()) : null));
     }
 
     public CryoniterMenu(int id, Inventory playerInventory, BlockEntity entity) {
         super(ModMenuTypes.CRYONITER_MENU.get(), id);
         checkContainerSize(playerInventory, 1);
         blockEntity = (CryoniterBlockEntity) entity;
-        this.itemHandler = blockEntity.getItemHandler();
+        ItemStackHandler itemHandler = blockEntity.getItemHandler();
 
         this.addSlot(new SlotItemHandler(itemHandler, 0, 80, 35));
 
@@ -51,6 +47,7 @@ public class CryoniterMenu extends AbstractContainerMenu {
 
     @Override
     public boolean stillValid(Player player) {
+        assert blockEntity.getLevel() != null;
         return stillValid(ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos()), player, blockEntity.getBlockState().getBlock());
     }
     @Override

@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "create:experience_nugget"
+    },
+    {
+      "item": "scguns:depleted_diamond_steel_ingot"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:diamond_steel_ingot",
+      "count": 1
+    }
+  ]
+}

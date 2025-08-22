@@ -9,20 +9,23 @@
   },
   "general": {
     "alwaysSpread": true,
-    "fireMode": "scguns:semi_automatic",
+    "fireMode": "scguns:burst",
+    "burstAmount": 2,
+    "burstCooldown": 6,
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "projectileAmount": 13,
-    "rate": 3,
-    "recoilAngle": 12.0,
-    "recoilKick": 8.0,
-    "spread": 12.0,
+    "rate": 1,
+    "projectileAmount": 8,
+    "recoilAngle": 8.0,
+    "recoilKick": 3.0,
+    "spread": 4.0,
     "meleeDamage": 6.0,
+    "meleeReach": 3.5,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 25,
+    "hotBarrelRate": 30,
     "criticalChance": 0.1,
     "playerKnockBack": true,
-    "playerKnockBackStrength": 0.25
+    "playerKnockBackStrength": 0.35
   },
   "modules": {
     "attachments": {
@@ -36,11 +39,11 @@
   },
   "projectile": {
     "advantage": "scguns:wither",
-    "damage": 20.0,
+    "damage": 23.0,
     "item": "scguns:shotgun_shell",
     "casingType": "scguns:small_copper_casing",
     "casingParticle": "scguns:shell",
-    "life": 20,
+    "life": 40,
     "size": 0.05,
     "speed": 4.0,
     "trailLengthMultiplier": 2.0
@@ -50,7 +53,7 @@
     "maxAmmo": 2,
     "reloadItem": "scguns:shotgun_shell",
     "reloadTimer": 20,
-    "reloadType": "scguns:manual"
+    "reloadType": "scguns:mag_fed"
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",

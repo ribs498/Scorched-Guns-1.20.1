@@ -10,7 +10,7 @@
       "item": "scguns:gun_magazine"
     },
     "L": {
-      "item": "scguns:firing_unit"
+      "item": "scguns:rapid_firing_unit"
     },
     "R": {
       "item": "scguns:heavy_gun_parts"
@@ -32,7 +32,7 @@
     }
   },
   "pattern": [
-    "MKX ",
+    "MKMX",
     "LRJS",
     "Q C "
   ],

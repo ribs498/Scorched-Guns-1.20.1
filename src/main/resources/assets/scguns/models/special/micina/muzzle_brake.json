@@ -1,0 +1,202 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+      "1": "scguns:item/micina"
+	},
+	"elements": [
+		{
+			"name": "muzzle_brake",
+			"from": [7.50562, 3.81671, 1.62396],
+			"to": [8.59489, 4.90598, 2.29634],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.05025, 4.303, 2.04915]},
+			"faces": {
+				"north": {"uv": [0, 11.5, 0.5, 12], "texture": "#1"},
+				"east": {"uv": [12.5, 3, 12.75, 3.5], "texture": "#1"},
+				"south": {"uv": [11.5, 0, 12, 0.5], "texture": "#1"},
+				"west": {"uv": [12.5, 3.5, 12.75, 4], "texture": "#1"},
+				"up": {"uv": [5, 12.75, 4.5, 12.5], "texture": "#1"},
+				"down": {"uv": [13, 4.5, 12.5, 4.75], "texture": "#1"}
+			}
+		},
+		{
+			"name": "muzzle_brake",
+			"from": [7.31109, 3.6222, 3.78594],
+			"to": [8.78939, 5.10049, 4.22082],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.05025, 4.303, 2.24652]},
+			"faces": {
+				"north": {"uv": [9.5, 3.5, 10.25, 4.25], "texture": "#1"},
+				"east": {"uv": [5, 11.5, 5.25, 12.25], "texture": "#1"},
+				"south": {"uv": [9.5, 4.5, 10.25, 5.25], "texture": "#1"},
+				"west": {"uv": [11.5, 5, 11.75, 5.75], "texture": "#1"},
+				"up": {"uv": [12.25, 3.75, 11.5, 3.5], "texture": "#1"},
+				"down": {"uv": [6.25, 11.5, 5.5, 11.75], "texture": "#1"}
+			}
+		},
+		{
+			"name": "muzzle_brake",
+			"from": [8.29349, 3.6222, 2.50622],
+			"to": [8.78939, 3.6222, 3.78595],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.05025, 4.303, 2.04914]},
+			"faces": {
+				"north": {"uv": [0, 0, 0.25, 0], "texture": "#1"},
+				"east": {"uv": [0, 0, 0.75, 0], "texture": "#1"},
+				"south": {"uv": [0, 0, 0.25, 0], "texture": "#1"},
+				"west": {"uv": [0, 0, 0.75, 0], "texture": "#1"},
+				"up": {"uv": [6.75, 12.25, 6.5, 11.5], "texture": "#1"},
+				"down": {"uv": [11.75, 7, 11.5, 7.75], "texture": "#1"}
+			}
+		},
+		{
+			"name": "muzzle_brake",
+			"from": [8.78939, 3.6222, 2.50622],
+			"to": [8.78939, 4.1181, 3.78595],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.05025, 4.303, 2.04914]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.25], "texture": "#1"},
+				"east": {"uv": [8, 11.5, 8.75, 11.75], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 0.25], "texture": "#1"},
+				"west": {"uv": [11.5, 8, 12.25, 8.25], "texture": "#1"},
+				"up": {"uv": [0, 0.75, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 0.75], "texture": "#1"}
+			}
+		},
+		{
+			"name": "muzzle_brake",
+			"from": [7.22859, 3.6222, 2.50622],
+			"to": [7.72449, 3.6222, 3.78595],
+			"rotation": {"angle": -45, "axis": "z", "origin": [7.96773, 4.303, 2.04914]},
+			"faces": {
+				"north": {"uv": [0, 0, 0.25, 0], "texture": "#1"},
+				"east": {"uv": [0, 0, 0.75, 0], "texture": "#1"},
+				"south": {"uv": [0, 0, 0.25, 0], "texture": "#1"},
+				"west": {"uv": [0, 0, 0.75, 0], "texture": "#1"},
+				"up": {"uv": [11.75, 9.25, 11.5, 8.5], "texture": "#1"},
+				"down": {"uv": [9.25, 11.5, 9, 12.25], "texture": "#1"}
+			}
+		},
+		{
+			"name": "muzzle_brake",
+			"from": [7.22859, 3.6222, 2.50622],
+			"to": [7.22859, 4.1181, 3.78595],
+			"rotation": {"angle": -45, "axis": "z", "origin": [7.96773, 4.303, 2.04914]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.25], "texture": "#1"},
+				"east": {"uv": [9.5, 11.5, 10.25, 11.75], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 0.25], "texture": "#1"},
+				"west": {"uv": [11.5, 9.5, 12.25, 9.75], "texture": "#1"},
+				"up": {"uv": [0, 0.75, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 0.75], "texture": "#1"}
+			}
+		},
+		{
+			"name": "muzzle_brake",
+			"from": [8.74814, 3.60511, 2.50622],
+			"to": [8.74814, 4.10101, 3.78595],
+			"rotation": {"angle": -45, "axis": "z", "origin": [8.009, 4.34426, 3.46908]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.25], "texture": "#1"},
+				"east": {"uv": [11.5, 10, 12.25, 10.25], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 0.25], "texture": "#1"},
+				"west": {"uv": [10.5, 11.5, 11.25, 11.75], "texture": "#1"},
+				"up": {"uv": [0, 0.75, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 0.75], "texture": "#1"}
+			}
+		},
+		{
+			"name": "muzzle_brake",
+			"from": [8.25224, 3.60511, 2.50622],
+			"to": [8.74814, 3.60511, 3.78595],
+			"rotation": {"angle": -45, "axis": "z", "origin": [8.009, 4.34426, 3.46908]},
+			"faces": {
+				"north": {"uv": [0, 0, 0.25, 0], "texture": "#1"},
+				"east": {"uv": [0, 0, 0.75, 0], "texture": "#1"},
+				"south": {"uv": [0, 0, 0.25, 0], "texture": "#1"},
+				"west": {"uv": [0, 0, 0.75, 0], "texture": "#1"},
+				"up": {"uv": [11.75, 11.25, 11.5, 10.5], "texture": "#1"},
+				"down": {"uv": [11.75, 11.5, 11.5, 12.25], "texture": "#1"}
+			}
+		},
+		{
+			"name": "muzzle_brake",
+			"from": [7.26985, 4.83341, 2.50622],
+			"to": [7.76575, 4.83341, 3.78595],
+			"rotation": {"angle": -45, "axis": "z", "origin": [8.009, 4.09426, 3.46908]},
+			"faces": {
+				"north": {"uv": [0, 0, 0.25, 0], "texture": "#1"},
+				"east": {"uv": [0, 0, 0.75, 0], "texture": "#1"},
+				"south": {"uv": [0, 0, 0.25, 0], "texture": "#1"},
+				"west": {"uv": [0, 0, 0.75, 0], "texture": "#1"},
+				"up": {"uv": [0.25, 12.75, 0, 12], "texture": "#1"},
+				"down": {"uv": [12.25, 0, 12, 0.75], "texture": "#1"}
+			}
+		},
+		{
+			"name": "muzzle_brake",
+			"from": [7.26985, 4.33751, 2.50622],
+			"to": [7.26985, 4.83341, 3.78595],
+			"rotation": {"angle": -45, "axis": "z", "origin": [8.009, 4.09426, 3.46908]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.25], "texture": "#1"},
+				"east": {"uv": [0.5, 12, 1.25, 12.25], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 0.25], "texture": "#1"},
+				"west": {"uv": [12, 2, 12.75, 2.25], "texture": "#1"},
+				"up": {"uv": [0, 0.75, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 0.75], "texture": "#1"}
+			}
+		},
+		{
+			"name": "muzzle_brake",
+			"from": [7.31109, 3.6222, 2.07135],
+			"to": [8.78939, 5.10049, 2.50622],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.05025, 4.303, 2.49652]},
+			"faces": {
+				"north": {"uv": [9.5, 5.5, 10.25, 6.25], "texture": "#1"},
+				"east": {"uv": [1.5, 12, 1.75, 12.75], "texture": "#1"},
+				"south": {"uv": [6, 9.5, 6.75, 10.25], "texture": "#1"},
+				"west": {"uv": [3.5, 12, 3.75, 12.75], "texture": "#1"},
+				"up": {"uv": [12.75, 2.75, 12, 2.5], "texture": "#1"},
+				"down": {"uv": [12.75, 4, 12, 4.25], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.75, -9],
+			"scale": [1.4, 1.4, 1.4]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.75, -9],
+			"scale": [1.4, 1.4, 1.4]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 9.75, -0.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.25, 9.75, -0.5]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1, 5, 0],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"fixed": {
+			"rotation": [-90, 90, 90],
+			"translation": [-3, 9.5, 0],
+			"scale": [2, 2, 2]
+		}
+	},
+	"groups": [
+		{
+			"name": "muzzle_brake",
+			"origin": [0.0625, -5.6, -5.4],
+			"color": 1,
+			"children": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+		}
+	]
+}

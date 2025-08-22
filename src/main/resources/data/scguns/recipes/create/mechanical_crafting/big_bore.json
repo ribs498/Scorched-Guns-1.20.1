@@ -21,7 +21,7 @@
   "pattern": [
     "LSSS",
     "RSSS",
-    "Q C "
+    "Q CX"
   ],
   "result": {
     "item": "scguns:big_bore"

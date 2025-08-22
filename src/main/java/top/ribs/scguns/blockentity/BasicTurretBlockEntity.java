@@ -1,5 +1,6 @@
 package top.ribs.scguns.blockentity;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -44,6 +45,7 @@ import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.block.*;
 import top.ribs.scguns.client.screen.BasicTurretMenu;
+import top.ribs.scguns.client.screen.ShotgunTurretMenu;
 import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.entity.projectile.turret.TurretProjectileEntity;
 import top.ribs.scguns.init.*;
@@ -86,7 +88,7 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
     public static final float RECOIL_MAX = 4.0F;
     private static final float RECOIL_SPEED = 0.3F;
     public float recoilPitchOffset = 0.0F;
-    private static final double MINIMUM_FIRING_DISTANCE = 1.3;
+    private static final double MINIMUM_FIRING_DISTANCE = 1.7;
     private static final int DAMAGE_INCREASE = 2;
     private static final double RANGE_INCREASE = 8.0;
 
@@ -112,9 +114,26 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
         return Component.translatable("container.basic_turret");
     }
 
-    @Nullable
-    @Override
     public AbstractContainerMenu createMenu(int id, @NotNull Inventory playerInventory, @NotNull Player player) {
+        boolean hasTargetingModule = false;
+        if (this.level != null) {
+            for (Direction direction : Direction.values()) {
+                BlockState blockState = this.level.getBlockState(this.worldPosition.relative(direction));
+                if (blockState.getBlock() instanceof TurretTargetingBlock) {
+                    hasTargetingModule = true;
+                    break;
+                }
+            }
+        }
+
+        if (!hasTargetingModule) {
+            if (this.level != null && !this.level.isClientSide) {
+                player.sendSystemMessage(Component.translatable("message.scguns.turret_needs_targeting_module")
+                        .withStyle(ChatFormatting.YELLOW));
+            }
+            return null;
+        }
+
         return new BasicTurretMenu(id, playerInventory, this);
     }
     public static <T extends BlockEntity> void tick(Level level, BlockPos pos, BlockState state, T t) {
@@ -140,7 +159,7 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
                     turret.disableCooldown = 0;
                 }
                 turret.resetToRestPosition();
-            } else if (state.getValue(BasicTurretBlock.POWERED)) {
+            } else if (!state.getValue(BasicTurretBlock.POWERED)) {
                 turret.updateTargetRange(rangeModifier);
                 if (!turret.isTargetValid()) {
                     turret.target = null;

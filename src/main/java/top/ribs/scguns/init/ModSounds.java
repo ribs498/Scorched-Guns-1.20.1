@@ -26,11 +26,17 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> COPPER_GUN_JAM = register("item.rusty_gnat.copper_jam");
     public static final RegistryObject<SoundEvent> BLACKPOWDER_FIRE = register("item.blackpowder.fire");
     public static final RegistryObject<SoundEvent> PING = register("item.ping.ping");
+    public static final RegistryObject<SoundEvent> JETPACK = register("item.jetpack.fire");
+    public static final RegistryObject<SoundEvent> JETPACK_LOOP = register("item.jetpack.loop");
+    public static final RegistryObject<SoundEvent> OLD_RIFLE_FIRE = register("item.old_rifle.fire");
+    public static final RegistryObject<SoundEvent> HEAVY_RIFLE_2_FIRE = register("item.heavy_rifle_2.fire");
+    public static final RegistryObject<SoundEvent> MACHINE_GUN_FIRE = register("item.machine_gun.fire");
     public static final RegistryObject<SoundEvent> WITHER = register("item.wither.wither");
     public static final RegistryObject<SoundEvent> AIRGUN_FIRE = register("item.airgun.fire");
     public static final RegistryObject<SoundEvent> BEAM_FIRE = register("item.beam.fire");
     public static final RegistryObject<SoundEvent> BRUISER_SILENCED_FIRE = register("item.bruiser.silenced_fire");
     public static final RegistryObject<SoundEvent> MAKESHIFT_RIFLE_FIRE = register("item.makeshift_rifle.fire");
+    public static final RegistryObject<SoundEvent> REVOLVER_FIRE = register("item.revolver.fire");
     public static final RegistryObject<SoundEvent> COWBOY_FIRE = register("item.cowboy.fire");
     public static final RegistryObject<SoundEvent> SHOCK_FIRE = register("item.shock.fire");
     public static final RegistryObject<SoundEvent> SHULKER_FIRE = register("item.shulker.fire");
@@ -45,7 +51,8 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> COMBAT_SHOTGUN_FIRE = register("item.combat_shotgun.fire");
     public static final RegistryObject<SoundEvent> COMBAT_SHOTGUN_SILENCED_FIRE = register("item.combat_shotgun.silenced_fire");
     public static final RegistryObject<SoundEvent> BRUISER_FIRE = register("item.bruiser.fire");
-
+    public static final RegistryObject<SoundEvent> CANNON_FIRE = register("item.cannon.fire");
+    public static final RegistryObject<SoundEvent> CANNON_RELOAD = register("item.cannon.reload");
     public static final RegistryObject<SoundEvent> MAKESHIFT_RIFLE_SILENCED_FIRE = register("item.makeshift_rifle.silenced_fire");
     public static final RegistryObject<SoundEvent> MAKESHIFT_RIFLE_COCK = register("item.makeshift_rifle.cock");
     public static final RegistryObject<SoundEvent> SCRAPPER_FIRE = register("item.scrapper.fire");

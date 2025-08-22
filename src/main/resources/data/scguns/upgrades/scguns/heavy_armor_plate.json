@@ -1,0 +1,12 @@
+{
+  "type": "plating",
+  "effects": {
+    "armorBonus": 4.0,
+    "armorToughness": 1.0,
+    "knockbackResistance": 0.25,
+    "speedModifier": -0.05
+  },
+  "display": {
+    "model": "heavy"
+  }
+}

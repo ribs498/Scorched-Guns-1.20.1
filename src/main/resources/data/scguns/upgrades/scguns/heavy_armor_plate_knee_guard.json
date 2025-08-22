@@ -1,0 +1,12 @@
+{
+  "type": "knee_guard",
+  "effects": {
+    "armorBonus": 2.5,
+    "armorToughness": 0.6,
+    "knockbackResistance": 0.15,
+    "speedModifier": -0.025
+  },
+  "display": {
+    "model": "heavy"
+  }
+}

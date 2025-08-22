@@ -25,9 +25,6 @@
     },
     "gun_grip": {
       "item": "scguns:gun_grip"
-    },
-    "gun_magazine": {
-      "item": "scguns:gun_magazine"
     }
   }
 }

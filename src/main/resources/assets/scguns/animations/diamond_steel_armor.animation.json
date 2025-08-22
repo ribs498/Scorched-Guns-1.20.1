@@ -1,0 +1,11 @@
+{
+	"format_version": "1.8.0",
+	"animations": {
+		"animation.diamond_steel_armor.idle": {
+			"loop": true,
+			"animation_length": 1.0,
+			"bones": {}
+		}
+	},
+	"geckolib_format_version": 2
+}

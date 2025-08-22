@@ -23,6 +23,7 @@ import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.client.handler.ReloadHandler;
+import top.ribs.scguns.common.exosuit.ExoSuitAmmoHelper;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.AmmoBoxItem;
 import top.ribs.scguns.item.GunItem;
@@ -30,6 +31,7 @@ import top.ribs.scguns.item.ammo_boxes.CreativeAmmoBoxItem;
 import top.ribs.scguns.item.animated.AnimatedGunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageGunSound;
+import top.ribs.scguns.network.message.S2CMessageStopReload;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
 import top.theillusivec4.curios.api.CuriosApi;
@@ -54,8 +56,6 @@ public class ReloadTracker {
     private final int slot;
     private final ItemStack stack;
     private final Gun gun;
-    private int currentBulletReloadTick = 0;
-    private boolean initialReload = true;
 
     public ReloadTracker(Player player) {
         this.startTick = player.tickCount;
@@ -64,40 +64,41 @@ public class ReloadTracker {
         this.gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
     }
 
-    private boolean isSameWeapon(Player player) {
-        return this.stack.isEmpty() || player.getInventory().selected != this.slot || player.getInventory().getSelected() != this.stack;
-    }
-    private void handleReloadByproduct(Player player) {
-        Item byproduct = this.gun.getReloads().getReloadByproduct();
-        if (byproduct != null) {
-            ItemStack byproductStack = new ItemStack(byproduct);
-            boolean added = player.getInventory().add(byproductStack);
-            if (!added) {
-                Level level = player.level();
-                double x = player.getX();
-                double y = player.getY();
-                double z = player.getZ();
-                ItemEntity itemEntity = new ItemEntity(level, x, y, z, byproductStack);
-                itemEntity.setDeltaMovement(
-                        level.random.nextDouble() * 0.2 - 0.1,
-                        0.2,
-                        level.random.nextDouble() * 0.2 - 0.1
-                );
-                level.addFreshEntity(itemEntity);
-            }
-        }
-    }
-    public boolean isWeaponFull() {
-        CompoundTag tag = this.stack.getOrCreateTag();
-        boolean full = tag.getInt("AmmoCount") >= GunModifierHelper.getModifiedAmmoCapacity(this.stack, this.gun);
 
-        if (full) {
-            boolean playingStop = tag.getBoolean("IsPlayingReloadStop");
-            if (!playingStop) {
-                tag.putBoolean("IsPlayingReloadStop", true);
+    private void handleReloadByproduct(Player player) {
+        if (this.gun.getReloads().getReloadType() != ReloadType.SINGLE_ITEM) {
+            return;
+        }
+
+        if (this.gun.getReloads().shouldGiveByproduct(player.level().getRandom(), this.stack)) {
+            Item byproduct = this.gun.getReloads().getReloadByproduct();
+            if (byproduct != null) {
+                ItemStack byproductStack = new ItemStack(byproduct);
+
+                boolean added = player.getInventory().add(byproductStack);
+                if (!added) {
+                    Level level = player.level();
+                    double x = player.getX();
+                    double y = player.getY();
+                    double z = player.getZ();
+                    ItemEntity itemEntity = new ItemEntity(level, x, y, z, byproductStack);
+                    itemEntity.setDeltaMovement(
+                            level.random.nextDouble() * 0.2 - 0.1,
+                            0.2,
+                            level.random.nextDouble() * 0.2 - 0.1
+                    );
+                    level.addFreshEntity(itemEntity);
+                }
             }
         }
-        return full;
+    }
+
+    public boolean isWeaponFull(Player player) {
+        ItemStack currentStack = player.getMainHandItem();
+        CompoundTag tag = currentStack.getOrCreateTag();
+        int currentAmmo = tag.getInt("AmmoCount");
+        int maxAmmo = GunModifierHelper.getModifiedAmmoCapacity(currentStack, this.gun);
+        return currentAmmo >= maxAmmo;
     }
 
     private boolean isWeaponEmpty() {
@@ -105,42 +106,29 @@ public class ReloadTracker {
         return tag.getInt("AmmoCount") == 0;
     }
 
-    private boolean hasNoAmmo(Player player) {
+    public boolean hasNoAmmo(Player player) {
+        boolean result;
         if (gun.getReloads().getReloadType() == ReloadType.SINGLE_ITEM) {
-            return Gun.findAmmo(player, this.gun.getReloads().getReloadItem()).stack().isEmpty();
+            result = Gun.findAmmo(player, this.gun.getReloads().getReloadItem()).stack().isEmpty();
+        } else {
+            result = Gun.findAmmo(player, this.gun.getProjectile().getItem()).stack().isEmpty();
         }
-        return Gun.findAmmo(player, this.gun.getProjectile().getItem()).stack().isEmpty();
+        return result;
     }
+
     private boolean canReload(Player player) {
-        if (stack.getItem() instanceof AnimatedGunItem) {
-            return false;
+        if (gun.getReloads().getReloadType() == ReloadType.MANUAL) {
+            return true;
         }
 
         int deltaTicks = player.tickCount - this.startTick;
         double reloadSpeed = Objects.requireNonNull(player.getAttribute(SCAttributes.RELOAD_SPEED.get())).getValue();
-        if (gun.getReloads().getReloadType() == ReloadType.MAG_FED) {
-            int reloadTime = (int) Math.ceil((double)GunEnchantmentHelper.getMagReloadSpeed(this.stack)/reloadSpeed);
-            return deltaTicks >= reloadTime;
-        } else if (gun.getReloads().getReloadType() == ReloadType.MANUAL) {
-            if (this.initialReload) {
-                this.initialReload = false;
-                this.currentBulletReloadTick = GunEnchantmentHelper.getReloadInterval(this.stack);
-                this.currentBulletReloadTick = (int) Math.ceil((double)currentBulletReloadTick/reloadSpeed);
-                return false;
-            } else if (currentBulletReloadTick <= 0) {
-                currentBulletReloadTick = GunEnchantmentHelper.getReloadInterval(this.stack);
-                return true;
-            } else {
-                currentBulletReloadTick -= 1;
-                return false;
-            }
-        } else {
-            int interval = (gun.getReloads().getReloadType() == ReloadType.SINGLE_ITEM) ?
-                    (int) Math.ceil((double)GunEnchantmentHelper.getMagReloadSpeed(this.stack)/reloadSpeed) :
-                    (int) Math.ceil((double)GunEnchantmentHelper.getReloadInterval(this.stack)/reloadSpeed);
-            return deltaTicks >= interval;
-        }
+        int interval = (gun.getReloads().getReloadType() == ReloadType.SINGLE_ITEM) ?
+                (int) Math.ceil((double) GunEnchantmentHelper.getMagReloadSpeed(this.stack) / reloadSpeed) :
+                (int) Math.ceil((double) GunEnchantmentHelper.getReloadInterval(this.stack) / reloadSpeed);
+        return deltaTicks >= interval;
     }
+
     public static int ammoInInventory(ItemStack[] ammoStack) {
         int result = 0;
         for (ItemStack x : ammoStack) {
@@ -151,6 +139,17 @@ public class ReloadTracker {
 
     private void shrinkFromAmmoPool(ItemStack[] ammoStack, Player player, int shrinkAmount) {
         final int[] shrinkAmt = {shrinkAmount};
+
+        int exoSuitShrinkAmount = Math.min(shrinkAmt[0], ExoSuitAmmoHelper.getAmmoCountInExoSuit(player, gun.getProjectile().getItem()));
+        if (exoSuitShrinkAmount > 0) {
+            ExoSuitAmmoHelper.shrinkAmmoInExoSuit(player, gun.getProjectile().getItem(), exoSuitShrinkAmount);
+            shrinkAmt[0] -= exoSuitShrinkAmount;
+
+            if (shrinkAmt[0] == 0) {
+                return;
+            }
+        }
+
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
             for (int i = 0; i < curios.getSlots(); i++) {
@@ -173,7 +172,6 @@ public class ReloadTracker {
             }
         });
 
-        // Shrink from inventory
         for (ItemStack itemStack : player.getInventory().items) {
             if (itemStack.getItem() instanceof AmmoBoxItem) {
                 List<ItemStack> contents = AmmoBoxItem.getContents(itemStack).collect(Collectors.toList());
@@ -192,16 +190,70 @@ public class ReloadTracker {
             }
         }
 
-        // Shrink from direct ammo stacks
-        for (ItemStack x : ammoStack) {
-            if (!x.isEmpty()) {
-                int max = Math.min(shrinkAmt[0], x.getCount());
-                x.shrink(max);
+        for (ItemStack itemStack : ammoStack) {
+            if (shrinkAmt[0] > 0 && !itemStack.isEmpty() && itemStack.getItem() == gun.getProjectile().getItem()) {
+                int max = Math.min(shrinkAmt[0], itemStack.getCount());
+                itemStack.shrink(max);
                 shrinkAmt[0] -= max;
-                if (shrinkAmt[0] == 0) {
-                    return;
+            }
+        }
+    }
+
+    private void shrinkFromAmmoPool(ItemStack ammoStack, Player player, int shrinkAmount) {
+        final int[] shrinkAmt = {shrinkAmount};
+
+        int exoSuitShrinkAmount = Math.min(shrinkAmt[0], ExoSuitAmmoHelper.getAmmoCountInExoSuit(player, gun.getProjectile().getItem()));
+        if (exoSuitShrinkAmount > 0) {
+            ExoSuitAmmoHelper.shrinkAmmoInExoSuit(player, gun.getProjectile().getItem(), exoSuitShrinkAmount);
+            shrinkAmt[0] -= exoSuitShrinkAmount;
+
+            if (shrinkAmt[0] == 0) {
+                return;
+            }
+        }
+
+        CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
+            IItemHandlerModifiable curios = handler.getEquippedCurios();
+            for (int i = 0; i < curios.getSlots(); i++) {
+                ItemStack stack = curios.getStackInSlot(i);
+                if (stack.getItem() instanceof AmmoBoxItem) {
+                    List<ItemStack> contents = AmmoBoxItem.getContents(stack).collect(Collectors.toList());
+                    for (ItemStack pouchAmmoStack : contents) {
+                        if (!pouchAmmoStack.isEmpty() && pouchAmmoStack.getItem() == gun.getProjectile().getItem()) {
+                            int max = Math.min(shrinkAmt[0], pouchAmmoStack.getCount());
+                            pouchAmmoStack.shrink(max);
+                            shrinkAmt[0] -= max;
+                            if (shrinkAmt[0] == 0) {
+                                updateAmmoPouchContents(stack, contents);
+                                return;
+                            }
+                        }
+                    }
+                    updateAmmoPouchContents(stack, contents);
                 }
             }
+        });
+        for (ItemStack itemStack : player.getInventory().items) {
+            if (itemStack.getItem() instanceof AmmoBoxItem) {
+                List<ItemStack> contents = AmmoBoxItem.getContents(itemStack).collect(Collectors.toList());
+                for (ItemStack pouchAmmoStack : contents) {
+                    if (!pouchAmmoStack.isEmpty() && pouchAmmoStack.getItem() == gun.getProjectile().getItem()) {
+                        int max = Math.min(shrinkAmt[0], pouchAmmoStack.getCount());
+                        pouchAmmoStack.shrink(max);
+                        shrinkAmt[0] -= max;
+                        if (shrinkAmt[0] == 0) {
+                            updateAmmoPouchContents(itemStack, contents);
+                            return;
+                        }
+                    }
+                }
+                updateAmmoPouchContents(itemStack, contents);
+            }
+        }
+        if (shrinkAmt[0] > 0 && !ammoStack.isEmpty() && ammoStack.getItem() == gun.getProjectile().getItem()) {
+            int max = Math.min(shrinkAmt[0], ammoStack.getCount());
+            ammoStack.shrink(max);
+            shrinkAmt[0] -= max;
         }
     }
 
@@ -214,6 +266,7 @@ public class ReloadTracker {
         }
         ammoPouch.getOrCreateTag().put(AmmoBoxItem.TAG_ITEMS, listTag);
     }
+
     public void increaseMagAmmo(Player player) {
         ItemStack[] ammoStack = Gun.findAmmoStack(player, this.gun.getProjectile().getItem());
         if (ammoStack.length > 0) {
@@ -258,23 +311,29 @@ public class ReloadTracker {
 
                 if (currentAmmo < maxAmmo) {
                     tag.putInt("AmmoCount", maxAmmo);
-                    // Use shrinkFromAmmoPool to handle ammo boxes properly
                     this.shrinkFromAmmoPool(ammoStacks, player, 1);
+                    handleReloadByproduct(player);
                 }
             }
             playReloadSound(player);
         }
     }
+
     public void increaseAmmo(Player player) {
         AmmoContext context = Gun.findAmmo(player, this.gun.getProjectile().getItem());
         ItemStack ammo = context.stack();
+
         if (!ammo.isEmpty()) {
             int amount = Math.min(ammo.getCount(), this.gun.getReloads().getReloadAmount());
-            CompoundTag tag = this.stack.getTag();
+            ItemStack currentStack = player.getMainHandItem();
+            CompoundTag tag = currentStack.getTag();
+
             if (tag != null) {
-                int maxAmmo = GunModifierHelper.getModifiedAmmoCapacity(this.stack, this.gun);
-                amount = Math.min(amount, maxAmmo - tag.getInt("AmmoCount"));
-                tag.putInt("AmmoCount", tag.getInt("AmmoCount") + amount);
+                int maxAmmo = GunModifierHelper.getModifiedAmmoCapacity(currentStack, this.gun);
+                int currentAmmo = tag.getInt("AmmoCount");
+                amount = Math.min(amount, maxAmmo - currentAmmo);
+                tag.putInt("AmmoCount", currentAmmo + amount);
+
             }
             shrinkFromAmmoPool(Gun.findAmmoStack(player, this.gun.getProjectile().getItem()), player, amount);
         }
@@ -299,110 +358,85 @@ public class ReloadTracker {
 
     @SubscribeEvent
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase == TickEvent.Phase.START && !event.player.level().isClientSide) {
-            Player player = event.player;
+        if (event.phase != TickEvent.Phase.START) {
+            return;
+        }
+        Player player = event.player;
+        if (player.level().isClientSide) {
+            return;
+        }
+        if (ModSyncedDataKeys.RELOADING.getValue(player)) {
+            ItemStack heldItem = player.getMainHandItem();
+            if (heldItem.getItem() instanceof GunItem gunItem) {
+                Gun gun = gunItem.getModifiedGun(heldItem);
 
-            if (ModSyncedDataKeys.RELOADING.getValue(player)) {
-                ItemStack heldItem = player.getMainHandItem();
-                if (heldItem.getItem() instanceof GunItem gunItem) {
-                    Gun gun = gunItem.getModifiedGun(heldItem);
-
-                    if (gun.getReloads().getReloadType() != ReloadType.MANUAL) {
-                        CompoundTag tag = heldItem.getOrCreateTag();
-
-                        if (tag.getBoolean("scguns:PausedDuringReload")) {
-                            RELOAD_TRACKER_MAP.remove(player);
-                            ModSyncedDataKeys.RELOADING.setValue(player, false);
-                            tag.remove("IsReloading");
-                            tag.remove("scguns:PausedDuringReload");
-                            return;
-                        }
+                if (gun.getReloads().getReloadType() != ReloadType.MANUAL) {
+                    CompoundTag tag = heldItem.getOrCreateTag();
+                    if (tag.getBoolean("scguns:PausedDuringReload")) {
+                        RELOAD_TRACKER_MAP.remove(player);
+                        ModSyncedDataKeys.RELOADING.setValue(player, false);
+                        tag.remove("IsReloading");
+                        tag.remove("scguns:PausedDuringReload");
+                        return;
                     }
                 }
-            }
-            CompoundTag tag = player.getMainHandItem().getTag();
 
-            ItemStack heldItem = player.getMainHandItem();
+                CompoundTag tag = heldItem.getOrCreateTag();
 
-            if (!(heldItem.getItem().getClass().getPackageName().startsWith("top.ribs.scguns"))) {
-                return;
-            }
-            if (ModSyncedDataKeys.RELOADING.getValue(player)) {
-                if (!RELOAD_TRACKER_MAP.containsKey(player)) {
+                if (!(heldItem.getItem().getClass().getPackageName().startsWith("top.ribs.scguns"))) {
+                    return;
+                }
+
+                ReloadTracker tracker = RELOAD_TRACKER_MAP.get(player);
+
+                boolean needsNewTracker = false;
+                if (tracker == null) {
+                    needsNewTracker = true;
+                } else {
+                    ItemStack currentWeapon = player.getInventory().getSelected();
+                    int currentSlot = player.getInventory().selected;
+                    boolean isActivelyReloading = ModSyncedDataKeys.RELOADING.getValue(player);
+
+                    if (!isActivelyReloading && (tracker.slot != currentSlot ||
+                            currentWeapon.isEmpty() ||
+                            !currentWeapon.getItem().getClass().equals(tracker.stack.getItem().getClass()))) {
+                        needsNewTracker = true;
+                        RELOAD_TRACKER_MAP.remove(player);
+                    }
+                }
+
+                if (needsNewTracker) {
                     if (!(player.getInventory().getSelected().getItem() instanceof GunItem)) {
                         ModSyncedDataKeys.RELOADING.setValue(player, false);
                         return;
                     }
 
-                    RELOAD_TRACKER_MAP.put(player, new ReloadTracker(player));
+                    tracker = new ReloadTracker(player);
+                    RELOAD_TRACKER_MAP.put(player, tracker);
                 }
-
-                ReloadTracker tracker = RELOAD_TRACKER_MAP.get(player);
-                if (tracker.isSameWeapon(player) || tracker.isWeaponFull() || tracker.hasNoAmmo(player)) {
+                boolean weaponFull = tracker.isWeaponFull(player);
+                boolean hasNoAmmo = tracker.hasNoAmmo(player);
+                if (weaponFull || hasNoAmmo) {
                     RELOAD_TRACKER_MAP.remove(player);
                     ModSyncedDataKeys.RELOADING.setValue(player, false);
-                    if (tag != null) {
-                        tag.remove("IsReloading");
-                    }
-                    return;
-                }
-
-                if (tracker.canReload(player)) {
-                    Gun gun = tracker.gun;
-                    ReloadType reloadType = gun.getReloads().getReloadType();
-
-                    if (reloadType == ReloadType.MANUAL) {
-                        tracker.increaseAmmo(player);
-                    } else if (reloadType == ReloadType.MAG_FED) {
-                        if (!(player.getMainHandItem().getItem() instanceof AnimatedGunItem)) {
-                            if (gun.getReloads().getReloadType() == ReloadType.MAG_FED) {
-                                tracker.increaseMagAmmo(player);
-                                RELOAD_TRACKER_MAP.remove(player);
-                                ModSyncedDataKeys.RELOADING.setValue(player, false);
-                                if (tag != null) {
-                                    tag.remove("IsReloading");
-                                }
-                            }
-                        } else {
-                            tracker.increaseMagAmmo(player);
-                        }
-                    } else if (reloadType == ReloadType.SINGLE_ITEM) {
-                        tracker.reloadItem(player);
-                    }
-
-                    if (tracker.hasNoAmmo(player) ||
-                            (tracker.isWeaponFull() && tracker.gun.getReloads().getReloadType() != ReloadType.MANUAL)) {
-                        if (player.getMainHandItem().getItem() instanceof AnimatedGunItem) {
-                            long id = GeoItem.getId(player.getMainHandItem());
-                            AnimationController<GeoAnimatable> animationController = ((AnimatedGunItem)player.getMainHandItem().getItem())
-                                    .getAnimatableInstanceCache()
-                                    .getManagerForId(id)
-                                    .getAnimationControllers()
-                                    .get("controller");
-
-                            animationController.setAnimationSpeed(1.0);
-                            animationController.forceAnimationReset();
-
-                            if (tracker.gun.getReloads().getReloadType() == ReloadType.MANUAL) {
-                                ReloadHandler.loaded(player);
-                            }
-                        }
-                        tracker.handleReloadByproduct(player);
-                        RELOAD_TRACKER_MAP.remove(player);
-                        ModSyncedDataKeys.RELOADING.setValue(player, false);
-                        if (tag != null) {
-                            tag.remove("IsReloading");
-                        }
-                    }
-                }
-            } else {
-                RELOAD_TRACKER_MAP.remove(player);
-                if (tag != null) {
                     tag.remove("IsReloading");
+                    tag.remove("scguns:IsReloading");
+                    if (player.getMainHandItem().getItem() instanceof AnimatedGunItem) {
+                        tag.putString("scguns:ReloadState", "STOPPING");
+                        tag.putBoolean("scguns:IsPlayingReloadStop", true);
+                        PacketHandler.getPlayChannel().sendToPlayer(() -> (ServerPlayer) player, new S2CMessageStopReload());
+                    }
                 }
+            }
+        } else {
+            RELOAD_TRACKER_MAP.remove(player);
+            CompoundTag tag = player.getMainHandItem().getTag();
+            if (tag != null) {
+                tag.remove("IsReloading");
             }
         }
     }
+
 
     public static void loaded(Player player) {
         ItemStack heldItem = player.getMainHandItem();
@@ -428,9 +462,19 @@ public class ReloadTracker {
         }
 
         ReloadTracker tracker = RELOAD_TRACKER_MAP.get(player);
-        if (tracker.isSameWeapon(player) ||
+
+        boolean weaponChanged = false;
+        ItemStack currentWeapon = player.getInventory().getSelected();
+        int currentSlot = player.getInventory().selected;
+        if (tracker.slot != currentSlot ||
+                !currentWeapon.getItem().equals(tracker.stack.getItem()) ||
+                currentWeapon.isEmpty()) {
+            weaponChanged = true;
+        }
+
+        if (weaponChanged ||
                 tracker.hasNoAmmo(player) ||
-                (tracker.isWeaponFull() && tracker.gun.getReloads().getReloadType() != ReloadType.MANUAL)) {
+                (tracker.isWeaponFull(player) && tracker.gun.getReloads().getReloadType() != ReloadType.MANUAL)) {
             RELOAD_TRACKER_MAP.remove(player);
             ModSyncedDataKeys.RELOADING.setValue(player, false);
             if (tag != null) {
@@ -465,7 +509,7 @@ public class ReloadTracker {
                     tracker.increaseAmmo(player);
                 }
 
-                if (tracker.isWeaponFull() || tracker.hasNoAmmo(player)) {
+                if (tracker.isWeaponFull(player) || tracker.hasNoAmmo(player)) {
                     long id = GeoItem.getId(player.getMainHandItem());
                     AnimationController<GeoAnimatable> animationController = gunItem.getAnimatableInstanceCache()
                             .getManagerForId(id)
@@ -488,5 +532,4 @@ public class ReloadTracker {
             }
         }
     }
-
 }

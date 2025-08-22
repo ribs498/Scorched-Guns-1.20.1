@@ -1,0 +1,41 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "C": {
+      "item": "minecraft:iron_ingot"
+    },
+    "L": {
+      "item": "scguns:rapid_firing_unit"
+    },
+    "R": {
+      "item": "scguns:gun_parts"
+    },
+    "S": {
+      "item": "scguns:gun_barrel"
+    },
+    "X": {
+      "item": "scguns:gun_magazine"
+    },
+    "V": {
+      "item": "scguns:treated_iron_gun_frame"
+    },
+    "P": {
+      "item": "scguns:wrecker_blueprint"
+    },
+    "K": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "CVP ",
+    "LRKS",
+    "X Q "
+  ],
+  "result": {
+    "item": "scguns:kalaskah"
+  }
+}

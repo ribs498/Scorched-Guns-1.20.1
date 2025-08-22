@@ -16,10 +16,13 @@
     },
     "S": {
       "item": "scguns:gun_barrel"
+    },
+    "X": {
+      "item": "minecraft:iron_ingot"
     }
   },
   "pattern": [
-    "C SS ",
+    "CXSS ",
     "LRSS ",
     "Q C  "
   ],

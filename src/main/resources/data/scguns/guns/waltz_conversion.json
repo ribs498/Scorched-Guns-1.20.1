@@ -23,7 +23,7 @@
     "enchantedSecondaryBeamColor": "#ff7fc3",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 8,
+    "rate": 7,
     "recoilAngle": 2.7,
     "recoilKick": 1.0,
     "spread": 2.0,
@@ -65,6 +65,7 @@
     "maxAmmo": 12,
     "reloadItem": "scguns:energy_core",
     "reloadByproduct": "scguns:depleted_energy_core",
+    "byproductChance": 0.55,
     "reloadTimer": 20,
     "reloadType": "scguns:single_item"
   },

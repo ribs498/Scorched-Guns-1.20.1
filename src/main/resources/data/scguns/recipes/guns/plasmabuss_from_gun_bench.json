@@ -5,7 +5,9 @@
     "count": 1
   },
   "ingredients": {
-
+    "blueprint": {
+      "item": "scguns:antique_blueprint"
+    },
     "gun_internal_1": {
       "item": "scguns:plasma_core"
     },

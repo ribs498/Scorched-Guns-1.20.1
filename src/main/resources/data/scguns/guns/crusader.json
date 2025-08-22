@@ -44,7 +44,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 3,
+    "maxAmmo": 4,
     "reloadItem": "scguns:syringe",
     "reloadTimer": 30,
     "reloadType": "scguns:mag_fed"

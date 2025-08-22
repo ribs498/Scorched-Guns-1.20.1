@@ -154,12 +154,16 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
             if (side == null) {
                 return lazyItemHandler.cast();
-            } else if (side == Direction.DOWN) {
+            }
+
+            Direction blockFacing = getBlockState().getValue(MechanicalPressBlock.FACING);
+
+            if (side == Direction.DOWN) {
                 return LazyOptional.of(() -> new OutputItemHandler(itemHandler)).cast();
-            } else if (side == Direction.UP) {
-                return LazyOptional.of(() -> new TopItemHandler(itemHandler)).cast();
-            } else {
+            } else if (side == blockFacing.getOpposite()) {
                 return LazyOptional.of(() -> new FuelItemHandler(itemHandler)).cast();
+            } else {
+                return LazyOptional.of(() -> new TopItemHandler(itemHandler)).cast();
             }
         }
         return super.getCapability(cap, side);
@@ -297,11 +301,11 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
         return false;
     }
     private void craftItem() {
-        SimpleContainer inventory = new SimpleContainer(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 2); // Add one for the mold slot
+        SimpleContainer inventory = new SimpleContainer(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 2);
         for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
             inventory.setItem(i - FIRST_INPUT_SLOT, itemHandler.getStackInSlot(i));
         }
-        inventory.setItem(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 1, itemHandler.getStackInSlot(MOLD_SLOT)); // Add mold slot
+        inventory.setItem(LAST_INPUT_SLOT - FIRST_INPUT_SLOT + 1, itemHandler.getStackInSlot(MOLD_SLOT));
         assert level != null;
         Optional<MechanicalPressRecipe> match = level.getRecipeManager()
                 .getRecipeFor(MechanicalPressRecipe.Type.INSTANCE, inventory, level);
@@ -310,7 +314,6 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
             ItemStack resultItem = recipe.getResultItem(level.registryAccess());
             ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
             if (outputStack.isEmpty() || (outputStack.getItem() == resultItem.getItem() && outputStack.getCount() + resultItem.getCount() <= outputStack.getMaxStackSize())) {
-                // Consume only the required ingredients
                 for (Ingredient ingredient : recipe.getIngredients()) {
                     for (int i = FIRST_INPUT_SLOT; i <= LAST_INPUT_SLOT; i++) {
                         if (ingredient.test(itemHandler.getStackInSlot(i))) {
@@ -319,16 +322,11 @@ public class MechanicalPressBlockEntity extends BlockEntity implements MenuProvi
                         }
                     }
                 }
-
-                // Reduce mold durability only if the recipe requires a mold
                 if (recipe.requiresMold()) {
                     ItemStack moldStack = itemHandler.getStackInSlot(MOLD_SLOT);
                     if (!moldStack.isEmpty() && moldStack.isDamageableItem()) {
-                        int newDamage = moldStack.getDamageValue() + 1;
-                        if (newDamage >= moldStack.getMaxDamage()) {
+                        if (moldStack.hurt(1, level.random, null)) {
                             moldStack.shrink(1);
-                        } else {
-                            moldStack.setDamageValue(newDamage);
                         }
                         itemHandler.setStackInSlot(MOLD_SLOT, moldStack);
                     }

@@ -103,11 +103,59 @@
       }
     ]
   },
+  "item.jetpack.fire": {
+    "subtitle": "subtitle.scguns.jetpack",
+    "sounds": [
+      {
+        "name": "scguns:item/jetpack/fire"
+      }
+    ]
+  },
+  "item.jetpack.loop": {
+    "subtitle": "subtitle.scguns.loop",
+    "sounds": [
+      {
+        "name": "scguns:item/jetpack/loop"
+      }
+    ]
+  },
   "item.airgun.fire": {
     "subtitle": "subtitle.scguns.fire",
     "sounds": [
       {
         "name": "scguns:item/airgun/fire"
+      }
+    ]
+  },
+  "item.old_rifle.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/old_rifle/fire"
+      }
+    ]
+  },
+  "item.machine_gun.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/machine_gun/fire"
+      }
+    ]
+  },
+  "item.revolver.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/revolver/fire"
+      }
+    ]
+  },
+  "item.heavy_rifle_2.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/heavy_rifle_2/fire"
       }
     ]
   },
@@ -148,6 +196,22 @@
     "sounds": [
       {
         "name": "scguns:item/sculk/fire"
+      }
+    ]
+  },
+  "item.cannon.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/cannon/fire"
+      }
+    ]
+  },
+  "item.cannon.reload": {
+    "subtitle": "subtitle.scguns.reload",
+    "sounds": [
+      {
+        "name": "scguns:item/cannon/reload"
       }
     ]
   },
@@ -562,4 +626,4 @@
       }
     ]
   }
-},
+}

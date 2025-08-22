@@ -16,7 +16,7 @@
     "rate": 13,
     "recoilAngle": 10.0,
     "recoilKick": 3.0,
-    "spread": 12.0,
+    "spread": 6.6,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
     "meleeReach": 3.5,
@@ -61,7 +61,7 @@
     "item": "scguns:bearpack_shell",
     "casingType": "scguns:medium_brass_casing",
     "casingParticle": "scguns:bearpack_shell",
-    "life": 25,
+    "life": 35,
     "size": 0.05,
     "speed": 4.0,
     "trailLengthMultiplier": 2.0

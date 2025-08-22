@@ -3,10 +3,15 @@ package top.ribs.scguns.entity.projectile;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ShieldItem;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
+import top.ribs.scguns.init.ModDamageTypes;
+import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.item.GunItem;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.entity.Entity;
@@ -43,7 +48,7 @@ public class RocketEntity extends ProjectileEntity
         {
             for (int i = 5; i > 0; i--)
             {
-                this.level().addParticle(ParticleTypes.CLOUD, true, this.getX() - (this.getDeltaMovement().x() / i), this.getY() - (this.getDeltaMovement().y() / i), this.getZ() - (this.getDeltaMovement().z() / i), 0, 0, 0);
+                this.level().addParticle(ModParticleTypes.ROCKET_TRAIL.get(), true, this.getX() - (this.getDeltaMovement().x() / i), this.getY() - (this.getDeltaMovement().y() / i), this.getZ() - (this.getDeltaMovement().z() / i), 0, 0, 0);
             }
             if (this.level().random.nextInt(2) == 0)
             {
@@ -54,19 +59,15 @@ public class RocketEntity extends ProjectileEntity
     }
 
     @Override
-    protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot)
-    {
-        // Always attempt to disable the shield
-        if (entity instanceof Player player)
-        {
+    protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
+        if (entity instanceof Player player) {
             ItemStack mainHandItem = player.getMainHandItem();
             ItemStack offHandItem = player.getOffhandItem();
 
             boolean isBlockingMainHand = player.isBlocking() && mainHandItem.getItem() instanceof ShieldItem;
             boolean isBlockingOffHand = player.isBlocking() && offHandItem.getItem() instanceof ShieldItem;
 
-            if (isBlockingMainHand || isBlockingOffHand)
-            {
+            if (isBlockingMainHand || isBlockingOffHand) {
                 ItemStack shield = isBlockingMainHand ? mainHandItem : offHandItem;
                 InteractionHand hand = isBlockingMainHand ? InteractionHand.MAIN_HAND : InteractionHand.OFF_HAND;
 
@@ -74,27 +75,32 @@ public class RocketEntity extends ProjectileEntity
                 player.stopUsingItem();
                 player.level().broadcastEntityEvent(player, (byte)30);
 
-                // Play shield break sound
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.SHIELD_BREAK, SoundSource.PLAYERS, 1.0F, 0.8F + player.level().getRandom().nextFloat() * 0.4F);
 
                 shield.hurtAndBreak(15, player, (p) -> p.broadcastBreakEvent(hand));
             }
         }
-
-        // Create explosion
-        createExplosion(this, Config.COMMON.rockets.explosionRadius.get().floatValue(), false);
+        float exactDamage = this.getDamage();
+        float explosionRadius = Config.COMMON.rockets.explosionRadius.get().floatValue();
+        createRocketExplosion(this, explosionRadius, exactDamage, false);
     }
 
     @Override
-    protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z)
-    {
-        createExplosion(this, Config.COMMON.rockets.explosionRadius.get().floatValue(), false);
+    protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
+        float exactDamage = this.getDamage();
+        float explosionRadius = Config.COMMON.rockets.explosionRadius.get().floatValue();
+        createRocketExplosion(this, explosionRadius, exactDamage, false);
     }
 
     @Override
-    public void onExpired()
-    {
-        createExplosion(this, Config.COMMON.rockets.explosionRadius.get().floatValue(), false);
+    public void onExpired() {
+        float exactDamage = this.getDamage();
+        float explosionRadius = Config.COMMON.rockets.explosionRadius.get().floatValue();
+        createRocketExplosion(this, explosionRadius, exactDamage, false);
+    }
+    @Override
+    public float getDamage() {
+        return super.getDamage();
     }
 }

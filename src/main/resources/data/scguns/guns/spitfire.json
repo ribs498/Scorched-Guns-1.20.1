@@ -35,14 +35,15 @@
     "item": "scguns:blaze_fuel",
     "life": 12,
     "size": 0.1,
-    "speed": 1.5,
+    "speed": 1.8,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 20,
+    "maxAmmo": 32,
     "reloadItem": "scguns:blaze_fuel",
     "reloadByproduct": "scguns:empty_tank",
+    "byproductChance": 0.65,
     "reloadTimer": 30,
     "reloadType": "scguns:single_item"
   },

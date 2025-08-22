@@ -21,6 +21,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.block.AdvancedComposterBlock;
 import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.init.ModBlockEntities;
@@ -45,7 +46,7 @@ public class AdvancedComposterBlockEntity extends BlockEntity implements Worldly
     private static final int[] SLOTS_FOR_DOWN = new int[]{OUTPUT_SLOT_START, OUTPUT_SLOT_START + 1, OUTPUT_SLOT_START + 2};
     private static final int[] SLOTS_FOR_SIDES = new int[]{INPUT_SLOT};
 
-    private static final int MAX_COMPOST_TIME = 500;
+    private static final int MAX_COMPOST_TIME = 300;
     private int compostTime = 0;
     private boolean isComposting = false;
 
@@ -110,6 +111,7 @@ public class AdvancedComposterBlockEntity extends BlockEntity implements Worldly
                 if (player != null) {
                     player.getInventory().add(stack);
                 } else {
+                    assert level != null;
                     Block.popResource(level, worldPosition.above(), stack);
                 }
                 setChanged();
@@ -131,11 +133,10 @@ public class AdvancedComposterBlockEntity extends BlockEntity implements Worldly
     }
 
     @Override
-    public ItemStack removeItem(int index, int count) {
+    public @NotNull ItemStack removeItem(int index, int count) {
         ItemStack stack = ContainerHelper.removeItem(items, index, count);
         if (!stack.isEmpty() && index >= OUTPUT_SLOT_START) {
             setChanged();
-            // Update the block state
             if (level != null) {
                 level.setBlock(worldPosition, getBlockState().setValue(AdvancedComposterBlock.LEVEL, getVisualLevel()), 3);
             }
@@ -192,7 +193,7 @@ public class AdvancedComposterBlockEntity extends BlockEntity implements Worldly
             BlockState newState = composterBlock.addItem(null, state, level, worldPosition, stack);
             level.setBlock(worldPosition, newState, 3);
             stack.shrink(1);
-            composterBlock.playComposterEffects(level, worldPosition, newState); // Add this line
+            composterBlock.playComposterEffects(level, worldPosition, newState);
         }
     }
 

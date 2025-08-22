@@ -20,7 +20,10 @@ public enum ModArmorMaterials implements ArmorMaterial {
     TREATED_BRASS("treated_brass", 30, new int[]{ 4, 6, 5, 4 }, 10,
             SoundEvents.ARMOR_EQUIP_IRON, 0.0f, 0.2f, () -> Ingredient.of(ModItems.TREATED_BRASS_INGOT.get())),
    ANCIENT_BRASS("ancient_brass", 16, new int[]{ 3, 5, 4, 3 }, 10,
-            SoundEvents.ARMOR_EQUIP_IRON, 0.0f, 0.15f, () -> Ingredient.of(ModItems.ANCIENT_BRASS.get()));
+            SoundEvents.ARMOR_EQUIP_IRON, 0.0f, 0.15f, () -> Ingredient.of(ModItems.ANCIENT_BRASS.get())),
+    EXO_SUIT("exo_suit", 200, new int[]{ 1, 1, 1, 1 }, 6,
+            SoundEvents.ARMOR_EQUIP_NETHERITE, 0.0f, 0.0f, () -> Ingredient.of(ModItems.TREATED_IRON_INGOT.get()));
+
     private final String name;
     private final int durabilityMultiplier;
     private final int[] protectionAmounts;

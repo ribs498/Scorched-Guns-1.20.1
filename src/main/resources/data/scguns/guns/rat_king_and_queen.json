@@ -22,7 +22,7 @@
     "fireMode": "scguns:automatic",
     "gripType": "scguns:dual_wield",
     "baseGripType": "scguns:dual_wield",
-    "rate": 4,
+    "rate": 3,
     "recoilAngle": 2.0,
     "recoilKick": 1.0,
     "spread": 2.0,
@@ -58,7 +58,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 18,
+    "maxAmmo": 20,
     "reloadItem": "scguns:compact_advanced_round",
     "reloadTimer": 20,
     "reloadType": "scguns:mag_fed"

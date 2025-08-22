@@ -32,7 +32,6 @@ public class NiterDustItem extends Item {
 
         BlockState blockstate = world.getBlockState(blockpos);
 
-        // Check if the block is a crop and apply weaker bonemeal effect
         if (blockstate.getBlock() instanceof BonemealableBlock) {
             if (applyWeakerBonemeal(itemstack, world, blockpos, player)) {
                 if (!world.isClientSide) {
@@ -42,16 +41,13 @@ public class NiterDustItem extends Item {
             }
         }
 
-        // Prevent placing Niter layer on top of fully grown crops
         if (blockstate.getBlock() instanceof BonemealableBlock) {
             BonemealableBlock bonemealableblock = (BonemealableBlock) blockstate.getBlock();
             if (!bonemealableblock.isValidBonemealTarget(world, blockpos, blockstate, world.isClientSide)) {
                 return InteractionResult.FAIL;
             }
         }
-
-        // If not a crop, place the Niter layer
-        FluidState fluidstate = world.getFluidState(blockpos);
+        world.getFluidState(blockpos);
 
         if (blockstate.is(ModBlocks.NITER_LAYER.get())) {
             int i = blockstate.getValue(SnowLayerBlock.LAYERS);
@@ -87,8 +83,7 @@ public class NiterDustItem extends Item {
             if (bonemealableblock.isValidBonemealTarget(world, pos, blockstate, world.isClientSide)) {
                 if (world instanceof ServerLevel) {
                     RandomSource random = world.getRandom();
-                    // Apply effect with a lower chance than regular bonemeal
-                    if (random.nextInt(3) == 0) { // 33% chance to apply effect
+                    if (random.nextInt(3) == 0) {
                         if (bonemealableblock.isBonemealSuccess(world, random, pos, blockstate)) {
                             bonemealableblock.performBonemeal((ServerLevel) world, random, pos, blockstate);
                         }

@@ -18,14 +18,13 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
-import top.ribs.scguns.Config;
+import top.ribs.scguns.config.BrassBoltConfig;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModSounds;
 
 public class BrassBoltEntity extends AbstractArrow {
     public BrassBoltEntity(EntityType<? extends AbstractArrow> type, Level world) {
         super(type, world);
-        this.setBaseDamage(Config.COMMON.gameplay.enemyBulletDamage.get());
     }
 
     public BrassBoltEntity(Level world, LivingEntity shooter) {
@@ -34,7 +33,7 @@ public class BrassBoltEntity extends AbstractArrow {
 
     public BrassBoltEntity(EntityType<BrassBoltEntity> type, Level world, LivingEntity shooter) {
         super(type, shooter, world);
-        this.setBaseDamage(Config.COMMON.gameplay.enemyBulletDamage.get());
+        this.setBaseDamage(BrassBoltConfig.getDamageForEntity(shooter.getType()));
     }
 
     @Override
@@ -46,15 +45,12 @@ public class BrassBoltEntity extends AbstractArrow {
     protected void onHitEntity(EntityHitResult result) {
         Entity entity = result.getEntity();
         if (entity instanceof LivingEntity livingEntity) {
-            float damageAmount = (float) this.getBaseDamage();
-            int damage = Mth.ceil(damageAmount);
-
+            int damage = Mth.ceil(this.getBaseDamage());
             if (livingEntity.hurt(this.damageSources().arrow(this, this.getOwner()), damage)) {
                 if (livingEntity.isAlive()) {
                     this.doPostHurtEffects(livingEntity);
                 }
             }
-
             livingEntity.setArrowCount(livingEntity.getArrowCount() - 1);
         }
         this.discard();
@@ -72,9 +68,10 @@ public class BrassBoltEntity extends AbstractArrow {
             this.discard();
             return;
         }
-
         super.tick();
-
+        if (!this.inGround && !this.isNoGravity()) {
+            this.setDeltaMovement(this.getDeltaMovement().add(0, 0.01, 0));
+        }
         if (this.level().isClientSide) {
             spawnTrailParticles();
         }
@@ -84,14 +81,14 @@ public class BrassBoltEntity extends AbstractArrow {
         double posX = this.getX();
         double posY = this.getY();
         double posZ = this.getZ();
-
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < 1; i++) {
             double offsetX = this.random.nextGaussian() * 0.02;
             double offsetY = this.random.nextGaussian() * 0.02;
             double offsetZ = this.random.nextGaussian() * 0.02;
             this.level().addParticle(ParticleTypes.SMALL_FLAME, posX, posY, posZ, offsetX, offsetY, offsetZ);
         }
     }
+
     @Override
     protected void onHit(HitResult hitResult) {
         super.onHit(hitResult);
@@ -107,6 +104,7 @@ public class BrassBoltEntity extends AbstractArrow {
     public void playSound(SoundEvent soundEvent, float volume, float pitch) {
         // Empty to disable sounds
     }
+
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -120,6 +118,7 @@ public class BrassBoltEntity extends AbstractArrow {
             this.setBaseDamage(compound.getDouble("damage"));
         }
     }
+
     @Override
     public Packet<ClientGamePacketListener> getAddEntityPacket() {
         return NetworkHooks.getEntitySpawningPacket(this);
@@ -130,7 +129,6 @@ public class BrassBoltEntity extends AbstractArrow {
         this.discard();
     }
 
-    // Override these methods to control damage calculation
     @Override
     public boolean isCritArrow() {
         return false;
@@ -138,8 +136,7 @@ public class BrassBoltEntity extends AbstractArrow {
 
     @Override
     public void shoot(double x, double y, double z, float velocity, float inaccuracy) {
-        super.shoot(x, y, z, 1.0F, inaccuracy);  // Use a fixed velocity of 1.0
-        this.setDeltaMovement(this.getDeltaMovement().normalize().scale(1.0));
+        super.shoot(x, y, z, velocity, inaccuracy);
     }
 
     @Override

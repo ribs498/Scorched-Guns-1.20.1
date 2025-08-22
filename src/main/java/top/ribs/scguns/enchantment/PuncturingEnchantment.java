@@ -9,13 +9,13 @@ public class PuncturingEnchantment extends GunEnchantment
 {
     public PuncturingEnchantment()
     {
-        super(Rarity.RARE, EnchantmentTypes.GUN, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.PROJECTILE);
+        super(Rarity.UNCOMMON, EnchantmentTypes.GUN, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.PROJECTILE);
     }
 
     @Override
     public int getMaxLevel()
     {
-        return 4;
+        return 3;
     }
 
     @Override

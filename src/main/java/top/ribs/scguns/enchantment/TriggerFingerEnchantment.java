@@ -9,7 +9,7 @@ public class TriggerFingerEnchantment extends GunEnchantment
 {
     public TriggerFingerEnchantment()
     {
-        super(Rarity.RARE, EnchantmentTypes.SINGLE_SHOT_GUN , new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.WEAPON);
+        super(Rarity.UNCOMMON, EnchantmentTypes.TRIGGER_FINGER_COMPATIBLE , new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.WEAPON);
 
     }
 

@@ -31,6 +31,8 @@ import top.ribs.scguns.init.ModBlockEntities;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class ThermolithBlockEntity extends BlockEntity implements MenuProvider {
@@ -72,25 +74,62 @@ public class ThermolithBlockEntity extends BlockEntity implements MenuProvider {
 
     private void meltRandomBlock() {
         RandomSource rand = RANDOM.get();
+        BlockPos startPos = findNearestLava();
+        if (startPos == null) {
+            startPos = worldPosition;
+        }
 
-        double angle = rand.nextDouble() * 2 * Math.PI;
-        double radius = Math.sqrt(rand.nextDouble()) * MELT_RADIUS;
-        int dx = (int) Math.round(radius * Math.cos(angle));
-        int dz = (int) Math.round(radius * Math.sin(angle));
+        for (int radius = 1; radius <= MELT_RADIUS; radius++) {
+            List<BlockPos> candidatesAtRadius = new ArrayList<>();
+            for (int dx = -radius; dx <= radius; dx++) {
+                for (int dz = -radius; dz <= radius; dz++) {
+                    for (int dy = -1; dy <= 1; dy++) {
+                        if (Math.abs(dx) == radius || Math.abs(dz) == radius) {
+                            BlockPos targetPos = startPos.offset(dx, dy, dz);
 
-        BlockPos targetPos = worldPosition.offset(dx, rand.nextInt(3) - 1, dz);
-
-        if (level.getBlockState(targetPos).is(BlockTags.create(MELTABLE_BLOCKS_TAG))) {
-            level.setBlockAndUpdate(targetPos, Blocks.LAVA.defaultBlockState());
-            if (rand.nextFloat() < 0.15f) {
-                itemHandler.extractItem(0, 1, false);
+                            if (worldPosition.distSqr(targetPos) <= MELT_RADIUS * MELT_RADIUS
+                                    && level.getBlockState(targetPos).is(BlockTags.create(MELTABLE_BLOCKS_TAG))) {
+                                candidatesAtRadius.add(targetPos);
+                            }
+                        }
+                    }
+                }
             }
-            if (level instanceof ServerLevel serverLevel) {
-                serverLevel.sendParticles(ParticleTypes.LAVA,
-                        targetPos.getX() + 0.5, targetPos.getY() + 0.5, targetPos.getZ() + 0.5,
-                        10, 0.5, 0.5, 0.5, 0.1);
+            if (!candidatesAtRadius.isEmpty()) {
+                BlockPos targetPos = candidatesAtRadius.get(rand.nextInt(candidatesAtRadius.size()));
+
+                level.setBlockAndUpdate(targetPos, Blocks.LAVA.defaultBlockState());
+
+                if (rand.nextFloat() < 0.15f) {
+                    itemHandler.extractItem(0, 1, false);
+                }
+
+                if (level instanceof ServerLevel serverLevel) {
+                    serverLevel.sendParticles(ParticleTypes.LAVA,
+                            targetPos.getX() + 0.5, targetPos.getY() + 0.5, targetPos.getZ() + 0.5,
+                            10, 0.5, 0.5, 0.5, 0.1);
+                }
+                return;
             }
         }
+    }
+
+    private BlockPos findNearestLava() {
+        for (int radius = 1; radius <= MELT_RADIUS; radius++) {
+            for (int dx = -radius; dx <= radius; dx++) {
+                for (int dz = -radius; dz <= radius; dz++) {
+                    for (int dy = -1; dy <= 1; dy++) {
+                        if (Math.abs(dx) == radius || Math.abs(dz) == radius) {
+                            BlockPos checkPos = worldPosition.offset(dx, dy, dz);
+                            if (level.getBlockState(checkPos).getBlock() == Blocks.LAVA) {
+                                return checkPos;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     private void updateLitState() {

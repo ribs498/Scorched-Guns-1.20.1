@@ -9,7 +9,7 @@ public class WaterProofEnchantment extends GunEnchantment
 {
     public WaterProofEnchantment()
     {
-        super(Rarity.COMMON, EnchantmentTypes.WATER_PROOF_COMPATIBLE, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.PROJECTILE);
+        super(Rarity.UNCOMMON, EnchantmentTypes.WATER_PROOF_COMPATIBLE, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.PROJECTILE);
     }
 
     @Override

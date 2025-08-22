@@ -17,17 +17,17 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "projectileAmount": 15,
+    "projectileAmount": 20,
     "rate": 6,
     "recoilAngle": 17.0,
     "recoilKick": 2.0,
-    "spread": 19.0,
+    "spread": 9.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 100,
     "criticalChance": 0.05,
     "playerKnockBack": true,
-    "playerKnockBackStrength": 0.25
+    "playerKnockBackStrength": 0.3
   },
   "modules": {
     "attachments": {
@@ -48,11 +48,11 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 15.0,
+    "damage": 16.5,
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:grapeshot",
-    "life": 30,
+    "life": 35,
     "size": 1.0,
     "speed": 5.0,
     "trailLengthMultiplier": 2.0

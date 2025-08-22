@@ -11,7 +11,7 @@
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
-    "rate": 6,
+    "rate": 4,
     "recoilAngle": 5.7,
     "recoilKick": 1.22,
     "spread": 2.0,
@@ -44,7 +44,7 @@
   },
   "projectile": {
     "advantage": "scguns:undead",
-    "damage": 16.0,
+    "damage": 16.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:ramrod_round",

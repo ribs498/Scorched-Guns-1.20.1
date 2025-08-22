@@ -1,0 +1,61 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+      "1": "scguns:item/micina"
+	},
+	"elements": [
+		{
+			"name": "hammer",
+			"from": [8, 4.22305, 14.15766],
+			"to": [8, 5.87305, 16.31516],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.83249, 5.24805, 14.13641]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.75], "texture": "#1"},
+				"east": {"uv": [7.5, 7, 8.5, 7.75], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 0.75], "texture": "#1"},
+				"up": {"uv": [0, 1, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 1], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.75, -9],
+			"scale": [1.4, 1.4, 1.4]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.75, -9],
+			"scale": [1.4, 1.4, 1.4]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 9.75, -0.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.25, 9.75, -0.5]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1, 5, 0],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"fixed": {
+			"rotation": [-90, 90, 90],
+			"translation": [-3, 9.5, 0],
+			"scale": [2, 2, 2]
+		}
+	},
+	"groups": [
+		{
+			"name": "hammer",
+			"origin": [0.83249, -4.56958, 4.66964],
+			"color": 4,
+			"children": [0]
+		}
+	]
+}

@@ -20,7 +20,7 @@
     "meleeCooldownTicks": 20,
     "meleeReach": 4.0,
     "hotBarrelRate": 100,
-    "criticalChance": 0.15
+    "criticalChance": 0.2
   },
   "modules": {
     "attachments": {
@@ -42,13 +42,13 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 5.3,
+      "yOffset": 5.2,
       "zOffset": 0.75
     }
   },
   "projectile": {
     "advantage": "scguns:illager",
-    "damage": 12.0,
+    "damage": 13.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:standard_copper_round",
@@ -61,10 +61,10 @@
     "trailLengthMultiplier": 2.0
   },
   "reloads": {
-    "emptyMagTimer": 50,
+    "emptyMagTimer": 0,
     "maxAmmo": 1,
     "reloadItem": "scguns:standard_copper_round",
-    "reloadTimer": 50,
+    "reloadTimer": 70,
     "reloadType": "scguns:mag_fed"
   },
   "sounds": {

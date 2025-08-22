@@ -19,7 +19,7 @@
       "item": "scguns:gun_barrel"
     },
     "M": {
-      "item": "scguns:treated_iron_ingot"
+      "item": "minecraft:iron_ingot"
     },
     "P": {
       "tag": "minecraft:planks"

@@ -45,7 +45,10 @@ public class BlundererEntity extends Raider implements RangedAttackMob {
     private int idleAnimationTimeout = 0;
 
     private int attackTime = -1;
-
+    @Override
+    public @NotNull MobType getMobType() {
+        return MobType.ILLAGER;
+    }
     public BlundererEntity(EntityType<? extends Raider> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.setUUID(UUID.randomUUID()); // Ensure unique UUID upon creation
@@ -163,7 +166,6 @@ public class BlundererEntity extends Raider implements RangedAttackMob {
         super.registerGoals();
         this.goalSelector.addGoal(0, new FloatGoal(this));
         this.goalSelector.addGoal(2, new RestrictSunGoal(this));
-        this.goalSelector.addGoal(3, new FleeSunGoal(this, 1.0));
         this.goalSelector.addGoal(4, new WaterAvoidingRandomStrollGoal(this, 1.0));
         this.goalSelector.addGoal(5, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(6, new RandomLookAroundGoal(this));
@@ -209,29 +211,60 @@ public class BlundererEntity extends Raider implements RangedAttackMob {
     @Override
     public void performRangedAttack(@NotNull LivingEntity target, float distanceFactor) {
         int numberOfPellets = 5;
-        float spreadAngle = 15.0F;
+        float maxSpreadAngle = 11.0F;
+        double offsetX = 0.0;
+        double offsetY = this.getEyeHeight() - 0.5;
+        double offsetZ = -0.5;
+
+        double targetX = target.getX() - (this.getX() + offsetX);
+        double targetY = target.getEyeY() - (this.getY() + offsetY);
+        double targetZ = target.getZ() - (this.getZ() + offsetZ);
+
+        double distance = Math.sqrt(targetX * targetX + targetY * targetY + targetZ * targetZ);
+        double baseX = targetX / distance;
+        double baseY = targetY / distance;
+        double baseZ = targetZ / distance;
 
         for (int i = 0; i < numberOfPellets; i++) {
             BrassBoltEntity projectile = new BrassBoltEntity(this.level(), this);
 
-            double offsetX = 0.0;
-            double offsetY = this.getEyeHeight() - 0.5;
-            double offsetZ = -0.5;
-            double d0 = target.getX() - (this.getX() + offsetX);
-            double d1 = target.getEyeY() - (this.getY() + offsetY);
-            double d2 = target.getZ() - (this.getZ() + offsetZ);
+            float spreadRadius = (float) (Math.random() * Math.toRadians(maxSpreadAngle));
+            float spreadAngle = (float) (Math.random() * 2 * Math.PI);
 
-            // Random spread
-            float randomSpread = (this.random.nextFloat() - 0.5F) * 2 * spreadAngle;
-            float angle = (float) Math.toDegrees(Math.atan2(d2, d0)) + randomSpread;
-            float pitch = (float) Math.toDegrees(Math.atan2(d1, Math.sqrt(d0 * d0 + d2 * d2))) + randomSpread;
+            double perpX1, perpY1, perpZ1;
+            double perpX2, perpY2, perpZ2;
 
-            double x = Math.cos(Math.toRadians(angle));
-            double z = Math.sin(Math.toRadians(angle));
-            double y = Math.tan(Math.toRadians(pitch));
+            if (Math.abs(baseY) < 0.9) {
+                perpX1 = 0;
+                perpY1 = baseZ;
+                perpZ1 = -baseY;
+            } else {
+                perpX1 = baseZ;
+                perpY1 = 0;
+                perpZ1 = -baseX;
+            }
+
+            double perpLength1 = Math.sqrt(perpX1 * perpX1 + perpY1 * perpY1 + perpZ1 * perpZ1);
+            perpX1 /= perpLength1;
+            perpY1 /= perpLength1;
+            perpZ1 /= perpLength1;
+
+            perpX2 = baseY * perpZ1 - baseZ * perpY1;
+            perpY2 = baseZ * perpX1 - baseX * perpZ1;
+            perpZ2 = baseX * perpY1 - baseY * perpX1;
+
+            double spreadX = Math.cos(spreadAngle) * Math.sin(spreadRadius);
+            double spreadZ = Math.sin(spreadAngle) * Math.sin(spreadRadius);
+
+            double finalX = baseX * Math.cos(spreadRadius) +
+                    (perpX1 * spreadX + perpX2 * spreadZ);
+            double finalY = baseY * Math.cos(spreadRadius) +
+                    (perpY1 * spreadX + perpY2 * spreadZ);
+            double finalZ = baseZ * Math.cos(spreadRadius) +
+                    (perpZ1 * spreadX + perpZ2 * spreadZ);
 
             projectile.setPos(this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ);
-            projectile.shoot(x, y, z, 2.6F, 1.0F);
+            projectile.shoot(finalX, finalY, finalZ, 2.6F, 0.0F); // Set inaccuracy to 0 since we're handling spread manually
             this.level().addFreshEntity(projectile);
         }
 
@@ -264,9 +297,6 @@ public class BlundererEntity extends Raider implements RangedAttackMob {
     @Override
     public void setUUID(UUID uuid) {
         super.setUUID(uuid);
-        if (this.uuid == null) {
-            this.uuid = UUID.randomUUID();
-        }
     }
 }
 

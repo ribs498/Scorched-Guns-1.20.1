@@ -1,0 +1,28 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:tl_runner"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "scguns:treated_iron_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_parts"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:plasma_core"
+    },
+
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_barrel"
+    }
+  ]
+}

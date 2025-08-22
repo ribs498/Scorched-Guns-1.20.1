@@ -13,7 +13,7 @@
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "projectileAmount": 1,
-    "rate": 8,
+    "rate": 6,
     "recoilAngle": 3.0,
     "recoilKick": 2.0,
     "spread": 3.0,
@@ -41,7 +41,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 10.0,
+    "damage": 13.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:shulkshot",
@@ -50,7 +50,11 @@
     "life": 120,
     "size": 0.00001,
     "speed":  0.5,
-    "trailLengthMultiplier": 100.0
+    "trailLengthMultiplier": 100.0,
+    "impactEffect": "minecraft:levitation",
+    "impactEffectDuration": 100,
+    "impactEffectChance": 0.3,
+    "impactEffectAmplifier": 0
   },
   "reloads": {
     "emptyMagTimer": 10,

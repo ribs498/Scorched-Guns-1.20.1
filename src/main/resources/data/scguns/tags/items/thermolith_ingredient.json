@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "scguns:vehement_coal",
+    "scguns:plasma",
     {"id":"create:blaze_cake",  "required":false}
   ]
 }

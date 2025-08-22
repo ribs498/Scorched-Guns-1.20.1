@@ -1,6 +1,6 @@
 {
   "type": "scguns:powered_mechanical_pressing",
-  "processingTime": 15,
+  "processingTime": 10,
   "energyUse": 500,
   "ingredients": [
     {

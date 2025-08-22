@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class TurretTargetingBlock extends BaseEntityBlock {
-    public static final DirectionProperty FACING = BlockStateProperties.FACING;
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
     public static final BooleanProperty CONNECTED = BooleanProperty.create("connected");
 
     private static final VoxelShape SHAPE_CENTERED = Block.box(2.0, 0.0, 2.0, 14.0, 7.0, 14.0);
@@ -78,7 +78,6 @@ public class TurretTargetingBlock extends BaseEntityBlock {
         }
     }
 
-    // New method for auto-connecting to turrets after placement
     @Override
     public void neighborChanged(BlockState state, Level world, BlockPos pos, Block block, BlockPos neighborPos, boolean isMoving) {
         super.neighborChanged(state, world, pos, block, neighborPos, isMoving);
@@ -94,21 +93,20 @@ public class TurretTargetingBlock extends BaseEntityBlock {
         }
     }
 
-    // Method to find the correct facing based on nearby turret
     private Direction getCorrectFacingForTurret(BlockGetter world, BlockPos pos) {
-        for (Direction direction : Direction.values()) {
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
             BlockPos neighborPos = pos.relative(direction);
             if (world.getBlockState(neighborPos).getBlock() instanceof BasicTurretBlock ||
                     world.getBlockState(neighborPos).getBlock() instanceof ShotgunTurretBlock ||
                     world.getBlockState(neighborPos).getBlock() instanceof AutoTurretBlock) {
-                return direction.getOpposite(); // Face towards the turret
+                return direction.getOpposite();
             }
         }
-        return Direction.NORTH; // Default to North if no turret found
+        return Direction.NORTH;
     }
 
     private boolean isAdjacentToTurret(BlockGetter world, BlockPos pos) {
-        for (Direction direction : Direction.values()) {
+        for (Direction direction : Direction.Plane.HORIZONTAL) {
             BlockPos neighborPos = pos.relative(direction);
             if (world.getBlockState(neighborPos).getBlock() instanceof BasicTurretBlock ||
                     world.getBlockState(neighborPos).getBlock() instanceof ShotgunTurretBlock ||

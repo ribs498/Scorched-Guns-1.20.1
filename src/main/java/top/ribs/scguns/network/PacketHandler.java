@@ -14,15 +14,18 @@ public class PacketHandler
     public static void init()
     {
         playChannel = FrameworkAPI.createNetworkBuilder(new ResourceLocation(Reference.MOD_ID, "play"), 1)
+                .registerPlayMessage(C2SMessageOffhandMelee.class, MessageDirection.PLAY_SERVER_BOUND)
+                .registerPlayMessage(C2SMessageSetBlueprintRecipe.class, MessageDirection.PLAY_SERVER_BOUND)
+                .registerPlayMessage(C2SMessageToggleExoSuitPower.class, MessageDirection.PLAY_SERVER_BOUND)
+                .registerPlayMessage(C2SMessageClearBlueprintRecipe.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(C2SMessageAim.class, MessageDirection.PLAY_SERVER_BOUND)
+                .registerPlayMessage(C2SMessageUtilityAction.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(C2SMessageMeleeAttack.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(S2CMessageMuzzleFlash.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .registerPlayMessage(C2SMessageReload.class, MessageDirection.PLAY_SERVER_BOUND)
-                .registerPlayMessage(C2SMessageReloadByproduct.class, MessageDirection.PLAY_SERVER_BOUND)
+                .registerPlayMessage(C2SMessageSaveExoSuitUpgrades.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(C2SMessageGunLoaded.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(C2SMessageEjectCasing.class, MessageDirection.PLAY_SERVER_BOUND)
-                .registerPlayMessage(C2SMessageManualReloadState.class, MessageDirection.PLAY_SERVER_BOUND)
-                .registerPlayMessage(C2SMessageManualReloadEnd.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(S2CMessageUpdateAmmo.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .registerPlayMessage(C2SMessageShoot.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(C2SMessageChargeSync.class, MessageDirection.PLAY_SERVER_BOUND)
@@ -42,11 +45,14 @@ public class PacketHandler
                 .registerPlayMessage(C2SMessageStopBeam.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(S2CMessageGunSound.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .registerPlayMessage(S2CMessageMeleeAttack.class, MessageDirection.PLAY_CLIENT_BOUND)
-
+                .registerPlayMessage(S2CMessageHotBarrelSync.class, MessageDirection.PLAY_CLIENT_BOUND)
+                .registerPlayMessage(S2CMessageStopReload.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .registerPlayMessage(S2CMessageProjectileHitBlock.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .registerPlayMessage(S2CMessageProjectileHitEntity.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .registerPlayMessage(C2SMessageLeftOverAmmo.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(S2CMessageRemoveProjectile.class, MessageDirection.PLAY_CLIENT_BOUND)
+                .registerPlayMessage(S2CShowTotemAnimationMessage.class, MessageDirection.PLAY_CLIENT_BOUND)
+                .registerPlayMessage(S2CMessageSyncExoSuitUpgrades.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .build();
 
     }

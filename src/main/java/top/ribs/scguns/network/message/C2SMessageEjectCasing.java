@@ -11,7 +11,6 @@ import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.event.GunEventBus;
 import top.ribs.scguns.init.ModEnchantments;
 import top.ribs.scguns.item.GunItem;
-import top.ribs.scguns.item.ammo_boxes.EmptyCasingPouchItem;
 
 import java.util.Objects;
 
@@ -42,24 +41,13 @@ public class C2SMessageEjectCasing extends PlayMessage<C2SMessageEjectCasing> {
                         int enchantmentLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SHELL_CATCHER.get(), heldItem);
                         double finalChance = baseChance + (enchantmentLevel * 0.15);
 
-                        if (Math.random() < finalChance) {
-                            // Try to add to pouch first
-                            boolean addedToPouch = false;
-                            for (ItemStack itemStack : player.getInventory().items) {
-                                if (itemStack.getItem() instanceof EmptyCasingPouchItem) {
-                                    int insertedItems = EmptyCasingPouchItem.add(itemStack, casingStack);
-                                    if (insertedItems > 0) {
-                                        addedToPouch = true;
-                                        // Sync the pouch contents with client
-                                        player.getInventory().setChanged();
-                                        break;
-                                    }
-                                }
-                            }
+                        double roll = Math.random();
 
-                            // If not added to pouch, spawn in world
+                        if (roll < finalChance) {
+                            boolean addedToPouch = GunEventBus.addCasingToPouch(player, casingStack);
+
                             if (!addedToPouch) {
-                                GunEventBus.spawnCasingInWorld(player.level(), player, casingStack.copy());
+                                GunEventBus.spawnCasingInWorld(player.level(), player, casingStack);
                             }
                         }
                     }

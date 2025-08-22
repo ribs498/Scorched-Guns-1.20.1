@@ -46,9 +46,9 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 12.0,
+    "damage": 22.0,
     "ejectsCasing": true,
-    "gravity": false,
+    "gravity": true,
     "item": "scguns:rocket",
     "ejectDuringReload": true,
     "casingType": "scguns:large_iron_casing",

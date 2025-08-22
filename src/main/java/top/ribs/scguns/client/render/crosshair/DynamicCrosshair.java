@@ -7,12 +7,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import org.joml.Matrix4f;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.client.handler.AimingHandler;
 import top.ribs.scguns.client.handler.GunRenderingHandler;
+import top.ribs.scguns.common.ChargeHandler;
+import top.ribs.scguns.common.FireMode;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.common.SpreadTracker;
 import top.ribs.scguns.item.GunItem;
@@ -46,6 +49,28 @@ public class DynamicCrosshair extends Crosshair {
         this.scale = 1.2F;
         this.fireBloom = 5.0F;
     }
+    private float getCurrentChargeProgress(Player player, ItemStack weapon, Gun modifiedGun) {
+        int maxChargeTime = modifiedGun.getGeneral().getFireTimer();
+        int chargeTime = ChargeHandler.getChargeTime(player.getUUID());
+
+        if (maxChargeTime > 0 && chargeTime > 0) {
+            return Math.min(1.0f, (float) chargeTime / maxChargeTime);
+        }
+
+        return 0.0f;
+    }
+
+    private float calculateChargeSpreadMultiplier(float chargeProgress, Gun modifiedGun) {
+        chargeProgress = Mth.clamp(chargeProgress, 0.0f, 1.0f);
+
+        float weaponSpreadPenalty = 3.0f;
+
+        float minSpreadMultiplier = 1.0f + weaponSpreadPenalty;
+        float maxSpreadMultiplier = 0.15f;
+
+        float curveValue = chargeProgress * chargeProgress * chargeProgress;
+        return minSpreadMultiplier - (minSpreadMultiplier - maxSpreadMultiplier) * curveValue;
+    }
     public void render(Minecraft mc, PoseStack stack, int windowWidth, int windowHeight, float partialTicks) {
         float alpha = 1.0F;
         float size1 = 7.0F;
@@ -54,27 +79,44 @@ public class DynamicCrosshair extends Crosshair {
         float scaleMultiplier = 2.0F;
         boolean renderDot = false;
         float finalSpreadTranslate;
+
         if (mc.player != null) {
             ItemStack heldItem = mc.player.getMainHandItem();
             Item var14 = heldItem.getItem();
             if (var14 instanceof GunItem) {
                 GunItem gun = (GunItem)heldItem.getItem();
                 Gun modifiedGun = gun.getModifiedGun(heldItem);
+
+                if (Gun.hasLaserSight(heldItem)) {
+                    return;
+                }
+
                 finalSpreadTranslate = (float) AimingHandler.get().getNormalisedAdsProgress();
                 float sprintTransition = GunRenderingHandler.get().getSprintTransition(Minecraft.getInstance().getFrameTime());
                 float spreadCount = SpreadTracker.get(mc.player).getNextSpread(gun, finalSpreadTranslate);
                 float spreadModifier = (spreadCount + 1.0F / Math.max((float) Config.COMMON.projectileSpread.maxCount.get(), 1.0F)) * Math.min(Mth.lerp(partialTicks, this.prevFireBloom, this.fireBloom), 1.0F);
                 spreadModifier = (float)Mth.lerp((double)sprintTransition * 0.5, spreadModifier, 1.0);
+
                 float baseSpread = GunCompositeStatHelper.getCompositeSpread(heldItem, modifiedGun);
-                GunCompositeStatHelper.getCompositeMinSpread(heldItem, modifiedGun);
                 float minSpread = modifiedGun.getGeneral().isAlwaysSpread() ? baseSpread : 0.0F;
+                if (modifiedGun.getGeneral().getFireMode() == FireMode.PULSE) {
+                    float chargeProgress = getCurrentChargeProgress(mc.player, heldItem, modifiedGun);
+                    float chargeSpreadMultiplier = calculateChargeSpreadMultiplier(chargeProgress, modifiedGun);
+                    baseSpread *= chargeSpreadMultiplier;
+                    minSpread *= chargeSpreadMultiplier;
+                }
+
                 float aimingSpreadMultiplier = Mth.lerp(finalSpreadTranslate, 1.0F, 0.5F);
                 spread = Math.max(Mth.lerp(spreadModifier, minSpread, baseSpread) * aimingSpreadMultiplier, 0.0F);
+
                 DotRenderMode dotRenderMode = Config.CLIENT.display.dynamicCrosshairDotMode.get();
-                renderDot = dotRenderMode == DotRenderMode.ALWAYS || dotRenderMode == DotRenderMode.AT_MIN_SPREAD && SpreadTracker.get(mc.player).getNextSpread(gun, finalSpreadTranslate) * spreadModifier <= 0.0F && (double)spread <= (Double)Config.CLIENT.display.dynamicCrosshairDotThreshold.get() || dotRenderMode == DotRenderMode.THRESHOLD && (double)spread <= Config.CLIENT.display.dynamicCrosshairDotThreshold.get() && (!(Boolean)Config.CLIENT.display.onlyRenderDotWhileAiming.get() || finalSpreadTranslate > 0.9F);
+                renderDot = dotRenderMode == DotRenderMode.ALWAYS ||
+                        dotRenderMode == DotRenderMode.AT_MIN_SPREAD && SpreadTracker.get(mc.player).getNextSpread(gun, finalSpreadTranslate) * spreadModifier <= 0.0F && (double)spread <= (Double)Config.CLIENT.display.dynamicCrosshairDotThreshold.get() ||
+                        dotRenderMode == DotRenderMode.THRESHOLD && (double)spread <= Config.CLIENT.display.dynamicCrosshairDotThreshold.get() && (!(Boolean)Config.CLIENT.display.onlyRenderDotWhileAiming.get() || finalSpreadTranslate > 0.9F);
             }
         }
 
+        // Rest of the render method remains unchanged...
         float baseScale = 1.0F + Mth.lerp(partialTicks, this.prevScale, this.scale) * scaleMultiplier;
         float adjustedSpread = spread > 1.0F ? (float)(1.0F + Math.log(spread) / 1.5) : spread;
         float fireBloomScale = Mth.lerp(partialTicks, this.prevScale, this.scale) * scaleMultiplier;
@@ -169,6 +211,5 @@ public class DynamicCrosshair extends Crosshair {
         }
 
         RenderSystem.defaultBlendFunc();
-
     }
 }

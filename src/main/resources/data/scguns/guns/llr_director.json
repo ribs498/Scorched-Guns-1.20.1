@@ -52,7 +52,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 12.5,
+    "damage": 13.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:standard_copper_round",

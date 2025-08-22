@@ -24,10 +24,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class NewbornCystModel implements IOverrideModel {
-    private static final int TOTAL_SHOTS = 7;
-    private static final float ROTATION_INCREMENT = 360.0f / TOTAL_SHOTS;
-    private float currentRotation = 0.0f;
-    private float targetRotation = 0.0f;
 
     @Override
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
@@ -36,16 +32,13 @@ public class NewbornCystModel implements IOverrideModel {
         renderBarrelAttachments(matrixStack, buffer, stack, light, overlay);
         renderUnderBarrelAttachments(matrixStack, buffer, stack, light, overlay);
 
-        // Render the iron sights if no scope is attached.
         if (Gun.getScope(stack) == null) {
             RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         } else {
             RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         }
 
-        if (entity.equals(Minecraft.getInstance().player)) {
-            renderBoltAndMagazine(matrixStack, buffer, stack, partialTicks, light, overlay);
-        }
+
         if (entity.equals(Minecraft.getInstance().player)) {
             matrixStack.pushPose();
             matrixStack.translate(0, -0.30, 0.33);
@@ -109,51 +102,6 @@ public class NewbornCystModel implements IOverrideModel {
             } else if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.NETHERITE_BAYONET.get()) {
                 RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_NETHERITE_BAYONET.getModel(), stack, matrixStack, buffer, light, overlay);
             }
-        }
-    }
-
-    private void renderBoltAndMagazine(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, float partialTicks, int light, int overlay) {
-        ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
-        float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
-        int shotCount = GunFireCystEventHandler.getShotCount();
-        targetRotation = shotCount * ROTATION_INCREMENT;
-
-        // Interpolate rotation
-        currentRotation = currentRotation + (targetRotation - currentRotation) * partialTicks;
-
-        matrixStack.pushPose();
-        matrixStack.translate(0, -5.8 * 0.0625, 0);
-        if (cooldown > 0) {
-            matrixStack.translate(0, 0, cooldown / 8);
-        }
-        matrixStack.translate(0, 5.8 * 0.0625, 0);
-        matrixStack.popPose();
-        renderMagazineRotation(matrixStack, buffer, stack, light, overlay);
-    }
-
-    private void renderMagazineRotation(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {
-        matrixStack.pushPose();
-        matrixStack.translate(0, -0.21, 0);
-        matrixStack.mulPose(Axis.ZP.rotationDegrees(currentRotation));
-        matrixStack.translate(0, 0.21, 0);
-        RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_DRUM.getModel(), stack, matrixStack, buffer, light, overlay);
-        matrixStack.popPose();
-    }
-
-    @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
-    public static class GunFireCystEventHandler {
-        private static int shotCount = 0;
-
-        @SubscribeEvent
-        public static void onGunFire(GunFireEvent.Post event) {
-            if (event.isClient()) {
-                shotCount++;
-                shotCount %= TOTAL_SHOTS; // Ensure shotCount is always within the bounds of the drum capacity
-            }
-        }
-
-        public static int getShotCount() {
-            return shotCount;
         }
     }
     private double ease(double x) {

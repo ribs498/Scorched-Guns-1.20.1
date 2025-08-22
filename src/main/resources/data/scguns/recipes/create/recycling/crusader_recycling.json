@@ -1,0 +1,19 @@
+{
+  "type": "create:crushing",
+  "ingredients": [
+    {
+      "item": "scguns:crusader"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "minecraft:iron_ingot"
+    }
+  ]
+}

@@ -25,6 +25,7 @@ import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageBlood;
+import top.ribs.scguns.network.message.S2CMessageProjectileHitBlock;
 import top.ribs.scguns.network.message.S2CMessageProjectileHitEntity;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 
@@ -45,20 +46,20 @@ public class SculkCellEntity extends ProjectileEntity {
 
     @Override
     protected void onProjectileTick() {
-        if (this.level().isClientSide && (this.tickCount > 1 && this.tickCount < this.life)) {
-            if (this.tickCount % 4 == 0) {
+        if (this.level().isClientSide && this.tickCount < this.life) {
+            if (this.tickCount % 2 == 0) {
+                this.level().addParticle(ModParticleTypes.SONIC_BLAST.get(), true, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
+            }
+
+            if (this.tickCount > 1 && this.tickCount % 4 == 0) {
                 double offsetX = (this.random.nextDouble() - 0.5) * 0.5;
                 double offsetY = (this.random.nextDouble() - 0.5) * 0.5;
                 double offsetZ = (this.random.nextDouble() - 0.5) * 0.5;
                 this.level().addParticle(ParticleTypes.SCULK_SOUL, true, this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ, 0, 0, 0);
             }
         }
-        if (this.level().isClientSide && (this.tickCount > 1 && this.tickCount < this.life)) {
-            if (this.tickCount % 2 == 0) {
-                this.level().addParticle(ModParticleTypes.SONIC_BLAST.get(), true, this.getX(), this.getY(), this.getZ(), 0, 0, 0);
-            }
-        }
     }
+
     @Override
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {
         float damage = this.getDamage();
@@ -69,6 +70,10 @@ public class SculkCellEntity extends ProjectileEntity {
 
         if (headshot) {
             damage *= Config.COMMON.gameplay.headShotDamageMultiplier.get();
+        }
+        if (entity instanceof LivingEntity livingTarget) {
+            damage = applyProjectileProtection(livingTarget, damage);
+            damage = calculateArmorBypassDamage(livingTarget, damage);
         }
         if (entity instanceof LivingEntity livingTarget) {
             damage = calculateArmorBypassDamage(livingTarget, damage);
@@ -151,11 +156,39 @@ public class SculkCellEntity extends ProjectileEntity {
             }
         }
     }
+
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
+        PacketHandler.getPlayChannel().sendToTrackingChunk(() -> this.level().getChunkAt(pos), new S2CMessageProjectileHitBlock(x, y, z, pos, face));
+
+        if (!this.level().isClientSide) {
+            ServerLevel serverLevel = (ServerLevel) this.level();
+
+            for (int i = 0; i < 5; i++) {
+                double offsetX = (this.random.nextDouble() - 0.5) * 0.3;
+                double offsetY = (this.random.nextDouble() - 0.5) * 0.3;
+                double offsetZ = (this.random.nextDouble() - 0.5) * 0.3;
+                serverLevel.sendParticles(ParticleTypes.SCULK_SOUL, x + offsetX, y + offsetY, z + offsetZ, 1, 0, 0, 0, 0.05);
+            }
+
+            for (int i = 0; i < 2; i++) {
+                serverLevel.sendParticles(ModParticleTypes.SONIC_BLAST.get(), x, y, z, 1, 0, 0, 0, 0);
+            }
+        }
+
+        super.onHitBlock(state, pos, face, x, y, z);
     }
 
     @Override
     public void onExpired() {
+        if (!this.level().isClientSide) {
+            ServerLevel serverLevel = (ServerLevel) this.level();
+            for (int i = 0; i < 8; i++) {
+                double offsetX = (this.random.nextDouble() - 0.5) * 0.5;
+                double offsetY = (this.random.nextDouble() - 0.5) * 0.5;
+                double offsetZ = (this.random.nextDouble() - 0.5) * 0.5;
+                serverLevel.sendParticles(ParticleTypes.SCULK_SOUL, this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ, 1, 0, 0, 0, 0.02);
+            }
+        }
     }
 }

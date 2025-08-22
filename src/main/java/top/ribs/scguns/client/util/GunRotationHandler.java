@@ -1,7 +1,7 @@
 package top.ribs.scguns.client.util;
 
 public class GunRotationHandler {
-    private static final float ROTATION_LERP_SPEED = 0.25f;
+    private static final float ROTATION_LERP_SPEED = 0.6f;
 
     private float currentCylinderRotation = 0.0f;
     private float currentMagazineRotation = 0.0f;

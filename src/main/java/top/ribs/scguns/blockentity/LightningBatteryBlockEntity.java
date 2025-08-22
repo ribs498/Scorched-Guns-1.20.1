@@ -33,7 +33,6 @@ import top.ribs.scguns.block.LightningBattery;
 import top.ribs.scguns.client.screen.LightningBatteryMenu;
 import top.ribs.scguns.client.screen.LightningBatteryRecipe;
 import top.ribs.scguns.interfaces.IEnergyGun;
-import top.ribs.scguns.item.EnergyGunItem;
 import top.ribs.scguns.init.ModBlockEntities;
 
 import javax.annotation.Nullable;
@@ -264,21 +263,23 @@ public class LightningBatteryBlockEntity extends BlockEntity implements MenuProv
         ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
 
         if (!inputStack.isEmpty()) {
-            if (inputStack.getItem() instanceof IEnergyGun) {
-                LazyOptional<IEnergyStorage> gunEnergyCap = inputStack.getCapability(ForgeCapabilities.ENERGY);
-                gunEnergyCap.ifPresent(gunEnergy -> {
-                    int energyToTransfer = Math.min(energyStorage.extractEnergy(100, true), gunEnergy.receiveEnergy(100, true));
+            LazyOptional<IEnergyStorage> itemEnergyCap = inputStack.getCapability(ForgeCapabilities.ENERGY);
+
+            if (itemEnergyCap.isPresent()) {
+                itemEnergyCap.ifPresent(itemEnergy -> {
+                    int energyToTransfer = Math.min(energyStorage.extractEnergy(100, true), itemEnergy.receiveEnergy(100, true));
                     if (energyToTransfer > 0) {
                         energyStorage.extractEnergy(energyToTransfer, false);
-                        gunEnergy.receiveEnergy(energyToTransfer, false);
+                        itemEnergy.receiveEnergy(energyToTransfer, false);
                         setChanged();
                         sync();
                     }
 
-                    // If the gun is fully charged, move it to the output slot
-                    if (gunEnergy.getEnergyStored() >= gunEnergy.getMaxEnergyStored()) {
-                        itemHandler.setStackInSlot(OUTPUT_SLOT, inputStack.copy());
-                        itemHandler.extractItem(INPUT_SLOT, 1, false);
+                    if (itemEnergy.getEnergyStored() >= itemEnergy.getMaxEnergyStored()) {
+                        if (outputStack.isEmpty()) {
+                            itemHandler.setStackInSlot(OUTPUT_SLOT, inputStack.copy());
+                            itemHandler.extractItem(INPUT_SLOT, 1, false);
+                        }
                     }
                 });
             } else {

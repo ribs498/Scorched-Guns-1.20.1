@@ -40,10 +40,8 @@ public class SulfurDustParticle extends TextureSheetParticle {
         this.setSpriteFromAge(this.sprites);
 
         if (this.onGround) {
-            this.yd = 0.08; // Small upward movement when on ground
+            this.yd = 0.08;
         }
-
-        // Random horizontal movement
         this.xd += (this.random.nextDouble() - 0.5) * 0.01;
         this.zd += (this.random.nextDouble() - 0.5) * 0.01;
 

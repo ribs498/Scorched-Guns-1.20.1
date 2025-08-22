@@ -55,7 +55,7 @@
   },
   "projectile": {
     "advantage": "scguns:heavy",
-    "damage": 23.5,
+    "damage": 24.5,
     "ejectsCasing": true,
     "gravity": false  ,
     "item": "scguns:krahg_round",

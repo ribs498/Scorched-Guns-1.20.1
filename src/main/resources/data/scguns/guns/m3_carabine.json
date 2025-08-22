@@ -3,7 +3,7 @@
     "flash": {
       "size": 1.0,
       "yOffset": 4.7,
-      "zOffset": -5.6,
+      "zOffset": -5.7,
       "textureLocation": "muzzle_flash_1"
     }
   },
@@ -12,20 +12,20 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 6,
-    "recoilAngle": 2.5,
-    "recoilKick": 0.75,
-    "spread": 2.0,
+    "rate": 4,
+    "recoilAngle":2.0,
+    "recoilKick": 1.1,
+    "spread": 1.5,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 14,
-    "criticalChance": 0.05
+    "criticalChance": 0.1
   },
   "modules": {
     "attachments": {
       "barrel": {
         "yOffset": 4.7,
-        "zOffset": -7.4
+        "zOffset": -7.5
       },
       "scope": {
         "size": 0.8,
@@ -45,12 +45,12 @@
     "zoom": {
       "fovModifier": 0.6,
       "yOffset": 6.3,
-      "zOffset": 0.75
+      "zOffset": 1.0
     }
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 9.0,
+    "damage": 11.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:advanced_round",
@@ -63,7 +63,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 18,
+    "maxAmmo": 19,
     "reloadItem": "scguns:advanced_round",
     "reloadTimer": 125,
     "reloadType": "scguns:mag_fed"

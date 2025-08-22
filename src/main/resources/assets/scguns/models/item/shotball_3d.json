@@ -1,0 +1,23 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "scguns:item/shotball_3d",
+		"particle": "scguns:item/shotball_3d"
+	},
+	"elements": [
+		{
+			"from": [-4.7401, -9.69119, -4.7401],
+			"to": [20.7401, 15.78902, 20.7401],
+			"rotation": {"angle": 0, "axis": "y", "origin": [4.17797, 3.04891, 4.17797]},
+			"faces": {
+				"north": {"uv": [0, 0, 3.5, 3.5], "texture": "#1"},
+				"east": {"uv": [0, 4, 3.5, 7.5], "texture": "#1"},
+				"south": {"uv": [4, 0, 7.5, 3.5], "texture": "#1"},
+				"west": {"uv": [4, 4, 7.5, 7.5], "texture": "#1"},
+				"up": {"uv": [3.5, 11.5, 0, 8], "texture": "#1"},
+				"down": {"uv": [11.5, 0, 8, 3.5], "texture": "#1"}
+			}
+		}
+	]
+}

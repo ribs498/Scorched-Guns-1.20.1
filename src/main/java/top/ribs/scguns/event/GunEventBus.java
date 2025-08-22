@@ -38,6 +38,7 @@ import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.server.ServerLifecycleHooks;
 import software.bernie.geckolib.animatable.GeoItem;
@@ -47,30 +48,27 @@ import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.block.SulfurVentBlock;
+import top.ribs.scguns.cache.HotBarrelCache;
 import top.ribs.scguns.client.handler.MeleeAttackHandler;
-import top.ribs.scguns.client.render.gun.model.RatKingAndQueenModel;
 import top.ribs.scguns.common.*;
+import top.ribs.scguns.common.exosuit.ExoSuitData;
+import top.ribs.scguns.common.exosuit.ExoSuitUpgrade;
+import top.ribs.scguns.common.exosuit.ExoSuitUpgradeManager;
+import top.ribs.scguns.common.network.ServerPlayHandler;
 import top.ribs.scguns.init.*;
 import top.ribs.scguns.interfaces.IAirGun;
 import top.ribs.scguns.interfaces.IEnergyGun;
 import top.ribs.scguns.item.*;
 import top.ribs.scguns.item.ammo_boxes.EmptyCasingPouchItem;
-import top.ribs.scguns.item.animated.AnimatedDualWieldGunItem;
-import top.ribs.scguns.item.animated.AnimatedGunItem;
-import top.ribs.scguns.item.animated.AnimatedUnderWaterGunItem;
-import top.ribs.scguns.item.animated.NonUnderwaterAnimatedGunItem;
+import top.ribs.scguns.item.animated.*;
 import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.C2SMessageReload;
+import top.ribs.scguns.network.message.S2CMessageHotBarrelSync;
 import top.theillusivec4.curios.api.CuriosApi;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-import static top.ribs.scguns.event.TemporaryLightManager.temporaryLights;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class GunEventBus {
@@ -80,7 +78,6 @@ public class GunEventBus {
             MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
             if (server != null) {
                 for (ServerLevel world : server.getAllLevels()) {
-                    TemporaryLightManager.tickLights(world);
                     BeamHandlerCommon.BeamMiningManager.tickMiningProgress(world);
                 }
             }
@@ -90,33 +87,10 @@ public class GunEventBus {
     public static void onServerStopping(ServerStoppingEvent event) {
         MinecraftServer server = event.getServer();
         for (ServerLevel world : server.getAllLevels()) {
-            TemporaryLightManager.cleanup(world);
+          TemporaryLightManager.emergencyCleanup(world);
         }
     }
-    @SubscribeEvent
-    public static void onChunkUnload(ChunkEvent.Unload event) {
-        if (!event.getLevel().isClientSide()) {
-            ChunkPos chunkPos = event.getChunk().getPos();
-            Iterator<Map.Entry<Long, TemporaryLightManager.LightData>> iterator = temporaryLights.entrySet().iterator();
-            while (iterator.hasNext()) {
-                Map.Entry<Long, TemporaryLightManager.LightData> entry = iterator.next();
-                BlockPos pos = BlockPos.of(entry.getKey());
-                if (chunkPos.equals(new ChunkPos(pos))) {
-                    TemporaryLightManager.LightData data = entry.getValue();
-                    Level level = (Level) event.getLevel();
-                    if (data.dimension == level.dimension()) {
-                        if (level.hasChunkAt(pos)) {
-                            BlockState currentState = level.getBlockState(pos);
-                            if (currentState.is(Blocks.LIGHT)) {
-                                level.setBlock(pos, data.previousState, 3);
-                            }
-                        }
-                        iterator.remove();
-                    }
-                }
-            }
-        }
-    }
+
     @SubscribeEvent
     public static void preShoot(GunFireEvent.Pre event) {
         Player player = event.getEntity();
@@ -127,6 +101,7 @@ public class GunEventBus {
         if (MeleeAttackHandler.isBanzaiActive()) {
             MeleeAttackHandler.stopBanzai();
         }
+
         if (level.isClientSide() && heldItem.getItem() instanceof AnimatedGunItem animatedGunItem) {
             try {
                 long id = GeoItem.getId(heldItem);
@@ -136,6 +111,14 @@ public class GunEventBus {
                         .get("controller");
 
                 if (animationController != null) {
+                    if (heldItem.isDamageableItem() &&
+                            heldItem.getDamageValue() >= (heldItem.getMaxDamage() - 1)) {
+                        player.displayClientMessage(Component.translatable("message.scguns.gun_broken")
+                                .withStyle(ChatFormatting.RED), true);
+                        event.setCanceled(true);
+                        return;
+                    }
+
                     if (animatedGunItem.isAnimationPlaying(animationController, "reload_stop")) {
                         event.setCanceled(true);
                         return;
@@ -207,7 +190,6 @@ public class GunEventBus {
                 }
             }
 
-            // Underwater checks
             if ((heldItem.getItem() instanceof NonUnderwaterGunItem ||
                     heldItem.getItem() instanceof NonUnderwaterAnimatedGunItem) &&
                     player.isUnderWater()) {
@@ -215,30 +197,45 @@ public class GunEventBus {
                 return;
             }
 
-            // Damage checks
             if (heldItem.isDamageableItem() && tag != null) {
                 if (heldItem.getDamageValue() == (heldItem.getMaxDamage() - 1)) {
                     level.playSound(null, player.blockPosition(), SoundEvents.ITEM_BREAK,
                             SoundSource.PLAYERS, 1.0F, 1.0F);
+                    player.displayClientMessage(Component.translatable("message.scguns.gun_broken")
+                            .withStyle(ChatFormatting.RED), true);
                     event.getEntity().getCooldowns().addCooldown(event.getStack().getItem(),
                             gun.getGeneral().getRate());
                     event.setCanceled(true);
                     return;
                 }
-
                 int maxDamage = heldItem.getMaxDamage();
                 int currentDamage = heldItem.getDamageValue();
-                if (currentDamage >= maxDamage / 1.5) {
-                    if (Math.random() >= 0.975) {
-                        event.getEntity().playSound(ModSounds.ITEM_PISTOL_COCK.get(), 1.0F, 1.0F);
-                        int coolDown = gun.getGeneral().getRate() * 10;
-                        if (coolDown > 30) {
-                            coolDown = 30;
-                        }
-                        event.getEntity().getCooldowns().addCooldown(event.getStack().getItem(), coolDown);
-                        event.setCanceled(true);
+                int gunRustLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.GUN_RUST.get(), heldItem);
+
+                double jamChance = 0.0;
+
+                if (gunRustLevel > 0) {
+                    jamChance = 0.10 + (gunRustLevel * 0.05);
+                }
+
+                if (currentDamage >= maxDamage * 0.8) {
+                    jamChance += 0.025;
+                }
+
+                if (jamChance > 0 && Math.random() < jamChance) {
+                    event.getEntity().playSound(ModSounds.ITEM_PISTOL_COCK.get(), 1.0F, 1.0F);
+                    player.displayClientMessage(Component.translatable("message.scguns.gun_jammed")
+                            .withStyle(ChatFormatting.YELLOW), true);
+
+                    int coolDown = gun.getGeneral().getRate() * 10;
+                    if (coolDown > 30) {
+                        coolDown = 30;
                     }
-                } else if (tag.getInt("AmmoCount") >= 1) {
+                    event.getEntity().getCooldowns().addCooldown(event.getStack().getItem(), coolDown);
+                    event.setCanceled(true);
+                    return;
+                }
+                if (tag.getInt("AmmoCount") >= 1) {
                     broken(heldItem, level, player);
                 }
             }
@@ -275,8 +272,8 @@ public class GunEventBus {
             boolean isCarbine = gunItem.isInCarbineMode(heldItem);
 
             if (gunItem instanceof AnimatedDualWieldGunItem) {
-                RatKingAndQueenModel.GunFireEventRatHandler.incrementShotCount();
-                boolean useAlternate = RatKingAndQueenModel.GunFireEventRatHandler.shouldUseAlternateAnimation();
+                ServerPlayHandler.RatKingAndQueenModel.GunFireEventRatHandler.incrementShotCount();
+                boolean useAlternate = ServerPlayHandler.RatKingAndQueenModel.GunFireEventRatHandler.shouldUseAlternateAnimation();
 
                 if (ModSyncedDataKeys.AIMING.getValue(player)) {
                     controller.tryTriggerAnimation(useAlternate ? "aim_shoot1" : "aim_shoot");
@@ -294,24 +291,35 @@ public class GunEventBus {
         if (heldItem.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(heldItem);
             int hotBarrelLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), heldItem);
+
             if (gun.getGeneral().hasPlayerKnockBack()) {
                 applyGunKnockback(player, gun);
             }
+
             if (hotBarrelLevel > 0) {
                 int hotBarrelFillRate = gun.getGeneral().getHotBarrelRate();
-                HotBarrelHandler.increaseHotBarrel(heldItem, hotBarrelFillRate);
-
+                HotBarrelCache.increaseHotBarrel(player, heldItem, hotBarrelFillRate);
+                if (!level.isClientSide() && player instanceof ServerPlayer serverPlayer) {
+                    int newLevel = HotBarrelCache.getHotBarrelLevel(player, heldItem);
+                    PacketHandler.getPlayChannel().sendToPlayer(
+                            () -> serverPlayer,
+                            new S2CMessageHotBarrelSync(newLevel, heldItem.getItem().getDescriptionId())
+                    );
+                }
                 boolean inSulfurCloud = isInSulfurCloudArea(player.level(), player.blockPosition());
                 if (inSulfurCloud) {
                     triggerExplosion(player.level(), player.blockPosition());
                 }
             }
-            Vec3 lookVec = player.getLookAngle();
-            BlockPos lightPos = player.blockPosition()
-                    .offset((int)(lookVec.x * 2), 2, (int)(lookVec.z * 2));
-            boolean isBeamWeapon = gun.getGeneral().getFireMode() == FireMode.BEAM;
-            TemporaryLightManager.addTemporaryLight(level, lightPos, isBeamWeapon);
-            int shotCount = RatKingAndQueenModel.GunFireEventRatHandler.getShotCount();
+            if (gun.getGeneral().isEnableGunLight()) {
+                Vec3 lookVec = player.getLookAngle();
+                BlockPos lightPos = player.blockPosition()
+                        .offset((int)(lookVec.x * 2), 2, (int)(lookVec.z * 2));
+                boolean isBeamWeapon = gun.getGeneral().getFireMode() == FireMode.BEAM;
+                TemporaryLightManager.addTemporaryLight(level, lightPos, isBeamWeapon);
+            }
+
+            int shotCount = ServerPlayHandler.RatKingAndQueenModel.GunFireEventRatHandler.getShotCount();
             boolean mirror = (heldItem.getItem() instanceof AnimatedDualWieldGunItem && (shotCount % 2 == 1));
 
             if (Config.COMMON.gameplay.spawnCasings.get()) {
@@ -320,32 +328,17 @@ public class GunEventBus {
                         ejectCasing(level, player, mirror);
                     }
                 }
-                if (gun.getProjectile().casingType != null && !player.getAbilities().instabuild && !gun.getProjectile().ejectDuringReload()) {
-                    ItemStack casingStack = new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(gun.getProjectile().casingType)));
-                    double baseChance = 0.4;
-                    int enchantmentLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SHELL_CATCHER.get(), heldItem);
-                    double finalChance = baseChance + (enchantmentLevel * 0.15);
-                    if (Math.random() < finalChance) {
-                        if (addCasingToPouch(player, casingStack)) {
-                            spawnCasingInWorld(level, player, casingStack);
-                        }
-                    }
-                }
+
             }
 
             if (heldItem.isDamageableItem()) {
-                if (Config.COMMON.gameplay.enableGunDamage.get()) {
-                    damageGun(heldItem, level, player);
-                }
-                if (Config.COMMON.gameplay.enableAttachmentDamage.get()) {
-                    damageAttachments(heldItem, level, player);
-                }
                 if (heldItem.getDamageValue() >= (heldItem.getMaxDamage() / 1.5) && Math.random() < 0.15) {
                     level.playSound(player, player.blockPosition(), ModSounds.COPPER_GUN_JAM.get(), SoundSource.PLAYERS, 1.0F, 1.0f);
                 }
             }
         }
     }
+
     private static void applyGunKnockback(Player player, Gun gun) {
         Vec3 lookVec = player.getLookAngle();
         float baseStrength = gun.getGeneral().getPlayerKnockBackStrength();
@@ -389,15 +382,29 @@ public class GunEventBus {
     public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
         Player player = event.player;
         ItemStack heldItem = player.getMainHandItem();
-        if (heldItem.getItem() instanceof GunItem && EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), heldItem) > 0) {
-            HotBarrelHandler.decayHotBarrel(heldItem);
+
+        if (heldItem.getItem() instanceof GunItem &&
+                EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), heldItem) > 0) {
+            int levelBefore = HotBarrelCache.getHotBarrelLevel(player, heldItem);
+            if (levelBefore > 0) {
+            }
+            HotBarrelCache.tickHotBarrel(player, heldItem);
+
         } else {
             for (int i = 0; i < player.getInventory().getContainerSize(); i++) {
                 ItemStack itemStack = player.getInventory().getItem(i);
-                if (itemStack.getItem() instanceof GunItem && EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), itemStack) > 0) {
-                    HotBarrelHandler.clearHotBarrel(itemStack);
+                if (itemStack.getItem() instanceof GunItem &&
+                        EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), itemStack) > 0) {
+
+                    if (HotBarrelCache.getHotBarrelLevel(player, itemStack) > 0) {
+                        HotBarrelCache.clearHotBarrel(player, itemStack);
+
+                    }
                 }
             }
+        }
+        if (player.tickCount % 1200 == 0) {
+            HotBarrelCache.cleanupOldEntries();
         }
     }
 
@@ -450,20 +457,31 @@ public class GunEventBus {
                 boolean isUnderwaterGun = stack.getItem() instanceof UnderwaterGunItem
                         || stack.getItem() instanceof AnimatedUnderWaterGunItem;
 
-
                 int damageAmount = 1;
                 int waterProofLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WATER_PROOF.get(), stack);
+                int acceleratorLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.ACCELERATOR.get(), stack);
 
                 if (isUnderwater) {
                     if (isUnderwaterGun) {
                         if (waterProofLevel > 0) {
-                            damageAmount = (Math.random() < 0.5) ? 1 : 0;
+                            if (Math.random() < 0.25) {
+                                damageAmount = 0;
+                            }
                         }
                     } else {
-                        damageAmount = (waterProofLevel > 0) ? 1 : 3;
+                        if (waterProofLevel > 0) {
+                        } else {
+                            damageAmount = 3;
+                        }
                     }
                 }
 
+                if (acceleratorLevel > 0 && damageAmount > 0) {
+                    float extraWearChance = 0.15f * acceleratorLevel;
+                    if (Math.random() < extraWearChance) {
+                        damageAmount *= 2;
+                    }
+                }
 
                 if (currentDamage >= (maxDamage - damageAmount)) {
                     if (currentDamage >= (maxDamage - damageAmount - 1)) {
@@ -585,50 +603,120 @@ public class GunEventBus {
     }
 
     public static boolean addCasingToPouch(Player player, ItemStack casingStack) {
+        ItemStack casingCopy = casingStack.copy();
+
+        // Check regular inventory for Empty Casing Pouches
         for (ItemStack itemStack : player.getInventory().items) {
             if (itemStack.getItem() instanceof EmptyCasingPouchItem) {
-                int insertedItems = EmptyCasingPouchItem.add(itemStack, casingStack);
+                int insertedItems = EmptyCasingPouchItem.add(itemStack, casingCopy);
                 if (insertedItems > 0) {
-                    casingStack.shrink(insertedItems);
-                    return false;
+                    return true;
                 }
             }
         }
 
-        // Check Curios slots for the empty casing pouch
-        AtomicBoolean result = new AtomicBoolean(false);
+        // Check exo suit pouches for Empty Casing Pouches
+        if (addCasingToExoSuitPouches(player, casingCopy)) {
+            return true;
+        }
+
+        // Check Curios slots for Empty Casing Pouches
+        final boolean[] result = {false};
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
             for (int i = 0; i < curios.getSlots(); i++) {
                 ItemStack stack = curios.getStackInSlot(i);
                 if (stack.getItem() instanceof EmptyCasingPouchItem) {
-                    int insertedItems = EmptyCasingPouchItem.add(stack, casingStack);
+                    int insertedItems = EmptyCasingPouchItem.add(stack, casingCopy);
                     if (insertedItems > 0) {
-                        casingStack.shrink(insertedItems);
-                        result.set(true);
-                        break;
+                        result[0] = true;
+                        return;
                     }
                 }
             }
         });
 
-        return !result.get();
+        return result[0];
     }
-    public static class RatKingAndQueenModel {
-        public static class GunFireEventRatHandler {
-            private static int shotCount = 0;
 
-            public static int getShotCount() {
-                return shotCount;
-            }
+    // Add this helper method to check exo suit pouches for Empty Casing Pouches
+    private static boolean addCasingToExoSuitPouches(Player player, ItemStack casingStack) {
+        ItemStack chestplate = getEquippedChestplate(player);
+        if (chestplate.isEmpty()) {
+            return false;
+        }
 
-            public static void incrementShotCount() {
-                shotCount++;
-            }
+        ItemStack pouchUpgrade = findPouchUpgrade(chestplate);
+        if (pouchUpgrade.isEmpty()) {
+            return false;
+        }
 
-            public static boolean shouldUseAlternateAnimation() {
-                return shotCount % 2 == 1;
+        ExoSuitUpgrade upgrade = ExoSuitUpgradeManager.getUpgradeForItem(pouchUpgrade);
+        if (upgrade == null) {
+            return false;
+        }
+
+        String pouchId = getPouchId(pouchUpgrade);
+        ItemStackHandler pouchInventory = getPouchInventory(chestplate, pouchId, upgrade.getDisplay().getStorageSize());
+
+        // Check through pouch inventory for Empty Casing Pouches
+        for (int i = 0; i < pouchInventory.getSlots(); i++) {
+            ItemStack stack = pouchInventory.getStackInSlot(i);
+            if (!stack.isEmpty() && stack.getItem() instanceof EmptyCasingPouchItem) {
+                int insertedItems = EmptyCasingPouchItem.add(stack, casingStack);
+                if (insertedItems > 0) {
+                    // Save the updated pouch inventory
+                    savePouchInventory(chestplate, pouchId, pouchInventory);
+                    return true;
+                }
             }
         }
+
+        return false;
+    }
+
+    // Add these helper methods to GunEventBus.java (similar to what we have in ExoSuitAmmoHelper)
+    private static ItemStack getEquippedChestplate(Player player) {
+        for (ItemStack armorStack : player.getArmorSlots()) {
+            if (armorStack.getItem() instanceof ExoSuitItem exosuit &&
+                    exosuit.getType() == net.minecraft.world.item.ArmorItem.Type.CHESTPLATE) {
+                return armorStack;
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    private static ItemStack findPouchUpgrade(ItemStack chestplate) {
+        for (int slot = 0; slot < 4; slot++) {
+            ItemStack upgradeItem = ExoSuitData.getUpgradeInSlot(chestplate, slot);
+            if (!upgradeItem.isEmpty()) {
+                ExoSuitUpgrade upgrade = ExoSuitUpgradeManager.getUpgradeForItem(upgradeItem);
+                if (upgrade != null && upgrade.getType().equals("pouches")) {
+                    return upgradeItem;
+                }
+            }
+        }
+        return ItemStack.EMPTY;
+    }
+
+    private static String getPouchId(ItemStack pouchUpgrade) {
+        return pouchUpgrade.getItem().toString();
+    }
+
+    private static ItemStackHandler getPouchInventory(ItemStack chestplate, String pouchId, int size) {
+        CompoundTag pouchData = chestplate.getOrCreateTag().getCompound("PouchData");
+
+        ItemStackHandler handler = new ItemStackHandler(size);
+        if (pouchData.contains(pouchId)) {
+            handler.deserializeNBT(pouchData.getCompound(pouchId));
+        }
+
+        return handler;
+    }
+
+    private static void savePouchInventory(ItemStack chestplate, String pouchId, ItemStackHandler handler) {
+        CompoundTag pouchData = chestplate.getOrCreateTag().getCompound("PouchData");
+        pouchData.put(pouchId, handler.serializeNBT());
+        chestplate.getOrCreateTag().put("PouchData", pouchData);
     }
 }

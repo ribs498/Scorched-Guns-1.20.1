@@ -50,6 +50,7 @@
   "reloads": {
     "emptyMagTimer": 10,
     "maxAmmo": 4,
+    "reloadAmount": 2,
     "reloadItem": "scguns:shock_cell",
     "reloadTimer": 15,
     "reloadType": "scguns:manual"

@@ -58,7 +58,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 14.0,
+    "damage": 15,
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:energy_core",
@@ -69,9 +69,10 @@
   },
   "reloads": {
     "emptyMagTimer": 50,
-    "maxAmmo": 12,
+    "maxAmmo": 6,
     "reloadItem": "scguns:energy_core",
     "reloadByproduct": "scguns:depleted_energy_core",
+    "byproductChance": 0.45,
     "reloadTimer": 27,
     "reloadType": "scguns:single_item"
   },

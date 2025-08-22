@@ -12,7 +12,9 @@ import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.event.GunFireEvent;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
+import top.ribs.scguns.util.ExoSuitRecoilHelper;
 
 import java.util.Random;
 
@@ -39,6 +41,7 @@ public class RecoilHandler {
     private RecoilHandler() {}
 
     private static int recoilRand;
+
     public void updateConfig() {
         try {
             if(Config.SERVER != null && Config.SERVER.enableCameraRecoil != null) {
@@ -48,6 +51,7 @@ public class RecoilHandler {
             // Config not ready yet
         }
     }
+
     @SubscribeEvent
     public void preShoot(GunFireEvent.Pre event) {
         if(!event.isClient())
@@ -63,15 +67,26 @@ public class RecoilHandler {
         if(!event.isClient())
             return;
 
-        if(!this.enableRecoil)  // Use cached value instead
+        if(!this.enableRecoil)
             return;
 
         ItemStack heldItem = event.getStack();
         GunItem gunItem = (GunItem) heldItem.getItem();
         Gun modifiedGun = gunItem.getModifiedGun(heldItem);
+
+        if(Minecraft.getInstance().player == null) return;
+
+        float baseRecoilAngle = modifiedGun.getGeneral().getRecoilAngle();
+        float exoSuitModifiedRecoil = ExoSuitRecoilHelper.getModifiedRecoilAngle(Minecraft.getInstance().player, baseRecoilAngle);
+
         float recoilModifier = 1.0F - GunModifierHelper.getRecoilModifier(heldItem);
+        if (Minecraft.getInstance().player != null) {
+            float enchantmentMultiplier = GunEnchantmentHelper.getRecoilModifier(Minecraft.getInstance().player, heldItem);
+            recoilModifier *= enchantmentMultiplier;
+        }
         recoilModifier *= (float) this.getAdsRecoilReduction(modifiedGun);
-        this.cameraRecoil = modifiedGun.getGeneral().getRecoilAngle() * recoilModifier;
+
+        this.cameraRecoil = exoSuitModifiedRecoil * recoilModifier;
         this.progressCameraRecoil = 0F;
         this.gunRecoilRandom = random.nextFloat();
     }
@@ -123,23 +138,35 @@ public class RecoilHandler {
             return;
 
         ItemStack heldItem = event.getItemStack();
-        if(!(heldItem.getItem() instanceof GunItem))
+        if(!(heldItem.getItem() instanceof GunItem gunItem))
             return;
 
-        GunItem gunItem = (GunItem) heldItem.getItem();
         Gun modifiedGun = gunItem.getModifiedGun(heldItem);
+        assert Minecraft.getInstance().player != null;
         ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
         float cooldown = tracker.getCooldownPercent(gunItem, Minecraft.getInstance().getFrameTime());
         cooldown = cooldown >= modifiedGun.getGeneral().getRecoilDurationOffset() ? (cooldown - modifiedGun.getGeneral().getRecoilDurationOffset()) / (1.0F - modifiedGun.getGeneral().getRecoilDurationOffset()) : 0.0F;
+
         if(cooldown >= 0.8) {
-            float amount = 1.0F * ((1.0F - cooldown) / 0.2F);
+            float amount = ((1.0F - cooldown) / 0.2F);
             this.gunRecoilNormal = 1 - (--amount) * amount * amount * amount;
         } else {
             float amount = (cooldown / 0.8F);
             this.gunRecoilNormal = amount < 0.5 ? 2 * amount * amount : -1 + (4 - 2 * amount) * amount;
         }
 
-        this.gunRecoilAngle = modifiedGun.getGeneral().getRecoilAngle();
+        float baseRecoilAngle = modifiedGun.getGeneral().getRecoilAngle();
+        if(Minecraft.getInstance().player != null) {
+            float exoSuitModifiedRecoil = ExoSuitRecoilHelper.getModifiedRecoilAngle(Minecraft.getInstance().player, baseRecoilAngle);
+
+            float recoilModifier = 1.0F - GunModifierHelper.getRecoilModifier(heldItem);
+            float enchantmentMultiplier = GunEnchantmentHelper.getRecoilModifier(Minecraft.getInstance().player, heldItem);
+            recoilModifier *= enchantmentMultiplier;
+
+            this.gunRecoilAngle = exoSuitModifiedRecoil * recoilModifier;
+        } else {
+            this.gunRecoilAngle = baseRecoilAngle;
+        }
     }
 
     public double getAdsRecoilReduction(Gun gun) {
@@ -158,4 +185,3 @@ public class RecoilHandler {
         return this.gunRecoilRandom;
     }
 }
-

@@ -106,13 +106,6 @@ public class NiterLayerBlock extends SnowLayerBlock implements LiquidBlockContai
         builder.add(LAYERS, WATERLOGGED);
     }
 
-    @Override
-    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
-        if (!state.getValue(WATERLOGGED) && world.getBrightness(LightLayer.BLOCK, pos) > 11) {
-            dropResources(state, world, pos);
-            world.removeBlock(pos, false);
-        }
-    }
 }
 
 

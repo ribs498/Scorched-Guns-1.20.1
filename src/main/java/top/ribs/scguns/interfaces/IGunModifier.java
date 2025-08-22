@@ -16,7 +16,7 @@ public interface IGunModifier
     /**
      * Modify the volume of the fire sound. This does not change the distance the sound can be heard
      * from, just the volume.
-     * 
+     *
      * @param volume the current fire volume
      * @return the new volume
      */
@@ -24,8 +24,10 @@ public interface IGunModifier
     {
         return volume;
     }
+
+
     default float recoilModifier(ItemStack weapon) {
-        return recoilModifier();  // Use the existing recoilModifier by default
+        return recoilModifier();
     }
 
     default float kickModifier(ItemStack weapon) {
@@ -237,4 +239,16 @@ public interface IGunModifier
         return speed;
     }
 
+    /**
+     * Modifies the mouse sensitivity when aiming down sights with this attachment.
+     * This can be used to compensate for FOV changes in scopes to maintain consistent feel.
+     * Values greater than 1.0 increase sensitivity, values less than 1.0 decrease it.
+     *
+     * @param sensitivity the current mouse sensitivity
+     * @return the modified mouse sensitivity
+     */
+    default double modifyMouseSensitivity(double sensitivity)
+    {
+        return sensitivity;
+    }
 }

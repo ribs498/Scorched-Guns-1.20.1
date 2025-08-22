@@ -6,7 +6,11 @@
     "scguns:supply_scamp",
     "scguns:sky_carrier",
     "scguns:cog_knight",
+    "scguns:trauma_unit",
     "minecraft:wither",
-    "minecraft:iron_golem"
+    "minecraft:iron_golem",
+    "scguns:signal_beacon",
+    "scguns:scamp_tank",
+    "scguns:scampler"
   ]
 }

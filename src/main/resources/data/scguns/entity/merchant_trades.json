@@ -1,0 +1,384 @@
+{
+  "max_total_offers": 10,
+  "section_limits": {
+    "blueprints": 4,
+    "weapons": 3,
+    "ammo": 3
+  },
+  "sections": {
+    "blueprints": [
+      {
+        "buy_item": {
+          "item": "minecraft:emerald",
+          "count": 35
+        },
+        "sell_item": {
+          "item": "scguns:copper_blueprint",
+          "count": 1
+        },
+        "max_uses": 2,
+        "xp_reward": 5,
+        "price_multiplier": 0.05
+      },
+      {
+        "buy_item": {
+          "item": "minecraft:amethyst_shard",
+          "count": 12
+        },
+        "sell_item": {
+          "item": "scguns:iron_blueprint",
+          "count": 1
+        },
+        "max_uses": 2,
+        "xp_reward": 5,
+        "price_multiplier": 0.05
+      },
+      {
+        "buy_item": {
+          "item": "scguns:ancient_brass",
+          "count": 45
+        },
+        "sell_item": {
+          "item": "scguns:wrecker_blueprint",
+          "count": 1
+        },
+        "max_uses": 2,
+        "xp_reward": 5,
+        "price_multiplier": 0.05
+      },
+      {
+        "buy_item": {
+          "item": "minecraft:heart_of_the_sea",
+          "count": 2
+        },
+        "sell_item": {
+          "item": "scguns:ocean_blueprint",
+          "count": 1
+        },
+        "max_uses": 2,
+        "xp_reward": 5,
+        "price_multiplier": 0.05
+      },
+      {
+        "buy_item": {
+          "item": "minecraft:netherite_scrap",
+          "count": 2
+        },
+        "sell_item": {
+          "item": "scguns:piglin_blueprint",
+          "count": 1
+        },
+        "max_uses": 2,
+        "xp_reward": 5,
+        "price_multiplier": 0.05
+      },
+      {
+        "buy_item": {
+          "item": "minecraft:echo_shard",
+          "count": 6
+        },
+        "sell_item": {
+          "item": "scguns:deep_dark_blueprint",
+          "count": 1
+        },
+        "max_uses": 2,
+        "xp_reward": 5,
+        "price_multiplier": 0.05
+      },
+      {
+        "buy_item": {
+          "item": "scguns:diamond_steel_block",
+          "count": 5
+        },
+        "buy_item_2": {
+          "item": "scguns:energy_core",
+          "count": 3
+        },
+        "sell_item": {
+          "item": "scguns:diamond_steel_blueprint",
+          "count": 1
+        },
+        "max_uses": 2,
+        "xp_reward": 5,
+        "price_multiplier": 0.05
+      },
+      {
+        "buy_item": {
+          "item": "scguns:treated_brass_block",
+          "count": 5
+        },
+        "buy_item_2": {
+          "item": "scguns:plasma_core",
+          "count": 3
+        },
+        "sell_item": {
+          "item": "scguns:treated_brass_blueprint",
+          "count": 1
+        },
+        "max_uses": 2,
+        "xp_reward": 5,
+        "price_multiplier": 0.05
+      },
+      {
+        "buy_item": {
+          "item": "minecraft:elytra",
+          "count": 1
+        },
+        "sell_item": {
+          "item": "scguns:end_blueprint",
+          "count": 1
+        },
+        "max_uses": 2,
+        "xp_reward": 5,
+        "price_multiplier": 0.05
+      }
+    ],
+    "weapons": [
+      {
+        "buy_item": {
+          "item": "minecraft:diamond",
+          "count": 6
+        },
+        "sell_item": {
+          "item": "scguns:osgood_50",
+          "count": 1
+        },
+        "max_uses": 1,
+        "xp_reward": 10,
+        "price_multiplier": 0.1
+      },
+      {
+        "buy_item": {
+          "item": "minecraft:emerald",
+          "count": 25
+        },
+        "sell_item": {
+          "item": "scguns:marlin",
+          "count": 1
+        },
+        "max_uses": 1,
+        "xp_reward": 8,
+        "price_multiplier": 0.1
+      },
+      {
+        "buy_item": {
+          "item": "scguns:diamond_steel_ingot",
+          "count": 13
+        },
+        "sell_item": {
+          "item": "scguns:mangalitsa",
+          "count": 1
+        },
+        "max_uses": 1,
+        "xp_reward": 8,
+        "price_multiplier": 0.1
+      },
+      {
+        "buy_item": {
+          "item": "scguns:treated_brass_ingot",
+          "count": 18
+        },
+        "sell_item": {
+          "item": "scguns:forlorn_hope",
+          "count": 1
+        },
+        "max_uses": 1,
+        "xp_reward": 8,
+        "price_multiplier": 0.1
+      },
+      {
+        "buy_item": {
+          "item": "minecraft:gold_ingot",
+          "count": 32
+        },
+        "sell_item": {
+          "item": "scguns:iron_spear",
+          "count": 1
+        },
+        "max_uses": 1,
+        "xp_reward": 8,
+        "price_multiplier": 0.1
+      },
+      {
+        "buy_item": {
+          "item": "scguns:treated_iron_ingot",
+          "count": 26
+        },
+        "sell_item": {
+          "item": "scguns:prush_gun",
+          "count": 1
+        },
+        "max_uses": 1,
+        "xp_reward": 8,
+        "price_multiplier": 0.1
+      },
+      {
+        "buy_item": {
+          "item": "minecraft:iron_ingot",
+          "count": 36
+        },
+        "buy_item_2": {
+          "item": "minecraft:diamond",
+          "count": 1
+        },
+        "sell_item": {
+          "item": "scguns:lockewood",
+          "count": 1
+        },
+        "max_uses": 1,
+        "xp_reward": 12,
+        "price_multiplier": 0.15
+      },
+      {
+        "buy_item": {
+          "item": "scguns:raw_phosphor",
+          "count": 4
+        },
+        "sell_item": {
+          "item": "scguns:arc_worker",
+          "count": 1
+        },
+        "max_uses": 1,
+        "xp_reward": 12,
+        "price_multiplier": 0.15
+      },
+      {
+        "buy_item": {
+          "item": "scguns:vehement_coal",
+          "count": 4
+        },
+        "sell_item": {
+          "item": "scguns:super_shotgun",
+          "count": 1
+        },
+        "max_uses": 1,
+        "xp_reward": 12,
+        "price_multiplier": 0.15
+      },
+      {
+        "buy_item": {
+          "item": "minecraft:emerald",
+          "count": 38
+        },
+        "sell_item": {
+          "item": "scguns:stigg",
+          "count": 1
+        },
+        "max_uses": 1,
+        "xp_reward": 12,
+        "price_multiplier": 0.15
+      },
+      {
+        "buy_item": {
+          "item": "scguns:ancient_brass",
+          "count": 12
+        },
+        "buy_item_2": {
+          "item": "minecraft:diamond",
+          "count": 5
+        },
+        "sell_item": {
+          "item": "scguns:cogloader",
+          "count": 1
+        },
+        "max_uses": 1,
+        "xp_reward": 15,
+        "price_multiplier": 0.2
+      }
+    ],
+    "ammo": [
+      {
+        "buy_item": {
+          "item": "minecraft:iron_ingot",
+          "count": 6
+        },
+        "sell_item": {
+          "item": "scguns:compact_advanced_round",
+          "count": 32
+        },
+        "max_uses": 4,
+        "xp_reward": 2,
+        "price_multiplier": 0.05
+      },
+      {
+        "buy_item": {
+          "item": "minecraft:copper_ingot",
+          "count": 8
+        },
+        "sell_item": {
+          "item": "scguns:standard_copper_round",
+          "count": 32
+        },
+        "max_uses": 6,
+        "xp_reward": 3,
+        "price_multiplier": 0.05
+      },
+
+      {
+        "buy_item": {
+          "item": "minecraft:gunpowder",
+          "count": 8
+        },
+        "sell_item": {
+          "item": "scguns:shotgun_shell",
+          "count": 24
+        },
+        "max_uses": 5,
+        "xp_reward": 3,
+        "price_multiplier": 0.1
+      },
+      {
+        "buy_item": {
+          "item": "minecraft:diamond",
+          "count": 1
+        },
+        "sell_item": {
+          "item": "scguns:krahg_round",
+          "count": 1
+        },
+        "max_uses": 6,
+        "xp_reward": 5,
+        "price_multiplier": 0.15
+      },
+      {
+        "buy_item": {
+          "item": "scguns:sulfur_chunk",
+          "count": 16
+        },
+        "sell_item": {
+          "item": "scguns:gibbs_round",
+          "count": 6
+        },
+        "max_uses": 5,
+        "xp_reward": 5,
+        "price_multiplier": 0.15
+      },
+      {
+        "buy_item": {
+          "item": "minecraft:gold_nugget",
+          "count": 24
+        },
+        "sell_item": {
+          "item": "scguns:buckshot",
+          "count": 16
+        },
+        "max_uses": 4,
+        "xp_reward": 4,
+        "price_multiplier": 0.1
+      },
+      {
+        "buy_item": {
+          "item": "minecraft:blaze_powder",
+          "count": 6
+        },
+        "sell_item": {
+          "item": "scguns:blaze_fuel",
+          "count": 3
+        },
+        "max_uses": 3,
+        "xp_reward": 6,
+        "price_multiplier": 0.2
+      }
+    ]
+  }
+}

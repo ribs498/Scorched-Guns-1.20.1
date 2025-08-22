@@ -20,10 +20,6 @@
       "item": "scguns:rapid_firing_unit"
     },
     {
-      "chance": 0.9,
-      "item": "minecraft:dragon_egg"
-    },
-    {
       "chance": 0.3,
       "item": "scguns:gun_barrel"
     },

@@ -40,12 +40,14 @@
     "scguns:phosphorite_brick_stairs",
     "scguns:phosphorite_brick_slab",
     "scguns:phosphorite_brick_wall",
-    "scguns:advanced_composter",
     "scguns:polished_phosphorite",
     "scguns:raw_phosphor_block",
     "scguns:cracked_phosphorite_bricks",
     "scguns:ammo_turret_module",
     "scguns:enemy_turret",
-    "scguns:ammo_box"
+    "scguns:ammo_box",
+    "scguns:cut_treated_brass",
+    "scguns:treated_brass_plates",
+    "scguns:treated_iron_grate"
   ]
 }

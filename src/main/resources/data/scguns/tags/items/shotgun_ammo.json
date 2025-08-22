@@ -3,6 +3,8 @@
   "values": [
     "scguns:shotgun_shell",
     "scguns:bearpack_shell",
-    "scguns:shulkshot"
+    "scguns:shulkshot",
+    "scguns:buckshot",
+    "scguns:nitro_buckshot"
   ]
 }

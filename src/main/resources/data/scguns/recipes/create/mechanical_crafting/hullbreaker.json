@@ -1,0 +1,35 @@
+{
+  "type": "create:mechanical_crafting",
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:treated_iron_block"
+    },
+    "X": {
+      "item": "scguns:ocean_blueprint"
+    },
+    "K": {
+      "item": "scguns:treated_iron_gun_frame"
+    },
+    "M": {
+      "item": "scguns:treated_iron_ingot"
+    }
+  },
+  "pattern": [
+    "QK  ",
+    "LRSS",
+    "K MX"
+  ],
+  "result": {
+    "item": "scguns:hullbreaker"
+  }
+}

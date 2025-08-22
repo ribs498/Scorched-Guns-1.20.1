@@ -197,8 +197,7 @@ public class Config
 
     /**
      * Common config options
-     */
-    public static class Common
+     */    public static class Common
     {
         public final Gameplay gameplay;
         public final Network network;
@@ -210,6 +209,7 @@ public class Config
         public final ProjectileSpread projectileSpread;
         public final Gunsmith Gunsmith;
         public final Turret turret;
+
 
         public Common(ForgeConfigSpec.Builder builder)
         {
@@ -253,8 +253,10 @@ public class Config
         public final ForgeConfigSpec.BooleanValue drawAnimation;
         public final ForgeConfigSpec.BooleanValue forceEnergyGuns;
         public final ForgeConfigSpec.BooleanValue toggleADS;
-
-
+        public final ForgeConfigSpec.DoubleValue globalDamageMultiplier;
+        public final ForgeConfigSpec.BooleanValue disableVillagerSpawning;
+        public final ForgeConfigSpec.DoubleValue dissidentSpawnChance;
+        public final ForgeConfigSpec.BooleanValue enableAutoReload;
         public Gameplay(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Properties relating to gameplay").push("gameplay");
@@ -284,6 +286,18 @@ public class Config
                 this.toggleADS = builder
                         .comment("If true, guns will toggle ADS mode.")
                         .define("toggleADS", false);
+                this.globalDamageMultiplier = builder
+                        .comment("Global multiplier for all gun damage. 1.0 = normal damage, 0.5 = half damage, 2.0 = double damage. Affects all projectile damage from guns.")
+                        .defineInRange("globalDamageMultiplier", 1.0, 0.01, 10.0);
+                this.disableVillagerSpawning = builder
+                        .comment("If true, the Brass Mask ritual will never spawn villagers. When disabled, it will spawn Dissidents instead based on the spawn chance below.")
+                        .define("disableVillagerSpawning", false);
+                this.dissidentSpawnChance = builder
+                        .comment("When villager spawning is disabled, this is the chance (0.0 to 1.0) that a Dissident will spawn. If a Dissident doesn't spawn, nothing will be created from the ritual.")
+                        .defineInRange("dissidentSpawnChance", 0.1, 0.0, 1.0);
+                this.enableAutoReload = builder
+                        .comment("If true, guns will automatically start reloading when fired with an empty magazine if ammo is available")
+                        .define("enableAutoReload", true);
             }
             builder.pop();
         }
@@ -338,41 +352,40 @@ public class Config
     /**
      * Mob aggression related config options
      */
-    public static class AggroMobs
-    {
+    public static class AggroMobs {
         public final ForgeConfigSpec.BooleanValue enabled;
-        public final ForgeConfigSpec.BooleanValue angerHostileMobs;
         public final ForgeConfigSpec.DoubleValue unsilencedRange;
+        public final ForgeConfigSpec.DoubleValue aggroChance;
+        public final ForgeConfigSpec.DoubleValue chainAggroChance;
+        public final ForgeConfigSpec.DoubleValue chainAggroRadius;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> exemptEntities;
 
-        public AggroMobs(ForgeConfigSpec.Builder builder)
-        {
-            builder.comment("Properties relating to mob aggression").push("aggro_mobs");
+        public AggroMobs(ForgeConfigSpec.Builder builder) {
+            builder.comment("Properties relating to mob aggression from gunfire").push("aggro_mobs");
             {
-                this.enabled = builder.comment("If true, nearby mobs are angered and/or scared by the firing of guns.").define("enabled", true);
-                this.angerHostileMobs = builder.comment("If true, in addition to causing peaceful mobs to panic, firing a gun will also cause nearby hostile mobs to target the shooter.").define("angerHostileMobs", true);
-                this.unsilencedRange = builder.comment("Any mobs within a sphere of this radius will aggro on the shooter of an unsilenced gun.").defineInRange("unsilencedRange", 20.0, 0.0, Double.MAX_VALUE);
-                this.exemptEntities = builder.comment("Any mobs of defined will not aggro on shooters").defineList("exemptMobs", Collections.emptyList(), o -> true);
+                this.enabled = builder.comment("If true, hostile mobs may become aggressive when guns are fired nearby.").define("enabled", true);
+                this.unsilencedRange = builder.comment("Range in which hostile mobs may detect and react to unsilenced gunfire.").defineInRange("unsilencedRange", 20.0, 0.0, Double.MAX_VALUE);
+                this.aggroChance = builder.comment("Chance (0.0 to 1.0) that a hostile mob will target the shooter when detecting gunfire.").defineInRange("aggroChance", 0.25, 0.0, 1.0);
+                this.chainAggroChance = builder.comment("Chance (0.0 to 1.0) that nearby mobs of the same type will also aggro when one becomes hostile.").defineInRange("chainAggroChance", 0.5, 0.0, 1.0);
+                this.chainAggroRadius = builder.comment("Radius in which chain aggro effects can spread to similar mobs.").defineInRange("chainAggroRadius", 8.0, 0.0, 32.0);
+                this.exemptEntities = builder.comment("LEGACY: Entities that will not aggro from gunfire. Use the 'scguns:aggro_from_guns' entity tag for better mod compatibility.").defineList("exemptMobs", Collections.emptyList(), o -> true);
             }
             builder.pop();
         }
     }
-    public static class FleeingMobs
-    {
+    public static class FleeingMobs {
         public final ForgeConfigSpec.BooleanValue enabled;
         public final ForgeConfigSpec.DoubleValue silencedRange;
         public final ForgeConfigSpec.DoubleValue unsilencedRange;
         public final ForgeConfigSpec.ConfigValue<List<? extends String>> fleeingEntities;
 
-        public FleeingMobs(ForgeConfigSpec.Builder builder)
-        {
+        public FleeingMobs(ForgeConfigSpec.Builder builder) {
             builder.comment("Properties relating to mob fleeing").push("fleeing_mobs");
             {
                 this.enabled = builder.comment("If true, nearby mobs will flee from the firing of guns.").define("enabled", true);
                 this.unsilencedRange = builder.comment("Any mobs within a sphere of this radius will flee from the shooter of an unsilenced gun.").defineInRange("unsilencedRange", 20.0, 0.0, Double.MAX_VALUE);
-                this.silencedRange = builder.comment("Any mobs within a sphere of this radius will flee from the shooter of a silenced gun.").defineInRange("silencedRange", 20.0, 0.0, Double.MAX_VALUE);
-                this.fleeingEntities = builder.comment("Any mobs listed here will flee from shooters").defineList("fleeingEntities", Arrays.asList(
-                        "minecraft:cow", "minecraft:sheep", "minecraft:pig", "minecraft:chicken", "minecraft:rabbit", "minecraft:horse", "minecraft:villager"), o -> o instanceof String);
+                this.silencedRange = builder.comment("Any mobs within a sphere of this radius will flee from the shooter of a silenced gun.").defineInRange("silencedRange", 5.0, 0.0, Double.MAX_VALUE);
+                this.fleeingEntities = builder.comment("LEGACY: Additional entities that will flee from gunshots. Animals are automatically detected. Use the 'scguns:fleeing_from_guns' entity tag instead for better mod compatibility.").defineList("fleeingEntities", Arrays.asList("minecraft:villager"), o -> o instanceof String);
             }
             builder.pop();
         }
@@ -389,7 +402,7 @@ public class Config
         {
             builder.comment("Properties relating to rockets").push("rockets");
             {
-                this.explosionRadius = builder.comment("The max distance which the explosion is effective to").defineInRange("explosionRadius", 5.0, 0.0, Double.MAX_VALUE);
+                this.explosionRadius = builder.comment("The max distance which the explosion is effective to").defineInRange("explosionRadius", 4.0, 0.0, Double.MAX_VALUE);
             }
             builder.pop();
         }
@@ -459,14 +472,14 @@ public class Config
 
         private double getDefaultDamage(TurretProjectileEntity.BulletType type) {
             return switch (type) {
-                case STANDARD_COPPER_ROUND -> 4.0;
-                case ADVANCED_ROUND -> 6.0;
-                case GIBBS_ROUND -> 8.0;
-                case COMPACT_COPPER_ROUND -> 2.0;
-                case COMPACT_ADVANCED_ROUND -> 3.5;
-                case HOG_ROUND -> 5.0;
-                case SHOTGUN_SHELL -> 18.0;
-                case BEARPACK_SHELL -> 24.0;
+                case STANDARD_COPPER_ROUND -> 6.0;
+                case ADVANCED_ROUND -> 8.0;
+                case GIBBS_ROUND -> 10.0;
+                case COMPACT_COPPER_ROUND -> 5.0;
+                case COMPACT_ADVANCED_ROUND ->6.5;
+                case HOG_ROUND -> 7.0;
+                case SHOTGUN_SHELL -> 22.0;
+                case BEARPACK_SHELL -> 28.0;
             };
         }
     }

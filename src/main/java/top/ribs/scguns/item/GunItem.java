@@ -59,11 +59,11 @@ public class GunItem extends Item implements IColored, IMeta {
         Gun modifiedGun = this.getModifiedGun(stack);
 
         ResourceLocation advantage = modifiedGun.getProjectile().getAdvantage();
-        // Calculate base damage and apply modifiers
         float baseDamage = modifiedGun.getProjectile().getDamage();
         baseDamage = GunModifierHelper.getModifiedProjectileDamage(stack, baseDamage);
         baseDamage = GunEnchantmentHelper.getAcceleratorDamage(stack, baseDamage);
         baseDamage = GunEnchantmentHelper.getHeavyShotDamage(stack, baseDamage);
+        baseDamage = GunEnchantmentHelper.getPuncturingDamageReductionForTooltip(stack, baseDamage);
 
         if (worldIn != null && Config.GunScalingConfig.getInstance().isScalingEnabled()) {
             long worldDay = worldIn.getDayTime() / 24000L;
@@ -71,6 +71,7 @@ public class GunItem extends Item implements IColored, IMeta {
                     (Config.GunScalingConfig.getInstance().getDamageIncreaseRate() * worldDay);
             baseDamage *= (float) Math.min(scaledDamage, Config.GunScalingConfig.getInstance().getMaxDamage());
         }
+        baseDamage *= Config.COMMON.gameplay.globalDamageMultiplier.get().floatValue();
         String additionalDamageText = "";
         CompoundTag tagCompound = stack.getTag();
         if (tagCompound != null) {
@@ -142,7 +143,6 @@ public class GunItem extends Item implements IColored, IMeta {
         for (IAttachment.Type type : IAttachment.Type.values()) {
             ItemStack attachmentStack = Gun.getAttachment(type, gunStack);
             if (attachmentStack != null && attachmentStack.getItem() instanceof BayonetItem) {
-                //System.out.println("Bayonet Found: " + attachmentStack.getItem()); // Debug statement
                 additionalDamage += ((BayonetItem) attachmentStack.getItem()).getAdditionalDamage();
             }
         }
@@ -186,6 +186,10 @@ public class GunItem extends Item implements IColored, IMeta {
 
     @Override
     public int getBarColor(ItemStack stack) {
+        if (stack.getDamageValue() >= (stack.getMaxDamage() - 1)) {
+            return 0x808080;
+        }
+
         if (stack.getDamageValue() >= (stack.getMaxDamage() / 1.5)) {
             return Objects.requireNonNull(ChatFormatting.RED.getColor());
         }
@@ -285,16 +289,6 @@ public class GunItem extends Item implements IColored, IMeta {
     public void onAttachmentChanged(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         tag.putBoolean("AttachmentChanged", true);
-    }
-
-    public boolean hasMendingInAttachments(ItemStack gunStack) {
-        for (IAttachment.Type type : IAttachment.Type.values()) {
-            ItemStack attachmentStack = Gun.getAttachment(type, gunStack);
-            if (!attachmentStack.isEmpty() && EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MENDING, attachmentStack) > 0) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public int getBayonetBanzaiLevel(ItemStack gunStack) {
