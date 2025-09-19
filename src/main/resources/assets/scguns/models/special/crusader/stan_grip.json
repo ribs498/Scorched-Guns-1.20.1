@@ -1,0 +1,91 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "scguns:item/crusader",
+		"particle": "scguns:item/crusader"
+	},
+	"elements": [
+		{
+			"name": "standard_grip",
+			"from": [7.51, 2.64277, 15.45423],
+			"to": [8.49, 4.64277, 17.45423],
+			"rotation": {"angle": -45, "axis": "x", "origin": [8.01, 1.44348, 16.27726]},
+			"faces": {
+				"north": {"uv": [3.75, 7.5, 4, 8], "texture": "#0"},
+				"east": {"uv": [3.5, 5.5, 4, 6], "texture": "#0"},
+				"south": {"uv": [7.5, 3.75, 7.75, 4.25], "texture": "#0"},
+				"west": {"uv": [5.75, 0, 6.25, 0.5], "texture": "#0"},
+				"up": {"uv": [4.75, 8, 4.5, 7.5], "texture": "#0"},
+				"down": {"uv": [5, 7.5, 4.75, 8], "texture": "#0"}
+			}
+		},
+		{
+			"name": "standard_grip",
+			"from": [7.625, 1.24767, 16.84714],
+			"to": [8.375, 2.99767, 17.34714],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8.125, 1.57071, 16.04644]},
+			"faces": {
+				"north": {"uv": [7.5, 4.75, 7.75, 5.25], "texture": "#0"},
+				"east": {"uv": [6, 8.25, 6.125, 8.75], "texture": "#0"},
+				"south": {"uv": [5, 7.5, 5.25, 8], "texture": "#0"},
+				"west": {"uv": [8.25, 6, 8.375, 6.5], "texture": "#0"},
+				"up": {"uv": [3.75, 8.875, 3.5, 8.75], "texture": "#0"},
+				"down": {"uv": [9, 3.75, 8.75, 3.875], "texture": "#0"}
+			}
+		},
+		{
+			"name": "standard_grip",
+			"from": [7.5, 1.24767, 14.84714],
+			"to": [8.5, 3.24767, 16.84714],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8, 1.57071, 16.04644]},
+			"faces": {
+				"north": {"uv": [5.25, 7.5, 5.5, 8], "texture": "#0"},
+				"east": {"uv": [5.75, 0.5, 6.25, 1], "texture": "#0"},
+				"south": {"uv": [7.5, 5.25, 7.75, 5.75], "texture": "#0"},
+				"west": {"uv": [5.75, 1, 6.25, 1.5], "texture": "#0"},
+				"up": {"uv": [5.75, 8, 5.5, 7.5], "texture": "#0"},
+				"down": {"uv": [6, 7.5, 5.75, 8], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.25, -5.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.25, -5.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 9.25, -1.25]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4.25, 9.25, -1.25]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [0.5, 6.25, 0],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [0.5, 8.75, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "standard_grip",
+			"origin": [8.225, 3.1, 9.2],
+			"color": 3,
+			"children": [0, 1, 2]
+		}
+	]
+}

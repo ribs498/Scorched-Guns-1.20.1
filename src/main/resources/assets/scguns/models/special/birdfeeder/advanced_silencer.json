@@ -1,0 +1,75 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "scguns:item/birdfeeder"
+	},
+	"elements": [
+		{
+			"name": "advanced_silencer",
+			"from": [7.35722, 3.825, -5.2625],
+			"to": [8.85722, 5.325, -0.6875],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.05721, 4.45, -3.75]},
+			"faces": {
+				"north": {"uv": [8.5, 4.25, 8.875, 4.625], "texture": "#0"},
+				"east": {"uv": [4.5, 1.5, 5.625, 1.875], "texture": "#0"},
+				"south": {"uv": [4.75, 8.5, 5.125, 8.875], "texture": "#0"},
+				"west": {"uv": [4.75, 3.75, 5.875, 4.125], "texture": "#0"},
+				"up": {"uv": [4.375, 5.875, 4, 4.75], "texture": "#0"},
+				"down": {"uv": [5.125, 4.25, 4.75, 5.375], "texture": "#0"}
+			}
+		},
+		{
+			"name": "advanced_silencer",
+			"from": [7.53399, 4.175, -0.6875],
+			"to": [8.68399, 5.325, -0.1875],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.234, 4.55, -3.25]},
+			"faces": {
+				"north": {"uv": [9.5, 7, 9.75, 7.25], "texture": "#0"},
+				"east": {"uv": [7, 10.5, 7.125, 10.75], "texture": "#0"},
+				"south": {"uv": [7.25, 9.5, 7.5, 9.75], "texture": "#0"},
+				"west": {"uv": [10.5, 7, 10.625, 7.25], "texture": "#0"},
+				"up": {"uv": [7.5, 10.625, 7.25, 10.5], "texture": "#0"},
+				"down": {"uv": [10.75, 7.25, 10.5, 7.375], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.25, -6.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.25, -6.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 9.25, -0.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.25, 9.25, -0.5]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1.5, 4, 0]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [4, 6, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "advanced_silencer",
+			"origin": [0.02904, -4.125, 3.275],
+			"color": 4,
+			"children": [0, 1]
+		}
+	]
+}

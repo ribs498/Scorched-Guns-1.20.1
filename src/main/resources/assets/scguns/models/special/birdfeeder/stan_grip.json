@@ -1,0 +1,75 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+      "0": "scguns:item/birdfeeder"
+	},
+	"elements": [
+		{
+			"name": "standard_grip",
+			"from": [7.49419, 0.49219, 16.80249],
+			"to": [8.49419, 2.24219, 18.30249],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.04418, 0.14219, 16.75249]},
+			"faces": {
+				"north": {"uv": [2, 9, 2.25, 9.5], "texture": "#0"},
+				"east": {"uv": [7.25, 6.75, 7.625, 7.25], "texture": "#0"},
+				"south": {"uv": [9, 2, 9.25, 2.5], "texture": "#0"},
+				"west": {"uv": [1, 7.5, 1.375, 8], "texture": "#0"},
+				"up": {"uv": [1.75, 9.625, 1.5, 9.25], "texture": "#0"},
+				"down": {"uv": [2, 9.25, 1.75, 9.625], "texture": "#0"}
+			}
+		},
+		{
+			"name": "standard_grip",
+			"from": [7.74419, 0.24219, 16.80249],
+			"to": [8.24419, 0.49219, 18.30249],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.04418, 0.14219, 16.75249]},
+			"faces": {
+				"north": {"uv": [11, 1, 11.125, 1.125], "texture": "#0"},
+				"east": {"uv": [10.25, 3.5, 10.625, 3.625], "texture": "#0"},
+				"south": {"uv": [1.25, 11, 1.375, 11.125], "texture": "#0"},
+				"west": {"uv": [3.75, 10.25, 4.125, 10.375], "texture": "#0"},
+				"up": {"uv": [10.375, 4.625, 10.25, 4.25], "texture": "#0"},
+				"down": {"uv": [4.625, 10.25, 4.5, 10.625], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.25, -6.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.25, -6.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 9.25, -0.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.25, 9.25, -0.5]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1.5, 4, 0]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [4, 6, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "standard_grip",
+			"origin": [-0.00582, -8.35781, 6.00249],
+			"color": 7,
+			"children": [0, 1]
+		}
+	]
+}

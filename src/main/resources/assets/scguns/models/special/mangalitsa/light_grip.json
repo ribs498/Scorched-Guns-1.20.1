@@ -1,0 +1,76 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+      "0": "scguns:item/mangalitsa"
+	},
+	"elements": [
+		{
+			"name": "light_grip",
+			"from": [7.14394, 1.05, 3.625],
+			"to": [8.89394, 1.55, 6.825],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 10]},
+			"faces": {
+				"north": {"uv": [5.25, 9.5, 5.75, 9.625], "texture": "#0"},
+				"east": {"uv": [9.25, 6, 10, 6.125], "texture": "#0"},
+				"south": {"uv": [9.5, 5.25, 10, 5.375], "texture": "#0"},
+				"west": {"uv": [7.75, 9.25, 8.5, 9.375], "texture": "#0"},
+				"up": {"uv": [1, 6.5, 0.5, 5.75], "texture": "#0"},
+				"down": {"uv": [6.25, 1, 5.75, 1.75], "texture": "#0"}
+			}
+		},
+		{
+			"name": "light_grip",
+			"from": [7.26894, 0.65, 3.7],
+			"to": [8.76894, 1.15, 6.7],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8, 10]},
+			"faces": {
+				"north": {"uv": [10, 1.75, 10.375, 1.875], "texture": "#0"},
+				"east": {"uv": [9.25, 8, 10, 8.125], "texture": "#0"},
+				"south": {"uv": [10, 2, 10.375, 2.125], "texture": "#0"},
+				"west": {"uv": [9.25, 8.25, 10, 8.375], "texture": "#0"},
+				"up": {"uv": [6.375, 7.25, 6, 6.5], "texture": "#0"},
+				"down": {"uv": [6.875, 6, 6.5, 6.75], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6, -7.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6, -7.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-4.5, 9.25, -0.75]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4.5, 9.25, -0.75]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-0.5, 7, 0],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [1.5, 8.5, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "light_grip",
+			"origin": [8, 8.15, 10.2],
+			"color": 6,
+			"children": [0, 1]
+		}
+	]
+}
