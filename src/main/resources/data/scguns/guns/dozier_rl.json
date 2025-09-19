@@ -52,7 +52,7 @@
     "item": "scguns:rocket",
     "life": 55,
     "size": 0.05,
-    "speed": 3.5,
+    "speed": 4.2,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {

@@ -1,5 +1,11 @@
 {
   "type": "create:crushing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
   "ingredients": [
     {
       "item": "scguns:laser_musket"

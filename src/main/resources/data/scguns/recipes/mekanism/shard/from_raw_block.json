@@ -1,1 +1,6 @@
-{"type":"mekanism:injecting","chemicalInput":{"amount":2,"gas":"mekanism:hydrogen_chloride"},"itemInput":{"ingredient":{"item":"scguns:raw_anthralite_block"}},"output":{"count":24,"item":"scguns:shard_anthralite"}}
+{"type":"mekanism:injecting",  "conditions": [
+  {
+    "type": "forge:mod_loaded",
+    "modid": "mekanism"
+  }
+],"chemicalInput":{"amount":2,"gas":"mekanism:hydrogen_chloride"},"itemInput":{"ingredient":{"item":"scguns:raw_anthralite_block"}},"output":{"count":24,"item":"scguns:shard_anthralite"}}

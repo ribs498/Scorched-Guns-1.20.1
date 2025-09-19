@@ -1,5 +1,11 @@
 {
 	"type":"createaddition:charging",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "createaddition"
+    }
+  ],
 	"input": {
       	"item": "scguns:depleted_energy_core",
 		"count": 1

@@ -1,4 +1,9 @@
-{"type":"mekanism:injecting","chemicalInput":{"amount":1,"gas":"mekanism:hydrogen_chloride"},"itemInput":{"ingredient"
+{"type":"mekanism:injecting",  "conditions": [
+  {
+    "type": "forge:mod_loaded",
+    "modid": "mekanism"
+  }
+],"chemicalInput":{"amount":1,"gas":"mekanism:hydrogen_chloride"},"itemInput":{"ingredient"
 :[
   {
     "item": "scguns:anthralite_ore"

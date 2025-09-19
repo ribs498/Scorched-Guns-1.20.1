@@ -1,4 +1,9 @@
-{"type":"mekanism:enriching","input":{
+{"type":"mekanism:enriching",  "conditions": [
+  {
+    "type": "forge:mod_loaded",
+    "modid": "mekanism"
+  }
+],"input":{
   "ingredient":[
   {
     "item": "scguns:anthralite_ore"

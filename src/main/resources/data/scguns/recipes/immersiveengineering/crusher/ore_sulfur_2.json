@@ -1,1 +1,20 @@
-{"type":"immersiveengineering:crusher","energy":6000,"input":{"item":"scguns:deepslate_sulfur_ore"},"result":{"base_ingredient":{"item":"scguns:sulfur_chunk"},"count":3},"secondaries":[]}
+{
+    "type": "immersiveengineering:crusher",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ],
+    "energy": 6000,
+    "input": {
+        "item": "scguns:deepslate_sulfur_ore"
+    },
+    "result": {
+        "base_ingredient": {
+            "item": "scguns:sulfur_chunk"
+        },
+        "count": 3
+    },
+    "secondaries": []
+}

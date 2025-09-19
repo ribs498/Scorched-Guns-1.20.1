@@ -1,1 +1,15 @@
-{"type":"immersiveengineering:hammer_crushing","input":{"item":"scguns:raw_anthralite"},"result":{"item":"scguns:anthralite_dust"}}
+{
+    "type": "immersiveengineering:hammer_crushing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ],
+    "input": {
+        "item": "scguns:raw_anthralite"
+    },
+    "result": {
+        "item": "scguns:anthralite_dust"
+    }
+}

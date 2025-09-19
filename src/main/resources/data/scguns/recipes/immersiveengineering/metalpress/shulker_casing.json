@@ -1,1 +1,18 @@
-{"type":"immersiveengineering:metal_press","energy":2400,"input":{"item":"minecraft:shulker_shell"},"mold":"scguns:medium_casing_mold","result":{"count":12,"item":"scguns:shulker_casing"}}
+{
+    "type": "immersiveengineering:metal_press",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ],
+    "energy": 2400,
+    "input": {
+        "item": "minecraft:shulker_shell"
+    },
+    "mold": "scguns:medium_casing_mold",
+    "result": {
+        "count": 12,
+        "item": "scguns:shulker_casing"
+    }
+}

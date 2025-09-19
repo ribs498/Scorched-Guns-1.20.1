@@ -37,15 +37,15 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 22.0,
+    "damage": 23.5,
     "ejectsCasing": true,
-    "gravity": false,
+    "gravity": true,
     "item": "scguns:energy_cell",
     "casingType": "scguns:empty_cell",
     "casingParticle": "scguns:iron_casing",
     "life": 45,
     "size": 6.0,
-    "speed": 2.0,
+    "speed": 5.0,
     "trailLengthMultiplier": 1.0,
     "trailColor": 3329330
   },

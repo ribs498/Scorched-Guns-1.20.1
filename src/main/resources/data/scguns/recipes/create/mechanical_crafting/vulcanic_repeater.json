@@ -1,5 +1,11 @@
 {
   "type": "create:mechanical_crafting",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
   "acceptMirrored": true,
   "key": {
     "J": {

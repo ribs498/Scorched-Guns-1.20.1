@@ -1,5 +1,11 @@
 {
   "type": "create:mixing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
   "ingredients": [
     [
       {
@@ -26,8 +32,12 @@
   ],
   "results": [
     {
-      "count": 9,
+      "count": 10,
       "item": "scguns:peal"
+    },
+    {
+      "chance": 0.5,
+      "item": "scguns:peal_dust"
     }
   ]
 }

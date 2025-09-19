@@ -12,6 +12,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.init.ModEffects;
@@ -185,5 +188,90 @@ public class SulfurGasCloud {
         int dustParticles = Math.round(baseDustParticles * intensity);
         spawnCloudParticlesForced(serverLevel, center, radius, cloudParticles, random);
         spawnDustParticlesForced(serverLevel, center, radius, dustParticles, random);
+    }
+
+    // Fire detection and explosion methods (moved from SulfurVentBlock)
+    public static boolean isFireInArea(Level level, Vec3 center, double radius) {
+        BlockPos centerPos = BlockPos.containing(center);
+        int blockRadius = (int) Math.ceil(radius);
+
+        for (BlockPos checkPos : BlockPos.betweenClosed(
+                centerPos.offset(-blockRadius, -1, -blockRadius),
+                centerPos.offset(blockRadius, 1, blockRadius))) {
+
+            if (center.distanceTo(Vec3.atCenterOf(checkPos)) <= radius) {
+                BlockState blockState = level.getBlockState(checkPos);
+                if (isFireSource(blockState)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isFireSource(BlockState blockState) {
+        return blockState.is(Blocks.FIRE) ||
+                blockState.is(Blocks.SOUL_FIRE) ||
+                (blockState.is(Blocks.CAMPFIRE) && blockState.getValue(BlockStateProperties.LIT)) ||
+                (blockState.is(Blocks.SOUL_CAMPFIRE) && blockState.getValue(BlockStateProperties.LIT));
+    }
+
+    public static void triggerGasExplosion(Level level, Vec3 center, double radius) {
+        if (level.isClientSide) return;
+
+        RandomSource random = level.random;
+        for (int i = 0; i < 6; i++) {
+            double xOffset = (random.nextDouble() - 0.5) * 2.0 * radius;
+            double yOffset = (random.nextDouble() - 0.5) * 2.0 * radius;
+            double zOffset = (random.nextDouble() - 0.5) * 2.0 * radius;
+
+            Vec3 explosionPos = center.add(xOffset, yOffset, zOffset);
+            level.explode(null, explosionPos.x, explosionPos.y, explosionPos.z, 4.0F, Level.ExplosionInteraction.NONE);
+        }
+    }
+
+    public static void extinguishFireInArea(Level level, Vec3 center, double radius) {
+        BlockPos centerPos = BlockPos.containing(center);
+        int blockRadius = (int) Math.ceil(radius);
+
+        for (BlockPos checkPos : BlockPos.betweenClosed(
+                centerPos.offset(-blockRadius, -1, -blockRadius),
+                centerPos.offset(blockRadius, 1, blockRadius))) {
+
+            if (center.distanceTo(Vec3.atCenterOf(checkPos)) <= radius) {
+                BlockState blockState = level.getBlockState(checkPos);
+                if (blockState.is(Blocks.FIRE) || blockState.is(Blocks.SOUL_FIRE)) {
+                    level.setBlock(checkPos, Blocks.AIR.defaultBlockState(), 3);
+                } else if (blockState.is(Blocks.CAMPFIRE) || blockState.is(Blocks.SOUL_CAMPFIRE)) {
+                    level.setBlock(checkPos, blockState.setValue(BlockStateProperties.LIT, false), 3);
+                }
+            }
+        }
+    }
+    public static boolean isTemporaryLightInArea(Level level, Vec3 center, double radius) {
+        BlockPos centerPos = BlockPos.containing(center);
+        int blockRadius = (int) Math.ceil(radius);
+
+        for (BlockPos checkPos : BlockPos.betweenClosed(
+                centerPos.offset(-blockRadius, -1, -blockRadius),
+                centerPos.offset(blockRadius, 1, blockRadius))) {
+
+            if (center.distanceTo(Vec3.atCenterOf(checkPos)) <= radius) {
+                BlockState blockState = level.getBlockState(checkPos);
+                if (blockState.getBlock().getClass().getSimpleName().equals("TemporaryLightBlock")) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean checkAndHandleFireExplosion(Level level, Vec3 center, double radius) {
+        if (isFireInArea(level, center, radius) || isTemporaryLightInArea(level, center, radius)) {
+            triggerGasExplosion(level, center, radius);
+            extinguishFireInArea(level, center, radius);
+            return true;
+        }
+        return false;
     }
 }

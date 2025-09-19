@@ -28,4 +28,5 @@ public class ModEnchantments
     public static final RegistryObject<Enchantment> WATER_PROOF = REGISTER.register("waterproof", WaterProofEnchantment::new);
     public static final RegistryObject<Enchantment> HOT_BARREL = REGISTER.register("hot_barrel", HotBarrelEnchantment::new);
     public static final RegistryObject<Enchantment> GUN_RUST = REGISTER.register("gun_rust", GunRustEnchantment::new);
+    public static final RegistryObject<Enchantment> CORRODED = REGISTER.register("corroded", CorrodedEnchantment::new);
 }

@@ -131,8 +131,6 @@ public class SulfurVentBlock extends Block {
         return state.getValue(VENT_TYPE) == SulfurVentType.BASE ? SHAPE_BASE : SHAPE_MIDDLE_TOP;
     }
 
-
-
     @Override
     public PushReaction getPistonPushReaction(BlockState state) {
         return PushReaction.DESTROY;
@@ -144,42 +142,10 @@ public class SulfurVentBlock extends Block {
         if (block instanceof PistonBaseBlock) {
             level.destroyBlock(pos, true);
         }
-        if (isFireSource(block.defaultBlockState()) && isInCloudArea(level, fromPos, pos)) {
-            triggerExplosion(level, pos);
-            shutdownVentTemporarily(level, pos, state);
-            return;
-        }
-
         boolean isActive = isActive(level, pos);
         level.setBlock(pos, state.setValue(ACTIVE, isActive), 3);
     }
-    private boolean isInCloudArea(Level level, BlockPos firePos, BlockPos ventPos) {
-        double distanceSquared = firePos.distSqr(ventPos);
-        return distanceSquared <= EFFECT_RADIUS_SQUARED;
-    }
 
-    private void triggerExplosion(Level level, BlockPos pos) {
-        RandomSource random = level.random;
-        for (int i = 0; i < 6; i++) {
-            double xOffset = (random.nextDouble() - 0.5) * 2.0 * EFFECT_RADIUS;
-            double yOffset = (random.nextDouble() - 0.5) * 2.0 * EFFECT_RADIUS;
-            double zOffset = (random.nextDouble() - 0.5) * 2.0 * EFFECT_RADIUS;
-            BlockPos explosionPos = pos.offset((int) xOffset, (int) yOffset, (int) zOffset);
-
-            level.explode(null, explosionPos.getX(), explosionPos.getY(), explosionPos.getZ(), 4.0F, Level.ExplosionInteraction.NONE);
-        }
-    }
-
-    private void extinguishFire(Level world, BlockPos ventPos) {
-        for (BlockPos checkPos : BlockPos.betweenClosed(ventPos.offset(-EFFECT_RADIUS, -1, -EFFECT_RADIUS), ventPos.offset(EFFECT_RADIUS, 1, EFFECT_RADIUS))) {
-            BlockState blockState = world.getBlockState(checkPos);
-            if (blockState.is(Blocks.FIRE) || blockState.is(Blocks.SOUL_FIRE)) {
-                world.setBlock(checkPos, Blocks.AIR.defaultBlockState(), 3);
-            } else if (blockState.is(Blocks.CAMPFIRE) || blockState.is(Blocks.SOUL_CAMPFIRE)) {
-                world.setBlock(checkPos, blockState.setValue(BlockStateProperties.LIT, false), 3);
-            }
-        }
-    }
     private void shutdownVentTemporarily(Level level, BlockPos pos, BlockState state) {
 
         level.setBlock(pos, state.setValue(ACTIVE, false), 3);
@@ -222,9 +188,8 @@ public class SulfurVentBlock extends Block {
     public void tick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
         if (!world.isClientSide) {
             if (state.getValue(ACTIVE)) {
-                if (isFireInCloudArea(world, pos)) {
-                    triggerExplosion(world, pos);
-                    extinguishFire(world, pos);
+                Vec3 center = Vec3.atCenterOf(pos);
+                if (SulfurGasCloud.checkAndHandleFireExplosion(world, center, EFFECT_RADIUS)) {
                     shutdownVentTemporarily(world, pos, state);
                     return;
                 }
@@ -282,23 +247,6 @@ public class SulfurVentBlock extends Block {
             SulfurGasCloud.spawnDustParticlesForced(serverLevel, center, CLOUD_RADIUS * 1.2, particlesToSpawn, random);
         }
     }
-
-    private boolean isFireInCloudArea(Level world, BlockPos ventPos) {
-        for (BlockPos checkPos : BlockPos.betweenClosed(ventPos.offset(-EFFECT_RADIUS, -1, -EFFECT_RADIUS), ventPos.offset(EFFECT_RADIUS, 1, EFFECT_RADIUS))) {
-            BlockState blockState = world.getBlockState(checkPos);
-            if (isFireSource(blockState)) {
-                return true;
-            }
-        }
-        return false;
-    }
-    private boolean isFireSource(BlockState blockState) {
-        return blockState.is(Blocks.FIRE) ||
-                blockState.is(Blocks.SOUL_FIRE) ||
-                (blockState.is(Blocks.CAMPFIRE) && blockState.getValue(BlockStateProperties.LIT)) ||
-                (blockState.is(Blocks.SOUL_CAMPFIRE) && blockState.getValue(BlockStateProperties.LIT));
-    }
-
     private void applyEffectsToEntities(ServerLevel world, BlockPos pos) {
         SulfurGasCloud.applyGasEffects(world, pos, EFFECT_RADIUS, 400, 1);
     }
@@ -348,15 +296,11 @@ public class SulfurVentBlock extends Block {
         boolean isActive = isActive(level, basePos);
         int activeVentCount = countActiveVentsNearby(level, basePos);
 
-        // Only update vent power if needed
         updateVentPower(level, pos);
 
-        // Avoid updating the state if it's already correct
         if (state.getValue(ACTIVE) != isActive) {
             level.setBlock(pos, state.setValue(ACTIVE, isActive), 3);
         }
-
-        // Schedule tick only if necessary
         if (activeVentCount >= MAX_ACTIVE_VENTS && state.getValue(VENT_TYPE) == SulfurVentType.BASE) {
             Player player = level.getNearestPlayer(pos.getX(), pos.getY(), pos.getZ(), 5, false);
             if (player != null) {
@@ -369,7 +313,7 @@ public class SulfurVentBlock extends Block {
 
     private BlockPos getBasePos(LevelAccessor level, BlockPos pos) {
         while (level.getBlockState(pos.below()).getBlock() instanceof SulfurVentBlock) {
-            if (pos.getY() <= 0) { // Ensure it doesn't go below the world
+            if (pos.getY() <= 0) {
                 break;
             }
             pos = pos.below();
@@ -382,7 +326,6 @@ public class SulfurVentBlock extends Block {
         int newPower = calculateVentPower(level, pos);
 
         if (currentPower != newPower) {
-            // Update only if power changes
             level.setBlock(pos, currentState.setValue(VENT_POWER, newPower), 3);
         }
     }

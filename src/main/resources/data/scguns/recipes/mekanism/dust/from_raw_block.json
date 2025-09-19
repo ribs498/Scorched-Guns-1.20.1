@@ -1,1 +1,6 @@
-{"type":"mekanism:enriching","input":{"ingredient":{"item":"scguns:raw_anthralite_block"}},"output":{"count":12,"item":"scguns:anthralite_dust"}}
+{"type":"mekanism:enriching",  "conditions": [
+  {
+    "type": "forge:mod_loaded",
+    "modid": "mekanism"
+  }
+],"input":{"ingredient":{"item":"scguns:raw_anthralite_block"}},"output":{"count":12,"item":"scguns:anthralite_dust"}}

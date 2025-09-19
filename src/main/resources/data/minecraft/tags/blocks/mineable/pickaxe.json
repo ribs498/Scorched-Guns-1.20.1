@@ -63,6 +63,7 @@
     "scguns:plasma_block",
     "scguns:cut_treated_brass",
     "scguns:treated_brass_plates",
-    "scguns:treated_iron_grate"
+    "scguns:treated_iron_grate",
+    "scguns:smooth_phosphorite"
   ]
 }

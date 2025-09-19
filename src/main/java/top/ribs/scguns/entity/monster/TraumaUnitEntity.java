@@ -27,6 +27,7 @@ import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.entity.projectile.TraumaHookEntity;
+import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
 
 import java.util.EnumSet;
@@ -57,7 +58,9 @@ public class TraumaUnitEntity extends Monster {
                 effect == MobEffects.MOVEMENT_SLOWDOWN ||
                 effect == MobEffects.DIG_SLOWDOWN ||
                 effect == MobEffects.HARM ||
-                effect == MobEffects.HEAL) {
+                effect == MobEffects.HEAL ||
+                effect == ModEffects.SULFUR_POISONING.get()
+        ) {
             return false;
         }
 

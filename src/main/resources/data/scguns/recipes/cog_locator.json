@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": {
+      "item": "scguns:ancient_brass"
+    },
+    "S": {
+      "item": "scguns:plasma"
+    },
+    "M": {
+      "item": "scguns:beacon_grenade"
+    }
+  },
+  "pattern": [
+    "XSX",
+    " M "
+  ],
+  "result": {
+    "item": "scguns:cog_locator"
+  }
+}

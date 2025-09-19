@@ -220,6 +220,11 @@ public class GunItem extends Item implements IColored, IMeta {
             Gun modifiedGun = this.getModifiedGun(stack);
             return (modifiedGun.getGeneral().getFireMode() != FireMode.AUTOMATIC);
         }
+        if (stack.is(ModTags.Items.MINING_GUN)) {
+            if (enchantment == Enchantments.BLOCK_FORTUNE || enchantment == Enchantments.SILK_TOUCH) {
+                return true;
+            }
+        }
         return super.canApplyAtEnchantingTable(stack, enchantment);
     }
 
@@ -307,4 +312,13 @@ public class GunItem extends Item implements IColored, IMeta {
     public Gun getGunProperties() {
         return this.gun;
     }
+
+    @Override
+    public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
+        if (stack.is(ModTags.Items.MINING_GUN)) {
+            return true;
+        }
+        return super.isBookEnchantable(stack, book);
+    }
+
 }

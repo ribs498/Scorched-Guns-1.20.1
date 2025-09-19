@@ -306,10 +306,6 @@ public class GunEventBus {
                             new S2CMessageHotBarrelSync(newLevel, heldItem.getItem().getDescriptionId())
                     );
                 }
-                boolean inSulfurCloud = isInSulfurCloudArea(player.level(), player.blockPosition());
-                if (inSulfurCloud) {
-                    triggerExplosion(player.level(), player.blockPosition());
-                }
             }
             if (gun.getGeneral().isEnableGunLight()) {
                 Vec3 lookVec = player.getLookAngle();
@@ -409,26 +405,11 @@ public class GunEventBus {
     }
 
 
-    private static boolean isInSulfurCloudArea(Level level, BlockPos playerPos) {
-        int effectRadiusSquared = SulfurVentBlock.EFFECT_RADIUS_SQUARED;
 
-        for (BlockPos checkPos : BlockPos.betweenClosed(playerPos.offset(-SulfurVentBlock.EFFECT_RADIUS, -1, -SulfurVentBlock.EFFECT_RADIUS), playerPos.offset(SulfurVentBlock.EFFECT_RADIUS, 1, SulfurVentBlock.EFFECT_RADIUS))) {
-            BlockState state = level.getBlockState(checkPos);
-
-            if (state.getBlock() instanceof SulfurVentBlock && state.getValue(SulfurVentBlock.ACTIVE)) {
-                double distanceSquared = checkPos.distSqr(playerPos);
-                if (distanceSquared <= effectRadiusSquared) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
 
     private static void triggerExplosion(Level level, BlockPos pos) {
         RandomSource random = level.random;
-        for (int i = 0; i < 7; i++) { // Trigger multiple explosions for effect
+        for (int i = 0; i < 7; i++) {
             double xOffset = (random.nextDouble() - 0.5) * 2.0 * SulfurVentBlock.EFFECT_RADIUS;
             double yOffset = (random.nextDouble() - 0.5) * 2.0 * SulfurVentBlock.EFFECT_RADIUS;
             double zOffset = (random.nextDouble() - 0.5) * 2.0 * SulfurVentBlock.EFFECT_RADIUS;

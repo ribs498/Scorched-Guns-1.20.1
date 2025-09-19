@@ -1,1 +1,7 @@
-{"type":"mekanism:purifying","chemicalInput":{"amount":1,"gas":"mekanism:oxygen"},"itemInput":{"ingredient":{"item":"scguns:shard_anthralite"}},"output":{"item":"scguns:clump_anthralite"}}
+{"type":"mekanism:purifying",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mekanism"
+    }
+  ],"chemicalInput":{"amount":1,"gas":"mekanism:oxygen"},"itemInput":{"ingredient":{"item":"scguns:shard_anthralite"}},"output":{"item":"scguns:clump_anthralite"}}

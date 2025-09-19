@@ -1,1 +1,15 @@
-{"type":"immersiveengineering:hammer_crushing","input":{"item":"scguns:sulfur_ore"},"result":{"item":"scguns:sulfur_chunk"}}
+{
+    "type": "immersiveengineering:hammer_crushing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ],
+    "input": {
+        "item": "scguns:sulfur_ore"
+    },
+    "result": {
+        "item": "scguns:sulfur_chunk"
+    }
+}

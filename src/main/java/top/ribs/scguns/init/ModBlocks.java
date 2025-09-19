@@ -29,12 +29,11 @@ public class ModBlocks {
             TemporaryLightBlock::new);
     public static final RegistryObject<Block> GUN_SHELF = register("gun_shelf",
             () -> new GunShelfBlock(BlockBehaviour.Properties.copy(Blocks.OAK_PLANKS)
-                    .requiresCorrectToolForDrops()
                     .strength(0.5F)));
     public static final RegistryObject<Block> MOB_TRAP = register("mob_trap",
             () -> new MobTrapBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                     .requiresCorrectToolForDrops()
-                    .strength(8.0F)
+                    .strength(12.0F)
                     .noOcclusion()));
     public static final RegistryObject<Block> AMMO_BOX = register("ammo_box",
             () -> new AmmoBoxBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
@@ -43,15 +42,12 @@ public class ModBlocks {
                     .strength(2.5F)));
     public static final RegistryObject<Block> ADVANCED_COMPOSTER = register("advanced_composter",
             () -> new AdvancedComposterBlock(BlockBehaviour.Properties.copy(Blocks.COMPOSTER)
-                    .requiresCorrectToolForDrops()
                     .strength(0.5F)));
     public static final RegistryObject<Block> POWDER_KEG = register("powder_keg",
             () -> new PowderKegBlock(BlockBehaviour.Properties.copy(Blocks.BARREL)
-                    .requiresCorrectToolForDrops()
                     .strength(0.5F)));
     public static final RegistryObject<Block> NITRO_KEG = register("nitro_keg",
             () -> new NitroKegBlock(BlockBehaviour.Properties.copy(Blocks.BARREL)
-                    .requiresCorrectToolForDrops()
                     .strength(0.5F)));
     public static final RegistryObject<Block> CRYONITER = register("cryoniter",
             () -> new CryoniterBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
@@ -149,7 +145,9 @@ public class ModBlocks {
     public static final RegistryObject<Block> PLASMA_BLOCK = registerBurnable("plasma_block",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                     .requiresCorrectToolForDrops()
+                    .lightLevel((state) -> 15)
                     .strength(3.0F)), 16200);
+
 
     public static final RegistryObject<Block> DIAMOND_STEEL_BLOCK = register("diamond_steel_block",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
@@ -322,6 +320,10 @@ public class ModBlocks {
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
                     .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASS)
                     .strength(1.5F)));
+    public static final RegistryObject<Block> SMOOTH_PHOSPHORITE = register("smooth_phosphorite",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASS)
+                    .strength(2.0F)));
     public static final RegistryObject<Block> POLISHED_PHOSPHORITE = register("polished_phosphorite",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
                     .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.BASS)

@@ -59,6 +59,10 @@ public class ThrowableGasGrenadeEntity extends ThrowableGrenadeEntity {
             if (this.remainingTicks <= (800 - this.delayTicks)) {
                 emitGasCloudParticles();
                 applyGasEffects();
+                if (!this.level().isClientSide) {
+                    Vec3 center = this.position();
+                    SulfurGasCloud.checkAndHandleFireExplosion(this.level(), center, this.explosionRadius);
+                }
             }
 
             this.remainingTicks--;

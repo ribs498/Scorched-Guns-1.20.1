@@ -53,6 +53,7 @@ public class ModTags
         public static final TagKey<Item> EXPLOSIVE_BLOCK = tag("explosive_block");
         public static final TagKey<Item> GEOTHERMAL_VENT_OUTPUT = tag("geothermal_vent_output");
         public static final TagKey<Item> SULFUR_VENT_OUTPUT = tag("sulfur_vent_output");
+        public static final TagKey<Item> MINING_GUN = tag("mining_gun");
 
         private static TagKey<Item> tag(String name)
         {

@@ -36,9 +36,8 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
     private static final float SHIELD_DISABLE_CHANCE = 0.50f;
     private static final float SHIELD_DAMAGE_PENETRATION = 0.3f;
 
-    // Beowulf Round bonuses - high tier expensive ammo
     private static final float BEOWULF_XP_MULTIPLIER = 0.75f;
-    private static final int BEOWULF_LOOTING_LEVEL = 2;
+    private static final int BEOWULF_LOOTING_LEVEL = 3;
 
     private static boolean eventRegistered = false;
 
@@ -65,10 +64,8 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
 
     @SubscribeEvent
     public static void onLootingLevel(LootingLevelEvent event) {
-        // Check if the damage source is from a Beowulf Round
         if (event.getDamageSource() != null &&
                 event.getDamageSource().getDirectEntity() instanceof BeowulfProjectileEntity) {
-            // Add our Beowulf Round looting bonus
             event.setLootingLevel(event.getLootingLevel() + BEOWULF_LOOTING_LEVEL);
         }
     }

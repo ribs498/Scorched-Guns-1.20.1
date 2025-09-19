@@ -55,7 +55,7 @@
     "casingParticle": "scguns:iron_casing",
     "life": 45,
     "size": 6.0,
-    "speed": 3.0,
+    "speed": 5.5,
     "trailLengthMultiplier": 1.0
   },
   "reloads": {

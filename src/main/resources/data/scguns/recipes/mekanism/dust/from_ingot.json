@@ -1,1 +1,6 @@
-{"type":"mekanism:crushing","input":{"ingredient":{"item":"scguns:anthralite_ingot"}},"output":{"item":"scguns:anthralite_dust"}}
+{"type":"mekanism:crushing",  "conditions": [
+  {
+    "type": "forge:mod_loaded",
+    "modid": "mekanism"
+  }
+],"input":{"ingredient":{"item":"scguns:anthralite_ingot"}},"output":{"item":"scguns:anthralite_dust"}}

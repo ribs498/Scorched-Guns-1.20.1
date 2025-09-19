@@ -1,5 +1,6 @@
 - Fixed Trauma Unit Spawning
 - Fixed Double durability damage to guns
+- Small tweaks to gun stats
 - Reworked gun light system
 - Added Trotters- New bolt action Piglin Rifle(thanks to Blumountain and Kel Cat from the discord for the design!)
 - Added the Stiletto- New single shot Krahg Pistol
@@ -46,5 +47,8 @@
 - Vent output is set by the tag geothermal_vent_output and sulfur_vent_output. ( data driven vents planned for later)
 - Sulfur dust can be placed like Niter
 - Niter no longer "melts" in heat sources
-
-
+- Improved the Dynamic Headshot system
+- Improved the Advantage system, uses the advantages.json file to set advantage values
+- Added the Corroded Enchantment for melee weapons, increases damage against Automaton mobs and poisons non-automaton mobs
+- Reworked Plasma Projectiles slighty
+- Added Smooth Phosphorite

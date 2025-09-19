@@ -32,6 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.entity.projectile.BrassBoltEntity;
+import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModSounds;
 
@@ -83,7 +84,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     private boolean isRegenerating = false;
     private int regenerationTicks = 0;
     private static final int REGENERATION_DURATION = 80;
-    private static final float REGENERATION_TARGET_HEALTH = 300.0F;
+    private static final float REGENERATION_TARGET_HEALTH = 500.0F;
     private static final float REGENERATION_RATE = 1.25F;
 
    private boolean hasTriggeredThirdPhase = false;
@@ -99,7 +100,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     private static final double SCAMPLER_CHECK_RADIUS = 30.0;
 
     private int thirdPhaseBeaconCooldown = 0;
-    private static final int THIRD_PHASE_BEACON_COOLDOWN = 250;
+    private static final int THIRD_PHASE_BEACON_COOLDOWN = 300;
     private static final float THIRD_PHASE_BEACON_CHANCE = 0.35f;
 
     private int repositionCooldown = 0;
@@ -113,8 +114,16 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
         this.setMaxUpStep(1.0F);
         this.bossEvent.setVisible(true);
         this.xpReward = XP_REWARD_BOSS;
+        this.setPersistenceRequired();
     }
-
+    @Override
+    public boolean requiresCustomPersistence() {
+        return true;
+    }
+    @Override
+    public boolean removeWhenFarAway(double distanceToClosestPlayer) {
+        return false;
+    }
     public boolean isInSecondPhase() {
         return this.entityData.get(IS_IN_SECOND_PHASE);
     }
@@ -124,7 +133,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     }
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 3500D)
+                .add(Attributes.MAX_HEALTH, 800D)
                 .add(Attributes.FOLLOW_RANGE, 35D)
                 .add(Attributes.MOVEMENT_SPEED, 0.3D)
                 .add(Attributes.ARMOR_TOUGHNESS, 0.8f)
@@ -155,11 +164,36 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
                 effect == MobEffects.MOVEMENT_SLOWDOWN ||
                 effect == MobEffects.DIG_SLOWDOWN ||
                 effect == MobEffects.HARM ||
+                effect == ModEffects.SULFUR_POISONING.get() ||
                 effect == MobEffects.HEAL) {
             return false;
         }
 
         return super.canBeAffected(pPotionEffect);
+    }
+    @Override
+    public void die(@NotNull DamageSource pCause) {
+        super.die(pCause);
+
+        if (!this.level().isClientSide) {
+            SupplyScampEntity supplyScamp = new SupplyScampEntity(ModEntities.SUPPLY_SCAMP.get(), this.level());
+            supplyScamp.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+            supplyScamp.setPersistenceRequired();
+            this.level().addFreshEntity(supplyScamp);
+
+            this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                    SoundEvents.GENERIC_EXPLODE, SoundSource.NEUTRAL, 1.0F, 1.2F);
+
+            if (this.level() instanceof ServerLevel serverLevel) {
+                for (int i = 0; i < 20; i++) {
+                    serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER,
+                            supplyScamp.getX() + (this.random.nextDouble() - 0.5) * 2.0,
+                            supplyScamp.getY() + 1.0 + this.random.nextDouble(),
+                            supplyScamp.getZ() + (this.random.nextDouble() - 0.5) * 2.0,
+                            1, 0.0, 0.0, 0.0, 0.0);
+                }
+            }
+        }
     }
     @Override
     public void setCustomName(Component name) {
@@ -798,7 +832,10 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
         if (target == null || !this.hasLineOfSight(target)) {
             return;
         }
-
+        if (target instanceof Player player && (player.isCreative() || player.isSpectator())) {
+            this.setTarget(null);
+            return;
+        }
         double distanceToTarget = this.distanceToSqr(target);
 
         if (distanceToTarget <= MACHINE_GUN_RANGE * MACHINE_GUN_RANGE && machineGunCooldown <= 0) {

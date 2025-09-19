@@ -8,6 +8,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameType;
 import net.minecraft.world.level.Level;
@@ -15,6 +17,8 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.storage.loot.LootParams;
+import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -159,6 +163,7 @@ public class BeamHandlerCommon {
                     state.is(Blocks.GLASS_PANE) ||
                     state.is(Blocks.TINTED_GLASS);
         }
+
         public static void updateBlockMining(Level world, BlockPos pos, ServerPlayer player, Gun modifiedGun) {
             BlockState state = world.getBlockState(pos);
             if (state.isAir() || isGlassBlock(state)) {
@@ -234,14 +239,49 @@ public class BeamHandlerCommon {
                 if (player.gameMode.getGameModeForPlayer() == GameType.CREATIVE) {
                     world.removeBlock(pos, false);
                 } else {
-                    BlockState blockState = world.getBlockState(pos);
-                    BlockEntity blockEntity = blockState.hasBlockEntity() ? world.getBlockEntity(pos) : null;
-                    Block.dropResources(blockState, world, pos, blockEntity, player, player.getMainHandItem());
-                    world.removeBlock(pos, false);
-                    world.levelEvent(2001, pos, Block.getId(blockState));
+                    breakBlockWithEnchantments(world, pos, state, player);
                 }
             }
         }
+        private static void breakBlockWithEnchantments(Level world, BlockPos pos, BlockState blockState, ServerPlayer player) {
+            ItemStack weapon = player.getMainHandItem();
+            BlockEntity blockEntity = blockState.hasBlockEntity() ? world.getBlockEntity(pos) : null;
+
+            int silkTouchLevel = weapon.getEnchantmentLevel(Enchantments.SILK_TOUCH);
+            if (silkTouchLevel > 0) {
+                Block.dropResources(blockState, world, pos, blockEntity, player, weapon);
+                world.removeBlock(pos, false);
+                world.levelEvent(2001, pos, Block.getId(blockState));
+                return;
+            }
+
+            int fortuneLevel = weapon.getEnchantmentLevel(Enchantments.BLOCK_FORTUNE);
+
+            if (fortuneLevel > 0 && world instanceof ServerLevel serverLevel) {
+                LootParams.Builder builder = new LootParams.Builder(serverLevel)
+                        .withParameter(LootContextParams.ORIGIN, Vec3.atCenterOf(pos))
+                        .withParameter(LootContextParams.TOOL, weapon)
+                        .withOptionalParameter(LootContextParams.THIS_ENTITY, player)
+                        .withOptionalParameter(LootContextParams.BLOCK_ENTITY, blockEntity);
+
+                List<ItemStack> drops = blockState.getDrops(builder);
+                if (blockState.is(net.minecraft.tags.BlockTags.create(new ResourceLocation("forge", "ores")))) {
+                    for (ItemStack drop : drops) {
+                        Block.popResource(world, pos, drop);
+                    }
+                } else {
+                    for (ItemStack drop : drops) {
+                        Block.popResource(world, pos, drop);
+                    }
+                }
+
+            } else {
+                Block.dropResources(blockState, world, pos, blockEntity, player, weapon);
+            }
+            world.removeBlock(pos, false);
+            world.levelEvent(2001, pos, Block.getId(blockState));
+        }
+
         public static void tickMiningProgress(Level world) {
             long currentTime = System.currentTimeMillis();
             Iterator<Map.Entry<BlockPos, MiningProgress>> iterator = miningProgress.entrySet().iterator();

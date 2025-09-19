@@ -37,6 +37,7 @@ import net.minecraftforge.event.ForgeEventFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.client.screen.SupplyScampMenuProvider;
+import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModItems;
 
@@ -95,7 +96,8 @@ public class SupplyScampEntity extends TamableAnimal {
                 effect == MobEffects.MOVEMENT_SLOWDOWN ||
                 effect == MobEffects.DIG_SLOWDOWN ||
                 effect == MobEffects.HARM ||
-                effect == MobEffects.HEAL) {
+                effect == ModEffects.SULFUR_POISONING.get()
+        ) {
             return false;
         }
 

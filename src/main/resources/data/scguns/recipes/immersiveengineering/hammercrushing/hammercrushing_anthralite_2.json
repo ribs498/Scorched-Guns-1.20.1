@@ -1,1 +1,15 @@
-{"type":"immersiveengineering:hammer_crushing","input":{"item":"scguns:deepslate_anthralite_ore"},"result":{"item":"scguns:anthralite_dust"}}
+{
+    "type": "immersiveengineering:hammer_crushing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "immersiveengineering"
+    }
+  ],
+    "input": {
+        "item": "scguns:deepslate_anthralite_ore"
+    },
+    "result": {
+        "item": "scguns:anthralite_dust"
+    }
+}

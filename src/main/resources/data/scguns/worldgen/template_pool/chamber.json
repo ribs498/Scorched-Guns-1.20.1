@@ -12,6 +12,15 @@
       }
     },
     {
+      "weight": 4,
+      "element": {
+        "location": "scguns:chambers/chamber_boss",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
       "weight": 8,
       "element": {
         "location": "scguns:chambers/chamber_pillar",

@@ -38,6 +38,7 @@ import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.entity.config.CogMinionConfig;
 import top.ribs.scguns.entity.weapon.ScGunsWeapon;
+import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.interfaces.IEntityCanReload;
@@ -141,6 +142,7 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
                 effect == MobEffects.MOVEMENT_SLOWDOWN ||
                 effect == MobEffects.DIG_SLOWDOWN ||
                 effect == MobEffects.HARM ||
+                effect == ModEffects.SULFUR_POISONING.get() ||
                 effect == MobEffects.HEAL) {
             return false;
         }

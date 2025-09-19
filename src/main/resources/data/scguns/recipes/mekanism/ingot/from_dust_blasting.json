@@ -1,1 +1,6 @@
-{"type":"minecraft:blasting","cookingtime":100,"experience":0.35,"ingredient":{"item":"scguns:anthralite_dust"},"result":"scguns:anthralite_ingot"}
+{"type":"minecraft:blasting",  "conditions": [
+  {
+    "type": "forge:mod_loaded",
+    "modid": "mekanism"
+  }
+],"cookingtime":100,"experience":0.35,"ingredient":{"item":"scguns:anthralite_dust"},"result":"scguns:anthralite_ingot"}

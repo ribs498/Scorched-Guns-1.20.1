@@ -40,21 +40,15 @@ public class ExoSuitUpgradeManager extends SimpleJsonResourceReloadListener {
                         ExoSuitUpgrade upgrade = loadUpgradeFromJson(jsonObject);
                         if (upgrade != null) {
                             itemUpgrades.put(itemId, upgrade);
-                        } else {
-                            System.err.println("✗ Failed to create upgrade object from JSON");
                         }
                     } else {
-                        System.err.println("✗ Invalid or missing item ID: " + itemId + " (exists in registry: " + ForgeRegistries.ITEMS.containsKey(itemId) + ")");
-                        System.err.println("Available items matching pattern: ");
                         ForgeRegistries.ITEMS.getKeys().stream()
                                 .filter(key -> key.toString().contains("heavy_armor_plate"))
                                 .forEach(key -> System.err.println("  - " + key));
                     }
                 } else {
-                    System.err.println("✗ File is not a valid JSON object: " + resourceLocation);
                 }
             } catch (Exception e) {
-                System.err.println("✗ Failed to load ExoSuit upgrade: " + resourceLocation);
                 e.printStackTrace();
             }
         });
@@ -155,8 +149,7 @@ public class ExoSuitUpgradeManager extends SimpleJsonResourceReloadListener {
 
             return upgrade;
 
-        } catch (Exception e) {
-            System.err.println("Failed to load upgrade from JSON: " + e.getMessage());
+        } catch (Exception e) {;
             e.printStackTrace();
             return null;
         }

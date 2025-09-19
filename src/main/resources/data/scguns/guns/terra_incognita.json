@@ -31,7 +31,7 @@
 
     },
     "zoom": {
-
+      "xOffset": 3.7,
       "yOffset": 7.9,
       "zOffset": 7.0,
       "fovModifier": 0.5
@@ -45,7 +45,7 @@
     "item": "scguns:rocket",
     "life": 55,
     "size": 0.05,
-    "speed": 5.0,
+    "speed": 5.5,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {

@@ -11,7 +11,6 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -62,18 +61,12 @@ public class BeaconProjectileEntity extends Projectile {
         }
 
         ticksInFlight++;
-
-        // Apply gravity
         Vec3 movement = this.getDeltaMovement();
         this.setDeltaMovement(movement.x, movement.y - 0.05, movement.z);
-
-        // Check for landing (ground hit or max flight time)
         if (this.onGround() || ticksInFlight >= MAX_FLIGHT_TIME || this.getY() <= this.level().getMinBuildHeight()) {
             landAndSpawnBeacon();
             return;
         }
-
-        // Additional ground check - check if we're about to hit a block
         if (!this.level().isClientSide) {
             Vec3 currentPos = this.position();
             Vec3 nextPos = currentPos.add(this.getDeltaMovement());

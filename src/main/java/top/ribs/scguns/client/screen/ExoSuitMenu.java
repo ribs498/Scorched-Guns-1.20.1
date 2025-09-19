@@ -175,12 +175,10 @@ public class ExoSuitMenu extends AbstractContainerMenu {
         if (slot.hasItem()) {
             ItemStack itemstack1 = slot.getItem();
             itemstack = itemstack1.copy();
+
             if (index >= EXOSUIT_INVENTORY_FIRST_SLOT_INDEX && index < EXOSUIT_INVENTORY_FIRST_SLOT_INDEX + 5) {
-                if (index == EXOSUIT_INVENTORY_FIRST_SLOT_INDEX + ARMOR_SLOT) {
-                    if (!this.moveItemStackTo(itemstack1, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, true)) {
-                        return ItemStack.EMPTY;
-                    }
-                } else {
+
+                if (!this.moveItemStackTo(itemstack1, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, true)) {
                     return ItemStack.EMPTY;
                 }
             }
@@ -189,7 +187,8 @@ public class ExoSuitMenu extends AbstractContainerMenu {
                     if (!this.moveItemStackTo(itemstack1, EXOSUIT_INVENTORY_FIRST_SLOT_INDEX + ARMOR_SLOT, EXOSUIT_INVENTORY_FIRST_SLOT_INDEX + ARMOR_SLOT + 1, false)) {
                         return ItemStack.EMPTY;
                     }
-                } else {
+                }
+                else {
                     if (!this.moveItemStackTo(itemstack1, EXOSUIT_INVENTORY_FIRST_SLOT_INDEX + UPGRADE_SLOT_1, EXOSUIT_INVENTORY_FIRST_SLOT_INDEX + UPGRADE_SLOT_4 + 1, false)) {
                         return ItemStack.EMPTY;
                     }

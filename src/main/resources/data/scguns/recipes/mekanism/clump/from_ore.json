@@ -1,4 +1,10 @@
-{"type":"mekanism:purifying","chemicalInput":{"amount":1,"gas":"mekanism:oxygen"},"itemInput":{
+{"type":"mekanism:purifying",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "mekanism"
+    }
+  ],"chemicalInput":{"amount":1,"gas":"mekanism:oxygen"},"itemInput":{
   "ingredient":
 [
   {

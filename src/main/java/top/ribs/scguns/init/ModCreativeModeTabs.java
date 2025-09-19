@@ -428,7 +428,9 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.TEAM_LOG.get());
                         pOutput.accept(ModItems.ENEMY_LOG.get());
                         pOutput.accept(ModItems.SCAMP_PACKAGE.get());
+                        pOutput.accept(ModItems.COG_LOCATOR.get());
                         pOutput.accept(ModItems.THE_PACT.get());
+
 
                         pOutput.accept(ModBlocks.ANTHRALITE_ORE.get());
                         pOutput.accept(ModBlocks.DEEPSLATE_ANTHRALITE_ORE.get());
@@ -468,6 +470,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.MAGENTA_NITER_GLASS.get());
                         pOutput.accept(ModBlocks.PINK_NITER_GLASS.get());
                         pOutput.accept(ModBlocks.PHOSPHORITE.get());
+                        pOutput.accept(ModBlocks.SMOOTH_PHOSPHORITE.get());
                         pOutput.accept(ModBlocks.POLISHED_PHOSPHORITE.get());
                         pOutput.accept(ModBlocks.PHOSPHORITE_BRICKS.get());
                         pOutput.accept(ModBlocks.CRACKED_PHOSPHORITE_BRICKS.get());

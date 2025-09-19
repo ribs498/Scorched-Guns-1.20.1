@@ -18,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.ribs.scguns.init.ModEffects;
 
 public class ScamplerEntity extends Monster {
     private int fuseTime = 25;
@@ -54,7 +55,9 @@ public class ScamplerEntity extends Monster {
                 effect == MobEffects.MOVEMENT_SLOWDOWN ||
                 effect == MobEffects.DIG_SLOWDOWN ||
                 effect == MobEffects.HARM ||
-                effect == MobEffects.HEAL) {
+                effect == MobEffects.HEAL ||
+                effect == ModEffects.SULFUR_POISONING.get()
+                ) {
             return false;
         }
 

@@ -1,5 +1,11 @@
 {
   "type": "create:deploying",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
   "ingredients": [
     {
       "item": "minecraft:shulker_shell"

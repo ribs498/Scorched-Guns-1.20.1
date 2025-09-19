@@ -1,5 +1,11 @@
 {
   "type": "create:mixing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
   "ingredients": [
     [
       {
@@ -21,8 +27,12 @@
   ],
   "results": [
     {
-      "count": 8,
+      "count": 10,
       "item": "scguns:sheol"
+    },
+    {
+      "chance": 0.5,
+      "item": "scguns:sheol_dust"
     }
   ]
 }

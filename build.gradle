@@ -129,6 +129,7 @@ dependencies {
     implementation fg.deobf("curse.maven:selene-499980:5702363")
     implementation fg.deobf("curse.maven:effortless-building-302113:5805519")
     implementation fg.deobf("curse.maven:create-enchantment-industry-688768:5331908")
+    implementation fg.deobf("curse.maven:born-in-chaos-686437:6833957")
 }
 
 jar {

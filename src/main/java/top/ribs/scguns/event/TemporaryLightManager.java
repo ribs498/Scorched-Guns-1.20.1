@@ -11,7 +11,7 @@ import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.block.TemporaryLightBlock;
 
 public class TemporaryLightManager {
-    private static final int DEFAULT_LIGHT_DURATION = 4;
+    private static final int DEFAULT_LIGHT_DURATION = 8;
     private static final int BEAM_LIGHT_DURATION = 20;
     private static final int LIGHT_LEVEL = 7;
 
