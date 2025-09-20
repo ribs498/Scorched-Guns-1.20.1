@@ -134,6 +134,7 @@ public class MeleeAttackHandler {
                 1.0F,
                 1.0F
         );
+
         if (heldItem.getItem() instanceof AnimatedGunItem) {
             AnimationController<GeoAnimatable> controller = ((AnimatedGunItem)heldItem.getItem())
                     .getAnimatableInstanceCache()
@@ -252,6 +253,8 @@ public class MeleeAttackHandler {
             List<LivingEntity> targets = findTargetsInArea(player, 2.5);
             for (LivingEntity aoeTarget : targets) {
                 if (aoeTarget.hurt(damageSource, attackDamage)) {
+                    spawnSuccessfulHitParticles(player, aoeTarget);
+
                     player.level().playSound(
                             null,
                             aoeTarget.getX(),
@@ -266,21 +269,53 @@ public class MeleeAttackHandler {
                     applyKnockback(player, aoeTarget, heldItem);
                     applySpecialEnchantmentsFromBayonet(heldItem, aoeTarget, player, gunItem);
                     triggerBanzaiImpactIfNecessary(heldItem);
-                    if (player.level().isClientSide) {
-                        ClientMeleeAttackHandler.spawnHitParticles((ClientLevel) player.level(), aoeTarget);
-                    }
                 }
             }
         } else {
             LivingEntity raycastTarget = raycastForMeleeAttack(player, heldItem);
             if (raycastTarget != null && raycastTarget.hurt(damageSource, attackDamage)) {
+                spawnSuccessfulHitParticles(player, raycastTarget);
+
                 applyKnockback(player, raycastTarget, heldItem);
                 applySpecialEnchantmentsFromBayonet(heldItem, raycastTarget, player, gunItem);
                 triggerBanzaiImpactIfNecessary(heldItem);
-                if (player.level().isClientSide) {
-                    ClientMeleeAttackHandler.spawnHitParticles((ClientLevel) player.level(), raycastTarget);
-                }
             }
+        }
+    }
+    private static void spawnSuccessfulHitParticles(ServerPlayer player, LivingEntity target) {
+        Vec3 targetPos = target.position().add(0, target.getBbHeight() * 0.5, 0);
+        ClientboundLevelParticlesPacket sweepPacket = new ClientboundLevelParticlesPacket(
+                ParticleTypes.SWEEP_ATTACK,
+                true,
+                targetPos.x,
+                targetPos.y,
+                targetPos.z,
+                0.0F,
+                0.0F,
+                0.0F,
+                0.0F,
+                1
+        );
+        player.connection.send(sweepPacket);
+
+        for (int i = 0; i < 5; i++) {
+            double offsetX = (Math.random() - 0.5) * 0.5;
+            double offsetY = (Math.random() - 0.5) * 0.5;
+            double offsetZ = (Math.random() - 0.5) * 0.5;
+
+            ClientboundLevelParticlesPacket critPacket = new ClientboundLevelParticlesPacket(
+                    ParticleTypes.CRIT,
+                    true,
+                    targetPos.x + offsetX,
+                    targetPos.y + offsetY,
+                    targetPos.z + offsetZ,
+                    0.0F,
+                    0.1F,
+                    0.0F,
+                    0.1F,
+                    1
+            );
+            player.connection.send(critPacket);
         }
     }
     private static void triggerBanzaiImpactIfNecessary(ItemStack heldItem) {

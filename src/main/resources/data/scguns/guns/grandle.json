@@ -64,7 +64,7 @@
   },
   "reloads": {
     "emptyMagTimer": 20,
-    "maxAmmo": 16,
+    "maxAmmo": 17,
     "reloadItem": "scguns:compact_advanced_round",
     "reloadTimer": 40,
     "reloadType": "scguns:mag_fed"

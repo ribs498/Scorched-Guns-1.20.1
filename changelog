@@ -57,3 +57,4 @@
 - Added conditional checks for tons of the compat recipes
 - Added Config option to disable fire placement for flamethrowers
 - The Merchant only has its special behavior if summoned via the Pact
+- Fixed Melee not being able to be re-bound

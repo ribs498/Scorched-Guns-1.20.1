@@ -123,6 +123,9 @@ public class ExoSuitFlightHandler {
 
 
     private static void handleJetpackFlightWithoutParticles(Player player) {
+        if (player.isSpectator()) {
+            return;
+        }
         ItemStack chestplate = player.getInventory().getArmor(2);
         if (!(chestplate.getItem() instanceof ExoSuitItem)) {
             if (player.getAbilities().flying && !player.isCreative()) {

@@ -601,6 +601,11 @@
 					}
 				}
 			},
+			"sound_effects": {
+				"0.125": {
+					"effect": "rack"
+				}
+			},
 			"particle_effects": {
 				"0.0": {
 					"effect": "eject_casing"
@@ -863,6 +868,11 @@
 							"lerp_mode": "catmullrom"
 						}
 					}
+				}
+			},
+			"sound_effects": {
+				"0.125": {
+					"effect": "rack"
 				}
 			},
 			"particle_effects": {

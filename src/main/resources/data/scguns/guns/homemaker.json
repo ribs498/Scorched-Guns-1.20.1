@@ -59,7 +59,7 @@
   },
   "reloads": {
     "emptyMagTimer": 50,
-    "maxAmmo": 4,
+    "maxAmmo": 5,
     "reloadItem": "scguns:shotgun_shell",
     "reloadTimer": 20,
     "reloadType": "scguns:manual"

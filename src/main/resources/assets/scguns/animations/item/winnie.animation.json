@@ -210,7 +210,7 @@
 				}
 			},
 			"sound_effects": {
-				"0.2917": {
+				"0.1667": {
 					"effect": "lever"
 				}
 			},
@@ -1016,9 +1016,6 @@
 			"particle_effects": {
 				"0.5": {
 					"effect": "loaded"
-				},
-				"0.5833": {
-					"effect": "loop_end"
 				}
 			}
 		},
@@ -1232,7 +1229,7 @@
 				}
 			},
 			"sound_effects": {
-				"0.2917": {
+				"0.1667": {
 					"effect": "lever"
 				}
 			},

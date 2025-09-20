@@ -11,12 +11,10 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.client.renderer.item.ItemProperties;
 import net.minecraft.client.renderer.texture.SimpleTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.ResourceManagerReloadListener;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -78,6 +76,12 @@ public class ClientHandler {
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
             updateMouseSensitivity();
+            Minecraft mc = Minecraft.getInstance();
+            if (mc.player != null && mc.screen == null && KeyBinds.KEY_MELEE.consumeClick()) {
+                if (mc.player.getMainHandItem().getItem() instanceof GunItem) {
+                    PacketHandler.getPlayChannel().sendToServer(new C2SMessageMeleeAttack());
+                }
+            }
         }
     }
     private static void updateMouseSensitivity() {
@@ -442,15 +446,8 @@ public class ClientHandler {
                 );
             }
 
-            // Context-aware utility action - opens pouches OR toggles jetpack based on equipped upgrade
             if (KeyBinds.KEY_ENABLE_EXO_CHESTPLATE.consumeClick()) {
                 PacketHandler.getPlayChannel().sendToServer(new C2SMessageUtilityAction());
-            }
-        }
-
-        if (KeyBinds.KEY_MELEE.consumeClick() && event.getAction() == GLFW.GLFW_PRESS) {
-            if (mc.player.getMainHandItem().getItem() instanceof GunItem gunItem) {
-                PacketHandler.getPlayChannel().sendToServer(new C2SMessageMeleeAttack());
             }
         }
     }

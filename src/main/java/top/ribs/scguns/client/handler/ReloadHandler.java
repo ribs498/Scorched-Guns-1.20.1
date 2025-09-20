@@ -264,7 +264,7 @@ public class ReloadHandler {
                     if (preReloadSound != null) {
                         Config.SERVER.reloadMaxDistance.get();
                         player.playSound(Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getValue(preReloadSound)),
-                                0.9F, 1.0F);
+                                0.7F, 1.0F);
                     }
 
                     if (MinecraftForge.EVENT_BUS.post(new GunReloadEvent.Pre(player, stack))) {
