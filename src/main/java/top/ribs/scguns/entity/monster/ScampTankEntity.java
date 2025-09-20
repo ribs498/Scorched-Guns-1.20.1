@@ -24,8 +24,13 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,6 +40,7 @@ import top.ribs.scguns.entity.projectile.BrassBoltEntity;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModSounds;
+import top.ribs.scguns.init.ModTags;
 
 import java.util.EnumSet;
 import java.util.List;
@@ -53,7 +59,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     private int mainCannonCooldown = 0;
     private int machineGunCooldown = 0;
 
-    private static final int MAIN_CANNON_COOLDOWN_TICKS = 60;
+    private static final int MAIN_CANNON_COOLDOWN_TICKS = 40;
     private static final int MACHINE_GUN_COOLDOWN_TICKS = 5;
 
     private static final double MAIN_CANNON_RANGE = 35.0;
@@ -64,7 +70,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     private static final double DETECTION_RANGE = 50.0;
 
     private int beaconSpawnCooldown = 0;
-    private static final int BEACON_SPAWN_COOLDOWN = 70;
+    private static final int BEACON_SPAWN_COOLDOWN = 60;
     private static final int MAX_SKY_CARRIERS_IN_AREA = 4;
     private static final double SKY_CARRIER_CHECK_RADIUS = 40.0;
 
@@ -83,35 +89,46 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
 
     private boolean isRegenerating = false;
     private int regenerationTicks = 0;
-    private static final int REGENERATION_DURATION = 80;
-    private static final float REGENERATION_TARGET_HEALTH = 500.0F;
-    private static final float REGENERATION_RATE = 1.25F;
+    private static final int REGENERATION_DURATION = 60;
+    private static final float REGENERATION_TARGET_HEALTH = 700.0F;
+    private static final float REGENERATION_RATE = 2.0F;
 
    private boolean hasTriggeredThirdPhase = false;
     private boolean isRegeneratingThirdPhase = false;
     private int regenerationTicksThirdPhase = 0;
     private static final int THIRD_PHASE_REGENERATION_DURATION = 60;
-    private static final float THIRD_PHASE_REGENERATION_TARGET_HEALTH = 150.0F;
-    private static final float THIRD_PHASE_REGENERATION_RATE = 1.5F;
+    private static final float THIRD_PHASE_REGENERATION_TARGET_HEALTH = 350.0F;
+    private static final float THIRD_PHASE_REGENERATION_RATE = 2.5F;
 
     private int scamplerSpawnCooldown = 0;
     private static final int SCAMPLER_SPAWN_COOLDOWN = 30;
-    private static final int MAX_SCAMPLERS_IN_AREA = 8;
+    private static final int MAX_SCAMPLERS_IN_AREA = 10;
     private static final double SCAMPLER_CHECK_RADIUS = 30.0;
 
     private int thirdPhaseBeaconCooldown = 0;
-    private static final int THIRD_PHASE_BEACON_COOLDOWN = 300;
-    private static final float THIRD_PHASE_BEACON_CHANCE = 0.35f;
-
+    private static final int THIRD_PHASE_BEACON_COOLDOWN = 60;
+    private static final float THIRD_PHASE_BEACON_CHANCE = 0.65f;
     private int repositionCooldown = 0;
+
+    private int terrainDestructionCooldown = 0;
+    private static final int TERRAIN_DESTRUCTION_COOLDOWN_TICKS = 10;
+
     private final ServerBossEvent bossEvent = new ServerBossEvent(
             this.getDisplayName(),
             BossEvent.BossBarColor.YELLOW,
             BossEvent.BossBarOverlay.PROGRESS
     );
+
+    private int avoidanceTimer = 0;
+    private int noLineOfSightTimer = 0;
+    private static final int NO_LOS_THRESHOLD = 60;
+    private boolean isAggressivelyRepositioning = false;
+    private Vec3 lastKnownTargetPosition = null;
+    private int frustratedShotAttempts = 0;
+
     public ScampTankEntity(EntityType<? extends ScampTankEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        this.setMaxUpStep(1.0F);
+        this.setMaxUpStep(2.0F);
         this.bossEvent.setVisible(true);
         this.xpReward = XP_REWARD_BOSS;
         this.setPersistenceRequired();
@@ -133,11 +150,11 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     }
     public static AttributeSupplier.Builder createAttributes() {
         return Monster.createMonsterAttributes()
-                .add(Attributes.MAX_HEALTH, 800D)
+                .add(Attributes.MAX_HEALTH, 1000D)
                 .add(Attributes.FOLLOW_RANGE, 35D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3D)
+                .add(Attributes.MOVEMENT_SPEED, 0.35D)
                 .add(Attributes.ARMOR_TOUGHNESS, 0.8f)
-                .add(Attributes.ARMOR, 8f)
+                .add(Attributes.ARMOR, 12f)
                 .add(Attributes.KNOCKBACK_RESISTANCE, 1.0f)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.5f)
                 .add(Attributes.ATTACK_DAMAGE, 3f);
@@ -387,11 +404,123 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
             }
         }
     }
+    private void checkAndDestroyTerrain() {
+        if (this.level().isClientSide || terrainDestructionCooldown > 0) return;
+
+        AABB destructionBox = this.getBoundingBox().inflate(0.5, 0.2, 0.5);
+
+        BlockPos minPos = new BlockPos(
+                (int)Math.floor(destructionBox.minX),
+                (int)Math.floor(destructionBox.minY),
+                (int)Math.floor(destructionBox.minZ)
+        );
+        BlockPos maxPos = new BlockPos(
+                (int)Math.ceil(destructionBox.maxX),
+                (int)Math.ceil(destructionBox.maxY + 1),
+                (int)Math.ceil(destructionBox.maxZ)
+        );
+
+        boolean destroyedAny = false;
+
+        for (BlockPos pos : BlockPos.betweenClosed(minPos, maxPos)) {
+            BlockState state = this.level().getBlockState(pos);
+
+            if (canDestroyBlock(state, pos)) {
+                destroyBlock(pos, state, false);
+                destroyedAny = true;
+            }
+        }
+
+        if (destroyedAny) {
+            terrainDestructionCooldown = TERRAIN_DESTRUCTION_COOLDOWN_TICKS;
+        }
+    }
+    private void chargeDestroyTerrain() {
+        if (this.level().isClientSide) return;
+
+        Vec3 chargeDir = this.chargeDirection.normalize();
+        double checkDistance = 3.0;
+
+        for (double d = 0; d <= checkDistance; d += 0.5) {
+            Vec3 checkPos = this.position().add(chargeDir.scale(d));
+            for (int x = -1; x <= 1; x++) {
+                for (int y = 0; y <= 2; y++) {
+                    for (int z = -1; z <= 1; z++) {
+                        BlockPos pos = new BlockPos(
+                                (int)(checkPos.x + x),
+                                (int)(checkPos.y + y),
+                                (int)(checkPos.z + z)
+                        );
+
+                        BlockState state = this.level().getBlockState(pos);
+                        if (canDestroyBlock(state, pos)) {
+                            destroyBlock(pos, state, true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    private boolean canDestroyBlock(BlockState state, BlockPos pos) {
+        if (state.isAir()) return false;
+
+        return state.is(ModTags.Blocks.TANK_BREAKABLE);
+    }
+    private void destroyBlock(BlockPos pos, BlockState state, boolean isCharging) {
+        if (this.level() instanceof ServerLevel serverLevel) {
+            if (serverLevel.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)) {
+                if (this.random.nextFloat() < (isCharging ? 0.1f : 0.2f)) {
+                    Block.dropResources(state, serverLevel, pos, null, this, ItemStack.EMPTY);
+                }
+            }
+
+            this.level().destroyBlock(pos, false);
+
+            serverLevel.sendParticles(
+                    isCharging ? ParticleTypes.EXPLOSION : ParticleTypes.CLOUD,
+                    pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                    isCharging ? 3 : 5,
+                    0.25, 0.25, 0.25,
+                    0.1
+            );
+
+            this.level().playSound(null, pos,
+                    isCharging ? SoundEvents.STONE_BREAK : SoundEvents.WOOD_BREAK,
+                    SoundSource.BLOCKS,
+                    isCharging ? 1.5F : 1.0F,
+                    isCharging ? 0.7F : 0.9F
+            );
+
+            if (isCharging) {
+                for (int i = 0; i < 10; i++) {
+                    serverLevel.sendParticles(
+                            ParticleTypes.ITEM_SNOWBALL,
+                            pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                            1,
+                            this.random.nextGaussian() * 0.3,
+                            this.random.nextDouble() * 0.3 + 0.2,
+                            this.random.nextGaussian() * 0.3,
+                            0.15
+                    );
+                }
+            }
+        }
+    }
     @Override
     public void tick() {
         super.tick();
 
         if (!this.level().isClientSide) {
+            if (terrainDestructionCooldown > 0) {
+                terrainDestructionCooldown--;
+            }
+
+            Vec3 movement = this.getDeltaMovement();
+            double speed = movement.horizontalDistance();
+
+            if (speed > 0.1) {
+                checkAndDestroyTerrain();
+            }
             updateFlashTimers();
             updateAttackCooldowns();
             this.bossEvent.setProgress(this.getHealth() / this.getMaxHealth());
@@ -466,7 +595,6 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
         }
     }
     private void handleThirdPhase() {
-        // Handle regeneration
         if (isRegeneratingThirdPhase && regenerationTicksThirdPhase > 0) {
             float currentHealth = this.getHealth();
             if (currentHealth < THIRD_PHASE_REGENERATION_TARGET_HEALTH) {
@@ -478,29 +606,22 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
                 this.removeEffect(MobEffects.DAMAGE_RESISTANCE);
             }
         }
-
-        // Spawn Scamplers rapidly (primary behavior)
         if (scamplerSpawnCooldown <= 0) {
             spawnScampler();
             scamplerSpawnCooldown = SCAMPLER_SPAWN_COOLDOWN;
         }
-
-        // Occasionally spawn signal beacons for extra chaos
         if (thirdPhaseBeaconCooldown <= 0) {
             if (this.random.nextFloat() < THIRD_PHASE_BEACON_CHANCE) {
                 spawnThirdPhaseBeacon();
                 thirdPhaseBeaconCooldown = THIRD_PHASE_BEACON_COOLDOWN;
             } else {
-                // Reset cooldown to a shorter time if we don't spawn, so we check again sooner
                 thirdPhaseBeaconCooldown = 60; // 3 seconds
             }
         }
-
-        // Slow wandering movement
         if (this.getNavigation().isDone() && this.random.nextInt(100) < 3) {
             double wanderX = this.getX() + (this.random.nextDouble() - 0.5) * 16.0;
             double wanderZ = this.getZ() + (this.random.nextDouble() - 0.5) * 16.0;
-            this.getNavigation().moveTo(wanderX, this.getY(), wanderZ, 0.4); // Slow speed
+            this.getNavigation().moveTo(wanderX, this.getY(), wanderZ, 0.4);
         }
     }
     private void spawnThirdPhaseBeacon() {
@@ -638,7 +759,6 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
                 spawnSupplyBeacons();
                 double dx = target.getX() - this.getX();
                 double dz = target.getZ() - this.getZ();
-                targetPostChargeYaw = (float) (Math.atan2(dz, dx) * (180.0 / Math.PI) - 90.0);
                 postChargeRotationTicks = POST_CHARGE_ROTATION_DURATION;
             }
         } else if (postChargeRotationTicks > 0) {
@@ -674,7 +794,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     private void executeCharge() {
         Vec3 movement = chargeDirection.scale(CHARGE_SPEED);
         this.setDeltaMovement(movement.x, this.getDeltaMovement().y, movement.z);
-
+        chargeDestroyTerrain();
         AABB hitBox = this.getBoundingBox().expandTowards(movement).inflate(0.5);
         List<LivingEntity> entities = this.level().getEntitiesOfClass(LivingEntity.class, hitBox,
                 entity -> entity != this && entity.isAlive() && !entity.isSpectator());
@@ -826,30 +946,147 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
             ScampTankEntity.this.entityData.set(IS_CHARGING, false);
         }
     }
+    private boolean hasCleanLineOfSight(LivingEntity target) {
+        if (target == null) return false;
 
+        double[][] checkPoints = {
+                {0, this.getBbHeight() * 0.8, 0},
+                {0, this.getBbHeight() * 0.6, 0},
+                {0, this.getBbHeight() * 1.2, 0}
+        };
+
+        for (double[] point : checkPoints) {
+            Vec3 tankPos = new Vec3(this.getX() + point[0], this.getY() + point[1], this.getZ() + point[2]);
+            Vec3 targetPos = new Vec3(target.getX(), target.getY() + target.getBbHeight() * 0.5, target.getZ());
+
+            if (this.level().clip(new ClipContext(
+                    tankPos,
+                    targetPos,
+                    ClipContext.Block.COLLIDER,
+                    ClipContext.Fluid.NONE,
+                    this
+            )).getType() == HitResult.Type.MISS) {
+                return true;
+            }
+        }
+
+        return false;
+    }
     private void handleCombat() {
         LivingEntity target = this.getTarget();
-        if (target == null || !this.hasLineOfSight(target)) {
+        if (target == null) {
+            noLineOfSightTimer = 0;
             return;
         }
+
         if (target instanceof Player player && (player.isCreative() || player.isSpectator())) {
             this.setTarget(null);
             return;
         }
+
+        boolean hasLOS = hasCleanLineOfSight(target);
         double distanceToTarget = this.distanceToSqr(target);
 
-        if (distanceToTarget <= MACHINE_GUN_RANGE * MACHINE_GUN_RANGE && machineGunCooldown <= 0) {
-            fireMachineGun(target);
-            machineGunCooldown = MACHINE_GUN_COOLDOWN_TICKS;
-        }
-        else if (distanceToTarget > MACHINE_GUN_RANGE * MACHINE_GUN_RANGE &&
-                distanceToTarget <= MAIN_CANNON_RANGE * MAIN_CANNON_RANGE &&
-                mainCannonCooldown <= 0) {
-            fireMainCannon(target);
-            mainCannonCooldown = MAIN_CANNON_COOLDOWN_TICKS;
+        if (!hasLOS) {
+            noLineOfSightTimer++;
+            lastKnownTargetPosition = target.position();
+
+            if (noLineOfSightTimer >= NO_LOS_THRESHOLD && !isAggressivelyRepositioning) {
+                initiateAggressiveRepositioning();
+            }
+
+            if (noLineOfSightTimer < 20 && lastKnownTargetPosition != null) {
+                attemptPredictiveShot(target);
+            }
+        } else {
+            noLineOfSightTimer = 0;
+            isAggressivelyRepositioning = false;
+            frustratedShotAttempts = 0;
+            if (distanceToTarget <= MACHINE_GUN_RANGE * MACHINE_GUN_RANGE && machineGunCooldown <= 0) {
+                fireMachineGun(target);
+                machineGunCooldown = MACHINE_GUN_COOLDOWN_TICKS;
+            }
+            else if (distanceToTarget > MACHINE_GUN_RANGE * MACHINE_GUN_RANGE &&
+                    distanceToTarget <= MAIN_CANNON_RANGE * MAIN_CANNON_RANGE &&
+                    mainCannonCooldown <= 0) {
+                fireMainCannon(target);
+                mainCannonCooldown = MAIN_CANNON_COOLDOWN_TICKS;
+            }
         }
     }
+    private void initiateAggressiveRepositioning() {
+        LivingEntity target = this.getTarget();
+        if (target == null) return;
 
+        isAggressivelyRepositioning = true;
+        frustratedShotAttempts++;
+
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                SoundEvents.RAVAGER_ROAR, SoundSource.HOSTILE, 1.5F, 0.5F);
+
+        if (frustratedShotAttempts >= 3 && !isInSecondPhase()) {
+            fireSuppressionBarrage(lastKnownTargetPosition);
+            frustratedShotAttempts = 0;
+        }
+    }
+    private void attemptPredictiveShot(LivingEntity target) {
+        if (mainCannonCooldown > 0 || lastKnownTargetPosition == null) return;
+        Vec3 targetVelocity = target.getDeltaMovement();
+        Vec3 predictedPos = lastKnownTargetPosition.add(
+                targetVelocity.x * 20,
+                targetVelocity.y * 10,
+                targetVelocity.z * 20
+        );
+        double turretHeight = this.getBbHeight() * 1.2;
+        double spawnX = this.getX();
+        double spawnY = this.getY() + turretHeight;
+        double spawnZ = this.getZ();
+
+        ScampRocketEntity rocket = new ScampRocketEntity(ModEntities.SCAMP_ROCKET.get(), this.level(), this);
+        rocket.setPos(spawnX, spawnY, spawnZ);
+        rocket.setDamage(5.0);
+        rocket.setExplosionRadius(4.0f);
+
+        double dx = predictedPos.x - spawnX;
+        double dy = predictedPos.y - spawnY;
+        double dz = predictedPos.z - spawnZ;
+
+        rocket.shoot(dx, dy, dz, 2.8f, 2.0f);
+        this.level().addFreshEntity(rocket);
+
+        mainCannonCooldown = MAIN_CANNON_COOLDOWN_TICKS / 2;
+    }
+
+    private void fireSuppressionBarrage(Vec3 targetArea) {
+        if (this.level().isClientSide) return;
+
+        for (int i = 0; i < 5; i++) {
+            ScampRocketEntity rocket = new ScampRocketEntity(ModEntities.SCAMP_ROCKET.get(), this.level(), this);
+
+            double spawnX = this.getX();
+            double spawnY = this.getY() + this.getBbHeight() * 1.2;
+            double spawnZ = this.getZ();
+
+            rocket.setPos(spawnX, spawnY, spawnZ);
+            rocket.setDamage(4.0);
+            rocket.setExplosionRadius(3.0f);
+
+            double spreadX = (this.random.nextDouble() - 0.5) * 8.0;
+            double spreadZ = (this.random.nextDouble() - 0.5) * 8.0;
+
+            double dx = targetArea.x + spreadX - spawnX;
+            double dy = targetArea.y - spawnY;
+            double dz = targetArea.z + spreadZ - spawnZ;
+
+            rocket.shoot(dx, dy, dz, 2.5f, 3.0f);
+            this.level().addFreshEntity(rocket);
+        }
+
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                SoundEvents.FIREWORK_ROCKET_LAUNCH, SoundSource.HOSTILE, 2.0F, 0.6F);
+
+        mainCannonCooldown = MAIN_CANNON_COOLDOWN_TICKS * 2;
+    }
     private void updateFlashTimers() {
         int mainTimer = this.entityData.get(MAIN_TURRET_FLASH_TIMER);
         if (mainTimer > 0) {
@@ -1050,19 +1287,16 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     private void shootBeaconProjectile() {
         if (this.level().isClientSide) return;
 
-        // Get target for direction (or use a random direction if no target)
         LivingEntity target = this.getTarget();
         Vec3 targetDirection;
 
         if (target != null) {
-            // Shoot beacon towards target area with some randomization
             double dx = target.getX() - this.getX();
             double dz = target.getZ() - this.getZ();
             double length = Math.sqrt(dx * dx + dz * dz);
 
-            // Add randomization so it doesn't always land exactly on target
-            double angle = Math.atan2(dz, dx) + (this.random.nextDouble() - 0.5) * Math.PI * 0.5; // ±45 degrees
-            double distance = 15.0 + this.random.nextDouble() * 15.0; // 15-30 blocks away
+            double angle = Math.atan2(dz, dx) + (this.random.nextDouble() - 0.5) * Math.PI * 0.5; //
+            double distance = 15.0 + this.random.nextDouble() * 10.0;
 
             targetDirection = new Vec3(
                     Math.cos(angle) * distance,
@@ -1070,7 +1304,6 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
                     Math.sin(angle) * distance
             );
         } else {
-            // Random direction if no target
             double angle = this.random.nextDouble() * Math.PI * 2;
             double distance = 10.0 + this.random.nextDouble() * 20.0;
             targetDirection = new Vec3(
@@ -1080,26 +1313,20 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
             );
         }
 
-        // Create beacon projectile (we'll use a modified beacon entity for this)
         BeaconProjectileEntity beaconProjectile = new BeaconProjectileEntity(ModEntities.BEACON_PROJECTILE.get(), this.level(), this);
-
-        // Launch from tank's position
         double launchX = this.getX();
         double launchY = this.getY() + this.getBbHeight() + 1.0;
         double launchZ = this.getZ();
 
         beaconProjectile.setPos(launchX, launchY, launchZ);
 
-        // Set target landing position
         Vec3 landingPos = this.position().add(targetDirection);
         beaconProjectile.setLandingTarget(landingPos.x, landingPos.z);
 
-        // Launch with arc trajectory
         double dx = landingPos.x - launchX;
         double dz = landingPos.z - launchZ;
         double distance = Math.sqrt(dx * dx + dz * dz);
 
-        // Calculate launch velocity for arc trajectory
         double launchVelocity = 1.2;
         double launchAngle = Math.PI / 6; // 30 degrees
 
@@ -1112,11 +1339,9 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
         beaconProjectile.setDeltaMovement(launchVector);
         this.level().addFreshEntity(beaconProjectile);
 
-        // Sound and visual effects
         this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
                 SoundEvents.DISPENSER_LAUNCH, SoundSource.HOSTILE, 1.5F, 0.8F);
 
-        // Muzzle flash from tank
         if (this.level() instanceof ServerLevel serverLevel) {
             for (int i = 0; i < 10; i++) {
                 serverLevel.sendParticles(ParticleTypes.SMOKE,
@@ -1127,32 +1352,26 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     }
 
     private boolean shouldSpawnBeacon() {
-        // Don't spawn if on cooldown
+
         if (beaconSpawnCooldown > 0) {
             return false;
         }
 
-        // Don't spawn if too many sky carriers already exist
         if (countNearbySkyCatriers() >= MAX_SKY_CARRIERS_IN_AREA) {
             return false;
         }
-
-        // Lower chance to spawn (30% chance when charge finishes)
         return this.random.nextFloat() < 0.3f;
     }
 
     private void spawnSupplyBeacons() {
         if (this.level().isClientSide) return;
 
-        // Check if we should spawn beacons at all
         if (!shouldSpawnBeacon()) {
             return;
         }
 
-        // Only spawn 1 beacon now instead of 0-2
         shootBeaconProjectile();
 
-        // Set cooldown
         beaconSpawnCooldown = BEACON_SPAWN_COOLDOWN;
     }
     private class TankChaseGoal extends Goal {
@@ -1160,6 +1379,8 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
         private int repositionTimer = 0;
         private double targetX, targetZ;
         private boolean hasDestination = false;
+        private Vec3 lastTargetPos = Vec3.ZERO;
+        private int failedPathAttempts = 0;
 
         public TankChaseGoal() {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
@@ -1178,8 +1399,8 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
 
             double distance = ScampTankEntity.this.distanceTo(target);
 
-            return distance > PREFERRED_COMBAT_RANGE + 3.0 ||
-                    (distance <= PREFERRED_COMBAT_RANGE + 3.0 && repositionTimer <= 0);
+            return distance > MIN_COMBAT_RANGE ||
+                    ScampTankEntity.this.avoidanceTimer > 0;
         }
 
         @Override
@@ -1192,14 +1413,13 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
                     ScampTankEntity.this.postChargeRotationTicks > 0) return false;
 
             LivingEntity target = ScampTankEntity.this.getTarget();
-            if (target == null || !target.isAlive()) return false;
-
-            return hasDestination && !ScampTankEntity.this.getNavigation().isDone();
+            return target != null && target.isAlive();
         }
 
         @Override
         public void start() {
             pathUpdateTimer = 0;
+            failedPathAttempts = 0;
             calculateDestination();
         }
 
@@ -1210,21 +1430,32 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
 
             pathUpdateTimer++;
 
-            if (pathUpdateTimer >= 30) {
-                pathUpdateTimer = 0;
-                calculateDestination();
+            if (ScampTankEntity.this.isAggressivelyRepositioning) {
+                if (pathUpdateTimer % 10 == 0) {
+                    calculateAggressiveDestination(target);
+                }
+            } else {
+                if (pathUpdateTimer >= 40) {
+                    pathUpdateTimer = 0;
+                    calculateDestination();
+                }
             }
+            if (hasDestination) {
+                double distToDestination = Math.sqrt(
+                        Math.pow(ScampTankEntity.this.getX() - targetX, 2) +
+                                Math.pow(ScampTankEntity.this.getZ() - targetZ, 2)
+                );
 
-            double distToDestination = Math.sqrt(
-                    Math.pow(ScampTankEntity.this.getX() - targetX, 2) +
-                            Math.pow(ScampTankEntity.this.getZ() - targetZ, 2)
-            );
-
-            if (distToDestination < 3.0) {
-                hasDestination = false;
+                if (distToDestination < 3.0) {
+                    hasDestination = false;
+                    if (ScampTankEntity.this.isAggressivelyRepositioning) {
+                        if (ScampTankEntity.this.hasCleanLineOfSight(target)) {
+                            ScampTankEntity.this.isAggressivelyRepositioning = false;
+                        }
+                    }
+                }
             }
         }
-
         private void calculateDestination() {
             LivingEntity target = ScampTankEntity.this.getTarget();
             if (target == null) return;
@@ -1240,6 +1471,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
                     double targetDistance = PREFERRED_COMBAT_RANGE;
                     targetX = target.getX() - (dx / length) * targetDistance;
                     targetZ = target.getZ() - (dz / length) * targetDistance;
+
                     ScampTankEntity.this.getNavigation().moveTo(targetX, target.getY(), targetZ, 0.8);
                     hasDestination = true;
                 }
@@ -1255,29 +1487,41 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
                     ScampTankEntity.this.getNavigation().moveTo(targetX, target.getY(), targetZ, 0.6);
                     hasDestination = true;
                 }
-            } else {
-                if (repositionTimer <= 0 && ScampTankEntity.this.random.nextInt(100) < 5) {
-                    double angle = ScampTankEntity.this.random.nextDouble() * Math.PI * 2;
-                    targetX = target.getX() + Math.cos(angle) * PREFERRED_COMBAT_RANGE;
-                    targetZ = target.getZ() + Math.sin(angle) * PREFERRED_COMBAT_RANGE;
+            }
+        }
+        private void calculateAggressiveDestination(LivingEntity target) {
+            double angle = Math.atan2(
+                    target.getZ() - ScampTankEntity.this.getZ(),
+                    target.getX() - ScampTankEntity.this.getX()
+            );
+            double[] angleOffsets = {Math.PI/3, -Math.PI/3, Math.PI/2, -Math.PI/2, Math.PI*2/3, -Math.PI*2/3};
 
-                    ScampTankEntity.this.getNavigation().moveTo(targetX, target.getY(), targetZ, 0.5);
+            for (double offset : angleOffsets) {
+                double testAngle = angle + offset;
+                double testDistance = PREFERRED_COMBAT_RANGE;
+
+                targetX = target.getX() + Math.cos(testAngle) * testDistance;
+                targetZ = target.getZ() + Math.sin(testAngle) * testDistance;
+
+                BlockPos testPos = new BlockPos((int)targetX, (int)ScampTankEntity.this.getY(), (int)targetZ);
+                if (ScampTankEntity.this.level().getBlockState(testPos).isAir()) {
+                    ScampTankEntity.this.getNavigation().moveTo(targetX, target.getY(), targetZ, 1.2); // Fast movement
                     hasDestination = true;
-                    repositionTimer = 100;
+                    break;
                 }
             }
         }
-
         @Override
         public void stop() {
             ScampTankEntity.this.getNavigation().stop();
             hasDestination = false;
-            repositionTimer = Math.max(repositionTimer - 1, 0);
+            failedPathAttempts = 0;
         }
     }
 
     private class TankLookGoal extends Goal {
-        private int rotationUpdateTimer = 0;
+        private float targetYaw = 0;
+        private static final float MAX_ROTATION_SPEED = 4.0f;
 
         public TankLookGoal() {
             this.setFlags(EnumSet.of(Goal.Flag.LOOK));
@@ -1287,7 +1531,8 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
         public boolean canUse() {
             return ScampTankEntity.this.getTarget() != null &&
                     !ScampTankEntity.this.isInSecondPhase() &&
-                    ScampTankEntity.this.postChargeRotationTicks <= 0;
+                    ScampTankEntity.this.postChargeRotationTicks <= 0 &&
+                    ScampTankEntity.this.avoidanceTimer <= 0;
         }
 
         @Override
@@ -1295,29 +1540,23 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
             LivingEntity target = ScampTankEntity.this.getTarget();
             if (target == null) return;
 
-            rotationUpdateTimer++;
+            double dx = target.getX() - ScampTankEntity.this.getX();
+            double dz = target.getZ() - ScampTankEntity.this.getZ();
+            targetYaw = (float) (Math.atan2(dz, dx) * (180.0 / Math.PI) - 90.0);
 
-            if (rotationUpdateTimer >= 40) {
-                rotationUpdateTimer = 0;
+            float currentYaw = ScampTankEntity.this.getYRot();
+            float yawDiff = targetYaw - currentYaw;
 
-                double dx = target.getX() - ScampTankEntity.this.getX();
-                double dz = target.getZ() - ScampTankEntity.this.getZ();
-                float targetYaw = (float) (Math.atan2(dz, dx) * (180.0 / Math.PI) - 90.0);
+            while (yawDiff > 180.0f) yawDiff -= 360.0f;
+            while (yawDiff < -180.0f) yawDiff += 360.0f;
 
-                float currentYaw = ScampTankEntity.this.getYRot();
-                float yawDiff = targetYaw - currentYaw;
+            float rotation = Math.signum(yawDiff) * Math.min(Math.abs(yawDiff), MAX_ROTATION_SPEED);
+            float newYaw = currentYaw + rotation;
 
-                while (yawDiff > 180.0f) yawDiff -= 360.0f;
-                while (yawDiff < -180.0f) yawDiff += 360.0f;
-
-                if (Math.abs(yawDiff) > 30.0f) {
-                    float rotation = Math.signum(yawDiff) * Math.min(Math.abs(yawDiff), 15.0f);
-                    float newYaw = currentYaw + rotation;
-
-                    ScampTankEntity.this.setYRot(newYaw);
-                    ScampTankEntity.this.yBodyRot = newYaw;
-                    ScampTankEntity.this.setYHeadRot(newYaw);
-                }
+            if (Math.abs(yawDiff) > 1.0f) {
+                ScampTankEntity.this.setYRot(newYaw);
+                ScampTankEntity.this.yBodyRot = newYaw;
+                ScampTankEntity.this.setYHeadRot(newYaw);
             }
         }
     }

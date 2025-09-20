@@ -10,7 +10,6 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.ribs.scguns.Reference;
-import top.ribs.scguns.common.exosuit.ExoSuitPouchHandler;
 import top.ribs.scguns.common.exosuit.ExoSuitUpgrade;
 import top.ribs.scguns.common.exosuit.ExoSuitUpgradeManager;
 import top.ribs.scguns.item.animated.ExoSuitItem;
@@ -45,6 +44,8 @@ public class ExoSuitUpgradeTooltipHandler {
                 .append(formattedType)
                 .withStyle(ChatFormatting.GRAY));
 
+        addSlotCompatibility(tooltip, upgradeType);
+
         addSpecialFunctionality(tooltip, stack, upgrade);
 
         ExoSuitUpgrade.Effects effects = upgrade.getEffects();
@@ -75,7 +76,6 @@ public class ExoSuitUpgradeTooltipHandler {
                     .withStyle(ChatFormatting.BLUE));
         }
 
-        // Movement effects
         if (effects.getSpeedModifier() != 0) {
             if (!hasEffects) {
                 tooltip.add(Component.translatable("tooltip.scguns.upgrade.effects").withStyle(ChatFormatting.AQUA));
@@ -103,6 +103,7 @@ public class ExoSuitUpgradeTooltipHandler {
             tooltip.add(Component.translatable("tooltip.scguns.exosuit.upgrade.stat.fall_damage_reduction", (int)(effects.getFallDamageReduction() * 100))
                     .withStyle(ChatFormatting.GREEN));
         }
+
         if (effects.getRecoilAngleReduction() > 0) {
             if (!hasEffects) {
                 tooltip.add(Component.translatable("tooltip.scguns.upgrade.effects").withStyle(ChatFormatting.AQUA));
@@ -129,6 +130,7 @@ public class ExoSuitUpgradeTooltipHandler {
             tooltip.add(Component.translatable("tooltip.scguns.exosuit.upgrade.stat.spread_reduction", (int)(effects.getSpreadReduction() * 100))
                     .withStyle(ChatFormatting.YELLOW));
         }
+
         if (effects.hasNightVision()) {
             if (!hasEffects) {
                 tooltip.add(Component.translatable("tooltip.scguns.upgrade.effects").withStyle(ChatFormatting.AQUA));
@@ -136,6 +138,7 @@ public class ExoSuitUpgradeTooltipHandler {
             tooltip.add(Component.translatable("tooltip.scguns.exosuit.upgrade.stat.night_vision")
                     .withStyle(ChatFormatting.LIGHT_PURPLE));
         }
+
         if (stack.getItem() instanceof EnergyUpgradeItem energyUpgrade) {
             addEnergyTooltip(tooltip, energyUpgrade);
         }
@@ -143,6 +146,27 @@ public class ExoSuitUpgradeTooltipHandler {
         tooltip.add(Component.literal(""));
         tooltip.add(Component.translatable("tooltip.scguns.upgrade.install_hint")
                 .withStyle(ChatFormatting.DARK_AQUA, ChatFormatting.ITALIC));
+    }
+
+    private static void addSlotCompatibility(List<Component> tooltip, String upgradeType) {
+        String slotKey = switch (upgradeType) {
+            case "pouches" -> "tooltip.scguns.exosuit.slots.chest_only";
+            case "utility" -> "tooltip.scguns.exosuit.slots.chest_legs_utility";
+            case "knee_guard" -> "tooltip.scguns.exosuit.slots.legs_only";
+            case "mobility" -> "tooltip.scguns.exosuit.slots.boots_only";
+            case "hud", "breathing" -> "tooltip.scguns.exosuit.slots.helmet_only";
+            case "pauldron" -> "tooltip.scguns.exosuit.slots.chest_shoulders";
+            case "plating" -> "tooltip.scguns.exosuit.slots.helmet_chest_legs";
+            case "power_core" -> "tooltip.scguns.exosuit.slots.chest_power";
+            default -> null;
+        };
+
+        if (slotKey != null) {
+            tooltip.add(Component.translatable("tooltip.scguns.exosuit.compatible_slots")
+                    .withStyle(ChatFormatting.DARK_PURPLE)
+                    .append(Component.translatable(slotKey)
+                            .withStyle(ChatFormatting.LIGHT_PURPLE, ChatFormatting.ITALIC)));
+        }
     }
 
     private static void addSpecialFunctionality(List<Component> tooltip, ItemStack stack, ExoSuitUpgrade upgrade) {
@@ -203,12 +227,9 @@ public class ExoSuitUpgradeTooltipHandler {
         Player player = Minecraft.getInstance().player;
         if (player == null) return;
 
-        // Find equipped chestplate
-        ItemStack chestplate = ItemStack.EMPTY;
         for (ItemStack armorStack : player.getArmorSlots()) {
             if (armorStack.getItem() instanceof ExoSuitItem exosuit &&
                     exosuit.getType() == net.minecraft.world.item.ArmorItem.Type.CHESTPLATE) {
-                chestplate = armorStack;
                 break;
             }
         }

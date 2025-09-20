@@ -9,7 +9,7 @@
   },
   "general": {
     "alwaysSpread": false,
-    "fireMode": "scguns:semi_automatic",
+    "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 5,
@@ -50,7 +50,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 13.0,
+    "damage": 14.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:shatter_round",

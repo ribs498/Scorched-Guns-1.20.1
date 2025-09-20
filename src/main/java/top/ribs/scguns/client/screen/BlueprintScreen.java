@@ -63,7 +63,7 @@ public class BlueprintScreen extends Screen {
             "floundergat", "marlin", "bomb_lance", "hullbreaker", "sequoia",
 
             // WRECKER
-            "mokova", "mak_mkii", "turnpike", "killer_23", "kalaskah", "basker", "tl_runner", "stigg",
+            "mokova", "mak_mkii", "turnpike", "killer_23", "homemaker", "kalaskah", "basker", "tl_runner", "stigg",
 
             // DIAMOND STEEL
             "krauser", "soul_drummer", "uppercut", "micina", "valora", "prush_gun", "lockewood", "rg_jigsaw", "inertial",

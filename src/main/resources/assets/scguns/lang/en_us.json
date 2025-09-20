@@ -1,4 +1,13 @@
 {
+  "tooltip.scguns.exosuit.compatible_slots": "Compatible with: ",
+  "tooltip.scguns.exosuit.slots.chest_only": "Chest Plate Only",
+  "tooltip.scguns.exosuit.slots.legs_only": "Leggings Only",
+  "tooltip.scguns.exosuit.slots.boots_only": "Boots Only",
+  "tooltip.scguns.exosuit.slots.helmet_only": "Helmet Only",
+  "tooltip.scguns.exosuit.slots.chest_shoulders": "Chest Plate (Shoulders)",
+  "tooltip.scguns.exosuit.slots.helmet_chest_legs": "Helmet, Chest, or Legs",
+  "tooltip.scguns.exosuit.slots.chest_power": "Chest Plate (Power Core)",
+  "tooltip.scguns.exosuit.slots.chest_legs_utility": "Chest Plate or Leggings (Utility)",
 
   "tooltip.scguns.exosuit.upgrade.pouches": "Pouches",
   "tooltip.scguns.exosuit.functionality.pouches.storage": "  • Storage Capacity: %d slots",
@@ -10,7 +19,7 @@
   "tooltip.scguns.exosuit.pouch.status.empty": "✓ Empty - Safe to remove",
   "tooltip.scguns.exosuit.pouch.status.contains_items": "⚠ Contains Items",
   "tooltip.scguns.exosuit.pouch.status.cannot_remove": "  Cannot be removed until emptied",
-
+   "exosuit.message.no_action": "No Action",
   "tooltip.scguns.exosuit.pouches": "§6Pouches",
   "tooltip.scguns.exosuit.pouch_equipped": "§a✓ %s equipped",
   "tooltip.scguns.exosuit.pouch_empty": "§2✓ Pouch is empty",
@@ -272,6 +281,7 @@
   "item.scguns.rg_jigsaw": "RG-Jigsaw",
     "item.scguns.stiletto": "Stiletto",
   "item.scguns.m3_marksman": "M3 Marksman",
+    "item.scguns.homemaker": "Homemaker",
     "item.scguns.micina": "Micina",
   "item.scguns.cog_locator": "Cog Locator",
   "item.scguns.depleted_diamond_steel_ingot.tooltip.usage": "§7Right Click to convert to Diamond Steel",
@@ -1350,5 +1360,6 @@
   "tooltip.scguns.attachment.stats.special": "§dSpecial Effects",
   "message.scguns.gun_broken": "Gun is broken!",
   "message.scguns.gun_jammed": "Gun jammed!",
-  "gui.scguns.vent_collector.filter_charge": "Filter Charge: %s/%s"
+  "gui.scguns.vent_collector.filter_charge": "Filter Charge: %s/%s",
+  "info.scguns.exosuit_help": "Press %s to modify upgrades"
 }

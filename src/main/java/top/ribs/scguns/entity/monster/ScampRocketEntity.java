@@ -1,5 +1,6 @@
 package top.ribs.scguns.entity.monster;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -7,6 +8,7 @@ import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
@@ -14,12 +16,17 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
+import top.ribs.scguns.init.ModTags;
 
 public class ScampRocketEntity extends Projectile {
     private static final EntityDataAccessor<Boolean> HAS_EXPLODED = SynchedEntityData.defineId(ScampRocketEntity.class, EntityDataSerializers.BOOLEAN);
@@ -117,9 +124,13 @@ public class ScampRocketEntity extends Projectile {
         this.entityData.set(HAS_EXPLODED, true);
 
         if (!this.level().isClientSide) {
-            this.level().explode(this, this.getX(), this.getY(), this.getZ(), this.explosionRadius, Level.ExplosionInteraction.NONE);
+            this.level().explode(this, this.getX(), this.getY(), this.getZ(),
+                    this.explosionRadius, Level.ExplosionInteraction.NONE);
 
-            this.level().playSound(null, this.getX(), this.getY(), this.getZ(), SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0F, 1.0F);
+            destroyBreakableBlocks();
+
+            this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                    SoundEvents.GENERIC_EXPLODE, this.getSoundSource(), 1.0F, 1.0F);
 
             this.discard();
         } else {
@@ -127,11 +138,48 @@ public class ScampRocketEntity extends Projectile {
                 double offsetX = this.random.nextGaussian() * 0.3D;
                 double offsetY = this.random.nextGaussian() * 0.3D;
                 double offsetZ = this.random.nextGaussian() * 0.3D;
-                this.level().addParticle(ParticleTypes.EXPLOSION, this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ, 0.0D, 0.0D, 0.0D);
+                this.level().addParticle(ParticleTypes.EXPLOSION,
+                        this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ,
+                        0.0D, 0.0D, 0.0D);
             }
         }
     }
+    private void destroyBreakableBlocks() {
+        if (this.level().isClientSide) return;
 
+        double breakRadius = this.explosionRadius * 1.5;
+
+        BlockPos center = this.blockPosition();
+        int range = (int) Math.ceil(breakRadius);
+
+        for (BlockPos pos : BlockPos.betweenClosed(
+                center.offset(-range, -range, -range),
+                center.offset(range, range, range))) {
+
+            double distance = Math.sqrt(pos.distToCenterSqr(this.position()));
+            if (distance > breakRadius) continue;
+
+            BlockState state = this.level().getBlockState(pos);
+            if (!state.isAir() && state.is(ModTags.Blocks.TANK_BREAKABLE)) {
+                float breakChance = 1.0f - (float)(distance / breakRadius);
+                breakChance *= 0.8f;
+
+                if (this.random.nextFloat() < breakChance) {
+                    if (this.level() instanceof ServerLevel serverLevel) {
+                        if (serverLevel.getGameRules().getBoolean(GameRules.RULE_DOBLOCKDROPS)
+                                && this.random.nextFloat() < 0.15f) {
+                            Block.dropResources(state, serverLevel, pos, null, null, ItemStack.EMPTY);
+                        }
+
+                        this.level().destroyBlock(pos, false);
+                        serverLevel.sendParticles(ParticleTypes.CLOUD,
+                                pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
+                                3, 0.25, 0.25, 0.25, 0.05);
+                    }
+                }
+            }
+        }
+    }
     @Override
     public boolean isPickable() {
         return !this.entityData.get(HAS_EXPLODED);

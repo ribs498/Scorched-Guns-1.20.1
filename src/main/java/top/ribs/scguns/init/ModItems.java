@@ -809,6 +809,17 @@ public class ModItems {
                     ModSounds.COPPER_GUN_JAM.get()
             )
     );
+    public static final RegistryObject<AnimatedGunItem> HOMEMAKER = REGISTER.register("homemaker",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(540),
+                    "homemaker",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
     public static final RegistryObject<AnimatedGunItem> RIBS_GLORY = REGISTER.register("ribs_glory",
             () -> new AnimatedGunItem(
                     new Item.Properties().stacksTo(1).durability(2400),
@@ -1271,7 +1282,7 @@ public class ModItems {
                     ModSounds.COPPER_GUN_JAM.get()
             )
     );
-    public static final RegistryObject<AnimatedGunItem> RAT_KING_AND_QUEEN = REGISTER.register("rat_king_and_queen",
+    public static final RegistryObject<AnimatedDualWieldGunItem> RAT_KING_AND_QUEEN = REGISTER.register("rat_king_and_queen",
             () -> new AnimatedDualWieldGunItem(
                     new Item.Properties().stacksTo(1).durability(2400),
                     "rat_king_and_queen",

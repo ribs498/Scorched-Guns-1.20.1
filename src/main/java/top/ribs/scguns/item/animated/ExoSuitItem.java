@@ -31,6 +31,7 @@ import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache
 import software.bernie.geckolib.core.animatable.instance.SingletonAnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.*;
 import software.bernie.geckolib.core.object.PlayState;
+import top.ribs.scguns.client.KeyBinds;
 import top.ribs.scguns.client.render.armor.ExoSuitRenderer;
 import top.ribs.scguns.client.screen.ExoSuitMenu;
 import top.ribs.scguns.common.exosuit.ExoSuitData;
@@ -40,6 +41,7 @@ import top.ribs.scguns.item.exosuit.DamageableUpgradeItem;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Locale;
 import java.util.function.Consumer;
 
 public class ExoSuitItem extends ArmorItem implements GeoItem {
@@ -123,6 +125,9 @@ public class ExoSuitItem extends ArmorItem implements GeoItem {
         }
 
         addSlotInformation(tooltip);
+        tooltip.add(Component.translatable("info.scguns.exosuit_help",
+                        KeyBinds.KEY_ATTACHMENTS.getTranslatedKeyMessage().getString().toUpperCase(Locale.ENGLISH))
+                .withStyle(ChatFormatting.YELLOW));
     }
     private void addPowerCoreInfo(ItemStack stack, List<Component> tooltip) {
         if (this.getType() != ArmorItem.Type.CHESTPLATE) {
@@ -395,7 +400,7 @@ public class ExoSuitItem extends ArmorItem implements GeoItem {
         return cache;
     }
 
-    private record ExoSuitMenuProvider(InteractionHand hand) implements MenuProvider {
+    public record ExoSuitMenuProvider(InteractionHand hand) implements MenuProvider {
 
         @Override
         public @NotNull Component getDisplayName() {

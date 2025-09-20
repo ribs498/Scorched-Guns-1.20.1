@@ -58,6 +58,7 @@ import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GrenadeItem;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.animated.AnimatedDualWieldGunItem;
 import top.ribs.scguns.item.animated.AnimatedGunItem;
 import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.item.attachment.impl.Scope;
@@ -149,6 +150,10 @@ public class GunRenderingHandler {
         handleRenderTick();
     }
 
+
+    public void updateDualWieldShotCount(int entityId, int shotCount) {
+        this.entityShotCount.put(entityId, shotCount);
+    }
     private void updateState() {
         this.updateSprinting();
         this.updateMuzzleFlash();
@@ -634,15 +639,21 @@ public class GunRenderingHandler {
         ItemStack heldItem = event.getStack();
         GunItem gunItem = (GunItem) heldItem.getItem();
         Gun modifiedGun = gunItem.getModifiedGun(heldItem);
+
         if (Config.CLIENT.display.cinematicGunEffects.get()) {
             addCameraShake(modifiedGun, 0.5f, 10);
-
         }
+
         if (event.getShooter() instanceof Player) {
             if (modifiedGun.getDisplay().getFlash() != null) {
                 int entityId = event.getShooter().getId();
                 this.showMuzzleFlashForPlayer(entityId);
-                this.entityShotCount.put(entityId, this.entityShotCount.getOrDefault(entityId, 0) + 1);
+
+                if (gunItem instanceof AnimatedDualWieldGunItem) {
+                    DualWieldShotTracker.get().incrementShotCount(entityId);
+                }
+
+                this.entityShotCount.put(entityId, DualWieldShotTracker.get().getShotCount(entityId));
             }
         }
     }
@@ -960,13 +971,15 @@ public class GunRenderingHandler {
         }
     }
     private void drawMuzzleFlash(ItemStack weapon, Gun modifiedGun, float random, boolean mirror, PoseStack poseStack, MultiBufferSource buffer, float partialTicks, ResourceLocation flashTexture, LivingEntity entity) {
-        if (!PropertyHelper.hasMuzzleFlash(weapon, modifiedGun))
+        if (!PropertyHelper.hasMuzzleFlash(weapon, modifiedGun)) {
             return;
-        Gun.Display.Flash flash = modifiedGun.getDisplay().getFlash();
-        if (flash == null)
-            return;
+        }
 
-        int shotCount = entityShotCount.getOrDefault(entity.getId(), 0);
+        Gun.Display.Flash flash = modifiedGun.getDisplay().getFlash();
+        if (flash == null) {
+            return;
+        }
+        int shotCount = DualWieldShotTracker.get().getShotCount(entity.getId());
         Vec3 muzzlePosition = (shotCount % 2 == 0) ? Vec3.ZERO : flash.getAlternatePosition();
 
         drawSingleMuzzleFlash(weapon, modifiedGun, random, mirror, poseStack, buffer, partialTicks, flashTexture, muzzlePosition);

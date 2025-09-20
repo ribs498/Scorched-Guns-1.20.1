@@ -1,0 +1,33 @@
+{
+  "type": "create:crushing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "scguns:homemaker"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "scguns:treated_iron_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_parts"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:firing_unit"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:heavy_gun_barrel"
+    }
+  ]
+}

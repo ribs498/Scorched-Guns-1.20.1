@@ -20,19 +20,10 @@ import java.util.UUID;
  */
 public class ExoSuitPowerManager {
 
-    // NBT key for storing power states
     private static final String POWER_STATES_TAG = "ExoSuitPowerStates";
 
-    // Map to track cooldowns for different power consumers
     private static final Map<UUID, Map<String, Integer>> playerCooldowns = new HashMap<>();
 
-    /**
-     * Attempts to consume energy from the power core for a specific upgrade
-     * @param player The player wearing the exosuit
-     * @param upgradeType The type of upgrade consuming power (e.g., "hud", "breathing")
-     * @param energyRequired Amount of energy to consume
-     * @return true if energy was successfully consumed
-     */
     public static boolean consumeEnergy(Player player, String upgradeType, int energyRequired) {
         ItemStack chestplate = getEquippedChestplate(player);
         if (chestplate.isEmpty()) {
@@ -50,7 +41,6 @@ public class ExoSuitPowerManager {
                         energyStorage.extractEnergy(energyRequired, false);
                         return true;
                     } else {
-                        // Send power shortage notification
                         sendPowerShortageNotification(player, upgradeType);
                         return false;
                     }

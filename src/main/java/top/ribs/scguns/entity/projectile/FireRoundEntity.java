@@ -120,7 +120,10 @@ public class FireRoundEntity extends ProjectileEntity {
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
         spawnExplosionParticles(new Vec3(x, y, z));
-        setBlockOnFire(pos, face);
+        if (Config.COMMON.gameplay.enableFirePlacement.get()) {
+            setBlockOnFire(pos, face);
+        }
+
         clearSculkInArea(pos);
     }
 

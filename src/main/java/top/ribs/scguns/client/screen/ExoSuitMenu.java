@@ -178,15 +178,17 @@ public class ExoSuitMenu extends AbstractContainerMenu {
 
             if (index >= EXOSUIT_INVENTORY_FIRST_SLOT_INDEX && index < EXOSUIT_INVENTORY_FIRST_SLOT_INDEX + 5) {
 
+                if (index == EXOSUIT_INVENTORY_FIRST_SLOT_INDEX + ARMOR_SLOT) {
+                    return ItemStack.EMPTY;
+                }
+
                 if (!this.moveItemStackTo(itemstack1, VANILLA_FIRST_SLOT_INDEX, VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT, true)) {
                     return ItemStack.EMPTY;
                 }
             }
             else if (index >= VANILLA_FIRST_SLOT_INDEX && index < VANILLA_FIRST_SLOT_INDEX + VANILLA_SLOT_COUNT) {
                 if (itemstack1.getItem() instanceof ExoSuitItem) {
-                    if (!this.moveItemStackTo(itemstack1, EXOSUIT_INVENTORY_FIRST_SLOT_INDEX + ARMOR_SLOT, EXOSUIT_INVENTORY_FIRST_SLOT_INDEX + ARMOR_SLOT + 1, false)) {
-                        return ItemStack.EMPTY;
-                    }
+                    return ItemStack.EMPTY;
                 }
                 else {
                     if (!this.moveItemStackTo(itemstack1, EXOSUIT_INVENTORY_FIRST_SLOT_INDEX + UPGRADE_SLOT_1, EXOSUIT_INVENTORY_FIRST_SLOT_INDEX + UPGRADE_SLOT_4 + 1, false)) {
@@ -229,7 +231,7 @@ public class ExoSuitMenu extends AbstractContainerMenu {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }
     }
-    private class ExoSuitArmorSlot extends SlotItemHandler {
+    private static class ExoSuitArmorSlot extends SlotItemHandler {
         public ExoSuitArmorSlot(IItemHandler itemHandler, int index, int xPosition, int yPosition) {
             super(itemHandler, index, xPosition, yPosition);
         }
@@ -242,6 +244,11 @@ public class ExoSuitMenu extends AbstractContainerMenu {
         @Override
         public int getMaxStackSize() {
             return 1;
+        }
+
+        @Override
+        public boolean mayPickup(Player player) {
+            return false;
         }
 
         @Override
@@ -350,4 +357,5 @@ public class ExoSuitMenu extends AbstractContainerMenu {
         };
 
     }
+
 }

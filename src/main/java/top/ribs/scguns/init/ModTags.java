@@ -21,7 +21,7 @@ public class ModTags
     {
         public static final TagKey<Block> FRAGILE = tag("fragile");
         public static final TagKey<Block> SCULK_BLOCKS = tag("sculk_blocks");
-
+        public static final TagKey<Block> TANK_BREAKABLE = tag("tank_breakable");
         private static TagKey<Block> tag(String name)
         {
             return BlockTags.create(new ResourceLocation(Reference.MOD_ID, name));

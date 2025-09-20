@@ -120,19 +120,19 @@ public class ScamplerEntity extends Monster {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ZOMBIE_AMBIENT;
+        return SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.ZOMBIE_HURT;
+        return SoundEvents.SNOW_GOLEM_HURT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ZOMBIE_DEATH;
+        return SoundEvents.SNOW_GOLEM_DEATH;
     }
 
     public int getFuseTime() {

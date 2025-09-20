@@ -12,7 +12,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 7,
+    "rate": 6,
     "recoilAngle":2.0,
     "recoilKick": 1.1,
     "spread": 1.5,
@@ -50,7 +50,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 9.5,
+    "damage": 11.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:shatter_round",
@@ -63,7 +63,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 8,
+    "maxAmmo": 10,
     "reloadItem": "scguns:advanced_round",
     "reloadTimer": 125,
     "reloadType": "scguns:mag_fed"

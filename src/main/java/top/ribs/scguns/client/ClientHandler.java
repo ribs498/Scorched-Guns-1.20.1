@@ -321,6 +321,7 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.PLASMABUSS.get(), new PlasmabussModel());
         ModelOverrides.register(ModItems.JACKHAMMER.get(), new JackhammerModel());
         ModelOverrides.register(ModItems.KILLER_23.get(), new Killer23Model());
+        ModelOverrides.register(ModItems.HOMEMAKER.get(), new HomemakerModel());
         ModelOverrides.register(ModItems.RIBS_GLORY.get(), new RibsGloryModel());
         ModelOverrides.register(ModItems.PAX.get(), new PaxModel());
         ModelOverrides.register(ModItems.PULSAR.get(), new PulsarModel());

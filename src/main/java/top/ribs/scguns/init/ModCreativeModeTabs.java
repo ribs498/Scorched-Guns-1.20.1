@@ -82,6 +82,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.STILETTO.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.TURNPIKE.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.KILLER_23.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.HOMEMAKER.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.KALASKAH.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.BASKER.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.TL_RUNNER.get());

@@ -236,6 +236,7 @@ public class Config
     public static class Gameplay
     {
         public final Griefing griefing;
+        public final ForgeConfigSpec.BooleanValue enableFirePlacement;
         public final ForgeConfigSpec.BooleanValue enableGunDamage;
         public final ForgeConfigSpec.BooleanValue enableAttachmentDamage;
         public  final ForgeConfigSpec.BooleanValue spawnCasings;
@@ -298,6 +299,7 @@ public class Config
                 this.enableAutoReload = builder
                         .comment("If true, guns will automatically start reloading when fired with an empty magazine if ammo is available")
                         .define("enableAutoReload", true);
+                this.enableFirePlacement = builder.comment("If true, allows flamethrowers to place fire on blocks").define("enableFirePlacement", true);
             }
             builder.pop();
         }

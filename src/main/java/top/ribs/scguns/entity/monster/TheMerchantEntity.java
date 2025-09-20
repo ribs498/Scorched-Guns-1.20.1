@@ -53,12 +53,16 @@ public class TheMerchantEntity extends PathfinderMob implements Merchant {
 
     private static final EntityDataAccessor<Boolean> WALKING_TO_SUMMONER =
             SynchedEntityData.defineId(TheMerchantEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> SUMMONED_BY_PACT =
+            SynchedEntityData.defineId(TheMerchantEntity.class, EntityDataSerializers.BOOLEAN);
 
-    private static final int DEFAULT_DESPAWN_TIME = 6000;
+    private boolean summonedByPact = false;
+
+    private static final int DEFAULT_DESPAWN_TIME = 500;
     private static final int MAX_DAMAGE_BEFORE_VANISH = 3;
     private static final Logger LOGGER = LogManager.getLogger(TheMerchantEntity.class);
     private int teleportCooldown = 0;
-    private static final int TELEPORT_COOLDOWN_TICKS = 100; // 5 seconds
+    private static final int TELEPORT_COOLDOWN_TICKS = 3000; // 150 seconds
     private static final double TELEPORT_RANGE = 8.0;
     private long tradesSeed = 0L;
     private boolean tradesInitialized = false;
@@ -67,11 +71,19 @@ public class TheMerchantEntity extends PathfinderMob implements Merchant {
     private Player tradingPlayer;
     private MerchantOffers offers = new MerchantOffers();
 
-    public TheMerchantEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
+    public TheMerchantEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel, boolean summonedByPact) {
         super(pEntityType, pLevel);
-        this.setDespawnTimer(DEFAULT_DESPAWN_TIME);
-        this.setDamageCount(0);
+        this.summonedByPact = summonedByPact;
+        this.setSummonedByPact(summonedByPact);
+
+        if (summonedByPact) {
+            this.setDespawnTimer(DEFAULT_DESPAWN_TIME);
+            this.setDamageCount(0);
+        }
         this.initializeTrades();
+    }
+    public TheMerchantEntity(EntityType<? extends PathfinderMob> pEntityType, Level pLevel) {
+        this(pEntityType, pLevel, false);
     }
 
     public final AnimationState idleAnimationState = new AnimationState();
@@ -183,7 +195,7 @@ public class TheMerchantEntity extends PathfinderMob implements Merchant {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 120D)
+                .add(Attributes.MAX_HEALTH, 130D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
                 .add(Attributes.MOVEMENT_SPEED, 0.25D)
                 .add(Attributes.ARMOR_TOUGHNESS, 0.5f)
@@ -192,7 +204,14 @@ public class TheMerchantEntity extends PathfinderMob implements Merchant {
                 .add(Attributes.ATTACK_KNOCKBACK, 0f)
                 .add(Attributes.ATTACK_DAMAGE, 0f);
     }
+    public boolean isSummonedByPact() {
+        return this.entityData.get(SUMMONED_BY_PACT);
+    }
 
+    public void setSummonedByPact(boolean summoned) {
+        this.entityData.set(SUMMONED_BY_PACT, summoned);
+        this.summonedByPact = summoned;
+    }
     @Override
     public void tick() {
         super.tick();
@@ -200,14 +219,16 @@ public class TheMerchantEntity extends PathfinderMob implements Merchant {
         if (this.level().isClientSide()) {
             setupAnimationStates();
         } else {
-            handleDespawnTimer();
-            handleWalkingToSummoner();
+            if (isSummonedByPact()) {
+                handleDespawnTimer();
+                handleWalkingToSummoner();
 
-            if (teleportCooldown > 0) {
-                teleportCooldown--;
-            }
-            if (teleportCooldown <= 0 && isSuffocating()) {
-                attemptEmergencyTeleport();
+                if (teleportCooldown > 0) {
+                    teleportCooldown--;
+                }
+                if (teleportCooldown <= 0 && isSuffocating()) {
+                    attemptEmergencyTeleport();
+                }
             }
 
             if (!isWalkingToSummoner()) {
@@ -217,7 +238,7 @@ public class TheMerchantEntity extends PathfinderMob implements Merchant {
     }
     @Override
     public boolean hurt(@NotNull DamageSource pSource, float pAmount) {
-        if (!this.level().isClientSide()) {
+        if (!this.level().isClientSide() && isSummonedByPact()) {
             boolean isSuffocationDamage = pSource == this.damageSources().inWall() ||
                     pSource == this.damageSources().cramming();
 
@@ -716,6 +737,7 @@ public class TheMerchantEntity extends PathfinderMob implements Merchant {
         this.entityData.define(DESPAWN_TIMER, DEFAULT_DESPAWN_TIME);
         this.entityData.define(DAMAGE_COUNT, 0);
         this.entityData.define(WALKING_TO_SUMMONER, false);
+        this.entityData.define(SUMMONED_BY_PACT, false);
     }
 
     @Override
@@ -775,6 +797,7 @@ public class TheMerchantEntity extends PathfinderMob implements Merchant {
     @Override
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
+        compound.putBoolean("SummonedByPact", this.summonedByPact);
         compound.putLong("TradesSeed", this.tradesSeed);
         compound.putBoolean("TradesInitialized", this.tradesInitialized);
 
@@ -792,6 +815,9 @@ public class TheMerchantEntity extends PathfinderMob implements Merchant {
     @Override
     public void readAdditionalSaveData(CompoundTag compound) {
         super.readAdditionalSaveData(compound);
+
+        this.summonedByPact = compound.getBoolean("SummonedByPact");
+        this.setSummonedByPact(this.summonedByPact);
 
         if (compound.contains("TradesSeed")) {
             this.tradesSeed = compound.getLong("TradesSeed");

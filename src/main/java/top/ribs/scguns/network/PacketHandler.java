@@ -44,6 +44,7 @@ public class PacketHandler
                 .registerPlayMessage(C2SMessageShooting.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(C2SMessageStopBeam.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(S2CMessageGunSound.class, MessageDirection.PLAY_CLIENT_BOUND)
+                .registerPlayMessage(S2CMessageDualWieldShotCount.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .registerPlayMessage(S2CMessageMeleeAttack.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .registerPlayMessage(S2CMessageHotBarrelSync.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .registerPlayMessage(S2CMessageStopReload.class, MessageDirection.PLAY_CLIENT_BOUND)

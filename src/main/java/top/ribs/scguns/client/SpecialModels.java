@@ -981,6 +981,18 @@ public enum SpecialModels {
     KILLER_23_NETHERITE_BAYONET("killer_23/netherite_bayonet"),
     KILLER_23_STAN_BARREL("killer_23/stan_barrel"),
     KILLER_23_EXT_BARREL("killer_23/ext_barrel"),
+
+    //HOMEMAKER
+    HOMEMAKER_MAIN("homemaker/main"),
+    HOMEMAKER_STOCK_LIGHT("homemaker/light_stock"),
+    HOMEMAKER_STOCK_HEAVY("homemaker/heavy_stock"),
+    HOMEMAKER_STOCK_WOODEN("homemaker/wooden_stock"),
+    HOMEMAKER_GRIP_LIGHT("homemaker/light_grip"),
+    HOMEMAKER_GRIP_VERTICAL("homemaker/tact_grip"),
+    HOMEMAKER_IRON_BAYONET("homemaker/iron_bayonet"),
+    HOMEMAKER_ANTHRALITE_BAYONET("homemaker/anthralite_bayonet"),
+    HOMEMAKER_DIAMOND_BAYONET("homemaker/diamond_bayonet"),
+    HOMEMAKER_NETHERITE_BAYONET("homemaker/netherite_bayonet"),
     //RIBSGLORY
     RIBS_GLORY_MAIN("ribs_glory/main"),
     RIBS_GLORY_BOLT("ribs_glory/bolt"),

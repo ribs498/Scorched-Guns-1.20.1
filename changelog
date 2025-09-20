@@ -7,6 +7,7 @@
 - Added New ammo type - Shatter Rounds
 - Added the M3 Marksman rifle
 - Added the RG-Jigsaw
+- Added the Homemaker
 - Added the Micina- Burst fire revolver
 - Added the Grandle (og), renamed existing Grandle to Grandle Conversion
 - Added Saketini IronPort
@@ -52,3 +53,7 @@
 - Added the Corroded Enchantment for melee weapons, increases damage against Automaton mobs and poisons non-automaton mobs
 - Reworked Plasma Projectiles slighty
 - Added Smooth Phosphorite
+- Added Cog Locator for finding Cog Chambers
+- Added conditional checks for tons of the compat recipes
+- Added Config option to disable fire placement for flamethrowers
+- The Merchant only has its special behavior if summoned via the Pact

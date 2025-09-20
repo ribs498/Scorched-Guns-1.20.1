@@ -45,6 +45,7 @@ import top.ribs.scguns.init.*;
 import top.ribs.scguns.interfaces.IProjectileFactory;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.item.ammo_boxes.CreativeAmmoBoxItem;
+import top.ribs.scguns.item.animated.ExoSuitItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.*;
 import top.ribs.scguns.util.GunEnchantmentHelper;
@@ -60,7 +61,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class ServerPlayHandler {
 
     private static final Map<UUID, BeamHandler.BeamInfo> activeBeams = new HashMap<>();
-
+    private static final Map<Integer, Integer> serverEntityShotCount = new HashMap<>();
     /**
      * Fires the weapon the player is currently holding.
      * This is only intended for use on the logical server.
@@ -128,7 +129,6 @@ public class ServerPlayHandler {
                 }
             }
         }
-        // Add casing ejection logic to server-side shooting
         if (Config.COMMON.gameplay.spawnCasings.get()) {
             if (modifiedGun.getProjectile().casingType != null && !player.getAbilities().instabuild && !modifiedGun.getProjectile().ejectDuringReload()) {
                 ItemStack casingStack = new ItemStack(Objects.requireNonNull(ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile().casingType)));
@@ -586,6 +586,10 @@ public class ServerPlayHandler {
         ItemStack heldItem = player.getMainHandItem();
         if (heldItem.getItem() instanceof GunItem) {
             NetworkHooks.openScreen(player, new SimpleMenuProvider((windowId, playerInventory, player1) -> new AttachmentContainer(windowId, playerInventory, heldItem), Component.translatable("container.scguns.attachments")));
+        } else if (heldItem.getItem() instanceof ExoSuitItem) {
+            NetworkHooks.openScreen(player, new ExoSuitItem.ExoSuitMenuProvider(InteractionHand.MAIN_HAND), buf -> {
+                buf.writeEnum(InteractionHand.MAIN_HAND);
+            });
         }
     }
 }

@@ -53,7 +53,7 @@ public class ThePactItem extends Item {
 
             Vec3 spawnPos = findSpawnPosition(pPlayer);
 
-            TheMerchantEntity merchant = new TheMerchantEntity(ModEntities.THE_MERCHANT.get(), serverLevel);
+            TheMerchantEntity merchant = new TheMerchantEntity(ModEntities.THE_MERCHANT.get(), serverLevel, true);
             merchant.setPos(spawnPos.x, spawnPos.y, spawnPos.z);
             merchant.setSummoner(pPlayer);
 

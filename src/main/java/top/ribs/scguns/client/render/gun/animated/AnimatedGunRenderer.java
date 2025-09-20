@@ -56,6 +56,7 @@ import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.event.GunFireEvent;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.animated.AnimatedDualWieldGunItem;
 import top.ribs.scguns.item.animated.AnimatedGunItem;
 import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.item.attachment.IBarrel;
@@ -78,12 +79,8 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
     private float prevFallSway;
     private static final long PARTICLE_COOLDOWN_MS = 100;
     private long lastParticleSpawnTime = 0;
-    private final Map<Integer, Integer> entityShotCount = new HashMap<>();
     private GeoBone currentLaserOriginBone = null;
 
-    public GeoBone getCurrentLaserOriginBone() {
-        return currentLaserOriginBone;
-    }
 
     public AnimatedGunRenderer(ResourceLocation path) {
         super(new AnimatedGunModel(path));
@@ -120,13 +117,14 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
             this.sprintIntensity = Mth.approach(this.sprintIntensity, intensity, 0.1F);
         }
     }
-
     @SubscribeEvent
     public void onGunFire(GunFireEvent.Post event) {
-        if (event.isClient()) {
+        if (event.isClient() && event.getShooter() instanceof Player player) {
             ItemStack heldItem = event.getStack();
-            GunItem gunItem = (GunItem) heldItem.getItem();
-            gunItem.getModifiedGun(heldItem);
+            if (heldItem.getItem() instanceof AnimatedDualWieldGunItem) {
+                DualWieldShotTracker.get().incrementShotCount(player.getId());
+                System.out.println("AnimatedGunRenderer: Dual-wield shot detected for player " + player.getId());
+            }
         }
     }
 
@@ -766,6 +764,7 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
         Gun modifiedGun = ((GunItem) weapon.getItem()).getModifiedGun(weapon);
         Gun.Display.Flash flash = modifiedGun.getDisplay().getFlash();
         if (flash == null) return;
+
         if (display != ItemDisplayContext.FIRST_PERSON_RIGHT_HAND &&
                 display != ItemDisplayContext.THIRD_PERSON_RIGHT_HAND &&
                 display != ItemDisplayContext.FIRST_PERSON_LEFT_HAND &&
@@ -773,14 +772,18 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
             return;
         }
         if (!(entity instanceof Player)) return;
+
         boolean isBeamActive = BeamHandler.activeBeams.containsKey(entity.getUUID());
         if (!isBeamActive && !GunRenderingHandler.entityIdForMuzzleFlash.contains(entity.getId())) {
             return;
         }
+
         float randomValue = GunRenderingHandler.entityIdToRandomValue.getOrDefault(entity.getId(), 0f);
-        boolean mirror = this.entityShotCount.getOrDefault(entity.getId(), 0) % 2 == 1 && flash.hasAlternateMuzzleFlash();
+        boolean mirror = DualWieldShotTracker.get().shouldUseAlternateAnimation(entity.getId()) && flash.hasAlternateMuzzleFlash();
+
         ResourceLocation flashTexture = new ResourceLocation(Reference.MOD_ID, "textures/effect/" + flash.getTextureLocation() + ".png");
         drawMuzzleFlash(weapon, modifiedGun, randomValue, mirror, poseStack, buffer, partialTicks, flashTexture, entity);
+
         if (flash.shouldSpawnParticles() && flash.getParticleType() != null) {
             spawnParticles(flash, entity);
         }
@@ -845,7 +848,6 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
             }
         }
     }
-
     private void drawMuzzleFlash(ItemStack weapon, Gun modifiedGun, float random, boolean mirror, PoseStack poseStack, MultiBufferSource buffer, float partialTicks, ResourceLocation flashTexture, LivingEntity entity) {
         if (!PropertyHelper.hasMuzzleFlash(weapon, modifiedGun)) {
             return;
@@ -858,8 +860,14 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
 
         poseStack.pushPose();
 
+        int shotCount = DualWieldShotTracker.get().getShotCount(entity.getId());
         Vec3 weaponOrigin = PropertyHelper.getModelOrigin(weapon, PropertyHelper.GUN_DEFAULT_ORIGIN);
         Vec3 flashPosition = PropertyHelper.getMuzzleFlashPosition(weapon, modifiedGun).subtract(weaponOrigin);
+
+        if (shotCount % 2 == 1 && flash.hasAlternateMuzzleFlash()) {
+            Vec3 alternatePos = flash.getAlternatePosition();
+            flashPosition = flashPosition.add(alternatePos.x * 0.0625, alternatePos.y * 0.0625, alternatePos.z * 0.0625);
+        }
 
         poseStack.translate(weaponOrigin.x * 0.0625, weaponOrigin.y * 0.0625, weaponOrigin.z * 0.0625);
         poseStack.translate(flashPosition.x * 0.0625 + 0.575, flashPosition.y * 0.0625 + 1.08, flashPosition.z * 0.0625);

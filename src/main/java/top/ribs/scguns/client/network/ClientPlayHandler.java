@@ -92,6 +92,9 @@ public class ClientPlayHandler {
             }
         }
     }
+    public static void handleMessageDualWieldShotCount(S2CMessageDualWieldShotCount message) {
+        GunRenderingHandler.get().updateDualWieldShotCount(message.getEntityId(), message.getShotCount());
+    }
     public static void handleReloadState(boolean reloading) {
         if (Minecraft.getInstance().player != null) {
             ItemStack heldItem = Minecraft.getInstance().player.getMainHandItem();

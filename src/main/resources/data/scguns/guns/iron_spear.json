@@ -53,7 +53,7 @@
   },
   "projectile": {
     "advantage": "scguns:heavy",
-    "damage": 17.5,
+    "damage": 18.5,
     "ejectsCasing": true,
     "gravity": false  ,
     "item": "scguns:gibbs_round",
@@ -66,8 +66,8 @@
   },
   "reloads": {
     "emptyMagTimer": 20,
-    "maxAmmo": 5,
-    "reloadItem": "scguns:krahg_round",
+    "maxAmmo": 7,
+    "reloadItem": "scguns:gibbs_round",
     "reloadTimer": 40,
     "reloadType": "scguns:mag_fed"
   },

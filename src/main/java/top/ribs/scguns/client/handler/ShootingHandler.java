@@ -343,19 +343,11 @@ public class ShootingHandler
                 controller.forceAnimationReset();
 
                 if (gunItem instanceof AnimatedDualWieldGunItem) {
-                    boolean useAlternate = ServerPlayHandler.RatKingAndQueenModel.GunFireEventRatHandler.shouldUseAlternateAnimation();
+                    boolean useAlternate = DualWieldShotTracker.get().shouldUseAlternateAnimation(player.getId());
                     if (ModSyncedDataKeys.AIMING.getValue(player)) {
                         controller.tryTriggerAnimation(useAlternate ? "aim_shoot1" : "aim_shoot");
-                    } else {
+                   } else {
                         controller.tryTriggerAnimation(useAlternate ? "shoot1" : "shoot");
-                    }
-                    ServerPlayHandler.RatKingAndQueenModel.GunFireEventRatHandler.incrementShotCount();
-                } else {
-                    boolean isCarbine = animatedGunItem.isInCarbineMode(heldItem);
-                    if (ModSyncedDataKeys.AIMING.getValue(player)) {
-                        controller.tryTriggerAnimation(isCarbine ? "carbine_aim_shoot" : "aim_shoot");
-                    } else {
-                        controller.tryTriggerAnimation(isCarbine ? "carbine_shoot" : "shoot");
                     }
                 }
             }
@@ -391,7 +383,7 @@ public class ShootingHandler
         if (player != null) {
             boolean currentRightClick = mc.options.keyUse.isDown();
             if (!currentRightClick) {
-                wasRightClickPressed = false; // Reset when key is released
+                wasRightClickPressed = false;
             }
             if (PlayerReviveHelper.isBleeding(player))
                 return;
@@ -402,10 +394,8 @@ public class ShootingHandler
                     burstCounter = 0;
                     burstCooldownTimer = 0;
                     fireTimer = 0;
-                    // Reset flags when switching weapons
                     wasHoldingFireWhenEmpty = false;
                     hasReleasedFireSinceEmpty = false;
-                    // FIXED: Clear charge state when switching weapons
                     ItemStack heldItem = player.getMainHandItem();
                     ChargeHandler.clearLastChargeProgress(player.getUUID());
                 }
@@ -429,7 +419,6 @@ public class ShootingHandler
 
                 if (gun.getGeneral().getFireMode() == FireMode.PULSE) {
                     if (isHoldingFire) {
-                        // FIXED: Always try to fire when holding fire, even if empty (for auto-reload)
                         if (Gun.hasAmmo(heldItem) || player.isCreative()) {
                             int preSoundThreshold = maxChargeTime / 3;
                             if (fireTimer == preSoundThreshold) {

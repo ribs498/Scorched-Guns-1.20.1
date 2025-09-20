@@ -34,6 +34,7 @@ import top.ribs.scguns.Config;
 import top.ribs.scguns.animations.GunAnimations;
 import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.client.KeyBinds;
+import top.ribs.scguns.client.handler.DualWieldShotTracker;
 import top.ribs.scguns.client.handler.MeleeAttackHandler;
 import top.ribs.scguns.client.render.gun.animated.AnimatedGunRenderer;
 import top.ribs.scguns.client.util.GunRotationHandler;
@@ -713,7 +714,6 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
             return;
         }
 
-        // Rest of manual reload state machine logic...
         long currentTime = System.currentTimeMillis();
         long lastStateChange = nbt.getLong("LastReloadStateChange");
         if (currentTime - lastStateChange < 0) {
@@ -880,15 +880,7 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
         boolean isCarbine = isInCarbineMode(stack);
 
         if (stack.getItem() instanceof AnimatedDualWieldGunItem) {
-            if (nbt.getBoolean("IsAiming")) {
-                boolean useAlternate = ServerPlayHandler.RatKingAndQueenModel.GunFireEventRatHandler.shouldUseAlternateAnimation();
-                animationController.tryTriggerAnimation(useAlternate ? "aim_shoot1" : "aim_shoot");
-            } else {
-                boolean useAlternate = ServerPlayHandler.RatKingAndQueenModel.GunFireEventRatHandler.shouldUseAlternateAnimation();
-                animationController.tryTriggerAnimation(useAlternate ? "shoot1" : "shoot");
-            }
-            ServerPlayHandler.RatKingAndQueenModel.GunFireEventRatHandler.incrementShotCount();
-        } else {
+       } else {
             if (nbt.getBoolean("IsAiming")) {
                 animationController.tryTriggerAnimation(isCarbine ? "carbine_aim_shoot" : "aim_shoot");
             } else {
