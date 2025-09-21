@@ -1,0 +1,39 @@
+{
+  "type": "create:mechanical_crafting",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "acceptMirrored": true,
+  "key": {
+    "C":
+    {
+      "item": "scguns:vertical_grip"
+    },
+    "L": {
+      "item": "minecraft:stick"
+    },
+    "R": {
+      "item": "scguns:firing_unit"
+    },
+    "S": {
+      "item": "scguns:large_iron_casing"
+    },
+    "M": {
+      "item": "scguns:treated_iron_ingot"
+    },
+    "X": {
+      "item": "scguns:wrecker_blueprint"
+    },
+  },
+  "pattern": [
+    "M X",
+    "LRS",
+    "  C"
+  ],
+  "result": {
+    "item": "scguns:whizzbanger"
+  }
+}

@@ -1,6 +1,7 @@
 {
   "entities": ["player"],
   "slots": [
-    "belt"
+    "belt",
+    "back"
   ]
 }

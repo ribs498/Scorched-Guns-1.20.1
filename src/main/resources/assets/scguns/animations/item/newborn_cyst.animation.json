@@ -846,9 +846,6 @@
 				}
 			},
 			"particle_effects": {
-				"0.0": {
-					"effect": "loaded"
-				},
 				"0.5417": {
 					"effect": "stop_mag_tracking"
 				}

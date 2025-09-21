@@ -18,7 +18,10 @@ public class EnergyAmmoBoxItem extends AmmoBoxItem {
         return new ResourceLocation("scguns", "energy_ammo");
     }
 
-
+    @Override
+    protected String getDescriptionKey() {
+        return "item.scguns.energy_ammo_box.description";
+    }
     @Override
     public int getBarColor(ItemStack stack) {
         return ENERGY_BAR_COLOR;

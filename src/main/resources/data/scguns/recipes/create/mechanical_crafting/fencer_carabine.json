@@ -1,0 +1,34 @@
+{
+  "type": "create:mechanical_crafting",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "acceptMirrored": true,
+  "key": {
+    "C": {
+      "item": "scguns:wooden_stock"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "scguns:gun_parts"
+    },
+    "S": {
+      "item": "scguns:stone_gun_barrel"
+    },
+    "M": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "LRSS ",
+    "C M  "
+  ],
+  "result": {
+    "item": "scguns:fencer_carabine"
+  }
+}

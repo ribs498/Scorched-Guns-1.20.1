@@ -270,7 +270,9 @@ public class GunModifierHelper
     {
         for(int i = 0; i < IAttachment.Type.values().length; i++)
         {
-            IGunModifier[] modifiers = getModifiers(weapon, IAttachment.Type.values()[i]);
+            IAttachment.Type type = IAttachment.Type.values()[i];
+            IGunModifier[] modifiers = getModifiers(weapon, type);
+
             for(IGunModifier modifier : modifiers)
             {
                 rate = modifier.modifyFireRate(rate);

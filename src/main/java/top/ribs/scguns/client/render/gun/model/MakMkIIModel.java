@@ -77,6 +77,9 @@ public class MakMkIIModel implements IOverrideModel {
             } else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get()) {
                 RenderUtil.renderModel(SpecialModels.MAK_MKII_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
             }
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get()) {
+                RenderUtil.renderModel(SpecialModels.MAK_MKII_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
         }
     }
     private void renderAnimatedParts(ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {

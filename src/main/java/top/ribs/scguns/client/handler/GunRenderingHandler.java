@@ -314,6 +314,7 @@ public class GunRenderingHandler {
 
 
     private void updateMelee() {
+        updateCustomMeleeAnimation();
         prevSprintToBanzaiProgress = sprintToBanzaiProgress;
         prevBanzaiImpactProgress = banzaiImpactProgress;
 
@@ -425,17 +426,42 @@ public class GunRenderingHandler {
         if (heldItem.getItem() instanceof GunItem gunItem) {
             assert player != null;
             if (MeleeAttackHandler.isMeleeOnCooldown(player, heldItem)) {
-
                 return;
             }
             MeleeAttackHandler.setMeleeCooldown(player, heldItem, gunItem);
+
+            Gun modifiedGun = gunItem.getModifiedGun(heldItem);
+            if (modifiedGun.getGeneral().usesCustomMeleeAnimation() && heldItem.getItem() instanceof AnimatedGunItem) {
+                ModSyncedDataKeys.MELEE.setValue(player, true);
+                return;
+            }
         }
+
         if (currentTime - meleeStartTime >= MELEE_DURATION) {
             this.isMeleeAttacking = true;
             this.meleeStartTime = currentTime;
             this.meleeProgress = 0;
             this.prevMeleeProgress = 0;
             ModSyncedDataKeys.MELEE.setValue(player, true);
+        }
+    }
+    private void updateCustomMeleeAnimation() {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) return;
+
+        ItemStack heldItem = player.getMainHandItem();
+        if (!(heldItem.getItem() instanceof AnimatedGunItem)) return;
+
+        CompoundTag tag = heldItem.getOrCreateTag();
+        if (!tag.getBoolean("scguns:IsMelee")) return;
+
+        long currentTime = System.currentTimeMillis();
+        long meleeStartTime = tag.getLong("MeleeStartTime");
+
+        if (currentTime - meleeStartTime >= MELEE_DURATION) {
+            tag.remove("scguns:IsMelee");
+            tag.remove("MeleeStartTime");
+            ModSyncedDataKeys.MELEE.setValue(player, false);
         }
     }
     private void applyMeleeTransforms(PoseStack poseStack, float partialTicks) {
@@ -446,6 +472,11 @@ public class GunRenderingHandler {
 
             if (heldItem.getItem() instanceof GunItem gunItem) {
                 Gun gun = gunItem.getModifiedGun(heldItem);
+
+                if (gun.getGeneral().usesCustomMeleeAnimation() && heldItem.getItem() instanceof AnimatedGunItem) {
+                    return;
+                }
+
                 if (Config.CLIENT.display.cinematicGunEffects.get() && gun.getGeneral().hasCameraShake()) {
                     addCameraShake(gun, 0.5f * (1 - progress), 0);
                 }
@@ -951,7 +982,8 @@ public class GunRenderingHandler {
         Gun.Display.Flash flash = modifiedGun.getDisplay().getFlash();
         if (flash == null) return;
 
-        if (!(entity instanceof Player)) return;
+        if (entity == null) return;
+
         if (display != ItemDisplayContext.FIRST_PERSON_RIGHT_HAND &&
                 display != ItemDisplayContext.THIRD_PERSON_RIGHT_HAND &&
                 display != ItemDisplayContext.FIRST_PERSON_LEFT_HAND &&

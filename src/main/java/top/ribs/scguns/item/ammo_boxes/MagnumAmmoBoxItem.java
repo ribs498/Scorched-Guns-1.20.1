@@ -11,7 +11,10 @@ public class MagnumAmmoBoxItem extends AmmoBoxItem {
     public MagnumAmmoBoxItem(Properties properties) {
         super(properties);
     }
-
+    @Override
+    protected String getDescriptionKey() {
+        return "item.scguns.magnum_ammo_box.description";
+    }
     @Override
     protected ResourceLocation getAmmoTag() {
         return new ResourceLocation("scguns", "magnum_ammo");

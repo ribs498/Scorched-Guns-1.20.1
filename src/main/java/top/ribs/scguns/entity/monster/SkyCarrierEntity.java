@@ -50,7 +50,7 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
 
     public SkyCarrierEntity(EntityType<? extends SkyCarrierEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        this.moveControl = new SkyCarrierMoveControl(this, 5.0, 8.0, 2.0, 0.6, 0.3);
+        this.moveControl = new SkyCarrierMoveControl(this, 5.0, 8.0, 2.0, 0.6, 0.1);
     }
 
     public void setInitialTarget(Vec3 targetPosition) {

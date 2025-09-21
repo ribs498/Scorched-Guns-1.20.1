@@ -26,6 +26,10 @@ public final class GunAnimations {
     public static final RawAnimation DRAW;
     public static final RawAnimation CARBINE_DRAW;
     public static final RawAnimation JAM;
+    public static final RawAnimation MELEE;
+    public static final RawAnimation CARBINE_MELEE;
+    public static final RawAnimation BAYONET;
+    public static final RawAnimation CARBINE_BAYONET;
 
     public GunAnimations() {}
 
@@ -50,5 +54,9 @@ public final class GunAnimations {
         DRAW = RawAnimation.begin().then("draw", Animation.LoopType.PLAY_ONCE).thenLoop("idle");
         CARBINE_DRAW = RawAnimation.begin().then("carbine_draw", Animation.LoopType.PLAY_ONCE).thenLoop("carbine_idle");
         JAM = RawAnimation.begin().then("jam", Animation.LoopType.PLAY_ONCE).thenLoop("idle");
+        MELEE = RawAnimation.begin().then("melee", Animation.LoopType.PLAY_ONCE).thenLoop("idle");
+        CARBINE_MELEE = RawAnimation.begin().then("carbine_melee", Animation.LoopType.PLAY_ONCE).thenLoop("carbine_idle");
+        BAYONET = RawAnimation.begin().then("bayonet", Animation.LoopType.PLAY_ONCE).thenLoop("idle");
+        CARBINE_BAYONET = RawAnimation.begin().then("carbine_bayonet", Animation.LoopType.PLAY_ONCE).thenLoop("carbine_idle");
     }
 }

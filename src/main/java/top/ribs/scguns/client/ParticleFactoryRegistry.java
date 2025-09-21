@@ -43,5 +43,7 @@ public class ParticleFactoryRegistry
 
         event.registerSpriteSet(ModParticleTypes.PLASMA_EXPLOSION.get(), PlasmaExplosionParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.ROCKET_EXPLOSION.get(), RocketExplosionParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.FIREBALL.get(), FireBallParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.SOUL_FIREBALL.get(), SoulFireBallParticle.Provider::new);
     }
 }

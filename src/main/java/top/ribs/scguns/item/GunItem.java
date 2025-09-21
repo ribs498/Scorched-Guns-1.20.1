@@ -91,6 +91,17 @@ public class GunItem extends Item implements IColored, IMeta {
         tooltip.add(Component.translatable("info.scguns.damage")
                 .append(": ").withStyle(ChatFormatting.GRAY)
                 .append(Component.literal(ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(baseDamage) + additionalDamageText).withStyle(ChatFormatting.WHITE)));
+        float baseArmorPen = modifiedGun.getProjectile().getArmorPen();
+        float puncturingPen = GunEnchantmentHelper.getPuncturingArmorBypass(stack);
+        float totalArmorPen = baseArmorPen + puncturingPen;
+
+        if (totalArmorPen > 0) {
+            String armorPenText = ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(totalArmorPen);
+            tooltip.add(Component.translatable("info.scguns.armor_penetration")
+                    .append(": ").withStyle(ChatFormatting.GRAY)
+                    .append(Component.literal(armorPenText).withStyle(ChatFormatting.YELLOW)));
+        }
+
         if (!advantage.equals(ModTags.Entities.NONE.location())) {
             tooltip.add(Component.translatable("info.scguns.advantage").withStyle(ChatFormatting.GRAY)
                     .append(Component.translatable("advantage." + advantage).withStyle(ChatFormatting.GOLD)));
@@ -133,6 +144,15 @@ public class GunItem extends Item implements IColored, IMeta {
                         .append(Component.translatable(effect.getDescriptionId()).withStyle(ChatFormatting.BLUE)));
             }
         }
+
+        Gun.WeaponType weaponType = modifiedGun.getGeneral().getWeaponType();
+        if (weaponType != null) {
+            String weaponTypeKey = "desc.scguns." + weaponType.name().toLowerCase();
+            tooltip.add(Component.translatable("info.scguns.weapon_type").withStyle(ChatFormatting.GRAY)
+                    .append(": ")
+                    .append(Component.translatable(weaponTypeKey).withStyle(ChatFormatting.AQUA)));
+        }
+
         tooltip.add(Component.translatable("info.scguns.attachment_help", KeyBinds.KEY_ATTACHMENTS.getTranslatedKeyMessage().getString().toUpperCase(Locale.ENGLISH)).withStyle(ChatFormatting.YELLOW));
     }
 

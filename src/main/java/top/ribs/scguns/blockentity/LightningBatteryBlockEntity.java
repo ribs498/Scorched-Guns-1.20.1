@@ -34,6 +34,7 @@ import top.ribs.scguns.client.screen.LightningBatteryMenu;
 import top.ribs.scguns.client.screen.LightningBatteryRecipe;
 import top.ribs.scguns.interfaces.IEnergyGun;
 import top.ribs.scguns.init.ModBlockEntities;
+import top.ribs.scguns.item.AirCanisterItem;
 
 import javax.annotation.Nullable;
 public class LightningBatteryBlockEntity extends BlockEntity implements MenuProvider, ICapabilityProvider {
@@ -252,6 +253,8 @@ public class LightningBatteryBlockEntity extends BlockEntity implements MenuProv
         energyStorage.receiveEnergy(i, false);
         updateBlockState();
     }
+    // Add this to the tick() method in LightningBatteryBlockEntity, replace the existing charging logic:
+
     public void tick() {
         if (this.level == null || this.level.isClientSide) {
             return;
@@ -267,18 +270,21 @@ public class LightningBatteryBlockEntity extends BlockEntity implements MenuProv
 
             if (itemEnergyCap.isPresent()) {
                 itemEnergyCap.ifPresent(itemEnergy -> {
-                    int energyToTransfer = Math.min(energyStorage.extractEnergy(100, true), itemEnergy.receiveEnergy(100, true));
-                    if (energyToTransfer > 0) {
-                        energyStorage.extractEnergy(energyToTransfer, false);
-                        itemEnergy.receiveEnergy(energyToTransfer, false);
-                        setChanged();
-                        sync();
-                    }
-
-                    if (itemEnergy.getEnergyStored() >= itemEnergy.getMaxEnergyStored()) {
-                        if (outputStack.isEmpty()) {
-                            itemHandler.setStackInSlot(OUTPUT_SLOT, inputStack.copy());
-                            itemHandler.extractItem(INPUT_SLOT, 1, false);
+                    if (inputStack.getItem() instanceof AirCanisterItem) {
+                        chargeAirCanister(inputStack, outputStack);
+                    } else {
+                        int energyToTransfer = Math.min(energyStorage.extractEnergy(100, true), itemEnergy.receiveEnergy(100, true));
+                        if (energyToTransfer > 0) {
+                            energyStorage.extractEnergy(energyToTransfer, false);
+                            itemEnergy.receiveEnergy(energyToTransfer, false);
+                            setChanged();
+                            sync();
+                        }
+                        if (itemEnergy.getEnergyStored() >= itemEnergy.getMaxEnergyStored()) {
+                            if (outputStack.isEmpty()) {
+                                itemHandler.setStackInSlot(OUTPUT_SLOT, inputStack.copy());
+                                itemHandler.extractItem(INPUT_SLOT, 1, false);
+                            }
                         }
                     }
                 });
@@ -322,8 +328,6 @@ public class LightningBatteryBlockEntity extends BlockEntity implements MenuProv
         }
 
         updateBlockState();
-
-        // Push energy to adjacent blocks
         for (Direction direction : Direction.values()) {
             BlockEntity adjacentEntity = level.getBlockEntity(worldPosition.relative(direction));
             if (adjacentEntity != null) {
@@ -338,6 +342,37 @@ public class LightningBatteryBlockEntity extends BlockEntity implements MenuProv
                 });
             }
         }
+    }
+    private void chargeAirCanister(ItemStack inputStack, ItemStack outputStack) {
+        LazyOptional<IEnergyStorage> airStorage = inputStack.getCapability(ForgeCapabilities.ENERGY);
+
+        airStorage.ifPresent(airCap -> {
+            int energyCostPerAir = 5;
+            int airPerTick = 5;
+            int energyCostPerTick = airPerTick * energyCostPerAir;
+            if (energyStorage.getEnergyStored() >= energyCostPerTick &&
+                    airCap.getEnergyStored() < airCap.getMaxEnergyStored()) {
+                int maxAirToAdd = Math.min(airPerTick, airCap.getMaxEnergyStored() - airCap.getEnergyStored());
+                int actualEnergyCost = maxAirToAdd * energyCostPerAir;
+                if (energyStorage.getEnergyStored() >= actualEnergyCost) {
+                    int airAdded = airCap.receiveEnergy(maxAirToAdd, false);
+
+                    if (airAdded > 0) {
+                        int actualCost = airAdded * energyCostPerAir;
+                        energyStorage.extractEnergy(actualCost, false);
+                        setChanged();
+                        sync();
+                    }
+                }
+            }
+
+            if (airCap.getEnergyStored() >= airCap.getMaxEnergyStored()) {
+                if (outputStack.isEmpty()) {
+                    itemHandler.setStackInSlot(OUTPUT_SLOT, inputStack.copy());
+                    itemHandler.extractItem(INPUT_SLOT, 1, false);
+                }
+            }
+        });
     }
 
 
@@ -357,9 +392,7 @@ public class LightningBatteryBlockEntity extends BlockEntity implements MenuProv
     }
 
     private void consumeEnergy(int amount) {
-        int energyBefore = energyStorage.getEnergyStored();
         energyStorage.extractEnergy(amount, false);
-        int energyAfter = energyStorage.getEnergyStored();
     }
 
     private void updateBlockState() {

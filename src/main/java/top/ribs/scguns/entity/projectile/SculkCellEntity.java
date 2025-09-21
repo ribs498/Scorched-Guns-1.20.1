@@ -40,8 +40,7 @@ public class SculkCellEntity extends ProjectileEntity {
     }
 
     public SculkCellEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
-        super(entityType, worldIn, shooter, weapon, item, modifiedGun);
-        this.setArmorBypassAmount(9.0F);
+        super(entityType, worldIn, shooter, weapon, item, modifiedGun);;
     }
 
     @Override

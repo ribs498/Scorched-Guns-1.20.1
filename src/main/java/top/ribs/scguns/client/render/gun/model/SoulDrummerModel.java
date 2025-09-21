@@ -50,6 +50,9 @@ public class SoulDrummerModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.KRAUSER_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.KRAUSER_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.KRAUSER_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+
         }
 
         if (entity.equals(Minecraft.getInstance().player)) {

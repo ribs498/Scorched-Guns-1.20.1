@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "rifle",
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
@@ -59,7 +60,11 @@
     "life": 45,
     "size": 0.05,
     "speed": 5.5,
-    "trailLengthMultiplier": 2.0
+    "trailLengthMultiplier": 2.0,
+    "impactEffect": "scguns:lacerated",
+    "impactEffectDuration": 300,
+    "impactEffectChance": 0.3,
+    "impactEffectAmplifier": 0
   },
   "reloads": {
     "emptyMagTimer": 10,

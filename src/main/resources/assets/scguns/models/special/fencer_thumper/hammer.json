@@ -1,0 +1,60 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+      "2": "scguns:item/fencer_thumper"
+	},
+	"elements": [
+		{
+			"name": "hammer",
+			"from": [7.915, -1.84639, 12.84607],
+			"to": [7.915, -0.19639, 14.75357],
+			"rotation": {"angle": -45, "axis": "x", "origin": [6.95116, 4.25027, 7.39628]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.375], "texture": "#2"},
+				"east": {"uv": [7.75, 1, 8.25, 1.375], "texture": "#2"},
+				"south": {"uv": [0, 0, 0, 0.375], "texture": "#2"},
+				"up": {"uv": [0, 0.5, 0, 0], "texture": "#2"},
+				"down": {"uv": [0, 0, 0, 0.5], "texture": "#2"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 7, -7.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 7, -7.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-4.5, 9.75, -1.25]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4.5, 9.75, -1.25]
+		},
+		"ground": {
+			"translation": [0, 7.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1.25, 5.75, 0]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [2.5, 7.75, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "hammer",
+			"origin": [0.94625, -4.52158, 4.86764],
+			"color": 5,
+			"children": [0]
+		}
+	]
+}

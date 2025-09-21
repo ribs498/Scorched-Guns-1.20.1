@@ -24,17 +24,14 @@ import java.util.function.Supplier;
  * Author: MrCrayfish
  */
 public class FuelAmmoItem extends Item implements IAmmo {
-    private final int burnTime;
     private final List<MobEffectInstance> potionEffects;
     private final Supplier<Item> containerItem;
 
-    public FuelAmmoItem(Properties properties, int burnTime, Supplier<Item> containerItem, MobEffectInstance... potionEffects) {
+    public FuelAmmoItem(Properties properties, Supplier<Item> containerItem, MobEffectInstance... potionEffects) {
         super(properties);
-        this.burnTime = burnTime;
         this.containerItem = containerItem;
         this.potionEffects = Arrays.stream(potionEffects).filter(Objects::nonNull).toList();
     }
-
     @Override
     public boolean hasCraftingRemainingItem(ItemStack stack) {
         return true;
@@ -43,11 +40,6 @@ public class FuelAmmoItem extends Item implements IAmmo {
     @Override
     public ItemStack getCraftingRemainingItem(ItemStack itemStack) {
         return new ItemStack(containerItem.get());
-    }
-
-    @Override
-    public int getBurnTime(ItemStack itemStack, @Nullable RecipeType<?> recipeType) {
-        return this.burnTime;
     }
 
     @Override

@@ -39,6 +39,9 @@ public class CarapiceModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.SHELLURKER_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.SHELLURKER_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.SHELLURKER_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+
         }
         if (entity.equals(Minecraft.getInstance().player)) {
 

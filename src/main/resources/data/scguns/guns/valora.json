@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "rifle",
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
@@ -19,6 +20,7 @@
     "meleeCooldownTicks": 10,
     "hotBarrelRate": 16,
     "criticalChance": 0.25,
+    "critDamageMultiplier": 2.0,
     "isSilenced": true
   },
   "modules": {

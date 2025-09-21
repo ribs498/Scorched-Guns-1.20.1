@@ -37,6 +37,9 @@ public class WaltzConversionModel implements IOverrideModel {
             } else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get()) {
                 RenderUtil.renderModel(SpecialModels.WALTZ_CONVERSION_HEAVY_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
             }
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get()) {
+                RenderUtil.renderModel(SpecialModels.WALTZ_CONVERSION_HEAVY_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
         }
         RenderUtil.renderModel(SpecialModels.WALTZ_CONVERSION_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
 

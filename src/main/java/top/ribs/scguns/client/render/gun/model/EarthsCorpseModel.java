@@ -74,8 +74,6 @@ public class EarthsCorpseModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.EARTHS_CORPSE_MUZZLE_BRAKE.getModel(), stack, matrixStack, buffer, light, overlay);
             }
         }
-
-        // Render the standard barrel if no extended barrel is attached
         if (!hasExtendedBarrel) {
             RenderUtil.renderModel(SpecialModels.EARTHS_CORPSE_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
         }
@@ -88,6 +86,9 @@ public class EarthsCorpseModel implements IOverrideModel {
             } else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.get()) {
                 RenderUtil.renderModel(SpecialModels.EARTHS_CORPSE_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             } else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get()) {
+                RenderUtil.renderModel(SpecialModels.EARTHS_CORPSE_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get()) {
                 RenderUtil.renderModel(SpecialModels.EARTHS_CORPSE_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
             }
         }

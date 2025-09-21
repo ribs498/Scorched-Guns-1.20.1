@@ -3,7 +3,6 @@ package top.ribs.scguns.block;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -12,17 +11,9 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.util.StringRepresentable;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
@@ -30,7 +21,6 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
@@ -41,9 +31,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.common.SulfurGasCloud;
-import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModParticleTypes;
-import top.ribs.scguns.init.ModTags;
+
 import java.util.List;
 import java.util.Random;
 
@@ -53,8 +42,6 @@ public class SulfurVentBlock extends Block {
     private static final VoxelShape SHAPE_BASE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     private static final VoxelShape SHAPE_MIDDLE_TOP = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 16.0D, 15.0D);
     private static final int CLOUD_RADIUS = 8;
-    private static final int CLOUD_HEIGHT = 4;
-    private static final int MAX_CLOUD_PARTICLES_PER_TICK = 15;
     private static final int MAX_DUST_PARTICLES_PER_TICK = 10;
     private static final int CLOUD_SPAWN_CHANCE = 95;
     private static final int DUST_SPAWN_CHANCE = 98;
@@ -65,10 +52,12 @@ public class SulfurVentBlock extends Block {
     public static final int MAX_ACTIVE_VENTS = 1;
     public static final int CHECK_RADIUS = 32;
     public static final int EFFECT_RADIUS_SQUARED = EFFECT_RADIUS * EFFECT_RADIUS;
-    private static final int HELMET_DAMAGE_INTERVAL = 50;
     public static final IntegerProperty VENT_POWER = IntegerProperty.create("vent_power", 1, 5);
     public static final int MAX_VENT_POWER = 5;
     private final Random random = new Random();
+    private static final int ENVIRONMENTAL_ACTION_COOLDOWN = 30;
+    private static final java.util.Map<BlockPos, Integer> actionCooldowns = new java.util.HashMap<>();
+    private static final java.util.Map<BlockPos, Integer> actionCycle = new java.util.HashMap<>();
 
     public SulfurVentBlock(Properties properties) {
         super(properties);
@@ -92,7 +81,7 @@ public class SulfurVentBlock extends Block {
                 .setValue(VENT_POWER, ventPower);
     }
     @Override
-    public BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
+    public @NotNull BlockState updateShape(BlockState state, Direction direction, BlockState neighborState, LevelAccessor level, BlockPos pos, BlockPos neighborPos) {
         if (level instanceof Level) {
             boolean isActive = isActive(level, pos);
             int ventPower = calculateVentPower((Level) level, pos);
@@ -193,10 +182,12 @@ public class SulfurVentBlock extends Block {
                     shutdownVentTemporarily(world, pos, state);
                     return;
                 }
+                boolean hasCollectorAbove = isVentCollectorAbove(world, pos);
 
-                if (state.getValue(VENT_TYPE) == SulfurVentType.BASE) {
+                if (state.getValue(VENT_TYPE) == SulfurVentType.BASE && !hasCollectorAbove) {
                     spawnSulfurCloud(world, pos, random);
                     spawnSulfurDust(world, pos, random);
+                    performEnvironmentalAction(world, pos, center, random);
                 }
 
                 applyEffectsToEntities(world, pos);
@@ -213,6 +204,47 @@ public class SulfurVentBlock extends Block {
                 scheduleParticleSpawn(world, pos);
             }
         }
+    }
+
+    private void performEnvironmentalAction(ServerLevel world, BlockPos pos, Vec3 center, RandomSource random) {
+        int cooldown = actionCooldowns.getOrDefault(pos, 0);
+        if (cooldown > 0) {
+            actionCooldowns.put(pos, cooldown - 1);
+            return;
+        }
+        int currentAction = actionCycle.getOrDefault(pos, 0);
+
+        switch (currentAction) {
+            case 0:
+                SulfurGasCloud.destroyNatureInArea(world, center, EFFECT_RADIUS, random);
+                break;
+            case 1:
+                SulfurGasCloud.placeSulfurLayers(world, center, EFFECT_RADIUS, random);
+                break;
+        }
+        actionCycle.put(pos, (currentAction + 1) % 2);
+        actionCooldowns.put(pos, ENVIRONMENTAL_ACTION_COOLDOWN);
+    }
+
+    @Override
+    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+        if (!state.is(newState.getBlock())) {
+            actionCooldowns.remove(pos);
+            actionCycle.remove(pos);
+        }
+        super.onRemove(state, level, pos, newState, isMoving);
+    }
+    private boolean isVentCollectorAbove(Level level, BlockPos pos) {
+        BlockPos checkPos = getTopVentPos(level, pos);
+        BlockPos abovePos = checkPos.above();
+        return level.getBlockState(abovePos).getBlock() instanceof VentCollectorBlock;
+    }
+    private BlockPos getTopVentPos(Level level, BlockPos pos) {
+        BlockPos currentPos = pos;
+        while (level.getBlockState(currentPos.above()).getBlock() instanceof SulfurVentBlock) {
+            currentPos = currentPos.above();
+        }
+        return currentPos;
     }
     private void spawnSulfurCloud(Level level, BlockPos pos, RandomSource random) {
         if (random.nextInt(100) >= CLOUD_SPAWN_CHANCE) return;

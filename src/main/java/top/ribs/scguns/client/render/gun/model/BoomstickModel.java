@@ -24,7 +24,6 @@ public class BoomstickModel implements IOverrideModel {
     @Override
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
 
-        // Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.BOOMSTICK_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
 
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
@@ -34,6 +33,9 @@ public class BoomstickModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.BOOMSTICK_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.BOOMSTICK_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.BOOMSTICK_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
+
         } else
             RenderUtil.renderModel(SpecialModels.BOOMSTICK_STAN_GRIP.getModel(), stack, matrixStack, buffer, light, overlay);
 

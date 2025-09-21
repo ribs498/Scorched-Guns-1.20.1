@@ -57,6 +57,9 @@ public class GrandleOgModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.GRANDLE_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.GRANDLE_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.GRANDLE_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+
         }
     }
 

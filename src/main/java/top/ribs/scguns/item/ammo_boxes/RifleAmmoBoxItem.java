@@ -20,7 +20,10 @@ public class RifleAmmoBoxItem extends AmmoBoxItem {
         return new ResourceLocation("scguns", "rifle_ammo");
     }
 
-
+    @Override
+    protected String getDescriptionKey() {
+        return "item.scguns.rifle_ammo_box.description";
+    }
     @Override
     public int getBarColor(ItemStack stack) {
         return RIFLE_BAR_COLOR;

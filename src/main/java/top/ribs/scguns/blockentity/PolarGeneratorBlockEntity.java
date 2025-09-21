@@ -260,7 +260,6 @@ public class PolarGeneratorBlockEntity extends BlockEntity implements MenuProvid
                 }
             }
 
-            // Rest of the tick method remains the same
             if (blockEntity.burnTime == 0 && blockEntity.energyStorage.getEnergyStored() < blockEntity.energyStorage.getMaxEnergyStored()) {
                 ItemStack fuelStack = blockEntity.itemHandler.getStackInSlot(0);
                 if (!fuelStack.isEmpty()) {
@@ -268,7 +267,22 @@ public class PolarGeneratorBlockEntity extends BlockEntity implements MenuProvid
                     if (burnTime > 0) {
                         blockEntity.burnTime = burnTime;
                         blockEntity.burnTimeTotal = burnTime;
+                        ItemStack containerItem = fuelStack.getCraftingRemainingItem();
                         fuelStack.shrink(1);
+                        if (!containerItem.isEmpty() && fuelStack.isEmpty()) {
+                            blockEntity.itemHandler.setStackInSlot(0, containerItem);
+                        }
+                        else if (!containerItem.isEmpty() && !fuelStack.isEmpty()) {
+                            ItemStack remainder = blockEntity.itemHandler.insertItem(0, containerItem, false);
+                            if (!remainder.isEmpty() && blockEntity.level != null) {
+                                net.minecraft.world.Containers.dropItemStack(blockEntity.level,
+                                        blockEntity.worldPosition.getX() + 0.5,
+                                        blockEntity.worldPosition.getY() + 1.0,
+                                        blockEntity.worldPosition.getZ() + 0.5,
+                                        remainder);
+                            }
+                        }
+
                         blockEntity.setChanged();
                         blockEntity.sync();
                     }

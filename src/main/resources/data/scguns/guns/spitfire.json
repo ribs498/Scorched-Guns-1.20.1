@@ -8,15 +8,16 @@
     }
   },
   "general": {
+    "weaponType": "flamethrower",
     "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:mini_gun",
     "baseGripType": "scguns:mini_gun",
-    "projectileAmount": 4,
+    "projectileAmount": 5,
     "rate": 3,
     "recoilAngle": 0.5,
     "recoilKick": 0.5,
-    "spread": 10.0,
+    "spread": 17.0,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
     "meleeReach": 3.5,
@@ -24,19 +25,19 @@
     "criticalChance": 0.05
   },
   "modules": {
-    "attachments": {
-    }
+    "attachments": {}
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 9.0,
+    "damage": 5.0,
     "gravity": true,
     "ejectsCasing": false,
     "item": "scguns:blaze_fuel",
-    "life": 12,
-    "size": 0.1,
-    "speed": 1.8,
-    "trailLengthMultiplier": 2.0
+    "life": 10,
+    "size": 1.0,
+    "speed": 1.5,
+    "trailLengthMultiplier": 1.0,
+    "hideProjectile": true
   },
   "reloads": {
     "emptyMagTimer": 10,

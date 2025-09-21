@@ -1,0 +1,146 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+      "3": "scguns:item/inquisitor"
+	},
+	"elements": [
+		{
+			"name": "wooden_stock",
+			"from": [7.31289, 2.38539, 18.16839],
+			"to": [8.73789, 4.57039, 18.71464],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8.02539, 3.47789, 18.54151]},
+			"faces": {
+				"north": {"uv": [5.75, 6.75, 6.125, 7.375], "texture": "#3"},
+				"east": {"uv": [3.25, 8, 3.375, 8.625], "texture": "#3"},
+				"south": {"uv": [7, 1, 7.375, 1.625], "texture": "#3"},
+				"west": {"uv": [3.5, 8, 3.625, 8.625], "texture": "#3"},
+				"up": {"uv": [8.875, 2.625, 8.5, 2.5], "texture": "#3"},
+				"down": {"uv": [8.875, 2.75, 8.5, 2.875], "texture": "#3"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.47318, 4.19262, 18.4799],
+			"to": [8.57756, 4.39972, 23.8645],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.0399, 7.43097, 10.08993]},
+			"faces": {
+				"north": {"uv": [8.75, 0, 9, 0.125], "texture": "#3"},
+				"east": {"uv": [7, 5.75, 8.375, 5.875], "texture": "#3"},
+				"south": {"uv": [8.75, 0.25, 9, 0.375], "texture": "#3"},
+				"west": {"uv": [6.75, 7, 8.125, 7.125], "texture": "#3"},
+				"up": {"uv": [5.25, 6.875, 5, 5.5], "texture": "#3"},
+				"down": {"uv": [5.75, 5.5, 5.5, 6.875], "texture": "#3"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.47318, 2.80505, 18.4799],
+			"to": [8.57756, 4.19262, 23.8645],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.0399, 7.43097, 10.08993]},
+			"faces": {
+				"north": {"uv": [1.25, 8, 1.5, 8.375], "texture": "#3"},
+				"east": {"uv": [3.25, 3.5, 4.625, 3.875], "texture": "#3"},
+				"south": {"uv": [1.75, 8, 2, 8.375], "texture": "#3"},
+				"west": {"uv": [3.75, 1.5, 5.125, 1.875], "texture": "#3"},
+				"up": {"uv": [0.5, 7.125, 0.25, 5.75], "texture": "#3"},
+				"down": {"uv": [6, 0.25, 5.75, 1.625], "texture": "#3"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.60262, 0.99292, 23.8645],
+			"to": [8.44812, 4.19262, 24.2787],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.0399, 7.43097, 10.08993]},
+			"faces": {
+				"north": {"uv": [3.5, 7, 3.75, 7.875], "texture": "#3"},
+				"east": {"uv": [7.5, 7.75, 7.625, 8.625], "texture": "#3"},
+				"south": {"uv": [3.75, 7, 4, 7.875], "texture": "#3"},
+				"west": {"uv": [8, 0, 8.125, 0.875], "texture": "#3"},
+				"up": {"uv": [9, 0.625, 8.75, 0.5], "texture": "#3"},
+				"down": {"uv": [1, 8.75, 0.75, 8.875], "texture": "#3"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.47402, 1.62458, 21.78314],
+			"to": [8.57673, 2.80505, 23.8645],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.0399, 7.43097, 10.08993]},
+			"faces": {
+				"north": {"uv": [6.25, 8.25, 6.5, 8.5], "texture": "#3"},
+				"east": {"uv": [7.5, 6.75, 8, 7], "texture": "#3"},
+				"south": {"uv": [8.25, 6.25, 8.5, 6.5], "texture": "#3"},
+				"west": {"uv": [2.25, 7.75, 2.75, 8], "texture": "#3"},
+				"up": {"uv": [6.75, 8, 6.5, 7.5], "texture": "#3"},
+				"down": {"uv": [8, 2.75, 7.75, 3.25], "texture": "#3"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.47402, 0.69263, 23.35192],
+			"to": [8.57673, 1.62458, 23.8645],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.0399, 7.43097, 10.08993]},
+			"faces": {
+				"north": {"uv": [6.5, 8.25, 6.75, 8.5], "texture": "#3"},
+				"east": {"uv": [1, 8.75, 1.125, 9], "texture": "#3"},
+				"south": {"uv": [8.25, 7, 8.5, 7.25], "texture": "#3"},
+				"west": {"uv": [8.75, 1, 8.875, 1.25], "texture": "#3"},
+				"up": {"uv": [9, 1.375, 8.75, 1.25], "texture": "#3"},
+				"down": {"uv": [9, 1.75, 8.75, 1.875], "texture": "#3"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.47236, 2.4944, 18.34528],
+			"to": [8.57839, 3.84055, 23.99911],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [7.89512, 3.2296, 19.17368]},
+			"faces": {
+				"north": {"uv": [2, 8, 2.25, 8.375], "texture": "#3"},
+				"east": {"uv": [3, 1, 4.5, 1.375], "texture": "#3"},
+				"south": {"uv": [2.25, 8, 2.5, 8.375], "texture": "#3"},
+				"west": {"uv": [3.25, 3, 4.75, 3.375], "texture": "#3"},
+				"up": {"uv": [2, 6.5, 1.75, 5], "texture": "#3"},
+				"down": {"uv": [2.25, 5, 2, 6.5], "texture": "#3"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6, -8.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6, -8.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.5, 8.5, -0.75]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.5, 8.5, -0.75]
+		},
+		"ground": {
+			"translation": [0, 9.5, -1.5],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-2, 3.75, 0],
+			"scale": [0.95, 0.95, 0.95]
+		},
+		"fixed": {
+			"rotation": [-90, 90, 90],
+			"translation": [-2.25, 8, 0],
+			"scale": [2, 2, 2]
+		}
+	},
+	"groups": [
+		{
+			"name": "wooden_stock",
+			"origin": [8.48994, 6.9476, 11.11742],
+			"color": 1,
+			"children": [0, 1, 2, 3, 4, 5, 6]
+		}
+	]
+}

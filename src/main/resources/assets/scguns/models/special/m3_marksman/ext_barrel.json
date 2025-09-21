@@ -3,14 +3,14 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-      "1": "scguns:item/m3_marksman",
-      "particle": "scguns:item/m3_marksman"
+		"1": "scguns:item/m3_marksman",
+		"particle": "scguns:item/m3_marksman"
 	},
 	"elements": [
 		{
 			"name": "extended_barrel",
-			"from": [7.21893, 3.849, -4.51394],
-			"to": [8.71893, 5.349, -4.01394],
+			"from": [7.34393, 3.974, -4.51394],
+			"to": [8.59393, 5.224, -4.01394],
 			"rotation": {"angle": -45, "axis": "z", "origin": [7.89393, 4.524, -6.58894]},
 			"faces": {
 				"north": {"uv": [8, 6, 8.375, 6.375], "texture": "#1"},
@@ -23,8 +23,8 @@
 		},
 		{
 			"name": "extended_barrel",
-			"from": [7.43787, 4.174, -4.01394],
-			"to": [8.43787, 5.174, 4.48606],
+			"from": [7.46287, 4.199, -4.01394],
+			"to": [8.41287, 5.149, 4.48606],
 			"rotation": {"angle": -45, "axis": "z", "origin": [7.78787, 4.524, -6.76394]},
 			"faces": {
 				"north": {"uv": [9.25, 9.25, 9.5, 9.5], "texture": "#1"},

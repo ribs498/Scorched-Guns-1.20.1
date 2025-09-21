@@ -28,6 +28,7 @@ public class RepeatingMusketModel implements IOverrideModel {
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
 
         RenderUtil.renderModel(SpecialModels.REPEATING_MUSKET_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
+        RenderUtil.renderModel(SpecialModels.REPEATING_MUSKET_MAGAZINE.getModel(), stack, matrixStack, buffer, light, overlay);
 
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
@@ -36,6 +37,9 @@ public class RepeatingMusketModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.MUSKET_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.MUSKET_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.MUSKET_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
+
         }
 
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.UNDER_BARREL)) {
@@ -75,12 +79,7 @@ public class RepeatingMusketModel implements IOverrideModel {
             matrixStack.popPose();
             flashTimer--;
         }
-        float magazinePosition = calculateMagazinePosition(stack);
-        float translationMultiplier = 0.325f;
-        matrixStack.pushPose();
-        matrixStack.translate(clampMagazinePosition(magazinePosition * translationMultiplier), 0, 0);
-        RenderUtil.renderModel(SpecialModels.REPEATING_MUSKET_MAGAZINE.getModel(), stack, matrixStack, buffer, light, overlay);
-        matrixStack.popPose();
+
     }
 
     private double ease(double x) {

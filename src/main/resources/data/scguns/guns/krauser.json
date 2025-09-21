@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "pistol",
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
     "rate": 4,
@@ -47,6 +48,7 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 9.5,
+    "armorPen": 1.0,
     "gravity": false,
     "item": "scguns:compact_advanced_round",
     "ejectsCasing": true,

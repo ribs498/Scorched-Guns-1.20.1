@@ -8,14 +8,15 @@
     }
   },
   "general": {
-    "alwaysSpread": false,
+    "weaponType": "smg",
+    "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed_smg",
     "baseGripType": "scguns:two_handed_smg",
     "rate": 3,
-    "recoilAngle": 4.0,
+    "recoilAngle": 3.0,
     "recoilKick": 1.0,
-    "spread": 3.25,
+    "spread": 2.25,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 15,
     "meleeReach": 2.5,
@@ -48,7 +49,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 5.0,
+    "damage": 4.5,
     "ejectsCasing": true,
     "item": "scguns:compact_copper_round",
     "casingType": "scguns:small_copper_casing",

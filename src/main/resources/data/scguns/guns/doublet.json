@@ -7,12 +7,13 @@
       "textureLocation": "muzzle_flash_1",
       "spawnParticles": true,
       "particleType": "minecraft:campfire_cosy_smoke",
-      "particleCount": 25,
-      "particleSpread": 0.7,
-      "particleRingRadius": 0.7
+      "particleCount": 16,
+      "particleSpread": 0.5,
+      "particleRingRadius": 0.5
     }
   },
   "general": {
+    "weaponType": "shotgun",
     "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
@@ -24,7 +25,7 @@
     "spread": 12.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 100,
+    "hotBarrelRate": 55,
     "criticalChance": 0.05,
     "playerKnockBack": true,
     "playerKnockBackStrength": 0.34

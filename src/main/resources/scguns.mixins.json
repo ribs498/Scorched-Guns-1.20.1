@@ -16,6 +16,9 @@
     "client.ItemInHandLayerMixin",
     "client.LevelRendererMixin",
     "client.MinecraftMixin",
+    "client.MixinAbstractZombieModel",
+    "client.MixinHumanoidModel",
+    "client.MixinIllagerModel",
     "client.MouseHandlerMixin",
     "client.PlayerModelMixin",
     "client.VehiclePoseMixin"

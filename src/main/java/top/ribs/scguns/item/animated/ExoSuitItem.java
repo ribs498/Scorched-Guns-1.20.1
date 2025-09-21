@@ -202,39 +202,38 @@ public class ExoSuitItem extends ArmorItem implements GeoItem {
             }
         }
     }
-
     private String getUpgradeDisplayName(ExoSuitUpgrade upgrade, ItemStack upgradeItem) {
         String upgradeType = upgrade.getType();
 
         if ("hud".equals(upgradeType)) {
             if (upgradeItem.getItem() instanceof top.ribs.scguns.item.exosuit.NightVisionModuleItem) {
-                return "Night Vision";
+                return Component.translatable("upgrade.scguns.exosuit.night_vision").getString();
             } else if (upgradeItem.getItem() instanceof top.ribs.scguns.item.exosuit.TargetTrackerModuleItem) {
-                return "Target Tracker";
+                return Component.translatable("upgrade.scguns.exosuit.target_tracker").getString();
             } else if (upgradeItem.getItem() instanceof top.ribs.scguns.item.exosuit.GasMaskModuleItem) {
-                return "Gas Mask";
+                return Component.translatable("upgrade.scguns.exosuit.gas_mask").getString();
             } else if (upgradeItem.getItem() instanceof top.ribs.scguns.item.exosuit.RebreatherModuleItem) {
-                return "Rebreather";
+                return Component.translatable("upgrade.scguns.exosuit.rebreather").getString();
             } else {
-                return "HUD System";
+                return Component.translatable("upgrade.scguns.exosuit.hud_system").getString();
             }
         }
         if ("breathing".equals(upgradeType)) {
             if (upgradeItem.getItem() instanceof top.ribs.scguns.item.exosuit.GasMaskModuleItem) {
-                return "Gas Mask";
+                return Component.translatable("upgrade.scguns.exosuit.gas_mask").getString();
             } else if (upgradeItem.getItem() instanceof top.ribs.scguns.item.exosuit.RebreatherModuleItem) {
-                return "Rebreather";
+                return Component.translatable("upgrade.scguns.exosuit.rebreather").getString();
             } else {
-                return "Life Support";
+                return Component.translatable("upgrade.scguns.exosuit.life_support").getString();
             }
         }
         return switch (upgradeType) {
-            case "plating" -> "Armor Plating";
-            case "pauldron" -> "Pauldron";
-            case "power_core" -> "Power Core";
-            case "utility" -> "Utility Module";
-            case "knee_guard" -> "Knee Guard";
-            case "mobility" -> "Mobility System";
+            case "plating" -> Component.translatable("upgrade.scguns.exosuit.armor_plating").getString();
+            case "pauldron" -> Component.translatable("upgrade.scguns.exosuit.pauldron").getString();
+            case "power_core" -> Component.translatable("upgrade.scguns.exosuit.power_core").getString();
+            case "utility" -> Component.translatable("upgrade.scguns.exosuit.utility_module").getString();
+            case "knee_guard" -> Component.translatable("upgrade.scguns.exosuit.knee_guard").getString();
+            case "mobility" -> Component.translatable("upgrade.scguns.exosuit.mobility_system").getString();
             default -> {
                 String itemName = upgradeItem.getDisplayName().getString();
                 if (itemName.startsWith("Heavy ")) {

@@ -1,7 +1,6 @@
 package top.ribs.scguns.event;
 
 
-import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleType;
@@ -15,7 +14,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -25,15 +23,11 @@ import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.level.ChunkEvent;
 import net.minecraftforge.event.server.ServerStoppingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -47,7 +41,6 @@ import software.bernie.geckolib.core.animation.AnimationController;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.ScorchedGuns;
-import top.ribs.scguns.block.SulfurVentBlock;
 import top.ribs.scguns.cache.HotBarrelCache;
 import top.ribs.scguns.client.handler.MeleeAttackHandler;
 import top.ribs.scguns.common.*;
@@ -65,9 +58,8 @@ import top.ribs.scguns.item.attachment.IAttachment;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.C2SMessageReload;
 import top.ribs.scguns.network.message.S2CMessageHotBarrelSync;
+import top.ribs.scguns.util.AirSourceHelper;
 import top.theillusivec4.curios.api.CuriosApi;
-
-import java.util.List;
 
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -171,19 +163,23 @@ public class GunEventBus {
                     }
                 }
 
-                if (ScorchedGuns.createLoaded && heldItem.getItem() instanceof IAirGun) {
-                    List<ItemStack> backtanks = BacktankUtil.getAllWithAir(player);
-                    if (backtanks.isEmpty()) {
-                        player.displayClientMessage(Component.translatable("message.airgun.no_air")
-                                .withStyle(ChatFormatting.RED), true);
-                        event.setCanceled(true);
-                        return;
-                    }
+                if (heldItem.getItem() instanceof IAirGun) {
                     float airCostPerShot = calculateAirCostPerShot(gun);
-                    BacktankUtil.consumeAir(player, backtanks.get(0), airCostPerShot);
-                    if (!BacktankUtil.hasAirRemaining(backtanks.get(0))) {
-                        player.displayClientMessage(Component.translatable("message.airgun.no_air")
-                                .withStyle(ChatFormatting.RED), true);
+                    if (!AirSourceHelper.consumeAir(player, airCostPerShot)) {
+                        AirSourceHelper.AirSource airSource = AirSourceHelper.getBestAirSource(player);
+
+                        if (airSource.getType() == AirSourceHelper.AirSource.Type.NONE) {
+                            if (ScorchedGuns.createLoaded) {
+                                player.displayClientMessage(Component.translatable("message.airgun.no_air_source")
+                                        .withStyle(ChatFormatting.RED), true);
+                            } else {
+                                player.displayClientMessage(Component.translatable("message.airgun.requires_canister")
+                                        .withStyle(ChatFormatting.RED), true);
+                            }
+                        } else {
+                            player.displayClientMessage(Component.translatable("message.airgun.no_air")
+                                    .withStyle(ChatFormatting.RED), true);
+                        }
                         event.setCanceled(true);
                         return;
                     }
@@ -403,21 +399,6 @@ public class GunEventBus {
             HotBarrelCache.cleanupOldEntries();
         }
     }
-
-
-
-
-    private static void triggerExplosion(Level level, BlockPos pos) {
-        RandomSource random = level.random;
-        for (int i = 0; i < 7; i++) {
-            double xOffset = (random.nextDouble() - 0.5) * 2.0 * SulfurVentBlock.EFFECT_RADIUS;
-            double yOffset = (random.nextDouble() - 0.5) * 2.0 * SulfurVentBlock.EFFECT_RADIUS;
-            double zOffset = (random.nextDouble() - 0.5) * 2.0 * SulfurVentBlock.EFFECT_RADIUS;
-            BlockPos explosionPos = pos.offset((int) xOffset, (int) yOffset, (int) zOffset);
-
-            level.explode(null, explosionPos.getX(), explosionPos.getY(), explosionPos.getZ(), 4.0F, Level.ExplosionInteraction.NONE);
-        }
-    }
     private static float calculateAirCostPerShot(Gun gun) {
         return gun.getGeneral().getEnergyUse();
     }
@@ -586,7 +567,6 @@ public class GunEventBus {
     public static boolean addCasingToPouch(Player player, ItemStack casingStack) {
         ItemStack casingCopy = casingStack.copy();
 
-        // Check regular inventory for Empty Casing Pouches
         for (ItemStack itemStack : player.getInventory().items) {
             if (itemStack.getItem() instanceof EmptyCasingPouchItem) {
                 int insertedItems = EmptyCasingPouchItem.add(itemStack, casingCopy);
@@ -595,13 +575,9 @@ public class GunEventBus {
                 }
             }
         }
-
-        // Check exo suit pouches for Empty Casing Pouches
         if (addCasingToExoSuitPouches(player, casingCopy)) {
             return true;
         }
-
-        // Check Curios slots for Empty Casing Pouches
         final boolean[] result = {false};
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
             IItemHandlerModifiable curios = handler.getEquippedCurios();
@@ -619,8 +595,6 @@ public class GunEventBus {
 
         return result[0];
     }
-
-    // Add this helper method to check exo suit pouches for Empty Casing Pouches
     private static boolean addCasingToExoSuitPouches(Player player, ItemStack casingStack) {
         ItemStack chestplate = getEquippedChestplate(player);
         if (chestplate.isEmpty()) {
@@ -640,13 +614,11 @@ public class GunEventBus {
         String pouchId = getPouchId(pouchUpgrade);
         ItemStackHandler pouchInventory = getPouchInventory(chestplate, pouchId, upgrade.getDisplay().getStorageSize());
 
-        // Check through pouch inventory for Empty Casing Pouches
         for (int i = 0; i < pouchInventory.getSlots(); i++) {
             ItemStack stack = pouchInventory.getStackInSlot(i);
             if (!stack.isEmpty() && stack.getItem() instanceof EmptyCasingPouchItem) {
                 int insertedItems = EmptyCasingPouchItem.add(stack, casingStack);
                 if (insertedItems > 0) {
-                    // Save the updated pouch inventory
                     savePouchInventory(chestplate, pouchId, pouchInventory);
                     return true;
                 }
@@ -655,8 +627,6 @@ public class GunEventBus {
 
         return false;
     }
-
-    // Add these helper methods to GunEventBus.java (similar to what we have in ExoSuitAmmoHelper)
     private static ItemStack getEquippedChestplate(Player player) {
         for (ItemStack armorStack : player.getArmorSlots()) {
             if (armorStack.getItem() instanceof ExoSuitItem exosuit &&

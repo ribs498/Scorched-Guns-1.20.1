@@ -13,6 +13,7 @@ import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.InventoryMenu;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
@@ -84,6 +85,31 @@ public class HUDRenderHandler {
     private static int screenCacheTimer = 0;
     private static final int SCREEN_CACHE_DURATION = 60;
 
+    // Optimizations: Text caching
+    private static Component cachedAmmoText = Component.empty();
+    private static Component cachedReserveAmmoText = Component.empty();
+    private static Component cachedReloadingText = Component.literal("Reloading...");
+    private static int lastCurrentAmmo = -1;
+    private static int lastMaxAmmo = -1;
+    private static int lastReserveAmmo = -1;
+    private static boolean lastCreativeState = false;
+    private static boolean lastCreativeBoxState = false;
+
+    // Ammo sprite caching
+    private static TextureAtlasSprite cachedAmmoSprite = null;
+    private static Item cachedAmmoItem = null;
+
+    // Rendering frequency control
+    private static int hudUpdateCounter = 0;
+    private static final int HUD_UPDATE_RATE = 2; // Update every 2 ticks
+    private static boolean hudNeedsUpdate = true;
+
+    // ExoSuit text caching
+    private static Component cachedPowerText = Component.empty();
+    private static Component cachedNoPowerText = Component.translatable("hud.scguns.exosuit.no_power_core").withStyle(ChatFormatting.RED);
+    private static int lastEnergyPercent = -1;
+    private static ChatFormatting lastEnergyColor = null;
+
     @SubscribeEvent
     public static void onRenderGuiOverlay(RenderGuiOverlayEvent.Post event) {
         Minecraft mc = Minecraft.getInstance();
@@ -92,13 +118,24 @@ public class HUDRenderHandler {
             return;
         }
 
+        // Frequency control - skip some frames
+        if (++hudUpdateCounter < HUD_UPDATE_RATE && !hudNeedsUpdate) {
+            return;
+        }
+        hudUpdateCounter = 0;
+        hudNeedsUpdate = false;
+
         updateScreenCache(mc);
 
         GuiGraphics guiGraphics = event.getGuiGraphics();
         PoseStack poseStack = guiGraphics.pose();
 
-        renderExoSuitStatusHUD(poseStack, guiGraphics, player);
+        // Always render ExoSuit HUD if player has any pieces
+        if (hasAnyExoSuitPiece(player)) {
+            renderExoSuitStatusHUD(poseStack, guiGraphics, player);
+        }
 
+        // Early exit if gun info display is disabled
         if (!Config.CLIENT.display.displayGunInfo.get()) {
             return;
         }
@@ -125,6 +162,7 @@ public class HUDRenderHandler {
 
             updateCreativeBoxCache(player);
             cacheValidityTimer = CACHE_DURATION;
+            markHudDirty(); // Mark for text cache updates
         } else {
             cacheValidityTimer--;
         }
@@ -303,13 +341,10 @@ public class HUDRenderHandler {
     }
 
     private static void renderGunInfoHUD(ItemStack heldItem, PoseStack poseStack, GuiGraphics guiGraphics, Player player) {
-        if (!Config.CLIENT.display.displayGunInfo.get()) {
-            return;
-        }
-
         if (cachedTag == null) {
             return;
         }
+
         if (Config.CLIENT.display.immersiveGunInfo.get()) {
             if (heldItem.getItem() instanceof AnimatedGunItem animatedGun) {
                 long id = GeoItem.getId(heldItem);
@@ -328,22 +363,11 @@ public class HUDRenderHandler {
 
         int currentAmmo = cachedTag.getInt("AmmoCount");
         int maxAmmo = GunModifierHelper.getModifiedAmmoCapacity(heldItem, cachedGun);
-
         boolean isCreative = player.isCreative();
-        MutableComponent ammoCountValue;
-        MutableComponent reserveAmmoValue;
 
-        if (isCreative) {
-            ammoCountValue = Component.literal("∞ / ∞").withStyle(ChatFormatting.BOLD);
-            reserveAmmoValue = Component.literal("∞").withStyle(ChatFormatting.BOLD);
-        } else {
-            ammoCountValue = Component.literal(currentAmmo + " / " + maxAmmo).withStyle(ChatFormatting.BOLD);
-            if (cachedHasCreativeBox) {
-                reserveAmmoValue = Component.literal("∞").withStyle(ChatFormatting.BOLD);
-            } else {
-                reserveAmmoValue = Component.literal(String.valueOf(reserveAmmo)).withStyle(ChatFormatting.BOLD);
-            }
-        }
+        // Update cached text components only when values change
+        updateAmmoTextCache(currentAmmo, maxAmmo, isCreative);
+        updateReserveAmmoTextCache(isCreative);
 
         int ammoPosX = (int) (cachedScreenWidth * 0.88);
         int ammoPosY = (int) (cachedScreenHeight * 0.8);
@@ -356,13 +380,17 @@ public class HUDRenderHandler {
 
         if (ModSyncedDataKeys.RELOADING.getValue(player)) {
             if (player.isAlive()) {
-                guiGraphics.drawString(mc.font, "Reloading...", ammoPosX, ammoPosY - 10, 0xFFFF55);
+                guiGraphics.drawString(mc.font, cachedReloadingText, ammoPosX, ammoPosY - 10, 0xFFFF55);
             }
         }
 
-        guiGraphics.drawString(mc.font, ammoCountValue, ammoPosX, ammoPosY, (currentAmmo > 0 || isCreative ? 0xFFFFFF : 0xFF5555));
+        // Use cached text components
+        int ammoColor = (currentAmmo > 0 || isCreative) ? 0xFFFFFF : 0xFF5555;
+        guiGraphics.drawString(mc.font, cachedAmmoText, ammoPosX, ammoPosY, ammoColor);
+
         int reserveAmmoPosY = ammoPosY + 10;
-        guiGraphics.drawString(mc.font, reserveAmmoValue, ammoPosX, reserveAmmoPosY, (reserveAmmo <= 0 && !Gun.hasUnlimitedReloads(heldItem) ? 0x555555 : 0xAAAAAA));
+        int reserveColor = (reserveAmmo <= 0 && !Gun.hasUnlimitedReloads(heldItem)) ? 0x555555 : 0xAAAAAA;
+        guiGraphics.drawString(mc.font, cachedReserveAmmoText, ammoPosX, reserveAmmoPosY, reserveColor);
 
         ItemStack ammoItemStack = new ItemStack(Objects.requireNonNull(cachedGun.getProjectile().getItem()));
         renderAmmoTypeTexture(ammoItemStack, ammoPosX - 20, ammoPosY, guiGraphics, mc);
@@ -370,13 +398,46 @@ public class HUDRenderHandler {
         RenderSystem.disableBlend();
     }
 
+    private static void updateAmmoTextCache(int currentAmmo, int maxAmmo, boolean isCreative) {
+        if (currentAmmo != lastCurrentAmmo || maxAmmo != lastMaxAmmo || isCreative != lastCreativeState) {
+            if (isCreative) {
+                cachedAmmoText = Component.literal("∞/ ∞").withStyle(ChatFormatting.BOLD);
+            } else {
+                cachedAmmoText = Component.literal(currentAmmo + " / " + maxAmmo).withStyle(ChatFormatting.BOLD);
+            }
+            lastCurrentAmmo = currentAmmo;
+            lastMaxAmmo = maxAmmo;
+            lastCreativeState = isCreative;
+        }
+    }
+
+    private static void updateReserveAmmoTextCache(boolean isCreative) {
+        if (reserveAmmo != lastReserveAmmo || cachedHasCreativeBox != lastCreativeBoxState || isCreative != lastCreativeState) {
+            if (isCreative || cachedHasCreativeBox) {
+                cachedReserveAmmoText = Component.literal("∞").withStyle(ChatFormatting.BOLD);
+            } else {
+                cachedReserveAmmoText = Component.literal(String.valueOf(reserveAmmo)).withStyle(ChatFormatting.BOLD);
+            }
+            lastReserveAmmo = reserveAmmo;
+            lastCreativeBoxState = cachedHasCreativeBox;
+        }
+    }
+
     private static void renderAmmoTypeTexture(ItemStack ammoItemStack, int x, int y, GuiGraphics guiGraphics, Minecraft mc) {
+        Item currentAmmoItem = ammoItemStack.getItem();
+
+        // Cache sprite lookup
+        if (cachedAmmoSprite == null || cachedAmmoItem != currentAmmoItem) {
+            ResourceLocation ammoTexture = ForgeRegistries.ITEMS.getKey(currentAmmoItem);
+            cachedAmmoSprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS)
+                    .apply(new ResourceLocation(ammoTexture.getNamespace(), "item/" + ammoTexture.getPath()));
+            cachedAmmoItem = currentAmmoItem;
+        }
+
         RenderSystem.setShaderTexture(0, InventoryMenu.BLOCK_ATLAS);
-        ResourceLocation ammoTexture = ForgeRegistries.ITEMS.getKey(ammoItemStack.getItem());
-        TextureAtlasSprite sprite = mc.getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(new ResourceLocation(ammoTexture.getNamespace(), "item/" + ammoTexture.getPath()));
         int iconSize = 16;
         int zLevel = 0;
-        guiGraphics.blit(x, y, zLevel, iconSize, iconSize, sprite);
+        guiGraphics.blit(x, y, zLevel, iconSize, iconSize, cachedAmmoSprite);
     }
 
     private static void renderChargeBarHUD(ItemStack heldItem, float partialTick, PoseStack poseStack, GuiGraphics guiGraphics, LocalPlayer player) {
@@ -441,10 +502,12 @@ public class HUDRenderHandler {
     private static void fetchReserveAmmo(Player player, Gun gun) {
         reserveAmmo = Gun.getReserveAmmoCount(player, gun.getProjectile().getItem());
         ammoAutoUpdateTimer = 0;
+        markHudDirty(); // Mark for text cache update
     }
 
     public static void stageReserveAmmoUpdate() {
         ammoAutoUpdateTimer = ammoAutoUpdateRate;
+        markHudDirty();
     }
 
     public static void updateReserveAmmo(Player player) {
@@ -453,6 +516,10 @@ public class HUDRenderHandler {
             Gun modifiedGun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
             fetchReserveAmmo(player, modifiedGun);
         }
+    }
+
+    public static void markHudDirty() {
+        hudNeedsUpdate = true;
     }
 
     @SubscribeEvent
@@ -464,6 +531,7 @@ public class HUDRenderHandler {
 
         if (++ammoAutoUpdateTimer >= ammoAutoUpdateRate) {
             ammoAutoUpdateTimer = 0;
+            markHudDirty();
         }
 
         if (isMeleeCooldownActive) {
@@ -500,11 +568,8 @@ public class HUDRenderHandler {
     public static boolean getHitMarkerCrit() {
         return hitMarkerCrit;
     }
-    private static void renderExoSuitStatusHUD(PoseStack poseStack, GuiGraphics guiGraphics, Player player) {
-        if (!hasAnyExoSuitPiece(player)) {
-            return;
-        }
 
+    private static void renderExoSuitStatusHUD(PoseStack poseStack, GuiGraphics guiGraphics, Player player) {
         int hudX = 3;
         int hudY = cachedScreenHeight - 60;
         int lineHeight = 10;
@@ -512,7 +577,7 @@ public class HUDRenderHandler {
 
         Minecraft mc = Minecraft.getInstance();
 
-        // Power Core Display
+        // Power Core Display with caching
         ItemStack chestplate = getEquippedExoSuitChestplate(player);
         if (!chestplate.isEmpty()) {
             ItemStack powerCore = findPowerCoreInChestplate(chestplate);
@@ -525,16 +590,21 @@ public class HUDRenderHandler {
                 if (maxEnergy > 0) {
                     int energyPercent = (energyStored * 100) / maxEnergy;
                     ChatFormatting energyColor = getEnergyColorForHUD(energyPercent);
-                    Component powerText = Component.translatable("tooltip.scguns.exosuit.energy_level", energyPercent)
-                            .withStyle(energyColor);
-                    guiGraphics.drawString(mc.font, powerText, hudX, currentY,
+
+                    // Update cached power text only when changed
+                    if (energyPercent != lastEnergyPercent || energyColor != lastEnergyColor) {
+                        cachedPowerText = Component.translatable("tooltip.scguns.exosuit.energy_level", energyPercent)
+                                .withStyle(energyColor);
+                        lastEnergyPercent = energyPercent;
+                        lastEnergyColor = energyColor;
+                    }
+
+                    guiGraphics.drawString(mc.font, cachedPowerText, hudX, currentY,
                             energyColor.getColor() != null ? energyColor.getColor() : 0xFFFFFF);
                     currentY += lineHeight;
                 }
             } else {
-                Component noPowerText = Component.translatable("hud.scguns.exosuit.no_power_core")
-                        .withStyle(ChatFormatting.RED);
-                guiGraphics.drawString(mc.font, noPowerText, hudX, currentY, 0xFF5555);
+                guiGraphics.drawString(mc.font, cachedNoPowerText, hudX, currentY, 0xFF5555);
                 currentY += lineHeight;
             }
         }
@@ -589,6 +659,7 @@ public class HUDRenderHandler {
                     statusColor.getColor() != null ? statusColor.getColor() : 0xFFFFFF);
         }
     }
+
     private static boolean hasUtilityModule(ItemStack chestplate) {
         for (int slot = 0; slot < 4; slot++) {
             ItemStack upgradeItem = ExoSuitData.getUpgradeInSlot(chestplate, slot);
@@ -622,6 +693,7 @@ public class HUDRenderHandler {
         }
         return "exosuit.upgrade.utility";
     }
+
     private static boolean hasAnyExoSuitPiece(Player player) {
         for (ItemStack armorStack : player.getArmorSlots()) {
             if (armorStack.getItem() instanceof ExoSuitItem) {
@@ -732,14 +804,13 @@ public class HUDRenderHandler {
         return "exosuit.upgrade.mobility";
     }
 
-    // Simple status text method
     private static String getModuleStatusText(boolean enabled, boolean canFunction) {
         if (!enabled) {
-            return "Disabled";
+            return Component.translatable("hud.scguns.exosuit.module.disabled").getString();
         } else if (!canFunction) {
-            return "No Power";
+            return Component.translatable("hud.scguns.exosuit.module.no_power").getString();
         } else {
-            return "Active";
+            return Component.translatable("hud.scguns.exosuit.module.active").getString();
         }
     }
 

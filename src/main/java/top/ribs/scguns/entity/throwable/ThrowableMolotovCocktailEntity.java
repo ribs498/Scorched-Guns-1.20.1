@@ -58,6 +58,6 @@ public class ThrowableMolotovCocktailEntity extends ThrowableGrenadeEntity
         double y = this.getY() + this.getType().getDimensions().height * 0.5;
         this.level().playSound(null, this.getX(), y, this.getZ(), SoundEvents.GLASS_BREAK, SoundSource.BLOCKS, 2, 1);
         this.level().playSound(null, this.getX(), y, this.getZ(), SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 2, 1);
-        GrenadeEntity.createFireExplosion(this, 2.0F, true);
+        GrenadeEntity.createFireExplosion(this, 4.0F, true);
     }
 }

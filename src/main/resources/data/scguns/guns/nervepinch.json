@@ -13,6 +13,7 @@
     }
   },
   "general": {
+    "weaponType": "rifle",
     "alwaysSpread": false,
     "fireMode": "scguns:pulse",
     "fireTimer": 25,

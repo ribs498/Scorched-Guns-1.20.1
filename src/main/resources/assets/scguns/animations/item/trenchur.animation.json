@@ -667,11 +667,6 @@
 				"0.4167": {
 					"effect": "reload_end"
 				}
-			},
-			"particle_effects": {
-				"0.0": {
-					"effect": "loaded"
-				}
 			}
 		},
 		"reload_loop": {

@@ -17,7 +17,10 @@ public class DishesPouch extends AmmoBoxItem {
     protected ResourceLocation getAmmoTag() {
         return new ResourceLocation("scguns", "dishes");
     }
-
+    @Override
+    protected String getDescriptionKey() {
+        return "item.scguns.dishes_pouch.description";
+    }
 
 
     @Override

@@ -48,10 +48,6 @@ public class BeowulfProjectileEntity extends ProjectileEntity {
 
     public BeowulfProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
-        float armorBypass = 3.0F;
-        float puncturingBypass = GunEnchantmentHelper.getPuncturingArmorBypass(weapon);
-        armorBypass += puncturingBypass;
-        this.setArmorBypassAmount(armorBypass);
         registerLootingEventHandler();
     }
 

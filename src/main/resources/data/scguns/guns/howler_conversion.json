@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "lmg",
     "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
@@ -56,6 +57,7 @@
   "projectile": {
     "advantage": "scguns:heavy",
     "damage": 24.5,
+    "armorPen": 5.0,
     "ejectsCasing": true,
     "gravity": false  ,
     "item": "scguns:krahg_round",

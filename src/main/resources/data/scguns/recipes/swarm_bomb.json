@@ -15,6 +15,7 @@
     " Q "
   ],
   "result": {
-    "item": "scguns:swarm_bomb"
+    "item": "scguns:swarm_bomb",
+    "count": 2
   }
 }

@@ -1,0 +1,75 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+      "1": "scguns:item/fencer_carabine"
+	},
+	"elements": [
+		{
+			"name": "light_grip",
+			"from": [7.13, 2.05433, 7.08097],
+			"to": [8.88, 2.55433, 10.28097],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.005, 2.10433, 8.66847]},
+			"faces": {
+				"north": {"uv": [0.5, 13, 1.5, 13.25], "texture": "#1"},
+				"east": {"uv": [12, 5, 13.5, 5.25], "texture": "#1"},
+				"south": {"uv": [13, 0.5, 14, 0.75], "texture": "#1"},
+				"west": {"uv": [12, 5.5, 13.5, 5.75], "texture": "#1"},
+				"up": {"uv": [6, 9.5, 5, 8], "texture": "#1"},
+				"down": {"uv": [7, 8, 6, 9.5], "texture": "#1"}
+			}
+		},
+		{
+			"name": "light_grip",
+			"from": [7.25, 1.65433, 7.25597],
+			"to": [8.75, 2.15433, 10.25597],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 2.10433, 8.76847]},
+			"faces": {
+				"north": {"uv": [13, 11, 13.75, 11.25], "texture": "#1"},
+				"east": {"uv": [12, 6, 13.5, 6.25], "texture": "#1"},
+				"south": {"uv": [13, 11.5, 13.75, 11.75], "texture": "#1"},
+				"west": {"uv": [12, 6.5, 13.5, 6.75], "texture": "#1"},
+				"up": {"uv": [8.75, 10, 8, 8.5], "texture": "#1"},
+				"down": {"uv": [0.75, 9, 0, 10.5], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.75, -9],
+			"scale": [1.4, 1.4, 1.4]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.75, -9],
+			"scale": [1.4, 1.4, 1.4]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 9.75, -0.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.25, 9.75, -0.5]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-2.25, 4.5, 0]
+		},
+		"fixed": {
+			"rotation": [-90, 90, 90],
+			"translation": [-3, 9.5, 0],
+			"scale": [2, 2, 2]
+		}
+	},
+	"groups": [
+		{
+			"name": "light_grip",
+			"origin": [0.1, -6.225, -1.0625],
+			"color": 9,
+			"children": [0, 1]
+		}
+	]
+}

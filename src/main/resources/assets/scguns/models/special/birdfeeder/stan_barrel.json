@@ -3,7 +3,7 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-      "0": "scguns:item/birdfeeder"
+		"0": "scguns:item/birdfeeder"
 	},
 	"elements": [
 		{
@@ -22,8 +22,8 @@
 		},
 		{
 			"name": "standard_barrel",
-			"from": [7.23535, 3.86184, -0.19642],
-			"to": [8.73535, 5.36184, 0.30358],
+			"from": [7.38535, 4.01184, -0.34642],
+			"to": [8.58535, 5.21184, 0.30358],
 			"rotation": {"angle": 45, "axis": "z", "origin": [8.03536, 4.61184, 8.14108]},
 			"faces": {
 				"north": {"uv": [8.5, 8.5, 8.875, 8.875], "texture": "#0"},

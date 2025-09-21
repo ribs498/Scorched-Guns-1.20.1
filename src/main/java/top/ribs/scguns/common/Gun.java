@@ -61,7 +61,21 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
     protected Modules modules = new Modules();
     private final GripType baseGripType = GripType.ONE_HANDED;
 
-
+public enum WeaponType {
+        pistol,
+        magnum,
+        smg,
+        rifle,
+        lmg,
+        shotgun,
+        sniper,
+        heavy,
+        flamethrower,
+        shock,
+        plasma,
+        laser,
+        special
+    }
     public static int getMaxAmmo(ItemStack stack) {
         return ((GunItem) stack.getItem()).getModifiedGun(stack).getReloads().getMaxAmmo();
     }
@@ -178,7 +192,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
     }
 
     public static class General implements INBTSerializable<CompoundTag> {
-
+        private WeaponType weaponType = WeaponType.pistol;
         @Ignored
         private FireMode fireMode = FireMode.SEMI_AUTO;
         @Optional
@@ -255,9 +269,15 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         private boolean isSilenced = false;
         @Optional
         private boolean enableGunLight = true;
+        @Optional
+        private boolean usesCustomMeleeAnimation = false;
+        @Optional
+        private float critDamageMultiplier = 1.5F;
+
         @Override
         public CompoundTag serializeNBT() {
             CompoundTag tag = new CompoundTag();
+            tag.putString("WeaponType", this.weaponType.toString());
             tag.putString("FireMode", this.fireMode.id().toString());
             tag.putInt("BurstAmount", this.burstAmount);
             tag.putInt("BurstCooldown", this.burstCooldown);
@@ -309,11 +329,16 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             tag.putFloat("SpeedModifier", this.speedModifier);
             tag.putBoolean("IsSilenced", this.isSilenced);
             tag.putBoolean("EnableGunLight", this.enableGunLight);
+            tag.putBoolean("UsesCustomMeleeAnimation", this.usesCustomMeleeAnimation);
+            tag.putFloat("CritDamageMultiplier", this.critDamageMultiplier);
             return tag;
         }
 
         @Override
         public void deserializeNBT(CompoundTag tag) {
+            if (tag.contains("WeaponType", Tag.TAG_STRING)) {
+                this.weaponType = WeaponType.valueOf(tag.getString("WeaponType"));
+            }
             if (tag.contains("FireMode", Tag.TAG_STRING)) {
                 this.fireMode = FireMode.getType(ResourceLocation.tryParse(tag.getString("FireMode")));
             }
@@ -431,6 +456,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("EnableGunLight", Tag.TAG_ANY_NUMERIC)) {
                 this.enableGunLight = tag.getBoolean("EnableGunLight");
             }
+            if (tag.contains("UsesCustomMeleeAnimation", Tag.TAG_ANY_NUMERIC)) {
+                this.usesCustomMeleeAnimation = tag.getBoolean("UsesCustomMeleeAnimation");
+            }
+            if (tag.contains("CritDamageMultiplier", Tag.TAG_ANY_NUMERIC)) {
+                this.critDamageMultiplier = tag.getFloat("CritDamageMultiplier");
+            }
         }
 
         public JsonObject toJsonObject() {
@@ -446,8 +477,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             Preconditions.checkArgument(this.spreadAdsReduction >= 0.0F && this.spreadAdsReduction <= 1.0F, "Spread ADS reduction must be between 0.0 and 1.0");
 
             JsonObject object = new JsonObject();
+
             if (this.infiniteAmmo) object.addProperty("infiniteAmmo", true);
             object.addProperty("fireMode", this.fireMode.id().toString());
+            object.addProperty("weaponType", this.weaponType.toString());
             if (this.burstAmount != 0) object.addProperty("burstAmount", this.burstAmount);
             if (this.burstCooldown != 0) object.addProperty("burstCooldown", this.burstCooldown);
             object.addProperty("rate", this.rate);
@@ -521,6 +554,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (!this.enableGunLight) {
                 object.addProperty("enableGunLight", false);
             }
+            if (this.usesCustomMeleeAnimation) {
+                object.addProperty("usesCustomMeleeAnimation", true);
+            }
+            if (this.critDamageMultiplier != 1.5F) {
+                object.addProperty("critDamageMultiplier", this.critDamageMultiplier);
+            }
             return object;
         }
 
@@ -529,6 +568,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
          */
         public General copy() {
             General general = new General();
+            general.weaponType = this.weaponType;
             general.fireMode = this.fireMode;
             general.burstAmount = this.burstAmount;
             general.burstCooldown = this.burstCooldown;
@@ -569,9 +609,17 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             general.speedModifier = this.speedModifier;
             general.isSilenced = this.isSilenced;
             general.enableGunLight = this.enableGunLight;
+            general.usesCustomMeleeAnimation = this.usesCustomMeleeAnimation;
+            general.critDamageMultiplier = this.critDamageMultiplier;
             return general;
         }
+        public float getCritDamageMultiplier() {
+            return this.critDamageMultiplier;
+        }
 
+        public boolean usesCustomMeleeAnimation() {
+            return this.usesCustomMeleeAnimation;
+        }
         public boolean isEnableGunLight() {
             return this.enableGunLight;
         }
@@ -642,7 +690,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         public float getMeleeReach() {
             return this.meleeReach;
         }
-
+        public WeaponType getWeaponType() {
+            return this.weaponType;
+        }
         /**
          * @return The type of grip this weapon uses
          */
@@ -967,6 +1017,8 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         private boolean visible;
         private float damage;
         @Optional
+        private float armorPen;
+        @Optional
         private ResourceLocation advantage = new ResourceLocation(Reference.MOD_ID, "none");
         private float size;
         private double speed;
@@ -979,6 +1031,8 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         private int trailColor = 0xFFD289;
         @Optional
         private double trailLengthMultiplier = 1.0;
+        @Optional
+        private boolean hideTrail;
         @Optional
         @Nullable
         private ResourceLocation casingParticle;
@@ -997,7 +1051,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         private int impactEffectAmplifier = 0;
         @Optional
         private float impactEffectChance = 1.0F;
-
+        @Optional
+        private boolean isSoulFire = false;
+        @Optional
+        private boolean hideProjectile = false;
         @Override
         public CompoundTag serializeNBT() {
             CompoundTag tag = new CompoundTag();
@@ -1005,6 +1062,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             tag.putBoolean("EjectsCasing", this.ejectsCasing);
             tag.putBoolean("Visible", this.visible);
             tag.putFloat("Damage", this.damage);
+            tag.putFloat("ArmorPen", this.armorPen);
             tag.putString("Advantage", this.advantage.toString());
             tag.putFloat("Size", this.size);
             tag.putDouble("Speed", this.speed);
@@ -1012,6 +1070,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             tag.putBoolean("Gravity", this.gravity);
             tag.putBoolean("DamageReduceOverLife", this.damageReduceOverLife);
             tag.putInt("TrailColor", this.trailColor);
+            tag.putBoolean("HideTrail", this.hideTrail);
             tag.putDouble("TrailLengthMultiplier", this.trailLengthMultiplier);
             if (this.casingType != null) {
                 tag.putString("CasingType", this.casingType.toString());
@@ -1027,6 +1086,8 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
                 tag.putInt("ImpactEffectAmplifier", this.impactEffectAmplifier);
                 tag.putFloat("ImpactEffectChance", this.impactEffectChance);
             }
+            tag.putBoolean("IsSoulFire", this.isSoulFire);
+            tag.putBoolean("HideProjectile", this.hideProjectile);
             return tag;
         }
 
@@ -1047,6 +1108,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("Damage", Tag.TAG_ANY_NUMERIC)) {
                 this.damage = tag.getFloat("Damage");
             }
+            if (tag.contains("ArmorPen", Tag.TAG_ANY_NUMERIC)) {
+                this.armorPen = tag.getFloat("ArmorPen");
+            }
             if (tag.contains("Advantage", Tag.TAG_STRING)) {
                 this.advantage = new ResourceLocation(tag.getString("Advantage"));
             }
@@ -1061,6 +1125,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             }
             if (tag.contains("Gravity", Tag.TAG_ANY_NUMERIC)) {
                 this.gravity = tag.getBoolean("Gravity");
+            }
+            if(tag.contains("HideTrail", Tag.TAG_ANY_NUMERIC))
+            {
+                this.hideTrail = tag.getBoolean("HideTrail");
             }
             if (tag.contains("DamageReduceOverLife", Tag.TAG_ANY_NUMERIC)) {
                 this.damageReduceOverLife = tag.getBoolean("DamageReduceOverLife");
@@ -1086,6 +1154,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
                 this.impactEffectAmplifier = tag.getInt("ImpactEffectAmplifier");
                 this.impactEffectChance = tag.getFloat("ImpactEffectChance");
             }
+            if (tag.contains("IsSoulFire", Tag.TAG_ANY_NUMERIC)) {
+                this.isSoulFire = tag.getBoolean("IsSoulFire");
+            }
+            if (tag.contains("HideProjectile", Tag.TAG_ANY_NUMERIC)) {
+                this.hideProjectile = tag.getBoolean("HideProjectile");
+            }
         }
 
         public JsonObject toJsonObject() {
@@ -1099,6 +1173,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (this.ejectsCasing) object.addProperty("ejectsCasing", true);
             if (this.visible) object.addProperty("visible", true);
             object.addProperty("damage", this.damage);
+            if (this.armorPen != 0.0F) object.addProperty("armorPen", this.armorPen);
             if (this.advantage != null) object.addProperty("advantage", this.advantage.toString());
             object.addProperty("size", this.size);
             object.addProperty("speed", this.speed);
@@ -1121,7 +1196,11 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
                 if (this.impactEffectChance != 1.0F)
                     object.addProperty("impactEffectChance", this.impactEffectChance);
             }
+            if (this.isSoulFire) object.addProperty("isSoulFire", true);
+            if (this.hideProjectile) object.addProperty("hideProjectile", true);
+            if(this.hideTrail) object.addProperty("hideTrail", true);
             return object;
+
         }
 
         public Projectile copy() {
@@ -1130,6 +1209,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             projectile.ejectsCasing = this.ejectsCasing;
             projectile.visible = this.visible;
             projectile.damage = this.damage;
+            projectile.armorPen = this.armorPen;
             projectile.advantage = this.advantage;
             projectile.size = this.size;
             projectile.speed = this.speed;
@@ -1146,7 +1226,18 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             projectile.impactEffectDuration = this.impactEffectDuration;
             projectile.impactEffectAmplifier = this.impactEffectAmplifier;
             projectile.impactEffectChance = this.impactEffectChance;
+            projectile.isSoulFire = this.isSoulFire;
+            projectile.hideProjectile = this.hideProjectile;
+            projectile.hideTrail = this.hideTrail;
             return projectile;
+        }
+
+        public float getArmorPen() {
+            return this.armorPen;
+        }
+
+        public boolean isSoulFire() {
+            return this.isSoulFire;
         }
         @Nullable
         public ResourceLocation getImpactEffect() {
@@ -1254,6 +1345,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             return this.trailColor;
         }
 
+
+        public boolean shouldHideProjectile() {
+            return this.hideProjectile;
+        }
         /**
          * @return The multiplier to change the length of the projectile trail
          */
@@ -1271,6 +1366,11 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
 
         public ResourceLocation getCasingParticle() {
             return this.casingParticle;
+        }
+
+        public boolean hideTrail()
+        {
+            return this.hideTrail;
         }
     }
 

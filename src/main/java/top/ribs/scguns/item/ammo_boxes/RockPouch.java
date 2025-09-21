@@ -28,5 +28,8 @@ public class RockPouch extends AmmoBoxItem {
     protected int getBaseMaxItemCount() {
         return ROCKS_MAX_ITEM_COUNT;
     }
-
+    @Override
+    protected String getDescriptionKey() {
+        return "item.scguns.rock_pouch.description";
+    }
 }

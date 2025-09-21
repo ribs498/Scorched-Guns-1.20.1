@@ -3,7 +3,7 @@
   "biomes": "#forge:is_general",
   "spawners": {
     "type": "scguns:trauma_unit",
-    "weight": 25,
+    "weight": 20,
     "minCount": 1,
     "maxCount": 1
   }

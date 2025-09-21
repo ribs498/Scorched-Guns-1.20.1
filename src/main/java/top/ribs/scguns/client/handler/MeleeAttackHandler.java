@@ -1,6 +1,5 @@
 package top.ribs.scguns.client.handler;
 
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.*;
 import net.minecraft.nbt.CompoundTag;
@@ -43,6 +42,7 @@ import top.ribs.scguns.util.GunModifierHelper;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+
 
 public class MeleeAttackHandler {
     private static final float ENCHANTMENT_DAMAGE_SCALING_FACTOR = 0.70f;
@@ -282,6 +282,7 @@ public class MeleeAttackHandler {
             }
         }
     }
+
     private static void spawnSuccessfulHitParticles(ServerPlayer player, LivingEntity target) {
         Vec3 targetPos = target.position().add(0, target.getBbHeight() * 0.5, 0);
         ClientboundLevelParticlesPacket sweepPacket = new ClientboundLevelParticlesPacket(
@@ -333,11 +334,51 @@ public class MeleeAttackHandler {
                     Enchantment enchantment = entry.getKey();
                     int level = entry.getValue();
                     applyEnchantmentEffects(enchantment, level, target, player);
+                    if (enchantment == top.ribs.scguns.init.ModEnchantments.CORRODED.get()) {
+                        applyCorrodedEffects(player, target, level);
+                    }
                 }
             }
         }
     }
+    private static void applyCorrodedEffects(Player player, LivingEntity target, int level) {
+        if (isBotEntity(target)) {
+            spawnCorrodedParticles(player, target, level);
+        } else {
+            if (player.level().getRandom().nextFloat() < 0.30F) {
+                int poisonDuration = 60 + (level * 20);
+                target.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                        net.minecraft.world.effect.MobEffects.POISON, poisonDuration, 0));
+            }
+        }
+    }
+    private static void spawnCorrodedParticles(Player player, LivingEntity target, int level) {
+        if (player.level() instanceof net.minecraft.server.level.ServerLevel serverLevel) {
+            java.util.Random random = new java.util.Random();
+            for (int i = 0; i < level * 5; i++) {
+                double offsetX = (random.nextDouble() - 0.5) * target.getBbWidth();
+                double offsetY = random.nextDouble() * target.getBbHeight();
+                double offsetZ = (random.nextDouble() - 0.5) * target.getBbWidth();
 
+                ClientboundLevelParticlesPacket particlePacket = new ClientboundLevelParticlesPacket(
+                        ParticleTypes.ELECTRIC_SPARK,
+                        true,
+                        target.getX() + offsetX,
+                        target.getY() + offsetY,
+                        target.getZ() + offsetZ,
+                        0.0F,
+                        0.0F,
+                        0.0F,
+                        0.1F,
+                        1
+                );
+
+                if (player instanceof ServerPlayer serverPlayer) {
+                    serverPlayer.connection.send(particlePacket);
+                }
+            }
+        }
+    }
     public static void performNormalMeleeAttack(ServerPlayer player) {
         performMeleeAttack(player);
     }
@@ -488,12 +529,20 @@ public class MeleeAttackHandler {
                         float damageBonus = damageEnchantment.getDamageBonus(level, target.getMobType());
                         enchantmentDamage += damageBonus * ENCHANTMENT_DAMAGE_SCALING_FACTOR;
                     }
+                    else if (enchantment == top.ribs.scguns.init.ModEnchantments.CORRODED.get()) {
+                        if (isBotEntity(target)) {
+                            float corrodedBonus = top.ribs.scguns.enchantment.CorrodedEnchantment.getBotDamageBonus(level);
+                            enchantmentDamage += corrodedBonus * ENCHANTMENT_DAMAGE_SCALING_FACTOR;
+                        }
+                    }
                 }
             }
         }
         return enchantmentDamage;
     }
-
+    private static boolean isBotEntity(LivingEntity entity) {
+        return entity.getType().is(top.ribs.scguns.init.ModTags.Entities.BOT);
+    }
     private static void applyEnchantmentEffects(Enchantment enchantment, int level, LivingEntity target, Player player) {
         if (enchantment == Enchantments.FIRE_ASPECT) {
             target.setSecondsOnFire(level * 4);
@@ -501,15 +550,31 @@ public class MeleeAttackHandler {
         } else if (enchantment == Enchantments.KNOCKBACK) {
             Vec3 direction = target.position().subtract(player.position()).normalize();
             target.knockback(level * 0.5F, -direction.x(), -direction.z());
-        } else if (enchantment == Enchantments.SMITE) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientMeleeAttackHandler.spawnParticleEffect(player, target, ParticleTypes.ENCHANTED_HIT));
-        } else if (enchantment == Enchantments.BANE_OF_ARTHROPODS) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientMeleeAttackHandler.spawnParticleEffect(player, target, ParticleTypes.ENCHANTED_HIT));
+        } else if (enchantment == Enchantments.SMITE && target.getMobType() == net.minecraft.world.entity.MobType.UNDEAD) {
+            spawnEnchantmentHitParticles(player, target);
+        } else if (enchantment == Enchantments.BANE_OF_ARTHROPODS && target.getMobType() == net.minecraft.world.entity.MobType.ARTHROPOD) {
+            spawnEnchantmentHitParticles(player, target);
         } else if (enchantment == Enchantments.SHARPNESS) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientMeleeAttackHandler.spawnParticleEffect(player, target, ParticleTypes.ENCHANTED_HIT));
+            spawnEnchantmentHitParticles(player, target);
         }
     }
-
+    private static void spawnEnchantmentHitParticles(Player player, LivingEntity target) {
+        if (player instanceof ServerPlayer serverPlayer) {
+            ClientboundLevelParticlesPacket particlePacket = new ClientboundLevelParticlesPacket(
+                    ParticleTypes.ENCHANTED_HIT,
+                    true,
+                    target.getX(),
+                    target.getY() + target.getBbHeight() * 0.5,
+                    target.getZ(),
+                    target.getBbWidth() * 0.5F,
+                    target.getBbHeight() * 0.25F,
+                    target.getBbWidth() * 0.5F,
+                    0.02F,
+                    8
+            );
+            serverPlayer.connection.send(particlePacket);
+        }
+    }
     private static void applyKnockback(Player player, LivingEntity target, ItemStack stack) {
         int knockbackLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.KNOCKBACK, stack);
         Vec3 direction = target.position().subtract(player.position()).normalize();

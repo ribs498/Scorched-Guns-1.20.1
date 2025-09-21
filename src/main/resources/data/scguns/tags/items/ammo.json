@@ -31,6 +31,9 @@
     "minecraft:arrow",
     "scguns:syringe",
     "scguns:shotball",
-    "scguns:shatter_round"
+    "scguns:shatter_round",
+    "scguns:frog_dart",
+    "scguns:needle",
+    "scguns:flechette"
   ]
 }

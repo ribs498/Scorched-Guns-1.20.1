@@ -15,6 +15,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.ScorchedGuns;
+import top.ribs.scguns.init.ModEffects;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
@@ -40,6 +41,10 @@ public class HealingBandageItem extends Item {
     public @NotNull ItemStack finishUsingItem(ItemStack stack, Level world, LivingEntity entityLiving) {
         if (entityLiving instanceof Player player && !world.isClientSide) {
             player.heal(healingAmount);
+            if (player.hasEffect(ModEffects.LACERATED.get())) {
+                player.removeEffect(ModEffects.LACERATED.get());
+            }
+
             for (MobEffectInstance effect : potionEffects) {
                 if (effect != null) {
                     player.addEffect(new MobEffectInstance(effect));
@@ -66,7 +71,8 @@ public class HealingBandageItem extends Item {
         tooltip.add(Component.translatable("item.scguns.healing_bandage.heal", healingAmount).withStyle(ChatFormatting.GREEN));
         if (!potionEffects.isEmpty()) {
             for (MobEffectInstance effect : potionEffects) {
-                if (effect != null && effect.getEffect() != null) {
+                if (effect != null) {
+                    effect.getEffect();
                     Component effectName = Component.translatable(effect.getEffect().getDescriptionId()).withStyle(ChatFormatting.BLUE);
                     int durationInSeconds = effect.getDuration() / 20;
                     int minutes = durationInSeconds / 60;

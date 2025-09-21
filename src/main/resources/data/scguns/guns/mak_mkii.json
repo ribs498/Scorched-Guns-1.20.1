@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "smg",
     "fireMode": "scguns:automatic",
     "gripType": "scguns:one_handed",
     "rate": 2,

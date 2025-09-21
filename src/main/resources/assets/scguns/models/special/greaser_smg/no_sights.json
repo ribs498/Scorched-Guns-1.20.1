@@ -1,8 +1,25 @@
 {
+	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"textures": {
 		"particle": "scguns:item/greaser_smg"
 	},
+	"elements": [
+		{
+			"name": "gun_body",
+			"from": [7.5, 6.59767, 10.05233],
+			"to": [8.5, 6.84767, 15.55233],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8.21459, 9.35, 7.625]},
+			"faces": {
+				"north": {"uv": [10.25, 9.25, 10.5, 9.375], "texture": "#particle"},
+				"east": {"uv": [8.625, 10.375, 10, 10.5], "texture": "#particle"},
+				"south": {"uv": [10.625, 9.25, 10.875, 9.375], "texture": "#particle"},
+				"west": {"uv": [8.625, 10.25, 10, 10.375], "texture": "#particle"},
+				"up": {"uv": [10.5, 10.875, 10.25, 9.5], "texture": "#particle"},
+				"down": {"uv": [10.875, 9.5, 10.625, 10.875], "texture": "#particle"}
+			}
+		}
+	],
 	"display": {
 		"thirdperson_righthand": {
 			"translation": [0, 6, -5.5],
@@ -13,10 +30,10 @@
 			"scale": [1.3, 1.3, 1.3]
 		},
 		"firstperson_righthand": {
-			"translation": [-4.25, 8.5, -1.5]
+			"translation": [-4.25, 8.75, -1.5]
 		},
 		"firstperson_lefthand": {
-			"translation": [-4.25, 8.5, -1.5]
+			"translation": [-4.25, 8.75, -1.5]
 		},
 		"ground": {
 			"translation": [0, 9.5, -3.75],

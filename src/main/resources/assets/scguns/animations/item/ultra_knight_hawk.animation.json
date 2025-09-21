@@ -675,11 +675,6 @@
 				"0.5833": {
 					"effect": "bolt"
 				}
-			},
-			"particle_effects": {
-				"0.0": {
-					"effect": "loaded"
-				}
 			}
 		},
 		"reload_loop": {

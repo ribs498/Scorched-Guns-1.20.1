@@ -1,30 +1,25 @@
 {
-  "type": "minecraft:crafting_shaped",
-  "key": {
-    "E": {
+  "type": "minecraft:crafting_shapeless",
+  "key": [
+    {
       "item": "minecraft:gunpowder"
     },
-    "W": {
+    {
       "item": "scguns:peal"
     },
-    "Q": {
+    {
       "item": "scguns:sheol"
     },
-    "#": {
+    {
       "item": "scguns:netherite_scrap_chunk"
     },
-    "M": {
+    {
       "tag": "forge:dusts/saltpeter"
     },
-    "L": {
+    {
       "tag": "forge:dusts/phosphorus"
     }
-  },
-  "pattern": [
-    "###",
-    "E#Q",
-    "LWM"
-  ],
+    ],
   "result": {
     "item": "scguns:nitro_powder",
     "count": 7

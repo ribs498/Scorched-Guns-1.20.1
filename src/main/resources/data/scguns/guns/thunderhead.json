@@ -14,21 +14,20 @@
     }
   },
   "general": {
+    "weaponType": "heavy",
     "fireMode": "scguns:automatic",
     "gripType": "scguns:mini_gun",
     "baseGripType": "scguns:mini_gun",
-    "rate": 5,
+    "rate": 4,
     "recoilAngle": 2.0,
     "recoilKick": 1.0,
     "spread": 1.5,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 15,
+    "hotBarrelRate": 10,
     "criticalChance": 0.05,
-    "playerKnockBack": true,
-    "playerKnockBackStrength": 0.35,
     "meleeReach": 3.5,
-    "speedModifier": 0.8
+    "speedModifier": 0.85
   },
   "modules": {
     "attachments": {
@@ -36,21 +35,24 @@
   },
   "projectile": {
     "advantage": "scguns:heavy",
-    "damage": 21.5,
+    "damage": 13.0,
     "gravity": false,
-    "item": "scguns:krahg_round",
     "ejectsCasing": true,
-    "casingType": "scguns:large_brass_casing",
+    "item": "scguns:shatter_round",
+    "casingType": "scguns:medium_brass_casing",
     "casingParticle": "scguns:brass_casing",
     "life": 60,
     "size": 0.1,
     "speed": 5.0,
-    "trailLengthMultiplier": 2.0
+    "trailLengthMultiplier": 2.0,
+    "impactEffect": "scguns:lacerated",
+    "impactEffectDuration": 300,
+    "impactEffectChance": 0.3,
+    "impactEffectAmplifier": 0
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 35,
-    "reloadItem": "scguns:krahg_round",
+    "maxAmmo": 40,
     "reloadTimer": 60,
     "reloadType": "scguns:mag_fed"
   },

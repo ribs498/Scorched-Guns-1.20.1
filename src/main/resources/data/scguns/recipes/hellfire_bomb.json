@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "throwable",
+  "key": {
+    "#": {
+      "item": "minecraft:glass_bottle"
+    },
+    "X": {
+      "item": "minecraft:iron_nugget"
+    },
+    "Q": {
+      "item": "minecraft:blaze_powder"
+    },
+    "M": {
+      "item": "minecraft:string"
+    },
+    "L":
+    [
+      {
+        "item": "minecraft:soul_sand"
+      },
+      {
+        "item": "minecraft:soul_soil"
+      }
+    ]
+  },
+  "pattern": [
+    "   ",
+    " MX",
+    "LQ#"
+  ],
+  "result": {
+    "item": "scguns:hellfire_bomb",
+    "count": 2
+  }
+}

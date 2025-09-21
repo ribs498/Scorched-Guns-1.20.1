@@ -44,6 +44,9 @@ public class SaketiniModel implements IOverrideModel {
             } else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get()) {
                 RenderUtil.renderModel(SpecialModels.MUSKET_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
             }
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get()) {
+                RenderUtil.renderModel(SpecialModels.MUSKET_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
         }
 
         // Renders the barrel and its attachments.

@@ -136,6 +136,10 @@ public class JEIScorchedPlugin implements IModPlugin {
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.POWERED_MECHANICAL_PRESS.get()), PoweredMechanicalPressCategory.POWERED_MECHANICAL_PRESS_TYPE);
         registration.addRecipeCatalyst(new ItemStack(ModBlocks.LIGHTNING_BATTERY.get()), LightningBatteryCategory.LIGHTNING_BATTERY_TYPE);
     }
+    @Override
+    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
+        registration.addRecipeTransferHandler(new GunBenchTransferInfo());
+    }
 }
 
 

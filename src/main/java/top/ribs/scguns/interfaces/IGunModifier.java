@@ -30,6 +30,8 @@ public interface IGunModifier
         return recoilModifier();
     }
 
+
+
     default float kickModifier(ItemStack weapon) {
         return kickModifier();  // Use the existing kickModifier by default
     }

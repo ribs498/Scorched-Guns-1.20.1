@@ -15,6 +15,7 @@
     }
   },
   "general": {
+    "weaponType": "lmg",
     "fireMode": "scguns:automatic",
     "gripType": "scguns:mini_gun",
     "baseGripType": "scguns:mini_gun",
@@ -37,6 +38,7 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 6.5,
+    "armorPen": 1.0,
     "gravity": false,
     "item": "scguns:compact_advanced_round",
     "ejectsCasing": true,

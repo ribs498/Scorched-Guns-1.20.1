@@ -2,6 +2,7 @@
   "display": {
   },
   "general": {
+    "weaponType": "rifle",
     "alwaysSpread": false,
     "fireMode": "scguns:pulse",
     "fireTimer": 23,
@@ -17,7 +18,8 @@
     "energyUse": 40.0,
     "hotBarrelRate": 50,
     "criticalChance": 0.05,
-    "enableGunLight": false
+    "enableGunLight": false,
+    "isSilenced": true
   },
   "modules": {
     "attachments": {

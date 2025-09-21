@@ -43,6 +43,10 @@ public class CogloaderModel implements IOverrideModel {
             } else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get()) {
                 RenderUtil.renderModel(SpecialModels.COGLOADER_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
             }
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get()) {
+                RenderUtil.renderModel(SpecialModels.COGLOADER_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
+
         }
     }
     private void renderBarrelAndAttachments(PoseStack matrixStack, MultiBufferSource buffer, ItemStack stack, int light, int overlay) {

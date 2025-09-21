@@ -349,8 +349,6 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
         Vec3 toTarget = targetPos.subtract(turretPos);
         double distance = toTarget.length();
         Vec3 rayVector = toTarget.normalize().scale(distance);
-
-        // Adjust the start position to be slightly above the turret base
         Vec3 adjustedTurretPos = turretPos.add(0, 0.5, 0);
 
         ClipContext clipContext = new ClipContext(adjustedTurretPos, adjustedTurretPos.add(rayVector), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null);
@@ -377,7 +375,7 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
 
     @NotNull TurretProjectileEntity getTurretProjectileEntity(TurretProjectileEntity.BulletType bulletType, double dx, double dy, double dz) {
         TurretProjectileEntity projectile = new TurretProjectileEntity(this.level, bulletType);
-        double speed = 3.0; // Adjust this value as needed
+        double speed = 3.0;
         projectile.shoot(dx, dy, dz, (float) speed, 0.0F);
         return projectile;
     }
@@ -510,7 +508,6 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
         boolean isPlayerTargetingModule = false;
         boolean isHostileTargetingModule = false;
 
-        // Check for targeting modules
         for (Direction direction : Direction.values()) {
             BlockState blockState = level.getBlockState(pos.relative(direction));
             if (blockState.getBlock() instanceof TurretTargetingBlock) {
@@ -554,7 +551,7 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
                             blacklistedEntityTypes.add(blacklistTag.getString(i));
                         }
                     }
-                } else if (hasEnemyLog) {
+                } else {
                     if (tag.contains("Whitelist", Tag.TAG_LIST)) {
                         ListTag listTag = tag.getList("Whitelist", Tag.TAG_COMPOUND);
                         for (int i = 0; i < listTag.size(); i++) {
@@ -574,7 +571,6 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
 
         Vec3 turretPos = new Vec3(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 1.0, this.worldPosition.getZ() + 0.5);
 
-        // Increase the vertical search range
         double verticalSearchRange = TARGETING_RADIUS;
         AABB searchBox = new AABB(pos).inflate(TARGETING_RADIUS, verticalSearchRange, TARGETING_RADIUS);
 
@@ -584,12 +580,14 @@ public class BasicTurretBlockEntity extends BlockEntity implements MenuProvider 
                 entity -> entity != null
                         && entity.isAlive()
                         && !isOwner(entity)
-                        && ((!hasTeamLog && !hasEnemyLog) || // Default targeting when no logs are present
+                        && ((!hasTeamLog && !hasEnemyLog) ||
                         (hasTeamLog && !loggedEntityUUIDs.contains(entity.getUUID()) && !blacklistedEntityTypes.contains(EntityType.getKey(entity.getType()).toString())) ||
                         (hasEnemyLog && (whitelistedEntityUUIDs.contains(entity.getUUID()) || whitelistedEntityTypes.contains(EntityType.getKey(entity.getType()).toString()))))
                         && !(entity instanceof EnderMan)
                         && (!finalIsPlayerTargetingModule || (entity instanceof Player && !((Player) entity).isCreative()))
-                        && (!finalIsHostileTargetingModule || entity.getType().getCategory() == MobCategory.MONSTER)
+                        && (!finalIsHostileTargetingModule ||
+                        (entity.getType().getCategory() == MobCategory.MONSTER ||
+                                entity.getType().is(ModTags.Entities.TURRET_ENEMY_WHITELIST)))
                         && !entity.getType().is(ModTags.Entities.TURRET_BLACKLIST)
         );
 

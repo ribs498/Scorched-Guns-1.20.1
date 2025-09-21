@@ -3,9 +3,14 @@
   "processingTime": 15,
   "energyUse": 500,
   "ingredients": [
-    {
-      "tag": "forge:ingots/brass"
-    }
+    [
+      {
+        "tag": "forge:ingots/brass"
+      },
+      {
+        "item": "scguns:ancient_brass"
+      }
+    ]
   ],
   "mold": {
     "item": "scguns:medium_casing_mold"

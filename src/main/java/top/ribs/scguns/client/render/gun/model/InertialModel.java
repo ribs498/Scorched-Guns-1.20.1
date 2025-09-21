@@ -34,16 +34,12 @@ public class InertialModel implements IOverrideModel {
             RenderUtil.renderModel(SpecialModels.INERTIAL_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         }
 
-        // Render stock attachments
         renderStockAttachments(stack, matrixStack, buffer, light, overlay);
 
-        // Render under-barrel attachments
         renderUnderBarrelAttachments(stack, matrixStack, buffer, light, overlay);
 
-        // Render magazine attachments
         renderMagazineAttachments(stack, matrixStack, buffer, light, overlay);
 
-        // Render barrel and attachments with the new system
         renderBarrelAndAttachments(stack, matrixStack, buffer, light, overlay);
 
         if (entity.equals(Minecraft.getInstance().player)) {
@@ -67,6 +63,9 @@ public class InertialModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+
         }
     }
 

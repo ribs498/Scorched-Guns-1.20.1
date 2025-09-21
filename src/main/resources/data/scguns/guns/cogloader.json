@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "lmg",
     "alwaysSpread": false,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
@@ -50,6 +51,7 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 10.0,
+    "armorPen": 3.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:advanced_round",

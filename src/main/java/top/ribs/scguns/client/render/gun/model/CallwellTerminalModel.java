@@ -29,7 +29,6 @@ public class CallwellTerminalModel implements IOverrideModel {
 
         renderBarrelAttachments(matrixStack, buffer, stack, light, overlay);
 
-        // Render stock attachments
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get()) {
                 RenderUtil.renderModel(SpecialModels.MUSKET_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
@@ -38,9 +37,11 @@ public class CallwellTerminalModel implements IOverrideModel {
             } else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get()) {
                 RenderUtil.renderModel(SpecialModels.MUSKET_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
             }
-        }
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get()) {
+                RenderUtil.renderModel(SpecialModels.MUSKET_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
 
-        // Render under-barrel attachments
+        }
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.UNDER_BARREL)) {
             if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.VERTICAL_GRIP.get()) {
                 RenderUtil.renderModel(SpecialModels.CALLWELL_TERMINAL_VERTICAL_GRIP.getModel(), stack, matrixStack, buffer, light, overlay);

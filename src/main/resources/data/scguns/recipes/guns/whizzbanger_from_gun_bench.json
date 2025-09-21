@@ -1,0 +1,27 @@
+{
+  "type": "scguns:gun_bench",
+  "result": {
+    "item": "scguns:whizzbanger",
+    "count": 1
+  },
+  "ingredients": {
+    "blueprint": {
+      "item": "scguns:wrecker_blueprint"
+    },
+    "gun_internal_1": {
+      "item": "minecraft:stick"
+    },
+    "gun_top_internal_1": {
+      "item": "scguns:treated_iron_ingot"
+    },
+    "gun_internal_2": {
+      "item": "scguns:firing_unit"
+    },
+    "gun_barrel_1": {
+      "item": "scguns:large_iron_casing"
+    },
+    "gun_magazine": {
+      "item": "scguns:vertical_grip"
+    }
+  }
+}

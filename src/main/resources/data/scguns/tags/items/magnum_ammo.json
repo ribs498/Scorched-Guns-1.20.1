@@ -2,6 +2,8 @@
   "replace": false,
   "values": [
     "scguns:ramrod_round",
-    "scguns:beowulf_round"
+    "scguns:beowulf_round",
+    "scguns:hog_round",
+    "scguns:frog_dart"
   ]
 }

@@ -18,7 +18,10 @@ public class RocketAmmoBoxItem extends AmmoBoxItem {
         return new ResourceLocation("scguns", "rocket_ammo");
     }
 
-
+    @Override
+    protected String getDescriptionKey() {
+        return "item.scguns.rocket_ammo_box.description";
+    }
     @Override
     public int getBarColor(ItemStack stack) {
         return ROCKET_BAR_COLOR;

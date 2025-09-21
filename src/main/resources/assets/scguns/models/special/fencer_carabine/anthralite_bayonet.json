@@ -1,0 +1,102 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "scguns:item/fencer_carabine"
+	},
+	"elements": [
+		{
+			"name": "anthralite_bayonet",
+			"from": [7.99268, 1.17933, -9.44403],
+			"to": [7.99268, 2.72933, 0.80597],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.32933, 10.73097]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.75], "texture": "#1"},
+				"east": {"uv": [0, 1, 5.25, 1.75], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 0.75], "texture": "#1"},
+				"up": {"uv": [0, 5.25, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 5.25], "texture": "#1"}
+			}
+		},
+		{
+			"name": "anthralite_bayonet",
+			"from": [7.20732, 3.61469, -0.21903],
+			"to": [8.55732, 4.96469, 0.33097],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.00732, 4.41469, 0.06847]},
+			"faces": {
+				"north": {"uv": [4, 10.5, 4.75, 11.25], "texture": "#1"},
+				"east": {"uv": [1.5, 13.5, 1.75, 14.25], "texture": "#1"},
+				"south": {"uv": [5, 10.5, 5.75, 11.25], "texture": "#1"},
+				"west": {"uv": [13.5, 3, 13.75, 3.75], "texture": "#1"},
+				"up": {"uv": [14.25, 4.25, 13.5, 4], "texture": "#1"},
+				"down": {"uv": [14.25, 4.5, 13.5, 4.75], "texture": "#1"}
+			}
+		},
+		{
+			"name": "anthralite_bayonet",
+			"from": [7.24268, 2.75433, -0.19403],
+			"to": [8.74268, 4.25433, 0.30597],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.32933, 10.73097]},
+			"faces": {
+				"north": {"uv": [6, 10.5, 6.75, 11.25], "texture": "#1"},
+				"east": {"uv": [3.5, 13.5, 3.75, 14.25], "texture": "#1"},
+				"south": {"uv": [7, 10.5, 7.75, 11.25], "texture": "#1"},
+				"west": {"uv": [5, 13.5, 5.25, 14.25], "texture": "#1"},
+				"up": {"uv": [14.25, 5.25, 13.5, 5], "texture": "#1"},
+				"down": {"uv": [6.25, 13.5, 5.5, 13.75], "texture": "#1"}
+			}
+		},
+		{
+			"name": "anthralite_bayonet",
+			"from": [7.61768, 1.75433, -0.19403],
+			"to": [8.36768, 2.75433, 0.30597],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.32933, 10.73097]},
+			"faces": {
+				"north": {"uv": [13, 1.5, 13.5, 2], "texture": "#1"},
+				"east": {"uv": [14.5, 1, 14.75, 1.5], "texture": "#1"},
+				"south": {"uv": [2.5, 13, 3, 13.5], "texture": "#1"},
+				"west": {"uv": [1.5, 14.5, 1.75, 15], "texture": "#1"},
+				"up": {"uv": [15, 1.75, 14.5, 1.5], "texture": "#1"},
+				"down": {"uv": [2.5, 14.5, 2, 14.75], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.75, -9],
+			"scale": [1.4, 1.4, 1.4]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.75, -9],
+			"scale": [1.4, 1.4, 1.4]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 9.75, -0.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.25, 9.75, -0.5]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-2.25, 4.5, 0]
+		},
+		"fixed": {
+			"rotation": [-90, 90, 90],
+			"translation": [-3, 9.5, 0],
+			"scale": [2, 2, 2]
+		}
+	},
+	"groups": [
+		{
+			"name": "anthralite_bayonet",
+			"origin": [0.1, -0.55, 0],
+			"color": 1,
+			"children": [0, 1, 2, 3]
+		}
+	]
+}

@@ -38,6 +38,9 @@ public class Echoes2Model implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.SCULK_RESONATOR_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.SCULK_RESONATOR_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.SCULK_RESONATOR_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+
         }
 
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.UNDER_BARREL)) {

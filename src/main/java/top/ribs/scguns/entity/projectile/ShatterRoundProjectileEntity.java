@@ -10,6 +10,8 @@ import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,19 +26,16 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import top.ribs.scguns.Config;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModDamageTypes;
-import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.interfaces.IDamageable;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageBlood;
 import top.ribs.scguns.network.message.S2CMessageProjectileHitBlock;
-import top.ribs.scguns.network.message.S2CMessageProjectileHitEntity;
 import top.ribs.scguns.particles.TrailData;
-import top.ribs.scguns.util.GunEnchantmentHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +125,7 @@ public class ShatterRoundProjectileEntity extends ProjectileEntity {
                     1, offsetX, offsetY, offsetZ, 0.02);
 
         }
-        serverLevel.sendParticles(ParticleTypes.FLASH,
+        serverLevel.sendParticles(ParticleTypes.SWEEP_ATTACK,
                 pos.x, pos.y, pos.z,
                 1, 0.1, 0.1, 0.1, 0.0);
 
@@ -253,6 +252,23 @@ public class ShatterRoundProjectileEntity extends ProjectileEntity {
         if (!(entity.getType().is(ModTags.Entities.GHOST) &&
                 !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
             entity.hurt(source, damage);
+
+            if (entity instanceof LivingEntity livingEntity) {
+                ResourceLocation effectLocation = this.projectile.getImpactEffect();
+                if (effectLocation != null) {
+                    float effectChance = this.projectile.getImpactEffectChance();
+                    if (this.random.nextFloat() < effectChance) {
+                        MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectLocation);
+                        if (effect != null) {
+                            livingEntity.addEffect(new MobEffectInstance(
+                                    effect,
+                                    this.projectile.getImpactEffectDuration(),
+                                    this.projectile.getImpactEffectAmplifier()
+                            ));
+                        }
+                    }
+                }
+            }
         }
 
         PacketHandler.getPlayChannel().sendToTracking(() -> entity,

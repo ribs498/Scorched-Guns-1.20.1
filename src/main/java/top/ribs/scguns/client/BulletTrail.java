@@ -2,6 +2,7 @@ package top.ribs.scguns.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -34,8 +35,9 @@ public class BulletTrail
     private final boolean enchanted;
     private final ParticleOptions particleData;
     private float size;
+    private boolean isVisible;
 
-    public BulletTrail(int entityId, Vec3 position, Vec3 motion, ItemStack item, int trailColor, double trailMultiplier, int maxAge, double gravity, int shooterId, boolean enchanted, ParticleOptions particleData)
+    public BulletTrail(int entityId, Vec3 position, Vec3 motion, ItemStack item, int trailColor, double trailMultiplier, int maxAge, double gravity, int shooterId, boolean enchanted, ParticleOptions particleData, boolean isVisible)
     {
         this.entityId = entityId;
         this.position = position;
@@ -48,6 +50,7 @@ public class BulletTrail
         this.shooterId = shooterId;
         this.enchanted = enchanted;
         this.particleData = particleData;
+        this.isVisible = isVisible;
         this.updateYawPitch();
     }
 
@@ -71,10 +74,12 @@ public class BulletTrail
         }
 
         Entity shooter = this.getShooter();
+        // Disabled default trail
         if(shooter instanceof Player && ((Player) shooter).isLocalPlayer())
         {
             Level world = shooter.level();
             world.addAlwaysVisibleParticle(this.particleData, true, this.position.x(), this.position.y(), this.position.z(), this.motion.x, this.motion.y, this.motion.z);
+            //world.addAlwaysVisibleParticle(ParticleTypes.MYCELIUM, true, this.position.x(), this.position.y(), this.position.z(), this.motion.x, this.motion.y, this.motion.z);
         }
 
         Entity entity = Minecraft.getInstance().getCameraEntity();
@@ -175,10 +180,12 @@ public class BulletTrail
         return null;
     }
 
+    // Trail Visibility
     public boolean isTrailVisible()
     {
-        Entity entity = Minecraft.getInstance().getCameraEntity();
-        return entity != null && entity.getId() != this.shooterId;
+        return this.isVisible;
+        /*Entity entity = Minecraft.getInstance().getCameraEntity();
+        return entity != null && entity.getId() != this.shooterId;*/
     }
 
     @Override

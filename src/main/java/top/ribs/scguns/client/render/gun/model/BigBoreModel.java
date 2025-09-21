@@ -25,23 +25,21 @@ public class BigBoreModel implements IOverrideModel {
     @Override
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
 
-        // Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.BIG_BORE_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
-
-        // Renders the iron sights if no scope is attached.
         if (Gun.getScope(stack) == null) {
             RenderUtil.renderModel(SpecialModels.BIG_BORE_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         } else {
             RenderUtil.renderModel(SpecialModels.BIG_BORE_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         }
-
-        // Renders the stock attachments.
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get()) {
                 RenderUtil.renderModel(SpecialModels.MUSKET_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
             } else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.get()) {
                 RenderUtil.renderModel(SpecialModels.MUSKET_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             } else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get()) {
+                RenderUtil.renderModel(SpecialModels.MUSKET_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get()) {
                 RenderUtil.renderModel(SpecialModels.MUSKET_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
             }
         }

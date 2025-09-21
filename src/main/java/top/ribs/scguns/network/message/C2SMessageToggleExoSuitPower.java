@@ -73,6 +73,34 @@ public class C2SMessageToggleExoSuitPower extends PlayMessage<C2SMessageToggleEx
             ServerPlayer player = context.getPlayer();
             if (player == null) return;
 
+            if ("jetpack".equals(message.powerType.getUpgradeType())) {
+                boolean currentState = ExoSuitPowerManager.isPowerEnabled(player, "utility");
+                boolean newState = !currentState;
+
+                ExoSuitPowerManager.setPowerEnabled(player, "utility", newState);
+
+                top.ribs.scguns.common.exosuit.ExoSuitFlightHandler.setJetpackActive(player, newState);
+
+                String statusKey = newState ? "exosuit.message.enabled" : "exosuit.message.disabled";
+                ChatFormatting statusColor = newState ? ChatFormatting.GREEN : ChatFormatting.RED;
+
+                Component feedbackMessage = Component.translatable("exosuit.message.prefix")
+                        .withStyle(ChatFormatting.GOLD)
+                        .append(Component.translatable(statusKey,
+                                        Component.translatable("exosuit.upgrade.jetpack"))
+                                .withStyle(statusColor));
+
+                player.sendSystemMessage(feedbackMessage, true);
+
+                if (newState) {
+                    player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                            SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.3f, 1.2f);
+                } else {
+                    player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
+                            SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.3f, 0.8f);
+                }
+                return;
+            }
             if (!ExoSuitPowerManager.canUpgradeFunction(player, message.powerType.getUpgradeType())) {
                 String moduleTranslationKey = getSpecificModuleTranslationKey(player, message.powerType.getUpgradeType());
 
@@ -84,19 +112,13 @@ public class C2SMessageToggleExoSuitPower extends PlayMessage<C2SMessageToggleEx
 
                 player.sendSystemMessage(feedbackMessage, true);
 
-                // Play error sound
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 0.5f, 0.8f);
                 return;
             }
 
-            // Toggle the power state
             boolean newState = ExoSuitPowerManager.togglePower(player, message.powerType.getUpgradeType());
-
-            // Get the specific module name for feedback
             String moduleTranslationKey = getSpecificModuleTranslationKey(player, message.powerType.getUpgradeType());
-
-            // Send feedback to player
             String statusKey = newState ? "exosuit.message.enabled" : "exosuit.message.disabled";
             ChatFormatting statusColor = newState ? ChatFormatting.GREEN : ChatFormatting.RED;
 
@@ -107,8 +129,6 @@ public class C2SMessageToggleExoSuitPower extends PlayMessage<C2SMessageToggleEx
                             .withStyle(statusColor));
 
             player.sendSystemMessage(feedbackMessage, true);
-
-            // Play appropriate sound
             if (newState) {
                 player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.EXPERIENCE_ORB_PICKUP, SoundSource.PLAYERS, 0.3f, 1.2f);
@@ -125,7 +145,6 @@ public class C2SMessageToggleExoSuitPower extends PlayMessage<C2SMessageToggleEx
      */
     private static String getSpecificModuleTranslationKey(ServerPlayer player, String upgradeType) {
         if ("hud".equals(upgradeType)) {
-            // Find which HUD module is equipped
             ItemStack hudModule = findHudModule(player);
             if (!hudModule.isEmpty()) {
                 if (hudModule.getItem() instanceof NightVisionModuleItem) {
@@ -138,11 +157,9 @@ public class C2SMessageToggleExoSuitPower extends PlayMessage<C2SMessageToggleEx
                     return "exosuit.upgrade.rebreather";
                 }
             }
-            // Fallback to generic HUD if no specific module found
             return "exosuit.upgrade.hud";
         }
 
-        // For other upgrade types, use the existing system
         return "exosuit.upgrade." + upgradeType;
     }
 

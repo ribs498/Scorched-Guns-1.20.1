@@ -17,6 +17,7 @@ import top.ribs.scguns.entity.projectile.BrassBoltEntity;
 import top.ribs.scguns.entity.projectile.*;
 import top.ribs.scguns.entity.projectile.turret.TurretProjectileEntity;
 import top.ribs.scguns.entity.throwable.*;
+import top.ribs.scguns.faction.raid.RaidEntity;
 
 import java.util.function.BiFunction;
 
@@ -25,6 +26,7 @@ import java.util.function.BiFunction;
  */
 public class ModEntities
 {
+
     public static final DeferredRegister<EntityType<?>> REGISTER = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, Reference.MOD_ID);
     public static final RegistryObject<EntityType<PrimedPowderKeg>> PRIMED_POWDER_KEG = REGISTER.register("primed_powder_keg",
             () -> EntityType.Builder.<PrimedPowderKeg>of(PrimedPowderKeg::new, MobCategory.MISC)
@@ -40,6 +42,7 @@ public class ModEntities
                     .build("primed_nitro_keg"));
     public static final RegistryObject<EntityType<TurretProjectileEntity>> TURRET_PROJECTILE = REGISTER.register("basic_turret", () ->
             EntityType.Builder.<TurretProjectileEntity>of(TurretProjectileEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).build("basic_turret"));
+    public static final RegistryObject<EntityType<RaidEntity>> RAID_ENTITY = REGISTER.register("raid_entity", () -> EntityType.Builder.<RaidEntity>of(RaidEntity::new, MobCategory.MISC).sized(3.0F, 3.0F).noSummon().noSave().fireImmune().build("raid_entity"));
 
     public static final RegistryObject<EntityType<ProjectileEntity>> PROJECTILE = registerProjectile("projectile", ProjectileEntity::new);
     public static final RegistryObject<EntityType<BearPackShellProjectileEntity>> BEARPACK_SHELL_PROJECTILE = registerBasic("bearpack_shell_projectile", BearPackShellProjectileEntity::new);
@@ -50,6 +53,7 @@ public class ModEntities
     public static final RegistryObject<EntityType<BeowulfProjectileEntity>> BEOWULF_PROJECTILE = registerBasic("beowulf_projectile", BeowulfProjectileEntity::new);
     public static final RegistryObject<EntityType<BlazeRodProjectileEntity>> BLAZE_ROD_PROJECTILE = registerBasic("blaze_rod_projectile", BlazeRodProjectileEntity::new);
     public static final RegistryObject<EntityType<BasicBulletProjectileEntity>> BASIC_BULLET_PROJECTILE = registerBasic("basic_bullet_projectile", BasicBulletProjectileEntity::new);
+    public static final RegistryObject<EntityType<NeedleProjectileEntity>> NEEDLE_PROJECTILE = registerBasic("needle_projectile", NeedleProjectileEntity::new);
     public static final RegistryObject<EntityType<HardenedBulletProjectileEntity>> HARDENED_BULLET_PROJECTILE = registerBasic("hardened_bullet_projectile", HardenedBulletProjectileEntity::new);
     public static final RegistryObject<EntityType<BuckshotProjectileEntity>> BUCKSHOT_PROJECTILE = registerBasic("buckshot_projectile", BuckshotProjectileEntity::new);
     public static final RegistryObject<EntityType<FireRoundEntity>> FIRE_ROUND_PROJECTILE = registerBasic("fire_round_projectile", FireRoundEntity::new);
@@ -58,6 +62,7 @@ public class ModEntities
     public static final RegistryObject<EntityType<MicroJetEntity>> MICROJET = registerBasic("microjet", MicroJetEntity::new);
     public static final RegistryObject<EntityType<ShulkshotProjectileEntity>> SHULKSHOT = registerBasic("shulkshot_projectile", ShulkshotProjectileEntity::new);
     public static final RegistryObject<EntityType<SculkCellEntity>> SCULK_CELL = registerBasic("sculk_cell", SculkCellEntity::new);
+    public static final RegistryObject<EntityType<FrogDartProjectileEntity>> FROG_DART_PROJECTILE = registerBasic("frog_dart_projectile", FrogDartProjectileEntity::new);
     public static final RegistryObject<EntityType<ShatterRoundProjectileEntity>> SHATTER_ROUND_PROJECTILE = registerBasic("shatter_round_projectile", ShatterRoundProjectileEntity::new);
     public static final RegistryObject<EntityType<SyringeProjectileEntity>> SYRINGE_PROJECTILE = registerBasic("syringe_projectile", SyringeProjectileEntity::new);
     public static final RegistryObject<EntityType<KrahgRoundProjectileEntity>> KRAHG_ROUND_PROJECTILE = registerBasic("krahg_round_projectile", KrahgRoundProjectileEntity::new);
@@ -67,6 +72,7 @@ public class ModEntities
     public static final RegistryObject<EntityType<ThrowableGrenadeEntity>> THROWABLE_GRENADE = registerBasic("throwable_grenade", ThrowableGrenadeEntity::new);
     public static final RegistryObject<EntityType<ThrowableStunGrenadeEntity>> THROWABLE_STUN_GRENADE = registerBasic("throwable_stun_grenade", ThrowableStunGrenadeEntity::new);
     public static final RegistryObject<EntityType<ThrowableMolotovCocktailEntity>> THROWABLE_MOLOTOV_COCKTAIL = registerBasic("throwable_molotov_cocktail", ThrowableMolotovCocktailEntity::new);
+    public static final RegistryObject<EntityType<ThrowableHellfireBombEntity>> THROWABLE_HELLFIRE_BOMB = registerBasic("throwable_hellfire_bomb", ThrowableHellfireBombEntity::new);
     public static final RegistryObject<EntityType<ThrowableGasGrenadeEntity>> THROWABLE_GAS_GRENADE = registerBasic("throwable_gas_grenade", ThrowableGasGrenadeEntity::new);
     public static final RegistryObject<EntityType<ThrowableBeaconGrenadeEntity>> THROWABLE_BEACON_GRENADE = registerBasic("throwable_beacon_grenade", ThrowableBeaconGrenadeEntity::new);
     public static final RegistryObject<EntityType<ThrowableChokeBombEntity>> THROWABLE_CHOKE_BOMB = registerBasic("throwable_choke_bomb", ThrowableChokeBombEntity::new);

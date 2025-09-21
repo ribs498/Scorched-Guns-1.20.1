@@ -46,6 +46,9 @@ public class ForlornHopeModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.FORLORN_HOPE_LIGHT_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.FORLORN_HOPE_HEAVY_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.FORLORN_HOPE_HEAVY_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
+
         }
     }
 

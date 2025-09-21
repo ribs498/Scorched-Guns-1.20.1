@@ -35,6 +35,9 @@ public class RustyGnatModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.RUSTY_GNAT_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
+
         }
 
         // Render magazine attachments

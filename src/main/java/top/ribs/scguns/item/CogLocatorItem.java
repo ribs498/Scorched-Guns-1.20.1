@@ -38,7 +38,6 @@ public class CogLocatorItem extends Item {
                 createPlasmaRingLine(serverLevel, playerVec, direction);
                 level.playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.BEACON_ACTIVATE, SoundSource.PLAYERS, 0.6F, 1.2F);
-
                 itemStack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(hand));
 
                 return InteractionResultHolder.success(itemStack);
@@ -46,7 +45,6 @@ public class CogLocatorItem extends Item {
                 level.playSound(null, player.getX(), player.getY(), player.getZ(),
                         SoundEvents.BEACON_DEACTIVATE, SoundSource.PLAYERS, 0.5F, 0.8F);
 
-                itemStack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(hand));
                 return InteractionResultHolder.fail(itemStack);
             }
         }

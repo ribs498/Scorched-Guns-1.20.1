@@ -13,6 +13,7 @@
     }
   },
   "general": {
+    "weaponType": "heavy",
     "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:bazooka",

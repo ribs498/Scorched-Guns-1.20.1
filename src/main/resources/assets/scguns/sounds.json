@@ -1,4 +1,20 @@
 {
+  "entity.scamp.hurt": {
+    "subtitle": "subtitle.scguns.scamp.hurt",
+    "sounds": [
+      {
+        "name": "scguns:entity/scamp/hurt"
+      }
+    ]
+  },
+    "entity.scamp.die": {
+        "subtitle": "subtitle.scguns.scamp.die",
+        "sounds": [
+        {
+            "name": "scguns:entity/scamp/die"
+        }
+        ]
+    },
   "item.lever.lever": {
     "subtitle": "subtitle.scguns.mag_in",
     "sounds": [
@@ -12,6 +28,38 @@
     "sounds": [
       {
         "name": "scguns:item/gun_sounds/metal"
+      }
+    ]
+  },
+  "item.gun_sounds.pump": {
+    "subtitle": "subtitle.scguns.mag_in",
+    "sounds": [
+      {
+        "name": "scguns:item/gun_sounds/pump"
+      }
+    ]
+  },
+  "item.gun_sounds.pump_half": {
+    "subtitle": "subtitle.scguns.mag_in",
+    "sounds": [
+      {
+        "name": "scguns:item/gun_sounds/pump_half"
+      }
+    ]
+  },
+  "item.gun_sounds.hiss": {
+    "subtitle": "subtitle.scguns.mag_in",
+    "sounds": [
+      {
+        "name": "scguns:item/gun_sounds/hiss"
+      }
+    ]
+  },
+  "item.gun_sounds.insert": {
+    "subtitle": "subtitle.scguns.mag_in",
+    "sounds": [
+      {
+        "name": "scguns:item/gun_sounds/insert"
       }
     ]
   },
@@ -124,6 +172,30 @@
     "sounds": [
       {
         "name": "scguns:item/airgun/fire"
+      }
+    ]
+  },
+  "item.carabine.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/carabine/fire"
+      }
+    ]
+  },
+  "item.new_rifle.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/new_rifle/fire"
+      }
+    ]
+  },
+  "item.new_rifle.fire_2": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/new_rifle/fire_2"
       }
     ]
   },
@@ -402,6 +474,14 @@
     "sounds": [
       {
         "name": "scguns:item/plasma/fire"
+      }
+    ]
+  },
+  "item.plasma.fire_2": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/plasma/fire_2"
       }
     ]
   },

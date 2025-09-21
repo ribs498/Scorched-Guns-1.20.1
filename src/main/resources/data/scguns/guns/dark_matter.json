@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "rifle",
     "alwaysSpread": false,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
@@ -46,6 +47,7 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 16.5,
+    "armorPen": 3.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:advanced_round",
@@ -57,7 +59,7 @@
     "trailLengthMultiplier": 4.0,
     "impactEffect": "minecraft:slowness",
     "impactEffectDuration": 100,
-    "impactEffectChance": 0.4,
+    "impactEffectChance": 0.3,
     "impactEffectAmplifier": 0
   },
   "reloads": {

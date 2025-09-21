@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "rifle",
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
@@ -71,8 +72,8 @@
   },
   "sounds": {
     "cock": "scguns:item.makeshift_rifle.cock",
-    "enchantedFire": "scguns:item.makeshift_rifle.fire",
-    "fire": "scguns:item.makeshift_rifle.fire",
+    "enchantedFire": "scguns:item.new_rifle.fire_2",
+    "fire": "scguns:item.new_rifle.fire_2",
     "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.makeshift_rifle.silenced_fire",
     "flyby": "scguns:bullet.flyby1"

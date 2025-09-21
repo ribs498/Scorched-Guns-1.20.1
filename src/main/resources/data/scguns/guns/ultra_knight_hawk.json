@@ -13,6 +13,7 @@
     }
   },
   "general": {
+    "weaponType": "magnum",
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",

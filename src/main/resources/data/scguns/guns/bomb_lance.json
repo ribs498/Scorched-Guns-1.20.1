@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "special",
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:mini_gun_3",
@@ -21,7 +22,8 @@
     "meleeReach": 4.5,
     "hotBarrelRate": 100,
     "criticalChance": 0.05,
-    "speedModifier": 1.1
+    "speedModifier": 1.1,
+    "usesCustomMeleeAnimation": true
   },
   "modules": {
     "attachments": {

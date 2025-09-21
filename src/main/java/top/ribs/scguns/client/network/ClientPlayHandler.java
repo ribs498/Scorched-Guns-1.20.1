@@ -61,6 +61,32 @@ import java.util.stream.Collectors;
  * Author: MrCrayfish
  */
 public class ClientPlayHandler {
+    public static void handleStopReload() {
+        Player player = Minecraft.getInstance().player;
+        if (player != null) {
+            ItemStack heldItem = player.getMainHandItem();
+            if (heldItem.getItem() instanceof AnimatedGunItem) {
+                CompoundTag tag = heldItem.getOrCreateTag();
+                tag.putString("scguns:ReloadState", "STOPPING");
+                tag.putBoolean("scguns:IsPlayingReloadStop", true);
+                tag.remove("InReloadLoop");
+                tag.remove("scguns:IsReloading");
+                ModSyncedDataKeys.RELOADING.setValue(player, false);
+                AnimatedGunItem gunItem = (AnimatedGunItem) heldItem.getItem();
+                long id = GeoItem.getId(heldItem);
+                AnimationController<GeoAnimatable> animationController = gunItem.getAnimatableInstanceCache()
+                        .getManagerForId(id)
+                        .getAnimationControllers()
+                        .get("controller");
+
+                if (animationController != null) {
+                    animationController.stop();
+                    animationController.setAnimationSpeed(1.0);
+                    animationController.tryTriggerAnimation(gunItem.isInCarbineMode(heldItem) ? "carbine_reload_stop" : "reload_stop");
+                }
+            }
+        }
+    }
     public static void handleSyncExoSuitUpgrades(S2CMessageSyncExoSuitUpgrades message) {
         LocalPlayer localPlayer = Minecraft.getInstance().player;
         if (localPlayer != null) {
@@ -266,9 +292,10 @@ public class ClientPlayHandler {
             int shooterId = message.getShooterId();
             boolean enchanted = message.isEnchanted();
             ParticleOptions data = message.getParticleData();
+            boolean isVisible = message.isVisible();
             for(int i = 0; i < message.getCount(); i++)
             {
-                BulletTrailRenderingHandler.get().add(new BulletTrail(entityIds[i], positions[i], motions[i], item, trailColor, trailLengthMultiplier, life, gravity, shooterId, enchanted, data));
+                BulletTrailRenderingHandler.get().add(new BulletTrail(entityIds[i], positions[i], motions[i], item, trailColor, trailLengthMultiplier, life, gravity, shooterId, enchanted, data, isVisible));
             }
         }
     }

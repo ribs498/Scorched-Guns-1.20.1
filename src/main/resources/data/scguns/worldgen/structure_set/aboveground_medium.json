@@ -21,7 +21,7 @@
     "type": "minecraft:random_spread",
     "salt": 109345295,
     "locate_offset": [0, 4, -5],
-    "spacing": 60,
-    "separation":  25
+    "spacing": 70,
+    "separation":  35
   }
 }

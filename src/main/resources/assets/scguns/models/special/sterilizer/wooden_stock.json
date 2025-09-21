@@ -1,0 +1,146 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "scguns:item/sterilizer"
+	},
+	"elements": [
+		{
+			"name": "wooden_stock",
+			"from": [7.12, 3.68441, 19.97565],
+			"to": [8.62, 5.68441, 20.47565],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.86053, 8.5779, 10.13478]},
+			"faces": {
+				"north": {"uv": [6.75, 3.25, 7.125, 3.75], "texture": "#1"},
+				"east": {"uv": [0.75, 8.75, 0.875, 9.25], "texture": "#1"},
+				"south": {"uv": [4.75, 6.75, 5.125, 7.25], "texture": "#1"},
+				"west": {"uv": [1, 8.75, 1.125, 9.25], "texture": "#1"},
+				"up": {"uv": [9.375, 0.625, 9, 0.5], "texture": "#1"},
+				"down": {"uv": [9.375, 0.75, 9, 0.875], "texture": "#1"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.245, 5.40941, 20.45065],
+			"to": [8.495, 5.60941, 24.65065],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.86053, 8.5779, 10.13478]},
+			"faces": {
+				"north": {"uv": [9, 1, 9.375, 1.125], "texture": "#1"},
+				"east": {"uv": [7.75, 0.5, 8.75, 0.625], "texture": "#1"},
+				"south": {"uv": [1.25, 9, 1.625, 9.125], "texture": "#1"},
+				"west": {"uv": [7.75, 5.25, 8.75, 5.375], "texture": "#1"},
+				"up": {"uv": [1.375, 6, 1, 5], "texture": "#1"},
+				"down": {"uv": [1.875, 5, 1.5, 6], "texture": "#1"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.245, 4.06941, 20.45065],
+			"to": [8.495, 5.40941, 24.65065],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.86053, 8.5779, 10.13478]},
+			"faces": {
+				"north": {"uv": [3.75, 7.5, 4.125, 7.875], "texture": "#1"},
+				"east": {"uv": [4.5, 2.75, 5.5, 3.125], "texture": "#1"},
+				"south": {"uv": [0.5, 7.75, 0.875, 8.125], "texture": "#1"},
+				"west": {"uv": [5, 1.5, 6, 1.875], "texture": "#1"},
+				"up": {"uv": [2.375, 6, 2, 5], "texture": "#1"},
+				"down": {"uv": [2.875, 5.25, 2.5, 6.25], "texture": "#1"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.37, 2.31941, 24.65065],
+			"to": [8.37, 5.40941, 25.05065],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.86053, 8.5779, 10.13478]},
+			"faces": {
+				"north": {"uv": [1.75, 6.75, 2, 7.5], "texture": "#1"},
+				"east": {"uv": [8.25, 4.25, 8.375, 5], "texture": "#1"},
+				"south": {"uv": [5.25, 6.75, 5.5, 7.5], "texture": "#1"},
+				"west": {"uv": [4.75, 8.25, 4.875, 9], "texture": "#1"},
+				"up": {"uv": [1.75, 9.375, 1.5, 9.25], "texture": "#1"},
+				"down": {"uv": [2, 9.25, 1.75, 9.375], "texture": "#1"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.2458, 2.92941, 22.64065],
+			"to": [8.4942, 4.06941, 24.65065],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.86053, 8.5779, 10.13478]},
+			"faces": {
+				"north": {"uv": [8.75, 0.75, 9, 1], "texture": "#1"},
+				"east": {"uv": [5, 2.5, 5.5, 2.75], "texture": "#1"},
+				"south": {"uv": [1.25, 8.75, 1.5, 9], "texture": "#1"},
+				"west": {"uv": [6.25, 7.75, 6.75, 8], "texture": "#1"},
+				"up": {"uv": [8, 6.75, 7.75, 6.25], "texture": "#1"},
+				"down": {"uv": [7, 7.75, 6.75, 8.25], "texture": "#1"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.2458, 2.02941, 24.15565],
+			"to": [8.4942, 2.92941, 24.65065],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.86053, 8.5779, 10.13478]},
+			"faces": {
+				"north": {"uv": [1.75, 8.75, 2, 9], "texture": "#1"},
+				"east": {"uv": [2, 9.25, 2.125, 9.5], "texture": "#1"},
+				"south": {"uv": [2, 8.75, 2.25, 9], "texture": "#1"},
+				"west": {"uv": [2.25, 9.25, 2.375, 9.5], "texture": "#1"},
+				"up": {"uv": [9.5, 2.375, 9.25, 2.25], "texture": "#1"},
+				"down": {"uv": [2.75, 9.25, 2.5, 9.375], "texture": "#1"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.2442, 3.76941, 20.32065],
+			"to": [8.4958, 5.06941, 24.78065],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [7.7442, 4.47941, 20.12065]},
+			"faces": {
+				"north": {"uv": [1, 7.75, 1.375, 8.125], "texture": "#1"},
+				"east": {"uv": [4.25, 3.5, 5.375, 3.875], "texture": "#1"},
+				"south": {"uv": [7.75, 1.25, 8.125, 1.625], "texture": "#1"},
+				"west": {"uv": [4.25, 4, 5.375, 4.375], "texture": "#1"},
+				"up": {"uv": [4.875, 2.625, 4.5, 1.5], "texture": "#1"},
+				"down": {"uv": [4.125, 4.5, 3.75, 5.625], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 5.75, -5],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 5.75, -5],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 8.75, 0.75]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.25, 8.75, 0.75]
+		},
+		"ground": {
+			"translation": [0, 9.5, 4.75],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-3.25, 2.75, 0],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [6.75, 3.5, 0],
+			"scale": [1.3, 1.3, 1.3]
+		}
+	},
+	"groups": [
+		{
+			"name": "wooden_stock",
+			"origin": [0, -0.25, 0.4],
+			"color": 1,
+			"children": [0, 1, 2, 3, 4, 5, 6]
+		}
+	]
+}

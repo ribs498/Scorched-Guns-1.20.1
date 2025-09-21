@@ -36,11 +36,6 @@ public class AdvancedRoundProjectileEntity extends ProjectileEntity {
 
     public AdvancedRoundProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
-        float armorBypass = 3.0F;
-        float puncturingBypass = GunEnchantmentHelper.getPuncturingArmorBypass(weapon);
-        armorBypass += puncturingBypass;
-
-        this.setArmorBypassAmount(armorBypass);
     }
     @Override
     protected void onHitEntity(Entity entity, Vec3 hitVec, Vec3 startVec, Vec3 endVec, boolean headshot) {

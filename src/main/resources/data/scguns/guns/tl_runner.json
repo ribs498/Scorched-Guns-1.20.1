@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "plasma",
     "alwaysSpread": false,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:one_handed",

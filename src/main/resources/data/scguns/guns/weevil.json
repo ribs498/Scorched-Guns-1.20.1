@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "heavy",
     "fireMode": "scguns:burst",
     "gripType": "scguns:mini_gun_2",
     "baseGripType": "scguns:mini_gun_2",

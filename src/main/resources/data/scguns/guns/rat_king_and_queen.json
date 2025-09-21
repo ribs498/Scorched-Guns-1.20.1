@@ -19,6 +19,7 @@
     }
   },
   "general": {
+    "weaponType": "smg",
     "fireMode": "scguns:automatic",
     "gripType": "scguns:dual_wield",
     "baseGripType": "scguns:dual_wield",

@@ -44,11 +44,11 @@ public class BlueprintScreen extends Screen {
     private static final List<String> GUN_ORDER = Arrays.asList(
             // ANTIQUE
             "flintlock_pistol", "handcannon", "musket", "blunderbuss", "doublet", "repeating_musket",
-            "laser_musket", "plasmabuss",
+            "longarm", "fencer_carabine", "fencer_thumper", "laser_musket", "plasmabuss",
 
             //FRONTIER
-            "pax", "winnie", "callwell", "callwell_conversion", "callwell_terminal", "saketini",
-            "big_bore",
+            "pax", "winnie","winnie_millend", "red_raydar", "callwell", "callwell_conversion", "callwell_terminal", "saketini",
+            "saketini_ironport", "big_bore",
 
             // COPPER
             "scrapper", "rusty_gnat", "umax_pistol", "makeshift_rifle", "boomstick", "bruiser",
@@ -63,11 +63,11 @@ public class BlueprintScreen extends Screen {
             "floundergat", "marlin", "bomb_lance", "hullbreaker", "sequoia",
 
             // WRECKER
-            "mokova", "mak_mkii", "turnpike", "killer_23", "homemaker", "kalaskah", "basker", "tl_runner", "stigg",
+            "mokova", "mak_mkii", "turnpike", "killer_23", "homemaker", "kalaskah", "basker", "tl_runner", "stigg", "whizzbanger",
 
             // DIAMOND STEEL
-            "krauser", "soul_drummer", "uppercut", "micina", "valora", "prush_gun", "lockewood", "rg_jigsaw", "inertial",
-            "mas_55", "plasgun", "cyclone", "shard_culler",
+            "krauser", "soul_drummer", "uppercut", "micina", "valora", "prush_gun", "drill", "drill_conversion", "lockewood", "rg_jigsaw", "inertial",
+            "mas_55", "inquisitor", "plasgun", "cyclone", "shard_culler",
 
             // TREATED BRASS
             "m22_waltz", "waltz_conversion", "osgood_50", "grandle_og", "grandle", "cogloader", "gale", "jackhammer",

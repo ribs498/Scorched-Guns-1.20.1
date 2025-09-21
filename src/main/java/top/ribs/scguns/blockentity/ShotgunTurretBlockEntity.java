@@ -307,7 +307,6 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
         Vec3 targetPos = new Vec3(target.getX(), target.getY() + target.getEyeHeight() * 0.5, target.getZ());
         Vec3 direction = targetPos.subtract(muzzlePos).normalize();
 
-        // Fire the cluster of pellets
         fireCluster(bulletType, muzzlePos, direction, damageModifier);
 
         this.recoilPitchOffset = RECOIL_MAX;
@@ -316,26 +315,19 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
     }
 
     private void fireCluster(TurretProjectileEntity.BulletType bulletType, Vec3 muzzlePos, Vec3 baseDirection, int damageModifier) {
-        // Fetch base damage from the config
         double baseDamage = Config.COMMON.turret.bulletDamage.get(bulletType).get();
-
-        // If damage scaling is enabled
         if (Config.COMMON.turret.enableDamageScaling.get()) {
             long daysInWorld = this.level.getDayTime() / 24000L;
             double scalingRate = Config.COMMON.turret.damageScalingRate.get();
             double maxDamage = Config.COMMON.turret.maxScaledDamage.get();
 
-            // Calculate the scaled damage
             baseDamage = Math.min(baseDamage + (scalingRate * daysInWorld), maxDamage);
         }
 
-        // Apply damage modifier to the final damage
         double finalDamage = baseDamage + damageModifier;
 
-        // Split the damage across pellets
         double pelletDamage = finalDamage / PELLET_COUNT;
 
-        // Fire each pellet with adjusted direction and damage
         for (int i = 0; i < PELLET_COUNT; i++) {
             Vec3 spreadDirection = applySpread(baseDirection);
             TurretProjectileEntity projectile = getTurretProjectileEntity(bulletType, spreadDirection.x, spreadDirection.y, spreadDirection.z);
@@ -348,26 +340,21 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
 
 
     private Vec3 applySpread(Vec3 baseDirection) {
+        assert this.level != null;
         float angleX = (float) (this.level.random.nextGaussian() * SPREAD_ANGLE);
         float angleY = (float) (this.level.random.nextGaussian() * SPREAD_ANGLE);
 
-        // Convert to radians
         double yawRad = Math.toRadians(angleX);
         double pitchRad = Math.toRadians(angleY);
-
-        // Apply rotation
         double x = baseDirection.x;
         double y = baseDirection.y;
         double z = baseDirection.z;
 
-        // Rotate around Y axis (yaw)
         double tempX = x * Math.cos(yawRad) - z * Math.sin(yawRad);
         double tempZ = x * Math.sin(yawRad) + z * Math.cos(yawRad);
         double tempY = y;
         x = tempX;
         z = tempZ;
-
-        // Rotate around X axis (pitch)
         tempY = y * Math.cos(pitchRad) - z * Math.sin(pitchRad);
         tempZ = y * Math.sin(pitchRad) + z * Math.cos(pitchRad);
         y = tempY;
@@ -407,8 +394,6 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
         Vec3 toTarget = targetPos.subtract(turretPos);
         double distance = toTarget.length();
         Vec3 rayVector = toTarget.normalize().scale(distance);
-
-        // Adjust the start position to be slightly above the turret base
         Vec3 adjustedTurretPos = turretPos.add(0, 0.5, 0);
 
         ClipContext clipContext = new ClipContext(adjustedTurretPos, adjustedTurretPos.add(rayVector), ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, null);
@@ -480,6 +465,7 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
     private boolean tryInsertIntoShellCatcher(TurretProjectileEntity.BulletType bulletType) {
         for (Direction direction : Direction.values()) {
             BlockPos neighborPos = this.worldPosition.relative(direction);
+            assert this.level != null;
             BlockEntity blockEntity = this.level.getBlockEntity(neighborPos);
             if (blockEntity instanceof ShellCatcherModuleBlockEntity shellCatcher) {
                 ItemStack casingStack = switch (bulletType) {
@@ -562,7 +548,6 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
         boolean isPlayerTargetingModule = false;
         boolean isHostileTargetingModule = false;
 
-        // Check for targeting modules
         for (Direction direction : Direction.values()) {
             BlockState blockState = level.getBlockState(pos.relative(direction));
             if (blockState.getBlock() instanceof TurretTargetingBlock) {
@@ -606,7 +591,7 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
                             blacklistedEntityTypes.add(blacklistTag.getString(i));
                         }
                     }
-                } else if (hasEnemyLog) {
+                } else {
                     if (tag.contains("Whitelist", Tag.TAG_LIST)) {
                         ListTag listTag = tag.getList("Whitelist", Tag.TAG_COMPOUND);
                         for (int i = 0; i < listTag.size(); i++) {
@@ -626,7 +611,6 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
 
         Vec3 turretPos = new Vec3(this.worldPosition.getX() + 0.5, this.worldPosition.getY() + 1.0, this.worldPosition.getZ() + 0.5);
 
-        // Increase the vertical search range
         double verticalSearchRange = TARGETING_RADIUS;
         AABB searchBox = new AABB(pos).inflate(TARGETING_RADIUS, verticalSearchRange, TARGETING_RADIUS);
 
@@ -636,12 +620,14 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
                 entity -> entity != null
                         && entity.isAlive()
                         && !isOwner(entity)
-                        && ((!hasTeamLog && !hasEnemyLog) || // Default targeting when no logs are present
+                        && ((!hasTeamLog && !hasEnemyLog) ||
                         (hasTeamLog && !loggedEntityUUIDs.contains(entity.getUUID()) && !blacklistedEntityTypes.contains(EntityType.getKey(entity.getType()).toString())) ||
                         (hasEnemyLog && (whitelistedEntityUUIDs.contains(entity.getUUID()) || whitelistedEntityTypes.contains(EntityType.getKey(entity.getType()).toString()))))
                         && !(entity instanceof EnderMan)
                         && (!finalIsPlayerTargetingModule || (entity instanceof Player && !((Player) entity).isCreative()))
-                        && (!finalIsHostileTargetingModule || entity.getType().getCategory() == MobCategory.MONSTER)
+                        && (!finalIsHostileTargetingModule ||
+                        (entity.getType().getCategory() == MobCategory.MONSTER ||
+                                entity.getType().is(ModTags.Entities.TURRET_ENEMY_WHITELIST)))
                         && !entity.getType().is(ModTags.Entities.TURRET_BLACKLIST)
         );
 
@@ -653,7 +639,7 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
 
             if (this.target != null) {
                 double predictedX = this.target.getX() + this.target.getDeltaMovement().x * 7;
-                double predictedY = this.target.getY() + (this.target.getBbHeight() / 2); // Target center of entity
+                double predictedY = this.target.getY() + (this.target.getBbHeight() / 2);
                 double predictedZ = this.target.getZ() + this.target.getDeltaMovement().z * 7;
 
                 smoothedTargetX = lerp(smoothedTargetX, predictedX, POSITION_SMOOTHING_FACTOR);
@@ -751,7 +737,7 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
         tag.putInt("DisableCooldown", this.disableCooldown);
         if (ownerUUID != null) {
             tag.putUUID("OwnerUUID", ownerUUID);
-            tag.putString("OwnerName", ownerName); // Save the owner's name
+            tag.putString("OwnerName", ownerName);
         }
     }
 
@@ -767,7 +753,7 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
         itemHandler.deserializeNBT(tag.getCompound("Inventory"));
         if (tag.hasUUID("OwnerUUID")) {
             this.ownerUUID = tag.getUUID("OwnerUUID");
-            this.ownerName = tag.getString("OwnerName"); // Load the owner's name
+            this.ownerName = tag.getString("OwnerName");
         }
     }
 
@@ -792,7 +778,7 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
     }
 
     public SimpleContainer getContainer() {
-        SimpleContainer container = new SimpleContainer(10); // Updated to include all 10 slots
+        SimpleContainer container = new SimpleContainer(10);
         for (int i = 0; i < 10; i++) {
             container.setItem(i, itemHandler.getStackInSlot(i));
         }
@@ -823,7 +809,7 @@ public class ShotgunTurretBlockEntity extends BlockEntity implements MenuProvide
     }
     public void setOwner(ServerPlayer player) {
         this.ownerUUID = player.getUUID();
-        this.ownerName = player.getName().getString(); // Save the owner's name
+        this.ownerName = player.getName().getString();
     }
 
     public String getOwnerName() {

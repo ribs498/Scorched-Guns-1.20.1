@@ -24,16 +24,13 @@ public class AstellaModel implements IOverrideModel {
     @Override
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
 
-        //Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.ASTELLA_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
-
         if (Gun.getScope(stack) == null) {
             RenderUtil.renderModel(SpecialModels.ASTELLA_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         } else {
             RenderUtil.renderModel(SpecialModels.ASTELLA_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
         }
 
-        // Render the standard barrel by default
         boolean extendedBarrelAttached = false;
 
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL)) {
@@ -47,8 +44,6 @@ public class AstellaModel implements IOverrideModel {
             else if (Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.ADVANCED_SILENCER.get())
                 RenderUtil.renderModel(SpecialModels.ASTELLA_ADVANCED_SILENCER.getModel(), stack, matrixStack, buffer, light, overlay);
         }
-
-        // Render the standard barrel if no extended barrel is attached
         if (!extendedBarrelAttached) {
             RenderUtil.renderModel(SpecialModels.ASTELLA_STAN_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
         }
@@ -61,6 +56,9 @@ public class AstellaModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.ASTELLA_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.ASTELLA_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.ASTELLA_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+
         }
         else
             RenderUtil.renderModel(SpecialModels.ASTELLA_STANDARD_GRIP.getModel(), stack, matrixStack, buffer, light, overlay);

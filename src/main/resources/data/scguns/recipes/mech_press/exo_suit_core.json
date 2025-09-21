@@ -3,7 +3,7 @@
   "processingTime": 60,
   "ingredients": [
     {
-      "item": "scguns:energy_cell"
+      "item": "scguns:energy_core"
     },
     {
       "item": "scguns:plasma"

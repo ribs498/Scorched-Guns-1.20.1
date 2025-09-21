@@ -1,0 +1,72 @@
+{
+  "display": {
+    "flash": {
+      "size": 1.0,
+      "yOffset": 5.8,
+      "zOffset": -9.2,
+      "textureLocation": "muzzle_flash_3"
+    }
+  },
+  "general": {
+    "weaponType": "plasma",
+    "alwaysSpread": false,
+    "fireMode": "scguns:automatic",
+    "gripType": "scguns:two_handed",
+    "baseGripType": "scguns:two_handed",
+    "rate": 3,
+    "recoilAngle": 2.0,
+    "recoilKick": 0.25,
+    "spread": 1.0,
+    "meleeDamage": 5.5,
+    "meleeCooldownTicks": 20,
+    "hotBarrelRate": 10,
+    "criticalChance": 0.05
+  },
+  "modules": {
+    "attachments": {
+      "scope": {
+        "size": 0.8,
+        "yOffset": 6.4,
+        "zOffset": 4.8
+      },
+      "stock": {
+        "scale": 0.0
+      },
+      "magazine": {
+        "scale": 0.0
+      }
+    },
+    "zoom": {
+      "fovModifier": 0.6,
+      "yOffset": 6.75,
+      "zOffset": 1.6
+    }
+  },
+  "projectile": {
+    "advantage": "scguns:none",
+    "damage": 22.0,
+    "ejectsCasing": true,
+    "gravity": false,
+    "item": "scguns:energy_cell",
+    "casingType": "scguns:empty_cell",
+    "casingParticle": "scguns:iron_casing",
+    "life": 50,
+    "size": 0.05,
+    "speed": 7.5,
+    "trailLengthMultiplier": 2.0
+  },
+  "reloads": {
+    "emptyMagTimer": 10,
+    "maxAmmo": 25,
+    "reloadTimer": 90,
+    "reloadType": "scguns:mag_fed"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.plasma.fire_2",
+    "preFire": "scguns:item.gauss.pre_fire",
+    "fire": "scguns:item.plasma.fire_2",
+    "reload": "scguns:item.gauss.reload",
+    "flyby": "scguns:bullet.flyby1"
+  }
+}

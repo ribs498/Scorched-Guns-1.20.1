@@ -69,7 +69,7 @@ public class ThrowableNailBombEntity extends ThrowableGrenadeEntity
 
         this.level().playSound(null, this.getX(), y, this.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1, 1);
         this.level().playSound(null, this.getX(), y, this.getZ(), SoundEvents.GLASS_BREAK, SoundSource.BLOCKS, 1.5F, 0.8F);
-        createShrapnelExplosion(this, 6.0F, false);
+        createShrapnelExplosion(this, 15.0F, false);
         this.spawnExplosionParticles(new Vec3(this.getX(), y, this.getZ()));
     }
 
@@ -106,7 +106,7 @@ public class ThrowableNailBombEntity extends ThrowableGrenadeEntity
                 origin.x, origin.y, origin.z,
                 1, 0.1, 0.1, 0.1, 0.0);
 
-        int shrapnelCount = 25;
+        int shrapnelCount = 30;
         float baseDamage = 8.0f;
 
         for (int i = 0; i < shrapnelCount; i++) {

@@ -13,11 +13,12 @@
     }
   },
   "general": {
+    "weaponType": "sniper",
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 24,
+    "rate": 26,
     "recoilAngle": 6.0,
     "recoilKick": 4.0,
     "spread": 0.0,
@@ -56,6 +57,7 @@
   "projectile": {
     "advantage": "scguns:heavy",
     "damage": 44.0,
+    "armorPen": 5.5,
     "ejectsCasing": true,
     "gravity": false  ,
     "item": "scguns:krahg_round",

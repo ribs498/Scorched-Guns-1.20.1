@@ -4,6 +4,8 @@
     "scguns:advanced_round",
     "scguns:standard_copper_round",
     "scguns:gibbs_round",
-    "scguns:krahg_round"
+    "scguns:krahg_round",
+    "scguns:shatter_round",
+    "scguns:frog_dart"
   ]
 }

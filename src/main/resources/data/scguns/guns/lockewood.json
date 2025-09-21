@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "rifle",
     "alwaysSpread": false,
     "fireMode": "scguns:burst",
     "burstAmount": 3,
@@ -54,6 +55,7 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 11.0,
+    "armorPen": 3.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:advanced_round",

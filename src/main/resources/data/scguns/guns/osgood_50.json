@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "pistol",
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
     "rate": 8,
@@ -45,6 +46,7 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 24.0,
+    "armorPen": 4.0,
     "gravity": false,
     "item": "scguns:beowulf_round",
     "casingType": "scguns:small_diamond_steel_casing",

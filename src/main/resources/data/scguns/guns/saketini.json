@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "sniper",
     "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
@@ -15,7 +16,7 @@
     "rate": 6,
     "recoilAngle": 4.0,
     "recoilKick": 2.0,
-    "spread": 0.5,
+    "spread": 0.25,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
     "meleeReach": 4.0,
@@ -48,7 +49,8 @@
   },
   "projectile": {
     "advantage": "scguns:illager",
-    "damage": 14.5,
+    "damage": 15.0,
+    "armorPen": 2.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:standard_copper_round",
@@ -57,7 +59,7 @@
     "ejectDuringReload": true,
     "life": 55,
     "size": 1.0,
-    "speed": 7.0,
+    "speed": 10.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {

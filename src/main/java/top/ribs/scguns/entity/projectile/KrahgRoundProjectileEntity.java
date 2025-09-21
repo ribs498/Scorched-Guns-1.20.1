@@ -64,10 +64,6 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
 
     public KrahgRoundProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
-        float armorBypass = 5.0F;
-        float puncturingBypass = GunEnchantmentHelper.getPuncturingArmorBypass(weapon);
-        armorBypass += puncturingBypass;
-        this.setArmorBypassAmount(armorBypass);
     }
 
     @Override

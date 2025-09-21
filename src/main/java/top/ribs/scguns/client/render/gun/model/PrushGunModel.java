@@ -35,6 +35,9 @@ public class PrushGunModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+
         } else {
             RenderUtil.renderModel(SpecialModels.PRUSH_GUN_STAN_GRIP.getModel(), stack, matrixStack, buffer, light, overlay);
         }

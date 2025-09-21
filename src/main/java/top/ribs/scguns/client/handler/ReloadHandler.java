@@ -108,7 +108,6 @@ public class ReloadHandler {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END)
             return;
-
         Player player = Minecraft.getInstance().player;
         if (player != null) {
             this.prevReloadTimer = this.reloadTimer;
@@ -116,23 +115,40 @@ public class ReloadHandler {
                 ItemStack stack = player.getMainHandItem();
                 if (Minecraft.getInstance().isPaused() && stack.getItem() instanceof GunItem) {
                     Gun gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
-                    if (gun.getReloads().getReloadType() != ReloadType.MANUAL) {
-                        setReloading(false);
-                        return;
+                    CompoundTag tag = stack.getOrCreateTag();
+                    if (gun.getReloads().getReloadType() == ReloadType.MANUAL) {
+                        tag.putString(AnimatedGunItem.RELOAD_STATE, "STOPPING");
+                        tag.putBoolean("scguns:IsPlayingReloadStop", true);
+                        tag.remove("InReloadLoop");
+                        tag.remove("scguns:IsReloading");
+                        if (stack.getItem() instanceof AnimatedGunItem animatedGun) {
+                            long id = GeoItem.getId(stack);
+                            AnimationController<GeoAnimatable> controller = animatedGun
+                                    .getAnimatableInstanceCache()
+                                    .getManagerForId(id)
+                                    .getAnimationControllers()
+                                    .get("controller");
+
+                            if (controller != null) {
+                                controller.stop();
+                                controller.setAnimationSpeed(1.0);
+                                controller.tryTriggerAnimation(
+                                        animatedGun.isInCarbineMode(stack) ? "carbine_reload_stop" : "reload_stop"
+                                );
+                            }
+                        }
                     }
+
+                    setReloading(false);
+                    return;
                 }
             }
-            if (ModSyncedDataKeys.RELOADING.getValue(player) && Minecraft.getInstance().isPaused()) {
-                setReloading(false);
-            }
             PacketHandler.getPlayChannel().sendToServer(new C2SMessageLeftOverAmmo());
-
             if (ModSyncedDataKeys.RELOADING.getValue(player)) {
                 if (this.reloadingSlot != player.getInventory().selected) {
                     setReloading(false);
                 }
             }
-
             this.updateReloadTimer(player);
             ItemStack stack = player.getMainHandItem();
             if (stack.getItem() instanceof GunItem && !(stack.getItem() instanceof AnimatedGunItem)) {

@@ -1,4 +1,5 @@
 {
+	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"textures": {
 		"1": "scguns:item/pyroclastic_flow",
@@ -72,8 +73,8 @@
 			}
 		},
 		{
-			"from": [7.25, 3.95, 5.1],
-			"to": [8.75, 5.45, 5.6],
+			"from": [7.35, 4.05, 5.1],
+			"to": [8.65, 5.35, 5.6],
 			"rotation": {"angle": 45, "axis": "z", "origin": [8, 4.7, 5.6]},
 			"faces": {
 				"north": {"uv": [2.75, 5.75, 3.125, 6.125], "texture": "#1"},

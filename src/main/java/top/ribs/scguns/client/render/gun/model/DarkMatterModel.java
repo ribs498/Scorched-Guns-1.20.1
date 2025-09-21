@@ -67,6 +67,9 @@ public class DarkMatterModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.DARK_MATTER_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.DARK_MATTER_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.DARK_MATTER_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
+
         }
     }
 

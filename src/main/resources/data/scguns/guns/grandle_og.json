@@ -8,11 +8,12 @@
     }
   },
   "general": {
+    "weaponType": "rifle",
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 4,
+    "rate": 5,
     "recoilAngle": 1.7,
     "recoilKick": 0.5,
     "spread": 1.0,
@@ -51,7 +52,8 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 8.5,
+    "damage": 9,
+    "armorPen": 2.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:compact_advanced_round",
@@ -72,8 +74,8 @@
   "sounds": {
     "cock": "scguns:item.pistol.cock",
     "preReload": "scguns:item.ping.ping",
-    "enchantedFire": "scguns:item.rusty_gnat.fire",
-    "fire": "scguns:item.rusty_gnat.fire",
+    "enchantedFire": "scguns:item.new_rifle.fire",
+    "fire": "scguns:item.new_rifle.fire",
     "reload": "scguns:item.gauss.reload",
     "silencedFire": "scguns:item.rusty_gnat.silenced_fire",
     "flyby": "scguns:bullet.flyby1"

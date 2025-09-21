@@ -1044,14 +1044,14 @@
 				}
 			},
 			"particle_effects": {
-				"0.0": {
+				"0.0417": {
 					"effect": "reset_mag_position"
-				},
-				"2.5417": {
-					"effect": "end_reload "
 				},
 				"2.6667": {
 					"effect": "loaded"
+				},
+				"2.7083": {
+					"effect": "resume_mag_tracking"
 				}
 			}
 		},
@@ -1823,7 +1823,7 @@
 				}
 			},
 			"particle_effects": {
-				"0.0": {
+				"0.0417": {
 					"effect": "reset_mag_position"
 				},
 				"2.5417": {
@@ -1831,6 +1831,9 @@
 				},
 				"2.6667": {
 					"effect": "loaded"
+				},
+				"2.7083": {
+					"effect": "resume_mag_tracking"
 				}
 			}
 		},

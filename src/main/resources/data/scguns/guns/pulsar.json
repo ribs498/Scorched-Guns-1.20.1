@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "shock",
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
     "rate": 5,

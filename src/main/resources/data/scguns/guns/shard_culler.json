@@ -14,6 +14,7 @@
     }
   },
   "general": {
+    "weaponType": "laser",
     "hasCameraShake": false,
     "fireMode": "scguns:beam",
     "beamColor": "#d309d3",
@@ -29,8 +30,9 @@
     "meleeDamage": 4.0,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 10,
-    "beamAmmoConsumptionDelay": 8000,
+    "beamAmmoConsumptionDelay": 250,
     "beamDamageDelay": 0,
+
     "enableMining": true,
     "miningSpeed": 1.0,
     "criticalChance": 0.05,
@@ -43,11 +45,16 @@
     "damage": 6.0,
     "gravity": false,
     "ejectsCasing": false,
+    "armorPen": 4.0,
     "item": "scguns:energy_core",
     "life": 50,
     "size": 1.0,
     "speed": 1.5,
-    "trailLengthMultiplier": 2.0
+    "trailLengthMultiplier": 2.0,
+    "impactEffect": "minecraft:slowness",
+    "impactEffectDuration": 100,
+    "impactEffectChance": 0.75,
+    "impactEffectAmplifier": 0
   },
   "reloads": {
     "emptyMagTimer": 50,

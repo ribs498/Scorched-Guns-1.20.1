@@ -88,12 +88,10 @@ public class CryoniterBlock extends BaseEntityBlock {
             double y = pos.getY() + 1.0;
             double z = pos.getZ() + 0.5;
 
-            // Spawn snowflake particles
             if (random.nextDouble() < 0.3) {
                 level.addParticle(ParticleTypes.SNOWFLAKE, x, y, z, 0.0, -0.1, 0.0);
             }
 
-            // Spawn white smoke particles
             for (Direction direction : Direction.values()) {
                 if (direction != Direction.UP) {
                     BlockPos relativePos = pos.relative(direction);
@@ -107,8 +105,6 @@ public class CryoniterBlock extends BaseEntityBlock {
                     }
                 }
             }
-
-            // Play a freezing sound occasionally
             if (random.nextDouble() < 0.1) {
                 level.playLocalSound(x, y, z, SoundEvents.POWDER_SNOW_FALL, SoundSource.BLOCKS, 0.2F + random.nextFloat() * 0.2F, 0.9F + random.nextFloat() * 0.15F, false);
             }

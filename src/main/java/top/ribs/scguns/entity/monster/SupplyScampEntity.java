@@ -40,6 +40,7 @@ import top.ribs.scguns.client.screen.SupplyScampMenuProvider;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModItems;
+import top.ribs.scguns.init.ModSounds;
 
 import java.util.*;
 
@@ -613,19 +614,19 @@ public class SupplyScampEntity extends TamableAnimal {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.IRON_GOLEM_STEP;
+        return SoundEvents.VEX_AMBIENT;
     }
 
     @Nullable
     @Override
     protected SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
-        return SoundEvents.IRON_GOLEM_HURT;
+        return ModSounds.SCAMP_HURT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.IRON_GOLEM_DEATH;
+        return ModSounds.SCAMP_DIE.get();
     }
 
     @Override

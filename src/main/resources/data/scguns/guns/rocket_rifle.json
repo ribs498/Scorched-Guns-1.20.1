@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "heavy",
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",

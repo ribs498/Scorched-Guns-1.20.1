@@ -13,7 +13,9 @@
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 37,
-    "criticalChance": 0.05
+    "criticalChance": 0.05,
+    "isSilenced": true,
+    "enableGunLight": false
   },
   "modules": {
     "attachments": {
@@ -28,6 +30,7 @@
     }
   },
   "projectile": {
+    "weaponType": "special",
     "advantage": "scguns:none",
     "damage": 0.0,
     "ejectsCasing": false,

@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "plasma",
     "alwaysSpread": true,
     "fireMode": "scguns:pulse",
     "fireTimer": 30,

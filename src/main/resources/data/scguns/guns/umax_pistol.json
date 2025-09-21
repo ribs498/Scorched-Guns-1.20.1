@@ -2,20 +2,23 @@
   "display": {
   },
   "general": {
-    "alwaysSpread": false,
-    "fireMode": "scguns:semi_automatic",
+    "weaponType": "pistol",
+    "alwaysSpread": true,
+    "fireMode": "scguns:automatic",
     "gripType": "scguns:one_handed",
-    "rate": 8,
+    "rate": 4,
     "recoilAngle": 1.0,
     "recoilKick": 1.0,
-    "spread": 0.1,
+    "spread": 1.5,
     "meleeDamage": 2.0,
     "meleeCooldownTicks": 15,
     "meleeReach": 2.5,
     "energyUse": 25.0,
     "hotBarrelRate": 40,
-    "criticalChance": 0.05,
-    "enableGunLight": false
+    "criticalChance": 0.3,
+    "critDamageMultiplier": 2.0,
+    "enableGunLight": false,
+    "isSilenced": true
   },
   "modules": {
     "attachments": {
@@ -36,18 +39,19 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 6.0,
+    "damage": 4.0,
     "ejectsCasing": false,
     "gravity": true,
     "item": "scguns:standard_bullet",
     "life": 40,
     "size": 1.0,
-    "speed": 6.0,
+    "speed": 4.0,
     "trailLengthMultiplier": 0.2
   },
   "reloads": {
     "emptyMagTimer": 30,
-    "maxAmmo": 7,
+    "maxAmmo": 12,
+    "reloadAmount": 2,
     "reloadItem": "scguns:standard_bullet",
     "reloadTimer": 15,
     "reloadType": "scguns:manual"

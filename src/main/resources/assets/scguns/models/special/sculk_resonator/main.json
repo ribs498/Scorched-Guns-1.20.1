@@ -1,4 +1,5 @@
 {
+	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "scguns:item/sculk_resonator",
@@ -332,8 +333,8 @@
 			}
 		},
 		{
-			"from": [6.70711, 3.75, -0.9],
-			"to": [8.70711, 5.75, 0.1],
+			"from": [6.80711, 3.85, -0.9],
+			"to": [8.60711, 5.65, 0.1],
 			"rotation": {"angle": 45, "axis": "z", "origin": [8.70711, 4.75, -6.4]},
 			"faces": {
 				"north": {"uv": [4.5, 0.5, 5, 1], "texture": "#0"},

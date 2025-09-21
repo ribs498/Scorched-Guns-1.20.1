@@ -8,10 +8,11 @@
     }
   },
   "general": {
+    "weaponType": "pistol",
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
-    "rate": 13,
+    "rate": 10,
     "recoilAngle": 5.0,
     "recoilKick": 2.0,
     "spread": 3.0,
@@ -45,7 +46,7 @@
   },
   "projectile": {
     "advantage": "scguns:illager",
-    "damage": 7.5,
+    "damage": 7.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:compact_copper_round",
@@ -54,7 +55,7 @@
     "ejectDuringReload": true,
     "life": 35,
     "size": 1.0,
-    "speed": 5.0,
+    "speed": 4.5,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {

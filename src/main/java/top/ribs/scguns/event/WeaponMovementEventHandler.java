@@ -78,28 +78,23 @@ public class WeaponMovementEventHandler {
 
         boolean holdingGun = (mainHandItem.getItem() instanceof GunItem) || (offHandItem.getItem() instanceof GunItem);
 
-        // If reloading but not holding a gun, force stop reloading
         if (isReloading && !holdingGun) {
             ModSyncedDataKeys.RELOADING.setValue(player, false);
             isReloading = false;
         }
 
-        // Calculate base weapon speed modifiers
         float mainHandSpeedModifier = getEffectiveSpeedModifier(mainHandItem, hasExoSuitLegs);
         float offHandSpeedModifier = getEffectiveSpeedModifier(offHandItem, hasExoSuitLegs);
         float finalSpeedModifier = Math.min(mainHandSpeedModifier, offHandSpeedModifier);
 
-        // Determine which weapon is the relevant one for enchantments
         ItemStack relevantWeapon = mainHandSpeedModifier < offHandSpeedModifier ? mainHandItem : offHandItem;
 
-        // Apply lightweight enchantment for heavy weapons (penalty reduction)
         if (finalSpeedModifier < 1.0F && isHeavyWeapon(relevantWeapon)) {
             int lightweightLevel = relevantWeapon.getEnchantmentLevel(ModEnchantments.LIGHTWEIGHT.get());
             double reduction = LIGHTWEIGHT_REDUCTION_PER_LEVEL * lightweightLevel;
             finalSpeedModifier = (float) Math.min(1.0F, finalSpeedModifier + reduction);
         }
 
-        // Apply heavy weapon modifier if needed
         if (finalSpeedModifier != 1.0F) {
             AttributeModifier modifier = new AttributeModifier(
                     HEAVY_WEAPON_MODIFIER_UUID,
@@ -110,12 +105,10 @@ public class WeaponMovementEventHandler {
             movementSpeed.addTransientModifier(modifier);
         }
 
-        // Apply lightweight speed bonus for all guns with lightweight enchantment
         if (holdingGun) {
             ItemStack gunWithLightweight = null;
             int maxLightweightLevel = 0;
 
-            // Find the gun with the highest lightweight level
             if (mainHandItem.getItem() instanceof GunItem) {
                 int level = mainHandItem.getEnchantmentLevel(ModEnchantments.LIGHTWEIGHT.get());
                 if (level > maxLightweightLevel) {
@@ -131,16 +124,14 @@ public class WeaponMovementEventHandler {
                 }
             }
 
-            if (gunWithLightweight != null && maxLightweightLevel > 0) {
+            if (gunWithLightweight != null) {
                 double speedBonus = 0.0D;
 
                 if (isHeavyWeapon(gunWithLightweight)) {
-                    // For heavy weapons: Level 2 gives 5% speed boost (level 1 only removes penalty)
                     if (maxLightweightLevel >= 2) {
                         speedBonus = LIGHTWEIGHT_SPEED_BONUS_PER_LEVEL;
                     }
                 } else {
-                    // For non-heavy weapons: 5% speed boost per level
                     speedBonus = LIGHTWEIGHT_SPEED_BONUS_PER_LEVEL * maxLightweightLevel;
                 }
 
@@ -155,23 +146,13 @@ public class WeaponMovementEventHandler {
                 }
             }
         }
-
-        // Apply reload speed penalty if reloading with a gun
         if (isReloading && holdingGun) {
             double reloadSpeedModifier = RELOAD_SPEED_PENALTY;
-
-            // Get the gun item that's being reloaded (prefer main hand)
             ItemStack gunItem = mainHandItem.getItem() instanceof GunItem ? mainHandItem : offHandItem;
-
-            // Apply lightweight enchantment bonus during reload
             int lightweightLevel = gunItem.getEnchantmentLevel(ModEnchantments.LIGHTWEIGHT.get());
             double lightweightBonus = LIGHTWEIGHT_RELOAD_BONUS_PER_LEVEL * lightweightLevel;
-
-            // Apply swift sneak enchantment bonus during reload (from legs equipment)
             int swiftSneakLevel = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SWIFT_SNEAK, legsItem);
             double swiftSneakBonus = SWIFT_SNEAK_RELOAD_BONUS_PER_LEVEL * swiftSneakLevel;
-
-            // Calculate final reload speed (cap at 100% to prevent exceeding normal speed)
             reloadSpeedModifier = Math.min(1.0D, reloadSpeedModifier + lightweightBonus + swiftSneakBonus);
 
             AttributeModifier reloadModifier = new AttributeModifier(

@@ -190,27 +190,25 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     }
     @Override
     public void die(@NotNull DamageSource pCause) {
-        super.die(pCause);
+        if (isRegenerating) {
+            isRegenerating = false;
+            this.removeEffect(MobEffects.DAMAGE_RESISTANCE);
+        }
+        if (isRegeneratingThirdPhase) {
+            isRegeneratingThirdPhase = false;
+            this.removeEffect(MobEffects.DAMAGE_RESISTANCE);
+        }
+
+        this.entityData.set(IS_CHARGING, false);
+        this.chargeWarmupTicks = 0;
+        this.chargeActiveTicks = 0;
+        this.postChargeRotationTicks = 0;
 
         if (!this.level().isClientSide) {
-            SupplyScampEntity supplyScamp = new SupplyScampEntity(ModEntities.SUPPLY_SCAMP.get(), this.level());
-            supplyScamp.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-            supplyScamp.setPersistenceRequired();
-            this.level().addFreshEntity(supplyScamp);
-
-            this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                    SoundEvents.GENERIC_EXPLODE, SoundSource.NEUTRAL, 1.0F, 1.2F);
-
-            if (this.level() instanceof ServerLevel serverLevel) {
-                for (int i = 0; i < 20; i++) {
-                    serverLevel.sendParticles(ParticleTypes.HAPPY_VILLAGER,
-                            supplyScamp.getX() + (this.random.nextDouble() - 0.5) * 2.0,
-                            supplyScamp.getY() + 1.0 + this.random.nextDouble(),
-                            supplyScamp.getZ() + (this.random.nextDouble() - 0.5) * 2.0,
-                            1, 0.0, 0.0, 0.0, 0.0);
-                }
-            }
+            this.bossEvent.removeAllPlayers();
         }
+
+        super.die(pCause);
     }
     @Override
     public void setCustomName(Component name) {
@@ -246,7 +244,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     }
 
     private void triggerWeaponDestruction() {
-        if (!this.level().isClientSide && !hasTriggeredWeaponDestruction) {
+        if (!this.level().isClientSide && !hasTriggeredWeaponDestruction && this.isAlive()) {
             hasTriggeredWeaponDestruction = true;
             setInSecondPhase(true);
 
@@ -302,7 +300,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
         }
     }
     private void triggerThirdPhase() {
-        if (!this.level().isClientSide && !hasTriggeredThirdPhase) {
+        if (!this.level().isClientSide && !hasTriggeredThirdPhase && this.isAlive()) {
             hasTriggeredThirdPhase = true;
             setInThirdPhase(true);
 
@@ -509,7 +507,22 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     @Override
     public void tick() {
         super.tick();
+        if (!this.isAlive()) {
+            if (isRegenerating) {
+                isRegenerating = false;
+                this.removeEffect(MobEffects.DAMAGE_RESISTANCE);
+            }
+            if (isRegeneratingThirdPhase) {
+                isRegeneratingThirdPhase = false;
+                this.removeEffect(MobEffects.DAMAGE_RESISTANCE);
+            }
+            this.entityData.set(IS_CHARGING, false);
 
+            if (!this.level().isClientSide) {
+                this.bossEvent.removeAllPlayers();
+            }
+            return;
+        }
         if (!this.level().isClientSide) {
             if (terrainDestructionCooldown > 0) {
                 terrainDestructionCooldown--;
@@ -595,6 +608,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
         }
     }
     private void handleThirdPhase() {
+        if (!this.isAlive()) return;
         if (isRegeneratingThirdPhase && regenerationTicksThirdPhase > 0) {
             float currentHealth = this.getHealth();
             if (currentHealth < THIRD_PHASE_REGENERATION_TARGET_HEALTH) {
@@ -729,6 +743,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
         }
     }
     private void handleChargingPhase() {
+        if (!this.isAlive()) return;
         LivingEntity target = this.getTarget();
         if (target == null) return;
 
@@ -887,6 +902,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
 
         @Override
         public boolean canUse() {
+            if (!ScampTankEntity.this.isAlive()) return false;
             if (!ScampTankEntity.this.isInSecondPhase() || ScampTankEntity.this.isInThirdPhase()) return false;
             if (ScampTankEntity.this.chargeCooldown > 0) return false;
             if (ScampTankEntity.this.chargeWarmupTicks > 0 || ScampTankEntity.this.chargeActiveTicks > 0) return false;
@@ -901,6 +917,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
 
         @Override
         public boolean canContinueToUse() {
+            if (!ScampTankEntity.this.isAlive()) return false;
             return ScampTankEntity.this.chargeWarmupTicks > 0 ||
                     ScampTankEntity.this.chargeActiveTicks > 0 ||
                     ScampTankEntity.this.postChargeRotationTicks > 0;
@@ -1376,11 +1393,8 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     }
     private class TankChaseGoal extends Goal {
         private int pathUpdateTimer = 0;
-        private int repositionTimer = 0;
         private double targetX, targetZ;
         private boolean hasDestination = false;
-        private Vec3 lastTargetPos = Vec3.ZERO;
-        private int failedPathAttempts = 0;
 
         public TankChaseGoal() {
             this.setFlags(EnumSet.of(Goal.Flag.MOVE, Goal.Flag.LOOK));
@@ -1388,6 +1402,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
 
         @Override
         public boolean canUse() {
+            if (!ScampTankEntity.this.isAlive()) return false;
             if (ScampTankEntity.this.isInThirdPhase()) {
                 return true;
             }
@@ -1405,6 +1420,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
 
         @Override
         public boolean canContinueToUse() {
+            if (!ScampTankEntity.this.isAlive()) return false;
             if (ScampTankEntity.this.isInThirdPhase()) {
                 return hasDestination && !ScampTankEntity.this.getNavigation().isDone();
             }
@@ -1419,7 +1435,6 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
         @Override
         public void start() {
             pathUpdateTimer = 0;
-            failedPathAttempts = 0;
             calculateDestination();
         }
 
@@ -1515,7 +1530,6 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
         public void stop() {
             ScampTankEntity.this.getNavigation().stop();
             hasDestination = false;
-            failedPathAttempts = 0;
         }
     }
 
@@ -1529,6 +1543,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
 
         @Override
         public boolean canUse() {
+            if (!ScampTankEntity.this.isAlive()) return false;
             return ScampTankEntity.this.getTarget() != null &&
                     !ScampTankEntity.this.isInSecondPhase() &&
                     ScampTankEntity.this.postChargeRotationTicks <= 0 &&

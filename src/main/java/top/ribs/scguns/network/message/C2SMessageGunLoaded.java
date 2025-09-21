@@ -83,22 +83,23 @@ public class C2SMessageGunLoaded extends PlayMessage<C2SMessageGunLoaded> {
                         boolean weaponFull = tracker.isWeaponFull(player);
                         boolean hasNoAmmo = tracker.hasNoAmmo(player);
 
-
                         if (weaponFull || hasNoAmmo) {
-                            ModSyncedDataKeys.RELOADING.setValue(player, false);
-                            tag.remove("IsReloading");
-                            tag.remove("scguns:IsReloading");
-
                             if (player.getMainHandItem().getItem() instanceof AnimatedGunItem) {
-                                tag.putString("scguns:ReloadState", "STOPPING");
-                                tag.putBoolean("scguns:IsPlayingReloadStop", true);
-                                PacketHandler.getPlayChannel().sendToPlayer(() -> player, new S2CMessageStopReload());
-                            }
+                                // Mark that we should stop after the current animation loop finishes
+                                tag.putBoolean("scguns:ShouldStopAfterLoop", true);
+                                // DON'T immediately set RELOADING to false - let the animation complete
+                                // The client-side animation will handle this when the loop finishes
+                            } else {
+                                // For non-animated guns, stop immediately as before
+                                ModSyncedDataKeys.RELOADING.setValue(player, false);
+                                tag.remove("IsReloading");
+                                tag.remove("scguns:IsReloading");
 
-                            PacketHandler.getPlayChannel().sendToNearbyPlayers(
-                                    () -> LevelLocation.create(player.level(), player.getX(), player.getY(), player.getZ(), 64),
-                                    new S2CMessageReload(false)
-                            );
+                                PacketHandler.getPlayChannel().sendToNearbyPlayers(
+                                        () -> LevelLocation.create(player.level(), player.getX(), player.getY(), player.getZ(), 64),
+                                        new S2CMessageReload(false)
+                                );
+                            }
                         }
                     }
                 }

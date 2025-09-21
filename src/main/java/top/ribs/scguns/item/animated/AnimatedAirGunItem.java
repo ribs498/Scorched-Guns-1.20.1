@@ -1,6 +1,5 @@
 package top.ribs.scguns.item.animated;
 
-import com.simibubi.create.content.equipment.armor.BacktankUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
@@ -15,6 +14,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.interfaces.IAirGun;
+import top.ribs.scguns.util.AirSourceHelper;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -34,8 +34,12 @@ public class AnimatedAirGunItem extends AnimatedGunItem implements IAirGun {
     @Override
     public boolean isBarVisible(ItemStack stack) {
         Boolean result = DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
-            List<ItemStack> backtanks = BacktankUtil.getAllWithAir(getClientPlayer());
-            return !backtanks.isEmpty() || stack.isDamaged();
+            Player player = getClientPlayer();
+            if (player != null) {
+                AirSourceHelper.AirSource airSource = AirSourceHelper.getBestAirSource(player);
+                return airSource.isAvailable() || stack.isDamaged();
+            }
+            return stack.isDamaged();
         });
         return result != null && result;
     }
@@ -43,15 +47,14 @@ public class AnimatedAirGunItem extends AnimatedGunItem implements IAirGun {
     @Override
     public int getBarWidth(ItemStack stack) {
         Integer width = DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
-            List<ItemStack> backtanks = BacktankUtil.getAllWithAir(getClientPlayer());
-            if (!backtanks.isEmpty()) {
-                ItemStack backtank = backtanks.get(0);
-                int maxAir = BacktankUtil.maxAir(backtank);
-                float air = BacktankUtil.getAir(backtank);
-                return Math.round(13.0F * air / maxAir);
-            } else {
-                return Math.round(13.0F - (float) stack.getDamageValue() * 13.0F / (float) stack.getMaxDamage());
+            Player player = getClientPlayer();
+            if (player != null) {
+                AirSourceHelper.AirInfo airInfo = AirSourceHelper.getAirInfo(player);
+                if (airInfo.sourceType() != AirSourceHelper.AirSource.Type.NONE) {
+                    return airInfo.barWidth();
+                }
             }
+            return Math.round(13.0F - (float) stack.getDamageValue() * 13.0F / (float) stack.getMaxDamage());
         });
         return width != null ? width : 0;
     }
@@ -59,9 +62,12 @@ public class AnimatedAirGunItem extends AnimatedGunItem implements IAirGun {
     @Override
     public int getBarColor(ItemStack stack) {
         Integer color = DistExecutor.unsafeCallWhenOn(Dist.CLIENT, () -> () -> {
-            List<ItemStack> backtanks = BacktankUtil.getAllWithAir(getClientPlayer());
-            if (!backtanks.isEmpty()) {
-                return BacktankUtil.getBarColor(backtanks.get(0), 1);
+            Player player = getClientPlayer();
+            if (player != null) {
+                AirSourceHelper.AirInfo airInfo = AirSourceHelper.getAirInfo(player);
+                if (airInfo.sourceType() != AirSourceHelper.AirSource.Type.NONE) {
+                    return airInfo.barColor();
+                }
             }
             if (stack.getDamageValue() >= (stack.getMaxDamage() / 1.5)) {
                 return Objects.requireNonNull(ChatFormatting.RED.getColor());
@@ -86,10 +92,22 @@ public class AnimatedAirGunItem extends AnimatedGunItem implements IAirGun {
         if (world != null && world.isClientSide) {
             Player player = getClientPlayer();
             if (player != null) {
-                List<ItemStack> backtanks = BacktankUtil.getAllWithAir(player);
-                if (backtanks.isEmpty()) {
-                    tooltip.add(Component.translatable("info.airgun.requires_airtank")
-                            .withStyle(ChatFormatting.RED));
+                AirSourceHelper.AirSource airSource = AirSourceHelper.getBestAirSource(player);
+
+                switch (airSource.getType()) {
+                    case CREATE_BACKTANK:
+                        tooltip.add(Component.translatable("info.airgun.using_backtank")
+                                .withStyle(ChatFormatting.GREEN));
+                        break;
+                    case AIR_CANISTER:
+                        tooltip.add(Component.translatable("info.airgun.using_canister")
+                                .withStyle(ChatFormatting.AQUA));
+                        break;
+                    case NONE:
+                    default:
+                        tooltip.add(Component.translatable("info.airgun.requires_air_source")
+                                .withStyle(ChatFormatting.RED));
+                        break;
                 }
             }
         }

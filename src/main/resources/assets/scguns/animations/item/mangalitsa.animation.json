@@ -102,6 +102,11 @@
 					}
 				}
 			},
+			"sound_effects": {
+				"0.2083": {
+					"effect": "pump"
+				}
+			},
 			"particle_effects": {
 				"0.2917": {
 					"effect": "eject_casing"
@@ -190,6 +195,11 @@
 						"0.5833": [0, 0, 0],
 						"0.6667": [0, 0, 0]
 					}
+				}
+			},
+			"sound_effects": {
+				"0.2083": {
+					"effect": "pump"
 				}
 			},
 			"particle_effects": {
@@ -950,6 +960,11 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.2083": {
+					"effect": "pump_half"
+				}
 			}
 		},
 		"reload_stop": {
@@ -959,10 +974,6 @@
 					"rotation": {
 						"0.0": {
 							"post": [-8.28217, 2.57594, 9.6658],
-							"lerp_mode": "catmullrom"
-						},
-						"0.0833": {
-							"post": [-9.28217, 2.57594, 9.6658],
 							"lerp_mode": "catmullrom"
 						},
 						"0.1667": {
@@ -983,10 +994,6 @@
 					"position": {
 						"0.0": {
 							"post": [0, 0.04, 0.38],
-							"lerp_mode": "catmullrom"
-						},
-						"0.0833": {
-							"post": [0.06901, 0.42977, 0.43756],
 							"lerp_mode": "catmullrom"
 						},
 						"0.1667": {
@@ -1072,13 +1079,8 @@
 				}
 			},
 			"sound_effects": {
-				"0.3333": {
-					"effect": "rack"
-				}
-			},
-			"particle_effects": {
-				"0.0": {
-					"effect": "loop_end"
+				"0.2917": {
+					"effect": "pump_half"
 				}
 			}
 		},
@@ -1217,9 +1219,6 @@
 			"particle_effects": {
 				"0.375": {
 					"effect": "loaded"
-				},
-				"0.5": {
-					"effect": "loop_end"
 				}
 			}
 		}

@@ -18,7 +18,10 @@ public class EmptyCasingPouchItem extends AmmoBoxItem {
         return new ResourceLocation("scguns", "empty_casing");
     }
 
-
+    @Override
+    protected String getDescriptionKey() {
+        return "item.scguns.empty_casing_pouch.description";
+    }
     @Override
     public int getBarColor(ItemStack stack) {
         return CASING_BAR_COLOR;

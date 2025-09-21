@@ -372,13 +372,13 @@ public class ReloadTracker {
 
                 if (gun.getReloads().getReloadType() != ReloadType.MANUAL) {
                     CompoundTag tag = heldItem.getOrCreateTag();
-                    if (tag.getBoolean("scguns:PausedDuringReload")) {
-                        RELOAD_TRACKER_MAP.remove(player);
-                        ModSyncedDataKeys.RELOADING.setValue(player, false);
-                        tag.remove("IsReloading");
-                        tag.remove("scguns:PausedDuringReload");
-                        return;
-                    }
+//                    if (tag.getBoolean("scguns:PausedDuringReload")) {
+//                        RELOAD_TRACKER_MAP.remove(player);
+//                        ModSyncedDataKeys.RELOADING.setValue(player, false);
+//                        tag.remove("IsReloading");
+//                        tag.remove("scguns:PausedDuringReload");
+//                        return;
+//                    }
                 }
 
                 CompoundTag tag = heldItem.getOrCreateTag();
@@ -417,6 +417,26 @@ public class ReloadTracker {
                 boolean weaponFull = tracker.isWeaponFull(player);
                 boolean hasNoAmmo = tracker.hasNoAmmo(player);
                 if (weaponFull || hasNoAmmo) {
+
+                    if (player.getMainHandItem().getItem() instanceof AnimatedGunItem &&
+                            tracker.gun.getReloads().getReloadType() == ReloadType.MANUAL) {
+
+                        if (tag.getBoolean("scguns:ShouldStopAfterLoop")) {
+                            long stopTime = tag.getLong("scguns:StopAfterLoopTime");
+                            if (stopTime == 0) {
+                                tag.putLong("scguns:StopAfterLoopTime", System.currentTimeMillis());
+                                return;
+                            }
+                            if (System.currentTimeMillis() - stopTime < 100) {
+                                return;
+                            }
+                            tag.remove("scguns:ShouldStopAfterLoop");
+                            tag.remove("scguns:StopAfterLoopTime");
+                        } else {
+                            tag.putBoolean("scguns:ShouldStopAfterLoop", true);
+                            return;
+                        }
+                    }
                     RELOAD_TRACKER_MAP.remove(player);
                     ModSyncedDataKeys.RELOADING.setValue(player, false);
                     tag.remove("IsReloading");

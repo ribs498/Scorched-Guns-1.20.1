@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "sniper",
     "alwaysSpread": false,
     "fireMode": "scguns:pulse",
     "fireTimer": 18,
@@ -43,6 +44,7 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 23.0,
+    "armorPen": 7.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:sculk_cell",

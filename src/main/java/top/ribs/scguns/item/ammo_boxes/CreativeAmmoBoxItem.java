@@ -51,7 +51,10 @@ public class CreativeAmmoBoxItem extends AmmoBoxItem {
         }
         return AmmoBoxItem.add(pouchStack, insertedStack);
     }
-
+    @Override
+    protected String getDescriptionKey() {
+        return "item.scguns.creative_ammo_box.description";
+    }
     @Override
     public boolean overrideStackedOnOther(ItemStack stack, Slot slot, ClickAction action, Player player) {
         return false;

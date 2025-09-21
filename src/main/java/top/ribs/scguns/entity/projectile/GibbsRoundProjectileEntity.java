@@ -46,11 +46,6 @@ public class GibbsRoundProjectileEntity extends ProjectileEntity {
 
     public GibbsRoundProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
-        float armorBypass = 4.0F;
-        float puncturingBypass = GunEnchantmentHelper.getPuncturingArmorBypass(weapon);
-        armorBypass += puncturingBypass;
-
-        this.setArmorBypassAmount(armorBypass);
         registerLootingEventHandler();
     }
 

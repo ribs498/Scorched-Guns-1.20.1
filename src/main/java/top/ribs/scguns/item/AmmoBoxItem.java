@@ -1,5 +1,6 @@
 package top.ribs.scguns.item;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.util.Mth;
@@ -190,9 +191,14 @@ public abstract class AmmoBoxItem extends Item {
 
     @Override
     public void appendHoverText(@NotNull ItemStack stack, Level level, @NotNull List<Component> tooltipComponents, @NotNull TooltipFlag isAdvanced) {
-        // tooltipComponents.add(Component.translatable("item.scguns.ammo_pouch.fullness").withStyle(ChatFormatting.GRAY));
-    }
 
+        if (Screen.hasShiftDown()) {
+            tooltipComponents.add(Component.translatable(getDescriptionKey()).withStyle(ChatFormatting.GRAY));
+        } else {
+            tooltipComponents.add(Component.translatable("tooltip.scguns.hold_shift").withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
+        }
+    }
+    protected abstract String getDescriptionKey();
     private void playRemoveOneSound(Entity entity) {
         entity.playSound(SoundEvents.BUNDLE_REMOVE_ONE, 0.8F, 0.8F + entity.level().getRandom().nextFloat() * 0.4F);
     }

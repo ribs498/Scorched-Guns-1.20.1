@@ -28,6 +28,7 @@ import top.ribs.scguns.compat.PlayerReviveHelper;
 import top.ribs.scguns.debug.Debug;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.animated.AnimatedGunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.C2SMessageAim;
 import top.ribs.scguns.util.GunEnchantmentHelper;
@@ -124,6 +125,14 @@ public class AimingHandler
             CompoundTag tag = heldItem.getOrCreateTag();
             inCriticalPhase = tag.getBoolean("InCriticalReloadPhase");
             Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
+
+            if (!isReloading && !inCriticalPhase && heldItem.getItem() instanceof AnimatedGunItem animatedGun) {
+                String reloadState = tag.getString("scguns:ReloadState");
+                if (reloadState.equals("STOPPING") && !tag.getBoolean("scguns:IsPlayingReloadStop")) {
+                    animatedGun.cleanupReloadState(tag);
+                }
+            }
+
             if (inCriticalPhase && gun.getReloads().getReloadType() != ReloadType.MANUAL) {
                 this.aiming = false;
                 wasKeyPressed = KeyBinds.getAimMapping().isDown();
@@ -255,7 +264,13 @@ public class AimingHandler
             this.aiming = false;
             return false;
         }
-
+        if(heldItem.getItem() instanceof AnimatedGunItem) {
+            CompoundTag tag = heldItem.getOrCreateTag();
+            if(tag.getBoolean("IsDrawing") && tag.getInt("DrawnTick") < 15) {
+                this.aiming = false;
+                return false;
+            }
+        }
         GripType gripType = gun.getGeneral().getGripType(heldItem);
         if(gripType == GripType.ONE_HANDED && !mc.player.getOffhandItem().isEmpty()) {
             this.aiming = false;

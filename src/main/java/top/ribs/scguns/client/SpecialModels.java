@@ -91,6 +91,29 @@ public enum SpecialModels {
     SEQUOIA_SILENCER("sequoia/silencer"),
     SEQUOIA_ADVANCED_SILENCER("sequoia/advanced_silencer"),
     SEQUOIA_MUZZLE_BRAKE("sequoia/muzzle_brake"),
+//WHIZZBANGER
+    WHIZZBANGER_MAIN("whizzbanger/main"),
+    //DRILL
+    DRILL_MAIN("drill/main"),
+    DRILL_STOCK_WEIGHTED("drill/heavy_stock"),
+    DRILL_STOCK_LIGHT("drill/light_stock"),
+    DRILL_STOCK_WOODEN("drill/wooden_stock"),
+    DRILL_IRON_BAYONET("drill/iron_bayonet"),
+    DRILL_ANTHRALITE_BAYONET("drill/anthralite_bayonet"),
+    DRILL_DIAMOND_BAYONET("drill/diamond_bayonet"),
+    DRILL_NETHERITE_BAYONET("drill/netherite_bayonet"),
+    DRILL_LIGHT_GRIP("drill/light_grip"),
+    DRILL_VERTICAL_GRIP("drill/vert_grip"),
+    DRILL_SIGHTS("drill/sights"),
+    DRILL_NO_SIGHTS("drill/no_sights"),
+
+    //DRILL_CONVERSION
+    DRILL_CONVERSION_MAIN("drill_conversion/main"),
+    DRILL_CONVERSION_IRON_BAYONET("drill_conversion/iron_bayonet"),
+    DRILL_CONVERSION_ANTHRALITE_BAYONET("drill_conversion/anthralite_bayonet"),
+    DRILL_CONVERSION_DIAMOND_BAYONET("drill_conversion/diamond_bayonet"),
+    DRILL_CONVERSION_NETHERITE_BAYONET("drill_conversion/netherite_bayonet"),
+    DRILL_CONVERSION_SIGHTS("drill_conversion/sights"),
 ///MUSKET
     MUSKET_MAIN("musket/main"),
     MUSKET_HAMMER("musket/hammer"),
@@ -113,6 +136,8 @@ public enum SpecialModels {
     BLUNDERBUSS_NETHERITE_BAYONET("blunderbuss/netherite_bayonet"),
     BLUNDERBUSS_LIGHT_GRIP("blunderbuss/light_grip"),
     BLUNDERBUSS_VERTICAL_GRIP("blunderbuss/vert_grip"),
+
+
     //DOUBLET
     DOUBLET_MAIN("doublet/main"),
     DOUBLET_HAMMER("doublet/hammer"),
@@ -122,7 +147,15 @@ public enum SpecialModels {
     DOUBLET_NETHERITE_BAYONET("doublet/netherite_bayonet"),
     DOUBLET_LIGHT_GRIP("doublet/light_grip"),
     DOUBLET_VERTICAL_GRIP("doublet/vert_grip"),
-
+/// FENCER_THUMPER
+    FENCER_THUMPER_MAIN("fencer_thumper/main"),
+    FENCER_THUMPER_HAMMER("fencer_thumper/hammer"),
+    FENCER_THUMPER_IRON_BAYONET("fencer_thumper/iron_bayonet"),
+    FENCER_THUMPER_ANTHRALITE_BAYONET("fencer_thumper/anthralite_bayonet"),
+    FENCER_THUMPER_DIAMOND_BAYONET("fencer_thumper/diamond_bayonet"),
+    FENCER_THUMPER_NETHERITE_BAYONET("fencer_thumper/netherite_bayonet"),
+    FENCER_THUMPER_LIGHT_GRIP("fencer_thumper/light_grip"),
+    FENCER_THUMPER_VERTICAL_GRIP("fencer_thumper/vert_grip"),
 
     ///PLASMABUSS
     PLASMABUSS_MAIN("plasmabuss/main"),
@@ -163,6 +196,39 @@ public enum SpecialModels {
     WINNIE_MUZZLE_BRAKE("winnie/muzzle_brake"),
     WINNIE_EXT_BARREL("winnie/ext_barrel"),
     WINNIE_STAN_BARREL("winnie/stan_barrel"),
+    /// RED_RAYDAR
+    RED_RAYDAR_MAIN("red_raydar/main"),
+    RED_RAYDAR_SIGHTS("red_raydar/sights"),
+    RED_RAYDAR_NO_SIGHTS("red_raydar/no_sights"),
+    RED_RAYDAR_IRON_BAYONET("red_raydar/iron_bayonet"),
+    RED_RAYDAR_ANTHRALITE_BAYONET("red_raydar/anthralite_bayonet"),
+    RED_RAYDAR_DIAMOND_BAYONET("red_raydar/diamond_bayonet"),
+    RED_RAYDAR_NETHERITE_BAYONET("red_raydar/netherite_bayonet"),
+    RED_RAYDAR_LIGHT_GRIP("red_raydar/light_grip"),
+    RED_RAYDAR_VERTICAL_GRIP("red_raydar/tact_grip"),
+    RED_RAYDAR_STOCK_WEIGHTED("red_raydar/heavy_stock"),
+    RED_RAYDAR_STOCK_LIGHT("red_raydar/light_stock"),
+    RED_RAYDAR_STOCK_WOODEN("red_raydar/wooden_stock"),
+
+
+
+
+    /// WINNIE_MILLEND
+    WINNIE_MILLEND_MAIN("winnie_millend/main"),
+    WINNIE_MILLEND_SIGHTS("winnie_millend/sights"),
+    WINNIE_MILLEND_NO_SIGHTS("winnie_millend/no_sights"),
+    WINNIE_MILLEND_HAMMER("winnie_millend/hammer"),
+    WINNIE_MILLEND_IRON_BAYONET("winnie_millend/iron_bayonet"),
+    WINNIE_MILLEND_ANTHRALITE_BAYONET("winnie_millend/anthralite_bayonet"),
+    WINNIE_MILLEND_DIAMOND_BAYONET("winnie_millend/diamond_bayonet"),
+    WINNIE_MILLEND_NETHERITE_BAYONET("winnie_millend/netherite_bayonet"),
+    WINNIE_MILLEND_LIGHT_GRIP("winnie_millend/light_grip"),
+    WINNIE_MILLEND_VERTICAL_GRIP("winnie_millend/tact_grip"),
+    WINNIE_MILLEND_SILENCER("winnie_millend/silencer"),
+    WINNIE_MILLEND_ADVANCED_SILENCER("winnie_millend/advanced_silencer"),
+    WINNIE_MILLEND_MUZZLE_BRAKE("winnie_millend/muzzle_brake"),
+    WINNIE_MILLEND_EXT_BARREL("winnie_millend/ext_barrel"),
+    WINNIE_MILLEND_STAN_BARREL("winnie_millend/stan_barrel"),
     //CALLWELLTERMINAL
     CALLWELL_TERMINAL_MAIN("callwell_terminal/main"),
     CALLWELL_TERMINAL_IRON_BAYONET("callwell_terminal/iron_bayonet"),
@@ -333,9 +399,9 @@ public enum SpecialModels {
     RG_JIGSAW_NO_SIGHTS("rg_jigsaw/no_sights"),
     RG_JIGSAW_STAN_BARREL("rg_jigsaw/stan_barrel"),
     RG_JIGSAW_EXT_BARREL("rg_jigsaw/ext_barrel"),
-    RG_JIGSAW_STOCK_LIGHT("rg_jigsaw/stock_light"),
-    RG_JIGSAW_STOCK_HEAVY("rg_jigsaw/stock_weighted"),
-    RG_JIGSAW_STOCK_WOODEN("rg_jigsaw/stock_wooden"),
+    RG_JIGSAW_STOCK_LIGHT("rg_jigsaw/light_stock"),
+    RG_JIGSAW_STOCK_HEAVY("rg_jigsaw/heavy_stock"),
+    RG_JIGSAW_STOCK_WOODEN("rg_jigsaw/wooden_stock"),
     RG_JIGSAW_SILENCER("rg_jigsaw/silencer"),
     RG_JIGSAW_ADVANCED_SILENCER("rg_jigsaw/advanced_silencer"),
     RG_JIGSAW_MUZZLE_BRAKE("rg_jigsaw/muzzle_brake"),
@@ -479,6 +545,12 @@ public enum SpecialModels {
     BASKER_STOCK_LIGHT("basker/light_stock"),
     BASKER_STOCK_HEAVY("basker/heavy_stock"),
     BASKER_STOCK_WOODEN("basker/wooden_stock"),
+
+    //INQUISITOR
+    INQUISITOR_MAIN("inquisitor/main"),
+    INQUISITOR_STOCK_LIGHT("inquisitor/light_stock"),
+    INQUISITOR_STOCK_HEAVY("inquisitor/heavy_stock"),
+    INQUISITOR_STOCK_WOODEN("inquisitor/wooden_stock"),
     //BIG_BORE
     BIG_BORE_MAIN("big_bore/main"),
     BIG_BORE_SIGHTS("big_bore/sights"),
@@ -502,6 +574,16 @@ public enum SpecialModels {
     SAKETINI_ANTHRALITE_BAYONET("saketini/anthralite_bayonet"),
     SAKETINI_DIAMOND_BAYONET("saketini/diamond_bayonet"),
     SAKETINI_NETHERITE_BAYONET("saketini/netherite_bayonet"),
+
+    /// FENCER_CARABINE
+    FENCER_CARABINE_MAIN("fencer_carabine/main"),
+    FENCER_CARABINE_HAMMER("fencer_carabine/hammer"),
+    FENCER_CARABINE_TACT_GRIP("fencer_carabine/tact_grip"),
+    FENCER_CARABINE_LIGHT_GRIP("fencer_carabine/light_grip"),
+    FENCER_CARABINE_IRON_BAYONET("fencer_carabine/iron_bayonet"),
+    FENCER_CARABINE_ANTHRALITE_BAYONET("fencer_carabine/anthralite_bayonet"),
+    FENCER_CARABINE_DIAMOND_BAYONET("fencer_carabine/diamond_bayonet"),
+    FENCER_CARABINE_NETHERITE_BAYONET("fencer_carabine/netherite_bayonet"),
 
     ///MARLIN
     MARLIN_MAIN("marlin/main"),
@@ -579,6 +661,17 @@ public enum SpecialModels {
     GREASER_SMG_STANDARD_MAG("greaser_smg/stan_mag"),
     GREASER_SMG_EXTENDED_MAG("greaser_smg/ext_mag"),
     GREASER_SMG_SPEED_MAG("greaser_smg/speed_mag"),
+
+    /// NAILER
+    NAILER_MAIN("nailer/main"),
+    NAILER_BOLT("nailer/bolt"),
+    NAILER_STOCK_LIGHT("nailer/light_stock"),
+    NAILER_STOCK_HEAVY("nailer/heavy_stock"),
+    NAILER_STOCK_WOODEN("nailer/wooden_stock"),
+    NAILER_STAN_STOCK("nailer/stan_stock"),
+    NAILER_STAN_MAG("nailer/stan_mag"),
+    NAILER_EXT_MAG("nailer/ext_mag"),
+    NAILER_SPEED_MAG("nailer/speed_mag"),
 ///DEFENDERPISTOL
     DEFENDER_PISTOL_MAIN("defender_pistol/main"),
     DEFENDER_PISTOL_STAN_BARREL("defender_pistol/stan_barrel"),
@@ -825,6 +918,12 @@ public enum SpecialModels {
     TL_RUNNER_STOCK_LIGHT("tl_runner/light_stock"),
     TL_RUNNER_STOCK_HEAVY("tl_runner/heavy_stock"),
     TL_RUNNER_STOCK_WOODEN("tl_runner/wooden_stock"),
+
+    //LONGARM
+    LONGARM_MAIN("longarm/main"),
+    LONGARM_STOCK_LIGHT("longarm/light_stock"),
+    LONGARM_STOCK_HEAVY("longarm/heavy_stock"),
+    LONGARM_STOCK_WOODEN("longarm/wooden_stock"),
 
     ///SPITFIRE
     SPITFIRE_MAIN("spitfire/main"),
@@ -1367,6 +1466,19 @@ COGLOADER_MAIN("cogloader/main"),
     LOCUST_STAN_MAG("locust/stan_mag"),
     LOCUST_EXT_MAG("locust/ext_mag"),
     LOCUST_SPEED_MAG("locust/speed_mag"),
+
+    //STERILIZER
+    STERILIZER_MAIN("sterilizer/main"),
+    STERILIZER_STOCK_LIGHT("sterilizer/light_stock"),
+    STERILIZER_STOCK_HEAVY("sterilizer/heavy_stock"),
+    STERILIZER_STOCK_WOODEN("sterilizer/wooden_stock"),
+    STERILIZER_SIGHTS("sterilizer/sights"),
+    STERILIZER_NO_SIGHTS("sterilizer/no_sights"),
+    STERILIZER_STAN_MAG("sterilizer/stan_mag"),
+    STERILIZER_EXT_MAG("sterilizer/ext_mag"),
+    STERILIZER_SPEED_MAG("sterilizer/speed_mag"),
+
+
     ///RAYGUN
     RAYGUN_MAIN("raygun/main"),
     RAYGUN_STOCK_HEAVY("raygun/heavy_stock"),

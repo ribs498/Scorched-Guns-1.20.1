@@ -1,5 +1,5 @@
 package top.ribs.scguns.entity.projectile;
-import net.minecraft.client.resources.model.Material;
+
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
@@ -8,7 +8,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -20,11 +19,14 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.*;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.Config;
+import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.common.Gun;
+import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.init.ModDamageTypes;
 import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.init.ModTags;
@@ -32,6 +34,8 @@ import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageProjectileHitEntity;
 import top.ribs.scguns.util.GunEnchantmentHelper;
+
+import static top.ribs.scguns.compat.CompatManager.SCULK_HORDE_LOADED;
 
 public class FireRoundEntity extends ProjectileEntity {
 
@@ -46,22 +50,98 @@ public class FireRoundEntity extends ProjectileEntity {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
     }
 
+    private boolean isSoulFireGun() {
+        return this.getProjectile().isSoulFire();
+    }
+
     @Override
     protected void onProjectileTick() {
         if (this.level().isClientSide && (this.tickCount > 1 && this.tickCount < this.life)) {
+            boolean hideProjectile = this.getProjectile().shouldHideProjectile();
+
+            if (hideProjectile) {
+                spawnSprayStyleParticles();
+            } else {
+                spawnGlobStyleParticles();
+            }
+        }
+    }
+    private void spawnSprayStyleParticles() {
+        if (this.tickCount % 2 == 0) {
+            int particleCount = 1 + this.random.nextInt(2);
+
+            for (int i = 0; i < particleCount; i++) {
+                double offsetX = (this.random.nextDouble() - 0.5) * 1.1;
+                double offsetY = (this.random.nextDouble() - 0.5) * 1.1;
+                double offsetZ = (this.random.nextDouble() - 0.5) * 1.1;
+
+                double velocityX = (this.random.nextDouble() - 0.5) * 0.1;
+                double velocityY = (this.random.nextDouble() - 0.5) * 0.1;
+                double velocityZ = (this.random.nextDouble() - 0.5) * 0.1;
+
+                if (isSoulFireGun()) {
+                    if (this.random.nextFloat() < 0.8f) {
+                        this.level().addParticle(ParticleTypes.SOUL_FIRE_FLAME, true,
+                                this.getX() + offsetX * 0.8, this.getY() + offsetY * 0.8, this.getZ() + offsetZ * 0.8,
+                                velocityX * 0.5, velocityY * 0.5, velocityZ * 0.5);
+                    }
+                    if (this.random.nextFloat() < 0.4f) {
+                        this.level().addParticle(ModParticleTypes.SOUL_FIREBALL.get(), true,
+                                this.getX() + offsetX * 0.6, this.getY() + offsetY * 0.6, this.getZ() + offsetZ * 0.6,
+                                velocityX * 0.3, velocityY * 0.3, velocityZ * 0.3);
+                    }
+                } else {
+                    if (this.random.nextFloat() < 0.4f) {
+                        this.level().addParticle(ModParticleTypes.FIREBALL.get(), true,
+                                this.getX() + offsetX * 0.6, this.getY() + offsetY * 0.6, this.getZ() + offsetZ * 0.6,
+                                velocityX * 0.3, velocityY * 0.3, velocityZ * 0.3);
+                    }
+                    if (this.random.nextFloat() < 0.6f) {
+                        this.level().addParticle(ParticleTypes.SMALL_FLAME, true,
+                                this.getX() + offsetX * 0.6, this.getY() + offsetY * 0.6, this.getZ() + offsetZ * 0.6,
+                                velocityX * 0.3, velocityY * 0.3, velocityZ * 0.3);
+                    }
+                }
+            }
             if (this.tickCount % 2 == 0) {
-                double offsetX = (this.random.nextDouble() - 0.5) * 0.5;
-                double offsetY = (this.random.nextDouble() - 0.5) * 0.5;
-                double offsetZ = (this.random.nextDouble() - 0.5) * 0.5;
-                this.level().addParticle(ParticleTypes.FLAME, true, this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ, 0, 0, 0);
-                this.level().addParticle(ParticleTypes.LAVA, true, this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ, 0, 0, 0);
+                int smokeCount = 1 + this.random.nextInt(1);
+                for (int i = 0; i < smokeCount; i++) {
+                    double offsetX = (this.random.nextDouble() - 0.5) * 0.6;
+                    double offsetY = (this.random.nextDouble() - 0.5) * 0.6;
+                    double offsetZ = (this.random.nextDouble() - 0.5) * 0.6;
+
+                    this.level().addParticle(ParticleTypes.SMOKE, true,
+                            this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ,
+                            0, 0.05, 0);
+
+                }
             }
-            if (this.tickCount % 6 == 0) {
-                double offsetX = (this.random.nextDouble() - 0.5) * 0.5;
-                double offsetY = (this.random.nextDouble() - 0.5) * 0.5;
-                double offsetZ = (this.random.nextDouble() - 0.5) * 0.5;
-                this.level().addParticle(ParticleTypes.SMOKE, true, this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ, 0, 0, 0);
+        }
+    }
+
+    private void spawnGlobStyleParticles() {
+        if (this.tickCount % 2 == 0) {
+            double offsetX = (this.random.nextDouble() - 0.5) * 0.5;
+            double offsetY = (this.random.nextDouble() - 0.5) * 0.5;
+            double offsetZ = (this.random.nextDouble() - 0.5) * 0.5;
+
+            if (isSoulFireGun()) {
+                this.level().addParticle(ParticleTypes.SOUL_FIRE_FLAME, true,
+                        this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ, 0, 0, 0);
+            } else {
+                this.level().addParticle(ParticleTypes.FLAME, true,
+                        this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ, 0, 0, 0);
+                this.level().addParticle(ParticleTypes.LAVA, true,
+                        this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ, 0, 0, 0);
             }
+        }
+
+        if (this.tickCount % 6 == 0) {
+            double offsetX = (this.random.nextDouble() - 0.5) * 0.5;
+            double offsetY = (this.random.nextDouble() - 0.5) * 0.5;
+            double offsetZ = (this.random.nextDouble() - 0.5) * 0.5;
+            this.level().addParticle(ParticleTypes.SMOKE, true,
+                    this.getX() + offsetX, this.getY() + offsetY, this.getZ() + offsetZ, 0, 0, 0);
         }
     }
 
@@ -92,19 +172,21 @@ public class FireRoundEntity extends ProjectileEntity {
                 if (shield.getItem() instanceof ShieldItem) {
                     player.setItemSlot(EquipmentSlot.OFFHAND, new ItemStack(Items.AIR));
                     player.level().addFreshEntity(new ItemEntity(player.level(), player.getX(), player.getY(), player.getZ(), shield));
-                    player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
-                            SoundEvents.FIRE_AMBIENT, SoundSource.PLAYERS, 1.0F, 1.0F);
+                    player.level().playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.FIRE_AMBIENT, SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
             }
         } else {
-            if (!(entity.getType().is(ModTags.Entities.GHOST) &&
-                    !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
+            if (!(entity.getType().is(ModTags.Entities.GHOST) && !advantage.equals(ModTags.Entities.UNDEAD.location()))) {
                 entity.hurt(source, damage);
             }
-            entity.setSecondsOnFire(5);
+            if (isSoulFireGun()) {
+                ScorchedGuns.setSoulFireOnEntity(entity, 5);
+            } else {
+                entity.setSecondsOnFire(5);
+            }
         }
 
-        if(entity instanceof LivingEntity) {
+        if (entity instanceof LivingEntity) {
             GunEnchantmentHelper.applyElementalPopEffect(this.getWeapon(), (LivingEntity) entity);
         }
 
@@ -139,36 +221,37 @@ public class FireRoundEntity extends ProjectileEntity {
             return;
         }
 
-        int clearedBlocks = 0;
-        int maxClearBlocks = 8;
+        if (!SCULK_HORDE_LOADED) {
+            int clearedBlocks = 0;
+            int maxClearBlocks = 8;
 
-        for (int x = -SCULK_CLEARING_RADIUS; x <= SCULK_CLEARING_RADIUS; x++) {
-            for (int y = -SCULK_CLEARING_RADIUS; y <= SCULK_CLEARING_RADIUS; y++) {
-                for (int z = -SCULK_CLEARING_RADIUS; z <= SCULK_CLEARING_RADIUS; z++) {
-                    if (clearedBlocks >= maxClearBlocks) {
-                        return;
-                    }
+            for (int x = -SCULK_CLEARING_RADIUS; x <= SCULK_CLEARING_RADIUS; x++) {
+                for (int y = -SCULK_CLEARING_RADIUS; y <= SCULK_CLEARING_RADIUS; y++) {
+                    for (int z = -SCULK_CLEARING_RADIUS; z <= SCULK_CLEARING_RADIUS; z++) {
+                        if (clearedBlocks >= maxClearBlocks) {
+                            return;
+                        }
 
-                    BlockPos checkPos = center.offset(x, y, z);
-                    BlockState blockState = this.level().getBlockState(checkPos);
+                        BlockPos checkPos = center.offset(x, y, z);
+                        BlockState blockState = this.level().getBlockState(checkPos);
 
-                    if (blockState.is(ModTags.Blocks.SCULK_BLOCKS)) {
-                        this.level().destroyBlock(checkPos, true);
+                        if (blockState.is(ModTags.Blocks.SCULK_BLOCKS)) {
+                            this.level().destroyBlock(checkPos, true);
 
-                        spawnCleansingParticles(checkPos);
-                        this.level().playSound(null, checkPos, SoundEvents.FIRE_EXTINGUISH,
-                                SoundSource.BLOCKS, 0.8F, 1.2F + this.random.nextFloat() * 0.4F);
+                            spawnCleansingParticles(checkPos);
+                            this.level().playSound(null, checkPos, SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 0.8F, 1.2F + this.random.nextFloat() * 0.4F);
 
-                        clearedBlocks++;
+                            clearedBlocks++;
+                        }
                     }
                 }
             }
-        }
-        if (clearedBlocks > 0) {
-            this.level().playSound(null, center, SoundEvents.BEACON_ACTIVATE,
-                    SoundSource.BLOCKS, 0.5F, 1.5F);
+            if (clearedBlocks > 0) {
+                this.level().playSound(null, center, SoundEvents.BEACON_ACTIVATE, SoundSource.BLOCKS, 0.5F, 1.5F);
+            }
         }
     }
+
     private void spawnCleansingParticles(BlockPos pos) {
         if (this.level() instanceof ServerLevel serverLevel) {
             for (int i = 0; i < 5; i++) {
@@ -176,30 +259,48 @@ public class FireRoundEntity extends ProjectileEntity {
                 double offsetY = pos.getY() + 0.5 + (this.random.nextDouble() - 0.5) * 0.8;
                 double offsetZ = pos.getZ() + 0.5 + (this.random.nextDouble() - 0.5) * 0.8;
 
-                serverLevel.sendParticles(ParticleTypes.WHITE_ASH,
-                        offsetX, offsetY, offsetZ, 2, 0.2, 0.2, 0.2, 0.1);
-                serverLevel.sendParticles(ParticleTypes.SMOKE,
-                        offsetX, offsetY, offsetZ, 1, 0.1, 0.3, 0.1, 0.05);
+                serverLevel.sendParticles(ParticleTypes.WHITE_ASH, offsetX, offsetY, offsetZ, 2, 0.2, 0.2, 0.2, 0.1);
+                serverLevel.sendParticles(ParticleTypes.SMOKE, offsetX, offsetY, offsetZ, 1, 0.1, 0.3, 0.1, 0.05);
             }
-            serverLevel.sendParticles(ParticleTypes.FLAME,
-                    pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5,
-                    8, 0.3, 0.3, 0.3, 0.02);
+            serverLevel.sendParticles(ParticleTypes.FLAME, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 8, 0.3, 0.3, 0.3, 0.02);
         }
     }
 
     private void spawnExplosionParticles(Vec3 position) {
         if (!this.level().isClientSide) {
             ServerLevel serverLevel = (ServerLevel) this.level();
-            for (int i = 0; i < 15; i++) {
-                double offsetX = (this.random.nextDouble() - 0.5) * 0.2;
-                double offsetY = (this.random.nextDouble() - 0.5) * 0.2;
-                double offsetZ = (this.random.nextDouble() - 0.5) * 0.2;
-                double speedX = (this.random.nextDouble() - 0.5) * 0.5;
-                double speedY = (this.random.nextDouble() - 0.5) * 0.5;
-                double speedZ = (this.random.nextDouble() - 0.5) * 0.5;
-                serverLevel.sendParticles(ParticleTypes.LAVA, position.x + offsetX, position.y + offsetY, position.z + offsetZ, 1, speedX, speedY, speedZ, 0.1);
-                serverLevel.sendParticles(ParticleTypes.DRIPPING_LAVA, position.x + offsetX, position.y + offsetY, position.z + offsetZ, 1, speedX, speedY, speedZ, 0.1);
-                serverLevel.sendParticles(ParticleTypes.SMALL_FLAME, position.x + offsetX, position.y + offsetY, position.z + offsetZ, 1, speedX, speedY, speedZ, 0.1);
+
+            if (isSoulFireGun()) {
+                for (int i = 0; i < 20; i++) {
+                    double offsetX = (this.random.nextDouble() - 0.5) * 0.2;
+                    double offsetY = (this.random.nextDouble() - 0.5) * 0.2;
+                    double offsetZ = (this.random.nextDouble() - 0.5) * 0.2;
+                    double speedX = (this.random.nextDouble() - 0.5) * 0.3;
+                    double speedY = (this.random.nextDouble() - 0.5) * 0.3;
+                    double speedZ = (this.random.nextDouble() - 0.5) * 0.3;
+                    serverLevel.sendParticles(ParticleTypes.SOUL_FIRE_FLAME,
+                            position.x + offsetX, position.y + offsetY, position.z + offsetZ,
+                            1, speedX, speedY, speedZ, 0.05);
+                }
+            } else {
+                for (int i = 0; i < 15; i++) {
+                    double offsetX = (this.random.nextDouble() - 0.5) * 0.2;
+                    double offsetY = (this.random.nextDouble() - 0.5) * 0.2;
+                    double offsetZ = (this.random.nextDouble() - 0.5) * 0.2;
+                    double speedX = (this.random.nextDouble() - 0.5) * 0.5;
+                    double speedY = (this.random.nextDouble() - 0.5) * 0.5;
+                    double speedZ = (this.random.nextDouble() - 0.5) * 0.5;
+
+                    serverLevel.sendParticles(ParticleTypes.LAVA,
+                            position.x + offsetX, position.y + offsetY, position.z + offsetZ,
+                            1, speedX, speedY, speedZ, 0.1);
+                    serverLevel.sendParticles(ParticleTypes.DRIPPING_LAVA,
+                            position.x + offsetX, position.y + offsetY, position.z + offsetZ,
+                            1, speedX, speedY, speedZ, 0.1);
+                    serverLevel.sendParticles(ParticleTypes.SMALL_FLAME,
+                            position.x + offsetX, position.y + offsetY, position.z + offsetZ,
+                            1, speedX, speedY, speedZ, 0.1);
+                }
             }
         }
     }
@@ -228,15 +329,19 @@ public class FireRoundEntity extends ProjectileEntity {
     }
 
     private BlockState getWallFireState(Direction attachedFace) {
-        BlockState fireState = Blocks.FIRE.defaultBlockState();
-        return switch (attachedFace) {
-            case UP -> fireState.setValue(FireBlock.UP, true);
-            case NORTH -> fireState.setValue(FireBlock.NORTH, true);
-            case SOUTH -> fireState.setValue(FireBlock.SOUTH, true);
-            case EAST -> fireState.setValue(FireBlock.EAST, true);
-            case WEST -> fireState.setValue(FireBlock.WEST, true);
-            default -> fireState;
-        };
+        if (isSoulFireGun()) {
+            return ModBlocks.FAKE_SOUL_FIRE.get().defaultBlockState();
+        } else {
+            BlockState fireState = Blocks.FIRE.defaultBlockState();
+            return switch (attachedFace) {
+                case UP -> fireState.setValue(FireBlock.UP, true);
+                case NORTH -> fireState.setValue(FireBlock.NORTH, true);
+                case SOUTH -> fireState.setValue(FireBlock.SOUTH, true);
+                case EAST -> fireState.setValue(FireBlock.EAST, true);
+                case WEST -> fireState.setValue(FireBlock.WEST, true);
+                default -> fireState;
+            };
+        }
     }
 
     private void tryPlaceWallFire(BlockPos pos, Direction face) {

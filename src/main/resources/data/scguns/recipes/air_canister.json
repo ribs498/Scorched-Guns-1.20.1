@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "X": {
+      "item": "scguns:empty_tank"
+    },
+    "M": {
+      "item": "minecraft:lever"
+    }
+  },
+  "pattern": [
+    "M  ",
+    "XX "
+  ],
+  "result": {
+    "item": "scguns:air_canister"
+  }
+}

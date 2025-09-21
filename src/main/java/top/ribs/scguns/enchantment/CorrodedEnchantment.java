@@ -77,7 +77,7 @@ public class CorrodedEnchantment extends Enchantment {
             }
         }
     }
-    private static boolean isBotEntity(LivingEntity entity) {
+    public static boolean isBotEntity(LivingEntity entity) {
         return entity.getType().is(ModTags.Entities.BOT);
     }
 

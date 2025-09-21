@@ -3,6 +3,7 @@ package top.ribs.scguns.init;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.*;
 import net.minecraftforge.common.ForgeSpawnEggItem;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -29,108 +30,9 @@ public class ModItems {
     public static final DeferredRegister<Item> REGISTER = DeferredRegister.create(ForgeRegistries.ITEMS, Reference.MOD_ID);
 
     public static RegistryObject<Item> ANTHRALITE_KNIFE;
-    public static RegistryObject<GunItem> GALE;
-    public static RegistryObject<GunItem> UMAX_PISTOL;
-    public static RegistryObject<Item> VENTURI;
-    public static RegistryObject<Item> SCRATCHES;
+
 
     public static void registerItems() {
-        SCRATCHES = REGISTER.register("scratches", () -> {
-            Item.Properties properties = new Item.Properties().stacksTo(1).durability(1400);
-            if (!ScorchedGuns.shouldUseEnergyGuns()) {
-                return new AnimatedAirGunItem(properties,
-                        "scratches",
-                        ModSounds.MAG_OUT.get(),
-                        ModSounds.MAG_IN.get(),
-                        ModSounds.RELOAD_END.get(),
-                        ModSounds.COPPER_GUN_JAM.get(),
-                        ModSounds.COPPER_GUN_JAM.get()
-                );
-            } else {
-                return new AnimatedEnergyGunItem(properties,
-                        "scratches",
-                        ModSounds.MAG_OUT.get(),
-                        ModSounds.MAG_IN.get(),
-                        ModSounds.RELOAD_END.get(),
-                        ModSounds.COPPER_GUN_JAM.get(),
-                        ModSounds.COPPER_GUN_JAM.get(),
-                        4900
-                );
-            }
-        });
-        GALE = REGISTER.register("gale", () -> {
-            Item.Properties properties = new Item.Properties().stacksTo(1).durability(1400);
-            if (!ScorchedGuns.shouldUseEnergyGuns()) {
-                return new AnimatedAirGunItem(properties,
-                        "gale",
-                        ModSounds.MAG_OUT.get(),
-                        ModSounds.MAG_IN.get(),
-                        ModSounds.RELOAD_END.get(),
-                        ModSounds.COPPER_GUN_JAM.get(),
-                        ModSounds.COPPER_GUN_JAM.get()
-                );
-            } else {
-                return new AnimatedEnergyGunItem(properties,
-                        "gale",
-                        ModSounds.MAG_OUT.get(),
-                        ModSounds.MAG_IN.get(),
-                        ModSounds.RELOAD_END.get(),
-                        ModSounds.COPPER_GUN_JAM.get(),
-                        ModSounds.COPPER_GUN_JAM.get(),
-                        4900
-                );
-            }
-        });
-        UMAX_PISTOL = REGISTER.register("umax_pistol", () -> {
-            Item.Properties properties = new Item.Properties().stacksTo(1).durability(400);
-            if (!ScorchedGuns.shouldUseEnergyGuns()) {
-                return new AnimatedAirGunItem(properties,
-                        "umax_pistol",
-                        ModSounds.MAG_OUT.get(),
-                        ModSounds.MAG_IN.get(),
-                        ModSounds.RELOAD_END.get(),
-                        ModSounds.COPPER_GUN_JAM.get(),
-                        ModSounds.COPPER_GUN_JAM.get()
-                );
-            } else {
-                return new AnimatedEnergyGunItem(properties,
-                        "umax_pistol",
-                        ModSounds.MAG_OUT.get(),
-                        ModSounds.MAG_IN.get(),
-                        ModSounds.RELOAD_END.get(),
-                        ModSounds.COPPER_GUN_JAM.get(),
-                        ModSounds.COPPER_GUN_JAM.get(),
-                        4900
-                );
-            }
-        });
-
-
-        VENTURI = REGISTER.register("venturi", () -> {
-            Item.Properties properties = new Item.Properties().stacksTo(1).durability(800);
-            if (!ScorchedGuns.shouldUseEnergyGuns()) {
-                return new AnimatedAirGunItem(properties,
-                        "venturi",
-                        ModSounds.MAG_OUT.get(),
-                        ModSounds.MAG_IN.get(),
-                        ModSounds.RELOAD_END.get(),
-                        ModSounds.COPPER_GUN_JAM.get(),
-                        ModSounds.COPPER_GUN_JAM.get()
-                );
-            } else {
-                return new AnimatedEnergyGunItem(properties,
-                        "venturi",
-                        ModSounds.MAG_OUT.get(),
-                        ModSounds.MAG_IN.get(),
-                        ModSounds.RELOAD_END.get(),
-                        ModSounds.COPPER_GUN_JAM.get(),
-                        ModSounds.COPPER_GUN_JAM.get(),
-                        4900
-                );
-            }
-        });
-
-
         if (ScorchedGuns.farmersDelightLoaded) {
             ANTHRALITE_KNIFE = REGISTER.register("anthralite_knife", () -> {
                 try {
@@ -143,21 +45,52 @@ public class ModItems {
             });
         }
     }
-    /**
-     * Creates either an AirGunItem or EnergyGunItem based on whether Create is loaded
-     * @param durability The durability for both gun types
-     * @param energyCapacity The energy capacity (only used for EnergyGunItem)
-     * @return The appropriate GunItem instance
-     */
-    private static GunItem createGunItem(int durability, int energyCapacity) {
-        Item.Properties properties = new Item.Properties().stacksTo(1).durability(durability);
+    public static final RegistryObject<AnimatedGunItem> SCRATCHES = REGISTER.register("scratches", () -> new AnimatedAirGunItem(
+            new Item.Properties().stacksTo(1).durability(1400),
+            "scratches",
+            ModSounds.MAG_OUT.get(),
+            ModSounds.MAG_IN.get(),
+            ModSounds.RELOAD_END.get(),
+            ModSounds.COPPER_GUN_JAM.get(),
+            ModSounds.COPPER_GUN_JAM.get()
+    ));
+    public static final RegistryObject<AnimatedGunItem> GALE = REGISTER.register("gale", () -> new AnimatedAirGunItem(
+            new Item.Properties().stacksTo(1).durability(1400),
+            "gale",
+            ModSounds.MAG_OUT.get(),
+            ModSounds.MAG_IN.get(),
+            ModSounds.RELOAD_END.get(),
+            ModSounds.COPPER_GUN_JAM.get(),
+            ModSounds.COPPER_GUN_JAM.get()
+    ));
+    public static final RegistryObject<AnimatedGunItem> UMAX_PISTOL = REGISTER.register("umax_pistol", () -> new AnimatedAirGunItem(
+            new Item.Properties().stacksTo(1).durability(400),
+            "umax_pistol",
+            ModSounds.MAG_OUT.get(),
+            ModSounds.MAG_IN.get(),
+            ModSounds.RELOAD_END.get(),
+            ModSounds.COPPER_GUN_JAM.get(),
+            ModSounds.COPPER_GUN_JAM.get()
+    ));
+    public static final RegistryObject<AnimatedGunItem> VENTURI = REGISTER.register("venturi", () -> new AnimatedAirGunItem(
+            new Item.Properties().stacksTo(1).durability(800),
+            "venturi",
+            ModSounds.MAG_OUT.get(),
+            ModSounds.MAG_IN.get(),
+            ModSounds.RELOAD_END.get(),
+            ModSounds.COPPER_GUN_JAM.get(),
+            ModSounds.COPPER_GUN_JAM.get()
+    ));
+    public static final RegistryObject<AnimatedGunItem> RED_RAYDAR = REGISTER.register("red_raydar", () -> new AnimatedAirGunItem(
+            new Item.Properties().stacksTo(1).durability(200),
+            "red_raydar",
+            ModSounds.MAG_OUT.get(),
+            ModSounds.MAG_IN.get(),
+            ModSounds.RELOAD_END.get(),
+            ModSounds.COPPER_GUN_JAM.get(),
+            ModSounds.COPPER_GUN_JAM.get()
+    ));
 
-        if (!ScorchedGuns.shouldUseEnergyGuns()) {
-            return new AirGunItem(properties);
-        } else {
-            return new EnergyGunItem(properties, energyCapacity);
-        }
-    }
 
     public static final RegistryObject<AnimatedGunItem> M3_CARABINE = REGISTER.register("m3_carabine",
             () -> new AnimatedGunItem(
@@ -218,6 +151,17 @@ public class ModItems {
             () -> new AnimatedDiamondSteelGunItem(
                     new Item.Properties().stacksTo(1).durability(1350),
                     "rg_jigsaw",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedDiamondSteelAirGunItem> NAILER = REGISTER.register("nailer",
+            () -> new AnimatedDiamondSteelAirGunItem(
+                    new Item.Properties().stacksTo(1).durability(1400),
+                    "nailer",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
                     ModSounds.RELOAD_END.get(),
@@ -302,7 +246,7 @@ public class ModItems {
                     ModSounds.COPPER_GUN_JAM.get()
             )
     );
-    public static final RegistryObject<AnimatedGunItem> INERTIAL = REGISTER.register("inertial",
+    public static final RegistryObject<AnimatedDiamondSteelGunItem> INERTIAL = REGISTER.register("inertial",
             () -> new AnimatedDiamondSteelGunItem(
                     new Item.Properties().stacksTo(1).durability(1350),
                     "inertial",
@@ -313,6 +257,18 @@ public class ModItems {
                     ModSounds.COPPER_GUN_JAM.get()
             )
     );
+    public static final RegistryObject<AnimatedDiamondSteelGunItem> INQUISITOR = REGISTER.register("inquisitor",
+            () -> new AnimatedDiamondSteelGunItem(
+                    new Item.Properties().stacksTo(1).durability(1350),
+                    "inquisitor",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+
     public static final RegistryObject<AnimatedGunItem> M22_WALTZ = REGISTER.register("m22_waltz",
             () -> new AnimatedGunItem(
                     new Item.Properties().stacksTo(1).durability(1400),
@@ -491,7 +447,7 @@ public class ModItems {
     );
     public static final RegistryObject<NonUnderwaterAnimatedGunItem> REPEATING_MUSKET = REGISTER.register("repeating_musket",
             () -> new NonUnderwaterAnimatedGunItem(
-                    new Item.Properties().stacksTo(1).durability(256),
+                    new Item.Properties().stacksTo(1).durability(180),
                     "repeating_musket",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
@@ -504,6 +460,39 @@ public class ModItems {
             () -> new NonUnderwaterAnimatedGunItem(
                     new Item.Properties().stacksTo(1).durability(256),
                     "blunderbuss",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<NonUnderwaterAnimatedGunItem> LONGARM = REGISTER.register("longarm",
+            () -> new NonUnderwaterAnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(200),
+                    "longarm",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<NonUnderwaterAnimatedGunItem> FENCER_CARABINE = REGISTER.register("fencer_carabine",
+            () -> new NonUnderwaterAnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(180),
+                    "fencer_carabine",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<NonUnderwaterAnimatedGunItem> FENCER_THUMPER = REGISTER.register("fencer_thumper",
+            () -> new NonUnderwaterAnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(180),
+                    "fencer_thumper",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
                     ModSounds.RELOAD_END.get(),
@@ -557,7 +546,7 @@ public class ModItems {
     );
     public static final RegistryObject<AnimatedGunItem> SAKETINI_IRONPORT = REGISTER.register("saketini_ironport",
             () -> new AnimatedGunItem(
-                    new Item.Properties().stacksTo(1).durability(256),
+                    new Item.Properties().stacksTo(1).durability(200),
                     "saketini_ironport",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
@@ -599,10 +588,43 @@ public class ModItems {
                     ModSounds.COPPER_GUN_JAM.get()
             )
     );
+    public static final RegistryObject<AnimatedGunItem> WINNIE_MILLEND = REGISTER.register("winnie_millend",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(256),
+                    "winnie_millend",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
     public static final RegistryObject<AnimatedGunItem> BRUISER = REGISTER.register("bruiser",
             () -> new AnimatedGunItem(
                     new Item.Properties().stacksTo(1).durability(800),
                     "bruiser",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedDiamondSteelGunItem> DRILL = REGISTER.register("drill",
+            () -> new AnimatedDiamondSteelGunItem(
+                    new Item.Properties().stacksTo(1).durability(1200),
+                    "drill",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedDiamondSteelGunItem> DRILL_CONVERSION = REGISTER.register("drill_conversion",
+            () -> new AnimatedDiamondSteelGunItem(
+                    new Item.Properties().stacksTo(1).durability(1200),
+                    "drill_conversion",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
                     ModSounds.RELOAD_END.get(),
@@ -855,8 +877,19 @@ public class ModItems {
     );
     public static final RegistryObject<AnimatedGunItem> BIG_BORE = REGISTER.register("big_bore",
             () -> new AnimatedGunItem(
-                    new Item.Properties().stacksTo(1).durability(9),
+                    new Item.Properties().stacksTo(1).durability(10),
                     "big_bore",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedGunItem> WHIZZBANGER = REGISTER.register("whizzbanger",
+            () -> new AnimatedGunItem(
+                    new Item.Properties().stacksTo(1).durability(15),
+                    "whizzbanger",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
                     ModSounds.RELOAD_END.get(),
@@ -954,7 +987,7 @@ public class ModItems {
     );
     public static final RegistryObject<AnimatedGunItem> ULTRA_KNIGHT_HAWK = REGISTER.register("ultra_knight_hawk",
             () -> new AnimatedGunItem(
-                    new Item.Properties().stacksTo(1).durability(15),
+                    new Item.Properties().stacksTo(1).durability(21),
                     "ultra_knight_hawk",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
@@ -1304,6 +1337,19 @@ public class ModItems {
                     ModSounds.COPPER_GUN_JAM.get()
             )
     );
+    public static final RegistryObject<AnimatedGunItem> STERILIZER = REGISTER.register("sterilizer",
+            () -> new AnimatedScorchedGunItem(
+                    new Item.Properties().stacksTo(1).durability(2400),
+                    "sterilizer",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.HISS.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+
+
     public static final RegistryObject<AnimatedGunItem> NEWBORN_CYST = REGISTER.register("newborn_cyst",
             () -> new AnimatedScorchedGunItem(
                     new Item.Properties().stacksTo(1).durability(2400),
@@ -1415,40 +1461,45 @@ public class ModItems {
             () -> new ExoSuitCoreItem(new Item.Properties().stacksTo(1), ExoSuitCoreItem.CoreTier.ADVANCED));
 
     public static final RegistryObject<Item> HEAVY_ARMOR_PLATE = REGISTER.register("heavy_armor_plate",
-            () -> new DamageableUpgradeItem(new Item.Properties().durability(80)));
+            () -> new DamageableUpgradeItem(new Item.Properties().durability(256)));
     public static final RegistryObject<Item> HEAVY_PAULDRON = REGISTER.register("heavy_pauldron",
-            () -> new DamageableUpgradeItem(new Item.Properties().durability(80)));
+            () -> new DamageableUpgradeItem(new Item.Properties().durability(256)));
     public static final RegistryObject<Item> ARMOR_PLATE = REGISTER.register("armor_plate",
-            () -> new DamageableUpgradeItem(new Item.Properties().durability(64)));
+            () -> new DamageableUpgradeItem(new Item.Properties().durability(300)));
     public static final RegistryObject<Item> PAULDRON = REGISTER.register("pauldron",
-            () -> new DamageableUpgradeItem(new Item.Properties().durability(64)));
+            () -> new DamageableUpgradeItem(new Item.Properties().durability(300)));
 
     public static final RegistryObject<Item> NIGHT_VISION_MODULE = REGISTER.register("night_vision_module",
-            () -> new NightVisionModuleItem(new Item.Properties().stacksTo(1).durability(256)));
+            () -> new NightVisionModuleItem(new Item.Properties().stacksTo(1).durability(512)));
 
     public static final RegistryObject<Item> GAS_MASK_MODULE = REGISTER.register("gas_mask_module",
-            () -> new GasMaskModuleItem(new Item.Properties().stacksTo(1).durability(256)));
+            () -> new GasMaskModuleItem(new Item.Properties().stacksTo(1).durability(512)));
     public static final RegistryObject<Item> REBREATHER_MODULE = REGISTER.register("rebreather_module",
-            () -> new RebreatherModuleItem(new Item.Properties().stacksTo(1).durability(256)));
+            () -> new RebreatherModuleItem(new Item.Properties().stacksTo(1).durability(512)));
     public static final RegistryObject<Item> TARGET_TRACKER_MODULE = REGISTER.register("target_tracker_module",
-            () -> new TargetTrackerModuleItem(new Item.Properties().stacksTo(1).durability(256)));
+            () -> new TargetTrackerModuleItem(new Item.Properties().stacksTo(1).durability(512)));
     public static final RegistryObject<Item> JETPACK_MODULE = REGISTER.register("jetpack_module",
-            () -> new JetpackModuleItem(new Item.Properties().stacksTo(1).durability(256)));
+            () -> new JetpackModuleItem(new Item.Properties().stacksTo(1).durability(512)));
     public static final RegistryObject<Item> ARMOR_POUCHES = REGISTER.register("armor_pouches",
             () -> new UpgradeItem(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> HEAVY_ARMOR_POUCHES = REGISTER.register("heavy_armor_pouches",
             () -> new UpgradeItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> RABBIT_MODULE = REGISTER.register("rabbit_module",
-            () -> new RabbitModuleItem(new Item.Properties().stacksTo(1).durability(256)));
+            () -> new RabbitModuleItem(new Item.Properties().stacksTo(1).durability(512)));
     public static final RegistryObject<Item> SUIT_GREASE = REGISTER.register("suit_grease",
-            () -> new DamageableUpgradeItem(new Item.Properties().stacksTo(1).durability(256)));
+            () -> new DamageableUpgradeItem(new Item.Properties().stacksTo(1).durability(512)));
     public static final RegistryObject<Item> TENSION_SPRING = REGISTER.register("tension_spring",
-            () -> new DamageableUpgradeItem(new Item.Properties().stacksTo(1).durability(256)));
+            () -> new DamageableUpgradeItem(new Item.Properties().stacksTo(1).durability(512)));
 
     public static final RegistryObject<Item> SHOCK_ABSORBER = REGISTER.register("shock_absorber",
-            () -> new DamageableUpgradeItem(new Item.Properties().stacksTo(1).durability(256)));
+            () -> new DamageableUpgradeItem(new Item.Properties().stacksTo(1).durability(512)));
 
+    public static final RegistryObject<Item> AIR_CANISTER = REGISTER.register("air_canister",
+            () -> new AirCanisterItem(new Item.Properties().stacksTo(1), 1500));
+
+    public static final RegistryObject<Item> REINFORCED_AIR_CANISTER = REGISTER.register("reinforced_air_canister",
+            () -> new AirCanisterItem(new Item.Properties().stacksTo(1), 3000));
 
     public static final RegistryObject<Item> ANTHRALITE_RESPIRATOR = REGISTER.register("anthralite_respirator", () -> new AnthraliteGasMaskArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> NETHERITE_RESPIRATOR = REGISTER.register("netherite_respirator", () -> new NetheriteGasMaskArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties()));
@@ -1475,6 +1526,7 @@ public class ModItems {
     public static final RegistryObject<Item> EXO_SUIT_BLUEPRINT = REGISTER.register("exo_suit_blueprint", () -> new BlueprintItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
     public static final RegistryObject<Item> STANDARD_BULLET = REGISTER.register("standard_bullet", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ADVANCED_BULLET = REGISTER.register("hardened_bullet", () -> new Item(new Item.Properties()));
+
     public static final RegistryObject<Item> SYRINGE = REGISTER.register("syringe", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> NITRO_POWDER = REGISTER.register("nitro_powder", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> NITRO_POWDER_DUST = REGISTER.register("nitro_powder_dust", () -> new Item(new Item.Properties()));
@@ -1490,6 +1542,7 @@ public class ModItems {
     public static final RegistryObject<Item> PHOSPHOR_DUST = REGISTER.register("phosphor_dust", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> BUCKSHOT = REGISTER.register("buckshot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> FLECHETTE = REGISTER.register("flechette", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> NEEDLE = REGISTER.register("needle", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> NITRO_BUCKSHOT = REGISTER.register("nitro_buckshot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> RAW_PHOSPHOR = REGISTER.register("raw_phosphor", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> GUNPOWDER_DUST = REGISTER.register("gunpowder_dust", () -> new Item(new Item.Properties()));
@@ -1573,30 +1626,24 @@ public class ModItems {
     public static final RegistryObject<Item> STANDARD_COPPER_ROUND = REGISTER.register("standard_copper_round", () -> new AmmoItem(new Item.Properties()));
     public static final RegistryObject<Item> COMPACT_ADVANCED_ROUND = REGISTER.register("compact_advanced_round", () -> new AmmoItem(new Item.Properties()));
     public static final RegistryObject<Item> RAMROD_ROUND = REGISTER.register("ramrod_round", () -> new AmmoItem(new Item.Properties()));
-    public static final RegistryObject<Item> ADVANCED_ROUND = REGISTER.register("advanced_round",
-            () -> new TooltipAmmo(new Item.Properties(), 2));
+    public static final RegistryObject<Item> ADVANCED_ROUND = REGISTER.register("advanced_round", () -> new AmmoItem(new Item.Properties()));
     public static final RegistryObject<Item> SHATTER_ROUND = REGISTER.register("shatter_round", () -> new AmmoItem(new Item.Properties()));
-    public static final RegistryObject<Item> KRAHG_ROUND = REGISTER.register("krahg_round",
-            () -> new TooltipAmmo(new Item.Properties(), 4));
-    public static final RegistryObject<Item> BEOWULF_ROUND = REGISTER.register("beowulf_round",
-            () -> new TooltipAmmo(new Item.Properties(), 2));
-    public static final RegistryObject<Item> GIBBS_ROUND = REGISTER.register("gibbs_round",
-            () -> new TooltipAmmo(new Item.Properties(), 2));
+    public static final RegistryObject<Item> KRAHG_ROUND = REGISTER.register("krahg_round", () -> new AmmoItem(new Item.Properties()));
+    public static final RegistryObject<Item> BEOWULF_ROUND = REGISTER.register("beowulf_round", () -> new AmmoItem(new Item.Properties()));
+    public static final RegistryObject<Item> GIBBS_ROUND = REGISTER.register("gibbs_round", () -> new AmmoItem(new Item.Properties()));
     public static final RegistryObject<Item> SHOTGUN_SHELL = REGISTER.register("shotgun_shell", () -> new AmmoItem(new Item.Properties()));
     public static final RegistryObject<Item> BEARPACK_SHELL = REGISTER.register("bearpack_shell", () -> new AmmoItem(new Item.Properties()));
     public static final RegistryObject<Item> BLAZE_FUEL = REGISTER.register("blaze_fuel",
             () -> new FuelAmmoItem(
                     new Item.Properties(),
-                    3200,
                     ModItems.EMPTY_TANK,
                     new MobEffectInstance(MobEffects.DAMAGE_BOOST, 200, 0),
                     new MobEffectInstance(MobEffects.WEAKNESS, 100, 0)
             ));
-
+    public static final RegistryObject<Item> FROG_DART = REGISTER.register("frog_dart", () -> new AmmoItem(new Item.Properties()));
     public static final RegistryObject<Item> SHOTBALL = REGISTER.register("shotball", () -> new ThrowableShotballItem(new Item.Properties()));
     public static final RegistryObject<Item> ENERGY_CELL = REGISTER.register("energy_cell", () -> new AmmoItem(new Item.Properties()));
-    public static final RegistryObject<Item> SCULK_CELL = REGISTER.register("sculk_cell",
-            () -> new TooltipAmmo(new Item.Properties(), 6));
+    public static final RegistryObject<Item> SCULK_CELL = REGISTER.register("sculk_cell", () -> new AmmoItem(new Item.Properties()));
     public static final RegistryObject<Item> SHOCK_CELL = REGISTER.register("shock_cell",
             () -> new TooltipAmmo(new Item.Properties(), "tooltip.scguns.arcing"));
     public static final RegistryObject<Item> MICROJET = REGISTER.register("microjet", () -> new AmmoItem(new Item.Properties()));
@@ -1624,6 +1671,7 @@ public class ModItems {
     public static final RegistryObject<Item> UNFINISHED_HEAVY_GUN_PARTS = REGISTER.register("unfinished_heavy_gun_parts", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> UNFINISHED_PLASMA_CORE = REGISTER.register("unfinished_plasma_core", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> UNFINISHED_OSBORNE_SLUG = REGISTER.register("unfinished_osborne_slug", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> UNFINISHED_FROG_DART = REGISTER.register("unfinished_frog_dart", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ROCKET = REGISTER.register("rocket", () -> new AmmoItem(new Item.Properties().stacksTo(32)));
     public static final RegistryObject<Item> OSBORNE_SLUG = REGISTER.register("osborne_slug", () -> new AmmoItem(new Item.Properties().stacksTo(4)));
     public static final RegistryObject<Item> PEBBLES = REGISTER.register("pebbles", () -> new Item(new Item.Properties()));
@@ -1645,9 +1693,10 @@ public class ModItems {
 
 
     // Projectiles And Throwables
-    public static final RegistryObject<Item> GRENADE = REGISTER.register("grenade", () -> new GrenadeItem(new Item.Properties().stacksTo(32), 10 * 3));
+    public static final RegistryObject<Item> GRENADE = REGISTER.register("grenade", () -> new GrenadeItem(new Item.Properties().stacksTo(32), 20 * 3));
     public static final RegistryObject<Item> STUN_GRENADE = REGISTER.register("stun_grenade", () -> new StunGrenadeItem(new Item.Properties().stacksTo(32), 72000));
     public static final RegistryObject<Item> MOLOTOV_COCKTAIL = REGISTER.register("molotov_cocktail", () -> new MolotovCocktailItem(new Item.Properties().stacksTo(32), 72000));
+    public static final RegistryObject<Item> HELLFIRE_BOMB = REGISTER.register("hellfire_bomb", () -> new HellfireBombItem(new Item.Properties().stacksTo(32), 72000));
     public static final RegistryObject<Item> CHOKE_BOMB = REGISTER.register("choke_bomb", () -> new ChokeBombItem(new Item.Properties().stacksTo(32), 72000));
     public static final RegistryObject<Item> SWARM_BOMB = REGISTER.register("swarm_bomb", () -> new SwarmBombItem(new Item.Properties().stacksTo(32), 72000));
     public static final RegistryObject<Item> NAIL_BOMB = REGISTER.register("nail_bomb", () -> new NailBombItem(new Item.Properties().stacksTo(32), 72000));
@@ -1676,12 +1725,14 @@ public class ModItems {
     public static final RegistryObject<Item> LIGHT_STOCK = REGISTER.register("light_stock", () -> new StockItem(Stock.create(GunModifiers.LIGHT_STOCK_MODIFIER), new Item.Properties().stacksTo(1).durability(1300), false));
     public static final RegistryObject<Item> WEIGHTED_STOCK = REGISTER.register("weighted_stock", () -> new StockItem(Stock.create(GunModifiers.WEIGHTED_STOCK_MODIFIER), new Item.Properties().stacksTo(1).durability(1700)));
     public static final RegistryObject<Item> WOODEN_STOCK = REGISTER.register("wooden_stock", () -> new StockItem(Stock.create(GunModifiers.WOODEN_STOCK_MODIFIER), new Item.Properties().stacksTo(1).durability(1550), false));
+    public static final RegistryObject<Item> BUMP_STOCK = REGISTER.register("bump_stock", () -> new StockItem(Stock.create(GunModifiers.BUMP_STOCK_MODIFIER), new Item.Properties().stacksTo(1).durability(700), true));
+
     // Barrel Attachments
     public static final RegistryObject<Item> SILENCER = REGISTER.register("silencer", () -> new BarrelItem(Barrel.create(0.0F, GunModifiers.SILENCER_MODIFIER, GunModifiers.SILENCED, GunModifiers.REDUCED_DAMAGE), new Item.Properties().stacksTo(1).durability(550)));
     public static final RegistryObject<Item> ADVANCED_SILENCER = REGISTER.register("advanced_silencer", () -> new BarrelItem(Barrel.create(0.0F, GunModifiers.ADVANCED_SILENCER_MODIFIER, GunModifiers.SILENCED), new Item.Properties().stacksTo(1).durability(1200)));
     public static final RegistryObject<Item> MUZZLE_BRAKE = REGISTER.register("muzzle_brake", () -> new BarrelItem(Barrel.create(0.0F, GunModifiers.MUZZLE_BRAKE_MODIFIER), new Item.Properties().stacksTo(1).durability(1400)));
     public static final RegistryObject<Item> EXTENDED_BARREL = REGISTER.register("extended_barrel", () -> new ExtendedBarrelItem(Barrel.create(0.0F, GunModifiers.EXTENDED_BARREL_MODIFIER), new Item.Properties().stacksTo(1).durability(700)));
-
+    public static final RegistryObject<Item> SLUG_SPLITTER = REGISTER.register("slug_splitter", () -> new BarrelItem(Barrel.create(0.0F, GunModifiers.SLUG_SPLITTER_MODIFIER), new Item.Properties().stacksTo(1).durability(1400)));
     // Under Barrel Attachments
     public static final RegistryObject<Item> LIGHT_GRIP = REGISTER.register("light_grip", () -> new UnderBarrelItem(UnderBarrel.create(GunModifiers.LIGHT_RECOIL), new Item.Properties().stacksTo(1).durability(1400)));
     public static final RegistryObject<Item> VERTICAL_GRIP = REGISTER.register("vertical_grip", () -> new UnderBarrelItem(UnderBarrel.create(GunModifiers.REDUCED_RECOIL), new Item.Properties().stacksTo(1).durability(1600)));
@@ -1717,6 +1768,20 @@ public class ModItems {
     public static final RegistryObject<Item> SIGNAL_BEACON_SPAWN_EGG = REGISTER.register("signal_beacon_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.SIGNAL_BEACON, 0xf7cb6c, 0xED1127, new Item.Properties()));
     public static final RegistryObject<Item> SCAMP_TANK_SPAWN_EGG = REGISTER.register("scamp_tank_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.SCAMP_TANK, 0xffeb8c, 0x4f4f4f, new Item.Properties()));
     public static final RegistryObject<Item> SCAMPLER_SPAWN_EGG = REGISTER.register("scampler_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.SCAMPLER, 0xffeb8c, 0xa02727, new Item.Properties()));
+
+    public static final RegistryObject<Item> GUNNER_ZOMBIE_SPAWN_EGG = REGISTER.register("gunner_zombie_spawn_egg",
+            () -> new GunnerSpawnEggItem(() -> EntityType.ZOMBIE, 0x00AFAF, 0x799C65, new Item.Properties()));
+
+    public static final RegistryObject<Item> GUNNER_SKELETON_SPAWN_EGG = REGISTER.register("gunner_skeleton_spawn_egg",
+            () -> new GunnerSpawnEggItem(() -> EntityType.SKELETON, 0x00AFAF, 0xCFC7B8, new Item.Properties()));
+    public static final RegistryObject<Item> GUNNER_PIGLIN_SPAWN_EGG = REGISTER.register("gunner_piglin_spawn_egg",
+            () -> new GunnerSpawnEggItem(() -> EntityType.PIGLIN, 0x00AFAF, 0xE2B45C, new Item.Properties()));
+    public static final RegistryObject<Item> GUNNER_HUSK_SPAWN_EGG = REGISTER.register("gunner_husk_spawn_egg",
+            () -> new GunnerSpawnEggItem(() -> EntityType.HUSK, 0x00AFAF, 0xC9B471, new Item.Properties()));
+    public static final RegistryObject<Item> GUNNER_PILLAGER_SPAWN_EGG = REGISTER.register("gunner_pillager_spawn_egg",
+            () -> new GunnerSpawnEggItem(() -> EntityType.PILLAGER, 0x00AFAF, 0x818181, new Item.Properties()));
+
+
     public static void register(IEventBus eventBus) {
         REGISTER.register(eventBus);
     }

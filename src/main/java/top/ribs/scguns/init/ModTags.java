@@ -37,7 +37,6 @@ public class ModTags
         public static final TagKey<Item> DOES_NOT_EJECT_CASINGS = tag("does_not_eject_casings");
         public static final TagKey<Item> SINGLE_SHOT = tag("single_shot");
         public static final TagKey<Item> NON_COLLATERAL = tag("non_collateral");
-        public static final TagKey<Item> NON_UNDERWATER = tag("non_underwater");
         public static final TagKey<Item> ONE_HANDED_CARBINE  = tag("one_handed_carbine");
         public static final TagKey<Item> HEAVY_WEAPON = tag("heavy_weapon");
         public static final TagKey<Item> OCEAN_GUN = tag("ocean_gun");
@@ -62,7 +61,8 @@ public class ModTags
     }
     public static class Entities
     {
-
+        public static final TagKey<EntityType<?>> GUNNER = tag("gunner");
+        public static final TagKey<EntityType<?>> CANNOT_BE_LACERATED = tag("cannot_be_lacerated");
         public static final TagKey<EntityType<?>> RED_BLOOD = tag("red_blood");
         public static final TagKey<EntityType<?>> WHITE_BLOOD = tag("white_blood");
         public static final TagKey<EntityType<?>> GREEN_BLOOD = tag("green_blood");
@@ -87,6 +87,7 @@ public class ModTags
         public static final TagKey<EntityType<?>> BOT = tag("bot");
         public static final TagKey<EntityType<?>> WATER = tag("water");
         public static final TagKey<EntityType<?>> TURRET_BLACKLIST = tag("turret_blacklist");
+        public static final TagKey<EntityType<?>> TURRET_ENEMY_WHITELIST = tag("turret_enemy_whitelist");
 
         public static TagKey<EntityType<?>> tag(String name)
         {

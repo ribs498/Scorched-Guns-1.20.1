@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "smg",
     "alwaysSpread": false,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
@@ -45,6 +46,7 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 11.0,
+    "armorPen": 7.0,
     "ejectsCasing": true,
     "item": "scguns:sculk_cell",
     "casingType": "scguns:empty_cell",

@@ -14,6 +14,9 @@ public class PacketHandler
     public static void init()
     {
         playChannel = FrameworkAPI.createNetworkBuilder(new ResourceLocation(Reference.MOD_ID, "play"), 1)
+
+                .registerPlayMessage(C2SMessageJetpackState.class, MessageDirection.PLAY_SERVER_BOUND)
+                .registerPlayMessage(C2SMessageJetpackThrust.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(C2SMessageOffhandMelee.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(C2SMessageSetBlueprintRecipe.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(C2SMessageToggleExoSuitPower.class, MessageDirection.PLAY_SERVER_BOUND)
@@ -54,6 +57,7 @@ public class PacketHandler
                 .registerPlayMessage(S2CMessageRemoveProjectile.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .registerPlayMessage(S2CShowTotemAnimationMessage.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .registerPlayMessage(S2CMessageSyncExoSuitUpgrades.class, MessageDirection.PLAY_CLIENT_BOUND)
+                .registerPlayMessage(S2CMessageEntityMuzzleFlash.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .build();
 
     }

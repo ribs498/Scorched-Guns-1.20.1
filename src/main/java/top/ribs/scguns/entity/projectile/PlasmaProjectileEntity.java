@@ -40,7 +40,7 @@ public class PlasmaProjectileEntity extends ProjectileEntity {
     private static final float SPLASH_DAMAGE_RADIUS = 2.0f;
     private static final float SPLASH_DAMAGE_FALLOFF = 0.7f;
     private static final float SPLASH_EFFECT_CHANCE_MULTIPLIER = 0.4f;
-    private static final float FIRE_CHANCE = 0.30f;
+    private static final float FIRE_CHANCE = 0.20f;
 
     public PlasmaProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -132,16 +132,19 @@ public class PlasmaProjectileEntity extends ProjectileEntity {
         DamageSource splashSource = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, (LivingEntity) this.getShooter());
 
         for (LivingEntity target : nearbyEntities) {
-            if (target == this.getShooter()) {
-                continue;
-            }
             double distance = target.position().distanceTo(center);
             if (distance > SPLASH_DAMAGE_RADIUS) {
                 continue;
             }
+
             float distanceRatio = (float) (distance / SPLASH_DAMAGE_RADIUS);
             float damageMultiplier = 1.0f - (distanceRatio * (1.0f - SPLASH_DAMAGE_FALLOFF));
             float splashDamage = baseSplashDamage * damageMultiplier;
+
+            if (target == this.getShooter()) {
+                splashDamage *= 0.4f;
+            }
+
             splashDamage = applyProjectileProtection(target, splashDamage);
             if (splashDamage > 0.5f) {
                 target.hurt(splashSource, splashDamage);
@@ -208,30 +211,32 @@ public class PlasmaProjectileEntity extends ProjectileEntity {
     private void spawnPlasmaParticles(Vec3 position) {
         if (!this.level().isClientSide) {
             ServerLevel serverLevel = (ServerLevel) this.level();
+
             serverLevel.sendParticles(ModParticleTypes.PLASMA_EXPLOSION.get(),
                     position.x, position.y, position.z, 1, 0, 0, 0, 0.1);
-            for (int i = 0; i < 20; i++) {
-                double angle = (i / 20.0) * 2 * Math.PI;
-                double radius = 0.5 + this.random.nextDouble() * 1.5;
+
+            for (int i = 0; i < 12; i++) {
+                double angle = (i / 12.0) * 2 * Math.PI;
+                double radius = 0.3 + this.random.nextDouble() * 0.8;
                 double offsetX = Math.cos(angle) * radius;
                 double offsetZ = Math.sin(angle) * radius;
-                double offsetY = (this.random.nextDouble() - 0.5) * 0.5;
+                double offsetY = (this.random.nextDouble() - 0.5) * 0.3;
 
-                double speedX = offsetX * 0.1;
-                double speedY = (this.random.nextDouble() - 0.3) * 0.2;
-                double speedZ = offsetZ * 0.1;
+                double speedX = offsetX * 0.08; // Slightly slower
+                double speedY = (this.random.nextDouble() - 0.3) * 0.15;
+                double speedZ = offsetZ * 0.08;
 
                 serverLevel.sendParticles(ModParticleTypes.GREEN_FLAME.get(),
                         position.x + offsetX, position.y + offsetY, position.z + offsetZ,
                         1, speedX, speedY, speedZ, 0.05);
             }
-            for (int i = 0; i < 11; i++) {
-                double offsetX = (this.random.nextDouble() - 0.5) * 3.0;
-                double offsetY = (this.random.nextDouble() - 0.5);
-                double offsetZ = (this.random.nextDouble() - 0.5) * 3.0;
-                double speedX = (this.random.nextDouble() - 0.5) * 0.3;
-                double speedY = (this.random.nextDouble() - 0.5) * 0.3;
-                double speedZ = (this.random.nextDouble() - 0.5) * 0.3;
+            for (int i = 0; i < 6; i++) {
+                double offsetX = (this.random.nextDouble() - 0.5) * 1.5;
+                double offsetY = (this.random.nextDouble() - 0.5) * 0.5;
+                double offsetZ = (this.random.nextDouble() - 0.5) * 1.5;
+                double speedX = (this.random.nextDouble() - 0.5) * 0.2;
+                double speedY = (this.random.nextDouble() - 0.5) * 0.2;
+                double speedZ = (this.random.nextDouble() - 0.5) * 0.2;
 
                 serverLevel.sendParticles(ParticleTypes.SOUL_FIRE_FLAME,
                         position.x + offsetX, position.y + offsetY, position.z + offsetZ,

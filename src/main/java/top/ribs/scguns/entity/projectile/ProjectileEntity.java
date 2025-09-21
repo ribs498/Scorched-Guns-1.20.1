@@ -63,6 +63,7 @@ import top.ribs.scguns.interfaces.IDamageable;
 import top.ribs.scguns.interfaces.IExplosionDamageable;
 import top.ribs.scguns.interfaces.IHeadshotBox;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.item.animated.AnimatedDiamondSteelAirGunItem;
 import top.ribs.scguns.item.animated.AnimatedDiamondSteelGunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageBlood;
@@ -125,10 +126,11 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if (shooter instanceof Player player) {
             ChargeHandler.clearLastChargeProgress(player.getUUID());
         }
+
+        float baseArmorBypass = this.projectile.getArmorPen();
         float puncturingBypass = GunEnchantmentHelper.getPuncturingArmorBypass(weapon);
-        if (puncturingBypass > 0) {
-            this.setArmorBypassAmount(this.armorBypassAmount + puncturingBypass);
-        }
+        this.setArmorBypassAmount(baseArmorBypass + puncturingBypass);
+
         AttributeInstance additionalDamageAttr = shooter.getAttribute(SCAttributes.ADDITIONAL_BULLET_DAMAGE.get());
         this.attributeAdditionalDamage = additionalDamageAttr != null ? (float) additionalDamageAttr.getValue() : 0.0F;
 
@@ -799,7 +801,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if (!this.level().isClientSide && this.getShooter() instanceof Player player) {
             ItemStack weapon = player.getMainHandItem();
 
-            if (weapon.getItem() instanceof AnimatedDiamondSteelGunItem) {
+            if (weapon.getItem() instanceof AnimatedDiamondSteelGunItem || weapon.getItem() instanceof AnimatedDiamondSteelGunItem) {
                 int baseXP = killedEntity.getExperienceReward();
                 int bonusXP = Math.round(baseXP * 0.2f);
 
@@ -945,13 +947,11 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         return this.shooterId;
     }
 
-
-
-
     float getCriticalDamage(ItemStack weapon, RandomSource rand, float damage) {
         float chance = GunModifierHelper.getCriticalChance(weapon);
         if (rand.nextFloat() < chance) {
-            return (float) (damage * Config.COMMON.gameplay.criticalDamageMultiplier.get());
+            float critMultiplier = this.modifiedGun.getGeneral().getCritDamageMultiplier();
+            return damage * critMultiplier;
         }
         return damage;
     }
@@ -1103,7 +1103,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             }
         });
 
-        // Clears the affected blocks if mode is none
         if (!explosion.interactsWithBlocks()) {
             explosion.clearToBlow();
         }
@@ -1151,9 +1150,12 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if (world.isClientSide())
             return;
 
-        DamageSource source = entity instanceof ProjectileEntity projectile ? entity.damageSources().explosion(entity, projectile.getShooter()) : null;
+        DamageSource source = entity instanceof ProjectileEntity projectile ?
+                entity.damageSources().explosion(entity, projectile.getShooter()) : null;
         Explosion.BlockInteraction mode = Explosion.BlockInteraction.KEEP;
-        Explosion explosion = new ProjectileExplosion(world, entity, source, null, entity.getX(), entity.getY(), entity.getZ(), radius, true, mode) {
+
+        Explosion explosion = new ProjectileExplosion(world, entity, source, null,
+                entity.getX(), entity.getY(), entity.getZ(), radius * 0.5f, true, mode) {
             @Override
             protected float getEntityDamageAmount(Entity entity, double distance) {
                 return 0;
@@ -1162,9 +1164,82 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
         if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, explosion))
             return;
+
         explosion.explode();
         explosion.finalizeExplosion(true);
 
+        BlockPos centerPos = entity.blockPosition();
+        AABB effectArea = new AABB(centerPos).inflate(radius);
+        List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, effectArea);
+
+        for (LivingEntity livingEntity : nearbyEntities) {
+            double distance = livingEntity.distanceTo(entity);
+            if (distance <= radius) {
+                livingEntity.setSecondsOnFire(8);
+                float damage = (float) (4.0F * (1.0 - distance / radius));
+                livingEntity.hurt(world.damageSources().inFire(), damage);
+            }
+        }
+    }
+    public static void createSoulFireExplosion(Entity entity, float radius, boolean forceNone) {
+        Level world = entity.level();
+        if (world.isClientSide())
+            return;
+
+        DamageSource source = entity instanceof ProjectileEntity projectile ?
+                entity.damageSources().explosion(entity, projectile.getShooter()) : null;
+        Explosion.BlockInteraction mode = Explosion.BlockInteraction.KEEP;
+
+        Explosion explosion = new ProjectileExplosion(world, entity, source, null,
+                entity.getX(), entity.getY(), entity.getZ(), radius * 0.5f, false, mode) {
+            @Override
+            protected float getEntityDamageAmount(Entity entity, double distance) {
+                return 0;
+            }
+        };
+
+        if (net.minecraftforge.event.ForgeEventFactory.onExplosionStart(world, explosion))
+            return;
+
+        explosion.explode();
+        explosion.finalizeExplosion(true);
+        BlockPos centerPos = entity.blockPosition();
+        AABB effectArea = new AABB(centerPos).inflate(radius);
+        List<LivingEntity> nearbyEntities = world.getEntitiesOfClass(LivingEntity.class, effectArea);
+
+        for (LivingEntity livingEntity : nearbyEntities) {
+            double distance = livingEntity.distanceTo(entity);
+            if (distance <= radius) {
+                livingEntity.setSecondsOnFire(8);
+
+                float damage = (float) (4.0F * (1.0 - distance / radius));
+                livingEntity.hurt(world.damageSources().inFire(), damage);
+            }
+        }
+
+        int radiusInt = (int) Math.ceil(radius);
+        int radiusSquared = radiusInt * radiusInt;
+
+        for (int x = -radiusInt; x <= radiusInt; x++) {
+            for (int z = -radiusInt; z <= radiusInt; z++) {
+                BlockPos columnPos = centerPos.offset(x, 0, z);
+
+                if (centerPos.distSqr(columnPos) <= radiusSquared) {
+                    for (int y = -radiusInt; y <= radiusInt; y++) {
+                        BlockPos pos = centerPos.offset(x, y, z);
+                        BlockState stateAtPos = world.getBlockState(pos);
+                        BlockState stateBelow = world.getBlockState(pos.below());
+
+                        if (stateAtPos.isAir() &&
+                                (stateBelow.isFaceSturdy(world, pos.below(), net.minecraft.core.Direction.UP) ||
+                                        !stateBelow.isAir())) {
+                            world.setBlock(pos, ModBlocks.FAKE_SOUL_FIRE.get().defaultBlockState(), 3);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static void createChokeExplosion(Entity entity, float radius) {

@@ -7,9 +7,14 @@
     }
   ],
   "ingredients": [
-    {
-      "tag": "forge:ingots/brass"
-    },
+    [
+      {
+        "tag": "forge:ingots/brass"
+      },
+      {
+        "item": "scguns:ancient_brass"
+      }
+    ],
     {
       "item": "scguns:medium_casing_mold"
     }

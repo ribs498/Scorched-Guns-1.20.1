@@ -1,4 +1,5 @@
 {
+	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
@@ -6,8 +7,8 @@
 	},
 	"elements": [
 		{
-			"from": [7.25, 4.35392, 7.20858],
-			"to": [8.75, 5.85392, 7.65858],
+			"from": [7.375, 4.47892, 7.20858],
+			"to": [8.625, 5.72892, 7.65858],
 			"rotation": {"angle": 45, "axis": "z", "origin": [8, 5.10392, 7.43358]},
 			"faces": {
 				"north": {"uv": [0, 9, 0.75, 9.75], "texture": "#3"},

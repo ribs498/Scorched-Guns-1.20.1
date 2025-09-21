@@ -13,6 +13,7 @@
     }
   },
   "general": {
+    "weaponType": "special",
     "fireMode": "scguns:pulse",
     "fireTimer": 18,
     "gripType": "scguns:mini_gun",

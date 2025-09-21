@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "shotgun",
     "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",

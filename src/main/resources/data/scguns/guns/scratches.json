@@ -2,6 +2,7 @@
   "display": {
   },
   "general": {
+    "weaponType": "heavy",
     "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:mini_gun_5",

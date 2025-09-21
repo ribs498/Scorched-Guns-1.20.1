@@ -7,12 +7,13 @@
       "textureLocation": "muzzle_flash_1",
       "spawnParticles": true,
       "particleType": "minecraft:campfire_cosy_smoke",
-      "particleCount": 15,
-      "particleSpread": 0.7,
-      "particleRingRadius": 0.7
+      "particleCount": 12,
+      "particleSpread": 0.5,
+      "particleRingRadius": 0.5
     }
   },
   "general": {
+    "weaponType": "pistol",
     "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
@@ -58,8 +59,8 @@
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",
-    "enchantedFire": "scguns:item.blackpowder.fire",
-    "fire": "scguns:item.blackpowder.fire",
+    "enchantedFire": "scguns:item.carabine.fire",
+    "fire": "scguns:item.carabine.fire",
     "reload": "scguns:item.gauss.reload"
   }
 }

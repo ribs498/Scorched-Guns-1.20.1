@@ -109,9 +109,9 @@
 					}
 				}
 			},
-			"particle_effects": {
-				"0.0": {
-					"effect": "eject_casing"
+			"sound_effects": {
+				"0.2083": {
+					"effect": "metal"
 				}
 			}
 		},
@@ -223,9 +223,9 @@
 					}
 				}
 			},
-			"particle_effects": {
-				"0.0": {
-					"effect": "eject_casing"
+			"sound_effects": {
+				"0.2083": {
+					"effect": "metal"
 				}
 			}
 		},
@@ -1126,13 +1126,13 @@
 			},
 			"sound_effects": {
 				"0.6667": {
-					"effect": "slap"
+					"effect": "insert"
 				},
 				"1.5": {
 					"effect": "rack"
 				},
 				"2.125": {
-					"effect": "jam"
+					"effect": "metal"
 				},
 				"3.3333": {
 					"effect": "rack"

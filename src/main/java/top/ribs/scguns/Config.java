@@ -183,7 +183,31 @@ public class Config
             builder.pop();
         }
     }
+    public static class ExoSuitCores
+    {
+        public final ForgeConfigSpec.IntValue basicCoreCapacity;
+        public final ForgeConfigSpec.IntValue advancedCoreCapacity;
+        public final ForgeConfigSpec.IntValue eliteCoreCapacity;
 
+        public ExoSuitCores(ForgeConfigSpec.Builder builder)
+        {
+            builder.comment("Properties relating to ExoSuit Core capacities").push("exosuit_cores");
+            {
+                this.basicCoreCapacity = builder
+                        .comment("Energy capacity for Basic ExoSuit Core")
+                        .defineInRange("basicCoreCapacity", 25000, 1000, 100000);
+
+                this.advancedCoreCapacity = builder
+                        .comment("Energy capacity for Advanced ExoSuit Core")
+                        .defineInRange("advancedCoreCapacity", 40000, 1000, 100000);
+
+                this.eliteCoreCapacity = builder
+                        .comment("Energy capacity for Elite ExoSuit Core")
+                        .defineInRange("eliteCoreCapacity", 65000, 1000, 100000);
+            }
+            builder.pop();
+        }
+    }
     public static class Experimental
     {
         public Experimental(ForgeConfigSpec.Builder builder)
@@ -201,6 +225,7 @@ public class Config
     {
         public final Gameplay gameplay;
         public final Network network;
+        public final GunnerMobs gunnerMobs;
         public final AggroMobs aggroMobs;
         public final FleeingMobs fleeingMobs;
         public final Rockets rockets;
@@ -209,6 +234,8 @@ public class Config
         public final ProjectileSpread projectileSpread;
         public final Gunsmith Gunsmith;
         public final Turret turret;
+        public final ExoSuitCores exoSuitCores;
+
 
 
         public Common(ForgeConfigSpec.Builder builder)
@@ -217,6 +244,7 @@ public class Config
             {
                 this.gameplay = new Gameplay(builder);
                 this.network = new Network(builder);
+                this.gunnerMobs = new GunnerMobs(builder);
                 this.aggroMobs = new AggroMobs(builder);
                 this.fleeingMobs = new FleeingMobs(builder);
                 this.rockets = new Rockets(builder);
@@ -225,6 +253,95 @@ public class Config
                 this.projectileSpread = new ProjectileSpread(builder);
                 this.Gunsmith = new Gunsmith(builder);
                 this.turret = new Turret(builder);
+                this.exoSuitCores = new ExoSuitCores(builder);
+            }
+            builder.pop();
+        }
+    }
+    public static class GunnerMobs
+    {
+        public final ForgeConfigSpec.BooleanValue gunnerMobSpawning;
+        public final ForgeConfigSpec.BooleanValue explosiveMobs;
+        public final ForgeConfigSpec.BooleanValue dropAmmo;
+        public final ForgeConfigSpec.BooleanValue eliteSpawning;
+        public final ForgeConfigSpec.DoubleValue eliteChance;
+        public final ForgeConfigSpec.BooleanValue horsemen;
+        public final ForgeConfigSpec.IntValue minimunDays;
+        public final ForgeConfigSpec.IntValue initialChance;
+        public final ForgeConfigSpec.IntValue chanceIncrement;
+        public final ForgeConfigSpec.IntValue maxChance;
+        public final ForgeConfigSpec.BooleanValue gunnerMobPatrols;
+        public final ForgeConfigSpec.IntValue patrolIntervalDays;
+        public final ForgeConfigSpec.IntValue randomIntervalMinTicks;
+        public final ForgeConfigSpec.IntValue randomIntervalMaxTicks;
+        public final ForgeConfigSpec.IntValue minimumDaysForPatrols;
+        public final ForgeConfigSpec.BooleanValue gunnerMobRaids;
+        public final ForgeConfigSpec.BooleanValue raidSupportMobs;
+        public final ForgeConfigSpec.IntValue raidIntervalDays;
+        public final ForgeConfigSpec.IntValue randomRaidIntervalMinTicks;
+        public final ForgeConfigSpec.IntValue randomRaidIntervalMaxTicks;
+        public final ForgeConfigSpec.IntValue minimumDaysForRaids;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> factions;
+        public final ForgeConfigSpec.BooleanValue terrorPhantomDestroyBlocks;
+        public final ForgeConfigSpec.BooleanValue phantomSwarm;
+        public final ForgeConfigSpec.BooleanValue phantomGunnersReplacePhantoms;
+
+        public GunnerMobs(ForgeConfigSpec.Builder builder) {
+            builder.comment("Faction and Gun Configuration").push("gunner_config");
+            {
+                this.gunnerMobSpawning = builder.comment("If enabled, mobs inside the Factions config will have a chance to spawn with guns.").define("gunnerMobSpawning", true);
+                this.explosiveMobs = builder.comment("If enabled, Raids will have a chance to spawn explosive mobs/mobs with explosive charges.").define("explosiveMobs", true);
+                this.dropAmmo = builder.comment("If enabled, mobs with guns will have a chance to drop ammo for the gun they are using.").define("dropAmmo", true);
+                this.eliteSpawning = builder.comment("If enabled, mobs will have a chance to spawn as Elites.").define("eliteSpawning", true);
+                this.eliteChance = builder.comment("The chance for Elite Gunners to spawn, 1.0 is always, 0.0 is never.").defineInRange("eliteChance", 0.3D, 0.1D, 1.0D);
+                this.horsemen = builder.comment("If enabled, Elite Gunners have a chance to spawn riding Horses.").define("horsemen", true);
+                this.minimunDays = builder.comment("The in-game day where mobs will start spawning, and the spawn chance will increase every day after. 0 is the world-creation day.").defineInRange("minimunDays", 4, 0, 100);
+                this.initialChance = builder.comment("This will define the initial chance of mobs spawning with guns. Goes from 0% to 100%").defineInRange("initialChance", 1, 0, 100);
+                this.chanceIncrement = builder.comment("This defines the increment of the chance of mobs spawning with guns per day.").defineInRange("chanceIncrement", 1, 0, 100);
+                this.maxChance = builder.comment("This will define the max chance of mobs spawning with guns.").defineInRange("maxChance", 50, 1, 100);
+                this.terrorPhantomDestroyBlocks = builder.comment("If enabled, the Terror Phantom will destroy blocks with its grenades.").define("terrorPhantomDestroyBlocks", false);
+                this.phantomSwarm = builder.comment("If enabled, defeating the Terror Phantom will enable the Phantom Swarm.").define("phantomSwarm", true);
+                this.phantomGunnersReplacePhantoms = builder.comment("If enabled, Phantom Gunners will have a chance to replace Phantoms AFTER defeating the Terror Phantom.").define("phantomGunnersReplacePhantoms", true);
+                this.gunnerMobPatrols = builder.comment("If enabled, Factions inside the config will have the same chance to spawn like Pillager Patrols.").define("gunnerMobPatrols", true);
+                this.patrolIntervalDays = builder.comment("Fixed patrol interval in days. Set to 0 to use a random interval instead.").defineInRange("patrolIntervalDays", 5, 0, 30);
+                this.randomIntervalMinTicks = builder.comment("Minimum random interval in ticks if patrolIntervalDays is 0.").defineInRange("randomIntervalMinTicks", 12000, 1, Integer.MAX_VALUE);
+                this.randomIntervalMaxTicks = builder.comment("Maximum random interval in ticks if patrolIntervalDays is 0.").defineInRange("randomIntervalMaxTicks", 24000, 1, Integer.MAX_VALUE);
+                this.minimumDaysForPatrols = builder.comment("Minimum number of in-game days before patrols can start spawning.").defineInRange("minimumDaysForPatrols", 5, 0, 30);
+                this.gunnerMobRaids = builder.comment("If enabled, Factions inside the config will have the same chance to start Raids naturally.").define("gunnerMobRaids", true);
+                this.raidSupportMobs = builder.comment("If enabled, Factions will spawn additional Mobs for support.").define("raidSupportMobs", true);
+                this.raidIntervalDays = builder.comment("Fixed Raid interval in days. Set to 0 to use a random interval instead.").defineInRange("raidIntervalDays", 30, 0, 100);
+                this.randomRaidIntervalMinTicks = builder.comment("Minimum random interval in ticks if raidIntervalDays is 0.").defineInRange("randomRaidIntervalMinTicks", 12000, 1, Integer.MAX_VALUE);
+                this.randomRaidIntervalMaxTicks = builder.comment("Maximum random interval in ticks if raidIntervalDays is 0.").defineInRange("randomRaidIntervalMaxTicks", 24000, 1, Integer.MAX_VALUE);
+                this.minimumDaysForRaids = builder.comment("Minimum number of in-game days before Factions can start Raids").defineInRange("minimumDaysForRaids", 15, 0, 100);
+                this.factions = builder.comment("Define factions, their mobs, and gun pools. Format: faction_name|ai_difficulty|mob1,mob2...|closeGun1,closeGun2...|longGun1,longGun2...|eliteGun1,eliteGun2...")
+                        .defineList("factions", Arrays.asList(
+                                "night_of_the_undead" + "|1" +
+                                        "|minecraft:zombie,minecraft:zombie_villager,minecraft:husk" +
+                                        "|scguns:greaser_smg,scguns:combat_shotgun" +
+                                        "|scguns:defender_pistol" +
+                                        "|scguns:brawler",
+                                "the_rattlers" + "|2" +
+                                        "|minecraft:skeleton,minecraft:stray" +
+                                        "|scguns:greaser_smg" +
+                                        "|scguns:iron_javelin" +
+                                        "|scguns:iron_spear,scguns:iron_javelin",
+                                "nosy_business" + "|3" +
+                                        "|minecraft:pillager,minecraft:vindicator" +
+                                        "|scguns:combat_shotgun" +
+                                        "|scguns:mas_55,scguns:prush_gun" +
+                                        "|scguns:inertial,scguns:m3_carabine",
+                                "bad_piggies" + "|2" +
+                                        "|minecraft:piglin,minecraft:piglin_brute" +
+                                        "|scguns:freyr,scguns:mangalitsa" +
+                                        "|scguns:vulcanic_repeater,scguns:pyroclastic_flow"  +
+                                        "|scguns:trotters",
+                                "hell_hogs" + "|3" +
+                                        "|minecraft:zombified_piglin,minecraft:wither_skeleton" +
+                                        "|scguns:greaser_smg,scguns:defender_pistol,scguns:combat_shotgun" +
+                                        "|scguns:lockewood,scguns:drill" +
+                                        "|scguns:krauser"
+                        ), o -> o instanceof String);
+
             }
             builder.pop();
         }
@@ -243,7 +360,6 @@ public class Config
         public final ForgeConfigSpec.DoubleValue growBoundingBoxAmount;
         public final ForgeConfigSpec.BooleanValue enableHeadShots;
         public final ForgeConfigSpec.DoubleValue headShotDamageMultiplier;
-        public final ForgeConfigSpec.DoubleValue criticalDamageMultiplier;
         public final ForgeConfigSpec.BooleanValue ignoreLeaves;
         public final ForgeConfigSpec.BooleanValue enableKnockback;
         public final ForgeConfigSpec.DoubleValue knockbackStrength;
@@ -252,12 +368,14 @@ public class Config
         public final ForgeConfigSpec.DoubleValue ammoBoxCapacityMultiplier;
         public final ForgeConfigSpec.IntValue energyProductionRate;
         public final ForgeConfigSpec.BooleanValue drawAnimation;
-        public final ForgeConfigSpec.BooleanValue forceEnergyGuns;
         public final ForgeConfigSpec.BooleanValue toggleADS;
         public final ForgeConfigSpec.DoubleValue globalDamageMultiplier;
         public final ForgeConfigSpec.BooleanValue disableVillagerSpawning;
         public final ForgeConfigSpec.DoubleValue dissidentSpawnChance;
         public final ForgeConfigSpec.BooleanValue enableAutoReload;
+        public final ForgeConfigSpec.BooleanValue enableSculkPurification;
+        public final ForgeConfigSpec.IntValue playerGunfireVolume;
+        public final ForgeConfigSpec.IntValue mobGunfireVolume;
         public Gameplay(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Properties relating to gameplay").push("gameplay");
@@ -271,7 +389,6 @@ public class Config
                 this.growBoundingBoxAmount = builder.comment("The extra amount to expand an entity's bounding box when checking for projectile collision. Setting this value higher will make it easier to hit entities").defineInRange("growBoundingBoxAmount", 0.3, 0.0, 1.0);
                 this.enableHeadShots = builder.comment("Enables the check for head shots for players. Projectiles that hit the head of a player will have increased damage.").define("enableHeadShots", true);
                 this.headShotDamageMultiplier = builder.comment("The value to multiply the damage by if projectile hit the players head").defineInRange("headShotDamageMultiplier", 1.25, 1.0, Double.MAX_VALUE);
-                this.criticalDamageMultiplier = builder.comment("The value to multiply the damage by if projectile is a critical hit").defineInRange("criticalDamageMultiplier", 1.5, 1.0, Double.MAX_VALUE);
                 this.ignoreLeaves = builder.comment("If true, projectiles will ignore leaves when checking for collision").define("ignoreLeaves", true);
                 this.enableKnockback = builder.comment("If true, projectiles will cause knockback when an entity is hit. By default this is set to true to match the behaviour of Minecraft.").define("enableKnockback", true);
                 this.knockbackStrength = builder.comment("Sets the strength of knockback when shot by a bullet projectile. Knockback must be enabled for this to take effect. If value is equal to zero, knockback will use default minecraft value").defineInRange("knockbackStrength", 0.15, 0.0, 1.0);
@@ -281,9 +398,6 @@ public class Config
                 this.energyProductionRate = builder
                         .comment("Energy produced per tick by the Polar Generator. Adjust this value to balance the generator's output.")
                         .defineInRange("energyProductionRate", 50, 1, Integer.MAX_VALUE);
-                this.forceEnergyGuns = builder
-                        .comment("If true, guns will always use energy system even if Create mod is loaded NOT WORKING.")
-                        .define("forceEnergyGuns", false);
                 this.toggleADS = builder
                         .comment("If true, guns will toggle ADS mode.")
                         .define("toggleADS", false);
@@ -300,6 +414,9 @@ public class Config
                         .comment("If true, guns will automatically start reloading when fired with an empty magazine if ammo is available")
                         .define("enableAutoReload", true);
                 this.enableFirePlacement = builder.comment("If true, allows flamethrowers to place fire on blocks").define("enableFirePlacement", true);
+                this.enableSculkPurification = builder.comment("If true, allows flamethrowers weapons to purify sculk blocks").define("enableSculkPurification", true);
+                this.playerGunfireVolume = builder.comment("The volume for Player Gunfire. Default is 8").defineInRange("playerGunfireVolume", 8, 1, 10);
+                this.mobGunfireVolume = builder.comment("The volume for Mob Gunfire. Default is 8").defineInRange("mobGunfireVolume", 8, 1, 10);
             }
             builder.pop();
         }

@@ -102,9 +102,6 @@ public class ExoSuitGasMaskHandler {
                 }
             }
         }
-
-        // TODO: Could also check for gas grenade effects
-
         return false;
     }
 

@@ -36,6 +36,9 @@ public class BirdfeederModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.BIRDFEEDER_LIGHT_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.BIRDFEEDER_WOODEN_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
+            if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.BIRDFEEDER_WEIGHTED_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
+
         }
         else {
             RenderUtil.renderModel(SpecialModels.BIRDFEEDER_STAN_GRIP.getModel(), stack, matrixStack, buffer, light, overlay);

@@ -1,7 +1,9 @@
 package top.ribs.scguns.client.handler;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -23,9 +25,7 @@ import top.ribs.scguns.Config;
 import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.client.KeyBinds;
 import top.ribs.scguns.common.*;
-import top.ribs.scguns.common.network.ServerPlayHandler;
 import top.ribs.scguns.compat.PlayerReviveHelper;
-import top.ribs.scguns.event.GunEventBus;
 import top.ribs.scguns.event.GunFireEvent;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.BayonetItem;
@@ -47,6 +47,10 @@ public class ShootingHandler
     private boolean wasRightClickPressed = false;
     private boolean wasHoldingFireWhenEmpty = false;
     private boolean hasReleasedFireSinceEmpty = false;
+    private boolean hasBufferedShot = false;
+    private int bufferTimer = 0;
+    private boolean lastFireKeyState = false;
+    private static final int BUFFER_DURATION = 4;
 
     public static ShootingHandler get()
     {
@@ -155,7 +159,7 @@ public class ShootingHandler
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOWEST)
     public void onHandleShooting(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.START)
             return;
@@ -171,52 +175,98 @@ public class ShootingHandler
             if (heldItem.getItem() instanceof GunItem gunItem && !PlayerReviveHelper.isBleeding(player)) {
                 Gun modifiedGun = gunItem.getModifiedGun(heldItem);
 
-                boolean shouldShoot = KeyBinds.getShootMapping().isDown() || (burstCounter > 0 && Gun.hasBurstFire(heldItem));
+                boolean isCurrentlyPressingFire = KeyBinds.getShootMapping().isDown();
                 if (ScorchedGuns.controllableLoaded) {
-                    shouldShoot |= ControllerHandler.isShooting();
+                    isCurrentlyPressingFire |= ControllerHandler.isShooting();
+                }
+                if (modifiedGun.getGeneral().getFireMode() == FireMode.SEMI_AUTO) {
+                    handleSemiAutoWithBuffer(player, heldItem, isCurrentlyPressingFire);
+                } else {
+                    handleOtherFireModes(player, heldItem, modifiedGun, isCurrentlyPressingFire);
                 }
 
-                if (modifiedGun.getGeneral().getFireMode() == FireMode.BEAM || modifiedGun.getGeneral().getFireMode() == FireMode.SEMI_BEAM) {
-                    if (shouldShoot && burstCooldownTimer <= 0) {
-                        if (!this.shooting) {
-                            this.shooting = true;
-                            PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(true));
-                        }
-                    } else {
-                        if (this.shooting) {
-                            this.shooting = false;
-                            PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(false));
-                            PacketHandler.getPlayChannel().sendToServer(new C2SMessageStopBeam());
-                        }
-                    }
-                } else {
-                    if (shouldShoot && burstCooldownTimer <= 0) {
-                        if (!this.shooting) {
-                            this.shooting = true;
-                            PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(true));
-                        }
-                    } else if (this.shooting) {
-                        this.shooting = false;
-                        PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(false));
-                    }
+                lastFireKeyState = isCurrentlyPressingFire;
+            } else if (this.shooting) {
+                this.shooting = false;
+                PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(false));
+                lastFireKeyState = false;
+                hasBufferedShot = false;
+                bufferTimer = 0;
+            }
+        } else {
+            this.shooting = false;
+            lastFireKeyState = false;
+            hasBufferedShot = false;
+            bufferTimer = 0;
+        }
+    }
+
+    private void handleSemiAutoWithBuffer(Player player, ItemStack heldItem, boolean isCurrentlyPressingFire) {
+        ItemCooldowns tracker = player.getCooldowns();
+        boolean isOnCooldown = tracker.isOnCooldown(heldItem.getItem());
+
+        boolean newFireInput = isCurrentlyPressingFire && !lastFireKeyState;
+
+        if (newFireInput) {
+            if (!isOnCooldown) {
+                if (!this.shooting) {
+                    this.shooting = true;
+                    PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(true));
+                }
+            } else {
+                this.hasBufferedShot = true;
+                this.bufferTimer = BUFFER_DURATION;
+            }
+        }
+        if (this.hasBufferedShot && !isOnCooldown) {
+            if (!this.shooting) {
+                this.shooting = true;
+                PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(true));
+            }
+            this.hasBufferedShot = false;
+            this.bufferTimer = 0;
+        }
+
+        if (this.hasBufferedShot) {
+            this.bufferTimer--;
+            if (this.bufferTimer <= 0) {
+                this.hasBufferedShot = false;
+            }
+        }
+        if (this.shooting && !isCurrentlyPressingFire && !this.hasBufferedShot) {
+            this.shooting = false;
+            PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(false));
+        }
+    }
+
+    private void handleOtherFireModes(Player player, ItemStack heldItem, Gun modifiedGun, boolean shouldShoot) {
+        this.hasBufferedShot = false;
+        this.bufferTimer = 0;
+        if (modifiedGun.getGeneral().getFireMode() == FireMode.BEAM || modifiedGun.getGeneral().getFireMode() == FireMode.SEMI_BEAM) {
+            if (shouldShoot && burstCooldownTimer <= 0) {
+                if (!this.shooting) {
+                    this.shooting = true;
+                    PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(true));
+                }
+            } else {
+                if (this.shooting) {
+                    this.shooting = false;
+                    PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(false));
+                    PacketHandler.getPlayChannel().sendToServer(new C2SMessageStopBeam());
+                }
+            }
+        } else {
+            if (shouldShoot && burstCooldownTimer <= 0) {
+                if (!this.shooting) {
+                    this.shooting = true;
+                    PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(true));
                 }
             } else if (this.shooting) {
                 this.shooting = false;
                 PacketHandler.getPlayChannel().sendToServer(new C2SMessageShooting(false));
-                ItemStack lastHeldItem = player.getMainHandItem();
-                if (lastHeldItem.getItem() instanceof GunItem) {
-                    Gun modifiedGun = ((GunItem) lastHeldItem.getItem()).getModifiedGun(lastHeldItem);
-                    if (modifiedGun != null && (modifiedGun.getGeneral().getFireMode() == FireMode.BEAM ||
-                            modifiedGun.getGeneral().getFireMode() == FireMode.SEMI_BEAM)) {
-                        PacketHandler.getPlayChannel().sendToServer(new C2SMessageStopBeam());
-                    }
-                }
             }
-        } else {
-            this.shooting = false;
         }
     }
-
     private boolean isEmpty(Player player, ItemStack heldItem)
     {
         if(!(heldItem.getItem() instanceof GunItem))
@@ -230,6 +280,16 @@ public class ShootingHandler
     public void fire(Player player, ItemStack heldItem) {
         if(!(heldItem.getItem() instanceof GunItem gunItem))
             return;
+        if (heldItem.isDamageableItem() &&
+                heldItem.getDamageValue() >= (heldItem.getMaxDamage() - 1)) {
+            player.displayClientMessage(
+                    Component.translatable("message.scguns.gun_broken")
+                            .withStyle(ChatFormatting.RED),
+                    true
+            );
+            return;
+        }
+
         if (heldItem.isDamageableItem() &&
                 heldItem.getDamageValue() >= (heldItem.getMaxDamage() - 1)) {
             return;
@@ -262,7 +322,7 @@ public class ShootingHandler
                                 return;
                             }
                             if (wasHoldingFireWhenEmpty && !hasReleasedFireSinceEmpty) {
-                               return;
+                                return;
                             }
                         }
 
@@ -318,6 +378,8 @@ public class ShootingHandler
                 }
             }
             burstCounter = 0;
+            hasBufferedShot = false;
+            bufferTimer = 0;
             return;
         }
         wasHoldingFireWhenEmpty = false;
@@ -346,7 +408,7 @@ public class ShootingHandler
                     boolean useAlternate = DualWieldShotTracker.get().shouldUseAlternateAnimation(player.getId());
                     if (ModSyncedDataKeys.AIMING.getValue(player)) {
                         controller.tryTriggerAnimation(useAlternate ? "aim_shoot1" : "aim_shoot");
-                   } else {
+                    } else {
                         controller.tryTriggerAnimation(useAlternate ? "shoot1" : "shoot");
                     }
                 }
@@ -396,7 +458,7 @@ public class ShootingHandler
                     fireTimer = 0;
                     wasHoldingFireWhenEmpty = false;
                     hasReleasedFireSinceEmpty = false;
-                    ItemStack heldItem = player.getMainHandItem();
+                    player.getMainHandItem();
                     ChargeHandler.clearLastChargeProgress(player.getUUID());
                 }
             }
@@ -471,7 +533,7 @@ public class ShootingHandler
                     } else {
                         ChargeHandler.updateChargeTime(player, heldItem, false);
                         doEmptyClick = true;
-                     }
+                    }
                 }
             }
             slot = player.getInventory().selected;
@@ -509,8 +571,6 @@ public class ShootingHandler
                     .get("controller");
 
             if (controller != null) {
-                String currentAnim = controller.getCurrentAnimation() != null ?
-                        controller.getCurrentAnimation().animation().name() : "none";
 
                 boolean playingReload = animatedGun.isAnimationPlaying(controller, "reload");
                 boolean playingCarbineReload = animatedGun.isAnimationPlaying(controller, "carbine_reload");

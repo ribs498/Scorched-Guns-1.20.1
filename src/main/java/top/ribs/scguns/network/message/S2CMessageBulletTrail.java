@@ -30,10 +30,33 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
     private int shooterId;
     private boolean enchanted;
     private ParticleOptions particleData;
+    private boolean isVisible;
 
     public S2CMessageBulletTrail() {}
 
-    public S2CMessageBulletTrail(ProjectileEntity[] spawnedProjectiles, Gun.Projectile projectileProps, int shooterId, ParticleOptions particleData)
+    public S2CMessageBulletTrail(ProjectileEntity[] spawnedProjectiles, Gun.Projectile projectileProps, int shooterId, ParticleOptions particleData) {
+        this.positions = new Vec3[spawnedProjectiles.length];
+        this.motions = new Vec3[spawnedProjectiles.length];
+        this.entityIds = new int[spawnedProjectiles.length];
+
+        for(int i = 0; i < spawnedProjectiles.length; ++i) {
+            ProjectileEntity projectile = spawnedProjectiles[i];
+            this.positions[i] = projectile.position();
+            this.motions[i] = projectile.getDeltaMovement();
+            this.entityIds[i] = projectile.getId();
+        }
+
+        this.item = spawnedProjectiles[0].getItem();
+        this.enchanted = spawnedProjectiles[0].getWeapon().isEnchanted();
+        this.trailColor = this.enchanted ? 10252799 : projectileProps.getTrailColor();
+        this.trailLengthMultiplier = projectileProps.getTrailLengthMultiplier();
+        this.life = projectileProps.getLife();
+        this.gravity = spawnedProjectiles[0].getModifiedGravity();
+        this.shooterId = shooterId;
+        this.particleData = particleData;
+    }
+
+    public S2CMessageBulletTrail(ProjectileEntity[] spawnedProjectiles, Gun.Projectile projectileProps, int shooterId, ParticleOptions particleData, boolean isVisible)
     {
         this.positions = new Vec3[spawnedProjectiles.length];
         this.motions = new Vec3[spawnedProjectiles.length];
@@ -53,9 +76,10 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         this.gravity = spawnedProjectiles[0].getModifiedGravity(); //It's possible that projectiles have different gravity
         this.shooterId = shooterId;
         this.particleData = particleData;
+        this.isVisible = isVisible;
     }
 
-    public S2CMessageBulletTrail(int[] entityIds, Vec3[] positions, Vec3[] motions, ItemStack item, int trailColor, double trailLengthMultiplier, int life, double gravity, int shooterId, boolean enchanted, ParticleOptions particleData)
+    public S2CMessageBulletTrail(int[] entityIds, Vec3[] positions, Vec3[] motions, ItemStack item, int trailColor, double trailLengthMultiplier, int life, double gravity, int shooterId, boolean enchanted, ParticleOptions particleData, boolean isVisible)
     {
         this.entityIds = entityIds;
         this.positions = positions;
@@ -68,6 +92,7 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         this.shooterId = shooterId;
         this.enchanted = enchanted;
         this.particleData = particleData;
+        this.isVisible = isVisible;
     }
 
     @Override
@@ -88,6 +113,7 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         buffer.writeInt(message.shooterId);
         buffer.writeBoolean(message.enchanted);
         buffer.writeId(BuiltInRegistries.PARTICLE_TYPE, message.particleData.getType());
+        buffer.writeBoolean(message.isVisible);
         message.particleData.writeToNetwork(buffer);
     }
 
@@ -113,8 +139,9 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         boolean enchanted = buffer.readBoolean();
         ParticleType<?> type = buffer.readById(BuiltInRegistries.PARTICLE_TYPE);
         if (type == null) type = ParticleTypes.CRIT;
+        boolean isVisible = buffer.readBoolean();
         ParticleOptions particleData = this.readParticle(buffer, type);
-        return new S2CMessageBulletTrail(entityIds, positions, motions, item, trailColor, trailLengthMultiplier, life, gravity,shooterId, enchanted, particleData);
+        return new S2CMessageBulletTrail(entityIds, positions, motions, item, trailColor, trailLengthMultiplier, life, gravity,shooterId, enchanted, particleData, isVisible);
     }
 
     @Override
@@ -182,6 +209,11 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
     public boolean isEnchanted()
     {
         return this.enchanted;
+    }
+
+    public boolean isVisible()
+    {
+        return this.isVisible;
     }
 
     public ParticleOptions getParticleData()

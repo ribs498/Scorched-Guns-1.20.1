@@ -23,8 +23,6 @@ public class BruiserModel implements IOverrideModel {
     @SuppressWarnings("resource")
     @Override
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
-
-        // Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.BRUISER_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
 
         if (entity.equals(Minecraft.getInstance().player)) {
@@ -36,22 +34,17 @@ public class BruiserModel implements IOverrideModel {
             ItemCooldowns tracker = Minecraft.getInstance().player.getCooldowns();
             float cooldown = tracker.getCooldownPercent(stack.getItem(), Minecraft.getInstance().getFrameTime());
             cooldown = (float) ease(cooldown);
-            // Apply transformations to the barrel and attached components
             matrixStack.translate(0, 0, cooldown / 6);
             matrixStack.translate(0, 5.8 * 0.0625, 0);
-            // Render the barrel and its attachments
             renderBarrelAndAttachments(stack, matrixStack, buffer, light, overlay);
-            // Always pop
             matrixStack.popPose();
         }
     }
 
     private void renderBarrelAndAttachments(ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
-        // Check if extended barrel is attached
         boolean hasExtendedBarrel = Gun.hasAttachmentEquipped(stack, IAttachment.Type.BARREL) &&
                 Gun.getAttachment(IAttachment.Type.BARREL, stack).getItem() == ModItems.EXTENDED_BARREL.get();
 
-        // Render the appropriate barrel
         if (hasExtendedBarrel) {
             RenderUtil.renderModel(SpecialModels.BRUISER_EXT_BARREL.getModel(), stack, matrixStack, buffer, light, overlay);
         } else {

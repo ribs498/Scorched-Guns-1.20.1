@@ -86,13 +86,8 @@
 				}
 			},
 			"sound_effects": {
-				"0.2917": {
-					"effect": "rack"
-				}
-			},
-			"particle_effects": {
-				"0.0": {
-					"effect": "eject_casing"
+				"0.25": {
+					"effect": "pump"
 				}
 			}
 		},
@@ -889,21 +884,21 @@
 				}
 			},
 			"sound_effects": {
+				"0.0": {
+					"effect": "pump_half"
+				},
 				"0.4167": {
 					"effect": "reload_mag_out"
 				},
-				"1.125": {
+				"1.0417": {
 					"effect": "reload_mag_in"
 				},
-				"1.2917": {
-					"effect": "slap"
-				},
-				"2.125": {
-					"effect": "bolt"
+				"2.2083": {
+					"effect": "pump_half"
 				}
 			},
 			"particle_effects": {
-				"2.2083": {
+				"2.25": {
 					"effect": "loaded"
 				}
 			}
@@ -1360,13 +1355,8 @@
 				}
 			},
 			"sound_effects": {
-				"0.2917": {
-					"effect": "rack"
-				}
-			},
-			"particle_effects": {
-				"0.0": {
-					"effect": "eject_casing"
+				"0.25": {
+					"effect": "pump"
 				}
 			}
 		}

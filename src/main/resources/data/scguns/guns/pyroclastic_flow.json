@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "sniper",
     "fireMode": "scguns:pulse",
     "fireTimer": 16,
     "gripType": "scguns:one_handed",
@@ -41,6 +42,7 @@
   "projectile": {
     "advantage": "scguns:wither",
     "damage": 15.0,
+    "armorPen": 2.0,
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:blaze_fuel",

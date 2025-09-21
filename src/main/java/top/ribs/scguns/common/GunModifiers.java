@@ -345,7 +345,7 @@ public class GunModifiers
         }
         @Override
         public double modifyDrawSpeed(double speed) {
-            return speed * 0.85F;  // 15% slower draw speed
+            return speed * 0.85F;
         }
     };
 
@@ -359,7 +359,29 @@ public class GunModifiers
         public double modifyAimDownSightSpeed(double speed) {
             return speed * 1.05F;
         }
+        public float criticalChance()
+        {
+            return 0.05F;
+        }
+
     };
+    public static final IGunModifier BUMP_STOCK_MODIFIER = new IGunModifier() {
+        @Override
+        public int modifyFireRate(int rate) {
+            return Math.max((int)(rate * 1.1f), 1);
+        }
+
+        @Override
+        public float recoilModifier() {
+            return 0.95F;
+        }
+
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed * 0.92F;
+        }
+    };
+
     public static final IGunModifier MUZZLE_BRAKE_MODIFIER = new IGunModifier() {
         @Override
         public float modifyProjectileSpread(float spread) {
@@ -375,6 +397,13 @@ public class GunModifiers
         public float recoilModifier() {
             return 0.95F;
         }
+    };
+
+
+
+
+    public static final IGunModifier SLUG_SPLITTER_MODIFIER = new IGunModifier() {
+
     };
 
     public static final IGunModifier EXTENDED_BARREL_MODIFIER = new IGunModifier() {

@@ -594,12 +594,14 @@ public class AutoTurretBlockEntity extends BlockEntity implements MenuProvider {
                 entity -> entity != null
                         && entity.isAlive()
                         && !isOwner(entity)
-                        && ((!hasTeamLog && !hasEnemyLog) || // Default targeting when no logs are present
+                        && ((!hasTeamLog && !hasEnemyLog) ||
                         (hasTeamLog && !loggedEntityUUIDs.contains(entity.getUUID()) && !blacklistedEntityTypes.contains(EntityType.getKey(entity.getType()).toString())) ||
                         (hasEnemyLog && (whitelistedEntityUUIDs.contains(entity.getUUID()) || whitelistedEntityTypes.contains(EntityType.getKey(entity.getType()).toString()))))
                         && !(entity instanceof EnderMan)
                         && (!finalIsPlayerTargetingModule || (entity instanceof Player && !((Player) entity).isCreative()))
-                        && (!finalIsHostileTargetingModule || entity.getType().getCategory() == MobCategory.MONSTER)
+                        && (!finalIsHostileTargetingModule ||
+                        (entity.getType().getCategory() == MobCategory.MONSTER ||
+                                entity.getType().is(ModTags.Entities.TURRET_ENEMY_WHITELIST)))
                         && !entity.getType().is(ModTags.Entities.TURRET_BLACKLIST)
         );
 

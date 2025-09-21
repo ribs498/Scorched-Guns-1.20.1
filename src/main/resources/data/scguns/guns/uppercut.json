@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "magnum",
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
     "rate": 6,
@@ -44,6 +45,7 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 23.0,
+    "armorPen": 4.5,
     "gravity": false,
     "item": "scguns:beowulf_round",
     "casingType": "scguns:small_diamond_steel_casing",
@@ -56,7 +58,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 5,
+    "maxAmmo": 4,
     "reloadAmount": 1,
     "reloadItem": "scguns:beowulf_round",
     "reloadTimer": 20,

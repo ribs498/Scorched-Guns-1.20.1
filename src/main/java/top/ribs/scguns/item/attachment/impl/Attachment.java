@@ -106,7 +106,7 @@ public abstract class Attachment
         stats.adsSpeedMultiplier = (baseAdsSpeed - 1.0);
         stats.recoilReduction = (1.0f - baseRecoil);
         stats.kickReduction = (1.0f - baseKick);
-        stats.fireRateChange = (10 - baseRate) / 10.0f;
+        stats.fireRateChange = (baseRate - 10) / 10.0f;
         stats.reloadSpeedChange = (1.0 - baseReloadSpeed);
         stats.capacityMultiplier = (stats.ammoCapacity - baseAmmoCapacity) / (float)baseAmmoCapacity;
 

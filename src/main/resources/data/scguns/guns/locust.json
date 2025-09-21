@@ -13,6 +13,7 @@
     }
   },
   "general": {
+    "weaponType": "rifle",
     "alwaysSpread": false,
     "fireMode": "scguns:burst",
     "burstAmount": 3,
@@ -56,6 +57,7 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 21.0,
+    "armorPen": 3.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:gibbs_round",

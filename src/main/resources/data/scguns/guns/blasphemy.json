@@ -13,6 +13,7 @@
     }
   },
   "general": {
+    "weaponType": "flamethrower",
     "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:one_handed_2",

@@ -54,28 +54,127 @@ public class SulfurGasCloud {
             }
         }
     }
+    public static void destroyNatureInArea(Level level, Vec3 center, double radius, RandomSource random) {
+        if (level.isClientSide) return;
 
-    public static void spawnDustParticles(Level level, Vec3 center, double radius, int particleCount, RandomSource random) {
-        if (level.isClientSide) {
-            for (int i = 0; i < particleCount; i++) {
-                double angle = random.nextDouble() * 2 * Math.PI;
-                double dustRadius = Math.sqrt(random.nextDouble()) * (radius * 1.2);
-                double x = center.x + Math.cos(angle) * dustRadius;
-                double z = center.z + Math.sin(angle) * dustRadius;
-                double y = center.y + 0.1 + random.nextDouble() * 0.3;
+        if (random.nextInt(100) > 65) return;
 
-                double speed = 0.001 + random.nextDouble() * 0.002;
-                double xSpeed = (random.nextDouble() - 0.5) * speed;
-                double ySpeed = random.nextDouble() * speed * 0.5;
-                double zSpeed = (random.nextDouble() - 0.5) * speed;
+        BlockPos centerPos = BlockPos.containing(center);
+        int blockRadius = (int) Math.ceil(radius);
 
-                level.addParticle(ModParticleTypes.SULFUR_DUST.get(), x, y, z, xSpeed, ySpeed, zSpeed);
+        List<BlockPos> blocksToDestroy = new java.util.ArrayList<>();
+
+        for (BlockPos checkPos : BlockPos.betweenClosed(
+                centerPos.offset(-blockRadius, -2, -blockRadius),
+                centerPos.offset(blockRadius, 2, blockRadius))) {
+
+            if (center.distanceTo(Vec3.atCenterOf(checkPos)) <= radius) {
+                BlockState blockState = level.getBlockState(checkPos);
+
+                if (shouldDestroyBlock(blockState)) {
+                    blocksToDestroy.add(checkPos.immutable());
+                }
             }
-        } else {
-            spawnDustParticlesForced((ServerLevel) level, center, radius, particleCount, random);
+        }
+        if (!blocksToDestroy.isEmpty()) {
+            int destroyCount = Math.min(1 + random.nextInt(3), blocksToDestroy.size());
+            for (int i = 0; i < destroyCount; i++) {
+                BlockPos posToDestroy = blocksToDestroy.get(random.nextInt(blocksToDestroy.size()));
+                destroyBlock(level, posToDestroy);
+                blocksToDestroy.remove(posToDestroy);
+            }
         }
     }
+    private static boolean shouldDestroyBlock(BlockState blockState) {
+        return blockState.is(net.minecraft.tags.BlockTags.FLOWERS) ||
+                blockState.is(net.minecraft.tags.BlockTags.CROPS) ||
+                blockState.is(net.minecraft.tags.BlockTags.SAPLINGS) ||
+                blockState.is(net.minecraft.tags.BlockTags.SMALL_FLOWERS) ||
+                blockState.is(net.minecraft.tags.BlockTags.TALL_FLOWERS) ||
+                blockState.is(Blocks.GRASS) ||
+                blockState.is(Blocks.TALL_GRASS) ||
+                blockState.is(Blocks.FERN) ||
+                blockState.is(Blocks.LARGE_FERN) ||
+                blockState.is(Blocks.SEAGRASS) ||
+                blockState.is(Blocks.TALL_SEAGRASS) ||
+                blockState.is(Blocks.DEAD_BUSH) ||
+                blockState.is(Blocks.VINE) ||
+                blockState.is(Blocks.GLOW_LICHEN) ||
+                blockState.is(Blocks.MOSS_CARPET) ||
+                blockState.is(Blocks.MOSS_BLOCK) ||
+                blockState.is(Blocks.SWEET_BERRY_BUSH) ||
+                blockState.is(Blocks.SUGAR_CANE) ||
+                blockState.is(Blocks.BAMBOO) ||
+                blockState.is(Blocks.CACTUS) ||
+                blockState.is(Blocks.KELP) ||
+                blockState.is(Blocks.KELP_PLANT);
+    }
+    public static void placeSulfurLayers(Level level, Vec3 center, double radius, RandomSource random) {
+        if (level.isClientSide) return;
 
+        if (random.nextInt(100) > 65) return;
+
+        BlockPos centerPos = BlockPos.containing(center);
+        int blockRadius = (int) Math.ceil(radius);
+
+        List<BlockPos> validPositions = new java.util.ArrayList<>();
+
+        for (BlockPos checkPos : BlockPos.betweenClosed(
+                centerPos.offset(-blockRadius, -1, -blockRadius),
+                centerPos.offset(blockRadius, 1, blockRadius))) {
+
+            if (center.distanceTo(Vec3.atCenterOf(checkPos)) <= radius) {
+                if (canPlaceSulfurLayer(level, checkPos)) {
+                    validPositions.add(checkPos.immutable());
+                }
+            }
+        }
+        if (!validPositions.isEmpty()) {
+            int placeCount = Math.min(1 + random.nextInt(2), validPositions.size());
+            for (int i = 0; i < placeCount; i++) {
+                BlockPos posToPlace = validPositions.get(random.nextInt(validPositions.size()));
+                placeSulfurLayer(level, posToPlace);
+                validPositions.remove(posToPlace);
+            }
+        }
+    }
+    private static boolean canPlaceSulfurLayer(Level level, BlockPos pos) {
+        BlockState currentState = level.getBlockState(pos);
+        BlockState belowState = level.getBlockState(pos.below());
+        if (currentState.isAir()) {
+            return belowState.isFaceSturdy(level, pos.below(), net.minecraft.core.Direction.UP);
+        } else if (currentState.getBlock() instanceof top.ribs.scguns.block.SulfurLayerBlock) {
+            int currentLayers = currentState.getValue(net.minecraft.world.level.block.SnowLayerBlock.LAYERS);
+            return currentLayers < 8;
+        }
+
+        return false;
+    }
+    private static void placeSulfurLayer(Level level, BlockPos pos) {
+        BlockState currentState = level.getBlockState(pos);
+
+        if (currentState.getBlock() instanceof top.ribs.scguns.block.SulfurLayerBlock) {
+            int currentLayers = currentState.getValue(net.minecraft.world.level.block.SnowLayerBlock.LAYERS);
+            if (currentLayers < 8) {
+                level.setBlock(pos, currentState.setValue(
+                        net.minecraft.world.level.block.SnowLayerBlock.LAYERS, currentLayers + 1), 3);
+            }
+        } else if (currentState.isAir()) {
+            BlockState sulfurLayer = top.ribs.scguns.init.ModBlocks.SULFUR_LAYER.get()
+                    .defaultBlockState()
+                    .setValue(net.minecraft.world.level.block.SnowLayerBlock.LAYERS, 1);
+            level.setBlock(pos, sulfurLayer, 3);
+        }
+
+    }
+    private static void destroyBlock(Level level, BlockPos pos) {
+        level.getBlockState(pos);
+        BlockState belowState = level.getBlockState(pos.below());
+        if (belowState.is(Blocks.GRASS_BLOCK)) {
+            level.setBlock(pos.below(), Blocks.DIRT.defaultBlockState(), 3);
+        }
+        level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
+    }
     public static void spawnDustParticlesForced(ServerLevel serverLevel, Vec3 center, double radius, int particleCount, RandomSource random) {
         List<ServerPlayer> nearbyPlayers = getNearbyPlayers(serverLevel, center, PARTICLE_RENDER_DISTANCE);
 

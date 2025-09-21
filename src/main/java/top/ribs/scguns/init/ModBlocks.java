@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
+import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -25,6 +26,10 @@ import java.util.function.Supplier;
 public class ModBlocks {
 
     public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Reference.MOD_ID);
+
+    public static final RegistryObject<Block> FAKE_SOUL_FIRE = REGISTER.register("fake_soul_fire",
+            () -> new FakeSoulFireBlock(BlockBehaviour.Properties.copy(Blocks.SOUL_FIRE), 2.0F));
+
     public static final RegistryObject<Block> TEMPORARY_LIGHT = REGISTER.register("temporary_light",
             TemporaryLightBlock::new);
     public static final RegistryObject<Block> GUN_SHELF = register("gun_shelf",

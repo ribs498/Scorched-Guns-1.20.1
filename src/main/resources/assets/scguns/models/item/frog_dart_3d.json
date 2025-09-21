@@ -1,0 +1,28 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "scguns:item/needle_3d",
+		"particle": "scguns:item/needle_3d"
+	},
+	"elements": [
+		{
+			"from": [7.5, 0, 7.5],
+			"to": [8.5, 10, 8.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [6.75, 1, 6.75]},
+			"faces": {
+				"north": {"uv": [0, 0, 1, 10], "texture": "#0"},
+				"east": {"uv": [1, 0, 2, 10], "texture": "#0"},
+				"south": {"uv": [2, 0, 3, 10], "texture": "#0"},
+				"west": {"uv": [3, 0, 4, 10], "texture": "#0"},
+				"up": {"uv": [5, 1, 4, 0], "texture": "#0"},
+				"down": {"uv": [5, 1, 4, 2], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"ground": {
+			"translation": [0, 4.5, 0]
+		}
+	}
+}

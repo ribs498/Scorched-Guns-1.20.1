@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "magnum",
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
@@ -44,6 +45,7 @@
   "projectile": {
     "advantage": "scguns:fire",
     "damage": 20.0,
+    "armorPen": 3.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:beowulf_round",

@@ -1,10 +1,10 @@
 {
   "type": "scguns:powered_mechanical_pressing",
   "processingTime": 60,
-  "energyUse": 500,
+  "energyUse": 2000,
   "ingredients": [
     {
-      "item": "scguns:energy_cell"
+      "item": "scguns:energy_core"
     },
     {
       "item": "scguns:plasma"

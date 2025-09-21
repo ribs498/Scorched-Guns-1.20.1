@@ -35,17 +35,45 @@ public class ExoSuitPowerManager {
             return false;
         }
 
-        return powerCore.getCapability(ForgeCapabilities.ENERGY)
-                .map(energyStorage -> {
-                    if (energyStorage.getEnergyStored() >= energyRequired) {
-                        energyStorage.extractEnergy(energyRequired, false);
-                        return true;
-                    } else {
-                        sendPowerShortageNotification(player, upgradeType);
-                        return false;
-                    }
-                }).orElse(false);
+        // FIXED: Directly manipulate NBT instead of relying on capabilities
+        CompoundTag powerCoreTag = powerCore.getOrCreateTag();
+        int currentEnergy = powerCoreTag.getInt("Energy");
+
+        if (currentEnergy >= energyRequired) {
+            powerCoreTag.putInt("Energy", currentEnergy - energyRequired);
+            updatePowerCoreInChestplate(chestplate, powerCore);
+
+            return true;
+        } else {
+            sendPowerShortageNotification(player, upgradeType);
+            return false;
+        }
     }
+
+    private static void updatePowerCoreInChestplate(ItemStack chestplate, ItemStack updatedPowerCore) {
+        for (int slot = 0; slot < 4; slot++) {
+            ItemStack upgradeItem = ExoSuitData.getUpgradeInSlot(chestplate, slot);
+            if (!upgradeItem.isEmpty()) {
+                ExoSuitUpgrade upgrade = ExoSuitUpgradeManager.getUpgradeForItem(upgradeItem);
+                if (upgrade != null && upgrade.getType().equals("power_core")) {
+                    CompoundTag upgradeData = ExoSuitData.getUpgradeData(chestplate);
+                    if (upgradeData.contains("Upgrades")) {
+                        net.minecraft.nbt.ListTag upgradeList = upgradeData.getList("Upgrades", 10);
+                        for (int i = 0; i < upgradeList.size(); i++) {
+                            CompoundTag slotTag = upgradeList.getCompound(i);
+                            if (slotTag.getInt("Slot") == slot) {
+                                slotTag.put("Item", updatedPowerCore.save(new CompoundTag()));
+                                break;
+                            }
+                        }
+                        ExoSuitData.setUpgradeData(chestplate, upgradeData);
+                    }
+                    break;
+                }
+            }
+        }
+    }
+
     public static boolean consumeEnergyForUpgrade(Player player, String upgradeType, ItemStack upgradeItem) {
         ExoSuitUpgrade upgrade = ExoSuitUpgradeManager.getUpgradeForItem(upgradeItem);
         if (upgrade == null) {
@@ -55,6 +83,7 @@ public class ExoSuitPowerManager {
         int energyRequired = (int) upgrade.getEffects().getEnergyUse();
         return consumeEnergy(player, upgradeType, energyRequired);
     }
+
     public static boolean canUpgradeFunction(Player player, String upgradeType) {
         ItemStack armorPiece = getArmorPieceForUpgradeType(player, upgradeType);
         if (armorPiece.isEmpty()) {
@@ -87,10 +116,9 @@ public class ExoSuitPowerManager {
             if (powerCore.isEmpty()) {
                 return false;
             }
-
-            return powerCore.getCapability(ForgeCapabilities.ENERGY)
-                    .map(energyStorage -> energyStorage.getEnergyStored() >= energyRequired)
-                    .orElse(false);
+            CompoundTag powerCoreTag = powerCore.getTag();
+            int currentEnergy = powerCoreTag != null ? powerCoreTag.getInt("Energy") : 0;
+            return currentEnergy >= energyRequired;
         }
 
         return true;
@@ -260,8 +288,6 @@ public class ExoSuitPowerManager {
                         .withStyle(ChatFormatting.RED));
 
         player.sendSystemMessage(feedbackMessage);
-
-        // Play low power sound
         player.level().playSound(null, player.getX(), player.getY(), player.getZ(),
                 SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 0.3f, 0.6f);
     }

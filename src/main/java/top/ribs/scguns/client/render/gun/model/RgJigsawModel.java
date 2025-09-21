@@ -54,6 +54,9 @@ public class RgJigsawModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.RG_JIGSAW_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.RG_JIGSAW_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.RG_JIGSAW_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+
         }
 
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.UNDER_BARREL)) {

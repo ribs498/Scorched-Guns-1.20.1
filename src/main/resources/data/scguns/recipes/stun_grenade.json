@@ -18,6 +18,7 @@
     " # "
   ],
   "result": {
-    "item": "scguns:stun_grenade"
+    "item": "scguns:stun_grenade",
+    "count": 2
   }
 }

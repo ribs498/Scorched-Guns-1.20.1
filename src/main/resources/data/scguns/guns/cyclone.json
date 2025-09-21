@@ -24,6 +24,7 @@
   "modules": {
   },
   "projectile": {
+    "weaponType": "heavy",
     "advantage": "scguns:none",
     "damage": 15.5,
     "gravity": false,

@@ -17,7 +17,10 @@ public class SpecialAmmoBoxItem extends AmmoBoxItem {
     protected ResourceLocation getAmmoTag() {
         return new ResourceLocation("scguns", "special_ammo");
     }
-
+    @Override
+    protected String getDescriptionKey() {
+        return "item.scguns.special_ammo_box.description";
+    }
 
     @Override
     public int getBarColor(ItemStack stack) {

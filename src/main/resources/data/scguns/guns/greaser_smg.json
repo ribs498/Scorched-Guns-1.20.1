@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "smg",
     "alwaysSpread": false,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
@@ -34,6 +35,11 @@
       },
       "magazine": {
         "scale": 0.0
+      },
+      "scope": {
+        "size": 0.85,
+        "yOffset": 6.9,
+        "zOffset": 4.5
       }
     },
     "zoom": {
@@ -45,6 +51,7 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 7.5,
+    "armorPen": 1.0,
     "ejectsCasing": true,
     "item": "scguns:compact_advanced_round",
     "casingType": "scguns:small_brass_casing",

@@ -14,25 +14,24 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import top.ribs.scguns.Config;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public class ExoSuitCoreItem extends Item {
-    private final int capacity;
     private final CoreTier tier;
 
     public ExoSuitCoreItem(Properties properties, CoreTier tier) {
         super(properties);
         this.tier = tier;
-        this.capacity = tier.getCapacity();
     }
 
     @Override
     public ICapabilityProvider initCapabilities(ItemStack stack, @Nullable CompoundTag nbt) {
         return new ICapabilityProvider() {
             private final LazyOptional<IEnergyStorage> energy = LazyOptional.of(() ->
-                    new SimpleExoSuitEnergyStorage(stack, capacity));
+                    new SimpleExoSuitEnergyStorage(stack, tier.getCapacity()));
 
             @Override
             public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
@@ -44,38 +43,37 @@ public class ExoSuitCoreItem extends Item {
     public static class SimpleExoSuitEnergyStorage implements IEnergyStorage {
         private final ItemStack stack;
         private final int capacity;
-        private int energy;
 
         public SimpleExoSuitEnergyStorage(ItemStack stack, int capacity) {
             this.stack = stack;
             this.capacity = capacity;
-            this.energy = loadEnergyFromNBT();
         }
 
         @Override
         public int receiveEnergy(int maxReceive, boolean simulate) {
-            int energyReceived = Math.min(capacity - energy, maxReceive);
+            int currentEnergy = getEnergyFromNBT();
+            int energyReceived = Math.min(capacity - currentEnergy, maxReceive);
 
-            if (!simulate) {
-                energy += energyReceived;
-                updateEnergyTag();
+            if (!simulate && energyReceived > 0) {
+                setEnergyToNBT(currentEnergy + energyReceived);
             }
             return energyReceived;
         }
 
         @Override
         public int extractEnergy(int maxExtract, boolean simulate) {
-            int energyExtracted = Math.min(energy, maxExtract);
-            if (!simulate) {
-                energy -= energyExtracted;
-                updateEnergyTag();
+            int currentEnergy = getEnergyFromNBT();
+            int energyExtracted = Math.min(currentEnergy, maxExtract);
+
+            if (!simulate && energyExtracted > 0) {
+                setEnergyToNBT(currentEnergy - energyExtracted);
             }
             return energyExtracted;
         }
 
         @Override
         public int getEnergyStored() {
-            return energy;
+            return getEnergyFromNBT();
         }
 
         @Override
@@ -93,14 +91,14 @@ public class ExoSuitCoreItem extends Item {
             return true;
         }
 
-        private void updateEnergyTag() {
-            CompoundTag tag = stack.getOrCreateTag();
-            tag.putInt("Energy", energy);
-        }
-
-        private int loadEnergyFromNBT() {
+        private int getEnergyFromNBT() {
             CompoundTag tag = stack.getTag();
             return tag != null && tag.contains("Energy", Tag.TAG_INT) ? tag.getInt("Energy") : 0;
+        }
+
+        private void setEnergyToNBT(int energy) {
+            CompoundTag tag = stack.getOrCreateTag();
+            tag.putInt("Energy", Math.max(0, Math.min(energy, capacity)));
         }
     }
 
@@ -138,7 +136,6 @@ public class ExoSuitCoreItem extends Item {
         return stack.getCapability(ForgeCapabilities.ENERGY).map(IEnergyStorage::getMaxEnergyStored).orElse(0);
     }
 
-
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level worldIn, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, worldIn, tooltip, flag);
@@ -157,29 +154,26 @@ public class ExoSuitCoreItem extends Item {
                         .withStyle(ChatFormatting.BLUE)));
     }
 
-    /**
-     * Enum defining different tiers of power cores
-     */
-
     public enum CoreTier {
-        BASIC("Basic", 10000, 500),
-        ADVANCED("Advanced", 20000, 800),
-        ELITE("Elite", 30000, 1000);
+        BASIC("Basic"),
+        ADVANCED("Advanced"),
+        ELITE("Elite");
 
         private final String displayName;
-        private final int capacity;
 
-        CoreTier(String displayName, int capacity, int maxTransfer) {
+        CoreTier(String displayName) {
             this.displayName = displayName;
-            this.capacity = capacity;
         }
 
         public String getDisplayName() {
             return displayName;
         }
-
         public int getCapacity() {
-            return capacity;
+            return switch (this) {
+                case BASIC -> Config.COMMON.exoSuitCores.basicCoreCapacity.get();
+                case ADVANCED -> Config.COMMON.exoSuitCores.advancedCoreCapacity.get();
+                case ELITE -> Config.COMMON.exoSuitCores.eliteCoreCapacity.get();
+            };
         }
     }
 }

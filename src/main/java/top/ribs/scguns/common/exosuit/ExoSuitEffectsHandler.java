@@ -17,7 +17,6 @@ import java.util.UUID;
  */
 public class ExoSuitEffectsHandler {
 
-    // FIXED: Generated completely random, unique UUIDs that won't conflict with vanilla
     private static final UUID HELMET_ARMOR_UUID = UUID.fromString("f47ac10b-58cc-4372-a567-0e02b2c3d479");
     private static final UUID HELMET_TOUGHNESS_UUID = UUID.fromString("6ba7b810-9dad-11d1-80b4-00c04fd430c8");
     private static final UUID HELMET_KNOCKBACK_UUID = UUID.fromString("6ba7b811-9dad-11d1-80b4-00c04fd430c8");
@@ -42,10 +41,7 @@ public class ExoSuitEffectsHandler {
      * Applies all effects from equipped ExoSuit pieces
      */
     public static void applyExoSuitEffects(Player player) {
-        // FIXED: Only remove ExoSuit effects, don't interfere with other systems
         removeExoSuitEffects(player);
-
-        // FIXED: Only apply effects if player is wearing ExoSuit pieces
         boolean hasExoSuitPieces = false;
         for (ItemStack armorStack : player.getArmorSlots()) {
             if (armorStack.getItem() instanceof ExoSuitItem exosuit) {
@@ -54,10 +50,6 @@ public class ExoSuitEffectsHandler {
             }
         }
 
-        // If no ExoSuit pieces, don't apply anything
-        if (!hasExoSuitPieces) {
-            return;
-        }
     }
 
     public static ExoSuitUpgrade.Effects getTotalEffects(Player player) {
@@ -93,7 +85,6 @@ public class ExoSuitEffectsHandler {
      * Removes all ExoSuit effects from a player
      */
     public static void removeExoSuitEffects(Player player) {
-        // FIXED: Only remove our specific UUIDs, don't interfere with vanilla armor
         removeAttributeModifier(player, Attributes.ARMOR, HELMET_ARMOR_UUID);
         removeAttributeModifier(player, Attributes.ARMOR_TOUGHNESS, HELMET_TOUGHNESS_UUID);
         removeAttributeModifier(player, Attributes.KNOCKBACK_RESISTANCE, HELMET_KNOCKBACK_UUID);
@@ -195,9 +186,6 @@ public class ExoSuitEffectsHandler {
             }
         }
     }
-
-    // ... Rest of the methods remain the same ...
-
     private static boolean shouldApplyNightVision(Player player, ItemStack armorStack) {
         if (!(armorStack.getItem() instanceof ExoSuitItem exosuit) ||
                 exosuit.getType() != net.minecraft.world.item.ArmorItem.Type.HELMET) {

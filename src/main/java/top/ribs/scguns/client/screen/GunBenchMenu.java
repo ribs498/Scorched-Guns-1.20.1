@@ -87,7 +87,18 @@ public class GunBenchMenu extends AbstractContainerMenu {
                 consumeIngredients();
             }
         });
+        this.addSlot(new Slot(container, SLOT_BLUEPRINT, 116, 17) { // the ordering MATTER AHHHH
+            @Override
+            public boolean mayPlace(@NotNull ItemStack stack) {
+                return stack.getItem() instanceof BlueprintItem;
+            }
 
+            @Override
+            public void setChanged() {
+                super.setChanged();
+                attemptAutoCrafting();
+            }
+        });
         // Add player inventory slots
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {

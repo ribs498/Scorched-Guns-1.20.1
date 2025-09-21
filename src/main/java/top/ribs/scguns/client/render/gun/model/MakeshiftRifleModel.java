@@ -86,6 +86,9 @@ public class MakeshiftRifleModel implements IOverrideModel {
             } else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get()) {
                 RenderUtil.renderModel(SpecialModels.MAKESHIFT_RIFLE_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
             }
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get()) {
+                RenderUtil.renderModel(SpecialModels.MAKESHIFT_RIFLE_STOCK_WEIGHTED.getModel(), stack, matrixStack, buffer, light, overlay);
+            }
         }
     }
 

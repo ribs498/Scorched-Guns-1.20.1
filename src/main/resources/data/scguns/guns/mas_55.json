@@ -8,6 +8,7 @@
     }
   },
   "general": {
+    "weaponType": "sniper",
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
@@ -53,6 +54,7 @@
   "projectile": {
     "advantage": "scguns:heavy",
     "damage": 19.5,
+    "armorPen": 4.5,
     "ejectsCasing": true,
     "gravity": false  ,
     "item": "scguns:gibbs_round",

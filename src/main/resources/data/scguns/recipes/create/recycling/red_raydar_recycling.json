@@ -1,0 +1,29 @@
+{
+  "type": "create:crushing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "scguns:red_raydar"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "scguns:empty_tank"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_parts"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_barrel"
+    }
+  ]
+}

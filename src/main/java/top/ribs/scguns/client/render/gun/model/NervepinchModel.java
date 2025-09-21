@@ -33,6 +33,9 @@ public class NervepinchModel implements IOverrideModel {
                 RenderUtil.renderModel(SpecialModels.NERVEPINCH_STOCK_LIGHT.getModel(), stack, matrixStack, buffer, light, overlay);
             else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.NERVEPINCH_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.NERVEPINCH_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
+
         }
         // Render magazine attachments
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.MAGAZINE)) {

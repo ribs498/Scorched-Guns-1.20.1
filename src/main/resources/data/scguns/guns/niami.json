@@ -2,6 +2,7 @@
   "display": {
   },
   "general": {
+    "weaponType": "special",
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
@@ -13,7 +14,9 @@
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 37,
-    "criticalChance": 0.05
+    "criticalChance": 0.05,
+    "isSilenced": true,
+    "enableGunLight": false
   },
   "modules": {
     "attachments": {

@@ -14,6 +14,7 @@
     }
   },
   "general": {
+    "weaponType": "laser",
     "hasCameraShake": false,
     "fireMode": "scguns:beam",
     "beamColor": "#ffea00",
@@ -29,7 +30,7 @@
     "meleeDamage": 4.0,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 10,
-    "beamAmmoConsumptionDelay": 10000,
+    "beamAmmoConsumptionDelay": 250,
     "beamDamageDelay": 0,
     "enableMining": true,
     "miningSpeed": 14.0,

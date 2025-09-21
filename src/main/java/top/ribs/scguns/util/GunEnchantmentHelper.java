@@ -127,7 +127,8 @@ public class GunEnchantmentHelper
         int heavyShotLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEAVY_SHOT.get(), weapon);
         float rateModifier = getRateModifier(triggerFingerLevel, heavyShotLevel);
         int modifiedRate = Math.round(baseRate * rateModifier);
-        modifiedRate = getHotBarrelFireRate(weapon, modifiedRate);
+        modifiedRate = GunModifierHelper.getModifiedRate(weapon, modifiedRate);
+
         return Math.max(modifiedRate, 1);
     }
 
@@ -151,9 +152,8 @@ public class GunEnchantmentHelper
     }
 
     public static float getKickModifier(ItemStack weapon) {
-        // Heavy Shot increases kick as well
         int heavyShotLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEAVY_SHOT.get(), weapon);
-        return 1.0f + (0.25f * heavyShotLevel); // Slightly less kick increase than recoil
+        return 1.0f + (0.25f * heavyShotLevel);
     }
 
     public static float getKickModifier(Player player, ItemStack weapon) {
