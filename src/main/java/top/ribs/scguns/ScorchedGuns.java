@@ -30,6 +30,7 @@ import top.ribs.scguns.common.exosuit.ExoSuitUpgradeManager;
 import top.ribs.scguns.compat.CreateModCondition;
 import top.ribs.scguns.compat.FarmersDelightModCondition;
 import top.ribs.scguns.compat.IEModCondition;
+import top.ribs.scguns.event.SculkHordeEvents;
 import top.ribs.scguns.config.MerchantTradeConfig;
 import top.ribs.scguns.config.ProjectileAdvantageConfig;
 import top.ribs.scguns.entity.config.ConfigLoader;
@@ -46,6 +47,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import static top.ribs.scguns.Reference.MOD_ID;
+import static top.ribs.scguns.compat.CompatManager.SCULK_HORDE_LOADED;
 
 @Mod(MOD_ID)
 public class ScorchedGuns {
@@ -122,6 +124,11 @@ public class ScorchedGuns {
         MinecraftForge.EVENT_BUS.register(PiglinWeaponEventHandler.class);
         MinecraftForge.EVENT_BUS.register(MerchantTradeConfig.class);
         MinecraftForge.EVENT_BUS.register(ProjectileAdvantageConfig.class);
+
+
+        if (SCULK_HORDE_LOADED) {
+            MinecraftForge.EVENT_BUS.register(SculkHordeEvents.class);
+        }
     }
     private void onConfigLoad(ModConfigEvent.Loading event) {
         if (event.getConfig().getType() == ModConfig.Type.SERVER) {

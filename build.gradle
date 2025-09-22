@@ -116,7 +116,7 @@ dependencies {
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-common-api:${jei_version}"))
     compileOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge-api:${jei_version}"))
     runtimeOnly(fg.deobf("mezz.jei:jei-${minecraft_version}-forge:${jei_version}"))
-    implementation fg.deobf("curse.maven:geckolib-388172:5675221")
+    implementation fg.deobf("curse.maven:geckolib-388172:7020955")
     implementation fg.deobf("curse.maven:create-328085:5689514")
     //implementation fg.deobf("curse.maven:createaddition-439890:5658602")
     implementation fg.deobf("curse.maven:shoulder-surfing-reloaded-243190:5455954")
@@ -130,6 +130,7 @@ dependencies {
     implementation fg.deobf("curse.maven:effortless-building-302113:5805519")
     implementation fg.deobf("curse.maven:create-enchantment-industry-688768:5331908")
     implementation fg.deobf("curse.maven:born-in-chaos-686437:6833957")
+    implementation fg.deobf("curse.maven:sculk-horde-501766:7001682")
 }
 
 jar {
