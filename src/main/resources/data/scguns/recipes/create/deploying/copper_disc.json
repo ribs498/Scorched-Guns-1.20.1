@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "minecraft:copper_block"
+    },
+    {
+      "item": "scguns:disc_mold"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:copper_disc",
+      "count": 2
+    }
+  ]
+}
