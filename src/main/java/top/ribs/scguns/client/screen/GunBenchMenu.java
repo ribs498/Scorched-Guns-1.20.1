@@ -62,19 +62,6 @@ public class GunBenchMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(container, SLOT_BARREL_2, 80, 35));
         this.addSlot(new Slot(container, SLOT_GRIP, 26, 53));
         this.addSlot(new Slot(container, SLOT_MAGAZINE, 62, 53));
-        this.addSlot(new Slot(container, SLOT_BLUEPRINT, 116, 17) {
-            @Override
-            public boolean mayPlace(@NotNull ItemStack stack) {
-                return stack.getItem() instanceof BlueprintItem;
-            }
-
-            @Override
-            public void setChanged() {
-                super.setChanged();
-                // When blueprint slot changes, attempt auto-crafting
-                attemptAutoCrafting();
-            }
-        });
         this.addSlot(new Slot(container, SLOT_OUTPUT, 140, 44) {
             @Override
             public boolean mayPlace(ItemStack stack) {
@@ -85,6 +72,18 @@ public class GunBenchMenu extends AbstractContainerMenu {
             public void onTake(Player player, ItemStack stack) {
                 super.onTake(player, stack);
                 consumeIngredients();
+            }
+        });
+        this.addSlot(new Slot(container, SLOT_BLUEPRINT, 116, 17) { // the ordering MATTER AHHHH
+            @Override
+            public boolean mayPlace(@NotNull ItemStack stack) {
+                return stack.getItem() instanceof BlueprintItem;
+            }
+
+            @Override
+            public void setChanged() {
+                super.setChanged();
+                attemptAutoCrafting();
             }
         });
 
