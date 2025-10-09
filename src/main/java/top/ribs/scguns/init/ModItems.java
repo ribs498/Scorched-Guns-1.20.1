@@ -447,7 +447,7 @@ public class ModItems {
     );
     public static final RegistryObject<NonUnderwaterAnimatedGunItem> REPEATING_MUSKET = REGISTER.register("repeating_musket",
             () -> new NonUnderwaterAnimatedGunItem(
-                    new Item.Properties().stacksTo(1).durability(180),
+                    new Item.Properties().stacksTo(1).durability(160),
                     "repeating_musket",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
@@ -758,6 +758,17 @@ public class ModItems {
             () -> new AnimatedGunItem(
                     new Item.Properties().stacksTo(1).durability(540),
                     "stiletto",
+                    ModSounds.MAG_OUT.get(),
+                    ModSounds.MAG_IN.get(),
+                    ModSounds.RELOAD_END.get(),
+                    ModSounds.COPPER_GUN_JAM.get(),
+                    ModSounds.COPPER_GUN_JAM.get()
+            )
+    );
+    public static final RegistryObject<AnimatedAirGunItem> RAILWORKER = REGISTER.register("railworker",
+            () -> new AnimatedAirGunItem(
+                    new Item.Properties().stacksTo(1).durability(540),
+                    "railworker",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
                     ModSounds.RELOAD_END.get(),
@@ -1097,7 +1108,7 @@ public class ModItems {
     );
     public static final RegistryObject<AnimatedGunItem> CR4K_MINING_LASER = REGISTER.register("cr4k_mining_laser",
             () -> new AnimatedGunItem(
-                    new Item.Properties().stacksTo(1).durability(1400),
+                    new Item.Properties().stacksTo(1).durability(1900),
                     "cr4k_mining_laser",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
@@ -1435,6 +1446,7 @@ public class ModItems {
     public static final RegistryObject<AxeItem> ANTHRALITE_AXE = REGISTER.register("anthralite_axe", () -> new AxeItem(ModTiers.ANTHRALITE, 5, -3.0F, new Item.Properties()));
     public static final RegistryObject<ShovelItem> ANTHRALITE_SHOVEL = REGISTER.register("anthralite_shovel", () -> new ShovelItem(ModTiers.ANTHRALITE, 1.5F, -3.0F, new Item.Properties()));
     public static final RegistryObject<HoeItem> ANTHRALITE_HOE = REGISTER.register("anthralite_hoe", () -> new HoeItem(ModTiers.ANTHRALITE, -3, -3.0F, new Item.Properties()));
+    public static final RegistryObject<CogMaceItem> COG_MACE = REGISTER.register("cog_mace", () -> new CogMaceItem(ModTiers.ANCIENT_BRASS, 2, -3.2F, new Item.Properties()));
     public static final RegistryObject<Item> RANGE_FINDER = REGISTER.register("range_finder", () -> new RangeFinderItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> ANTHRALITE_HELMET = REGISTER.register("anthralite_helmet", () -> new AnthraliteArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> ANTHRALITE_CHESTPLATE = REGISTER.register("anthralite_chestplate", () -> new AnthraliteArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
@@ -1496,10 +1508,10 @@ public class ModItems {
             () -> new DamageableUpgradeItem(new Item.Properties().stacksTo(1).durability(512)));
 
     public static final RegistryObject<Item> AIR_CANISTER = REGISTER.register("air_canister",
-            () -> new AirCanisterItem(new Item.Properties().stacksTo(1), 1500));
+            () -> new AirCanisterItem(new Item.Properties().stacksTo(1), 1700));
 
     public static final RegistryObject<Item> REINFORCED_AIR_CANISTER = REGISTER.register("reinforced_air_canister",
-            () -> new AirCanisterItem(new Item.Properties().stacksTo(1), 3000));
+            () -> new AirCanisterItem(new Item.Properties().stacksTo(1), 3200));
 
     public static final RegistryObject<Item> ANTHRALITE_RESPIRATOR = REGISTER.register("anthralite_respirator", () -> new AnthraliteGasMaskArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> NETHERITE_RESPIRATOR = REGISTER.register("netherite_respirator", () -> new NetheriteGasMaskArmorItem(ArmorMaterials.NETHERITE, ArmorItem.Type.HELMET, new Item.Properties()));
@@ -1646,7 +1658,8 @@ public class ModItems {
     public static final RegistryObject<Item> SCULK_CELL = REGISTER.register("sculk_cell", () -> new AmmoItem(new Item.Properties()));
     public static final RegistryObject<Item> SHOCK_CELL = REGISTER.register("shock_cell",
             () -> new TooltipAmmo(new Item.Properties(), "tooltip.scguns.arcing"));
-    public static final RegistryObject<Item> MICROJET = REGISTER.register("microjet", () -> new AmmoItem(new Item.Properties()));
+    public static final RegistryObject<Item> MICROJET = REGISTER.register("microjet",
+            () -> new TooltipAmmo(new Item.Properties(), "tooltip.scguns.speed_damage"));
     public static final RegistryObject<Item> SHULKSHOT = REGISTER.register("shulkshot",
             () -> new TooltipAmmo(new Item.Properties(), "tooltip.scguns.homing"));
 
@@ -1768,19 +1781,6 @@ public class ModItems {
     public static final RegistryObject<Item> SIGNAL_BEACON_SPAWN_EGG = REGISTER.register("signal_beacon_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.SIGNAL_BEACON, 0xf7cb6c, 0xED1127, new Item.Properties()));
     public static final RegistryObject<Item> SCAMP_TANK_SPAWN_EGG = REGISTER.register("scamp_tank_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.SCAMP_TANK, 0xffeb8c, 0x4f4f4f, new Item.Properties()));
     public static final RegistryObject<Item> SCAMPLER_SPAWN_EGG = REGISTER.register("scampler_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.SCAMPLER, 0xffeb8c, 0xa02727, new Item.Properties()));
-
-    public static final RegistryObject<Item> GUNNER_ZOMBIE_SPAWN_EGG = REGISTER.register("gunner_zombie_spawn_egg",
-            () -> new GunnerSpawnEggItem(() -> EntityType.ZOMBIE, 0x00AFAF, 0x799C65, new Item.Properties()));
-
-    public static final RegistryObject<Item> GUNNER_SKELETON_SPAWN_EGG = REGISTER.register("gunner_skeleton_spawn_egg",
-            () -> new GunnerSpawnEggItem(() -> EntityType.SKELETON, 0x00AFAF, 0xCFC7B8, new Item.Properties()));
-    public static final RegistryObject<Item> GUNNER_PIGLIN_SPAWN_EGG = REGISTER.register("gunner_piglin_spawn_egg",
-            () -> new GunnerSpawnEggItem(() -> EntityType.PIGLIN, 0x00AFAF, 0xE2B45C, new Item.Properties()));
-    public static final RegistryObject<Item> GUNNER_HUSK_SPAWN_EGG = REGISTER.register("gunner_husk_spawn_egg",
-            () -> new GunnerSpawnEggItem(() -> EntityType.HUSK, 0x00AFAF, 0xC9B471, new Item.Properties()));
-    public static final RegistryObject<Item> GUNNER_PILLAGER_SPAWN_EGG = REGISTER.register("gunner_pillager_spawn_egg",
-            () -> new GunnerSpawnEggItem(() -> EntityType.PILLAGER, 0x00AFAF, 0x818181, new Item.Properties()));
-
 
     public static void register(IEventBus eventBus) {
         REGISTER.register(eventBus);

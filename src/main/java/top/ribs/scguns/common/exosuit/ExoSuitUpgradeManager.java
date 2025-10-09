@@ -5,12 +5,17 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.event.OnDatapackSyncEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
+import top.ribs.scguns.network.PacketHandler;
+import top.ribs.scguns.network.message.S2CMessageSyncUpgradeRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,17 +46,65 @@ public class ExoSuitUpgradeManager extends SimpleJsonResourceReloadListener {
                         if (upgrade != null) {
                             itemUpgrades.put(itemId, upgrade);
                         }
-                    } else {
-                        ForgeRegistries.ITEMS.getKeys().stream()
-                                .filter(key -> key.toString().contains("heavy_armor_plate"))
-                                .forEach(key -> System.err.println("  - " + key));
                     }
-                } else {
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         });
+
+        System.out.println("ExoSuitUpgradeManager: Loaded " + itemUpgrades.size() + " upgrades");
+    }
+
+    /**
+     * Syncs upgrade data to clients when they join or datapacks reload
+     */
+    @SubscribeEvent
+    public static void onDatapackSync(OnDatapackSyncEvent event) {
+        Map<ResourceLocation, net.minecraft.nbt.CompoundTag> upgradeData = serializeUpgrades();
+        S2CMessageSyncUpgradeRegistry message = new S2CMessageSyncUpgradeRegistry(upgradeData);
+
+        if (event.getPlayer() != null) {
+            PacketHandler.getPlayChannel().sendToPlayer(
+                    event::getPlayer,
+                    message
+            );
+        } else {
+            for (ServerPlayer player : event.getPlayerList().getPlayers()) {
+                PacketHandler.getPlayChannel().sendToPlayer(
+                        () -> player,
+                        message
+                );
+            }
+        }
+    }
+
+    /**
+     * Serializes all upgrade data for network sync
+     */
+    public static Map<ResourceLocation, net.minecraft.nbt.CompoundTag> serializeUpgrades() {
+        Map<ResourceLocation, net.minecraft.nbt.CompoundTag> serialized = new HashMap<>();
+
+        for (Map.Entry<ResourceLocation, ExoSuitUpgrade> entry : itemUpgrades.entrySet()) {
+            serialized.put(entry.getKey(), entry.getValue().serializeNBT());
+        }
+
+        return serialized;
+    }
+
+    /**
+     * Deserializes upgrade data received from server
+     */
+    public static void deserializeUpgrades(Map<ResourceLocation, net.minecraft.nbt.CompoundTag> upgradeData) {
+        itemUpgrades.clear();
+
+        for (Map.Entry<ResourceLocation, net.minecraft.nbt.CompoundTag> entry : upgradeData.entrySet()) {
+            ExoSuitUpgrade upgrade = new ExoSuitUpgrade();
+            upgrade.deserializeNBT(entry.getValue());
+            itemUpgrades.put(entry.getKey(), upgrade);
+        }
+
+        System.out.println("ExoSuitUpgradeManager: Synced " + itemUpgrades.size() + " upgrades from server");
     }
 
     private ResourceLocation getItemIdFromJson(JsonObject json, ResourceLocation fileLocation) {
@@ -193,4 +246,5 @@ public class ExoSuitUpgradeManager extends SimpleJsonResourceReloadListener {
     public static ExoSuitUpgradeManager getInstance() {
         return instance;
     }
+
 }

@@ -18,14 +18,14 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 22,
+    "rate": 24,
     "recoilAngle": 4.0,
     "recoilKick": 2.0,
     "spread": 1.0,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 30,
-    "criticalChance": 0.07
+    "criticalChance": 0.03
   },
   "modules": {
     "attachments": {

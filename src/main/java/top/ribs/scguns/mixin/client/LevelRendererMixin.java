@@ -11,6 +11,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.ribs.scguns.client.handler.BulletTrailRenderingHandler;
+import top.ribs.scguns.client.handler.TurretBulletTrailRenderingHandler;
 
 /**
  * Author: MrCrayfish
@@ -22,5 +23,6 @@ public class LevelRendererMixin
     private void renderBullets(PoseStack stack, float partialTicks, long finishTimeNano, boolean drawBlockOutline, Camera info, GameRenderer gameRenderer, LightTexture lightTexture, Matrix4f projection, CallbackInfo ci)
     {
         BulletTrailRenderingHandler.get().render(stack, partialTicks);
+        TurretBulletTrailRenderingHandler.get().render(stack, partialTicks);
     }
 }

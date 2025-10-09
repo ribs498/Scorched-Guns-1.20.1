@@ -31,6 +31,7 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
     private boolean enchanted;
     private ParticleOptions particleData;
     private boolean isVisible;
+    private double trailThickness; // Add this
 
     public S2CMessageBulletTrail() {}
 
@@ -54,6 +55,7 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         this.gravity = spawnedProjectiles[0].getModifiedGravity();
         this.shooterId = shooterId;
         this.particleData = particleData;
+        this.trailThickness = projectileProps.getTrailThickness(); // Add this
     }
 
     public S2CMessageBulletTrail(ProjectileEntity[] spawnedProjectiles, Gun.Projectile projectileProps, int shooterId, ParticleOptions particleData, boolean isVisible)
@@ -73,13 +75,17 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         this.trailColor = this.enchanted ? 0x9C71FF : projectileProps.getTrailColor();
         this.trailLengthMultiplier = projectileProps.getTrailLengthMultiplier();
         this.life = projectileProps.getLife();
-        this.gravity = spawnedProjectiles[0].getModifiedGravity(); //It's possible that projectiles have different gravity
+        this.gravity = spawnedProjectiles[0].getModifiedGravity();
         this.shooterId = shooterId;
         this.particleData = particleData;
         this.isVisible = isVisible;
+        this.trailThickness = projectileProps.getTrailThickness(); // Add this
     }
 
-    public S2CMessageBulletTrail(int[] entityIds, Vec3[] positions, Vec3[] motions, ItemStack item, int trailColor, double trailLengthMultiplier, int life, double gravity, int shooterId, boolean enchanted, ParticleOptions particleData, boolean isVisible)
+    public S2CMessageBulletTrail(int[] entityIds, Vec3[] positions, Vec3[] motions, ItemStack item,
+                                 int trailColor, double trailLengthMultiplier, int life, double gravity,
+                                 int shooterId, boolean enchanted, ParticleOptions particleData,
+                                 boolean isVisible, double trailThickness) // Add parameter
     {
         this.entityIds = entityIds;
         this.positions = positions;
@@ -93,6 +99,7 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         this.enchanted = enchanted;
         this.particleData = particleData;
         this.isVisible = isVisible;
+        this.trailThickness = trailThickness; // Add this
     }
 
     @Override
@@ -115,6 +122,7 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         buffer.writeId(BuiltInRegistries.PARTICLE_TYPE, message.particleData.getType());
         buffer.writeBoolean(message.isVisible);
         message.particleData.writeToNetwork(buffer);
+        buffer.writeDouble(message.trailThickness); // Add this
     }
 
     @Override
@@ -141,9 +149,14 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         if (type == null) type = ParticleTypes.CRIT;
         boolean isVisible = buffer.readBoolean();
         ParticleOptions particleData = this.readParticle(buffer, type);
-        return new S2CMessageBulletTrail(entityIds, positions, motions, item, trailColor, trailLengthMultiplier, life, gravity,shooterId, enchanted, particleData, isVisible);
+        double trailThickness = buffer.readDouble(); // Add this
+        return new S2CMessageBulletTrail(entityIds, positions, motions, item, trailColor,
+                trailLengthMultiplier, life, gravity, shooterId,
+                enchanted, particleData, isVisible, trailThickness); // Add parameter
     }
-
+    public double getTrailThickness() {
+        return this.trailThickness;
+    }
     @Override
     public void handle(S2CMessageBulletTrail message, MessageContext context)
     {

@@ -25,6 +25,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.*;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModDamageTypes;
@@ -44,8 +45,13 @@ public class ShotballProjectileEntity extends ProjectileEntity {
     private static final float BOUNCE_VELOCITY_RETENTION = 0.7F;
     private static final float DAMAGE_REDUCTION_PER_BOUNCE = 0.85F;
     private static final float MIN_BOUNCE_VELOCITY = 0.01F;
-    private static final int RIDER_IMMUNITY_TICKS = 3; // Adjust as needed
+    private static final int RIDER_IMMUNITY_TICKS = 3;
     private int immunityTicks;
+    private static final float BASE_KNOCKBACK = 3.0F;
+    private static final float KNOCKBACK_MULTIPLIER_PER_BOUNCE = 0.9F;
+    private static final float VERTICAL_KNOCKBACK_BOOST = 0.4F;
+    private static final float SPLASH_KNOCKBACK_RADIUS = 5.0F;
+    private static final float SPLASH_KNOCKBACK_FALLOFF = 0.5F;
 
 
 
@@ -91,6 +97,71 @@ public class ShotballProjectileEntity extends ProjectileEntity {
                 this.onExpired();
             }
             this.remove(RemovalReason.KILLED);
+        }
+    }
+    private void applyKnockback(Entity target, Vec3 hitPos) {
+        if (!(target instanceof LivingEntity)) {
+            return;
+        }
+
+        Vec3 knockbackDirection = target.position().subtract(this.position()).normalize();
+
+        Vec3 knockbackVec = getVec3(knockbackDirection);
+
+        target.push(knockbackVec.x, knockbackVec.y, knockbackVec.z);
+        target.hurtMarked = true;
+    }
+
+    private @NotNull Vec3 getVec3(Vec3 knockbackDirection) {
+        float knockbackStrength = BASE_KNOCKBACK * currentDamageMultiplier;
+
+        int bouncesUsed = MAX_BOUNCES - bouncesLeft;
+        knockbackStrength *= (float) Math.pow(KNOCKBACK_MULTIPLIER_PER_BOUNCE, bouncesUsed);
+
+        return new Vec3(
+                knockbackDirection.x * knockbackStrength,
+                Math.max(knockbackDirection.y * knockbackStrength, 0) + VERTICAL_KNOCKBACK_BOOST,
+                knockbackDirection.z * knockbackStrength
+        );
+    }
+
+    private void applySplashKnockback(Entity primaryTarget, Vec3 hitPos, float primaryKnockbackStrength) {
+
+        AABB searchBox = new AABB(hitPos.x - SPLASH_KNOCKBACK_RADIUS,
+                hitPos.y - SPLASH_KNOCKBACK_RADIUS,
+                hitPos.z - SPLASH_KNOCKBACK_RADIUS,
+                hitPos.x + SPLASH_KNOCKBACK_RADIUS,
+                hitPos.y + SPLASH_KNOCKBACK_RADIUS,
+                hitPos.z + SPLASH_KNOCKBACK_RADIUS);
+
+        List<LivingEntity> nearbyEntities = this.level().getEntitiesOfClass(LivingEntity.class, searchBox,
+                entity -> entity != primaryTarget && entity != this.shooter && entity.isAlive());
+
+        for (LivingEntity nearbyEntity : nearbyEntities) {
+            double distance = nearbyEntity.position().distanceTo(hitPos);
+
+            if (distance <= SPLASH_KNOCKBACK_RADIUS) {
+                float distanceFalloff = (float) (1.0 - (distance / SPLASH_KNOCKBACK_RADIUS));
+
+                Vec3 splashDirection = nearbyEntity.position().subtract(hitPos).normalize();
+
+                float splashStrength = primaryKnockbackStrength * SPLASH_KNOCKBACK_FALLOFF * distanceFalloff;
+
+                Vec3 splashKnockback = new Vec3(
+                        splashDirection.x * splashStrength,
+                        Math.max(splashDirection.y * splashStrength, 0) + (VERTICAL_KNOCKBACK_BOOST * 0.7F),
+                        splashDirection.z * splashStrength
+                );
+
+                nearbyEntity.push(splashKnockback.x, splashKnockback.y, splashKnockback.z);
+                nearbyEntity.hurtMarked = true;
+
+                if (distance <= SPLASH_KNOCKBACK_RADIUS * 0.6F) {
+                    float splashDamage = this.getDamage() * 0.15F * distanceFalloff;
+                    DamageSource source = ModDamageTypes.Sources.projectile(this.level().registryAccess(), this, this.shooter);
+                    nearbyEntity.hurt(source, splashDamage);
+                }
+            }
         }
     }
     private boolean isShooterRelatedEntity(Entity entity) {
@@ -233,6 +304,14 @@ public class ShotballProjectileEntity extends ProjectileEntity {
                     !this.getProjectile().getAdvantage().equals(ModTags.Entities.UNDEAD.location()))) {
                 if (damage > 0) {
                     entity.hurt(source, damage);
+
+                    float knockbackStrength = BASE_KNOCKBACK * currentDamageMultiplier;
+                    int bouncesUsed = MAX_BOUNCES - bouncesLeft;
+                    knockbackStrength *= (float) Math.pow(KNOCKBACK_MULTIPLIER_PER_BOUNCE, bouncesUsed);
+
+                    applyKnockback(entity, hitVec);
+
+                    applySplashKnockback(entity, hitVec, knockbackStrength);
                 }
 
                 if (entity instanceof LivingEntity livingEntity) {
@@ -419,7 +498,7 @@ public class ShotballProjectileEntity extends ProjectileEntity {
                     bounceArray,
                     projectileProps,
                     player.getId(),
-                    data);
+                    data, false);
 
             double radius = Config.COMMON.network.projectileTrackingRange.get();
             PacketHandler.getPlayChannel().sendToNearbyPlayers(

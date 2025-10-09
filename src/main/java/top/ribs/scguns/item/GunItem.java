@@ -65,12 +65,7 @@ public class GunItem extends Item implements IColored, IMeta {
         baseDamage = GunEnchantmentHelper.getHeavyShotDamage(stack, baseDamage);
         baseDamage = GunEnchantmentHelper.getPuncturingDamageReductionForTooltip(stack, baseDamage);
 
-        if (worldIn != null && Config.GunScalingConfig.getInstance().isScalingEnabled()) {
-            long worldDay = worldIn.getDayTime() / 24000L;
-            double scaledDamage = Config.GunScalingConfig.getInstance().getBaseDamage() +
-                    (Config.GunScalingConfig.getInstance().getDamageIncreaseRate() * worldDay);
-            baseDamage *= (float) Math.min(scaledDamage, Config.GunScalingConfig.getInstance().getMaxDamage());
-        }
+
         baseDamage *= Config.COMMON.gameplay.globalDamageMultiplier.get().floatValue();
         String additionalDamageText = "";
         CompoundTag tagCompound = stack.getTag();

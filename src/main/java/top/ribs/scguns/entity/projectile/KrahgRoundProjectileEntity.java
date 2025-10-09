@@ -288,6 +288,7 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
         }
 
         PacketHandler.getPlayChannel().sendToTracking(() -> entity, new S2CMessageBlood(hitVec.x, hitVec.y, hitVec.z, entity.getType()));
+        entity.invulnerableTime = 0;
     }
 
     @Override

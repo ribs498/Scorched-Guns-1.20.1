@@ -23,14 +23,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
-import top.ribs.scguns.block.AutoTurretBlock;
-import top.ribs.scguns.block.BasicTurretBlock;
-import top.ribs.scguns.block.EnemyTurretBlock;
-import top.ribs.scguns.block.ShotgunTurretBlock;
-import top.ribs.scguns.blockentity.AutoTurretBlockEntity;
-import top.ribs.scguns.blockentity.BasicTurretBlockEntity;
-import top.ribs.scguns.blockentity.EnemyTurretBlockEntity;
-import top.ribs.scguns.blockentity.ShotgunTurretBlockEntity;
+import top.ribs.scguns.block.*;
+import top.ribs.scguns.blockentity.*;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModDamageTypes;
 import top.ribs.scguns.item.GunItem;
@@ -183,6 +177,13 @@ public class LightningProjectileEntity extends ProjectileEntity {
         if (state.getBlock() instanceof AutoTurretBlock) {
             BlockEntity blockEntity = level().getBlockEntity(pos);
             if (blockEntity instanceof AutoTurretBlockEntity turret) {
+                turret.onHitByLightningProjectile();
+            }
+        }
+        if (state.getBlock() instanceof SniperTurretBlock)
+        {
+            BlockEntity blockEntity = level().getBlockEntity(pos);
+            if (blockEntity instanceof SniperTurretBlockEntity turret) {
                 turret.onHitByLightningProjectile();
             }
         }

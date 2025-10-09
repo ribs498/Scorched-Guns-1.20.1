@@ -1,60 +1,44 @@
-- Fixed Trauma Unit Spawning
-- Fixed Double durability damage to guns
-- Small tweaks to gun stats
-- Reworked gun light system
-- Added Trotters- New bolt action Piglin Rifle(thanks to Blumountain and Kel Cat from the discord for the design!)
-- Added the Stiletto- New single shot Krahg Pistol
-- Added New ammo type - Shatter Rounds
-- Added the M3 Marksman rifle
-- Added the RG-Jigsaw
-- Added the Homemaker
-- Added the Micina- Burst fire revolver
-- Added the Grandle (og), renamed existing Grandle to Grandle Conversion
-- Added Saketini IronPort
-- Reworked Scamps, removed Scamp Controller, now will seek out Barrels (specifically barrels) to deposit items when it has picked up 3 items during its patrolling
-- Fixed Scamps Going for dropped items even in sit mode
-- Fixed Scamps not being able to be healed with Ancient Brass
-- Buffed Speed mag modifier so its actually useful now lmao
-- Tamed Mobs no longer are affected by gun shots
-- Fixed issue with turrets not opening
-- Fixed Bearpack issues for snow layers
-- Added Some modifiers to scopes
-- Medium And Long Scope now have slightly increased sensitivity during aiming to compensate for fov changes
-- Animated Armors now hide second skin layers when worn
-- Diamond Steel armor is now 3d (thanks again to Albatroz Feroz on the discord for the model!)
-- Added proper (kinda ugly but functional) 3rd person weapon pose for Vehicles (horse/boat/minecart/etc) as well as crawl/swim
-- Molds now properly can use Unbreaking enchantment
-- Fixed up the Diamond steel conversion process, added recipes for create compat and Create enchantment industry
-- Added ability to offhand swords and bayonets with 1 handed weapons, as well as use other offhand stuff like food and torches
-- Reworked the gun lights feature so its less buggy
-- Added the Cog Chambers Dungeon to the world
-- Added the Scamppanzer boss
-- Added the Exo Suit, blueprint drops from the Scamppanzer boss
-- Added a small speed decrease during reloads, can be negated with Light Frame and/or Swift Sneak (thanks to brandon on the discord for the idea!)
-- Light Frame now has 2 levels, for non heavy weapons it can increase movement speed by 5%-10% (5% max for heavy weapons)
-- Hypervelocity now has a chance to do double durability damage on fire, increases per level
-- Sharpshooter reworked, still has increased crit chance and increases armor penetration, but decreases base damage slightly
-- Tight Seal now gives a 15% damage boost underwater, continues to prevent double durability damage underwater.
-- Tight seal can be applied to the Ocean tier guns, have a 25% chance to not add durability damage when fired underwater alongside damage boost
-- Ramrod rounds now do 1.75x damage to undead and apply weakness
-- Gibbs Rounds drop an additional 25% xp and apply 2 level of looting on kill
-- Beowulf round drop an additional 75% xp and 2 level of looting on kill
-- Flamethrowers now clear sculk, uses sculk_block tag for what it can clear ( thank to Atobá in the discord for the idea!)
-- Attachment tooltips are clearer with what they do
-- Cog Knight now has a Charge Attack
-- Dissident now have Leap Attack
-- Added Gun Rust Curse, found on guns found in structures. Always has a chance to jam guns
-- Fixed Turret modules issues with up and down
-- Vent output is set by the tag geothermal_vent_output and sulfur_vent_output. ( data driven vents planned for later)
-- Sulfur dust can be placed like Niter
-- Niter no longer "melts" in heat sources
-- Improved the Dynamic Headshot system
-- Improved the Advantage system, uses the advantages.json file to set advantage values
-- Added the Corroded Enchantment for melee weapons, increases damage against Automaton mobs and poisons non-automaton mobs
-- Reworked Plasma Projectiles slighty
-- Added Smooth Phosphorite
-- Added Cog Locator for finding Cog Chambers
-- Added conditional checks for tons of the compat recipes
-- Added Config option to disable fire placement for flamethrowers
-- The Merchant only has its special behavior if summoned via the Pact
-- Fixed Melee not being able to be re-bound
+The Right To Bear Arms Update!
+- Standard Mobs can now use guns ( thanks to Miga's code helping me implement)
+- Added a tier progression system for guns, acquiring a gun from a tier will allow mobs to spawn with guns from the previous tier
+- Cog knight overhaul, now can use guns
+- Overhauled Hornlin/Zombified Hornlin (more mob overhauls coming)
+- Turret overhaul, mainly internal changes, uses json files for config
+- Added Sniper Turret
+- Bullet Trail overhaul, looks a lot better now (Huge thanks to Atobá for the help and Migas code!)
+- Added The Inquistor (thanks to Albatroz for the model!) Soul fire flamethrower
+- Soul fire'd mod compat, 2 new soul fire items will set mobs on soul fire if enabled, normal on fire effects if not
+- Added fake soul fire hehe
+- Added Hellfire bomb
+- Added Nailer (Thanks to Ablatroz for the model once again!)
+- Added Lacerated Effect, causes sparatic damage over time
+- Added Railworker
+- Shatter Round guns cause lacerated
+- Added Cog Mace, melee weapon based on speed to increase damage
+- Added Drill
+- Added Drill Conversion
+- Added Whizzbanger
+- Scratches rechambered to Flechette
+- Thunderhead rechambered to Shatter Round
+- Added Needle bullet
+- Added Bump Stock
+- Visual Overhaul for some nether guns
+- Added The Collective Painting
+- Airgun overhaul, no longer requires Create for airguns (compatibility still exists)
+- Added Air tank and Reinforced Airtank (can be filled manually or via lightning battery) with curios back support
+- Added Red Raydar rifle to frontier tier
+- Added the Atom Sterilizer to the Scorched tier
+- Added Sculk Horde compatibility (Thanks to Atobá for the help!)
+- Sulfur Vents have more behavior, can place sulfur layers around it, and destroy grass
+- Sulfur vent clouds will be disabled when a vent collector is on top
+- Block destruction from explosions config is now set to false by default
+- Microjets now have a 1.5 damage multiplier based on distance traveled
+- Shotball now deals huge knockback
+- Added tons of weapon rebalancing
+
+- Fixed broken gun feedback
+- Fixed some Exo Suit bugs
+- Fixed some reloading bugs
+- Lots of config related changes so id suggest deleting and refreshing game
+
+I was bad with this changelog so theres definitly stuff i forgot to put in here lmao

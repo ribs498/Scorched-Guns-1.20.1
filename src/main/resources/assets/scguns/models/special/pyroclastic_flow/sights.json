@@ -1,60 +1,64 @@
 {
+	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
 	"textures": {
-		"1": "scguns:item/pyroclastic_flow",
-		"particle": "scguns:item/pyroclastic_flow"
+      "1": "scguns:item/pyroclastic_flow"
 	},
 	"elements": [
 		{
+			"name": "sights",
 			"from": [8.075, 6.65, 13.9],
 			"to": [8.2, 6.8, 14.15],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8.55, 2.6, 7.3]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.2, 8]},
 			"faces": {
-				"north": {"uv": [6, 8, 6.125, 8.125], "texture": "#1"},
-				"east": {"uv": [0, 8, 0.25, 8.125], "texture": "#1"},
-				"south": {"uv": [8, 6, 8.125, 6.125], "texture": "#1"},
-				"west": {"uv": [8, 0, 8.25, 0.125], "texture": "#1"},
-				"up": {"uv": [1.125, 8.25, 1, 8], "texture": "#1"},
-				"down": {"uv": [8.125, 1, 8, 1.25], "texture": "#1"}
+				"north": {"uv": [0, 8, 0.125, 8.125], "texture": "#1"},
+				"east": {"uv": [8, 0, 8.125, 0.125], "texture": "#1"},
+				"south": {"uv": [0.25, 8, 0.375, 8.125], "texture": "#1"},
+				"west": {"uv": [8, 0.25, 8.125, 0.375], "texture": "#1"},
+				"up": {"uv": [0.625, 8.125, 0.5, 8], "texture": "#1"},
+				"down": {"uv": [8.125, 0.5, 8, 0.625], "texture": "#1"}
 			}
 		},
 		{
+			"name": "sights",
 			"from": [7.625, 6.3, 11.9],
 			"to": [8.375, 6.65, 14.15],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.275, 2.25, 7.3]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.2, 8]},
 			"faces": {
-				"north": {"uv": [2.25, 7, 2.5, 7.125], "texture": "#1"},
-				"east": {"uv": [1, 6.5, 1.625, 6.625], "texture": "#1"},
-				"south": {"uv": [7, 2.25, 7.25, 2.375], "texture": "#1"},
-				"west": {"uv": [6.5, 1, 7.125, 1.125], "texture": "#1"},
-				"up": {"uv": [5.75, 2.125, 5.5, 1.5], "texture": "#1"},
-				"down": {"uv": [4.75, 5.5, 4.5, 6.125], "texture": "#1"}
+				"north": {"uv": [7.75, 0, 8, 0.125], "texture": "#1"},
+				"east": {"uv": [7, 4.25, 7.625, 4.375], "texture": "#1"},
+				"south": {"uv": [0.25, 7.75, 0.5, 7.875], "texture": "#1"},
+				"west": {"uv": [7, 4.5, 7.625, 4.625], "texture": "#1"},
+				"up": {"uv": [3, 6.375, 2.75, 5.75], "texture": "#1"},
+				"down": {"uv": [6, 5.5, 5.75, 6.125], "texture": "#1"}
 			}
 		},
 		{
+			"name": "sights",
 			"from": [7.975, 6.65, 11.9],
 			"to": [8.025, 6.725, 12.15],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.3, 2.6, 7.3]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.2, 8]},
 			"faces": {
-				"north": {"uv": [7, 8, 7.125, 8.125], "texture": "#1"},
-				"east": {"uv": [2, 8, 2.25, 8.125], "texture": "#1"},
-				"south": {"uv": [8, 7, 8.125, 7.125], "texture": "#1"},
-				"west": {"uv": [8, 2, 8.25, 2.125], "texture": "#1"},
-				"up": {"uv": [3.125, 8.25, 3, 8], "texture": "#1"},
-				"down": {"uv": [8.125, 3, 8, 3.25], "texture": "#1"}
+				"north": {"uv": [0.75, 8, 0.875, 8.125], "texture": "#1"},
+				"east": {"uv": [8, 0.75, 8.125, 0.875], "texture": "#1"},
+				"south": {"uv": [1, 8, 1.125, 8.125], "texture": "#1"},
+				"west": {"uv": [8, 1, 8.125, 1.125], "texture": "#1"},
+				"up": {"uv": [1.375, 8.125, 1.25, 8], "texture": "#1"},
+				"down": {"uv": [8.125, 1.25, 8, 1.375], "texture": "#1"}
 			}
 		},
 		{
+			"name": "sights",
 			"from": [7.8, 6.65, 13.9],
 			"to": [7.925, 6.8, 14.15],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.45, 2.6, 7.3]},
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.2, 8]},
 			"faces": {
-				"north": {"uv": [8, 8, 8.125, 8.125], "texture": "#1"},
-				"east": {"uv": [4, 8, 4.25, 8.125], "texture": "#1"},
-				"south": {"uv": [0, 9, 0.125, 9.125], "texture": "#1"},
-				"west": {"uv": [8, 4, 8.25, 4.125], "texture": "#1"},
-				"up": {"uv": [5.125, 8.25, 5, 8], "texture": "#1"},
-				"down": {"uv": [8.125, 5, 8, 5.25], "texture": "#1"}
+				"north": {"uv": [1.5, 8, 1.625, 8.125], "texture": "#1"},
+				"east": {"uv": [8, 1.5, 8.125, 1.625], "texture": "#1"},
+				"south": {"uv": [1.75, 8, 1.875, 8.125], "texture": "#1"},
+				"west": {"uv": [8, 1.75, 8.125, 1.875], "texture": "#1"},
+				"up": {"uv": [2.125, 8.125, 2, 8], "texture": "#1"},
+				"down": {"uv": [8.125, 2, 8, 2.125], "texture": "#1"}
 			}
 		}
 	],
@@ -87,5 +91,13 @@
 			"translation": [0, 8, 0],
 			"scale": [1.5, 1.5, 1.5]
 		}
-	}
+	},
+	"groups": [
+		{
+			"name": "sights",
+			"origin": [0.475, -0.62625, 16.0625],
+			"color": 3,
+			"children": [0, 1, 2, 3]
+		}
+	]
 }

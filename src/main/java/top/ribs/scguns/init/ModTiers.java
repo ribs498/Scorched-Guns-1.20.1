@@ -36,6 +36,36 @@ public class ModTiers {
             return Ingredient.of(ModItems.ANTHRALITE_INGOT.get());
         }
     };
+    public static final Tier ANCIENT_BRASS = new Tier() {
+        @Override
+        public int getUses() {
+            return 250;
+        }
 
+        @Override
+        public float getSpeed() {
+            return 6.0F;
+        }
+
+        @Override
+        public float getAttackDamageBonus() {
+            return 3.0F;
+        }
+
+        @Override
+        public int getLevel() {
+            return 2;
+        }
+
+        @Override
+        public int getEnchantmentValue() {
+            return 14;
+        }
+
+        @Override
+        public Ingredient getRepairIngredient() {
+            return Ingredient.of(ModItems.ANCIENT_BRASS.get());
+        }
+    };
 }
 

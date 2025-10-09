@@ -28,7 +28,7 @@ import net.minecraft.world.level.*;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.NotNull;
-import top.ribs.scguns.entity.projectile.BrassBoltEntity;
+import top.ribs.scguns.entity.projectile.EnemyProjectileEntity;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModSounds;
 
@@ -233,7 +233,7 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
             double spawnHeight = this.getY() + this.getBbHeight() + turretOffsetHeight;
             double spawnX = this.getX() - Math.sin(Math.toRadians(this.getYRot())) * turretOffsetBack;
             double spawnZ = this.getZ() + Math.cos(Math.toRadians(this.getYRot())) * turretOffsetBack;
-            BrassBoltEntity brassBolt = new BrassBoltEntity(this.level(), this);
+            EnemyProjectileEntity brassBolt = new EnemyProjectileEntity(this.level(), this);
             brassBolt.setPos(spawnX, spawnHeight, spawnZ);
             double dx = target.getX() - spawnX;
             double dy = target.getEyeY() - spawnHeight + 0.1;

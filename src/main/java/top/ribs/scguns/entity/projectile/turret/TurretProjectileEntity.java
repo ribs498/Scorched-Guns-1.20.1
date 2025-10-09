@@ -1,12 +1,10 @@
 package top.ribs.scguns.entity.projectile.turret;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,35 +14,24 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
-import top.ribs.scguns.Config;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModSounds;
+import top.ribs.scguns.network.PacketHandler;
+import top.ribs.scguns.network.message.S2CMessageTurretBulletTrail;
 
 public class TurretProjectileEntity extends AbstractArrow {
+    private boolean trailSpawned = false;
 
     public TurretProjectileEntity(EntityType<? extends AbstractArrow> type, Level world) {
         super(type, world);
         this.setNoGravity(true);
     }
 
-    public TurretProjectileEntity(Level world, BulletType bulletType) {
+    public TurretProjectileEntity(Level world) {
         super(ModEntities.TURRET_PROJECTILE.get(), world);
-
-        double baseDamage = Config.COMMON.turret.bulletDamage.get(bulletType).get();
-
-        if (Config.COMMON.turret.enableDamageScaling.get()) {
-            long daysInWorld = this.level().getDayTime() / 24000L;
-            double scalingRate = Config.COMMON.turret.damageScalingRate.get();
-            double maxDamage = Config.COMMON.turret.maxScaledDamage.get();
-
-            double scaledDamage = Math.min(baseDamage + (scalingRate * daysInWorld), maxDamage);
-            this.setBaseDamage(scaledDamage);
-        } else {
-            this.setBaseDamage(baseDamage);
-        }
-
         this.setNoGravity(true);
     }
 
@@ -60,25 +47,23 @@ public class TurretProjectileEntity extends AbstractArrow {
     }
 
     @Override
-    public void setEnchantmentEffectsFromEntity(LivingEntity pShooter, float pVelocity) {
-        // Do nothing to avoid applying enchantments
-    }
-
-    @Override
     protected void onHitEntity(EntityHitResult pResult) {
-        super.onHitEntity(pResult);
         Entity entity = pResult.getEntity();
         if (entity instanceof LivingEntity livingEntity) {
             float damageAmount = (float) this.getBaseDamage();
-            int damage = Mth.ceil(damageAmount);
-            if (livingEntity.hurt(this.damageSources().arrow(this, this.getOwner()), damage)) {
+            if (livingEntity.hurt(this.damageSources().arrow(this, this.getOwner()), damageAmount)) {
                 if (livingEntity.isAlive()) {
                     this.doPostHurtEffects(livingEntity);
                 }
             }
             livingEntity.setArrowCount(livingEntity.getArrowCount() - 1);
+            entity.invulnerableTime = 0;
         }
         this.discard();
+    }
+
+    @Override
+    public void setEnchantmentEffectsFromEntity(LivingEntity pShooter, float pVelocity) {
     }
 
     @Override
@@ -95,8 +80,10 @@ public class TurretProjectileEntity extends AbstractArrow {
     @Override
     public void tick() {
         super.tick();
-        if (this.level().isClientSide) {
-            spawnTrailParticles();
+
+        if (!this.level().isClientSide && !this.trailSpawned && this.tickCount == 1) {
+            this.spawnBulletTrail();
+            this.trailSpawned = true;
         }
 
         if (this.inGround || this.tickCount > 100) {
@@ -104,17 +91,26 @@ public class TurretProjectileEntity extends AbstractArrow {
         }
     }
 
-    private void spawnTrailParticles() {
-        double posX = this.getX();
-        double posY = this.getY();
-        double posZ = this.getZ();
+    private void spawnBulletTrail() {
+        Vec3 position = this.position();
+        Vec3 motion = this.getDeltaMovement();
 
-        for (int i = 0; i < 3; i++) {
-            double offsetX = this.random.nextGaussian() * 0.02;
-            double offsetY = this.random.nextGaussian() * 0.02;
-            double offsetZ = this.random.nextGaussian() * 0.02;
-            this.level().addParticle(ParticleTypes.SMALL_FLAME, posX, posY, posZ, offsetX, offsetY, offsetZ);
-        }
+        int trailColor = 0xFF6600;
+        double trailLength = 1.0;
+        int maxAge = 100;
+        double trailThickness = 0.8;
+
+        S2CMessageTurretBulletTrail message = new S2CMessageTurretBulletTrail(
+                this.getId(),
+                position,
+                motion,
+                trailColor,
+                trailLength,
+                maxAge,
+                trailThickness
+        );
+
+        PacketHandler.getPlayChannel().sendToTrackingEntity(() -> this, message);
     }
 
     @Override
@@ -132,6 +128,7 @@ public class TurretProjectileEntity extends AbstractArrow {
     public void addAdditionalSaveData(CompoundTag compound) {
         super.addAdditionalSaveData(compound);
         compound.putDouble("TurretDamage", this.getBaseDamage());
+        compound.putBoolean("TrailSpawned", this.trailSpawned);
     }
 
     @Override
@@ -140,11 +137,11 @@ public class TurretProjectileEntity extends AbstractArrow {
         if (compound.contains("TurretDamage")) {
             this.setBaseDamage(compound.getDouble("TurretDamage"));
         }
+        this.trailSpawned = compound.getBoolean("TrailSpawned");
     }
 
     @Override
     public void playSound(SoundEvent soundEvent, float volume, float pitch) {
-
     }
 
     @Override

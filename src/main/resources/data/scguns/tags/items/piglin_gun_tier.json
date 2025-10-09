@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:empty_blasphemy",
+    "scguns:blasphemy",
+    "scguns:pyroclastic_flow",
+    "scguns:freyr",
+    "scguns:mangalitsa",
+    "scguns:vulcanic_repeater",
+    "scguns:super_shotgun"
+  ]
+}

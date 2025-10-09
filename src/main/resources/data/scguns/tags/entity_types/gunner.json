@@ -7,6 +7,14 @@
     "minecraft:drowned",
     "minecraft:skeleton",
     "minecraft:stray",
-    "minecraft:vindicator"
+    "minecraft:vindicator",
+    "minecraft:pillager",
+    "minecraft:vindicator",
+    "minecraft:piglin",
+    "minecraft:piglin_brute",
+    "minecraft:zombified_piglin",
+    "minecraft:wither_skeleton",
+    "scguns:hornlin",
+    "scguns:zombified_hornlin"
   ]
 }

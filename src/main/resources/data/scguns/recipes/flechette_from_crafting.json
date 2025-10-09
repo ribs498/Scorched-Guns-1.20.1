@@ -1,0 +1,37 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "scguns:needle"
+    },
+    {
+      "item": "scguns:needle"
+    },
+    {
+      "item": "scguns:needle"
+    },
+    {
+      "item": "scguns:needle"
+    },
+    {
+      "item": "scguns:needle"
+    },
+    {
+      "item": "scguns:needle"
+    },
+    {
+      "item": "scguns:needle"
+    },
+    {
+      "item": "scguns:needle"
+    },
+    {
+      "item": "scguns:needle"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "scguns:flechette"
+  }
+}

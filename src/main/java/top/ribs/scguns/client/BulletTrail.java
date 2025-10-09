@@ -2,7 +2,6 @@ package top.ribs.scguns.client;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
@@ -36,8 +35,13 @@ public class BulletTrail
     private final ParticleOptions particleData;
     private float size;
     private boolean isVisible;
+    private final double trailThickness;
 
-    public BulletTrail(int entityId, Vec3 position, Vec3 motion, ItemStack item, int trailColor, double trailMultiplier, int maxAge, double gravity, int shooterId, boolean enchanted, ParticleOptions particleData, boolean isVisible)
+
+    public BulletTrail(int entityId, Vec3 position, Vec3 motion, ItemStack item, int trailColor,
+                       double trailMultiplier, int maxAge, double gravity, int shooterId,
+                       boolean enchanted, ParticleOptions particleData, boolean isVisible,
+                       double trailThickness)
     {
         this.entityId = entityId;
         this.position = position;
@@ -51,6 +55,7 @@ public class BulletTrail
         this.enchanted = enchanted;
         this.particleData = particleData;
         this.isVisible = isVisible;
+        this.trailThickness = trailThickness;
         this.updateYawPitch();
     }
 
@@ -78,7 +83,7 @@ public class BulletTrail
         if(shooter instanceof Player && ((Player) shooter).isLocalPlayer())
         {
             Level world = shooter.level();
-            world.addAlwaysVisibleParticle(this.particleData, true, this.position.x(), this.position.y(), this.position.z(), this.motion.x, this.motion.y, this.motion.z);
+            //world.addAlwaysVisibleParticle(this.particleData, true, this.position.x(), this.position.y(), this.position.z(), this.motion.x, this.motion.y, this.motion.z);
             //world.addAlwaysVisibleParticle(ParticleTypes.MYCELIUM, true, this.position.x(), this.position.y(), this.position.z(), this.motion.x, this.motion.y, this.motion.z);
         }
 
@@ -89,7 +94,9 @@ public class BulletTrail
             this.dead = true;
         }
     }
-
+    public double getTrailThickness() {
+        return this.trailThickness;
+    }
     public int getEntityId()
     {
         return this.entityId;

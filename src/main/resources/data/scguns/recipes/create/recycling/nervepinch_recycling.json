@@ -8,7 +8,7 @@
   ],
   "ingredients": [
     {
-      "item": "scguns:locust"
+      "item": "scguns:nervepinch"
     }
   ],
   "processingTime": 250,
@@ -23,7 +23,7 @@
     },
     {
       "chance": 0.3,
-      "item": "scguns:rapid_firing_unit"
+      "item": "scguns:empty_tank"
     },
     {
       "chance": 0.3,

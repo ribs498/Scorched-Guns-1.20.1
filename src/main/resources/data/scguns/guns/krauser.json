@@ -58,6 +58,7 @@
     "size": 0.05,
     "speed": 7.0,
     "trailLengthMultiplier": 2.0
+
   },
   "reloads": {
     "emptyMagTimer": 10,

@@ -6,7 +6,6 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -15,7 +14,6 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Turtle;
 import net.minecraft.world.entity.monster.Monster;
@@ -26,10 +24,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.ribs.scguns.entity.projectile.BrassBoltEntity;
+import top.ribs.scguns.entity.projectile.EnemyProjectileEntity;
 import top.ribs.scguns.init.ModSounds;
-
-import java.util.EnumSet;
 
 public class RedcoatEntity extends Monster implements RangedAttackMob {
     private static final EntityDataAccessor<Boolean> ATTACKING = SynchedEntityData.defineId(RedcoatEntity.class, EntityDataSerializers.BOOLEAN);
@@ -203,7 +199,7 @@ public class RedcoatEntity extends Monster implements RangedAttackMob {
 
     @Override
     public void performRangedAttack(@NotNull LivingEntity target, float distanceFactor) {
-        BrassBoltEntity projectile = new BrassBoltEntity(this.level(), this);
+        EnemyProjectileEntity projectile = new EnemyProjectileEntity(this.level(), this);
         double offsetX = 0.0;
         double offsetY = this.getEyeHeight() - 0.5;
         double offsetZ = -0.5;

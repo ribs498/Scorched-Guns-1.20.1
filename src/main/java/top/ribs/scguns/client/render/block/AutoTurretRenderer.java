@@ -36,8 +36,7 @@ public class AutoTurretRenderer implements BlockEntityRenderer<AutoTurretBlockEn
             matrixStack.translate(x, y, z);
             matrixStack.mulPose(Axis.YP.rotationDegrees(yaw));
 
-            // Apply recoil to pitch only
-            float recoilPitch = pitch + turret.getRecoilPitchOffset(); // Add recoil pitch offset
+            float recoilPitch = pitch + turret.getRecoilPitchOffset();
             matrixStack.mulPose(Axis.XP.rotationDegrees(recoilPitch));
 
             matrixStack.translate(-x, -y, -z);

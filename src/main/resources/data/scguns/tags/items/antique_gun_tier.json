@@ -1,0 +1,16 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:musket",
+    "scguns:flintlock_pistol",
+    "scguns:handcannon",
+    "scguns:blunderbuss",
+    "scguns:doublet",
+    "scguns:repeating_musket",
+    "scguns:longarm",
+    "scguns:fencer_carabine",
+    "scguns:fencer_thumper",
+    "scguns:laser_musket",
+    "scguns:plasmabuss"
+  ]
+}

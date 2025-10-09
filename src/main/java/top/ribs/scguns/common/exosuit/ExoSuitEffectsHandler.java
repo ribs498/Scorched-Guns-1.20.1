@@ -42,10 +42,8 @@ public class ExoSuitEffectsHandler {
      */
     public static void applyExoSuitEffects(Player player) {
         removeExoSuitEffects(player);
-        boolean hasExoSuitPieces = false;
         for (ItemStack armorStack : player.getArmorSlots()) {
             if (armorStack.getItem() instanceof ExoSuitItem exosuit) {
-                hasExoSuitPieces = true;
                 applyArmorPieceEffects(player, armorStack, exosuit);
             }
         }

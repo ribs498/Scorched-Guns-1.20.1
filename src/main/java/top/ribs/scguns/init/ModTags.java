@@ -4,14 +4,18 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.Reference;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
+import top.ribs.scguns.entity.player.PlayerGunProgression;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import static top.ribs.scguns.init.ModTags.Items.*;
 
 public class ModTags
 {
@@ -54,13 +58,65 @@ public class ModTags
         public static final TagKey<Item> SULFUR_VENT_OUTPUT = tag("sulfur_vent_output");
         public static final TagKey<Item> MINING_GUN = tag("mining_gun");
 
+        public static final TagKey<Item> ANTIQUE_GUN_TIER = tag("antique_gun_tier");
+        public static final TagKey<Item> FRONTIER_GUN_TIER = tag("frontier_gun_tier");
+        public static final TagKey<Item> COPPER_GUN_TIER = tag("copper_gun_tier");
+        public static final TagKey<Item> IRON_GUN_TIER = tag("iron_gun_tier");
+        public static final TagKey<Item> WRECKER_GUN_TIER = tag("wrecker_gun_tier");
+        public static final TagKey<Item> OCEAN_GUN_TIER = tag("ocean_gun_tier");
+        public static final TagKey<Item> DIAMOND_STEEL_GUN_TIER = tag("diamond_steel_gun_tier");
+        public static final TagKey<Item> TREATED_BRASS_GUN_TIER = tag("treated_brass_gun_tier");
+        public static final TagKey<Item> PIGLIN_GUN_TIER = tag("piglin_gun_tier");
+        public static final TagKey<Item> DEEP_DARK_GUN_TIER = tag("deep_dark_gun_tier");
+        public static final TagKey<Item> END_GUN_TIER = tag("end_gun_tier");
+        public static final TagKey<Item> SCORCHED_GUN_TIER = tag("scorched_gun_tier");
+
+        public static final TagKey<Item> ENTITY_BLACKLISTED_GUN = tag("entity_blacklisted_gun");
+
+        public static boolean isInTierTag(ItemStack stack, PlayerGunProgression.GunTier tier) {
+            if (stack.isEmpty() || tier.getTagName() == null) {
+                return false;
+            }
+
+            return switch (tier) {
+                case ANTIQUE -> stack.is(ANTIQUE_GUN_TIER);
+                case FRONTIER -> stack.is(FRONTIER_GUN_TIER);
+                case COPPER -> stack.is(COPPER_GUN_TIER);
+                case IRON -> stack.is(IRON_GUN_TIER);
+                case WRECKER -> stack.is(WRECKER_GUN_TIER);
+                case OCEAN -> stack.is(OCEAN_GUN_TIER);
+                case DIAMOND_STEEL -> stack.is(DIAMOND_STEEL_GUN_TIER);
+                case TREATED_BRASS -> stack.is(TREATED_BRASS_GUN_TIER);
+                case PIGLIN -> stack.is(PIGLIN_GUN_TIER);
+                case DEEP_DARK -> stack.is(DEEP_DARK_GUN_TIER);
+                case END -> stack.is(END_GUN_TIER);
+                case SCORCHED -> stack.is(SCORCHED_GUN_TIER);
+                default -> false;
+            };
+        }
+        public static PlayerGunProgression.GunTier getTierForItem(ItemStack stack) {
+            if (stack.isEmpty()) {
+                return null;
+            }
+
+            for (PlayerGunProgression.GunTier tier : PlayerGunProgression.GunTier.values()) {
+                if (tier == PlayerGunProgression.GunTier.NONE) continue;
+                if (isInTierTag(stack, tier)) {
+                    return tier;
+                }
+            }
+
+            return null;
+        }
         private static TagKey<Item> tag(String name)
         {
             return ItemTags.create(new ResourceLocation(Reference.MOD_ID, name));
         }
     }
+
     public static class Entities
     {
+        public static final TagKey<EntityType<?>> DISABLE_BULLET_TRAIL = tag("disable_bullet_trail");
         public static final TagKey<EntityType<?>> GUNNER = tag("gunner");
         public static final TagKey<EntityType<?>> CANNOT_BE_LACERATED = tag("cannot_be_lacerated");
         public static final TagKey<EntityType<?>> RED_BLOOD = tag("red_blood");

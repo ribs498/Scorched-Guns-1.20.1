@@ -24,12 +24,10 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.level.Level;
 
-/**
- * Author: MrCrayfish
- */
 public class RocketEntity extends ProjectileEntity
 {
-    private static final float SHIELD_DISABLE_CHANCE = 1.0f; // 100% chance to disable shield
+    private static final float EXPLOSION_RADIUS = 5.0f;
+    private static final float SHIELD_DISABLE_CHANCE = 1.0f;
 
     public RocketEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn)
     {
@@ -82,23 +80,21 @@ public class RocketEntity extends ProjectileEntity
             }
         }
         float exactDamage = this.getDamage();
-        float explosionRadius = Config.COMMON.rockets.explosionRadius.get().floatValue();
-        createRocketExplosion(this, explosionRadius, exactDamage, false);
+        createRocketExplosion(this, EXPLOSION_RADIUS, exactDamage, false);
     }
 
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
         float exactDamage = this.getDamage();
-        float explosionRadius = Config.COMMON.rockets.explosionRadius.get().floatValue();
-        createRocketExplosion(this, explosionRadius, exactDamage, false);
+        createRocketExplosion(this, EXPLOSION_RADIUS, exactDamage, false);
     }
 
     @Override
     public void onExpired() {
         float exactDamage = this.getDamage();
-        float explosionRadius = Config.COMMON.rockets.explosionRadius.get().floatValue();
-        createRocketExplosion(this, explosionRadius, exactDamage, false);
+        createRocketExplosion(this, EXPLOSION_RADIUS, exactDamage, false);
     }
+
     @Override
     public float getDamage() {
         return super.getDamage();

@@ -49,7 +49,6 @@ public class RocketExplosion extends ProjectileExplosion {
 
     @Override
     public void explode() {
-        // Play the explosion sound at the beginning of the explosion
         playExplosionSound();
 
         Set<BlockPos> set = Sets.newHashSet();

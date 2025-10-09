@@ -95,6 +95,7 @@ public abstract class BaseTurretModuleBlock extends BaseEntityBlock {
             BlockPos neighborPos = pos.relative(direction);
             if (world.getBlockState(neighborPos).getBlock() instanceof BasicTurretBlock ||
                     world.getBlockState(neighborPos).getBlock() instanceof ShotgunTurretBlock ||
+                    world.getBlockState(neighborPos).getBlock() instanceof SniperTurretBlock ||
                     world.getBlockState(neighborPos).getBlock() instanceof AutoTurretBlock) {
                 return direction.getOpposite();
             }
@@ -107,6 +108,7 @@ public abstract class BaseTurretModuleBlock extends BaseEntityBlock {
             BlockPos neighborPos = pos.relative(direction);
             if (world.getBlockState(neighborPos).getBlock() instanceof BasicTurretBlock ||
                     world.getBlockState(neighborPos).getBlock() instanceof ShotgunTurretBlock ||
+                    world.getBlockState(neighborPos).getBlock() instanceof SniperTurretBlock ||
                     world.getBlockState(neighborPos).getBlock() instanceof AutoTurretBlock) {
                 return true;
             }

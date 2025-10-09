@@ -13,7 +13,7 @@
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 3,
+    "rate": 4,
     "recoilAngle": 2.0,
     "recoilKick": 0.25,
     "spread": 1.0,
@@ -44,7 +44,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 22.0,
+    "damage": 20.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:energy_cell",
@@ -57,7 +57,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 25,
+    "maxAmmo": 18,
     "reloadTimer": 90,
     "reloadType": "scguns:mag_fed"
   },

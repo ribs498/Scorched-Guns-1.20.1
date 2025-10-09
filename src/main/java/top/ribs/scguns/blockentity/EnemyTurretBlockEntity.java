@@ -236,9 +236,10 @@ public class EnemyTurretBlockEntity extends BlockEntity {
                 level.random.triangle(0, INACCURACY)
         ).normalize();
 
-        TurretProjectileEntity projectile = new TurretProjectileEntity(level, TurretProjectileEntity.BulletType.COMPACT_COPPER_ROUND);
+        TurretProjectileEntity projectile = new TurretProjectileEntity(level);
         projectile.setPos(muzzlePos.x, muzzlePos.y, muzzlePos.z);
         projectile.shoot(direction.x, direction.y, direction.z, 3.0F, 0.0F);
+
         projectile.setBaseDamage(2.5 * damageMultiplier);
 
         level.addFreshEntity(projectile);

@@ -1,0 +1,41 @@
+{
+  "type": "create:mechanical_crafting",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "C": {
+      "tag": "minecraft:planks"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "scguns:gun_parts"
+    },
+    "S": {
+      "item": "scguns:gun_barrel"
+    },
+    "X": {
+      "item": "scguns:diamond_steel_blueprint"
+    },
+    "K": {
+      "item": "scguns:diamond_steel_gun_frame"
+    }
+  },
+  "pattern": [
+    "XKS",
+    "LRS",
+    "Q C"
+  ],
+  "result": {
+    "item": "scguns:drill_conversion"
+  }
+}

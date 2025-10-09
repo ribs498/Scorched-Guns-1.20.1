@@ -1,0 +1,45 @@
+{
+  "type": "create:crushing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "scguns:railworker"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "scguns:treated_iron_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:treated_iron_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:empty_tank"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_parts"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_magazine"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:firing_unit"
+    }
+  ]
+}

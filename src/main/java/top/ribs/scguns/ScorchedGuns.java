@@ -27,23 +27,21 @@ import top.ribs.scguns.client.screen.*;
 import top.ribs.scguns.common.BoundingBoxManager;
 import top.ribs.scguns.common.NetworkGunManager;
 import top.ribs.scguns.common.ProjectileManager;
+import top.ribs.scguns.common.TurretManager;
 import top.ribs.scguns.common.exosuit.ExoSuitUpgradeManager;
 import top.ribs.scguns.compat.CreateModCondition;
 import top.ribs.scguns.compat.FarmersDelightModCondition;
 import top.ribs.scguns.compat.IEModCondition;
 import top.ribs.scguns.compat.SoulFiredModCondition;
+import top.ribs.scguns.config.*;
 import top.ribs.scguns.event.SculkHordeEvents;
-import top.ribs.scguns.config.MerchantTradeConfig;
-import top.ribs.scguns.config.ProjectileAdvantageConfig;
-import top.ribs.scguns.entity.config.ConfigLoader;
 import top.ribs.scguns.entity.projectile.*;
 import top.ribs.scguns.entity.throwable.GrenadeEntity;
 import top.ribs.scguns.event.*;
-import top.ribs.scguns.faction.GunMobValues;
-import top.ribs.scguns.faction.GunnerMobSpawner;
+import top.ribs.scguns.config.GunMobValues;
+import top.ribs.scguns.config.GunnerMobSpawner;
 import top.ribs.scguns.init.ModBlockEntities;
 import top.ribs.scguns.client.ClientHandler;
-import top.ribs.scguns.entity.config.CogMinionConfig;
 import top.ribs.scguns.init.*;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.world.VillageStructures;
@@ -57,7 +55,6 @@ import static top.ribs.scguns.compat.CompatManager.SCULK_HORDE_LOADED;
 public class ScorchedGuns {
     public static final String MODID = "scguns";
     public static final Logger LOGGER = LogManager.getLogger(MOD_ID);
-    public static CogMinionConfig COG_MINION_CONFIG = new CogMinionConfig();
     public static boolean backpackedLoaded;
     public static boolean curiosLoaded;
     public static boolean controllableLoaded;
@@ -75,7 +72,6 @@ public class ScorchedGuns {
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, Config.clientSpec);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.commonSpec);
-        Config.GunScalingConfig.setup();
         ModLoadingContext.get().registerConfig(ModConfig.Type.SERVER, Config.serverSpec);
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -127,8 +123,12 @@ public class ScorchedGuns {
         MinecraftForge.EVENT_BUS.register(OceanWeaponEventHandler.class);
         MinecraftForge.EVENT_BUS.register(PiglinWeaponEventHandler.class);
         MinecraftForge.EVENT_BUS.register(MerchantTradeConfig.class);
+        MinecraftForge.EVENT_BUS.register(GunnerMobConfig.class);
+        MinecraftForge.EVENT_BUS.register(TieredWeaponConfig.class);
+        MinecraftForge.EVENT_BUS.register(EliteTierConfig.class);
+        MinecraftForge.EVENT_BUS.register(EntityEquipmentConfig.class);
         MinecraftForge.EVENT_BUS.register(ProjectileAdvantageConfig.class);
-
+        MinecraftForge.EVENT_BUS.register(TurretManager.class);
 
         if (SCULK_HORDE_LOADED) {
             MinecraftForge.EVENT_BUS.register(SculkHordeEvents.class);
@@ -211,7 +211,7 @@ public class ScorchedGuns {
             ProjectileManager.getInstance().registerFactory(ModItems.STANDARD_BULLET.get(), (worldIn, entity, weapon, item, modifiedGun) -> new BasicBulletProjectileEntity(ModEntities.BASIC_BULLET_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.ADVANCED_BULLET.get(), (worldIn, entity, weapon, item, modifiedGun) -> new HardenedBulletProjectileEntity(ModEntities.HARDENED_BULLET_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.NEEDLE.get(), (worldIn, entity, weapon, item, modifiedGun) -> new NeedleProjectileEntity(ModEntities.NEEDLE_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
-            ProjectileManager.getInstance().registerFactory(ModItems.FLECHETTE.get(), (worldIn, entity, weapon, item, modifiedGun) -> new NeedleProjectileEntity(ModEntities.NEEDLE_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
+            ProjectileManager.getInstance().registerFactory(ModItems.FLECHETTE.get(), (worldIn, entity, weapon, item, modifiedGun) -> new FlechetteProjectileEntity(ModEntities.FLECHETTE_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.BUCKSHOT.get(), (worldIn, entity, weapon, item, modifiedGun) -> new BuckshotProjectileEntity(ModEntities.BUCKSHOT_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.NITRO_BUCKSHOT.get(), (worldIn, entity, weapon, item, modifiedGun) -> new BuckshotProjectileEntity(ModEntities.BUCKSHOT_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.SHOTBALL.get(), (worldIn, entity, weapon, item, modifiedGun) -> new ShotballProjectileEntity(ModEntities.SHOTBALL_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
@@ -222,17 +222,6 @@ public class ScorchedGuns {
 
           if (Config.COMMON.gameplay.improvedHitboxes.get()) {
                 MinecraftForge.EVENT_BUS.register(new BoundingBoxManager());
-            }
-            try {
-                InputStream inputStream = ScorchedGuns.class.getClassLoader().getResourceAsStream("data/scguns/entity/cog_minion_item.json");
-                if (inputStream != null) {
-                    COG_MINION_CONFIG = ConfigLoader.loadCogMinionConfig(inputStream);
-                    inputStream.close();
-                } else {
-                    LOGGER.error("Could not find Cog Minion config");
-                }
-            } catch (IOException e) {
-                LOGGER.error("Failed to load Cog Minion config", e);
             }
         });
     }

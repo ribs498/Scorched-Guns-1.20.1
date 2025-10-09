@@ -26,6 +26,10 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
     protected int seeTime;
     protected int attackTime;
     protected final float attackRadiusSqr;
+    protected double idealRange;
+    protected double minRange;
+
+    protected float accuracyModifier = 1.0F;
 
     protected int strafingTime = -1;
     protected boolean shouldStrafe = false;
@@ -41,27 +45,48 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
     protected boolean isPanicked = false;
     protected int panickTimer = 0;
 
-    protected AIType aiType = AIType.TACTICAL;
+    protected AIType aiType;
 
     protected Vec3 lastKnownPosition;
 
-    protected float spreadModifier = 10;
     protected int burstAmount = 3;
     protected int burstTimer = 20;
 
-    public GunAttackGoal(T shooter, double stopRange, float speedModifier, AIType aiType, int difficulty) {
+    protected static final float ROTATION_SPEED = 15.0F;
+
+    public GunAttackGoal(T shooter, ItemStack gunStack, float speedModifier, AIType aiType, int difficulty) {
         this.shooter = shooter;
         this.speedModifier = speedModifier;
         this.attackTime = -1;
-        this.attackRadiusSqr = (float) (stopRange * stopRange);
         this.aiType = aiType;
+
+        if (gunStack.getItem() instanceof GunItem gunItem) {
+            Gun gun = gunItem.getModifiedGun(gunStack);
+            this.idealRange = gun.getIdealAttackRange();
+            this.minRange = gun.getMinAttackRange();
+        } else {
+            this.idealRange = 15.0;
+            this.minRange = 8.0;
+        }
+
+        this.attackRadiusSqr = (float) (this.idealRange * this.idealRange);
+
         if (this.shooter.getTarget() != null) {
             this.lastKnownPosition = this.shooter.getTarget().position();
         }
 
-        this.spreadModifier /= difficulty;
-        this.burstAmount *= difficulty;
-        this.burstTimer /= difficulty;
+        float baseAccuracy = switch(aiType) {
+            case TACTICAL -> 2.5F;
+            case DEFAULT -> 2.0F;
+            case RECKLESS -> 1.2F;
+            case COWARD -> 1.5F;
+        };
+
+        float difficultyBonus = 1.0F + ((difficulty - 1) * 0.3F);
+        this.accuracyModifier = baseAccuracy * difficultyBonus;
+
+        this.burstAmount = 2 + (difficulty / 2);
+        this.burstTimer = Math.max(10, 30 - (difficulty * 4));
     }
 
     @Override
@@ -168,7 +193,10 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
             }
 
             boolean inRange = distanceToTarget <= this.attackRadiusSqr;
+            boolean tooClose = distanceToTarget < (this.minRange * this.minRange);
+            boolean isRetreating = false;
 
+            // Movement logic
             if (!inRange || !canSeeTarget) {
                 if (this.shooter.tickCount % 20 == 0 || this.shooter.getNavigation().isDone()) {
                     if (this.aiType == AIType.RECKLESS) {
@@ -179,6 +207,13 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
                 }
                 this.shouldStrafe = false;
                 this.strafingTime = -1;
+            } else if (tooClose && this.aiType != AIType.RECKLESS) {
+                Vec3 awayVector = this.shooter.position().subtract(target.position()).normalize();
+                Vec3 retreatPos = this.shooter.position().add(awayVector.scale(2.0));
+                this.shooter.getNavigation().moveTo(retreatPos.x, retreatPos.y, retreatPos.z, this.speedModifier * 0.8);
+                this.shouldStrafe = false;
+                this.strafingTime = -1;
+                isRetreating = true;
             } else {
                 this.shooter.getNavigation().stop();
                 if (this.aiType != AIType.RECKLESS) {
@@ -201,9 +236,12 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
                     }
                 }
             }
-            if (inRange && canSeeTarget && this.seeTime >= 10) {
-                this.shooter.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
 
+            if (canSeeTarget) {
+                updateSmoothRotation(target);
+            }
+
+            if (inRange && canSeeTarget && this.seeTime >= 5 && !isRetreating) {
                 if (this.shooter.getMainHandItem().getTag().getInt("AmmoCount") > 0) {
                     if (--this.attackTime <= 0) {
                         if (remainingBursts <= 0 && burstResetTimer <= 0) {
@@ -231,6 +269,30 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
         }
     }
 
+    private void updateSmoothRotation(LivingEntity target) {
+        Vec3 targetPos = target.position().add(0, target.getEyeHeight() * 0.8, 0);
+        Vec3 shooterPos = this.shooter.position().add(0, this.shooter.getEyeHeight(), 0);
+        Vec3 toTarget = targetPos.subtract(shooterPos);
+
+        double horizontalDist = Math.sqrt(toTarget.x * toTarget.x + toTarget.z * toTarget.z);
+        float desiredYaw = (float)(Math.atan2(toTarget.z, toTarget.x) * (180.0 / Math.PI)) - 90.0F;
+        float desiredPitch = (float)(-(Math.atan2(toTarget.y, horizontalDist) * (180.0 / Math.PI)));
+
+        float yawDiff = desiredYaw - this.shooter.getYRot();
+        while (yawDiff > 180.0F) yawDiff -= 360.0F;
+        while (yawDiff < -180.0F) yawDiff += 360.0F;
+
+        float newYaw = this.shooter.getYRot() + Math.max(-ROTATION_SPEED, Math.min(ROTATION_SPEED, yawDiff));
+        float newPitch = this.shooter.getXRot() + Math.max(-ROTATION_SPEED, Math.min(ROTATION_SPEED, desiredPitch - this.shooter.getXRot()));
+
+        this.shooter.setYRot(newYaw);
+        this.shooter.setXRot(newPitch);
+        this.shooter.yBodyRot = newYaw;
+        this.shooter.yBodyRotO = this.shooter.yBodyRot;
+        this.shooter.yHeadRot = newYaw;
+        this.shooter.yHeadRotO = this.shooter.yHeadRot;
+    }
+
     private void shoot(LivingEntity target, Gun gun) {
         if (this.shooter.hasEffect(ModEffects.BLINDED.get())) {
             if (this.shooter.getRandom().nextBoolean()) {
@@ -239,7 +301,7 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
         }
 
         ItemStack heldItem = this.shooter.getMainHandItem();
-        AIGunEvent.performGunAttack(this.shooter, target, heldItem, gun, this.spreadModifier);
+        AIGunEvent.performGunAttack(this.shooter, target, heldItem, gun, this.accuracyModifier);
 
         this.attackTime = gun.getGeneral().getRate();
         consumeAmmo(heldItem);

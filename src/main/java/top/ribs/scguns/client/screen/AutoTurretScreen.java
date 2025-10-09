@@ -10,8 +10,10 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.blockentity.AutoTurretBlockEntity;
 import top.ribs.scguns.blockentity.BasicTurretBlockEntity;
+import top.ribs.scguns.blockentity.ShotgunTurretBlockEntity;
 
 import java.util.Objects;
 import java.util.UUID;
@@ -35,15 +37,16 @@ public class AutoTurretScreen extends AbstractContainerScreen<AutoTurretMenu> {
         guiGraphics.blit(TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight);
     }
     @Override
-    public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
+    public void render(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float delta) {
         this.renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, delta);
         this.renderTooltip(guiGraphics, mouseX, mouseY);
 
-       AutoTurretBlockEntity turret = menu.getBlockEntity();
+        AutoTurretBlockEntity turret = menu.getBlockEntity();
         String ownerName = turret.getOwnerName();
 
-        guiGraphics.drawString(this.font, "Owner: " + ownerName, this.leftPos + 80, this.topPos + 6, 0x404040, false);
+        Component ownerText = Component.translatable("info.scguns.turret.owner", ownerName);
+        guiGraphics.drawString(this.font, ownerText, this.leftPos + 90, this.topPos + 6, 0x404040, false);
     }
 
 }

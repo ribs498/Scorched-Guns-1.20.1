@@ -1,8 +1,14 @@
 {
   "type": "minecraft:stonecutting",
   "count": 8,
-  "ingredient": {
+  "ingredient":
+[
+  {
     "item": "scguns:anthralite_ingot"
   },
+  {
+    "item": "scguns:treated_iron_ingot"
+  }
+],
   "result": "scguns:flechette"
 }

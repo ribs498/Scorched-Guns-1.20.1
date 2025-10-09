@@ -1,0 +1,194 @@
+{
+  "ANTIQUE": {
+    "weapons": [
+      "scguns:fencer_carabine",
+      "scguns:fencer_thumper"
+    ],
+    "armor": [
+      {
+        "item": "minecraft:leather_helmet",
+        "slot": "head",
+        "chance": 0.8
+      },
+      {
+        "item": "minecraft:leather_chestplate",
+        "slot": "chest",
+        "chance": 0.8
+      },
+      {
+        "item": "minecraft:leather_leggings",
+        "slot": "legs",
+        "chance": 0.6
+      },
+      {
+        "item": "minecraft:leather_boots",
+        "slot": "feet",
+        "chance": 0.6
+      }
+    ]
+  },
+  "FRONTIER": {
+    "weapons": [
+      "scguns:callwell_terminal",
+      "scguns:saketini_ironport"
+    ],
+    "armor": [
+      {
+        "item": "minecraft:chainmail_helmet",
+        "slot": "head",
+        "chance": 0.8
+      },
+      {
+        "item": "minecraft:chainmail_chestplate",
+        "slot": "chest",
+        "chance": 0.8
+      },
+      {
+        "item": "minecraft:chainmail_leggings",
+        "slot": "legs",
+        "chance": 0.6
+      },
+      {
+        "item": "minecraft:chainmail_boots",
+        "slot": "feet",
+        "chance": 0.6
+      }
+    ]
+  },
+  "COPPER": {
+    "weapons": [
+      "scguns:llr_director",
+      "scguns:birdfeeder"
+    ],
+    "armor": [
+      {
+        "item": "scguns:copper_helmet",
+        "slot": "head",
+        "chance": 0.9
+      },
+      {
+        "item": "scguns:copper_chestplate",
+        "slot": "chest",
+        "chance": 0.9
+      },
+      {
+        "item": "scguns:copper_leggings",
+        "slot": "legs",
+        "chance": 0.7
+      },
+      {
+        "item": "scguns:copper_boots",
+        "slot": "feet",
+        "chance": 0.7
+      }
+    ]
+  },
+  "IRON": {
+    "weapons": [
+      "scguns:brawler",
+      "scguns:iron_javelin"
+    ],
+    "armor": [
+      {
+        "item": "scguns:anthralite_helmet",
+        "slot": "head",
+        "chance": 0.9
+      },
+      {
+        "item": "scguns:anthralite_chestplate",
+        "slot": "chest",
+        "chance": 0.9
+      },
+      {
+        "item": "scguns:anthralite_leggings",
+        "slot": "legs",
+        "chance": 0.7
+      },
+      {
+        "item": "scguns:anthralite_boots",
+        "slot": "feet",
+        "chance": 0.7
+      }
+    ]
+  },
+  "WRECKER": {
+    "weapons": [],
+    "armor": []
+  },
+  "OCEAN": {
+    "weapons": [],
+    "armor": []
+  },
+  "DIAMOND_STEEL": {
+    "weapons": [
+      "scguns:plasgun",
+      "scguns:mas_55"
+    ],
+    "armor": [
+      {
+        "item": "scguns:diamond_steel_helmet",
+        "slot": "head",
+        "chance": 1.0
+      },
+      {
+        "item": "scguns:diamond_steel_chestplate",
+        "slot": "chest",
+        "chance": 1.0
+      },
+      {
+        "item": "scguns:diamond_steel_leggings",
+        "slot": "legs",
+        "chance": 0.8
+      },
+      {
+        "item": "scguns:diamond_steel_boots",
+        "slot": "feet",
+        "chance": 0.8
+      }
+    ]
+  },
+  "TREATED_BRASS": {
+    "weapons": [
+      "scguns:jackhammer",
+      "scguns:gauss_rifle"
+    ],
+    "armor": [
+      {
+        "item": "scguns:treated_brass_helmet",
+        "slot": "head",
+        "chance": 1.0
+      },
+      {
+        "item": "scguns:treated_brass_chestplate",
+        "slot": "chest",
+        "chance": 1.0
+      },
+      {
+        "item": "scguns:treated_brass_leggings",
+        "slot": "legs",
+        "chance": 0.8
+      },
+      {
+        "item": "scguns:treated_brass_boots",
+        "slot": "feet",
+        "chance": 0.8
+      }
+    ]
+  },
+  "PIGLIN": {
+    "weapons": [],
+    "armor": []
+  },
+  "DEEP_DARK": {
+    "weapons": [],
+    "armor": []
+  },
+  "END": {
+    "weapons": [],
+    "armor": []
+  },
+  "SCORCHED": {
+    "weapons": [],
+    "armor": []
+  }
+}

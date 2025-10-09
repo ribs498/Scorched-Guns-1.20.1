@@ -4,6 +4,7 @@ import com.mrcrayfish.framework.api.network.LevelLocation;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,14 +30,28 @@ import top.ribs.scguns.interfaces.IProjectileFactory;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageBulletTrail;
+import top.ribs.scguns.network.message.S2CMessageEntityCasingEject;
 import top.ribs.scguns.network.message.S2CMessageEntityMuzzleFlash;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
 
 
 public class AIGunEvent {
+    public static Vec3 getLeadingDirection(LivingEntity shooter, LivingEntity target, double projectileSpeed) {
+        Vec3 targetPos = target.position().add(0, target.getEyeHeight() * 0.8, 0);
+        Vec3 targetVelocity = target.getDeltaMovement();
+        Vec3 shooterPos = shooter.position().add(0, shooter.getEyeHeight(), 0);
 
-    public static void performGunAttack(Mob shooter, LivingEntity target, ItemStack itemStack, Gun modifiedGun, float spreadModifier) {
+        Vec3 toTarget = targetPos.subtract(shooterPos);
+        double distance = toTarget.length();
+        double timeToHit = distance / projectileSpeed;
+
+        Vec3 predictedPos = targetPos.add(targetVelocity.scale(timeToHit));
+
+        return predictedPos.subtract(shooterPos).normalize();
+    }
+
+    public static void performGunAttack(Mob shooter, LivingEntity target, ItemStack itemStack, Gun modifiedGun, float accuracyModifier){
         final Level level = shooter.level();
         if (level.isClientSide()) return;
 
@@ -45,19 +60,27 @@ public class AIGunEvent {
         ProjectileEntity[] spawnedProjectiles = new ProjectileEntity[count];
 
         if (shooter.hasEffect(ModEffects.DEAFENED.get()) || shooter.hasEffect(ModEffects.BLINDED.get())) {
-            spreadModifier *= 2;
+            accuracyModifier *= 0.5F;
         }
         if (target.hasEffect(ModEffects.DEAFENED.get())) {
-            spreadModifier *= 1.5F;
+            accuracyModifier *= 0.75F;
         }
+
+        float aiDamageMultiplier = getAIDamageMultiplier(level.getDifficulty());
 
         for (int i = 0; i < count; ++i) {
             IProjectileFactory factory = ProjectileManager.getInstance().getFactory(BuiltInRegistries.ITEM.getKey(projectileProps.getItem()));
             ProjectileEntity projectileEntity = factory.create(level, shooter, itemStack, (GunItem) itemStack.getItem(), modifiedGun);
             projectileEntity.setWeapon(itemStack);
-            projectileEntity.setAdditionalDamage(Gun.getAdditionalDamage(itemStack));
 
-            Vec3 dir = getDirection(shooter, itemStack, (GunItem) itemStack.getItem(), modifiedGun, spreadModifier);
+            float originalDamage = Gun.getAdditionalDamage(itemStack);
+            float scaledDamage = originalDamage * aiDamageMultiplier;
+            projectileEntity.setAdditionalDamage(scaledDamage);
+
+            projectileEntity.getPersistentData().putFloat("AIDamageScale", aiDamageMultiplier);
+
+            Vec3 dir = getDirection(shooter, target, itemStack, (GunItem) itemStack.getItem(), modifiedGun, accuracyModifier);
+
             double speedModifier = GunEnchantmentHelper.getProjectileSpeedModifier(itemStack);
             double speed = GunModifierHelper.getModifiedProjectileSpeed(itemStack, projectileEntity.getProjectile().getSpeed() * speedModifier);
 
@@ -79,7 +102,6 @@ public class AIGunEvent {
         int z1 = (int) shooter.getZ();
         double r = Config.COMMON.network.projectileTrackingRange.get();
 
-        // Send bullet trail
         ParticleOptions data = GunEnchantmentHelper.getParticle(itemStack);
         boolean isVisible = !modifiedGun.getProjectile().hideTrail();
         S2CMessageBulletTrail messageBulletTrail = new S2CMessageBulletTrail(spawnedProjectiles, projectileProps, shooter.getId(), data, isVisible);
@@ -88,7 +110,6 @@ public class AIGunEvent {
                 messageBulletTrail
         );
 
-        // Send muzzle flash
         if (modifiedGun.getDisplay().getFlash() != null) {
             float randomValue = level.random.nextFloat();
             S2CMessageEntityMuzzleFlash flashMessage = new S2CMessageEntityMuzzleFlash(shooter.getId(), randomValue);
@@ -98,7 +119,19 @@ public class AIGunEvent {
             );
         }
 
-        // Fire lights
+        if (Config.COMMON.gameplay.spawnCasings.get()) {
+            if (modifiedGun.getProjectile().ejectsCasing() && !modifiedGun.getProjectile().ejectDuringReload()) {
+                ResourceLocation particleLocation = modifiedGun.getProjectile().getCasingParticle();
+                if (particleLocation != null) {
+                    S2CMessageEntityCasingEject casingMessage = new S2CMessageEntityCasingEject(shooter.getId(), particleLocation);
+                    PacketHandler.getPlayChannel().sendToNearbyPlayers(
+                            () -> LevelLocation.create(level, radius, y1, z1, r),
+                            casingMessage
+                    );
+                }
+            }
+        }
+
         if (Config.CLIENT.display.fireLights.get()) {
             BlockState targetState = shooter.level().getBlockState(BlockPos.containing(shooter.getEyePosition()));
             if (targetState.getBlock() == ModBlocks.TEMPORARY_LIGHT.get()) {
@@ -112,53 +145,70 @@ public class AIGunEvent {
         }
     }
 
-    public static Vec3 getDirection(LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun, float spreadModifier)
-    {
+    private static float getAIDamageMultiplier(Difficulty difficulty) {
+        return switch(difficulty) {
+            case PEACEFUL -> 0.05F;
+            case EASY -> 0.1F;
+            case NORMAL -> 0.2F;
+            case HARD -> 0.3F;
+        };
+    }
+
+    public static Vec3 getDirection(LivingEntity shooter, LivingEntity target, ItemStack weapon, GunItem item, Gun modifiedGun, float accuracyModifier) {
         float gunSpread = GunModifierHelper.getModifiedSpread(weapon, modifiedGun.getGeneral().getSpread());
 
-        if(gunSpread == 0F)
-        {
-            return getVectorFromRotation(shooter.getViewXRot(1F), shooter.getViewYRot(1F));
+        float baseAimError = 5.0F;
+
+        float difficultyMod = switch(shooter.level().getDifficulty()) {
+            case PEACEFUL -> 3.0F;
+            case EASY -> 2.0F;
+            case NORMAL -> 1.5F;
+            case HARD -> 1.0F;
+        };
+
+        float aimError = (baseAimError * difficultyMod) / accuracyModifier;
+
+        aimError = Math.min(aimError, 25F);
+
+        Vec3 baseDirection = getVectorFromRotation(shooter.getViewXRot(1F), shooter.getViewYRot(1F));
+
+        if (shooter.level().getDifficulty() == Difficulty.HARD && target.getDeltaMovement().lengthSqr() > 0.01) {
+            double speed = modifiedGun.getProjectile().getSpeed();
+            Vec3 leadDir = getLeadingDirection(shooter, target, speed);
+            baseDirection = baseDirection.add(leadDir.scale(0.3)).normalize();
         }
 
-        if(shooter instanceof Player)
-        {
-            if(!modifiedGun.getGeneral().isAlwaysSpread())
-            {
-                gunSpread *= SpreadTracker.get((Player) shooter).getSpread(item);
-            }
+        float aimErrorRad = aimError * Mth.DEG_TO_RAD;
+        float theta1 = shooter.level().random.nextFloat() * 2F * (float) Math.PI;
+        float r1 = Mth.sqrt(shooter.level().random.nextFloat()) * (float) Math.tan(aimErrorRad);
 
-            if(ModSyncedDataKeys.AIMING.getValue((Player) shooter))
-            {
-                gunSpread *= 0.5F;
-            }
-        }
-        else {
-            //gunSpread *= shooter.level().getDifficulty() != Difficulty.HARD ? 10F : 5F;
-            gunSpread *= shooter.level().getDifficulty() != Difficulty.HARD ? spreadModifier*2 : spreadModifier;
-            if (gunSpread > 60) {
-                gunSpread = 60;
-            }
+        Vec3 vecUpwards = getVectorFromRotation(shooter.getViewXRot(1F) + 90F, shooter.getViewYRot(1F));
+        Vec3 vecSideways = baseDirection.cross(vecUpwards);
+
+        float a1 = Mth.cos(theta1) * r1;
+        float a2 = Mth.sin(theta1) * r1;
+
+        Vec3 aimedDirection = baseDirection.add(vecSideways.scale(a1)).add(vecUpwards.scale(a2)).normalize();
+
+        if (gunSpread == 0F) {
+            return aimedDirection;
         }
 
         gunSpread = Math.min(gunSpread, 170F) * 0.5F * Mth.DEG_TO_RAD;
 
-        Vec3 vecforwards = getVectorFromRotation(shooter.getXRot(), shooter.getYRot());
-        Vec3 vecupwards = getVectorFromRotation(shooter.getXRot() + 90F, shooter.getYRot());
-        Vec3 vecsideways = vecforwards.cross(vecupwards);
+        Vec3 spreadUpwards = getVectorFromRotation(shooter.getViewXRot(1F) + 90F, shooter.getViewYRot(1F));
+        Vec3 spreadSideways = aimedDirection.cross(spreadUpwards);
 
-        float theta = shooter.level().random.nextFloat() * 2F * (float) Math.PI;
-        float r = Mth.sqrt(shooter.level().random.nextFloat()) * (float) Math.tan((double) gunSpread);
+        float theta2 = shooter.level().random.nextFloat() * 2F * (float) Math.PI;
+        float r2 = Mth.sqrt(shooter.level().random.nextFloat()) * (float) Math.tan(gunSpread);
 
-        float a1 = Mth.cos(theta) * r;
-        float a2 = Mth.sin(theta) * r;
+        float b1 = Mth.cos(theta2) * r2;
+        float b2 = Mth.sin(theta2) * r2;
 
-
-        return vecforwards.add(vecsideways.scale(a1)).add(vecupwards.scale(a2)).normalize();
+        return aimedDirection.add(spreadSideways.scale(b1)).add(spreadUpwards.scale(b2)).normalize();
     }
 
-    private static Vec3 getVectorFromRotation(float pitch, float yaw)
-    {
+    private static Vec3 getVectorFromRotation(float pitch, float yaw) {
         float f = Mth.cos(-yaw * 0.017453292F - (float) Math.PI);
         float f1 = Mth.sin(-yaw * 0.017453292F - (float) Math.PI);
         float f2 = -Mth.cos(-pitch * 0.017453292F);

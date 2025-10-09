@@ -51,11 +51,12 @@
     "life": 100,
     "size": 1.0,
     "speed": 9.0,
-    "trailLengthMultiplier": 0.2
+    "trailLengthMultiplier": 0.2,
+    "trailThickness": 0.5
   },
   "reloads": {
     "emptyMagTimer": 30,
-    "maxAmmo": 8,
+    "maxAmmo": 10,
     "reloadItem": "scguns:advanced_bullet",
     "reloadTimer": 30,
     "reloadType": "scguns:mag_fed"

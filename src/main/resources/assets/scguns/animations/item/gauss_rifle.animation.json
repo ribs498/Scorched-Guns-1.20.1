@@ -802,7 +802,7 @@
 			},
 			"sound_effects": {
 				"0.0833": {
-					"effect": "bolt"
+					"effect": "hiss"
 				},
 				"0.6667": {
 					"effect": "reload_mag_out"

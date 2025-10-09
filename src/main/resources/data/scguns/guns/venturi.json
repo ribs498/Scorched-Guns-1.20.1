@@ -5,10 +5,10 @@
     "weaponType": "shotgun",
     "alwaysSpread": true,
     "fireMode": "scguns:pulse",
-    "fireTimer": 30,
+    "fireTimer": 20,
     "gripType": "scguns:two_handed_shotgun",
     "baseGripType": "scguns:two_handed_shotgun",
-    "projectileAmount": 7,
+    "projectileAmount": 5,
     "rate": 12,
     "recoilAngle": 1.5,
     "recoilKick": 1.0,
@@ -47,7 +47,8 @@
     "life": 50,
     "size": 1.0,
     "speed": 4.0,
-    "trailLengthMultiplier": 0.2
+    "trailLengthMultiplier": 0.2,
+    "trailThickness": 0.5
   },
   "reloads": {
     "emptyMagTimer": 30,

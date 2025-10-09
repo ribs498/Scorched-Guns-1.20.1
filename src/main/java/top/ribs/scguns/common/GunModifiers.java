@@ -12,20 +12,10 @@ public class GunModifiers
 {
     public static final IGunModifier LONG_SCOPE_SENSITIVITY_COMPENSATION = new IGunModifier()
     {
-        @Override
-        public double modifyMouseSensitivity(double sensitivity)
-        {
-            return sensitivity * 2.0;
-        }
     };
 
     public static final IGunModifier MEDIUM_SCOPE_SENSITIVITY_COMPENSATION = new IGunModifier()
     {
-        @Override
-        public double modifyMouseSensitivity(double sensitivity)
-        {
-            return sensitivity * 1.5;
-        }
     };
     public static final IGunModifier SILENCED = new IGunModifier()
     {
@@ -151,14 +141,6 @@ public class GunModifiers
         }
     };
 
-    public static final IGunModifier LONG_SCOPE_SPREAD_REDUCTION = new IGunModifier()
-    {
-        @Override
-        public float modifyProjectileSpread(float spread)
-        {
-            return spread * 0.8F;
-        }
-    };
 
     public static final IGunModifier MEDIUM_SCOPE_RECOIL_REDUCTION = new IGunModifier()
     {
@@ -175,21 +157,13 @@ public class GunModifiers
         }
     };
 
-    public static final IGunModifier MEDIUM_SCOPE_SPREAD_REDUCTION = new IGunModifier()
-    {
-        @Override
-        public float modifyProjectileSpread(float spread)
-        {
-            return spread * 0.85F;
-        }
-    };
 
     public static final IGunModifier REFLEX_SIGHT_CRIT_BONUS = new IGunModifier()
     {
         @Override
         public float criticalChance()
         {
-            return 0.05F;
+            return 0.025F;
         }
     };
 
@@ -477,7 +451,7 @@ public class GunModifiers
 
         @Override
         public int modifyAmmoCapacity(int baseCapacity) {
-            return (int) (baseCapacity * 2.25);
+            return (int) (baseCapacity * 2.0);
         }
 
         @Override

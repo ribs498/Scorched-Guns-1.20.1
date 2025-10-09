@@ -8,7 +8,7 @@
     }
   },
   "general": {
-    "weaponType": "pistol",
+    "weaponType": "magnum",
     "alwaysSpread": false,
     "fireMode": "scguns:burst",
     "burstAmount": 2,

@@ -212,6 +212,7 @@ public class ServerPlayHandler {
         return arrow;
     }
 
+
     private static void fireProjectiles(Level world, ServerPlayer player, ItemStack heldItem, GunItem item, Gun modifiedGun) {
         int count = modifiedGun.getGeneral().getProjectileAmount();
         Gun.Projectile projectileProps = modifiedGun.getProjectile();
@@ -227,11 +228,10 @@ public class ServerPlayHandler {
             projectileEntity.tick();
         }
 
-        if (projectileProps.isVisible() && !projectileProps.shouldHideProjectile()) {
+        if (!projectileProps.shouldHideProjectile()) {
             sendProjectileTrail(player, spawnedProjectiles, projectileProps);
         }
     }
-
     private static void sendProjectileTrail(ServerPlayer player, ProjectileEntity[] projectiles, Gun.Projectile projectileProps) {
         double spawnX = player.getX();
         double spawnY = player.getY() + 1.0;
@@ -243,7 +243,7 @@ public class ServerPlayHandler {
                 projectiles,
                 projectileProps,
                 player.getId(),
-                data);
+                data, true);
 
         PacketHandler.getPlayChannel().sendToNearbyPlayers(
                 () -> LevelLocation.create(player.level(), spawnX, spawnY, spawnZ, radius),

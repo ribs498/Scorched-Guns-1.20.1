@@ -8,7 +8,7 @@
     }
   },
   "general": {
-    "weaponType": "pistol",
+    "weaponType": "sniper",
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",

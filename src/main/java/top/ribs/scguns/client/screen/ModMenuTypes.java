@@ -41,6 +41,8 @@ public static final RegistryObject<MenuType<BasicTurretMenu>> BASIC_TURRET_MENU 
             MENUS.register("shotgun_turret_menu", () -> IForgeMenuType.create(ShotgunTurretMenu::new));
     public static final RegistryObject<MenuType<AutoTurretMenu>> AUTO_TURRET_MENU =
             MENUS.register("auto_turret_menu", () -> IForgeMenuType.create(AutoTurretMenu::new));
+    public static final RegistryObject<MenuType<SniperTurretMenu>> SNIPER_TURRET_MENU =
+            MENUS.register("sniper_turret_menu", () -> IForgeMenuType.create(SniperTurretMenu::new));
     public static final RegistryObject<MenuType<LightningBatteryMenu>> LIGHTING_BATTERY_MENU =
             MENUS.register("lightning_battery_menu", () -> IForgeMenuType.create(LightningBatteryMenu::new));
     public static final RegistryObject<MenuType<MechanicalPressMenu>> MECHANICAL_PRESS_MENU =

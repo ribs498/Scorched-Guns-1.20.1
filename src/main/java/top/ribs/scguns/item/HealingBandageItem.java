@@ -44,7 +44,6 @@ public class HealingBandageItem extends Item {
             if (player.hasEffect(ModEffects.LACERATED.get())) {
                 player.removeEffect(ModEffects.LACERATED.get());
             }
-
             for (MobEffectInstance effect : potionEffects) {
                 if (effect != null) {
                     player.addEffect(new MobEffectInstance(effect));

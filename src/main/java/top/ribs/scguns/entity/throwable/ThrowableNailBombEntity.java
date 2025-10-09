@@ -5,6 +5,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -15,6 +16,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.network.PacketHandler;
@@ -29,6 +31,9 @@ import java.util.List;
 public class ThrowableNailBombEntity extends ThrowableGrenadeEntity
 {
     public float rotation;
+    private static final float LACERATION_CHANCE = 0.35f;
+    private static final int LACERATION_DURATION = 200;
+    private static final int LACERATION_AMPLIFIER = 0;
 
     public ThrowableNailBombEntity(EntityType<? extends ThrowableGrenadeEntity> entityType, Level worldIn)
     {
@@ -204,14 +209,26 @@ public class ThrowableNailBombEntity extends ThrowableGrenadeEntity
         }
 
         entity.hurt(damageSource, damage);
-        if (entity instanceof LivingEntity && !world.isClientSide()) {
+        if (entity instanceof LivingEntity livingEntity && !world.isClientSide()) {
+
+            if (world.random.nextFloat() < LACERATION_CHANCE) {
+                MobEffectInstance laceration = new MobEffectInstance(
+                        ModEffects.LACERATED.get(),
+                        LACERATION_DURATION,
+                        LACERATION_AMPLIFIER,
+                        false,
+                        false,
+                        true
+                );
+                livingEntity.addEffect(laceration);
+            }
+
             PacketHandler.getPlayChannel().sendToTracking(() -> entity,
                     new S2CMessageBlood(hitPos.x, hitPos.y, hitPos.z, entity.getType()));
         }
 
         entity.invulnerableTime = Math.min(entity.invulnerableTime, 3);
     }
-
     private static void createShrapnelTracer(Level world, Vec3 start, Vec3 end) {
         if (world.isClientSide()) return;
 

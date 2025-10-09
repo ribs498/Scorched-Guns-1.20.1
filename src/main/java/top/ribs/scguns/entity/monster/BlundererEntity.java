@@ -18,18 +18,16 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.IronGolem;
 import net.minecraft.world.entity.animal.Turtle;
-import net.minecraft.world.entity.monster.AbstractIllager;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.monster.RangedAttackMob;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.raid.Raider;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.ribs.scguns.entity.projectile.BrassBoltEntity;
+import top.ribs.scguns.entity.projectile.EnemyProjectileEntity;
 import top.ribs.scguns.init.ModSounds;
 
 import java.util.UUID;
@@ -226,7 +224,7 @@ public class BlundererEntity extends Raider implements RangedAttackMob {
         double baseZ = targetZ / distance;
 
         for (int i = 0; i < numberOfPellets; i++) {
-            BrassBoltEntity projectile = new BrassBoltEntity(this.level(), this);
+            EnemyProjectileEntity projectile = new EnemyProjectileEntity(this.level(), this);
 
             float spreadRadius = (float) (Math.random() * Math.toRadians(maxSpreadAngle));
             float spreadAngle = (float) (Math.random() * 2 * Math.PI);

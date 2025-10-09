@@ -27,6 +27,7 @@ public abstract class MixinIllagerModel {
             return;
         }
 
+        // Force arms to be visible and not crossed
         this.arms.visible = false;
         this.leftArm.visible = true;
         this.rightArm.visible = true;
@@ -38,6 +39,7 @@ public abstract class MixinIllagerModel {
         HumanoidArm mainArm = mob.getMainArm();
         boolean rightHanded = mainArm == HumanoidArm.RIGHT;
 
+        // Reset arm positions to default
         this.rightArm.x = -5.0F;
         this.rightArm.y = 2.0F;
         this.rightArm.z = 0.0F;
@@ -45,6 +47,7 @@ public abstract class MixinIllagerModel {
         this.leftArm.y = 2.0F;
         this.leftArm.z = 0.0F;
 
+        // Clear all rotations
         this.rightArm.xRot = 0;
         this.rightArm.yRot = 0;
         this.rightArm.zRot = 0;
@@ -53,17 +56,22 @@ public abstract class MixinIllagerModel {
         this.leftArm.zRot = 0;
 
         if (rightHanded) {
+            // Main arm aiming
             this.rightArm.xRot = (float) Math.toRadians(-90F);
             this.rightArm.yRot = (float) Math.toRadians(-10F);
             this.rightArm.zRot = 0;
 
+            // Support arm
             this.leftArm.xRot = (float) Math.toRadians(-85F);
             this.leftArm.yRot = (float) Math.toRadians(30F);
             this.leftArm.zRot = 0;
         } else {
+            // Main arm aiming
             this.leftArm.xRot = (float) Math.toRadians(-90F);
             this.leftArm.yRot = (float) Math.toRadians(10F);
             this.leftArm.zRot = 0;
+
+            // Support arm
             this.rightArm.xRot = (float) Math.toRadians(-85F);
             this.rightArm.yRot = (float) Math.toRadians(-30F);
             this.rightArm.zRot = 0;

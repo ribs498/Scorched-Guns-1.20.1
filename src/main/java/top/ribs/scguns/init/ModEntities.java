@@ -1,10 +1,8 @@
 package top.ribs.scguns.init;
 
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
-import net.minecraft.world.entity.monster.Blaze;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -13,11 +11,10 @@ import top.ribs.scguns.Reference;
 import top.ribs.scguns.entity.block.PrimedNitroKeg;
 import top.ribs.scguns.entity.block.PrimedPowderKeg;
 import top.ribs.scguns.entity.monster.*;
-import top.ribs.scguns.entity.projectile.BrassBoltEntity;
+import top.ribs.scguns.entity.projectile.EnemyProjectileEntity;
 import top.ribs.scguns.entity.projectile.*;
 import top.ribs.scguns.entity.projectile.turret.TurretProjectileEntity;
 import top.ribs.scguns.entity.throwable.*;
-import top.ribs.scguns.faction.raid.RaidEntity;
 
 import java.util.function.BiFunction;
 
@@ -42,9 +39,8 @@ public class ModEntities
                     .build("primed_nitro_keg"));
     public static final RegistryObject<EntityType<TurretProjectileEntity>> TURRET_PROJECTILE = REGISTER.register("basic_turret", () ->
             EntityType.Builder.<TurretProjectileEntity>of(TurretProjectileEntity::new, MobCategory.MISC).sized(0.5F, 0.5F).build("basic_turret"));
-    public static final RegistryObject<EntityType<RaidEntity>> RAID_ENTITY = REGISTER.register("raid_entity", () -> EntityType.Builder.<RaidEntity>of(RaidEntity::new, MobCategory.MISC).sized(3.0F, 3.0F).noSummon().noSave().fireImmune().build("raid_entity"));
 
-    public static final RegistryObject<EntityType<ProjectileEntity>> PROJECTILE = registerProjectile("projectile", ProjectileEntity::new);
+    public static final RegistryObject<EntityType<ProjectileEntity>> PROJECTILE = registerBasic("projectile", ProjectileEntity::new);
     public static final RegistryObject<EntityType<BearPackShellProjectileEntity>> BEARPACK_SHELL_PROJECTILE = registerBasic("bearpack_shell_projectile", BearPackShellProjectileEntity::new);
     public static final RegistryObject<EntityType<OsborneSlugProjectileEntity>> OSBORNE_SLUG_PROJECTILE = registerBasic("osborne_slug_projectile", OsborneSlugProjectileEntity::new);
     public static final RegistryObject<EntityType<PlasmaProjectileEntity>> PLASMA_PROJECTILE = registerBasic("plasma_projectile", PlasmaProjectileEntity::new);
@@ -54,6 +50,7 @@ public class ModEntities
     public static final RegistryObject<EntityType<BlazeRodProjectileEntity>> BLAZE_ROD_PROJECTILE = registerBasic("blaze_rod_projectile", BlazeRodProjectileEntity::new);
     public static final RegistryObject<EntityType<BasicBulletProjectileEntity>> BASIC_BULLET_PROJECTILE = registerBasic("basic_bullet_projectile", BasicBulletProjectileEntity::new);
     public static final RegistryObject<EntityType<NeedleProjectileEntity>> NEEDLE_PROJECTILE = registerBasic("needle_projectile", NeedleProjectileEntity::new);
+    public static final RegistryObject<EntityType<FlechetteProjectileEntity>> FLECHETTE_PROJECTILE = registerBasic("flechette_projectile", FlechetteProjectileEntity::new);
     public static final RegistryObject<EntityType<HardenedBulletProjectileEntity>> HARDENED_BULLET_PROJECTILE = registerBasic("hardened_bullet_projectile", HardenedBulletProjectileEntity::new);
     public static final RegistryObject<EntityType<BuckshotProjectileEntity>> BUCKSHOT_PROJECTILE = registerBasic("buckshot_projectile", BuckshotProjectileEntity::new);
     public static final RegistryObject<EntityType<FireRoundEntity>> FIRE_ROUND_PROJECTILE = registerBasic("fire_round_projectile", FireRoundEntity::new);
@@ -113,8 +110,8 @@ public class ModEntities
             .setShouldReceiveVelocityUpdates(true)
             .build("trauma_hook"));
 
-    public static final RegistryObject<EntityType<BrassBoltEntity>> BRASS_BOLT = REGISTER.register("brass_bolt", () ->
-            EntityType.Builder.<BrassBoltEntity>of(BrassBoltEntity::new, MobCategory.MISC)
+    public static final RegistryObject<EntityType<EnemyProjectileEntity>> BRASS_BOLT = REGISTER.register("brass_bolt", () ->
+            EntityType.Builder.<EnemyProjectileEntity>of(EnemyProjectileEntity::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F)
                     .setTrackingRange(64)
                     .setUpdateInterval(1)
@@ -139,16 +136,4 @@ public class ModEntities
                 .setShouldReceiveVelocityUpdates(true).build(id));
     }
 
-    private static <T extends ProjectileEntity> RegistryObject<EntityType<T>> registerProjectile(String id, BiFunction<EntityType<T>, Level, T> function)
-    {
-        return REGISTER.register(id, () -> EntityType.Builder.of(function::apply, MobCategory.MISC)
-                .sized(0.25F, 0.25F)
-                .setTrackingRange(0)
-                .noSummon()
-                .fireImmune()
-                .noSave()
-                .setShouldReceiveVelocityUpdates(false)
-                .setCustomClientFactory((spawnEntity, world) -> null)
-                .build(id));
-    }
 }

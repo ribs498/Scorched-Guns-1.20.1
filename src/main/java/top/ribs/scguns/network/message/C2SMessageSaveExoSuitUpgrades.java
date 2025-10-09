@@ -72,11 +72,9 @@ public class C2SMessageSaveExoSuitUpgrades extends PlayMessage<C2SMessageSaveExo
                         ExoSuitData.setUpgradeData(equippedPiece, upgradeData);
                         serverPlayer.setItemSlot(armorSlot, equippedPiece);
 
-                        // Send sync to ALL nearby players INCLUDING the one who made the change
                         List<ServerPlayer> playersToSync = serverPlayer.serverLevel().getEntitiesOfClass(ServerPlayer.class,
-                                serverPlayer.getBoundingBox().inflate(64.0));
+                                serverPlayer.getBoundingBox().inflate(128.0));
 
-                        // Make sure the originating player is included
                         if (!playersToSync.contains(serverPlayer)) {
                             playersToSync.add(serverPlayer);
                         }

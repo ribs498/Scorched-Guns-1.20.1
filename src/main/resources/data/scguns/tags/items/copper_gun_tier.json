@@ -1,0 +1,14 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:scrapper",
+    "scguns:rusty_gnat",
+    "scguns:umax_pistol",
+    "scguns:makeshift_rifle",
+    "scguns:boomstick",
+    "scguns:bruiser",
+    "scguns:llr_director",
+    "scguns:birdfeeder",
+    "scguns:arc_worker"
+  ]
+}

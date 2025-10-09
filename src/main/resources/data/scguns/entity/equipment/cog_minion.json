@@ -1,0 +1,110 @@
+{
+  "equipment_chance": 0.75,
+  "items": [
+    {
+      "item": "minecraft:tnt",
+      "weight": 2.0,
+      "drop_chance": 0.4
+    },
+    {
+      "item": "scguns:nitro_keg",
+      "weight": 0.2,
+      "drop_chance": 0.5
+    },
+    {
+      "item": "scguns:powder_keg",
+      "weight": 1.0,
+      "drop_chance": 0.5
+    },
+    {
+      "item": "minecraft:stick",
+      "weight": 10.0,
+      "drop_chance": 0.2
+    },
+    {
+      "item": "scguns:musket",
+      "weight": 1.0,
+      "drop_chance": 0.3
+    },
+    {
+      "item": "scguns:blunderbuss",
+      "weight": 1.0,
+      "drop_chance": 0.3
+    },
+    {
+      "item": "scguns:doublet",
+      "weight": 1.0,
+      "drop_chance": 0.3
+    },
+    {
+      "item": "minecraft:wooden_sword",
+      "weight": 10.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.5,
+      "max_durability": 1.0
+    },
+    {
+      "item": "minecraft:wooden_pickaxe",
+      "weight": 10.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.5,
+      "max_durability": 1.0
+    },
+    {
+      "item": "minecraft:stone_sword",
+      "weight": 8.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.3,
+      "max_durability": 0.8
+    },
+    {
+      "item": "minecraft:stone_pickaxe",
+      "weight": 8.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.3,
+      "max_durability": 0.8
+    },
+    {
+      "item": "minecraft:iron_sword",
+      "weight": 6.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.2,
+      "max_durability": 0.6
+    },
+    {
+      "item": "minecraft:iron_pickaxe",
+      "weight": 6.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.2,
+      "max_durability": 0.6
+    },
+    {
+      "item": "minecraft:golden_sword",
+      "weight": 4.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.1,
+      "max_durability": 0.4
+    },
+    {
+      "item": "minecraft:golden_pickaxe",
+      "weight": 4.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.1,
+      "max_durability": 0.4
+    },
+    {
+      "item": "minecraft:diamond_sword",
+      "weight": 1.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.05,
+      "max_durability": 0.2
+    },
+    {
+      "item": "minecraft:diamond_pickaxe",
+      "weight": 1.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.05,
+      "max_durability": 0.2
+    }
+  ]
+}

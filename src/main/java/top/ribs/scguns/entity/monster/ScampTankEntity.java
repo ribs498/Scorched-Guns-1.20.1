@@ -36,7 +36,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.ribs.scguns.entity.projectile.BrassBoltEntity;
+import top.ribs.scguns.entity.projectile.EnemyProjectileEntity;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModSounds;
@@ -1276,7 +1276,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
         double spawnY = this.getY() + machineGunHeight;
         double spawnZ = this.getZ() + Math.sin(Math.toRadians(this.getYRot() + 90)) * machineGunOffset;
 
-        BrassBoltEntity bolt = new BrassBoltEntity(this.level(), this);
+        EnemyProjectileEntity bolt = new EnemyProjectileEntity(this.level(), this);
         bolt.setPos(spawnX, spawnY, spawnZ);
 
         double dx = target.getX() - spawnX;

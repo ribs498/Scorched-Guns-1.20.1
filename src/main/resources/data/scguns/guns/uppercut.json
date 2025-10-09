@@ -11,7 +11,7 @@
     "weaponType": "magnum",
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
-    "rate": 6,
+    "rate": 7,
     "recoilAngle": 9.0,
     "recoilKick": 5.4,
     "spread": 2.0,

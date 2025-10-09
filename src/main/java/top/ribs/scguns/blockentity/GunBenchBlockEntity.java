@@ -23,7 +23,7 @@ public class GunBenchBlockEntity extends BlockEntity implements MenuProvider {
         @Override
         public void setChanged() {
             super.setChanged();
-            GunBenchBlockEntity.this.setChanged();  // Mark the block entity as dirty
+            GunBenchBlockEntity.this.setChanged();
         }
     };
 
@@ -44,7 +44,6 @@ public class GunBenchBlockEntity extends BlockEntity implements MenuProvider {
     @Override
     public void load(CompoundTag tag) {
         super.load(tag);
-        // Load inventory from NBT
         for (int i = 0; i < this.inventory.getContainerSize(); i++) {
             CompoundTag itemTag = tag.getCompound("Item" + i);
             if (!itemTag.isEmpty()) {
@@ -56,7 +55,6 @@ public class GunBenchBlockEntity extends BlockEntity implements MenuProvider {
     @Override
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        // Save inventory to NBT
         for (int i = 0; i < this.inventory.getContainerSize(); i++) {
             ItemStack itemstack = this.inventory.getItem(i);
             CompoundTag itemTag = new CompoundTag();
@@ -71,11 +69,16 @@ public class GunBenchBlockEntity extends BlockEntity implements MenuProvider {
 
     public void dropContents(Player player) {
         for (int i = 0; i < this.inventory.getContainerSize(); ++i) {
+            if (i == GunBenchMenu.SLOT_OUTPUT) {
+                continue;
+            }
+
             ItemStack itemstack = this.inventory.getItem(i);
             if (!itemstack.isEmpty()) {
                 if (player != null) {
                     player.drop(itemstack, false);
                 } else {
+                    assert this.level != null;
                     this.level.addFreshEntity(new ItemEntity(this.level, this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(), itemstack));
                 }
             }

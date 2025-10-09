@@ -1,0 +1,54 @@
+{
+  "equipment_chance": 0.95,
+  "items": [
+    {
+      "item": "scguns:cog_mace",
+      "weight": 16.0,
+      "drop_chance": 0.5,
+      "min_durability": 0.5,
+      "max_durability": 1.0
+    },
+    {
+      "item": "minecraft:iron_sword",
+      "weight": 8.0,
+      "drop_chance": 0.4,
+      "min_durability": 0.5,
+      "max_durability": 1.0
+    },
+    {
+      "item": "scguns:anthralite_sword",
+      "weight": 8.0,
+      "drop_chance": 0.4,
+      "min_durability": 0.5,
+      "max_durability": 1.0
+    },
+    {
+      "item": "minecraft:golden_sword",
+      "weight": 10.0,
+      "drop_chance": 0.4,
+      "min_durability": 0.5,
+      "max_durability": 1.0
+    },
+    {
+      "item": "minecraft:diamond_sword",
+      "weight": 4.0,
+      "drop_chance": 0.4,
+      "min_durability": 0.5,
+      "max_durability": 1.0
+    },
+    {
+      "item": "scguns:niami",
+      "weight": 6.0,
+      "drop_chance": 0.5,
+      "min_durability": 0.5,
+      "max_durability": 1.0
+    },
+    {
+      "item": "scguns:grandle_og",
+      "weight": 6.0,
+      "drop_chance": 0.5,
+      "min_durability": 0.5,
+      "max_durability": 1.0
+    }
+  ]
+}

@@ -13,7 +13,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 12,
+    "rate": 11,
     "recoilAngle": 4.0,
     "recoilKick": 2.0,
     "spread": 2.0,
@@ -48,7 +48,7 @@
   },
   "projectile": {
     "advantage": "scguns:illager",
-    "damage": 8,
+    "damage": 9,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:compact_copper_round",

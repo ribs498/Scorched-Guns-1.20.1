@@ -1,12 +1,8 @@
 package top.ribs.scguns.entity.projectile;
 
-import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -35,15 +31,16 @@ import top.ribs.scguns.util.GunEnchantmentHelper;
 
 import java.util.List;
 
-/**
- * Author: MrCrayfish
- */
 public class MicroJetEntity extends ProjectileEntity {
     public static final float EXPLOSION_DAMAGE_MULTIPLIER = 2.0F;
+    private static final float MAX_DAMAGE_MULTIPLIER = 1.5f;
+    private static final int TICKS_TO_MAX_SPEED = 15;
     private static final float SHIELD_DISABLE_CHANCE = 0.75f;
     private static final float SHIELD_DAMAGE_PENETRATION = 0.2f;
     private static final float HEADSHOT_EFFECT_DURATION_MULTIPLIER = 1.5f;
     private static final float AREA_EFFECT_DURATION_MULTIPLIER = 0.75f;
+
+    private int ticksInFlight = 0;
 
     public MicroJetEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn) {
         super(entityType, worldIn);
@@ -52,8 +49,11 @@ public class MicroJetEntity extends ProjectileEntity {
     public MicroJetEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
     }
+
     @Override
     protected void onProjectileTick() {
+        ticksInFlight++;
+
         if (this.level().isClientSide) {
             for (int i = 2; i > 0; i--) {
                 this.level().addParticle(ModParticleTypes.ROCKET_TRAIL.get(), true,
@@ -71,6 +71,22 @@ public class MicroJetEntity extends ProjectileEntity {
                         0, 0, 0);
             }
         }
+    }
+
+    @Override
+    public float getDamage() {
+        float baseDamage = super.getDamage();
+        float speedMultiplier = calculateSpeedMultiplier();
+        return baseDamage * speedMultiplier;
+    }
+
+    private float calculateSpeedMultiplier() {
+        if (ticksInFlight >= TICKS_TO_MAX_SPEED) {
+            return MAX_DAMAGE_MULTIPLIER;
+        }
+
+        float progress = (float) ticksInFlight / TICKS_TO_MAX_SPEED;
+        return 1.0f + (progress * (MAX_DAMAGE_MULTIPLIER - 1.0f));
     }
 
     @Override
@@ -108,6 +124,7 @@ public class MicroJetEntity extends ProjectileEntity {
         }
         createMiniExplosion(this, 1.0f);
     }
+
     private float applyBlastProtection(LivingEntity target, float damage) {
         int protectionLevel = EnchantmentHelper.getEnchantmentLevel(Enchantments.BLAST_PROTECTION, target);
 
@@ -119,6 +136,7 @@ public class MicroJetEntity extends ProjectileEntity {
 
         return damage;
     }
+
     private void applyEffect(LivingEntity target, float powerMultiplier, boolean headshot) {
         ResourceLocation effectLocation = this.getProjectile().getImpactEffect();
         if (effectLocation != null) {
@@ -157,7 +175,7 @@ public class MicroJetEntity extends ProjectileEntity {
                                     center.x + 1.0, center.y + 1.0, center.z + 1.0)
                     );
 
-                    float areaEffectChance = this.getProjectile().getImpactEffectChance() * 0.4f; // 60% reduced chance in area
+                    float areaEffectChance = this.getProjectile().getImpactEffectChance() * 0.4f;
 
                     for (LivingEntity entity : nearbyEntities) {
                         if (entity != this.getShooter()) {
@@ -190,6 +208,7 @@ public class MicroJetEntity extends ProjectileEntity {
         applyAreaEffects(pos);
         createMiniExplosion(this, 1.0f);
     }
+
     public static void createMiniExplosion(Entity entity, float radius) {
         Level world = entity.level();
         if (world.isClientSide)

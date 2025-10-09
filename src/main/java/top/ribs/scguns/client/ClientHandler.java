@@ -33,7 +33,6 @@ import top.ribs.scguns.client.handler.*;
 import top.ribs.scguns.client.render.block.*;
 import top.ribs.scguns.client.render.curios.AirCanisterRenderer;
 import top.ribs.scguns.client.render.curios.AmmoBoxRenderer;
-import top.ribs.scguns.client.render.entity.RaidEntityRenderer;
 import top.ribs.scguns.client.render.entity.TurretProjectileRenderer;
 import top.ribs.scguns.client.render.gun.ModelOverrides;
 import top.ribs.scguns.client.render.gun.model.*;
@@ -152,6 +151,7 @@ public class ClientHandler {
         BlockEntityRenderers.register(ModBlockEntities.ENEMY_TURRET.get(), EnemyTurretRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.AUTO_TURRET.get(), AutoTurretRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.SHOTGUN_TURRET.get(), ShotgunTurretRenderer::new);
+        BlockEntityRenderers.register(ModBlockEntities.SNIPER_TURRET.get(), SniperTurretRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.POWERED_MECHANICAL_PRESS.get(), PoweredMechanicalPressRenderer::new);
         BlockEntityRenderers.register(ModBlockEntities.POLAR_GENERATOR.get(), PolarGeneratorRenderer::new);
         ItemBlockRenderTypes.setRenderLayer(ModBlocks.PLASMA_LANTERN.get(), RenderType.cutout());
@@ -195,6 +195,7 @@ public class ClientHandler {
         MenuScreens.register(ModMenuTypes.AMMO_MODULE.get(), AmmoModuleScreen::new);
         MenuScreens.register(ModMenuTypes.BASIC_TURRET_MENU.get(), BasicTurretScreen::new);
         MenuScreens.register(ModMenuTypes.AUTO_TURRET_MENU.get(), AutoTurretScreen::new);
+        MenuScreens.register(ModMenuTypes.SNIPER_TURRET_MENU.get(), SniperTurretScreen::new);
         MenuScreens.register(ModMenuTypes.SHOTGUN_TURRET_MENU.get(), ShotgunTurretScreen::new);
         MenuScreens.register(ModMenuTypes.VENT_COLLECTOR_MENU.get(), VentCollectorScreen::new);
 
@@ -221,7 +222,7 @@ public class ClientHandler {
 
         EntityRenderers.register(ModEntities.BLUNDERER.get(), BlundererRenderer::new);
         EntityRenderers.register(ModEntities.SIGNAL_BEACON.get(), SignalBeaconRenderer::new);
-        EntityRenderers.register(ModEntities.BRASS_BOLT.get(), BrassBoltRenderer::new);
+        EntityRenderers.register(ModEntities.BRASS_BOLT.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.TRAUMA_HOOK.get(), TraumaHookRenderer::new);
         EntityRenderers.register(ModEntities.SCAMP_TANK.get(), ScampTankRenderer::new);
         EntityRenderers.register(ModEntities.SCAMP_ROCKET.get(), ScampRocketRenderer::new);
@@ -235,7 +236,7 @@ public class ClientHandler {
                 });
 
         EntityRenderers.register(ModEntities.TURRET_PROJECTILE.get(), TurretProjectileRenderer::new);
-        EntityRenderers.register(ModEntities.RAID_ENTITY.get(), RaidEntityRenderer::new);
+
         // Register the AmmoBoxRenderer for each ammo box item
         CuriosRendererRegistry.register(ModItems.PISTOL_AMMO_BOX.get(), AmmoBoxRenderer::new);
         CuriosRendererRegistry.register(ModItems.RIFLE_AMMO_BOX.get(), AmmoBoxRenderer::new);
@@ -260,6 +261,7 @@ public class ClientHandler {
     public static void setup() {
         MinecraftForge.EVENT_BUS.register(AimingHandler.get());
         MinecraftForge.EVENT_BUS.register(BulletTrailRenderingHandler.get());
+        MinecraftForge.EVENT_BUS.register(TurretBulletTrailRenderingHandler.get());
         MinecraftForge.EVENT_BUS.register(CrosshairHandler.get());
         MinecraftForge.EVENT_BUS.register(GunRenderingHandler.get());
         MinecraftForge.EVENT_BUS.register(RecoilHandler.get());
@@ -385,6 +387,7 @@ public class ClientHandler {
          ModelOverrides.register(ModItems.GAUSS_RIFLE.get(), new GaussRifleModel());
         ModelOverrides.register(ModItems.ROCKET_RIFLE.get(), new RocketRifleModel());
         ModelOverrides.register(ModItems.PRUSH_GUN.get(), new PrushGunModel());
+        ModelOverrides.register(ModItems.RAILWORKER.get(), new RailworkerModel());
         ModelOverrides.register(ModItems.INERTIAL.get(), new InertialModel());
         ModelOverrides.register(ModItems.INQUISITOR.get(), new InquisitorModel());
         ModelOverrides.register(ModItems.COGLOADER.get(), new CogloaderModel());

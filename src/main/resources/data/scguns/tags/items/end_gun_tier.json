@@ -1,0 +1,11 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:carapice",
+    "scguns:shellurker",
+    "scguns:weevil",
+    "scguns:dark_matter",
+    "scguns:lone_wonder",
+    "scguns:raygun"
+  ]
+}

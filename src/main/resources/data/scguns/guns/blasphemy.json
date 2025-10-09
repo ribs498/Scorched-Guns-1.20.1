@@ -22,7 +22,7 @@
     "projectileAmount": 3,
     "recoilAngle": 4.0,
     "recoilKick": 0.5,
-    "spread": 5.0,
+    "spread": 4.0,
     "meleeDamage": 3.0,
     "meleeReach": 2.5,
     "meleeCooldownTicks": 10,
@@ -47,7 +47,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 10,
+    "maxAmmo": 15,
     "reloadItem": "scguns:blaze_fuel",
     "reloadByproduct": "scguns:empty_tank",
     "byproductChance": 0.7,

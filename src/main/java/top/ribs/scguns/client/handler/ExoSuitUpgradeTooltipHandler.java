@@ -42,28 +42,23 @@ public class ExoSuitUpgradeTooltipHandler {
     }
 
     private static void addUpgradeTooltip(List<Component> tooltip, ExoSuitUpgrade upgrade, ItemStack stack, boolean showDetailed) {
-        // Always show basic info
         tooltip.add(Component.literal(""));
 
-        // Upgrade type - simplified styling
         String upgradeType = upgrade.getType();
         String formattedType = formatUpgradeType(upgradeType);
         tooltip.add(Component.translatable("tooltip.scguns.exosuit.upgrade.type")
                 .append(formattedType)
-                .withStyle(ChatFormatting.YELLOW));
+                .withStyle(ChatFormatting.GRAY));
 
-        // Slot compatibility - always shown but less prominent
         addSlotCompatibility(tooltip, upgradeType);
 
         if (!showDetailed) {
-            // Show shift hint
             tooltip.add(Component.literal(""));
             tooltip.add(Component.translatable("tooltip.scguns.upgrade.hold_shift")
                     .withStyle(ChatFormatting.GRAY, ChatFormatting.ITALIC));
             return;
         }
 
-        // Detailed information when shift is held
         addSpecialFunctionality(tooltip, stack, upgrade);
         addEffectsTooltip(tooltip, upgrade.getEffects());
 
@@ -77,15 +72,10 @@ public class ExoSuitUpgradeTooltipHandler {
     }
 
     private static void addEffectsTooltip(List<Component> tooltip, ExoSuitUpgrade.Effects effects) {
-        boolean hasEffects = false;
 
-        // Defensive stats
         if (effects.getArmorBonus() > 0 || effects.getArmorToughness() > 0 || effects.getKnockbackResistance() > 0) {
-            if (!hasEffects) {
-                tooltip.add(Component.literal(""));
-                tooltip.add(Component.translatable("tooltip.scguns.upgrade.effects.defensive").withStyle(ChatFormatting.BLUE));
-                hasEffects = true;
-            }
+            tooltip.add(Component.literal(""));
+            tooltip.add(Component.translatable("tooltip.scguns.upgrade.effects.defensive").withStyle(ChatFormatting.GRAY));
 
             if (effects.getArmorBonus() > 0) {
                 tooltip.add(Component.literal(" • ").append(Component.translatable("tooltip.scguns.exosuit.upgrade.stat.armor", effects.getArmorBonus()))
@@ -106,8 +96,7 @@ public class ExoSuitUpgradeTooltipHandler {
         // Mobility stats
         if (effects.getSpeedModifier() != 0 || effects.getJumpBoost() > 0 || effects.getFallDamageReduction() > 0) {
             tooltip.add(Component.literal(""));
-            tooltip.add(Component.translatable("tooltip.scguns.upgrade.effects.mobility").withStyle(ChatFormatting.GREEN));
-            hasEffects = true;
+            tooltip.add(Component.translatable("tooltip.scguns.upgrade.effects.mobility").withStyle(ChatFormatting.GRAY));
 
             if (effects.getSpeedModifier() != 0) {
                 String speedKey = effects.getSpeedModifier() > 0 ? "tooltip.scguns.exosuit.upgrade.stat.speed_positive" : "tooltip.scguns.exosuit.upgrade.stat.speed_negative";
@@ -130,8 +119,7 @@ public class ExoSuitUpgradeTooltipHandler {
         // Combat stats
         if (effects.getRecoilAngleReduction() > 0 || effects.getRecoilKickReduction() > 0 || effects.getSpreadReduction() > 0) {
             tooltip.add(Component.literal(""));
-            tooltip.add(Component.translatable("tooltip.scguns.upgrade.effects.combat").withStyle(ChatFormatting.GOLD));
-            hasEffects = true;
+            tooltip.add(Component.translatable("tooltip.scguns.upgrade.effects.combat").withStyle(ChatFormatting.GRAY));
 
             if (effects.getRecoilAngleReduction() > 0) {
                 tooltip.add(Component.literal(" • ").append(Component.translatable("tooltip.scguns.exosuit.upgrade.stat.recoil_angle", (int)(effects.getRecoilAngleReduction() * 100)))
@@ -152,7 +140,7 @@ public class ExoSuitUpgradeTooltipHandler {
         // Special effects
         if (effects.hasNightVision()) {
             tooltip.add(Component.literal(""));
-            tooltip.add(Component.translatable("tooltip.scguns.upgrade.effects.special").withStyle(ChatFormatting.LIGHT_PURPLE));
+            tooltip.add(Component.translatable("tooltip.scguns.upgrade.effects.special").withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.literal(" • ").append(Component.translatable("tooltip.scguns.exosuit.upgrade.stat.night_vision"))
                     .withStyle(ChatFormatting.GRAY));
         }
@@ -182,28 +170,28 @@ public class ExoSuitUpgradeTooltipHandler {
     private static void addSpecialFunctionality(List<Component> tooltip, ItemStack stack, ExoSuitUpgrade upgrade) {
         if (stack.getItem() instanceof RebreatherModuleItem) {
             tooltip.add(Component.literal(""));
-            tooltip.add(Component.translatable("tooltip.scguns.exosuit.functionality.header").withStyle(ChatFormatting.AQUA));
+            tooltip.add(Component.translatable("tooltip.scguns.exosuit.functionality.header").withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.literal(" • ").append(Component.translatable("tooltip.scguns.exosuit.functionality.rebreather.water_breathing"))
                     .withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.literal(" • ").append(Component.translatable("tooltip.scguns.exosuit.functionality.rebreather.unlimited_exploration"))
                     .withStyle(ChatFormatting.GRAY));
         } else if (stack.getItem() instanceof TargetTrackerModuleItem) {
             tooltip.add(Component.literal(""));
-            tooltip.add(Component.translatable("tooltip.scguns.exosuit.functionality.header").withStyle(ChatFormatting.AQUA));
+            tooltip.add(Component.translatable("tooltip.scguns.exosuit.functionality.header").withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.literal(" • ").append(Component.translatable("tooltip.scguns.exosuit.functionality.target_tracker.highlights"))
                     .withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.literal(" • ").append(Component.translatable("tooltip.scguns.exosuit.functionality.target_tracker.accuracy"))
                     .withStyle(ChatFormatting.GRAY));
         } else if (stack.getItem() instanceof GasMaskModuleItem) {
             tooltip.add(Component.literal(""));
-            tooltip.add(Component.translatable("tooltip.scguns.exosuit.functionality.header").withStyle(ChatFormatting.AQUA));
+            tooltip.add(Component.translatable("tooltip.scguns.exosuit.functionality.header").withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.literal(" • ").append(Component.translatable("tooltip.scguns.exosuit.functionality.gas_mask.toxic_protection"))
                     .withStyle(ChatFormatting.GRAY));
             tooltip.add(Component.literal(" • ").append(Component.translatable("tooltip.scguns.exosuit.functionality.gas_mask.environmental_filter"))
                     .withStyle(ChatFormatting.GRAY));
         } else if (upgrade.getType().equals("pouches")) {
             tooltip.add(Component.literal(""));
-            tooltip.add(Component.translatable("tooltip.scguns.exosuit.functionality.header").withStyle(ChatFormatting.AQUA));
+            tooltip.add(Component.translatable("tooltip.scguns.exosuit.functionality.header").withStyle(ChatFormatting.GRAY));
             int storageSize = upgrade.getDisplay().getStorageSize();
             tooltip.add(Component.literal(" • ").append(Component.translatable("tooltip.scguns.exosuit.functionality.pouches.storage", storageSize))
                     .withStyle(ChatFormatting.GRAY));
@@ -226,7 +214,7 @@ public class ExoSuitUpgradeTooltipHandler {
 
     private static void addEnergyTooltip(List<Component> tooltip, EnergyUpgradeItem energyUpgrade) {
         tooltip.add(Component.literal(""));
-        tooltip.add(Component.translatable("tooltip.scguns.exosuit.energy.header").withStyle(ChatFormatting.YELLOW));
+        tooltip.add(Component.translatable("tooltip.scguns.exosuit.energy.header").withStyle(ChatFormatting.GRAY));
 
         String consumptionKey = switch (energyUpgrade.getConsumptionType()) {
             case PER_TICK -> "tooltip.scguns.exosuit.energy.consumption.per_tick";

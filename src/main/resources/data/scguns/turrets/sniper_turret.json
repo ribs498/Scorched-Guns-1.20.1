@@ -1,0 +1,51 @@
+{
+  "targeting": {
+    "range": 40.0,
+    "verticalRange": 40.0,
+    "minFiringDistance": 2.0,
+    "rotationSpeed": 0.5,
+    "positionSmoothing": 0.2,
+    "maxPitch": 60.0,
+    "minPitch": -25.0,
+    "predictionMultiplier": 7,
+    "requiresLineOfSight": true
+  },
+  "combat": {
+    "cooldown": 55,
+    "inaccuracy": 0.05,
+    "pelletCount": 1,
+    "spreadAngle": 0.0,
+    "recoilMax": 8.0,
+    "recoilSpeed": 0.3,
+    "damageModifier": 2,
+    "projectileSpeed": 6.0,
+    "fireSound": "scguns:item.heavy_rifle.fire"
+  },
+  "ammunition": {
+    "acceptedAmmo": [
+      {
+        "item": "scguns:gibbs_round",
+        "bulletType": "scguns:gibbs_round",
+        "casingType": "scguns:medium_diamond_steel_casing",
+        "damage": 15.0
+      },
+      {
+        "item": "scguns:krahg_round",
+        "bulletType": "scguns:krahg_round",
+        "casingType": "scguns:large_brass_casing",
+        "damage": 26.0
+      }
+    ],
+    "casingEjectChance": 0.65
+  },
+  "behavior": {
+    "restingYaw": 0.0,
+    "restingPitch": -30.0,
+    "disableTime": 200,
+    "hasOpenAnimation": false
+  },
+  "display": {
+    "muzzleLength": 1.5,
+    "muzzleOffsetY": 1.4
+  }
+}

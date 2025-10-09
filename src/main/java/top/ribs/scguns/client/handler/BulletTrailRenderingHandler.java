@@ -10,6 +10,7 @@ import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
@@ -18,18 +19,14 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import top.ribs.scguns.client.BulletTrail;
-import top.ribs.scguns.entity.projectile.ShulkshotProjectileEntity;
+import top.ribs.scguns.init.ModTags;
 
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Author: MrCrayfish
- */
 public class BulletTrailRenderingHandler
 {
     private static BulletTrailRenderingHandler instance;
-    private static final ResourceLocation TEXTURE = new ResourceLocation("minecraft:textures/misc/white.png");
 
     public static BulletTrailRenderingHandler get()
     {
@@ -44,25 +41,10 @@ public class BulletTrailRenderingHandler
 
     private BulletTrailRenderingHandler() {}
 
-    /**
-     * Adds a bullet trail to render into the world
-     *
-     * @param trail the bullet trail get
-     */
     public void add(BulletTrail trail) {
-        Level world = Minecraft.getInstance().level;
-        if (world != null) {
-            // Check if the entity is not a ShulkshotProjectileEntity before adding the trail
-            if (!(world.getEntity(trail.getEntityId()) instanceof ShulkshotProjectileEntity)) {
-                this.bullets.put(trail.getEntityId(), trail);
-            }
-        }
+        this.bullets.put(trail.getEntityId(), trail);
     }
-    /**
-     * Removes the bullet for the given entity id.
-     *
-     * @param entityId the entity id of the bullet
-     */
+
     public void remove(int entityId)
     {
         this.bullets.remove(entityId);
@@ -106,11 +88,20 @@ public class BulletTrailRenderingHandler
         this.bullets.clear();
     }
 
-    private void renderBulletTrail(BulletTrail trail, PoseStack poseStack, float deltaTicks)
-    {
+    private void renderBulletTrail(BulletTrail trail, PoseStack poseStack, float deltaTicks) {
         Minecraft mc = Minecraft.getInstance();
         Entity entity = mc.getCameraEntity();
-        if(entity == null || trail.isDead())
+        Level world = mc.level;
+
+        if(entity == null || trail.isDead() || world == null)
+            return;
+
+        Entity projectileEntity = world.getEntity(trail.getEntityId());
+
+        if(projectileEntity == null)
+            return;
+
+        if(projectileEntity.getType().is(ModTags.Entities.DISABLE_BULLET_TRAIL))
             return;
 
         if(!trail.isTrailVisible()) {
@@ -134,18 +125,27 @@ public class BulletTrailRenderingHandler
         poseStack.scale(0.05625F, 0.05625F, 0.05625F);
         poseStack.translate(-4.0F, 0.0F, 0.0F);
         MultiBufferSource.BufferSource renderTypeBuffer = mc.renderBuffers().bufferSource();
-        VertexConsumer vertexConsumer = renderTypeBuffer.getBuffer(RenderType.energySwirl(TEXTURE, 0.0F, 0.15625F));
+        VertexConsumer vertexConsumer = renderTypeBuffer.getBuffer(RenderType.energySwirl(getTexture(projectileEntity), 0.0F, 0.15625F));
         PoseStack.Pose posestack$pose = poseStack.last();
         Matrix4f matrix4f = posestack$pose.pose();
         Matrix3f matrix3f = posestack$pose.normal();
 
-        // Makes the Trail longer the longer airtime it has
-        int size = Math.min((trail.getAge() + 1) * 30, 200);
+        double speed = Math.sqrt(motion.x * motion.x + motion.y * motion.y + motion.z * motion.z);
+        float speedFactor = (float) Math.max(1.0, speed * 0.4);
+
+        int baseSize = 30;
+        int size = (int) Math.min((trail.getAge() + 1) * 30 * trail.getTrailThickness() * speedFactor,
+                baseSize * trail.getTrailThickness() * speedFactor);
 
         int color = trail.getTrailColor();
         int red = (color >> 16) & 0xFF;
         int green = (color >> 8) & 0xFF;
         int blue = color & 0xFF;
+
+        float brightnessFactor = (float) Math.min(1.2, 1.0 + speed * 0.08);
+        red = Math.min(255, (int)(red * brightnessFactor));
+        green = Math.min(255, (int)(green * brightnessFactor));
+        blue = Math.min(255, (int)(blue * brightnessFactor));
 
         int light = 15728880;
         if(trail.isTrailVisible())
@@ -172,8 +172,12 @@ public class BulletTrailRenderingHandler
         poseStack.popPose();
     }
 
-    public void vertex(int red, int green, int blue, Matrix4f pMatrix, Matrix3f pNormal, VertexConsumer pConsumer, int pX, int pY, int pZ, float pU, float pV, int pNormalX, int pNormalZ, int pNormalY, int pPackedLight) {
+    public ResourceLocation getTexture(Entity entity) {
+        ResourceLocation id = EntityType.getKey(entity.getType());
+        return new ResourceLocation(String.format("%s:textures/trail/%s.png", id.getNamespace(), id.getPath()));
+    }
 
+    public void vertex(int red, int green, int blue, Matrix4f pMatrix, Matrix3f pNormal, VertexConsumer pConsumer, int pX, int pY, int pZ, float pU, float pV, int pNormalX, int pNormalZ, int pNormalY, int pPackedLight) {
         pConsumer.vertex(pMatrix, (float)pX, (float)pY, (float)pZ)
                 .color(red, green, blue, 255)
                 .uv(pU, pV)

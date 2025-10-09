@@ -2,6 +2,8 @@ package top.ribs.scguns.block;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -9,6 +11,7 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -28,10 +31,13 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
+import top.ribs.scguns.Reference;
 import top.ribs.scguns.blockentity.AutoTurretBlockEntity;
 import top.ribs.scguns.init.ModBlockEntities;
+import top.ribs.scguns.util.TurretTooltipHelper;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 public class AutoTurretBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -48,7 +54,17 @@ public class AutoTurretBlock extends BaseEntityBlock {
         VoxelShape turretHead = Block.box(6, 10, 6, 10, 16, 10);
         return Shapes.or(base, turretHead);
     }
-
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+        TurretTooltipHelper.addTurretTooltip(
+                new ResourceLocation(Reference.MOD_ID, "auto_turret"),
+                stack,
+                level instanceof Level ? (Level) level : null,
+                tooltip,
+                flag
+        );
+    }
 
     @Nullable
     @Override
@@ -155,4 +171,3 @@ public class AutoTurretBlock extends BaseEntityBlock {
         return 0;
     }
 }
-

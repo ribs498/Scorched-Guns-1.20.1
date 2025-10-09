@@ -1,0 +1,188 @@
+{
+  "mobs": {
+    "minecraft:pillager": {
+      "spawn_chance": 0.3,
+      "ai_difficulty": 2,
+      "weapons": [
+        "scguns:pax",
+        "scguns:winnie",
+        "scguns:winnie_millend",
+        "scguns:saketini",
+        "scguns:saketini_ironport"
+      ],
+      "armor": [
+        {
+          "item": "minecraft:iron_helmet",
+          "slot": "head",
+          "chance": 0.5
+        },
+        {
+          "item": "minecraft:iron_chestplate",
+          "slot": "chest",
+          "chance": 0.3
+        }
+      ]
+    },
+    "minecraft:vindicator": {
+      "spawn_chance": 0.3,
+      "ai_difficulty": 2,
+      "weapons": [
+        "scguns:callwell",
+        "scguns:callwell_conversion",
+        "scguns:callwell_terminal"
+      ],
+      "armor": [
+        {
+          "item": "minecraft:iron_helmet",
+          "slot": "head",
+          "chance": 0.5
+        },
+        {
+          "item": "minecraft:iron_chestplate",
+          "slot": "chest",
+          "chance": 0.3
+        }
+      ]
+    },
+    "minecraft:piglin": {
+      "spawn_chance": 0.25,
+      "ai_difficulty": 2,
+      "weapons": [
+        "scguns:freyr",
+        "scguns:vulcanic_repeater"
+      ],
+      "armor": [
+        {
+          "item": "minecraft:golden_helmet",
+          "slot": "head",
+          "chance": 0.2
+        },
+        {
+          "item": "scguns:anthralite_respirator",
+          "slot": "head",
+          "chance": 0.2
+        },
+        {
+          "item": "minecraft:golden_chestplate",
+          "slot": "chest",
+          "chance": 0.3
+        }
+      ]
+    },
+    "minecraft:zombified_piglin": {
+      "spawn_chance": 0.25,
+      "ai_difficulty": 2,
+      "weapons": [
+        "scguns:freyr",
+        "scguns:vulcanic_repeater"
+      ],
+      "armor": [
+        {
+          "item": "minecraft:golden_helmet",
+          "slot": "head",
+          "chance": 0.2
+        },
+        {
+          "item": "scguns:anthralite_respirator",
+          "slot": "head",
+          "chance": 0.2
+        },
+        {
+          "item": "minecraft:golden_chestplate",
+          "slot": "chest",
+          "chance": 0.3
+        }
+      ]
+    },
+    "minecraft:piglin_brute": {
+      "spawn_chance": 0.25,
+      "ai_difficulty": 2,
+      "weapons": [
+        "scguns:mangalitsa",
+        "scguns:trotters",
+        "scguns:pyroclastic_flow"
+      ],
+      "armor": [
+        {
+          "item": "minecraft:golden_helmet",
+          "slot": "head",
+          "chance": 0.2
+        },
+        {
+          "item": "scguns:anthralite_respirator",
+          "slot": "head",
+          "chance": 0.2
+        },
+        {
+          "item": "minecraft:golden_chestplate",
+          "slot": "chest",
+          "chance": 0.3
+        }
+      ]
+    },
+    "scguns:hornlin": {
+      "spawn_chance": 1.0,
+      "ai_difficulty": 1,
+      "weapons": [
+        "scguns:freyr",
+        "scguns:mangalitsa",
+        "minecraft:golden_shovel",
+        "minecraft:golden_sword"
+      ],
+      "armor": [
+        {
+        "item": "minecraft:golden_helmet",
+        "slot": "head",
+        "chance": 0.2
+        },
+        {
+          "item": "scguns:anthralite_respirator",
+          "slot": "head",
+          "chance": 0.2
+        },
+        {
+          "item": "minecraft:golden_chestplate",
+          "slot": "chest",
+          "chance": 0.3
+        },
+        {
+          "item": "minecraft:golden_boots",
+          "slot": "feet",
+          "chance": 0.5
+        }
+      ]
+    },
+    "scguns:zombified_hornlin": {
+      "spawn_chance": 1.0,
+      "ai_difficulty": 1,
+      "weapons": [
+        "scguns:freyr",
+        "scguns:mangalitsa",
+        "minecraft:golden_shovel",
+        "minecraft:golden_sword"
+      ],
+      "armor": [
+        {
+          "item": "minecraft:golden_helmet",
+          "slot": "head",
+          "chance": 0.2
+        },
+        {
+          "item": "scguns:anthralite_respirator",
+          "slot": "head",
+          "chance": 0.2
+        },
+        {
+          "item": "minecraft:golden_chestplate",
+          "slot": "chest",
+          "chance": 0.3
+        },
+        {
+          "item": "minecraft:golden_boots",
+          "slot": "feet",
+          "chance": 0.5
+        }
+      ]
+    }
+  }
+}

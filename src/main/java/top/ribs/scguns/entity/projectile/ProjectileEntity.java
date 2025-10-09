@@ -221,14 +221,13 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
         damage = GunEnchantmentHelper.getChargeDamage(this.weapon, damage, this.chargeProgress);
 
-        if (Config.GunScalingConfig.getInstance().isScalingEnabled()) {
-            double scaledDamage = Config.GunScalingConfig.getInstance().getBaseDamage() +
-                    (Config.GunScalingConfig.getInstance().getDamageIncreaseRate() * this.worldDay);
-            damage *= (float) Math.min(scaledDamage, Config.GunScalingConfig.getInstance().getMaxDamage());
-        }
+
 
         damage *= Config.COMMON.gameplay.globalDamageMultiplier.get().floatValue();
-
+        if (this.getPersistentData().contains("AIDamageScale")) {
+            float scale = this.getPersistentData().getFloat("AIDamageScale");
+            damage *= scale;
+        }
         return Math.max(0F, damage);
     }
     @Override

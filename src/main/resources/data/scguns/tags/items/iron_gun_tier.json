@@ -1,0 +1,22 @@
+{
+  "replace": false,
+  "values": [
+    "scguns:defender_pistol",
+    "scguns:trenchur",
+    "scguns:greaser_smg",
+    "scguns:m3_carabine",
+    "scguns:m3_marksman",
+    "scguns:combat_shotgun",
+    "scguns:venturi",
+    "scguns:iron_javelin",
+    "scguns:iron_spear",
+    "scguns:auvtomag",
+    "scguns:pulsar",
+    "scguns:gyrojet_pistol",
+    "scguns:brawler",
+    "scguns:crusader",
+    "scguns:mk43_rifle",
+    "scguns:rocket_rifle",
+    "scguns:ultra_knight_hawk"
+  ]
+}

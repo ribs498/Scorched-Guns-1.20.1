@@ -2,11 +2,13 @@ package top.ribs.scguns.entity.monster;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -20,15 +22,20 @@ import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BowItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.ribs.scguns.config.EntityEquipmentConfig;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
+import top.ribs.scguns.init.ModItems;
+import top.ribs.scguns.item.GunItem;
 
 import java.util.EnumSet;
 
@@ -42,6 +49,10 @@ public class CogKnightEntity extends Monster {
 
     public CogKnightEntity(EntityType<? extends CogKnightEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+    }
+    @Override
+    public HumanoidArm getMainArm() {
+        return HumanoidArm.LEFT;
     }
     @Override
     public boolean canBeAffected(@NotNull MobEffectInstance pPotionEffect) {
@@ -85,9 +96,7 @@ public class CogKnightEntity extends Monster {
         if (!this.level().isClientSide()) {
             if (this.isAttacking() && this.getAttackTimeout() > 0) {
                 this.setAttackTimeout(this.getAttackTimeout() - 1);
-
-                // Deal damage at the right moment in the animation (when arm is swinging down)
-                if (this.getAttackTimeout() == 6) { // Damage happens mid-swing
+                if (this.getAttackTimeout() == 6) {
                     LivingEntity target = this.getTarget();
                     if (target != null && this.distanceToSqr(target) <= this.getBbWidth() * 2.0F * this.getBbWidth() * 2.0F + target.getBbWidth()) {
                         this.doHurtTarget(target);
@@ -168,6 +177,13 @@ public class CogKnightEntity extends Monster {
             f = 0f;
         }
         this.walkAnimation.update(f, 0.2f);
+    }
+    @Override
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
+                                        MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData,
+                                        @Nullable CompoundTag pDataTag) {
+        EntityEquipmentConfig.equipEntity(this, "cog_knight");
+        return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 
     protected void registerGoals() {
@@ -276,6 +292,11 @@ public class CogKnightEntity extends Monster {
 
         @Override
         public boolean canUse() {
+            ItemStack mainHandItem = this.mob.getMainHandItem();
+            if (mainHandItem.getItem() instanceof GunItem || mainHandItem.getItem() instanceof BowItem) {
+                return false;
+            }
+
             if (this.cooldownTicks > 0) {
                 this.cooldownTicks--;
                 return false;

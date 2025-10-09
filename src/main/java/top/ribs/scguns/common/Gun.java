@@ -76,6 +76,21 @@ public enum WeaponType {
         laser,
         special
     }
+    public double getIdealAttackRange() {
+        return switch (this.general.getWeaponType()) {
+            case pistol, magnum, smg, shotgun, flamethrower -> 12.0;
+            case rifle, lmg, plasma, shock, heavy, special -> 18.0;
+            case laser, sniper -> 30.0;
+        };
+    }
+    public double getMinAttackRange() {
+        return switch (this.general.getWeaponType()) {
+            case shotgun, flamethrower -> 1.0;
+            case pistol, magnum, smg -> 2.0;
+            case rifle, lmg, plasma, shock, heavy, special -> 2.5;
+            case laser, sniper -> 3.0;
+        };
+    }
     public static int getMaxAmmo(ItemStack stack) {
         return ((GunItem) stack.getItem()).getModifiedGun(stack).getReloads().getMaxAmmo();
     }
@@ -1055,6 +1070,8 @@ public enum WeaponType {
         private boolean isSoulFire = false;
         @Optional
         private boolean hideProjectile = false;
+        @Optional
+        private double trailThickness = 1.0;
         @Override
         public CompoundTag serializeNBT() {
             CompoundTag tag = new CompoundTag();
@@ -1088,6 +1105,7 @@ public enum WeaponType {
             }
             tag.putBoolean("IsSoulFire", this.isSoulFire);
             tag.putBoolean("HideProjectile", this.hideProjectile);
+            tag.putDouble("TrailThickness", this.trailThickness);
             return tag;
         }
 
@@ -1160,6 +1178,9 @@ public enum WeaponType {
             if (tag.contains("HideProjectile", Tag.TAG_ANY_NUMERIC)) {
                 this.hideProjectile = tag.getBoolean("HideProjectile");
             }
+            if (tag.contains("TrailThickness", Tag.TAG_ANY_NUMERIC)) {
+                this.trailThickness = tag.getDouble("TrailThickness");
+            }
         }
 
         public JsonObject toJsonObject() {
@@ -1199,8 +1220,8 @@ public enum WeaponType {
             if (this.isSoulFire) object.addProperty("isSoulFire", true);
             if (this.hideProjectile) object.addProperty("hideProjectile", true);
             if(this.hideTrail) object.addProperty("hideTrail", true);
+            if(this.trailThickness != 1.0) object.addProperty("trailThickness", this.trailThickness);
             return object;
-
         }
 
         public Projectile copy() {
@@ -1229,9 +1250,15 @@ public enum WeaponType {
             projectile.isSoulFire = this.isSoulFire;
             projectile.hideProjectile = this.hideProjectile;
             projectile.hideTrail = this.hideTrail;
+            projectile.trailThickness = this.trailThickness;
             return projectile;
         }
-
+        public boolean shouldHideTrail() {
+            return this.hideTrail;
+        }
+        public double getTrailThickness() {
+            return this.trailThickness;
+        }
         public float getArmorPen() {
             return this.armorPen;
         }

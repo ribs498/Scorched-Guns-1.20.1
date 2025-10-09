@@ -85,6 +85,7 @@ public class ModCreativeModeTabs {
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.MOKOVA.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.MAK_MKII.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.STILETTO.get());
+                        CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.RAILWORKER.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.TURNPIKE.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.KILLER_23.get());
                         CreativeTabHelper.addItemWithFullAmmo(pOutput, ModItems.HOMEMAKER.get());
@@ -191,6 +192,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.ADRIEN_LEGGINGS.get());
                         pOutput.accept(ModItems.ADRIEN_BOOTS.get());
                         pOutput.accept(ModItems.BRASS_MASK.get());
+                        pOutput.accept(ModItems.COG_MACE.get());
                         pOutput.accept(ModItems.COG_KNIGHT_HELMET.get());
                         pOutput.accept(ModItems.COG_KNIGHT_CHESTPLATE.get());
                         pOutput.accept(ModItems.COG_KNIGHT_LEGGINGS.get());
@@ -320,7 +322,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.COMPACT_COPPER_ROUND.get());
                         pOutput.accept(ModItems.STANDARD_COPPER_ROUND.get());
                         pOutput.accept(ModItems.RAMROD_ROUND.get());
-                        pOutput.accept(ModItems.FROG_DART.get());
+                        //pOutput.accept(ModItems.FROG_DART.get());
                         pOutput.accept(ModItems.HOG_ROUND.get());
                         pOutput.accept(ModItems.COMPACT_ADVANCED_ROUND.get());
                         pOutput.accept(ModItems.ADVANCED_ROUND.get());
@@ -530,6 +532,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.BASIC_TURRET.get());
                         pOutput.accept(ModBlocks.AUTO_TURRET.get());
                         pOutput.accept(ModBlocks.SHOTGUN_TURRET.get());
+                        pOutput.accept(ModBlocks.SNIPER_TURRET.get());
                         pOutput.accept(ModBlocks.HOSTILE_TURRET_TARGETING_BLOCK.get());
                         pOutput.accept(ModBlocks.PLAYER_TURRET_TARGETING_BLOCK.get());
                         pOutput.accept(ModBlocks.TURRET_TARGETING_BLOCK.get());
@@ -560,7 +563,6 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.SIGNAL_BEACON_SPAWN_EGG.get());
                         pOutput.accept(ModItems.SCAMP_TANK_SPAWN_EGG.get());
                         pOutput.accept(ModItems.SCAMPLER_SPAWN_EGG.get());
-                        pOutput.accept(ModItems.GUNNER_ZOMBIE_SPAWN_EGG.get());
                        // pOutput.accept(ModItems.THE_MERCHANT_SPAWN_EGG.get());
                     })
                     .build());

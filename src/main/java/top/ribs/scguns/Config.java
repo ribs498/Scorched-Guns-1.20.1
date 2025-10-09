@@ -228,12 +228,10 @@ public class Config
         public final GunnerMobs gunnerMobs;
         public final AggroMobs aggroMobs;
         public final FleeingMobs fleeingMobs;
-        public final Rockets rockets;
         public final Grenades grenades;
         public final StunGrenades stunGrenades;
         public final ProjectileSpread projectileSpread;
         public final Gunsmith Gunsmith;
-        public final Turret turret;
         public final ExoSuitCores exoSuitCores;
 
 
@@ -247,101 +245,47 @@ public class Config
                 this.gunnerMobs = new GunnerMobs(builder);
                 this.aggroMobs = new AggroMobs(builder);
                 this.fleeingMobs = new FleeingMobs(builder);
-                this.rockets = new Rockets(builder);
                 this.grenades = new Grenades(builder);
                 this.stunGrenades = new StunGrenades(builder);
                 this.projectileSpread = new ProjectileSpread(builder);
                 this.Gunsmith = new Gunsmith(builder);
-                this.turret = new Turret(builder);
                 this.exoSuitCores = new ExoSuitCores(builder);
             }
             builder.pop();
         }
     }
-    public static class GunnerMobs
-    {
+    public static class GunnerMobs {
         public final ForgeConfigSpec.BooleanValue gunnerMobSpawning;
-        public final ForgeConfigSpec.BooleanValue explosiveMobs;
-        public final ForgeConfigSpec.BooleanValue dropAmmo;
+        public final ForgeConfigSpec.DoubleValue gunnerSpawnChance;
+        public final ForgeConfigSpec.BooleanValue scaleToDifficulty;
         public final ForgeConfigSpec.BooleanValue eliteSpawning;
         public final ForgeConfigSpec.DoubleValue eliteChance;
-        public final ForgeConfigSpec.BooleanValue horsemen;
-        public final ForgeConfigSpec.IntValue minimunDays;
-        public final ForgeConfigSpec.IntValue initialChance;
-        public final ForgeConfigSpec.IntValue chanceIncrement;
-        public final ForgeConfigSpec.IntValue maxChance;
-        public final ForgeConfigSpec.BooleanValue gunnerMobPatrols;
-        public final ForgeConfigSpec.IntValue patrolIntervalDays;
-        public final ForgeConfigSpec.IntValue randomIntervalMinTicks;
-        public final ForgeConfigSpec.IntValue randomIntervalMaxTicks;
-        public final ForgeConfigSpec.IntValue minimumDaysForPatrols;
-        public final ForgeConfigSpec.BooleanValue gunnerMobRaids;
-        public final ForgeConfigSpec.BooleanValue raidSupportMobs;
-        public final ForgeConfigSpec.IntValue raidIntervalDays;
-        public final ForgeConfigSpec.IntValue randomRaidIntervalMinTicks;
-        public final ForgeConfigSpec.IntValue randomRaidIntervalMaxTicks;
-        public final ForgeConfigSpec.IntValue minimumDaysForRaids;
-        public final ForgeConfigSpec.ConfigValue<List<? extends String>> factions;
-        public final ForgeConfigSpec.BooleanValue terrorPhantomDestroyBlocks;
-        public final ForgeConfigSpec.BooleanValue phantomSwarm;
-        public final ForgeConfigSpec.BooleanValue phantomGunnersReplacePhantoms;
 
         public GunnerMobs(ForgeConfigSpec.Builder builder) {
-            builder.comment("Faction and Gun Configuration").push("gunner_config");
+            builder.comment("Gun Mob Spawning Configuration").push("gunner_config");
             {
-                this.gunnerMobSpawning = builder.comment("If enabled, mobs inside the Factions config will have a chance to spawn with guns.").define("gunnerMobSpawning", true);
-                this.explosiveMobs = builder.comment("If enabled, Raids will have a chance to spawn explosive mobs/mobs with explosive charges.").define("explosiveMobs", true);
-                this.dropAmmo = builder.comment("If enabled, mobs with guns will have a chance to drop ammo for the gun they are using.").define("dropAmmo", true);
-                this.eliteSpawning = builder.comment("If enabled, mobs will have a chance to spawn as Elites.").define("eliteSpawning", true);
-                this.eliteChance = builder.comment("The chance for Elite Gunners to spawn, 1.0 is always, 0.0 is never.").defineInRange("eliteChance", 0.3D, 0.1D, 1.0D);
-                this.horsemen = builder.comment("If enabled, Elite Gunners have a chance to spawn riding Horses.").define("horsemen", true);
-                this.minimunDays = builder.comment("The in-game day where mobs will start spawning, and the spawn chance will increase every day after. 0 is the world-creation day.").defineInRange("minimunDays", 4, 0, 100);
-                this.initialChance = builder.comment("This will define the initial chance of mobs spawning with guns. Goes from 0% to 100%").defineInRange("initialChance", 1, 0, 100);
-                this.chanceIncrement = builder.comment("This defines the increment of the chance of mobs spawning with guns per day.").defineInRange("chanceIncrement", 1, 0, 100);
-                this.maxChance = builder.comment("This will define the max chance of mobs spawning with guns.").defineInRange("maxChance", 50, 1, 100);
-                this.terrorPhantomDestroyBlocks = builder.comment("If enabled, the Terror Phantom will destroy blocks with its grenades.").define("terrorPhantomDestroyBlocks", false);
-                this.phantomSwarm = builder.comment("If enabled, defeating the Terror Phantom will enable the Phantom Swarm.").define("phantomSwarm", true);
-                this.phantomGunnersReplacePhantoms = builder.comment("If enabled, Phantom Gunners will have a chance to replace Phantoms AFTER defeating the Terror Phantom.").define("phantomGunnersReplacePhantoms", true);
-                this.gunnerMobPatrols = builder.comment("If enabled, Factions inside the config will have the same chance to spawn like Pillager Patrols.").define("gunnerMobPatrols", true);
-                this.patrolIntervalDays = builder.comment("Fixed patrol interval in days. Set to 0 to use a random interval instead.").defineInRange("patrolIntervalDays", 5, 0, 30);
-                this.randomIntervalMinTicks = builder.comment("Minimum random interval in ticks if patrolIntervalDays is 0.").defineInRange("randomIntervalMinTicks", 12000, 1, Integer.MAX_VALUE);
-                this.randomIntervalMaxTicks = builder.comment("Maximum random interval in ticks if patrolIntervalDays is 0.").defineInRange("randomIntervalMaxTicks", 24000, 1, Integer.MAX_VALUE);
-                this.minimumDaysForPatrols = builder.comment("Minimum number of in-game days before patrols can start spawning.").defineInRange("minimumDaysForPatrols", 5, 0, 30);
-                this.gunnerMobRaids = builder.comment("If enabled, Factions inside the config will have the same chance to start Raids naturally.").define("gunnerMobRaids", true);
-                this.raidSupportMobs = builder.comment("If enabled, Factions will spawn additional Mobs for support.").define("raidSupportMobs", true);
-                this.raidIntervalDays = builder.comment("Fixed Raid interval in days. Set to 0 to use a random interval instead.").defineInRange("raidIntervalDays", 30, 0, 100);
-                this.randomRaidIntervalMinTicks = builder.comment("Minimum random interval in ticks if raidIntervalDays is 0.").defineInRange("randomRaidIntervalMinTicks", 12000, 1, Integer.MAX_VALUE);
-                this.randomRaidIntervalMaxTicks = builder.comment("Maximum random interval in ticks if raidIntervalDays is 0.").defineInRange("randomRaidIntervalMaxTicks", 24000, 1, Integer.MAX_VALUE);
-                this.minimumDaysForRaids = builder.comment("Minimum number of in-game days before Factions can start Raids").defineInRange("minimumDaysForRaids", 15, 0, 100);
-                this.factions = builder.comment("Define factions, their mobs, and gun pools. Format: faction_name|ai_difficulty|mob1,mob2...|closeGun1,closeGun2...|longGun1,longGun2...|eliteGun1,eliteGun2...")
-                        .defineList("factions", Arrays.asList(
-                                "night_of_the_undead" + "|1" +
-                                        "|minecraft:zombie,minecraft:zombie_villager,minecraft:husk" +
-                                        "|scguns:greaser_smg,scguns:combat_shotgun" +
-                                        "|scguns:defender_pistol" +
-                                        "|scguns:brawler",
-                                "the_rattlers" + "|2" +
-                                        "|minecraft:skeleton,minecraft:stray" +
-                                        "|scguns:greaser_smg" +
-                                        "|scguns:iron_javelin" +
-                                        "|scguns:iron_spear,scguns:iron_javelin",
-                                "nosy_business" + "|3" +
-                                        "|minecraft:pillager,minecraft:vindicator" +
-                                        "|scguns:combat_shotgun" +
-                                        "|scguns:mas_55,scguns:prush_gun" +
-                                        "|scguns:inertial,scguns:m3_carabine",
-                                "bad_piggies" + "|2" +
-                                        "|minecraft:piglin,minecraft:piglin_brute" +
-                                        "|scguns:freyr,scguns:mangalitsa" +
-                                        "|scguns:vulcanic_repeater,scguns:pyroclastic_flow"  +
-                                        "|scguns:trotters",
-                                "hell_hogs" + "|3" +
-                                        "|minecraft:zombified_piglin,minecraft:wither_skeleton" +
-                                        "|scguns:greaser_smg,scguns:defender_pistol,scguns:combat_shotgun" +
-                                        "|scguns:lockewood,scguns:drill" +
-                                        "|scguns:krauser"
-                        ), o -> o instanceof String);
+                this.gunnerMobSpawning = builder
+                        .comment("If enabled, mobs will have a chance to spawn with guns.")
+                        .define("gunnerMobSpawning", true);
 
+                this.gunnerSpawnChance = builder
+                        .comment("Base chance for progression-based gunner mobs to spawn (0.0 = never, 1.0 = always).",
+                                "This is the spawn chance on NORMAL difficulty. Thematic mobs use their own config.")
+                        .defineInRange("gunnerSpawnChance", 0.3D, 0.0D, 1.0D);
+
+                this.scaleToDifficulty = builder
+                        .comment("If enabled, spawn chances scale with game difficulty.",
+                                "PEACEFUL: 50% of base chance, EASY: 75%, NORMAL: 100%, HARD: 150%")
+                        .define("scaleToDifficulty", true);
+
+                this.eliteSpawning = builder
+                        .comment("If enabled, gunner mobs will have a chance to spawn as Elites with better armor.")
+                        .define("eliteSpawning", true);
+
+                this.eliteChance = builder
+                        .comment("Base chance for Elite Gunners to spawn (0.0 = never, 1.0 = always).",
+                                "This is the spawn chance on NORMAL difficulty.")
+                        .defineInRange("eliteChance", 0.2D, 0.0D, 1.0D);
             }
             builder.pop();
         }
@@ -370,6 +314,7 @@ public class Config
         public final ForgeConfigSpec.BooleanValue drawAnimation;
         public final ForgeConfigSpec.BooleanValue toggleADS;
         public final ForgeConfigSpec.DoubleValue globalDamageMultiplier;
+        public final ForgeConfigSpec.DoubleValue globalTurretDamageMultiplier;
         public final ForgeConfigSpec.BooleanValue disableVillagerSpawning;
         public final ForgeConfigSpec.DoubleValue dissidentSpawnChance;
         public final ForgeConfigSpec.BooleanValue enableAutoReload;
@@ -403,7 +348,10 @@ public class Config
                         .define("toggleADS", false);
                 this.globalDamageMultiplier = builder
                         .comment("Global multiplier for all gun damage. 1.0 = normal damage, 0.5 = half damage, 2.0 = double damage. Affects all projectile damage from guns.")
-                        .defineInRange("globalDamageMultiplier", 1.0, 0.01, 10.0);
+                        .defineInRange("globalDamageMultiplier", 1.0, 0.01, 100.0);
+                this.globalTurretDamageMultiplier = builder
+                        .comment("Global multiplier for all turret gun damage. 1.0 = normal damage, 0.5 = half damage, 2.0 = double damage. Affects all projectile damage from turrets.")
+                        .defineInRange("globalTurretDamageMultiplier", 1.0, 0.01, 100.0);
                 this.disableVillagerSpawning = builder
                         .comment("If true, the Brass Mask ritual will never spawn villagers. When disabled, it will spawn Dissidents instead based on the spawn chance below.")
                         .define("disableVillagerSpawning", false);
@@ -439,7 +387,7 @@ public class Config
         {
             builder.comment("Properties related to gun griefing").push("griefing");
             {
-                this.enableBlockRemovalOnExplosions = builder.comment("If enabled, allows block removal on explosions").define("enableBlockRemovalOnExplosions", true);
+                this.enableBlockRemovalOnExplosions = builder.comment("If enabled, allows block removal on explosions").define("enableBlockRemovalOnExplosions", false);
                 this.enableGlassBreaking = builder.comment("If enabled, allows guns to shoot out glass and other fragile objects").define("enableGlassBreaking", true);
                 this.fragileBlockDrops = builder.comment("If enabled, fragile blocks will drop their loot when broken").define("fragileBlockDrops", true);
                 this.fragileBaseBreakChance = builder.comment("The base chance that a fragile block is broken when impacted by a bullet. The hardness of a block will scale this value; the harder the block, the lower the final calculated chance will be.").defineInRange("fragileBlockBreakChance", 1.0, 0.0, 1.0);
@@ -511,23 +459,6 @@ public class Config
     }
 
     /**
-     * Missile related config options
-     */
-    public static class Rockets
-    {
-        public final ForgeConfigSpec.DoubleValue explosionRadius;
-
-        public Rockets(ForgeConfigSpec.Builder builder)
-        {
-            builder.comment("Properties relating to rockets").push("rockets");
-            {
-                this.explosionRadius = builder.comment("The max distance which the explosion is effective to").defineInRange("explosionRadius", 4.0, 0.0, Double.MAX_VALUE);
-            }
-            builder.pop();
-        }
-    }
-
-    /**
      * Grenade related config options
      */
     public static class Grenades
@@ -554,52 +485,6 @@ public class Config
 
             }
             builder.pop();
-        }
-    }
-    public static class Turret
-    {
-        public final Map<TurretProjectileEntity.BulletType, ForgeConfigSpec.DoubleValue> bulletDamage;
-        public final ForgeConfigSpec.BooleanValue enableDamageScaling;
-        public final ForgeConfigSpec.DoubleValue damageScalingRate;
-        public final ForgeConfigSpec.DoubleValue maxScaledDamage;
-
-        public Turret(ForgeConfigSpec.Builder builder)
-        {
-            builder.comment("Properties relating to turrets").push("turret");
-            {
-                bulletDamage = new EnumMap<>(TurretProjectileEntity.BulletType.class);
-                for (TurretProjectileEntity.BulletType type : TurretProjectileEntity.BulletType.values()) {
-                    bulletDamage.put(type, builder
-                            .comment("Base damage for " + type.name() + " turret projectile")
-                            .defineInRange(type.name().toLowerCase() + "_damage", getDefaultDamage(type), 0.0, Double.MAX_VALUE));
-                }
-
-                this.enableDamageScaling = builder
-                        .comment("If true, turret damage will scale over time")
-                        .define("enable_damage_scaling", false);
-
-                this.damageScalingRate = builder
-                        .comment("The rate at which turret damage increases per day")
-                        .defineInRange("damage_scaling_rate", 0.03, 0.0, Double.MAX_VALUE);
-
-                this.maxScaledDamage = builder
-                        .comment("The maximum damage that turret scaling can reach")
-                        .defineInRange("max_scaled_damage", Double.MAX_VALUE, 0.0, Double.MAX_VALUE);
-            }
-            builder.pop();
-        }
-
-        private double getDefaultDamage(TurretProjectileEntity.BulletType type) {
-            return switch (type) {
-                case STANDARD_COPPER_ROUND -> 6.0;
-                case ADVANCED_ROUND -> 8.0;
-                case GIBBS_ROUND -> 10.0;
-                case COMPACT_COPPER_ROUND -> 5.0;
-                case COMPACT_ADVANCED_ROUND ->6.5;
-                case HOG_ROUND -> 7.0;
-                case SHOTGUN_SHELL -> 22.0;
-                case BEARPACK_SHELL -> 28.0;
-            };
         }
     }
     /**
@@ -702,96 +587,6 @@ public class Config
                 this.maxCount = builder.comment("The amount of times a player has to shoot within the spread threshold before the maximum amount of spread is applied. Setting the value higher means it will take longer for the spread to be applied.").defineInRange("maxCount", 10, 1, Integer.MAX_VALUE);
             }
             builder.pop();
-        }
-    }
-    public static class GunScalingConfig {
-        private static final ForgeConfigSpec SPEC;
-        public static final ForgeConfigSpec.Builder BUILDER = new ForgeConfigSpec.Builder();
-        private static final GunScalingConfig INSTANCE = new GunScalingConfig();
-
-        private static final ForgeConfigSpec.BooleanValue enableScalingDamage;
-        private static final ForgeConfigSpec.DoubleValue damageIncreaseRate;
-        private static final ForgeConfigSpec.DoubleValue baseDamage;
-        private static final ForgeConfigSpec.DoubleValue maxDamage;
-
-        static {
-            BUILDER.push("Scaling Damage");
-
-            enableScalingDamage = BUILDER
-                    .comment("If true, gun damage will scale with the days in the world.")
-                    .define("Enable Scaling Damage", false);
-
-            damageIncreaseRate = BUILDER
-                    .comment("The decimal amount that gun damage increases per day.")
-                    .defineInRange("Damage Increase Rate", 0.03, 0.0, Double.POSITIVE_INFINITY);
-
-            baseDamage = BUILDER
-                    .comment("The base damage value for the guns.")
-                    .defineInRange("Base Damage", 1.0, 0.0, Double.POSITIVE_INFINITY);
-
-            maxDamage = BUILDER
-                    .comment("The maximum damage that gun scaling can reach.")
-                    .defineInRange("Max Scaled Damage", Double.POSITIVE_INFINITY, 0.0, Double.POSITIVE_INFINITY);
-
-            BUILDER.pop();
-
-            SPEC = BUILDER.build();
-        }
-
-        // Getters
-        public boolean isScalingEnabled() {
-            return enableScalingDamage.get();
-        }
-
-        public double getDamageIncreaseRate() {
-            return damageIncreaseRate.get();
-        }
-
-        public double getBaseDamage() {
-            return baseDamage.get();
-        }
-
-        public double getMaxDamage() {
-            return maxDamage.get();
-        }
-
-        // Setters
-        public void setScalingEnabled(boolean enabled) {
-            enableScalingDamage.set(enabled);
-        }
-
-        public void setDamageIncreaseRate(double rate) {
-            damageIncreaseRate.set(rate);
-        }
-
-        public void setBaseDamage(double damage) {
-            baseDamage.set(damage);
-        }
-
-        public void setMaxDamage(double max) {
-            maxDamage.set(max);
-        }
-
-        public static void setup() {
-            Path configPath = FMLPaths.CONFIGDIR.get();
-            Path gunConfigPath = Paths.get(configPath.toAbsolutePath().toString(), "gun_scaling");
-
-            // Create the config folder
-            try {
-                Files.createDirectory(gunConfigPath);
-            } catch (Exception e) {
-                // Do nothing
-            }
-
-            ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, SPEC, "gun_scaling/main.toml");
-        }
-
-        public static GunScalingConfig getInstance() {
-            return INSTANCE;
-        }
-
-        public void save() {
-            SPEC.save();
         }
     }
 

@@ -6,12 +6,8 @@ import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
-import net.minecraft.core.particles.BlockParticleOption;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.particles.*;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -20,6 +16,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -30,7 +27,6 @@ import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animation.AnimationController;
 import top.ribs.scguns.Config;
-import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.client.BulletTrail;
 import top.ribs.scguns.client.CustomGunManager;
 import top.ribs.scguns.client.audio.GunShotSound;
@@ -43,6 +39,7 @@ import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.common.NetworkGunManager;
 import top.ribs.scguns.common.ReloadType;
 import top.ribs.scguns.common.exosuit.ExoSuitData;
+import top.ribs.scguns.common.exosuit.ExoSuitUpgradeManager;
 import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GunItem;
@@ -61,59 +58,64 @@ import java.util.stream.Collectors;
  * Author: MrCrayfish
  */
 public class ClientPlayHandler {
-    public static void handleStopReload() {
-        Player player = Minecraft.getInstance().player;
-        if (player != null) {
-            ItemStack heldItem = player.getMainHandItem();
-            if (heldItem.getItem() instanceof AnimatedGunItem) {
-                CompoundTag tag = heldItem.getOrCreateTag();
-                tag.putString("scguns:ReloadState", "STOPPING");
-                tag.putBoolean("scguns:IsPlayingReloadStop", true);
-                tag.remove("InReloadLoop");
-                tag.remove("scguns:IsReloading");
-                ModSyncedDataKeys.RELOADING.setValue(player, false);
-                AnimatedGunItem gunItem = (AnimatedGunItem) heldItem.getItem();
-                long id = GeoItem.getId(heldItem);
-                AnimationController<GeoAnimatable> animationController = gunItem.getAnimatableInstanceCache()
-                        .getManagerForId(id)
-                        .getAnimationControllers()
-                        .get("controller");
 
-                if (animationController != null) {
-                    animationController.stop();
-                    animationController.setAnimationSpeed(1.0);
-                    animationController.tryTriggerAnimation(gunItem.isInCarbineMode(heldItem) ? "carbine_reload_stop" : "reload_stop");
-                }
-            }
+    public static void handleEntityCasingEject(S2CMessageEntityCasingEject message) {
+        Minecraft mc = Minecraft.getInstance();
+        Level level = mc.level;
+        if (level == null) return;
+
+        Entity entity = level.getEntity(message.getEntityId());
+        if (!(entity instanceof LivingEntity livingEntity)) return;
+
+        Vec3 lookVec = livingEntity.getLookAngle();
+        Vec3 rightVec = new Vec3(-lookVec.z, 0, lookVec.x).normalize();
+        Vec3 forwardVec = new Vec3(lookVec.x, 0, lookVec.z).normalize();
+
+        double offsetX = rightVec.x * 0.5 + forwardVec.x * 0.5;
+        double offsetY = livingEntity.getEyeHeight() - 0.4;
+        double offsetZ = rightVec.z * 0.5 + forwardVec.z * 0.5;
+
+        Vec3 particlePos = livingEntity.getPosition(1).add(offsetX, offsetY, offsetZ);
+
+        ParticleType<?> particleType = ForgeRegistries.PARTICLE_TYPES.getValue(message.getParticleLocation());
+        if (particleType instanceof SimpleParticleType simpleParticleType) {
+            level.addParticle(simpleParticleType,
+                    particlePos.x, particlePos.y, particlePos.z,
+                    0, 0, 0);
         }
+    }
+    public static void handleSyncUpgradeRegistry(S2CMessageSyncUpgradeRegistry message) {
+        Minecraft.getInstance().execute(() -> {
+            ExoSuitUpgradeManager.deserializeUpgrades(message.getUpgradeData());
+        });
     }
     public static void handleSyncExoSuitUpgrades(S2CMessageSyncExoSuitUpgrades message) {
         LocalPlayer localPlayer = Minecraft.getInstance().player;
-        if (localPlayer != null) {
-            // Find the player by UUID
-            Player targetPlayer = null;
-            if (localPlayer.getUUID().equals(message.getPlayerId())) {
-                targetPlayer = localPlayer;
-            } else {
-                for (Player player : localPlayer.level().players()) {
-                    if (player.getUUID().equals(message.getPlayerId())) {
-                        targetPlayer = player;
-                        break;
-                    }
-                }
+        Level level = Minecraft.getInstance().level;
+        if (localPlayer == null || level == null) return;
+
+        Player targetPlayer = null;
+        for (Player player : level.players()) {
+            if (player.getUUID().equals(message.getPlayerId())) {
+                targetPlayer = player;
+                break;
+            }
+        }
+
+        if (targetPlayer != null) {
+            ItemStack armorPiece = targetPlayer.getItemBySlot(message.getArmorSlot());
+
+            if (armorPiece.isEmpty() && !message.getUpgradeData().isEmpty()) {
+                return;
             }
 
-            if (targetPlayer != null) {
-                ItemStack armorPiece = targetPlayer.getItemBySlot(message.getArmorSlot());
-                if (!armorPiece.isEmpty() && armorPiece.getItem() instanceof ExoSuitItem exoSuitItem) {
-                    ExoSuitData.setUpgradeData(armorPiece, message.getUpgradeData());
+            if (armorPiece.getItem() instanceof ExoSuitItem) {
+                ExoSuitData.setUpgradeData(armorPiece, message.getUpgradeData());
 
-                    if (targetPlayer == localPlayer) {
-                        localPlayer.inventoryMenu.broadcastChanges();
+                targetPlayer.setItemSlot(message.getArmorSlot(), armorPiece.copy());
 
-                        ItemStack refreshedStack = armorPiece.copy();
-                        targetPlayer.setItemSlot(message.getArmorSlot(), refreshedStack);
-                    }
+                if (targetPlayer == localPlayer) {
+                    localPlayer.inventoryMenu.broadcastChanges();
                 }
             }
         }
@@ -146,14 +148,11 @@ public class ClientPlayHandler {
         if (!(heldItem.getItem() instanceof AnimatedGunItem gunItem)) return;
 
         CompoundTag tag = heldItem.getOrCreateTag();
-        Gun modifiedGun = gunItem.getModifiedGun(heldItem);
-        boolean isManualReload = modifiedGun.getReloads().getReloadType() == ReloadType.MANUAL;
-        boolean isReloading = tag.getBoolean("scguns:IsReloading") ||
-                (tag.contains("scguns:ReloadState") && !tag.getString("scguns:ReloadState").equals("NONE"));
-
-        if (!isManualReload || !isReloading) {
-            return;
-        }
+        tag.putString("scguns:ReloadState", "STOPPING");
+        tag.putBoolean("scguns:IsPlayingReloadStop", true);
+        tag.remove("InReloadLoop");
+        tag.remove("scguns:IsReloading");
+        ModSyncedDataKeys.RELOADING.setValue(player, false);
 
         long id = GeoItem.getId(heldItem);
         AnimationController<GeoAnimatable> animationController = gunItem.getAnimatableInstanceCache()
@@ -161,22 +160,13 @@ public class ClientPlayHandler {
                 .getAnimationControllers()
                 .get("controller");
 
-        int currentAmmo = tag.getInt("AmmoCount");
-        int maxAmmo = GunModifierHelper.getModifiedAmmoCapacity(heldItem, modifiedGun);
-        boolean hasNoAmmo = Gun.findAmmo(player, modifiedGun.getProjectile().getItem()).stack().isEmpty();
-
-        if (animationController != null && (currentAmmo >= maxAmmo || hasNoAmmo)) {
-            tag.putString("scguns:ReloadState", "STOPPING");
-            tag.putBoolean("scguns:IsPlayingReloadStop", true);
+        if (animationController != null) {
+            animationController.stop();
             animationController.setAnimationSpeed(1.0);
-            animationController.forceAnimationReset();
             animationController.tryTriggerAnimation(
                     gunItem.isInCarbineMode(heldItem) ? "carbine_reload_stop" : "reload_stop"
             );
         }
-        tag.remove("scguns:IsReloading");
-        tag.remove("loaded");
-        tag.remove("scguns:ReloadComplete");
     }
     public static void handleMessageGunSound(S2CMessageGunSound message) {
         Minecraft mc = Minecraft.getInstance();
@@ -292,10 +282,14 @@ public class ClientPlayHandler {
             int shooterId = message.getShooterId();
             boolean enchanted = message.isEnchanted();
             ParticleOptions data = message.getParticleData();
-            boolean isVisible = message.isVisible();
+            boolean isVisible = true;
+            double trailThickness = message.getTrailThickness();
+
             for(int i = 0; i < message.getCount(); i++)
             {
-                BulletTrailRenderingHandler.get().add(new BulletTrail(entityIds[i], positions[i], motions[i], item, trailColor, trailLengthMultiplier, life, gravity, shooterId, enchanted, data, isVisible));
+                BulletTrailRenderingHandler.get().add(new BulletTrail(entityIds[i], positions[i], motions[i],
+                        item, trailColor, trailLengthMultiplier, life, gravity, shooterId, enchanted, data,
+                        isVisible, trailThickness));
             }
         }
     }

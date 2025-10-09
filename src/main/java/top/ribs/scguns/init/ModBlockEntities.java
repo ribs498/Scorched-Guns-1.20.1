@@ -89,6 +89,12 @@ public class ModBlockEntities {
                     BlockEntityType.Builder.of(AutoTurretBlockEntity::new,
                             ModBlocks.AUTO_TURRET.get()).build(null));
 
+    public static final RegistryObject<BlockEntityType<SniperTurretBlockEntity>> SNIPER_TURRET =
+            BLOCK_ENTITIES.register("sniper_turret", () ->
+                    BlockEntityType.Builder.of(SniperTurretBlockEntity::new,
+                            ModBlocks.SNIPER_TURRET.get()).build(null));
+
+
     public static final RegistryObject<BlockEntityType<EnemyTurretBlockEntity>> ENEMY_TURRET =
             BLOCK_ENTITIES.register("enemy_turret", () ->
                     BlockEntityType.Builder.of(EnemyTurretBlockEntity::new,

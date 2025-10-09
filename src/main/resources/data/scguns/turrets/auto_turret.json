@@ -1,0 +1,57 @@
+{
+  "targeting": {
+    "range": 12.0,
+    "verticalRange": 12.0,
+    "minFiringDistance": 1.3,
+    "rotationSpeed": 0.5,
+    "positionSmoothing": 0.2,
+    "maxPitch": 60.0,
+    "minPitch": -25.0,
+    "predictionMultiplier": 7,
+    "requiresLineOfSight": true
+  },
+  "combat": {
+    "cooldown": 10,
+    "inaccuracy": 0.05,
+    "pelletCount": 1,
+    "spreadAngle": 0.0,
+    "recoilMax": 4.0,
+    "recoilSpeed": 0.3,
+    "damageModifier": 2,
+    "projectileSpeed": 3.0,
+    "fireSound": "scguns:item.iron_pistol.fire"
+  },
+  "ammunition": {
+    "acceptedAmmo": [
+      {
+        "item": "scguns:compact_advanced_round",
+        "bulletType": "scguns:compact_advanced_round",
+        "casingType": "scguns:small_brass_casing",
+        "damage": 6.5
+      },
+      {
+        "item": "scguns:hog_round",
+        "bulletType": "scguns:hog_round",
+        "casingType": "scguns:small_iron_casing",
+        "damage": 8.0
+      },
+      {
+        "item": "scguns:compact_copper_round",
+        "bulletType": "scguns:compact_copper_round",
+        "casingType": "scguns:small_copper_casing",
+        "damage": 5.5
+      }
+    ],
+    "casingEjectChance": 0.65
+  },
+  "behavior": {
+    "restingYaw": 0.0,
+    "restingPitch": -30.0,
+    "disableTime": 200,
+    "hasOpenAnimation": false
+  },
+  "display": {
+    "muzzleLength": 1.0,
+    "muzzleOffsetY": 1.4
+  }
+}

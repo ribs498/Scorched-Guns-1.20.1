@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=north": { "model": "scguns:block/basic_turret_base" },
+    "facing=south": { "model": "scguns:block/basic_turret_base", "y": 180 },
+    "facing=west": { "model": "scguns:block/basic_turret_base", "y": 270 },
+    "facing=east": { "model": "scguns:block/basic_turret_base", "y": 90 }
+  }
+}

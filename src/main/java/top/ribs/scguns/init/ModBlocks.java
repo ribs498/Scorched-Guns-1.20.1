@@ -82,6 +82,11 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops()
                     .strength(3.0F)
                     .noOcclusion()));
+    public static final RegistryObject<Block> SNIPER_TURRET = register("sniper_turret",
+            () -> new SniperTurretBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .requiresCorrectToolForDrops()
+                    .strength(8.0F)
+                    .noOcclusion()));
     public static final RegistryObject<Block> ENEMY_TURRET = register("enemy_turret",
             () -> new EnemyTurretBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                     .requiresCorrectToolForDrops()

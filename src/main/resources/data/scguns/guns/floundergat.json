@@ -14,7 +14,7 @@
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "projectileAmount": 22,
-    "rate": 11,
+    "rate": 9,
     "recoilAngle": 10.0,
     "recoilKick": 0.5,
     "spread": 10.8,

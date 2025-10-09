@@ -49,8 +49,8 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 16.5,
-    "armorPen": 4.0,
+    "damage": 14.5,
+    "armorPen": 2.0,
     "gravity": false,
     "item": "scguns:compact_advanced_round",
     "ejectsCasing": true,
@@ -63,7 +63,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 14,
+    "maxAmmo": 12,
     "reloadItem": "scguns:compact_advanced_round",
     "reloadTimer": 50,
     "reloadType": "scguns:mag_fed"

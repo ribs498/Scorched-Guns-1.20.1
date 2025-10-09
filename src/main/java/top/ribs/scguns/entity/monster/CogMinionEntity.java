@@ -5,11 +5,8 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
@@ -25,18 +22,12 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
-import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import top.ribs.scguns.ScorchedGuns;
-import top.ribs.scguns.attributes.SCAttributes;
-import top.ribs.scguns.entity.config.CogMinionConfig;
+import top.ribs.scguns.config.EntityEquipmentConfig;
 import top.ribs.scguns.entity.weapon.ScGunsWeapon;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
@@ -44,10 +35,7 @@ import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.interfaces.IEntityCanReload;
 import top.ribs.scguns.item.GunItem;
 
-import java.util.List;
-
 public class CogMinionEntity extends Monster implements IEntityCanReload {
-    private static final Logger LOGGER = LogManager.getLogger();
     private static final EntityDataAccessor<Boolean> ATTACKING =
             SynchedEntityData.defineId(CogMinionEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -89,44 +77,10 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
             this.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
         }
     }
-    public int getTicksUntilNextAttack() {
-        return this.ticksUntilNextAttack;
-    }
     public boolean canBreatheUnderwater() {
         return true;
     }
-    public int getAttackCooldown() {
-        ItemStack mainHandItem = this.getMainHandItem();
-        if (mainHandItem.getItem() instanceof GunItem) {
-            ScGunsWeapon weapon = new ScGunsWeapon(mainHandItem);
-            double attackSpeedModifier = 2.0;
-            return weapon.getAdjustedAttackCooldown(attackSpeedModifier);
-        }
-        return 40;
-    }
-    public void performRangedAttack(LivingEntity target) {
-        if (this.shotCount >= this.maxShots) {
-            this.setTicksUntilNextAttack(RELOAD_TIME);
-            this.shotCount = 0;
-            this.setMaxShots();
-            return;
-        }
-        ItemStack mainHandItem = this.getMainHandItem();
-        if (mainHandItem.getItem() instanceof GunItem) {
-            ScGunsWeapon weapon = new ScGunsWeapon(mainHandItem);
-            double inaccuracy = 0.33; // inaccuracy
-            double dx = target.getX() - this.getX();
-            double dy = target.getEyeY() - this.getEyeY();
-            double dz = target.getZ() - this.getZ();
-            double distance = Math.sqrt(dx * dx + dz * dz);
-            double xSpread = dx + (this.random.nextDouble() - 0.5) * inaccuracy;
-            double ySpread = dy + (this.random.nextDouble() - 0.5) * inaccuracy;
-            double zSpread = dz + (this.random.nextDouble() - 0.5) * inaccuracy;
-            double projectileSpeedModifier = 0.5;
-            weapon.performRangedAttackIWeapon(this, this.getX() + xSpread, this.getY() + ySpread, this.getZ() + zSpread, weapon.getAdjustedProjectileSpeed(projectileSpeedModifier));
-            this.shotCount++;
-        }
-    }
+
     @Override
     public boolean canBeAffected(@NotNull MobEffectInstance pPotionEffect) {
         MobEffect effect = pPotionEffect.getEffect();
@@ -176,46 +130,12 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
         }
     }
     @Override
-    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
+                                        MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData,
+                                        @Nullable CompoundTag pDataTag) {
         super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
-        RandomSource random = pLevel.getRandom();
-        CogMinionConfig config = ScorchedGuns.COG_MINION_CONFIG;
-
-        if (random.nextFloat() < config.getSpawnWithItemChance()) {
-            CogMinionConfig.ItemSpawnData spawnData = selectItemBasedOnChance(config.getItems(), random);
-            if (spawnData != null) {
-                Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(spawnData.getItem()));
-                if (item != null) {
-                    ItemStack itemStack = new ItemStack(item);
-                    if (itemStack.isDamageableItem() && spawnData.getMinDurability() != null && spawnData.getMaxDurability() != null) {
-                        float durabilityRange = spawnData.getMaxDurability() - spawnData.getMinDurability();
-                        float randomDurability = spawnData.getMinDurability() + random.nextFloat() * durabilityRange;
-                        itemStack.setDamageValue((int)(itemStack.getMaxDamage() * (1 - randomDurability)));
-                    }
-
-                    this.setItemInHand(InteractionHand.MAIN_HAND, itemStack);
-                    this.setDropChance(EquipmentSlot.MAINHAND, spawnData.getDropChance());
-                }
-            }
-        }
+        EntityEquipmentConfig.equipEntity(this, "cog_minion");
         return pSpawnData;
-    }
-
-
-    private CogMinionConfig.ItemSpawnData selectItemBasedOnChance(List<CogMinionConfig.ItemSpawnData> items, RandomSource random) {
-        float totalChance = 0;
-        for (CogMinionConfig.ItemSpawnData item : items) {
-            totalChance += item.getSpawnChance();
-        }
-        float randomChance = random.nextFloat() * totalChance;
-        float currentChance = 0;
-        for (CogMinionConfig.ItemSpawnData item : items) {
-            currentChance += item.getSpawnChance();
-            if (randomChance < currentChance) {
-                return item;
-            }
-        }
-        return null;
     }
 
     @Override
@@ -229,14 +149,6 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
         if (this.ticksUntilNextAttack > 0) {
             this.ticksUntilNextAttack--;
         }
-//
-//        // Check and log if the entity is holding a gun item
-//        ItemStack mainHandItem = this.getItemInHand(InteractionHand.MAIN_HAND);
-//        if (mainHandItem.getItem() instanceof GunItem) {
-//            LOGGER.info("CogMinionEntity is holding a GunItem.");
-//        } else {
-//            LOGGER.info("CogMinionEntity is not holding a GunItem.");
-//        }
     }
     @Override
     public boolean wantsToPickUp(ItemStack pStack) {
@@ -303,8 +215,7 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
     }
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(1, new CogMinionGunAttackGoal(this, 15.0, 1.2));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, true));
+       this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, true));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers(CogMinionEntity.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));
@@ -338,60 +249,6 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.IRON_GOLEM_DEATH;
-    }
-
-    public float getAttackSoundVolume() {
-        return 1.0F;
-    }
-    public static class CogMinionGunAttackGoal extends Goal {
-        private final CogMinionEntity shooter;
-        private final double stopRange;
-        private final double speedModifier;
-
-        public CogMinionGunAttackGoal(CogMinionEntity shooter, double stopRange, double speedModifier) {
-            this.shooter = shooter;
-            this.stopRange = stopRange;
-            this.speedModifier = speedModifier;
-        }
-
-        @Override
-        public boolean canUse() {
-            LivingEntity target = this.shooter.getTarget();
-            return target != null && target.isAlive() && this.isGunInHand();
-        }
-
-        @Override
-        public boolean canContinueToUse() {
-            return this.canUse();
-        }
-
-        @Override
-        public void tick() {
-            LivingEntity target = this.shooter.getTarget();
-            if (target != null && target.isAlive()) {
-                double distanceToTarget = this.shooter.distanceToSqr(target);
-                if (distanceToTarget <= this.stopRange * this.stopRange) {
-                    this.shooter.getNavigation().stop();
-                } else {
-                    this.shooter.getNavigation().moveTo(target, this.speedModifier);
-                }
-
-                if (this.shooter.getSensing().hasLineOfSight(target)) {
-                    this.shooter.getLookControl().setLookAt(target);
-                    this.shooter.getLookControl().setLookAt(target.getX(), target.getEyeY(), target.getZ());
-
-                    if (this.shooter.getTicksUntilNextAttack() <= 0) {
-                        this.shooter.setTicksUntilNextAttack(this.shooter.getAttackCooldown());
-                        this.shooter.performRangedAttack(target);
-                    }
-                }
-            }
-        }
-
-        private boolean isGunInHand() {
-            ItemStack mainHandItem = this.shooter.getMainHandItem();
-            return mainHandItem.getItem() instanceof GunItem;
-        }
     }
 
 }

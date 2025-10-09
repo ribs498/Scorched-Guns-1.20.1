@@ -1,0 +1,57 @@
+{
+  "targeting": {
+    "range": 24.0,
+    "verticalRange": 24.0,
+    "minFiringDistance": 1.7,
+    "rotationSpeed": 0.5,
+    "positionSmoothing": 0.2,
+    "maxPitch": 60.0,
+    "minPitch": -25.0,
+    "predictionMultiplier": 7,
+    "requiresLineOfSight": true
+  },
+  "combat": {
+    "cooldown": 25,
+    "inaccuracy": 0.05,
+    "pelletCount": 1,
+    "spreadAngle": 0.0,
+    "recoilMax": 4.0,
+    "recoilSpeed": 0.3,
+    "damageModifier": 2,
+    "projectileSpeed": 3.0,
+    "fireSound": "scguns:item.iron_rifle.fire"
+  },
+  "ammunition": {
+    "acceptedAmmo": [
+      {
+        "item": "scguns:gibbs_round",
+        "bulletType": "scguns:gibbs_round",
+        "casingType": "scguns:medium_diamond_steel_casing",
+        "damage": 12.0
+      },
+      {
+        "item": "scguns:advanced_round",
+        "bulletType": "scguns:advanced_round",
+        "casingType": "scguns:medium_brass_casing",
+        "damage": 9.0
+      },
+      {
+        "item": "scguns:standard_copper_round",
+        "bulletType": "scguns:standard_copper_round",
+        "casingType": "scguns:medium_copper_casing",
+        "damage": 7.5
+      }
+    ],
+    "casingEjectChance": 0.65
+  },
+  "behavior": {
+    "restingYaw": 0.0,
+    "restingPitch": -30.0,
+    "disableTime": 200,
+    "hasOpenAnimation": false
+  },
+  "display": {
+    "muzzleLength": 1.0,
+    "muzzleOffsetY": 1.4
+  }
+}

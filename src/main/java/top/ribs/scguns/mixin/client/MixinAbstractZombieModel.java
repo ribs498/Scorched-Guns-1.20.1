@@ -44,7 +44,7 @@ public abstract class MixinAbstractZombieModel extends HumanoidModel<Monster> {
             this.rightArm.yRot = (float) Math.toRadians(-5F);
             this.rightArm.zRot = 0;
             this.leftArm.xRot = (float) Math.toRadians(-88F);
-            this.leftArm.yRot = (float) Math.toRadians(25F);
+            this.leftArm.yRot = (float) Math.toRadians(30F);
             this.leftArm.zRot = 0;
         } else {
             this.leftArm.xRot = (float) Math.toRadians(-90F);

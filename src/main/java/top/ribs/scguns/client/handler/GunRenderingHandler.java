@@ -121,7 +121,8 @@ public class GunRenderingHandler {
     public static final float THIRD_PERSON_MELEE_DURATION = 400.0f;
     private static final long PARTICLE_COOLDOWN_MS = 100;
     private long lastParticleSpawnTime = 0;
-
+    private float thirdPersonMeleeStartTick = -1;
+    private static final float THIRD_PERSON_MELEE_TICKS = 8.0f;
     @Nullable
     private ItemStack renderingWeapon;
 
@@ -343,20 +344,38 @@ public class GunRenderingHandler {
             prevMeleeProgress = 0;
         }
 
-        // Handle third person melee attacking progress
-        if (isThirdPersonMeleeAttacking) {
-            long elapsed = currentTime - thirdPersonMeleeStartTime;
-            prevThirdPersonMeleeProgress = thirdPersonMeleeProgress;
-            thirdPersonMeleeProgress = Math.min(elapsed / THIRD_PERSON_MELEE_DURATION, 1.0f);
-            if (thirdPersonMeleeProgress >= 1.0f) {
-                isThirdPersonMeleeAttacking = false;
+        // UPDATED: Handle third person melee attacking progress with tick-based timing
+        Minecraft mc = Minecraft.getInstance();
+        if (mc.player != null) {
+            float currentTick = mc.player.tickCount + mc.getFrameTime();
+
+            if (isThirdPersonMeleeAttacking) {
+                // Detect new attack: start tick was just set or increased
+                if (thirdPersonMeleeStartTick < 0 || currentTick < thirdPersonMeleeStartTick) {
+                    thirdPersonMeleeStartTick = currentTick;
+                }
+
+                // Calculate smooth elapsed time since attack started
+                float elapsedTicks = currentTick - thirdPersonMeleeStartTick;
+
+                // Store previous for interpolation
+                prevThirdPersonMeleeProgress = thirdPersonMeleeProgress;
+
+                // Calculate attack progress (0.0 to 1.0) based on elapsed ticks
+                thirdPersonMeleeProgress = Math.min(elapsedTicks / THIRD_PERSON_MELEE_TICKS, 1.0f);
+
+                if (thirdPersonMeleeProgress >= 1.0f) {
+                    isThirdPersonMeleeAttacking = false;
+                    thirdPersonMeleeProgress = 0;
+                    prevThirdPersonMeleeProgress = 0;
+                    thirdPersonMeleeStartTick = -1;
+                    ModSyncedDataKeys.MELEE.setValue(mc.player, false);
+                }
+            } else {
                 thirdPersonMeleeProgress = 0;
                 prevThirdPersonMeleeProgress = 0;
-                ModSyncedDataKeys.MELEE.setValue(Minecraft.getInstance().player, false);
+                thirdPersonMeleeStartTick = -1;
             }
-        } else {
-            thirdPersonMeleeProgress = 0;
-            prevThirdPersonMeleeProgress = 0;
         }
 
         if (banzaiImpactProgress > 0.0f) {
@@ -409,12 +428,11 @@ public class GunRenderingHandler {
     }
     public void startThirdPersonMeleeAnimation() {
         this.isThirdPersonMeleeAttacking = true;
-        this.thirdPersonMeleeStartTime = System.currentTimeMillis();
+        this.thirdPersonMeleeStartTick = -1;
         this.thirdPersonMeleeProgress = 0;
         this.prevThirdPersonMeleeProgress = 0;
         ModSyncedDataKeys.MELEE.setValue(Minecraft.getInstance().player, true);
     }
-
     public boolean isThirdPersonMeleeAttacking() {
         return this.isThirdPersonMeleeAttacking;
     }

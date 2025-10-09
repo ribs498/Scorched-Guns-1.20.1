@@ -21,10 +21,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-/**
- * Handles entity reactions to gunfire including mob aggro and animal panic
- * Uses a tag-based system for better mod compatibility with performance optimizations
- */
+
 public class GunEffectsHandler {
 
     private static final Map<UUID, Long> lastEffectTime = new ConcurrentHashMap<>();
@@ -62,7 +59,6 @@ public class GunEffectsHandler {
             return true;
         }
 
-        // Check exemption list
         return !Config.COMMON.aggroMobs.exemptEntities.get()
                 .contains(EntityType.getKey(entity.getType()).toString());
     };
@@ -115,9 +111,6 @@ public class GunEffectsHandler {
         }
     }
 
-    /**
-     * Performance optimized entity retrieval with limiting and distance sorting
-     */
     private static List<LivingEntity> getOptimizedNearbyEntities(Level world, ServerPlayer player, double radius) {
         AABB searchArea = new AABB(
                 player.getX() - radius, player.getY() - radius, player.getZ() - radius,
@@ -148,33 +141,27 @@ public class GunEffectsHandler {
     private static boolean shouldEntityFlee(LivingEntity entity) {
         return Config.COMMON.fleeingMobs.enabled.get() &&
                 FLEEING_ENTITIES.test(entity) &&
-                !isTamedMob(entity);
+                !isTamedMob(entity) &&
+                !hasPassengers(entity);
+    }
+
+    private static boolean hasPassengers(LivingEntity entity) {
+        return !entity.getPassengers().isEmpty();
     }
 
     private static boolean shouldEntityAggro(LivingEntity entity) {
         return Config.COMMON.aggroMobs.enabled.get() && HOSTILE_ENTITIES.test(entity);
     }
 
-    /**
-     * Checks if an entity is tamed by any player
-     * Covers TamableAnimal (wolves, cats, parrots) and AbstractHorse (horses, donkeys, mules, llamas)
-     */
     private static boolean isTamedMob(LivingEntity entity) {
-        // Check for TamableAnimal (wolves, cats, parrots, etc.)
         if (entity instanceof TamableAnimal tamableAnimal) {
             return tamableAnimal.isTame();
         }
 
-        // Check for AbstractHorse (horses, donkeys, mules, llamas, etc.)
         if (entity instanceof AbstractHorse horse) {
             return horse.isTamed();
         }
 
-        // Add other mod-specific tamed entities here if needed
-        // Example for other mods:
-        // if (entity instanceof SomeModTamedEntity modEntity) {
-        //     return modEntity.isTamed();
-        // }
 
         return false;
     }
@@ -237,9 +224,6 @@ public class GunEffectsHandler {
         }
     }
 
-    /**
-     * Cleanup old entries to prevent memory leaks
-     */
     private static void cleanupOldEntries(long currentTime) {
         long expireTime = currentTime - (EFFECT_COOLDOWN_MS * 20);
 

@@ -63,10 +63,12 @@ public class BlueprintScreen extends Screen {
             "floundergat", "marlin", "bomb_lance", "hullbreaker", "sequoia",
 
             // WRECKER
-            "mokova", "mak_mkii", "turnpike", "killer_23", "homemaker", "kalaskah", "basker", "tl_runner", "stigg", "whizzbanger",
+            "mokova", "mak_mkii", "stilleto", "railworker",
+            "turnpike", "killer_23", "homemaker", "kalaskah", "basker", "tl_runner", "stigg", "whizzbanger",
 
             // DIAMOND STEEL
-            "krauser", "soul_drummer", "uppercut", "micina", "valora", "prush_gun", "drill", "drill_conversion", "lockewood", "rg_jigsaw", "inertial",
+            "krauser", "soul_drummer", "uppercut", "micina", "valora", "prush_gun", "drill", "drill_conversion", "lockewood",
+            "rg_jigsaw","nailer", "inertial",
             "mas_55", "inquisitor", "plasgun", "cyclone", "shard_culler",
 
             // TREATED BRASS
@@ -84,7 +86,7 @@ public class BlueprintScreen extends Screen {
             "carapice", "shellurker", "weevil", "dark_matter", "lone_wonder", "raygun",
 
             // SCORCHED
-                "prima_materia", "rat_king_and_queen", "locust", "newborn_cyst", "earths_corpse",
+                "prima_materia", "rat_king_and_queen", "locust", "sterilizer", "newborn_cyst", "earths_corpse",
             "flayed_god", "nervepinch", "terra_incognita", "astella",
 
             //EXOSUIT

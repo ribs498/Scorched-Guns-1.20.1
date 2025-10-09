@@ -11,7 +11,7 @@
     "fireMode": "scguns:automatic",
     "gripType": "scguns:mini_gun_2",
     "baseGripType": "scguns:mini_gun_2",
-    "rate": 7,
+    "rate": 6,
     "recoilAngle": 2.0,
     "recoilKick": 3.0,
     "spread": 3.0,
@@ -40,7 +40,7 @@
   "reloads": {
     "emptyMagTimer": 10,
     "reloadAmount": 3,
-    "maxAmmo": 21,
+    "maxAmmo": 24,
     "reloadItem": "scguns:microjet",
     "reloadTimer": 15,
     "reloadType": "scguns:manual"

@@ -1,6 +1,5 @@
 package top.ribs.scguns.block;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerPlayer;
@@ -24,23 +23,22 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderGuiOverlayEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.blockentity.BasicTurretBlockEntity;
 import top.ribs.scguns.init.ModBlockEntities;
-
 import javax.annotation.Nullable;
-import java.util.UUID;
+import java.util.List;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.block.*;
+import top.ribs.scguns.util.TurretTooltipHelper;
+
 
 public class BasicTurretBlock extends BaseEntityBlock {
     public static final DirectionProperty FACING = HorizontalDirectionalBlock.FACING;
@@ -57,7 +55,17 @@ public class BasicTurretBlock extends BaseEntityBlock {
         VoxelShape turretHead = Block.box(6, 10, 6, 10, 16, 10);
         return Shapes.or(base, turretHead);
     }
-
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+        TurretTooltipHelper.addTurretTooltip(
+                new ResourceLocation(Reference.MOD_ID, "basic_turret"),
+                stack,
+                level instanceof Level ? (Level) level : null,
+                tooltip,
+                flag
+        );
+    }
     @Nullable
     @Override
     public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
@@ -163,4 +171,3 @@ public class BasicTurretBlock extends BaseEntityBlock {
         return 0;
     }
 }
-

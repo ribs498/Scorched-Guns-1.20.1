@@ -1,149 +1,166 @@
 package top.ribs.scguns.entity.client;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.Entity;
-import top.ribs.scguns.entity.animations.ModAnimationDefinitions;
 import top.ribs.scguns.entity.monster.HornlinEntity;
+import top.ribs.scguns.item.GunItem;
 
-public class HornlinModel<T extends Entity> extends HierarchicalModel<T> {
-	private final ModelPart Hornlin;
-	private final ModelPart head;
-	final ModelPart Flash;
+public class HornlinModel extends HumanoidModel<HornlinEntity> {
+    private final ModelPart leftEar;
+    private final ModelPart rightEar;
 
-	public HornlinModel(ModelPart root) {
-		this.Hornlin = root.getChild("Hornlin");
-		this.head = this.Hornlin.getChild("head");
-		this.Flash = this.Hornlin.getChild("left_arm").getChild("Freyr").getChild("Flash");
-	}
+    private final PartPose headDefault;
+    private final PartPose bodyDefault;
+    private final PartPose leftArmDefault;
+    private final PartPose rightArmDefault;
 
-	public static LayerDefinition createBodyLayer() {
-		MeshDefinition meshdefinition = new MeshDefinition();
-		PartDefinition partdefinition = meshdefinition.getRoot();
+    public HornlinModel(ModelPart root) {
+        super(root);
+        this.leftEar = this.head.getChild("left_ear");
+        this.rightEar = this.head.getChild("right_ear");
 
-		PartDefinition Hornlin = partdefinition.addOrReplaceChild("Hornlin", CubeListBuilder.create(), PartPose.offset(0.0F, 25.25F, 0.0F));
+        this.headDefault = this.head.storePose();
+        this.bodyDefault = this.body.storePose();
+        this.leftArmDefault = this.leftArm.storePose();
+        this.rightArmDefault = this.rightArm.storePose();
+    }
 
-		PartDefinition head = Hornlin.addOrReplaceChild("head", CubeListBuilder.create().texOffs(0, 19).addBox(-4.913F, -4.5681F, -4.207F, 10.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
-				.texOffs(17, 35).addBox(-1.913F, -0.5681F, -5.207F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(28, 22).addBox(2.087F, 1.4319F, -5.207F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(28, 19).addBox(-2.913F, 1.4319F, -5.207F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.087F, -27.4658F, 0.1809F));
+    public static LayerDefinition createBodyLayer() {
+        MeshDefinition meshdefinition = new MeshDefinition();
+        PartDefinition partdefinition = meshdefinition.getRoot();
 
-		PartDefinition head_r1 = head.addOrReplaceChild("head_r1", CubeListBuilder.create().texOffs(0, 19).addBox(-1.0F, -1.25F, -1.25F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.8862F, -1.5367F, -3.9901F, 1.1249F, 0.1704F, -0.0665F));
+        PartDefinition head = partdefinition.addOrReplaceChild("head",
+                CubeListBuilder.create()
+                        .texOffs(0, 16).addBox(-5.0F, -8.0F, -4.0F, 10.0F, 8.0F, 8.0F, new CubeDeformation(0.0F))
+                        .texOffs(36, 50).addBox(-2.0F, -4.0F, -5.0F, 4.0F, 4.0F, 1.0F, new CubeDeformation(0.0F))
+                        .texOffs(46, 12).addBox(2.0F, -2.0F, -5.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
+                        .texOffs(50, 12).addBox(-3.0F, -2.0F, -5.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition head_r2 = head.addOrReplaceChild("head_r2", CubeListBuilder.create().texOffs(0, 23).addBox(1.5F, -1.9F, -4.75F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(0.087F, -5.5681F, -0.207F, 0.5672F, 0.0F, 0.0F));
+        head.addOrReplaceChild("head_r1",
+                CubeListBuilder.create().texOffs(46, 50).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 3.0F, new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(2.8F, -7.75F, -4.75F, -0.3927F, 0.0F, 0.0F));
 
-		PartDefinition left_ear = head.addOrReplaceChild("left_ear", CubeListBuilder.create().texOffs(36, 25).addBox(-3.5933F, 7.5607F, -0.6526F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 57).addBox(-2.8433F, 4.0607F, -2.6526F, 1.0F, 5.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.587F, -7.5253F, 0.4456F, 0.0F, 0.0F, -0.6109F));
+        head.addOrReplaceChild("head_r2",
+                CubeListBuilder.create().texOffs(38, 12).addBox(-1.0F, -1.0F, -1.0F, 2.0F, 2.0F, 2.0F, new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(-3.15F, -5.0F, -4.375F, -0.4215F, 0.3614F, -0.1572F));
 
-		PartDefinition right_ear = head.addOrReplaceChild("right_ear", CubeListBuilder.create().texOffs(56, 8).addBox(1.8433F, 4.0607F, -2.6526F, 1.0F, 5.0F, 4.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.413F, -7.5253F, 0.4456F, 0.0F, 0.0F, 0.6109F));
+        head.addOrReplaceChild("left_ear",
+                CubeListBuilder.create()
+                        .texOffs(16, 49).addBox(0.0F, 0.0F, -2.0F, 1.0F, 5.0F, 4.0F, new CubeDeformation(0.0F))
+                        .texOffs(32, 44).addBox(-1.0F, 3.75F, 0.0F, 3.0F, 3.0F, 0.0F, new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(4.5F, -6.0F, 0.0F, 0.0F, 0.0F, -0.6109F));
 
-		PartDefinition left_arm = Hornlin.addOrReplaceChild("left_arm", CubeListBuilder.create().texOffs(17, 52).addBox(-5.0F, 5.25F, -2.0F, 4.0F, 7.0F, 5.0F, new CubeDeformation(0.0F))
-				.texOffs(40, 0).addBox(-5.0F, -0.75F, -3.0F, 4.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-4.5F, -21.1888F, 2.1585F, -1.5265F, -0.1744F, -0.0077F));
+        head.addOrReplaceChild("right_ear",
+                CubeListBuilder.create().texOffs(26, 49).addBox(-1.0F, 0.0F, -2.0F, 1.0F, 5.0F, 4.0F, new CubeDeformation(0.0F)),
+                PartPose.offsetAndRotation(-4.5F, -6.0F, 0.0F, 0.0F, 0.0F, 0.6109F));
 
-		PartDefinition Freyr = left_arm.addOrReplaceChild("Freyr", CubeListBuilder.create().texOffs(53, 56).addBox(-1.5018F, -7.9167F, -2.503F, 3.0F, 8.0F, 4.0F, new CubeDeformation(0.0F))
-				.texOffs(58, 26).addBox(1.4982F, -5.9167F, -2.253F, 1.0F, 4.0F, 3.0F, new CubeDeformation(0.0F))
-				.texOffs(54, 0).addBox(2.4982F, -5.4167F, -1.753F, 6.0F, 3.0F, 2.0F, new CubeDeformation(0.0F))
-				.texOffs(57, 17).addBox(-1.5018F, -4.9167F, 1.497F, 3.0F, 7.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-2.9982F, 16.9167F, -3.497F, 0.0F, 0.0F, 0.1309F));
+        partdefinition.addOrReplaceChild("body",
+                CubeListBuilder.create()
+                        .texOffs(0, 0).addBox(-5.5F, 6.0F, -4.0F, 11.0F, 8.0F, 8.0F, new CubeDeformation(0.2F))
+                        .texOffs(0, 32).addBox(-5.5F, 14.0F, -4.0F, 11.0F, 4.0F, 8.0F, new CubeDeformation(0.0F))
+                        .texOffs(36, 16).addBox(-5.0F, 0.0F, -3.5F, 10.0F, 6.0F, 7.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(0.0F, 0.0F, 0.0F));
 
-		PartDefinition cube_r1 = Freyr.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(31, 6).addBox(-0.5F, -5.0F, -2.0F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-1.0518F, -3.9167F, -0.003F, 0.0F, -0.7854F, 0.0F));
+        partdefinition.addOrReplaceChild("right_arm",
+                CubeListBuilder.create()
+                        .texOffs(38, 39).addBox(-5.0F, -1.0F, -2.0F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F))
+                        .texOffs(0, 44).addBox(-4.0F, 5.0F, -1.25F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F))
+                        .texOffs(16, 44).addBox(-4.0F, -2.0F, -1.25F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(-5.0F, 1.0F, 0.0F));
 
-		PartDefinition cube_r2 = Freyr.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(0, 35).addBox(0.0F, -5.0F, 0.0F, 1.0F, 2.0F, 1.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 6).addBox(-0.5F, -3.0F, -0.5F, 2.0F, 1.0F, 2.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 0).addBox(-0.5F, -9.0F, -0.5F, 2.0F, 4.0F, 2.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(-0.0018F, 9.0833F, -1.253F, 0.0F, -0.7854F, 0.0F));
+        partdefinition.addOrReplaceChild("left_arm",
+                CubeListBuilder.create()
+                        .texOffs(38, 39).mirror().addBox(0.0F, -1.0F, -2.0F, 5.0F, 6.0F, 5.0F, new CubeDeformation(0.0F)).mirror(false)
+                        .texOffs(0, 44).mirror().addBox(0.0F, 5.0F, -1.25F, 4.0F, 6.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
+                        .texOffs(16, 44).mirror().addBox(0.0F, -2.0F, -1.25F, 4.0F, 1.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false),
+                PartPose.offset(5.0F, 1.0F, 0.0F));
 
-		PartDefinition Flash = Freyr.addOrReplaceChild("Flash", CubeListBuilder.create().texOffs(25, 0).addBox(-3.0F, 7.25F, -3.75F, 6.0F, 0.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offset(0.0F, 0.0F, 0.0F));
+        partdefinition.addOrReplaceChild("right_leg",
+                CubeListBuilder.create()
+                        .texOffs(53, 33).addBox(-7.0F, 7.0F, -2.5F, 5.0F, 5.0F, 6.0F, new CubeDeformation(0.0F))
+                        .texOffs(54, 5).addBox(-7.0F, 1.0F, -3.5F, 5.0F, 6.0F, 7.0F, new CubeDeformation(0.0F)),
+                PartPose.offset(2.0F, 12.0F, 0.0F));
 
-		PartDefinition right_arm = Hornlin.addOrReplaceChild("right_arm", CubeListBuilder.create().texOffs(39, 48).addBox(1.0F, 5.25F, -2.0F, 4.0F, 7.0F, 5.0F, new CubeDeformation(0.0F))
-				.texOffs(24, 39).addBox(1.0F, -0.75F, -3.0F, 4.0F, 6.0F, 6.0F, new CubeDeformation(0.0F)), PartPose.offsetAndRotation(4.4127F, -22.307F, -0.6788F, -1.1201F, 0.7417F, 0.4083F));
+        partdefinition.addOrReplaceChild("left_leg",
+                CubeListBuilder.create()
+                        .texOffs(53, 33).mirror().addBox(-2.0F, 7.0F, -2.5F, 5.0F, 5.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false)
+                        .texOffs(54, 5).mirror().addBox(-2.0F, 1.0F, -3.5F, 5.0F, 6.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false),
+                PartPose.offset(2.0F, 12.0F, 0.0F));
 
-		PartDefinition body = Hornlin.addOrReplaceChild("body", CubeListBuilder.create().texOffs(29, 28).addBox(-5.5F, -5.0F, -3.5F, 11.0F, 4.0F, 7.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 0).addBox(-5.5F, -1.0F, -5.0F, 11.0F, 10.0F, 9.0F, new CubeDeformation(0.0F))
-				.texOffs(29, 58).addBox(5.5F, 5.0F, -3.05F, 2.0F, 4.0F, 6.0F, new CubeDeformation(0.0F))
-				.texOffs(57, 48).addBox(5.5F, 4.0F, -3.05F, 3.0F, 1.0F, 6.0F, new CubeDeformation(0.0F))
-				.texOffs(57, 48).mirror().addBox(-8.5F, 4.0F, -3.05F, 3.0F, 1.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false)
-				.texOffs(29, 58).mirror().addBox(-7.5F, 5.0F, -3.05F, 2.0F, 4.0F, 6.0F, new CubeDeformation(0.0F)).mirror(false), PartPose.offset(0.0F, -19.0F, 0.0F));
+        partdefinition.addOrReplaceChild("hat", CubeListBuilder.create(), PartPose.ZERO);
 
-		PartDefinition left_leg = Hornlin.addOrReplaceChild("left_leg", CubeListBuilder.create().texOffs(0, 48).addBox(-5.75F, 11.0F, -3.0F, 5.0F, 3.0F, 6.0F, new CubeDeformation(0.0F))
-				.texOffs(0, 35).addBox(-5.75F, 5.0F, -4.0F, 5.0F, 6.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(0.5F, -15.0F, 0.0F));
-
-		PartDefinition right_leg = Hornlin.addOrReplaceChild("right_leg", CubeListBuilder.create().texOffs(44, 39).addBox(0.75F, 11.0F, -3.0F, 5.0F, 3.0F, 6.0F, new CubeDeformation(0.0F))
-				.texOffs(33, 12).addBox(0.75F, 5.0F, -4.0F, 5.0F, 6.0F, 7.0F, new CubeDeformation(0.0F)), PartPose.offset(-0.5F, -15.0F, 0.0F));
-
-		return LayerDefinition.create(meshdefinition, 128, 128);
-	}
-
+        return LayerDefinition.create(meshdefinition, 128, 128);
+    }
 
     @Override
-    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.root().getAllParts().forEach(ModelPart::resetPose);
+    public void setupAnim(HornlinEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.head.loadPose(this.headDefault);
+        this.body.loadPose(this.bodyDefault);
+        this.leftArm.loadPose(this.leftArmDefault);
+        this.rightArm.loadPose(this.rightArmDefault);
 
-        if (entity instanceof HornlinEntity) {
-            HornlinEntity hornlin = (HornlinEntity) entity;
-            this.animateWalk(ModAnimationDefinitions.HORNLIN_WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
-            this.animate(hornlin.idleAnimationState, ModAnimationDefinitions.HORNLIN_IDLE, ageInTicks, 1f);
-            this.animate(hornlin.attackAnimationState, ModAnimationDefinitions.HORNLIN_IDLE, ageInTicks, 1f);
+        boolean isEating = entity.isEatingGold();
+        boolean isPreparing = entity.isPreparingToEat();
+        boolean holdingGun = entity.getMainHandItem().getItem() instanceof GunItem;
 
-            // Handle head movement based on what the Hornlin is doing
-            float finalYaw = netHeadYaw;
-            float finalPitch = headPitch;
+        if (!isEating && !isPreparing) {
+            super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+        } else {
+            this.rightLeg.xRot = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+            this.leftLeg.xRot = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.4F * limbSwingAmount;
+            this.rightLeg.yRot = 0.0F;
+            this.leftLeg.yRot = 0.0F;
+            this.rightLeg.zRot = 0.0F;
+            this.leftLeg.zRot = 0.0F;
+        }
 
-            // If eating or preparing to eat gold, override head movement to look at gold
-            if ((hornlin.isEatingGold() || hornlin.isPreparingToEat()) && hornlin.getTargetGoldItem() != null) {
-                // Calculate look direction to gold item
-                double deltaX = hornlin.getTargetGoldItem().getX() - hornlin.getX();
-                double deltaZ = hornlin.getTargetGoldItem().getZ() - hornlin.getZ();
-                double deltaY = hornlin.getTargetGoldItem().getY() - hornlin.getEyeY();
+        float earWiggle = ((float)Math.PI / 6F);
+        float earTime = ageInTicks * 0.1F + limbSwing * 0.5F;
+        float earAmount = 0.08F + limbSwingAmount * 0.4F;
+        this.leftEar.zRot = -earWiggle - Mth.cos(earTime * 1.2F) * earAmount;
+        this.rightEar.zRot = earWiggle + Mth.cos(earTime) * earAmount;
 
-                // Convert to angles
-                double horizontalDistance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
-                float goldYaw = (float) (Math.atan2(deltaZ, deltaX) * 180.0 / Math.PI) - 90.0F;
-                float goldPitch = (float) (Math.atan2(deltaY, horizontalDistance) * 180.0 / Math.PI);
+        if (isEating || isPreparing) {
+            animateEating(entity, ageInTicks, isEating, isPreparing);
+        } else if (holdingGun) {
+            this.rightArm.xRot = -1.5708F;
+            this.rightArm.yRot = 0.0F;
+            this.rightArm.zRot = 0.0F;
 
-                // Use gold-looking angles instead of normal head tracking
-                finalYaw = goldYaw - hornlin.getYRot(); // Convert to relative angle
-                finalPitch = -goldPitch; // Negative because model pitch is inverted
-
-                // Add head bobbing while eating
-                if (hornlin.isEatingGold()) {
-                    float bobAmount = 0.15F; // How much to bob (in radians)
-                    float bobSpeed = 0.8F;   // How fast to bob
-                    float bob = Mth.sin(ageInTicks * bobSpeed) * bobAmount;
-                    finalPitch += bob * (180.0F / (float)Math.PI); // Convert to degrees
-
-                    // Also add slight side-to-side movement
-                    float sideAmount = 0.05F;
-                    float sideBob = Mth.cos(ageInTicks * bobSpeed * 0.7F) * sideAmount;
-                    finalYaw += sideBob * (180.0F / (float)Math.PI);
-                }
-            }
-
-            // Clamp the final angles to reasonable limits
-            float clampedYaw = Mth.clamp(finalYaw, -45.0F, 45.0F);
-            float clampedPitch = Mth.clamp(finalPitch, -30.0F, 30.0F);
-
-            this.head.yRot = clampedYaw * ((float)Math.PI / 180F);
-            this.head.xRot = clampedPitch * ((float)Math.PI / 180F);
-
-            this.Flash.visible = hornlin.isMuzzleFlashVisible();
+            this.leftArm.xRot = -1.1F;
+            this.leftArm.yRot = 0.8F;
+            this.leftArm.zRot = 0.5F;
+            this.leftArm.x -= 1.0F;
         }
     }
 
+    private void animateEating(HornlinEntity entity, float ageInTicks, boolean isEating, boolean isPreparing) {
+        if (isPreparing) {
+            float progress = entity.getHeldFoodItem().isEmpty() ? 0.0F : 1.0F;
 
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		Hornlin.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-	}
+            this.leftArm.xRot = Mth.lerp(progress, 0.0F, -1.8F);
+            this.leftArm.yRot = Mth.lerp(progress, 0.0F, 0.4F);
+            this.leftArm.zRot = Mth.lerp(progress, 0.0F, 0.3F);
 
-	@Override
-	public ModelPart root() {
-		return Hornlin;
-	}
+            this.head.xRot += Mth.lerp(progress, 0.0F, 0.15F);
+
+        } else if (isEating) {
+            this.leftArm.xRot = -1.8F;
+            this.leftArm.yRot = 0.4F;
+            this.leftArm.zRot = 0.3F;
+
+            float eatBob = Mth.sin(ageInTicks * 0.4F) * 0.08F;
+            this.leftArm.xRot += eatBob;
+
+            this.head.xRot += 0.15F + Mth.sin(ageInTicks * 0.35F) * 0.05F;
+
+            float excitedEarWiggle = Mth.sin(ageInTicks * 0.5F) * 0.15F;
+            this.leftEar.zRot += excitedEarWiggle;
+            this.rightEar.zRot -= excitedEarWiggle;
+        }
+    }
 }
-
-
-

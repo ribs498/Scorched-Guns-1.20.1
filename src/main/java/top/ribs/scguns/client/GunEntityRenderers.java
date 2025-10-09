@@ -29,6 +29,7 @@ public class GunEntityRenderers
         event.registerEntityRenderer(ModEntities.BLAZE_ROD_PROJECTILE.get(), ProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.BASIC_BULLET_PROJECTILE.get(), ProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.NEEDLE_PROJECTILE.get(), ProjectileRenderer::new);
+        event.registerEntityRenderer(ModEntities.FLECHETTE_PROJECTILE.get(), ProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.HARDENED_BULLET_PROJECTILE.get(), ProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.BUCKSHOT_PROJECTILE.get(), ProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.FIRE_ROUND_PROJECTILE.get(), ProjectileRenderer::new);

@@ -46,7 +46,11 @@
     "life": 40,
     "size": 0.05,
     "speed": 7.0,
-    "trailLengthMultiplier": 2.0
+    "trailLengthMultiplier": 2.0,
+    "impactEffect": "minecraft:slowness",
+    "impactEffectDuration": 200,
+    "impactEffectChance": 0.9,
+    "impactEffectAmplifier": 0
   },
   "reloads": {
     "emptyMagTimer": 10,

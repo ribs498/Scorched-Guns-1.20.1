@@ -24,6 +24,7 @@ public enum SpecialModels {
     BASIC_TURRET_TOP("basic_turret/basic_turret_top"),
     SHOTGUN_TURRET_TOP("basic_turret/shotgun_turret_top"),
     AUTO_TURRET_TOP("basic_turret/auto_turret_top"),
+    SNIPER_TURRET_TOP("basic_turret/sniper_turret_top"),
     ENEMY_TURRET_TOP("basic_turret/enemy_turret_top"),
 ///FLINTLOCK
     FLINTLOCK_PISTOL_MAIN("flintlock_pistol/main"),
@@ -539,6 +540,15 @@ public enum SpecialModels {
     ARC_WORKER_HEAVY_STOCK("arc_worker/heavy_stock"),
     ARC_WORKER_SIGHTS("arc_worker/sights"),
     ARC_WORKER_NO_SIGHTS("arc_worker/no_sights"),
+
+    ///RAILWORKER
+    RAILWORKER_MAIN("railworker/main"),
+    RAILWORKER_WOODEN_STOCK("railworker/wooden_stock"),
+    RAILWORKER_LIGHT_STOCK("railworker/light_stock"),
+    RAILWORKER_HEAVY_STOCK("railworker/heavy_stock"),
+    RAILWORKER_STAN_MAG("railworker/stan_mag"),
+    RAILWORKER_EXT_MAG("railworker/ext_mag"),
+    RAILWORKER_SPEED_MAG("railworker/speed_mag"),
 
     //BASKER
     BASKER_MAIN("basker/main"),
