@@ -3,14 +3,14 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-      "1": "scguns:item/micina"
+		"1": "scguns:item/micina"
 	},
 	"elements": [
 		{
 			"name": "extended_barrel",
-			"from": [7.411, 3.72618, 0.71049],
-			"to": [8.5985, 4.91368, 9.21049],
-			"rotation": {"angle": 45, "axis": "z", "origin": [8, 4.31518, -0.44864]},
+			"from": [7.411, 3.22618, 0.71049],
+			"to": [8.5985, 4.41368, 9.21049],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8, 3.81518, -0.44864]},
 			"faces": {
 				"north": {"uv": [8.5, 13, 9.25, 13.75], "texture": "#1"},
 				"east": {"uv": [0, 0, 4.25, 0.5], "texture": "#1"},

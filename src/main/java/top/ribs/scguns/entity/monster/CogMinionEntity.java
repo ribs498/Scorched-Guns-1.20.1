@@ -28,12 +28,10 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import top.ribs.scguns.config.EntityEquipmentConfig;
-import top.ribs.scguns.entity.weapon.ScGunsWeapon;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.interfaces.IEntityCanReload;
-import top.ribs.scguns.item.GunItem;
 
 public class CogMinionEntity extends Monster implements IEntityCanReload {
     private static final EntityDataAccessor<Boolean> ATTACKING =
@@ -41,18 +39,10 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
 
     private int reloadTick;
     public int ticksUntilNextAttack = 0;
-    private int shotCount = 0;
-    private int maxShots;
-    private static final int MIN_SHOTS = 4;
-    private static final int MAX_SHOTS = 9;
-    private static final int RELOAD_TIME = 30;
 
     public CogMinionEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.setCanPickUpLoot(true);
-    }
-    private void setMaxShots() {
-        this.maxShots = MIN_SHOTS + this.random.nextInt(MAX_SHOTS - MIN_SHOTS + 1);
     }
     @Override
     public int mob$getReloadTick() {
@@ -64,9 +54,6 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
         this.reloadTick = reloadTick;
     }
 
-    public void setTicksUntilNextAttack(int ticksUntilNextAttack) {
-        this.ticksUntilNextAttack = ticksUntilNextAttack;
-    }
     private boolean isHoldingExplosiveBlock() {
         ItemStack mainHandItem = this.getMainHandItem();
         return mainHandItem.is(ModTags.Items.EXPLOSIVE_BLOCK);

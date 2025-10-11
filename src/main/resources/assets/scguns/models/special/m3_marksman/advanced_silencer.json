@@ -3,15 +3,15 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-      "1": "scguns:item/m3_marksman",
-      "particle": "scguns:item/m3_marksman"
+		"1": "scguns:item/m3_marksman",
+		"particle": "scguns:item/m3_marksman"
 	},
 	"elements": [
 		{
 			"name": "advanced_silencer",
-			"from": [7.35303, 3.77526, -5.03894],
-			"to": [8.85303, 5.27526, -0.53894],
-			"rotation": {"angle": 45, "axis": "z", "origin": [8.05303, 4.40026, -3.52644]},
+			"from": [7.35303, 4.27526, -5.03894],
+			"to": [8.85303, 5.77526, -0.53894],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.05303, 4.90026, -3.52644]},
 			"faces": {
 				"north": {"uv": [8.25, 6.5, 8.625, 6.875], "texture": "#1"},
 				"east": {"uv": [4.75, 3.25, 5.875, 3.625], "texture": "#1"},
@@ -23,9 +23,9 @@
 		},
 		{
 			"name": "advanced_silencer",
-			"from": [7.52981, 4.09597, -0.53894],
-			"to": [8.67981, 5.24597, -0.03894],
-			"rotation": {"angle": 45, "axis": "z", "origin": [8.22981, 4.47097, -3.10144]},
+			"from": [7.52981, 4.59597, -0.53894],
+			"to": [8.67981, 5.74597, -0.03894],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.22981, 4.97097, -3.10144]},
 			"faces": {
 				"north": {"uv": [9.5, 0.25, 9.75, 0.5], "texture": "#1"},
 				"east": {"uv": [4, 10.5, 4.125, 10.75], "texture": "#1"},

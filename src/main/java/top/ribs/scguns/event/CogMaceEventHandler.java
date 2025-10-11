@@ -7,7 +7,6 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.item.CogMaceItem;
-
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class CogMaceEventHandler {
 
@@ -15,6 +14,7 @@ public class CogMaceEventHandler {
     public static void onLivingHurt(LivingHurtEvent event) {
         if (event.getSource().getEntity() instanceof LivingEntity attacker) {
             if (attacker.getMainHandItem().getItem() instanceof CogMaceItem) {
+                LivingEntity target = event.getEntity();
 
                 double movementSpeed = attacker.getAttributeValue(Attributes.MOVEMENT_SPEED);
                 double speedBonus = Math.max(0, movementSpeed - 0.1) * 30.0;
@@ -27,6 +27,9 @@ public class CogMaceEventHandler {
                 float totalBonus = (float)(speedBonus + fallBonus);
 
                 if (totalBonus > 0.1F) {
+                    if (target.isBlocking()) {
+                        totalBonus *= 0.5F;
+                    }
                     event.setAmount(event.getAmount() + totalBonus);
                 }
             }

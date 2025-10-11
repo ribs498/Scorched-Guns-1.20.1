@@ -50,7 +50,7 @@
     "ejectsCasing": false,
     "life": 45,
     "size": 0.05,
-    "speed": 3.0,
+    "speed": 2.5,
     "trailLengthMultiplier": 2.0,
     "impactEffect": "scguns:lacerated",
     "impactEffectDuration": 300,

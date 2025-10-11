@@ -3,14 +3,14 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-      "1": "scguns:item/red_raydar"
+		"1": "scguns:item/red_raydar"
 	},
 	"elements": [
 		{
 			"name": "anthralite_bayonet",
-			"from": [7.29634, 2.95, 0.575],
-			"to": [8.49634, 3.95, 1.075],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 7.7, 9.65]},
+			"from": [7.29634, 3.45, 0.575],
+			"to": [8.49634, 4.45, 1.075],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.2, 9.65]},
 			"faces": {
 				"north": {"uv": [0, 8.5, 0.25, 8.75], "texture": "#1"},
 				"east": {"uv": [0, 9, 0.125, 9.25], "texture": "#1"},
@@ -22,9 +22,9 @@
 		},
 		{
 			"name": "anthralite_bayonet",
-			"from": [7.52134, 1.95, 0.575],
-			"to": [8.27134, 2.95, 1.075],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.2, 9.65]},
+			"from": [7.52134, 2.45, 0.575],
+			"to": [8.27134, 3.45, 1.075],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.7, 9.65]},
 			"faces": {
 				"north": {"uv": [0.25, 8.5, 0.5, 8.75], "texture": "#1"},
 				"east": {"uv": [1, 9, 1.125, 9.25], "texture": "#1"},
@@ -36,9 +36,9 @@
 		},
 		{
 			"name": "anthralite_bayonet",
-			"from": [7.89634, 1.375, -8.675],
-			"to": [7.89634, 2.925, 1.575],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.2, 9.65]},
+			"from": [7.89634, 1.875, -8.675],
+			"to": [7.89634, 3.425, 1.575],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.7, 9.65]},
 			"faces": {
 				"north": {"uv": [0, 0, 0, 0.375], "texture": "#1"},
 				"east": {"uv": [3, 0.5, 5.625, 0.875], "texture": "#1"},

@@ -3,14 +3,14 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-      "1": "scguns:item/red_raydar"
+		"1": "scguns:item/red_raydar"
 	},
 	"elements": [
 		{
 			"name": "light_grip",
-			"from": [7.22866, 2.4, 8.35],
-			"to": [8.57866, 2.9, 11.55],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.35, 10.65]},
+			"from": [7.22866, 2.9, 8.35],
+			"to": [8.57866, 3.4, 11.55],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.85, 10.65]},
 			"faces": {
 				"north": {"uv": [8.5, 5.5, 8.875, 5.625], "texture": "#1"},
 				"east": {"uv": [8.25, 1.5, 9, 1.625], "texture": "#1"},
@@ -22,9 +22,9 @@
 		},
 		{
 			"name": "light_grip",
-			"from": [7.35366, 2, 8.425],
-			"to": [8.45366, 2.5, 11.425],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.35, 10.65]},
+			"from": [7.35366, 2.5, 8.425],
+			"to": [8.45366, 3, 11.425],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.85, 10.65]},
 			"faces": {
 				"north": {"uv": [6.5, 8.75, 6.75, 8.875], "texture": "#1"},
 				"east": {"uv": [8.25, 1.75, 9, 1.875], "texture": "#1"},

@@ -26,12 +26,13 @@
     "attachments": {
       "scope": {
         "size": 0.8,
-        "yOffset": 5.3,
+        "yOffset": 5.1,
         "zOffset": 3.5
       },
       "stock": {
         "scale": 0.0
-      }, "barrel": {
+      },
+      "barrel": {
         "yOffset": 3.9,
         "zOffset": -9.5
       }

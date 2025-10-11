@@ -3,15 +3,15 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-      "1": "scguns:item/m3_marksman",
-      "particle": "scguns:item/m3_marksman"
+		"1": "scguns:item/m3_marksman",
+		"particle": "scguns:item/m3_marksman"
 	},
 	"elements": [
 		{
 			"name": "netherite_bayonet",
-			"from": [8, 2.00133, -8.54127],
-			"to": [8, 3.50133, 1.45873],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.32633, 5.78373]},
+			"from": [8, 2.50133, -8.54127],
+			"to": [8, 4.00133, 1.45873],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.82633, 5.78373]},
 			"faces": {
 				"north": {"uv": [0, 0, 0, 0.375], "texture": "#1"},
 				"east": {"uv": [0, 1, 2.5, 1.375], "texture": "#1"},
@@ -22,9 +22,9 @@
 		},
 		{
 			"name": "netherite_bayonet",
-			"from": [7.625, 2.82633, 0.48373],
-			"to": [8.375, 3.57633, 0.98373],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.32633, 6.28373]},
+			"from": [7.625, 3.32633, 0.48373],
+			"to": [8.375, 4.07633, 0.98373],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.82633, 6.28373]},
 			"faces": {
 				"north": {"uv": [6.25, 9.25, 6.5, 9.5], "texture": "#1"},
 				"east": {"uv": [10.5, 1.25, 10.625, 1.5], "texture": "#1"},
@@ -36,9 +36,9 @@
 		},
 		{
 			"name": "netherite_bayonet",
-			"from": [7.4, 3.57633, 0.48373],
-			"to": [8.6, 4.60133, 0.95873],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.32633, 6.28373]},
+			"from": [7.4, 4.07633, 0.48373],
+			"to": [8.6, 5.10133, 0.95873],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.82633, 6.28373]},
 			"faces": {
 				"north": {"uv": [9.25, 6.75, 9.5, 7], "texture": "#1"},
 				"east": {"uv": [2, 10.5, 2.125, 10.75], "texture": "#1"},

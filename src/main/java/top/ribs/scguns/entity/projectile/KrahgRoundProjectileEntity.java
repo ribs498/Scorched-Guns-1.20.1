@@ -55,7 +55,6 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
             Blocks.END_PORTAL_FRAME,
             Blocks.ANCIENT_DEBRIS,
             Blocks.REINFORCED_DEEPSLATE
-
     );
 
     public KrahgRoundProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
@@ -86,6 +85,9 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
                 assert hitEntities != null;
                 if (!hitEntities.isEmpty()) {
                     for (EntityResult entity : hitEntities) {
+                        if (entity.getEntity().getId() == this.shooterId) {
+                            continue;
+                        }
                         double dist = startVec.distanceToSqr(entity.getHitPos());
                         if (dist < closestEntityDist) {
                             closestEntityDist = dist;
@@ -138,6 +140,7 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
             this.remove(RemovalReason.KILLED);
         }
     }
+
     @Override
     protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
         boolean canBreak = canBreakBlock(state, pos);
@@ -170,6 +173,7 @@ public class KrahgRoundProjectileEntity extends ProjectileEntity {
             this.remove(RemovalReason.KILLED);
         }
     }
+
     private boolean canBreakBlock(BlockState state, BlockPos pos) {
         if (!Config.COMMON.gameplay.griefing.enableBlockBreaking.get()) {
             return false;

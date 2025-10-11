@@ -11,12 +11,12 @@
     "weaponType": "smg",
     "alwaysSpread": true,
     "fireMode": "scguns:automatic",
-    "gripType": "scguns:two_handed_smg",
-    "baseGripType": "scguns:two_handed_smg",
+    "gripType": "scguns:two_handed",
+    "baseGripType": "scguns:two_handed",
     "rate": 3,
-    "recoilAngle": 3.0,
+    "recoilAngle": 3.75,
     "recoilKick": 1.0,
-    "spread": 2.25,
+    "spread": 2.8,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 15,
     "meleeReach": 2.5,
@@ -31,7 +31,7 @@
       },
       "scope": {
         "size": 0.7,
-        "yOffset": 5.9,
+        "yOffset": 5.6,
         "zOffset": 5.5
       },
       "stock": {

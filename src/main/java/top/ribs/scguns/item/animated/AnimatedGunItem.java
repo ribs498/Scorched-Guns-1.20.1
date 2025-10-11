@@ -34,6 +34,7 @@ import top.ribs.scguns.Config;
 import top.ribs.scguns.animations.GunAnimations;
 import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.client.KeyBinds;
+import top.ribs.scguns.client.handler.AimingHandler;
 import top.ribs.scguns.client.handler.GunRenderingHandler;
 import top.ribs.scguns.client.handler.MeleeAttackHandler;
 import top.ribs.scguns.client.render.gun.animated.AnimatedGunRenderer;
@@ -720,7 +721,10 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
 
         Player player = Minecraft.getInstance().player;
         if (player == null) return;
-
+        if(ModSyncedDataKeys.AIMING.getValue(player)) {
+            ModSyncedDataKeys.AIMING.setValue(player, false);
+            AimingHandler.get().aiming = false;
+        }
         boolean serverReloading = ModSyncedDataKeys.RELOADING.getValue(player);
         boolean clientReloading = nbt.getBoolean("scguns:IsReloading");
 

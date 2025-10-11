@@ -3,14 +3,14 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-      "1": "scguns:item/micina"
+		"1": "scguns:item/micina"
 	},
 	"elements": [
 		{
 			"name": "hammer",
-			"from": [8, 4.22305, 14.15766],
-			"to": [8, 5.87305, 16.31516],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.83249, 5.24805, 14.13641]},
+			"from": [8, 3.72305, 14.15766],
+			"to": [8, 5.37305, 16.31516],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.83249, 4.74805, 14.13641]},
 			"faces": {
 				"north": {"uv": [0, 0, 0, 0.75], "texture": "#1"},
 				"east": {"uv": [7.5, 7, 8.5, 7.75], "texture": "#1"},

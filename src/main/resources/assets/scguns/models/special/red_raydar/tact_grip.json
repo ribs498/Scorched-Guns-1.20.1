@@ -3,14 +3,14 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-      "1": "scguns:item/red_raydar"
+		"1": "scguns:item/red_raydar"
 	},
 	"elements": [
 		{
 			"name": "vertical_grip",
-			"from": [7.22866, 2.13, 8.71125],
-			"to": [8.57866, 3.18, 10.24125],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.8942, 8.35, 10.4]},
+			"from": [7.22866, 2.63, 8.71125],
+			"to": [8.57866, 3.68, 10.24125],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.8942, 8.85, 10.4]},
 			"faces": {
 				"north": {"uv": [0.75, 8.25, 1.125, 8.5], "texture": "#1"},
 				"east": {"uv": [8.25, 0.75, 8.625, 1], "texture": "#1"},
@@ -22,9 +22,9 @@
 		},
 		{
 			"name": "vertical_grip",
-			"from": [7.45366, 0.1975, 9.04875],
-			"to": [8.35366, 2.1975, 9.94875],
-			"rotation": {"angle": 45, "axis": "y", "origin": [7.90367, 0.585, 9.49875]},
+			"from": [7.45366, 0.6975, 9.04875],
+			"to": [8.35366, 2.6975, 9.94875],
+			"rotation": {"angle": 45, "axis": "y", "origin": [7.90367, 1.085, 9.49875]},
 			"faces": {
 				"north": {"uv": [2.75, 5, 3, 5.5], "texture": "#1"},
 				"east": {"uv": [0.5, 8, 0.75, 8.5], "texture": "#1"},
@@ -36,9 +36,9 @@
 		},
 		{
 			"name": "vertical_grip",
-			"from": [7.36366, -0.2525, 8.95875],
-			"to": [8.44366, 0.1975, 10.03875],
-			"rotation": {"angle": 45, "axis": "y", "origin": [7.90367, 0.585, 9.49875]},
+			"from": [7.36366, 0.2475, 8.95875],
+			"to": [8.44366, 0.6975, 10.03875],
+			"rotation": {"angle": 45, "axis": "y", "origin": [7.90367, 1.085, 9.49875]},
 			"faces": {
 				"north": {"uv": [5, 8.75, 5.25, 8.875], "texture": "#1"},
 				"east": {"uv": [8.75, 5, 9, 5.125], "texture": "#1"},

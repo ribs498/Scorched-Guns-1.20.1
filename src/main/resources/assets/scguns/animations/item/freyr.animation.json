@@ -377,9 +377,6 @@
 				},
 				"1.4583": {
 					"effect": "slap"
-				},
-				"1.875": {
-					"effect": "bolt"
 				}
 			},
 			"particle_effects": {

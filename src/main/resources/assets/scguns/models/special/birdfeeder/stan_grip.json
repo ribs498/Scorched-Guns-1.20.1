@@ -3,14 +3,14 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-      "0": "scguns:item/birdfeeder"
+		"0": "scguns:item/birdfeeder"
 	},
 	"elements": [
 		{
 			"name": "standard_grip",
-			"from": [7.49419, 0.49219, 16.80249],
-			"to": [8.49419, 2.24219, 18.30249],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.04418, 0.14219, 16.75249]},
+			"from": [7.49419, 0.99219, 16.80249],
+			"to": [8.49419, 2.74219, 18.30249],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.04418, 0.64219, 16.75249]},
 			"faces": {
 				"north": {"uv": [2, 9, 2.25, 9.5], "texture": "#0"},
 				"east": {"uv": [7.25, 6.75, 7.625, 7.25], "texture": "#0"},
@@ -22,9 +22,9 @@
 		},
 		{
 			"name": "standard_grip",
-			"from": [7.74419, 0.24219, 16.80249],
-			"to": [8.24419, 0.49219, 18.30249],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.04418, 0.14219, 16.75249]},
+			"from": [7.74419, 0.74219, 16.80249],
+			"to": [8.24419, 0.99219, 18.30249],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8.04418, 0.64219, 16.75249]},
 			"faces": {
 				"north": {"uv": [11, 1, 11.125, 1.125], "texture": "#0"},
 				"east": {"uv": [10.25, 3.5, 10.625, 3.625], "texture": "#0"},

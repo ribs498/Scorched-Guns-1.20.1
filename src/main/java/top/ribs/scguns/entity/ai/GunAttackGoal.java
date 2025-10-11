@@ -6,6 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -30,6 +31,7 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
     protected double minRange;
 
     protected float accuracyModifier = 1.0F;
+    protected float fireRateModifier = 1.0F;
 
     protected int strafingTime = -1;
     protected boolean shouldStrafe = false;
@@ -85,8 +87,19 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
         float difficultyBonus = 1.0F + ((difficulty - 1) * 0.3F);
         this.accuracyModifier = baseAccuracy * difficultyBonus;
 
+        this.fireRateModifier = getFireRateModifier(shooter.level().getDifficulty());
+
         this.burstAmount = 2 + (difficulty / 2);
         this.burstTimer = Math.max(10, 30 - (difficulty * 4));
+    }
+
+    private float getFireRateModifier(Difficulty difficulty) {
+        return switch(difficulty) {
+            case PEACEFUL -> 1.5F;
+            case EASY -> 1.25F;
+            case NORMAL -> 1.0F;
+            case HARD -> 0.75F;
+        };
     }
 
     @Override
@@ -196,7 +209,6 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
             boolean tooClose = distanceToTarget < (this.minRange * this.minRange);
             boolean isRetreating = false;
 
-            // Movement logic
             if (!inRange || !canSeeTarget) {
                 if (this.shooter.tickCount % 20 == 0 || this.shooter.getNavigation().isDone()) {
                     if (this.aiType == AIType.RECKLESS) {
@@ -303,7 +315,10 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
         ItemStack heldItem = this.shooter.getMainHandItem();
         AIGunEvent.performGunAttack(this.shooter, target, heldItem, gun, this.accuracyModifier);
 
-        this.attackTime = gun.getGeneral().getRate();
+        int baseRate = gun.getGeneral().getRate();
+        float configMultiplier = Config.COMMON.gameplay.mobFireRateMultiplier.get().floatValue();
+        this.attackTime = (int)(baseRate * this.fireRateModifier * configMultiplier);
+
         consumeAmmo(heldItem);
         if (this.shooter.getMainHandItem().getItem() instanceof GunItem) {
             ejectCasing(this.shooter.level(), this.shooter, false);

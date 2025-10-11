@@ -10,6 +10,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.ScorchedGuns;
+import top.ribs.scguns.item.AirCanisterItem;
 import top.ribs.scguns.item.EnergyGunItem;
 import top.ribs.scguns.item.GunItem;
 
@@ -373,8 +374,8 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.EMPTY_CASING_POUCH.get());
                         pOutput.accept(ModItems.DISHES_POUCH.get());
                         pOutput.accept(ModItems.ROCK_POUCH.get());
-                        pOutput.accept(ModItems.AIR_CANISTER.get());
-                        pOutput.accept(ModItems.REINFORCED_AIR_CANISTER.get());
+                        CreativeTabHelper.addAirCanisterWithFullAir(pOutput, ModItems.AIR_CANISTER.get());
+                        CreativeTabHelper.addAirCanisterWithFullAir(pOutput, ModItems.REINFORCED_AIR_CANISTER.get());
 
 
                         pOutput.accept(ModItems.COPPER_GUN_FRAME.get());
@@ -594,6 +595,15 @@ public class ModCreativeModeTabs {
             }
 
             output.accept(stack);
+        }
+        public static void addAirCanisterWithFullAir(CreativeModeTab.Output output, Item item) {
+            if (item instanceof AirCanisterItem airCanisterItem) {
+                ItemStack stack = new ItemStack(airCanisterItem);
+                stack.getOrCreateTag().putInt("AirStored", airCanisterItem.getMaxAirStored(stack));
+                output.accept(stack);
+            } else {
+                output.accept(item);
+            }
         }
     }
 

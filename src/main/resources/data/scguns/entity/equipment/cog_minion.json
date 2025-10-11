@@ -37,6 +37,21 @@
       "drop_chance": 0.3
     },
     {
+      "item": "scguns:repeating_musket",
+      "weight": 1.0,
+      "drop_chance": 0.3
+    },
+    {
+      "item": "scguns:longarm",
+      "weight": 1.0,
+      "drop_chance": 0.3
+    },
+    {
+      "item": "scguns:fencer_carabine",
+      "weight": 1.0,
+      "drop_chance": 0.3
+    },
+    {
       "item": "minecraft:wooden_sword",
       "weight": 10.0,
       "drop_chance": 0.2,

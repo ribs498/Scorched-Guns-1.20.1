@@ -110,6 +110,12 @@ public class ReloadHandler {
             return;
         Player player = Minecraft.getInstance().player;
         if (player != null) {
+            if(ModSyncedDataKeys.RELOADING.getValue(player)) {
+                if(ModSyncedDataKeys.AIMING.getValue(player)) {
+                    ModSyncedDataKeys.AIMING.setValue(player, false);
+                    PacketHandler.getPlayChannel().sendToServer(new C2SMessageAim(false));
+                }
+            }
             this.prevReloadTimer = this.reloadTimer;
             if (ModSyncedDataKeys.RELOADING.getValue(player)) {
                 ItemStack stack = player.getMainHandItem();
@@ -241,12 +247,13 @@ public class ReloadHandler {
                     }
 
                     if (stack.getItem() instanceof AnimatedGunItem animatedGun) {
-                        Gun gun = gunItem.getModifiedGun(stack);
+                        gunItem.getModifiedGun(stack);
 
-                        // Force stop aiming for any reload
                         if (ModSyncedDataKeys.AIMING.getValue(player)) {
                             ModSyncedDataKeys.AIMING.setValue(player, false);
                             PacketHandler.getPlayChannel().sendToServer(new C2SMessageAim(false));
+
+                            AimingHandler.get().aiming = false;
                         }
 
                         if (!tag.getBoolean("IsDrawn")) {

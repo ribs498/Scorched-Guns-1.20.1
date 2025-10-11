@@ -117,11 +117,6 @@ public class ScamplerEntity extends Monster {
         return false;
     }
 
-    @Nullable
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return SoundEvents.AMBIENT_SOUL_SAND_VALLEY_MOOD.get();
-    }
 
     @Nullable
     @Override

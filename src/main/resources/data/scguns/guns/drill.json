@@ -18,7 +18,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 5,
+    "rate": 4,
     "recoilAngle": 4.0,
     "recoilKick": 2.0,
     "spread": 1.0,

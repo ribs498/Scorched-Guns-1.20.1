@@ -3,14 +3,14 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-      "1": "scguns:item/birdfeeder"
+		"1": "scguns:item/birdfeeder"
 	},
 	"elements": [
 		{
 			"name": "sliding_magazine",
-			"from": [2.86778, 4.33407, 13.51483],
-			"to": [7.36778, 5.08407, 16.01483],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.875, 11.75]},
+			"from": [2.86778, 4.83407, 13.51483],
+			"to": [7.36778, 5.58407, 16.01483],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.375, 11.75]},
 			"faces": {
 				"north": {"uv": [6.5, 1.5, 7.625, 1.75], "texture": "#1"},
 				"east": {"uv": [7.75, 4.25, 8.375, 4.5], "texture": "#1"},
@@ -22,9 +22,9 @@
 		},
 		{
 			"name": "sliding_magazine",
-			"from": [7.36778, 4.43407, 13.61483],
-			"to": [7.86778, 4.98407, 15.91483],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.875, 11.75]},
+			"from": [7.36778, 4.93407, 13.61483],
+			"to": [7.86778, 5.48407, 15.91483],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.375, 11.75]},
 			"faces": {
 				"north": {"uv": [7.25, 3.25, 7.375, 3.375], "texture": "#1"},
 				"east": {"uv": [11, 3.25, 11.625, 3.375], "texture": "#1"},
@@ -36,9 +36,9 @@
 		},
 		{
 			"name": "sliding_magazine",
-			"from": [1.36778, 4.58407, 13.51483],
-			"to": [2.36778, 4.58407, 16.01483],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.875, 11.75]},
+			"from": [1.36778, 5.08407, 13.51483],
+			"to": [2.36778, 5.08407, 16.01483],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.375, 11.75]},
 			"faces": {
 				"north": {"uv": [0, 0, 0.25, 0], "texture": "#1"},
 				"east": {"uv": [0, 0, 0.625, 0], "texture": "#1"},
@@ -49,9 +49,9 @@
 		},
 		{
 			"name": "sliding_magazine",
-			"from": [2.36778, 4.08407, 13.51483],
-			"to": [2.86778, 5.08407, 16.01483],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.875, 11.75]},
+			"from": [2.36778, 4.58407, 13.51483],
+			"to": [2.86778, 5.58407, 16.01483],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.375, 11.75]},
 			"faces": {
 				"north": {"uv": [2, 10.75, 2.125, 11], "texture": "#1"},
 				"east": {"uv": [7.75, 7.5, 8.375, 7.75], "texture": "#1"},

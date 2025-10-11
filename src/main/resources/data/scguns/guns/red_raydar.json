@@ -16,7 +16,7 @@
     "hotBarrelRate": 15,
     "energyUse": 15.0,
     "criticalChance": 0.01,
-    "critDamageMultiplier": 35.0,
+    "critDamageMultiplier": 25.0,
     "enableGunLight": false,
     "isSilenced": true
   },

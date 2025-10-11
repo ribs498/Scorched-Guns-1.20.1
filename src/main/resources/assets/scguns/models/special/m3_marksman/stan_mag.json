@@ -3,15 +3,15 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-      "1": "scguns:item/m3_marksman",
-      "particle": "scguns:item/m3_marksman"
+		"1": "scguns:item/m3_marksman",
+		"particle": "scguns:item/m3_marksman"
 	},
 	"elements": [
 		{
 			"name": "default_mag",
-			"from": [7.5, 0.274, 9.36106],
-			"to": [8.5, 2.274, 12.11106],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.32633, 8.78373]},
+			"from": [7.5, 0.774, 9.36106],
+			"to": [8.5, 2.774, 12.11106],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.82633, 8.78373]},
 			"faces": {
 				"north": {"uv": [1.75, 8.75, 2, 9.25], "texture": "#1"},
 				"east": {"uv": [4.75, 5.25, 5.5, 5.75], "texture": "#1"},
@@ -23,9 +23,9 @@
 		},
 		{
 			"name": "default_mag",
-			"from": [7.75, 2.274, 9.38606],
-			"to": [8.25, 2.524, 12.08606],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.32633, 8.78373]},
+			"from": [7.75, 2.774, 9.38606],
+			"to": [8.25, 3.024, 12.08606],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.82633, 8.78373]},
 			"faces": {
 				"north": {"uv": [0, 11, 0.125, 11.125], "texture": "#1"},
 				"east": {"uv": [9, 7.75, 9.625, 7.875], "texture": "#1"},
@@ -37,9 +37,9 @@
 		},
 		{
 			"name": "default_mag",
-			"from": [7.375, -0.226, 9.21106],
-			"to": [8.625, 0.274, 12.21106],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.32633, 8.78373]},
+			"from": [7.375, 0.274, 9.21106],
+			"to": [8.625, 0.774, 12.21106],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.82633, 8.78373]},
 			"faces": {
 				"north": {"uv": [10, 8, 10.375, 8.125], "texture": "#1"},
 				"east": {"uv": [9, 5.75, 9.75, 5.875], "texture": "#1"},

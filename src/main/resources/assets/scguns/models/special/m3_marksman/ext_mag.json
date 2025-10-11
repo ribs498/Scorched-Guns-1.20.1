@@ -3,15 +3,15 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-      "1": "scguns:item/m3_marksman",
-      "particle": "scguns:item/m3_marksman"
+		"1": "scguns:item/m3_marksman",
+		"particle": "scguns:item/m3_marksman"
 	},
 	"elements": [
 		{
 			"name": "extended_mag",
-			"from": [7.36626, -1.786, 9.39753],
-			"to": [8.63375, 1.274, 12.1015],
-			"rotation": {"angle": 45, "axis": "z", "origin": [8, -0.256, 11.19531]},
+			"from": [7.36626, -1.286, 9.39753],
+			"to": [8.63375, 1.774, 12.1015],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8, 0.244, 11.19531]},
 			"faces": {
 				"north": {"uv": [6.5, 5.25, 6.875, 6], "texture": "#1"},
 				"east": {"uv": [4.25, 4, 4.875, 4.75], "texture": "#1"},
@@ -23,9 +23,9 @@
 		},
 		{
 			"name": "extended_mag",
-			"from": [7.36626, -1.786, 9.38796],
-			"to": [8.63375, 1.274, 12.11106],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.32633, 8.78373]},
+			"from": [7.36626, -1.286, 9.38796],
+			"to": [8.63375, 1.774, 12.11106],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.82633, 8.78373]},
 			"faces": {
 				"north": {"uv": [0, 6.75, 0.375, 7.5], "texture": "#1"},
 				"east": {"uv": [0.5, 4.5, 1.125, 5.25], "texture": "#1"},
@@ -37,9 +37,9 @@
 		},
 		{
 			"name": "extended_mag",
-			"from": [6.47, -0.88975, 9.39753],
-			"to": [9.53, 0.37774, 12.1015],
-			"rotation": {"angle": 45, "axis": "z", "origin": [8, -0.256, 11.19531]},
+			"from": [6.47, -0.38975, 9.39753],
+			"to": [9.53, 0.87774, 12.1015],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8, 0.244, 11.19531]},
 			"faces": {
 				"north": {"uv": [6.5, 1.75, 7.25, 2.125], "texture": "#1"},
 				"east": {"uv": [7.25, 1.75, 7.875, 2.125], "texture": "#1"},
@@ -51,9 +51,9 @@
 		},
 		{
 			"name": "extended_mag",
-			"from": [6.47, -0.88975, 9.38701],
-			"to": [9.53, 0.37774, 12.11202],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.32633, 8.78373]},
+			"from": [6.47, -0.38975, 9.38701],
+			"to": [9.53, 0.87774, 12.11202],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.82633, 8.78373]},
 			"faces": {
 				"north": {"uv": [3, 6.75, 3.75, 7.125], "texture": "#1"},
 				"east": {"uv": [4.25, 7.25, 4.875, 7.625], "texture": "#1"},
@@ -65,9 +65,9 @@
 		},
 		{
 			"name": "extended_mag",
-			"from": [7.5, 1.274, 9.36106],
-			"to": [8.5, 2.274, 12.11106],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.32633, 8.78373]},
+			"from": [7.5, 1.774, 9.36106],
+			"to": [8.5, 2.774, 12.11106],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.82633, 8.78373]},
 			"faces": {
 				"north": {"uv": [6.25, 9.5, 6.5, 9.75], "texture": "#1"},
 				"east": {"uv": [7.5, 6.75, 8.25, 7], "texture": "#1"},
@@ -79,9 +79,9 @@
 		},
 		{
 			"name": "extended_mag",
-			"from": [7.75, 2.274, 9.38606],
-			"to": [8.25, 2.524, 12.08606],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.32633, 8.78373]},
+			"from": [7.75, 2.774, 9.38606],
+			"to": [8.25, 3.024, 12.08606],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.82633, 8.78373]},
 			"faces": {
 				"north": {"uv": [0.25, 11, 0.375, 11.125], "texture": "#1"},
 				"east": {"uv": [9, 8.25, 9.625, 8.375], "texture": "#1"},

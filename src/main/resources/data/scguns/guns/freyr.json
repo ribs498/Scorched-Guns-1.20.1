@@ -14,7 +14,7 @@
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 3,
-    "recoilAngle": 4.0,
+    "recoilAngle": 3.0,
     "recoilKick": 0.5,
     "spread": 3.0,
     "meleeDamage": 3.5,
@@ -47,8 +47,8 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 6.8,
-      "zOffset": 1.5
+      "yOffset": 6.9,
+      "zOffset": -0.5
     }
   },
   "projectile": {
@@ -65,7 +65,7 @@
   },
   "reloads": {
     "emptyMagTimer": 30,
-    "maxAmmo": 24,
+    "maxAmmo": 20,
     "reloadItem": "scguns:compact_advanced_round",
     "reloadTimer": 35,
     "reloadType": "scguns:mag_fed"

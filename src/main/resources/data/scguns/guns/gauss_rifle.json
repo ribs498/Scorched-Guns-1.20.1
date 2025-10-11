@@ -50,7 +50,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 23.5,
+    "damage": 24.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:energy_cell",

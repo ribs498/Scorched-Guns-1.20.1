@@ -58,7 +58,7 @@ public class AimingHandler
     private final AimTracker localTracker = new AimTracker();
     private final Map<Player, AimTracker> aimingMap = new WeakHashMap<>();
     private double normalisedAdsProgress;
-    private boolean aiming = false;
+    public boolean aiming = false;
     private boolean wasKeyPressed = false;
 
     private AimingHandler() {}
@@ -119,13 +119,14 @@ public class AimingHandler
 
         boolean isReloading = ModSyncedDataKeys.RELOADING.getValue(player);
         ItemStack heldItem = player.getMainHandItem();
-        boolean inCriticalPhase;
+        boolean inCriticalPhase = false;
 
         if (heldItem.getItem() instanceof GunItem) {
             CompoundTag tag = heldItem.getOrCreateTag();
             inCriticalPhase = tag.getBoolean("InCriticalReloadPhase");
             Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
 
+            // Handle reload stopping animation completion
             if (!isReloading && !inCriticalPhase && heldItem.getItem() instanceof AnimatedGunItem animatedGun) {
                 String reloadState = tag.getString("scguns:ReloadState");
                 if (reloadState.equals("STOPPING") && !tag.getBoolean("scguns:IsPlayingReloadStop")) {
@@ -133,6 +134,7 @@ public class AimingHandler
                 }
             }
 
+            // If reloading or in critical phase, force aiming off
             if (inCriticalPhase && gun.getReloads().getReloadType() != ReloadType.MANUAL) {
                 this.aiming = false;
                 wasKeyPressed = KeyBinds.getAimMapping().isDown();
@@ -140,25 +142,25 @@ public class AimingHandler
                     ModSyncedDataKeys.AIMING.setValue(player, false);
                     PacketHandler.getPlayChannel().sendToServer(new C2SMessageAim(false));
                 }
-
                 this.localTracker.handleAiming(player, player.getItemInHand(InteractionHand.MAIN_HAND));
                 return;
             }
         }
 
-        boolean currentKeyPressed = KeyBinds.getAimMapping().isDown();
-
-        if(isReloading) {
+        // Block aiming input during reload
+        if(isReloading || inCriticalPhase) {
             this.aiming = false;
-            wasKeyPressed = currentKeyPressed;
+            wasKeyPressed = KeyBinds.getAimMapping().isDown();
             if(ModSyncedDataKeys.AIMING.getValue(player)) {
                 ModSyncedDataKeys.AIMING.setValue(player, false);
                 PacketHandler.getPlayChannel().sendToServer(new C2SMessageAim(false));
             }
-
             this.localTracker.handleAiming(player, player.getItemInHand(InteractionHand.MAIN_HAND));
             return;
         }
+
+        boolean currentKeyPressed = KeyBinds.getAimMapping().isDown();
+
 
         boolean toggleAdsEnabled = Config.COMMON.gameplay.toggleADS.get();
 
@@ -172,7 +174,6 @@ public class AimingHandler
         else
         {
             this.aiming = currentKeyPressed;
-
         }
         wasKeyPressed = currentKeyPressed;
 
@@ -240,6 +241,19 @@ public class AimingHandler
         if(mc.player.isSpectator())
             return false;
 
+        // CRITICAL: Block aiming during reload
+        if(ModSyncedDataKeys.RELOADING.getValue(mc.player)) {
+            return false;
+        }
+
+        ItemStack heldItem = mc.player.getMainHandItem();
+        if(heldItem.getItem() instanceof GunItem) {
+            CompoundTag tag = heldItem.getOrCreateTag();
+            if(tag.getBoolean("InCriticalReloadPhase")) {
+                return false;
+            }
+        }
+
         if(Debug.isForceAim())
             return true;
 
@@ -253,7 +267,6 @@ public class AimingHandler
             return false;
         }
 
-        ItemStack heldItem = mc.player.getMainHandItem();
         if(!(heldItem.getItem() instanceof GunItem)) {
             this.aiming = false;
             return false;
@@ -282,10 +295,6 @@ public class AimingHandler
             return false;
         }
 
-        if(ModSyncedDataKeys.RELOADING.getValue(mc.player)) {
-            this.aiming = false;
-            return false;
-        }
         return this.aiming;
     }
 

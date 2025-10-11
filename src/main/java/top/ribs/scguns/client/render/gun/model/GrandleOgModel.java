@@ -25,11 +25,7 @@ public class GrandleOgModel implements IOverrideModel {
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
 
         RenderUtil.renderModel(SpecialModels.GRANDLE_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
-        if (Gun.getScope(stack) == null) {
-            RenderUtil.renderModel(SpecialModels.GRANDLE_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
-        } else {
-            RenderUtil.renderModel(SpecialModels.GRANDLE_NO_SIGHTS.getModel(), stack, matrixStack, buffer, light, overlay);
-        }
+
 
         renderStockAttachments(stack, matrixStack, buffer, light, overlay);
         renderUnderBarrelAttachments(stack, matrixStack, buffer, light, overlay);

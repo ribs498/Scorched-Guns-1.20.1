@@ -3,14 +3,14 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-      "0": "scguns:item/niami"
+		"0": "scguns:item/niami"
 	},
 	"elements": [
 		{
 			"name": "standard_grip",
-			"from": [7.5, 0.29277, 14.70423],
-			"to": [8.5, 4.29277, 16.70423],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 0.59348, 16.77726]},
+			"from": [7.5, 0.54277, 14.70423],
+			"to": [8.5, 4.54277, 16.70423],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [8, 0.84348, 16.77726]},
 			"faces": {
 				"north": {"uv": [6.75, 7.25, 7, 8.25], "texture": "#0"},
 				"east": {"uv": [1.5, 4.25, 2, 5.25], "texture": "#0"},
@@ -22,9 +22,9 @@
 		},
 		{
 			"name": "standard_grip",
-			"from": [7.625, -0.20723, 14.70423],
-			"to": [8.375, 0.29277, 16.70423],
-			"rotation": {"angle": -22.5, "axis": "x", "origin": [7.875, 0.59348, 16.77726]},
+			"from": [7.625, 0.04277, 14.70423],
+			"to": [8.375, 0.54277, 16.70423],
+			"rotation": {"angle": -22.5, "axis": "x", "origin": [7.875, 0.84348, 16.77726]},
 			"faces": {
 				"north": {"uv": [10.25, 9.5, 10.5, 9.625], "texture": "#0"},
 				"east": {"uv": [10, 2, 10.5, 2.125], "texture": "#0"},

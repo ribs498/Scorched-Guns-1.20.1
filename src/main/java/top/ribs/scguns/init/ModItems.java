@@ -649,7 +649,7 @@ public class ModItems {
                     "plasgun",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
-                    ModSounds.RELOAD_END.get(),
+                    ModSounds.HISS.get(),
                     ModSounds.COPPER_GUN_JAM.get(),
                     ModSounds.COPPER_GUN_JAM.get()
             )
@@ -682,7 +682,7 @@ public class ModItems {
                     "gauss_rifle",
                     ModSounds.MAG_OUT.get(),
                     ModSounds.MAG_IN.get(),
-                    ModSounds.RELOAD_END.get(),
+                    ModSounds.HISS.get(),
                     ModSounds.COPPER_GUN_JAM.get(),
                     ModSounds.COPPER_GUN_JAM.get()
             )

@@ -3,14 +3,14 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [64, 64],
 	"textures": {
-      "0": "scguns:item/birdfeeder"
+		"0": "scguns:item/birdfeeder"
 	},
 	"elements": [
 		{
 			"name": "netherite_bayonet",
-			"from": [7.22829, 4.01036, 0.3],
-			"to": [8.57829, 5.36036, 0.85],
-			"rotation": {"angle": 45, "axis": "z", "origin": [8.0283, 4.81036, 0.5875]},
+			"from": [7.22829, 4.51036, 0.3],
+			"to": [8.57829, 5.86036, 0.85],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.0283, 5.31036, 0.5875]},
 			"faces": {
 				"north": {"uv": [7.75, 8, 8.125, 8.375], "texture": "#0"},
 				"east": {"uv": [10, 2.25, 10.125, 2.625], "texture": "#0"},
@@ -22,9 +22,9 @@
 		},
 		{
 			"name": "netherite_bayonet",
-			"from": [7.26366, 3.15, 0.325],
-			"to": [8.76366, 4.65, 0.825],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.875, 11.75]},
+			"from": [7.26366, 3.65, 0.325],
+			"to": [8.76366, 5.15, 0.825],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.375, 11.75]},
 			"faces": {
 				"north": {"uv": [1.5, 8.25, 1.875, 8.625], "texture": "#0"},
 				"east": {"uv": [10, 3, 10.125, 3.375], "texture": "#0"},
@@ -36,9 +36,9 @@
 		},
 		{
 			"name": "netherite_bayonet",
-			"from": [7.63866, 2.15, 0.325],
-			"to": [8.38866, 3.15, 0.825],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.875, 11.75]},
+			"from": [7.63866, 2.65, 0.325],
+			"to": [8.38866, 3.65, 0.825],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.375, 11.75]},
 			"faces": {
 				"north": {"uv": [9.5, 6.25, 9.75, 6.5], "texture": "#0"},
 				"east": {"uv": [5.75, 10.5, 5.875, 10.75], "texture": "#0"},
@@ -50,9 +50,9 @@
 		},
 		{
 			"name": "netherite_bayonet",
-			"from": [8.01366, 1.575, -8.925],
-			"to": [8.01366, 3.125, 1.325],
-			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.875, 11.75]},
+			"from": [8.01366, 2.075, -8.925],
+			"to": [8.01366, 3.625, 1.325],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.375, 11.75]},
 			"faces": {
 				"north": {"uv": [0, 0, 0, 0.375], "texture": "#0"},
 				"east": {"uv": [0, 1, 2.625, 1.375], "texture": "#0"},

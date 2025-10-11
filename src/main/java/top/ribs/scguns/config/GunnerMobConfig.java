@@ -30,17 +30,14 @@ public class GunnerMobConfig {
     private static final ResourceLocation CONFIG_LOCATION = new ResourceLocation("scguns", "entity/gunner_mobs.json");
 
     public record MobGunnerData(float spawnChance, List<Item> allowedWeapons, List<ArmorPiece> allowedArmor,
-                                int aiDifficulty) {
+                                int aiDifficulty, float weaponDropChance) {
 
-        public Item getRandomWeapon(RandomSource random) {  // Change parameter type
-                if (allowedWeapons.isEmpty()) return null;
-                return allowedWeapons.get(random.nextInt(allowedWeapons.size()));
-            }
+        public Item getRandomWeapon(RandomSource random) {
+            if (allowedWeapons.isEmpty()) return null;
+            return allowedWeapons.get(random.nextInt(allowedWeapons.size()));
         }
+    }
 
-    /**
-     * @param slot "head", "chest", "legs", "feet"
-     */
     public record ArmorPiece(Item item, String slot, float spawnChance) {
     }
 
@@ -87,6 +84,9 @@ public class GunnerMobConfig {
             int aiDifficulty = mobData.has("ai_difficulty") ?
                     mobData.get("ai_difficulty").getAsInt() : 2;
 
+            float weaponDropChance = mobData.has("weapon_drop_chance") ?
+                    mobData.get("weapon_drop_chance").getAsFloat() : 0.085f;
+
             List<Item> weapons = new ArrayList<>();
             if (mobData.has("weapons")) {
                 JsonArray weaponsArray = mobData.getAsJsonArray("weapons");
@@ -120,7 +120,7 @@ public class GunnerMobConfig {
                 }
             }
 
-            return new MobGunnerData(spawnChance, weapons, armor, aiDifficulty);
+            return new MobGunnerData(spawnChance, weapons, armor, aiDifficulty, weaponDropChance);
 
         } catch (Exception e) {
             LOGGER.error("Error parsing mob gunner data", e);

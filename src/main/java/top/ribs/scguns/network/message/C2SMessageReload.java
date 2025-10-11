@@ -53,6 +53,10 @@ public class C2SMessageReload extends PlayMessage<C2SMessageReload> {
 
                 if (message.reload) {
                     if (!currentlyReloading && !inCriticalPhase) {
+                        if(currentlyAiming) {
+                            ModSyncedDataKeys.AIMING.setValue(player, false);
+                        }
+
                         ModSyncedDataKeys.RELOADING.setValue(player, true);
                         tag.putBoolean("IsReloading", true);
                         tag.putBoolean("scguns:IsReloading", true);
@@ -77,10 +81,6 @@ public class C2SMessageReload extends PlayMessage<C2SMessageReload> {
                         tag.putString("scguns:ReloadState", "STOPPING");
                         ReloadHandler.loaded(player);
                     }
-                }
-
-                if (message.reload && currentlyAiming) {
-                    ModSyncedDataKeys.AIMING.setValue(player, false);
                 }
             }
         });

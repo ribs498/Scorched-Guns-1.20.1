@@ -11,7 +11,7 @@
     "weaponType": "pistol",
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
-    "rate": 8,
+    "rate": 7,
     "recoilAngle": 4.5,
     "recoilKick": 4.5,
     "spread": 1.0,
@@ -40,12 +40,12 @@
     "zoom": {
       "fovModifier": 0.6,
       "yOffset": 6.6,
-      "zOffset": 0.5
+      "zOffset": -1.0
     }
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 24.0,
+    "damage": 24.5,
     "armorPen": 4.0,
     "gravity": false,
     "item": "scguns:beowulf_round",

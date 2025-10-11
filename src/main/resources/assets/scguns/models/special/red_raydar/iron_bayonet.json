@@ -3,14 +3,14 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-      "1": "scguns:item/red_raydar"
+		"1": "scguns:item/red_raydar"
 	},
 	"elements": [
 		{
 			"name": "iron_bayonet",
-			"from": [7.29634, 2.975, 0.575],
-			"to": [8.49634, 3.975, 1.075],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 7.7, 9.65]},
+			"from": [7.29634, 3.475, 0.575],
+			"to": [8.49634, 4.475, 1.075],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.2, 9.65]},
 			"faces": {
 				"north": {"uv": [7.75, 8.25, 8, 8.5], "texture": "#1"},
 				"east": {"uv": [7.25, 8.75, 7.375, 9], "texture": "#1"},
@@ -22,9 +22,9 @@
 		},
 		{
 			"name": "iron_bayonet",
-			"from": [7.52134, 1.975, 0.575],
-			"to": [8.27134, 2.975, 1.075],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.2, 9.65]},
+			"from": [7.52134, 2.475, 0.575],
+			"to": [8.27134, 3.475, 1.075],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.7, 9.65]},
 			"faces": {
 				"north": {"uv": [8, 8.25, 8.25, 8.5], "texture": "#1"},
 				"east": {"uv": [8.75, 8, 8.875, 8.25], "texture": "#1"},
@@ -36,9 +36,9 @@
 		},
 		{
 			"name": "iron_bayonet",
-			"from": [7.89634, 1.4, -8.675],
-			"to": [7.89634, 2.95, 1.575],
-			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.2, 9.65]},
+			"from": [7.89634, 1.9, -8.675],
+			"to": [7.89634, 3.45, 1.575],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.90366, 8.7, 9.65]},
 			"faces": {
 				"north": {"uv": [0, 0, 0, 0.375], "texture": "#1"},
 				"east": {"uv": [3, 0, 5.625, 0.375], "texture": "#1"},

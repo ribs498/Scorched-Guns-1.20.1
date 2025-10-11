@@ -1,44 +1,11 @@
-The Right To Bear Arms Update!
-- Standard Mobs can now use guns ( thanks to Miga's code helping me implement)
-- Added a tier progression system for guns, acquiring a gun from a tier will allow mobs to spawn with guns from the previous tier
-- Cog knight overhaul, now can use guns
-- Overhauled Hornlin/Zombified Hornlin (more mob overhauls coming)
-- Turret overhaul, mainly internal changes, uses json files for config
-- Added Sniper Turret
-- Bullet Trail overhaul, looks a lot better now (Huge thanks to Atobá for the help and Migas code!)
-- Added The Inquistor (thanks to Albatroz for the model!) Soul fire flamethrower
-- Soul fire'd mod compat, 2 new soul fire items will set mobs on soul fire if enabled, normal on fire effects if not
-- Added fake soul fire hehe
-- Added Hellfire bomb
-- Added Nailer (Thanks to Ablatroz for the model once again!)
-- Added Lacerated Effect, causes sparatic damage over time
-- Added Railworker
-- Shatter Round guns cause lacerated
-- Added Cog Mace, melee weapon based on speed to increase damage
-- Added Drill
-- Added Drill Conversion
-- Added Whizzbanger
-- Scratches rechambered to Flechette
-- Thunderhead rechambered to Shatter Round
-- Added Needle bullet
-- Added Bump Stock
-- Visual Overhaul for some nether guns
-- Added The Collective Painting
-- Airgun overhaul, no longer requires Create for airguns (compatibility still exists)
-- Added Air tank and Reinforced Airtank (can be filled manually or via lightning battery) with curios back support
-- Added Red Raydar rifle to frontier tier
-- Added the Atom Sterilizer to the Scorched tier
-- Added Sculk Horde compatibility (Thanks to Atobá for the help!)
-- Sulfur Vents have more behavior, can place sulfur layers around it, and destroy grass
-- Sulfur vent clouds will be disabled when a vent collector is on top
-- Block destruction from explosions config is now set to false by default
-- Microjets now have a 1.5 damage multiplier based on distance traveled
-- Shotball now deals huge knockback
-- Added tons of weapon rebalancing
-
-- Fixed broken gun feedback
-- Fixed some Exo Suit bugs
-- Fixed some reloading bugs
-- Lots of config related changes so id suggest deleting and refreshing game
-
-I was bad with this changelog so theres definitly stuff i forgot to put in here lmao
+- Fixed Inquisitor particles
+- fixed Krahg Round bugs
+- Shell Catcher and Phantom rounds are incompatible with each other
+- Fixed Cog Mace bypassing shield
+- TONS of visual bugs fixed ( HUGE thanks to JaDn for compiling them)
+- Bunch of new way better textures thanks to Jadn again!
+- Final contribution from the great Jadn, spanish lang updates!
+- Fixed Aiming Reload bug
+- Heavily lowered Drop chance for piglin guns
+- added drop weight to gunner mob json
+- Some gun stat tweaks n fixes

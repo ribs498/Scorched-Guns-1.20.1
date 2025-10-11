@@ -28,6 +28,7 @@ public class NewbornCystModel implements IOverrideModel {
     @Override
     public void render(float partialTicks, ItemDisplayContext transformType, ItemStack stack, ItemStack parent, LivingEntity entity, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {
         RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
+        RenderUtil.renderModel(SpecialModels.NEWBORN_CYST_DRUM.getModel(), stack, matrixStack, buffer, light, overlay);
         renderStockAttachments(matrixStack, buffer, stack, light, overlay);
         renderBarrelAttachments(matrixStack, buffer, stack, light, overlay);
         renderUnderBarrelAttachments(matrixStack, buffer, stack, light, overlay);

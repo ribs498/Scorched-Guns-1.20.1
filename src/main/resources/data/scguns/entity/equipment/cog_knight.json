@@ -47,8 +47,8 @@
       "item": "scguns:grandle_og",
       "weight": 6.0,
       "drop_chance": 0.5,
-      "min_durability": 0.5,
-      "max_durability": 1.0
+      "min_durability": 0.1,
+      "max_durability": 0.3
     }
   ]
 }

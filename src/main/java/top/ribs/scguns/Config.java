@@ -321,6 +321,8 @@ public class Config
         public final ForgeConfigSpec.BooleanValue enableSculkPurification;
         public final ForgeConfigSpec.IntValue playerGunfireVolume;
         public final ForgeConfigSpec.IntValue mobGunfireVolume;
+        public final ForgeConfigSpec.DoubleValue mobFireRateMultiplier;
+
         public Gameplay(ForgeConfigSpec.Builder builder)
         {
             builder.comment("Properties relating to gameplay").push("gameplay");
@@ -365,6 +367,9 @@ public class Config
                 this.enableSculkPurification = builder.comment("If true, allows flamethrowers weapons to purify sculk blocks").define("enableSculkPurification", true);
                 this.playerGunfireVolume = builder.comment("The volume for Player Gunfire. Default is 8").defineInRange("playerGunfireVolume", 8, 1, 10);
                 this.mobGunfireVolume = builder.comment("The volume for Mob Gunfire. Default is 8").defineInRange("mobGunfireVolume", 8, 1, 10);
+                this.mobFireRateMultiplier = builder
+                        .comment("Global multiplier for mob fire rate. 1.0 = normal speed, 0.5 = faster (half delay), 2.0 = slower (double delay). Lower values = faster shooting.")
+                        .defineInRange("mobFireRateMultiplier", 1.0, 0.1, 5.0);
             }
             builder.pop();
         }
