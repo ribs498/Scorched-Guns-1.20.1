@@ -2,11 +2,40 @@
   "ANTIQUE": {
     "weapons": [
       "scguns:fencer_carabine",
-      "scguns:fencer_thumper"
+      "scguns:fencer_thumper",
+      "scguns:repeating_musket"
     ],
     "armor": [
       {
-        "item": "minecraft:leather_helmet",
+        "item": "scguns:redcoat_hat",
+        "slot": "head",
+        "chance": 0.8
+      },
+      {
+        "item": "scguns:redcoat_coat",
+        "slot": "chest",
+        "chance": 0.8
+      },
+      {
+        "item": "scguns:redcoat_pants",
+        "slot": "legs",
+        "chance": 0.6
+      },
+      {
+        "item": "scguns:redcoat_boots",
+        "slot": "feet",
+        "chance": 0.6
+      }
+    ]
+  },
+  "FRONTIER": {
+    "weapons": [
+      "scguns:callwell_terminal",
+      "scguns:saketini_ironport"
+    ],
+    "armor": [
+      {
+        "item": "scguns:ridgetop",
         "slot": "head",
         "chance": 0.8
       },
@@ -27,34 +56,6 @@
       }
     ]
   },
-  "FRONTIER": {
-    "weapons": [
-      "scguns:callwell_terminal",
-      "scguns:saketini_ironport"
-    ],
-    "armor": [
-      {
-        "item": "minecraft:chainmail_helmet",
-        "slot": "head",
-        "chance": 0.8
-      },
-      {
-        "item": "minecraft:chainmail_chestplate",
-        "slot": "chest",
-        "chance": 0.8
-      },
-      {
-        "item": "minecraft:chainmail_leggings",
-        "slot": "legs",
-        "chance": 0.6
-      },
-      {
-        "item": "minecraft:chainmail_boots",
-        "slot": "feet",
-        "chance": 0.6
-      }
-    ]
-  },
   "COPPER": {
     "weapons": [
       "scguns:llr_director",
@@ -62,22 +63,22 @@
     ],
     "armor": [
       {
-        "item": "scguns:copper_helmet",
+        "item": "scguns:scrap_helmet",
         "slot": "head",
         "chance": 0.9
       },
       {
-        "item": "scguns:copper_chestplate",
+        "item": "scguns:scrap_chestplate",
         "slot": "chest",
         "chance": 0.9
       },
       {
-        "item": "scguns:copper_leggings",
+        "item": "scguns:scrap_leggings",
         "slot": "legs",
         "chance": 0.7
       },
       {
-        "item": "scguns:copper_boots",
+        "item": "scguns:scrap_boots",
         "slot": "feet",
         "chance": 0.7
       }

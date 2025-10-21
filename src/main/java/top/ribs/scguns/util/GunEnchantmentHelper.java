@@ -113,7 +113,7 @@ public class GunEnchantmentHelper
         int heavyShotLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEAVY_SHOT.get(), weapon);
         double speedModifier = 1.0;
         if (acceleratorLevel > 0) {
-            speedModifier += 0.4 * acceleratorLevel;
+            speedModifier += 0.25 * acceleratorLevel;
         }
         if (heavyShotLevel > 0) {
             speedModifier -= 0.10 * heavyShotLevel;
@@ -125,22 +125,24 @@ public class GunEnchantmentHelper
         int baseRate = modifiedGun.getGeneral().getRate();
         int triggerFingerLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.TRIGGER_FINGER.get(), weapon);
         int heavyShotLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEAVY_SHOT.get(), weapon);
-        float rateModifier = getRateModifier(triggerFingerLevel, heavyShotLevel);
+        int puncturingLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.PUNCTURING.get(), weapon);
+        float rateModifier = getRateModifier(triggerFingerLevel, heavyShotLevel, puncturingLevel );
         int modifiedRate = Math.round(baseRate * rateModifier);
         modifiedRate = GunModifierHelper.getModifiedRate(weapon, modifiedRate);
 
         return Math.max(modifiedRate, 1);
     }
 
-    public static int getHotBarrelFireRate(ItemStack weapon, int baseRate) {
-        return baseRate;
-    }
 
     public static float getRecoilModifier(ItemStack weapon) {
         int heavyShotLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEAVY_SHOT.get(), weapon);
-        return 1.0f + (0.35f * heavyShotLevel);
-    }
+        int puncturingLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.PUNCTURING.get(), weapon);
 
+        float modifier = 1.0f;
+        modifier += 0.25f * heavyShotLevel;
+        modifier += 0.10f * puncturingLevel;
+        return modifier;
+    }
 
     public static float getRecoilModifier(Player player, ItemStack weapon) {
         float baseModifier = getRecoilModifier(weapon);
@@ -153,7 +155,7 @@ public class GunEnchantmentHelper
 
     public static float getKickModifier(ItemStack weapon) {
         int heavyShotLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEAVY_SHOT.get(), weapon);
-        return 1.0f + (0.25f * heavyShotLevel);
+        return 1.0f + (0.05f * heavyShotLevel);
     }
 
     public static float getKickModifier(Player player, ItemStack weapon) {
@@ -168,19 +170,26 @@ public class GunEnchantmentHelper
         return baseModifier;
     }
 
-    private static float getRateModifier(int triggerFingerLevel, int heavyShotLevel) {
-        float heavyShotModifier = 1.0f + (0.27f * heavyShotLevel);
+    private static float getRateModifier(int triggerFingerLevel, int heavyShotLevel, int puncturingLevel) {
+        float heavyShotModifier = 1.0f + (0.15f * heavyShotLevel);
+        float puncturingModifier = 1.0f + (0.06f * puncturingLevel);
         float triggerFingerModifier = 1.0f - (0.12f * triggerFingerLevel);
-        float combinedModifier = heavyShotModifier * triggerFingerModifier;
+        float combinedModifier = heavyShotModifier * puncturingModifier * triggerFingerModifier;
         return Mth.clamp(combinedModifier, 0.5f, 2.0f);
     }
-
     public static float getHeavyShotDamage(ItemStack weapon, float damage) {
         int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEAVY_SHOT.get(), weapon);
         if (level > 0) {
-            damage += damage * (0.1F * level);
+            damage += damage * (0.125F * level);
         }
         return damage;
+    }
+    public static float getHeavyShotKnockback(ItemStack weapon, float baseKnockback) {
+        int level = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HEAVY_SHOT.get(), weapon);
+        if (level > 0) {
+            return baseKnockback + (0.2F * level);
+        }
+        return baseKnockback;
     }
 
     public static float getAcceleratorDamage(ItemStack weapon, float damage) {
@@ -197,11 +206,6 @@ public class GunEnchantmentHelper
         return baseDamage + (baseDamage * damageBoost);
     }
 
-    public static int getHotBarrelFireRate(Player player, ItemStack weapon, int baseRate) {
-        int hotBarrelLevel = HotBarrelCache.getHotBarrelLevel(player, weapon);
-        float fireRateBoost = (hotBarrelLevel / 100.0f) * 0.25f;
-        return Math.max((int) (baseRate * (1.0f - fireRateBoost)), 1);
-    }
 
     public static float getHotBarrelRecoil(Player player, ItemStack weapon, float baseRecoil) {
         int hotBarrelLevel = HotBarrelCache.getHotBarrelLevel(player, weapon);
@@ -241,29 +245,15 @@ public class GunEnchantmentHelper
     public static float getPuncturingArmorBypass(ItemStack weapon) {
         int puncturingLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.PUNCTURING.get(), weapon);
         if (puncturingLevel > 0) {
-            return 4.0f * puncturingLevel;
+            return 5.0f * puncturingLevel;
         }
         return 0.0f;
     }
-
     public static float getPuncturingDamageReduction(ItemStack weapon, LivingEntity target, float damage) {
-        int puncturingLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.PUNCTURING.get(), weapon);
-        if (puncturingLevel > 0) {
-            if (target == null || target.getArmorValue() < 10) {
-                float reductionPercent = 0.05f * puncturingLevel;
-                return damage * (1.0f - reductionPercent);
-            }
-        }
+
         return damage;
     }
-    public static float getPuncturingDamageReductionForTooltip(ItemStack weapon, float damage) {
-        int puncturingLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.PUNCTURING.get(), weapon);
-        if (puncturingLevel > 0) {
-            float reductionPercent = 0.05f * puncturingLevel;
-            return damage * (1.0f - reductionPercent);
-        }
-        return damage;
-    }
+
     public static float getWaterProofDamage(ItemStack weapon, Player player, float damage) {
         int waterProofLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WATER_PROOF.get(), weapon);
         if (waterProofLevel > 0 && player != null && player.isUnderWater()) {

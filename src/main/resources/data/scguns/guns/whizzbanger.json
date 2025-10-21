@@ -36,6 +36,7 @@
     }
   },
   "projectile": {
+    "knockbackStrength": 3.0,
     "advantage": "scguns:bot",
     "damage": 88.0,
     "ejectsCasing": true,

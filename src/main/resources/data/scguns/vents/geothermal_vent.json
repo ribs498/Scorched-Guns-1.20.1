@@ -1,0 +1,30 @@
+{
+  "activation": {
+    "baseBlock": "minecraft:magma_block",
+    "requiresWaterlogged": true
+  },
+  "power": {
+    "maxPower": 5,
+    "baseTickInterval": 80,
+    "tickWiggleRoom": 60
+  },
+  "production": {
+    "outputs": [
+      {
+        "item": "scguns:niter_dust",
+        "weight": 10
+      }
+    ],
+    "productionChance": 0.7
+  },
+  "placement": {
+    "enabled": true,
+    "blockToPlace": "scguns:niter",
+    "radius": 6,
+    "placementChance": 0.4
+  },
+  "particles": {
+    "showActive": true,
+    "activeSound": "minecraft:block.campfire.crackle"
+  }
+}

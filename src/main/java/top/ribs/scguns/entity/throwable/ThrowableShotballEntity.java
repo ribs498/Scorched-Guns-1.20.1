@@ -146,9 +146,7 @@ public class ThrowableShotballEntity extends ThrowableItemEntity {
 
     @Override
     public void onDeath() {
-        // Spawn final particles when the shotball comes to rest
         spawnFinalParticles(this.position());
-        // Spawn black dissipation particles when destroyed/expired
         spawnDeathParticles(this.position());
     }
 
@@ -167,13 +165,11 @@ public class ThrowableShotballEntity extends ThrowableItemEntity {
         if (!this.level().isClientSide) {
             ServerLevel serverLevel = (ServerLevel) this.level();
 
-            // Just electric sparks for clean bounce effect
             for (int i = 0; i < 4; i++) {
                 double velocityX = (this.random.nextDouble() - 0.5) * 0.4;
                 double velocityY = this.random.nextDouble() * 0.4;
                 double velocityZ = (this.random.nextDouble() - 0.5) * 0.4;
 
-                // Electric spark particles for the "shotball" effect
                 serverLevel.sendParticles(ParticleTypes.ELECTRIC_SPARK,
                         position.x, position.y, position.z,
                         1,
@@ -191,7 +187,6 @@ public class ThrowableShotballEntity extends ThrowableItemEntity {
         if (!this.level().isClientSide) {
             ServerLevel serverLevel = (ServerLevel) this.level();
 
-            // Just electric sparks for clean entity hit effect
             for (int i = 0; i < 5; i++) {
                 double velocityX = (this.random.nextDouble() - 0.5) * 0.3;
                 double velocityY = (this.random.nextDouble() - 0.5) * 0.3;
@@ -207,14 +202,10 @@ public class ThrowableShotballEntity extends ThrowableItemEntity {
         }
     }
 
-    /**
-     * Spawn particles when the shotball finally comes to rest or expires
-     */
     private void spawnFinalParticles(Vec3 position) {
         if (!this.level().isClientSide) {
             ServerLevel serverLevel = (ServerLevel) this.level();
 
-            // Smaller final impact effect
             for (int i = 0; i < 4; i++) {
                 double velocityX = (this.random.nextDouble() - 0.5) * 0.2;
                 double velocityY = this.random.nextDouble() * 0.2;
@@ -235,7 +226,6 @@ public class ThrowableShotballEntity extends ThrowableItemEntity {
                 );
             }
 
-            // Final dust cloud when coming to rest on ground
             if (this.getDeltaMovement().y() <= 0.01) {
                 for (int i = 0; i < 3; i++) {
                     double dustX = position.x + (this.random.nextDouble() - 0.5) * 0.4;
@@ -252,21 +242,15 @@ public class ThrowableShotballEntity extends ThrowableItemEntity {
             }
         }
     }
-
-    /**
-     * Spawn black dissipation particles when the shotball is destroyed or expires
-     */
     private void spawnDeathParticles(Vec3 position) {
         if (!this.level().isClientSide) {
             ServerLevel serverLevel = (ServerLevel) this.level();
 
-            // Black smoke particles for dissipation effect
             for (int i = 0; i < 6; i++) {
                 double velocityX = (this.random.nextDouble() - 0.5) * 0.3;
                 double velocityY = this.random.nextDouble() * 0.4 + 0.1; // Upward bias
                 double velocityZ = (this.random.nextDouble() - 0.5) * 0.3;
 
-                // Large smoke particles
                 serverLevel.sendParticles(ParticleTypes.LARGE_SMOKE,
                         position.x + (this.random.nextDouble() - 0.5) * 0.3,
                         position.y + (this.random.nextDouble() - 0.5) * 0.2,
@@ -277,7 +261,6 @@ public class ThrowableShotballEntity extends ThrowableItemEntity {
                 );
             }
 
-            // Regular smoke for density
             for (int i = 0; i < 4; i++) {
                 double velocityX = (this.random.nextDouble() - 0.5) * 0.2;
                 double velocityY = this.random.nextDouble() * 0.3 + 0.05;
@@ -293,7 +276,6 @@ public class ThrowableShotballEntity extends ThrowableItemEntity {
                 );
             }
 
-            // Play a subtle dissipation sound
             this.level().playSound(null, position.x, position.y, position.z,
                     SoundEvents.FIRE_EXTINGUISH, SoundSource.NEUTRAL,
                     0.3F, 1.8F + (this.random.nextFloat() - 0.5F) * 0.4F);

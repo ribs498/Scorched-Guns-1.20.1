@@ -5,11 +5,11 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "scguns:deep_dark_blueprint"
+          "name": "scguns:blueprint_scrap"
         },
         {
           "type": "minecraft:item",
-          "name": "scguns:diamond_steel_blueprint"
+          "name": "scguns:blueprint_scrap"
         },
         {
           "type": "minecraft:item",
@@ -64,6 +64,20 @@
             }
           ],
           "name": "scguns:sculk_cell"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:sculk_flare"
         },
         {
           "type": "minecraft:empty",

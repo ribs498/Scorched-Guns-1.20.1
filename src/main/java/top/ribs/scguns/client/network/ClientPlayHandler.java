@@ -8,6 +8,7 @@ import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.core.Vec3i;
 import net.minecraft.core.particles.*;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
@@ -23,6 +24,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.joml.Vector3f;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -37,7 +39,6 @@ import top.ribs.scguns.client.handler.HUDRenderHandler;
 import top.ribs.scguns.client.particle.BloodParticle;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.common.NetworkGunManager;
-import top.ribs.scguns.common.ReloadType;
 import top.ribs.scguns.common.exosuit.ExoSuitData;
 import top.ribs.scguns.common.exosuit.ExoSuitUpgradeManager;
 import top.ribs.scguns.init.ModParticleTypes;
@@ -47,9 +48,9 @@ import top.ribs.scguns.item.animated.AnimatedGunItem;
 import top.ribs.scguns.item.animated.ExoSuitItem;
 import top.ribs.scguns.network.message.*;
 import top.ribs.scguns.particles.BulletHoleData;
-import top.ribs.scguns.util.GunModifierHelper;
 
 import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -83,6 +84,310 @@ public class ClientPlayHandler {
                     particlePos.x, particlePos.y, particlePos.z,
                     0, 0, 0);
         }
+    }
+
+
+    public static void handleRaidFlareBurst(S2CMessageRaidFlareBurst message) {
+        Minecraft mc = Minecraft.getInstance();
+        Level world = mc.level;
+        if (world == null) return;
+
+        double centerX = message.getX();
+        double centerY = message.getY();
+        double centerZ = message.getZ();
+        String patternType = message.getPatternType();
+        double scale = message.getScale();
+        int repetitions = message.getRepetitions();
+
+        switch (patternType) {
+            case "star" -> spawnStarPattern(world, centerX, centerY, centerZ, scale, repetitions, message.getParticles());
+            case "circle" -> spawnCirclePattern(world, centerX, centerY, centerZ, scale, repetitions, message.getParticles());
+            case "union_jack" -> spawnUnionJackPattern(world, centerX, centerY, centerZ, scale, message.getParticles());
+            case "spiral" -> spawnSpiralPattern(world, centerX, centerY, centerZ, scale, repetitions, message.getParticles());
+            case "wave" -> spawnWavePattern(world, centerX, centerY, centerZ, scale, repetitions, message.getParticles());
+            case "cross" -> spawnCrossPattern(world, centerX, centerY, centerZ, scale, message.getParticles());
+            case "double_helix" -> spawnDoubleHelixPattern(world, centerX, centerY, centerZ, scale, repetitions, message.getParticles());
+            case "burst" -> spawnBurstPattern(world, centerX, centerY, centerZ, scale, repetitions, message.getParticles());
+            case "ring" -> spawnRingPattern(world, centerX, centerY, centerZ, scale, repetitions, message.getParticles());
+            case "pig_snout" -> spawnPigSnoutPattern(world, centerX, centerY, centerZ, scale, message.getParticles());
+            case "skulk_pulse" -> spawnSkulkPulsePattern(world, centerX, centerY, centerZ, scale, repetitions, message.getParticles());
+            default -> spawnDefaultBurst(world, centerX, centerY, centerZ, message.getParticles());
+        }
+    }
+
+    private static void spawnPigSnoutPattern(Level world, double centerX, double centerY, double centerZ,
+                                             double scale, List<S2CMessageRaidFlareBurst.ParticleData> particleTypes) {
+        int segments = 25;
+
+        double nostrilRadius = scale * 0.25;
+        double nostrilOffset = scale * 0.35;
+
+        for (int i = 0; i < segments; i++) {
+            double angle = (Math.PI * 2 * i) / segments;
+            double x = centerX - nostrilOffset + Math.cos(angle) * nostrilRadius;
+            double z = centerZ + Math.sin(angle) * nostrilRadius;
+            spawnBurstParticlesAt(world, x, centerY, z, particleTypes);
+        }
+
+        for (int i = 0; i < segments; i++) {
+            double angle = (Math.PI * 2 * i) / segments;
+            double x = centerX + nostrilOffset + Math.cos(angle) * nostrilRadius;
+            double z = centerZ + Math.sin(angle) * nostrilRadius;
+            spawnBurstParticlesAt(world, x, centerY, z, particleTypes);
+        }
+
+        int outerSegments = 40;
+        for (int i = 0; i < outerSegments; i++) {
+            double angle = (Math.PI * 2 * i) / outerSegments;
+            double x = centerX + Math.cos(angle) * scale;
+            double z = centerZ + Math.sin(angle) * scale * 0.7;
+            spawnBurstParticlesAt(world, x, centerY, z, particleTypes);
+        }
+    }
+
+    private static void spawnSkulkPulsePattern(Level world, double centerX, double centerY, double centerZ,
+                                               double scale, int repetitions, List<S2CMessageRaidFlareBurst.ParticleData> particleTypes) {
+        int segments = 30;
+
+        for (int rep = 0; rep < repetitions; rep++) {
+            double pulseRadius = scale * ((rep + 1.0) / repetitions);
+
+            for (int i = 0; i < segments; i++) {
+                double angle = (Math.PI * 2 * i) / segments;
+                double x = centerX + Math.cos(angle) * pulseRadius;
+                double z = centerZ + Math.sin(angle) * pulseRadius;
+                spawnBurstParticlesAt(world, x, centerY, z, particleTypes);
+            }
+
+            if (rep % 2 == 0) {
+                int tendrils = 8;
+                for (int t = 0; t < tendrils; t++) {
+                    double tendrilAngle = (Math.PI * 2 * t) / tendrils + (rep * 0.3);
+                    int points = 5;
+                    for (int p = 0; p < points; p++) {
+                        double distance = pulseRadius + (p * scale * 0.2);
+                        double x = centerX + Math.cos(tendrilAngle) * distance;
+                        double z = centerZ + Math.sin(tendrilAngle) * distance;
+                        spawnBurstParticlesAt(world, x, centerY, z, particleTypes);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void spawnSpiralPattern(Level world, double centerX, double centerY, double centerZ,
+                                           double radius, int repetitions, List<S2CMessageRaidFlareBurst.ParticleData> particleTypes) {
+        int segments = 40;
+        for (int rep = 0; rep < repetitions; rep++) {
+            for (int i = 0; i < segments; i++) {
+                double t = (double) i / segments;
+                double angle = t * Math.PI * 4;
+                double r = radius * t;
+                double x = centerX + Math.cos(angle) * r;
+                double z = centerZ + Math.sin(angle) * r;
+                spawnBurstParticlesAt(world, x, centerY, z, particleTypes);
+            }
+        }
+    }
+
+    private static void spawnWavePattern(Level world, double centerX, double centerY, double centerZ,
+                                         double scale, int repetitions, List<S2CMessageRaidFlareBurst.ParticleData> particleTypes) {
+        int segments = 30;
+        for (int rep = 0; rep < repetitions; rep++) {
+            for (int i = 0; i < segments; i++) {
+                double t = (double) i / segments;
+                double angle = t * Math.PI * 2;
+                double waveHeight = Math.sin(angle * 3) * scale * 0.3;
+
+                double x = centerX + (t - 0.5) * scale * 2;
+                double y = centerY + waveHeight;
+                double z = centerZ;
+                spawnBurstParticlesAt(world, x, y, z, particleTypes);
+
+                x = centerX;
+                z = centerZ + (t - 0.5) * scale * 2;
+                spawnBurstParticlesAt(world, x, y, z, particleTypes);
+            }
+        }
+    }
+
+    private static void spawnCrossPattern(Level world, double centerX, double centerY, double centerZ,
+                                          double scale, List<S2CMessageRaidFlareBurst.ParticleData> particleTypes) {
+        int segments = 30;
+
+        for (int i = 0; i < segments; i++) {
+            double t = (double) i / segments;
+            double offset = (t - 0.5) * scale * 2;
+
+            spawnBurstParticlesAt(world, centerX + offset, centerY, centerZ, particleTypes);
+            spawnBurstParticlesAt(world, centerX, centerY, centerZ + offset, particleTypes);
+        }
+    }
+
+    private static void spawnDoubleHelixPattern(Level world, double centerX, double centerY, double centerZ,
+                                                double radius, int repetitions, List<S2CMessageRaidFlareBurst.ParticleData> particleTypes) {
+        int segments = 50;
+        for (int rep = 0; rep < repetitions; rep++) {
+            for (int i = 0; i < segments; i++) {
+                double t = (double) i / segments;
+                double angle = t * Math.PI * 4;
+                double height = (t - 0.5) * radius * 2;
+
+                double x1 = centerX + Math.cos(angle) * radius * 0.5;
+                double z1 = centerZ + Math.sin(angle) * radius * 0.5;
+                spawnBurstParticlesAt(world, x1, centerY + height, z1, particleTypes);
+
+                double x2 = centerX + Math.cos(angle + Math.PI) * radius * 0.5;
+                double z2 = centerZ + Math.sin(angle + Math.PI) * radius * 0.5;
+                spawnBurstParticlesAt(world, x2, centerY + height, z2, particleTypes);
+            }
+        }
+    }
+
+    private static void spawnBurstPattern(Level world, double centerX, double centerY, double centerZ,
+                                          double scale, int repetitions, List<S2CMessageRaidFlareBurst.ParticleData> particleTypes) {
+        int rays = 12;
+        int pointsPerRay = 8;
+
+        for (int rep = 0; rep < repetitions; rep++) {
+            for (int ray = 0; ray < rays; ray++) {
+                double angle = (Math.PI * 2 * ray) / rays;
+                for (int point = 0; point < pointsPerRay; point++) {
+                    double distance = (scale / pointsPerRay) * (point + 1);
+                    double x = centerX + Math.cos(angle) * distance;
+                    double z = centerZ + Math.sin(angle) * distance;
+                    spawnBurstParticlesAt(world, x, centerY, z, particleTypes);
+                }
+            }
+        }
+    }
+
+    private static void spawnRingPattern(Level world, double centerX, double centerY, double centerZ,
+                                         double radius, int repetitions, List<S2CMessageRaidFlareBurst.ParticleData> particleTypes) {
+        int particleCount = 40;
+        for (int rep = 0; rep < repetitions; rep++) {
+            double ringHeight = centerY + (rep - repetitions / 2.0) * 0.5;
+            for (int i = 0; i < particleCount; i++) {
+                double angle = (Math.PI * 2 * i) / particleCount;
+                double x = centerX + Math.cos(angle) * radius;
+                double z = centerZ + Math.sin(angle) * radius;
+                spawnBurstParticlesAt(world, x, ringHeight, z, particleTypes);
+            }
+        }
+    }
+    private static void spawnStarPattern(Level world, double centerX, double centerY, double centerZ,
+                                         double radius, int repetitions, List<S2CMessageRaidFlareBurst.ParticleData> particleTypes) {
+        int points = 5;
+        for (int rep = 0; rep < repetitions; rep++) {
+            for (int i = 0; i < points * 2; i++) {
+                double angle = (Math.PI * 2 * i) / (points * 2);
+                double r = (i % 2 == 0) ? radius : radius * 0.4;
+                double x = centerX + Math.cos(angle) * r;
+                double z = centerZ + Math.sin(angle) * r;
+                spawnBurstParticlesAt(world, x, centerY, z, particleTypes);
+            }
+        }
+    }
+
+    private static void spawnUnionJackPattern(Level world, double centerX, double centerY, double centerZ,
+                                              double scale, List<S2CMessageRaidFlareBurst.ParticleData> particleTypes) {
+        int segments = 30;
+
+        for (int i = 0; i < segments; i++) {
+            double t = (double) i / segments;
+            double x = centerX + (t - 0.5) * scale * 2;
+            double z = centerZ + (t - 0.5) * scale * 2;
+            spawnBurstParticlesAt(world, x, centerY, z, particleTypes);
+        }
+
+        for (int i = 0; i < segments; i++) {
+            double t = (double) i / segments;
+            double x = centerX + (t - 0.5) * scale * 2;
+            double z = centerZ - (t - 0.5) * scale * 2;
+            spawnBurstParticlesAt(world, x, centerY, z, particleTypes);
+        }
+
+        for (int i = 0; i < segments; i++) {
+            double t = (double) i / segments;
+            double x = centerX + (t - 0.5) * scale * 2;
+            spawnBurstParticlesAt(world, x, centerY, centerZ, particleTypes);
+        }
+
+        for (int i = 0; i < segments; i++) {
+            double t = (double) i / segments;
+            double z = centerZ + (t - 0.5) * scale * 2;
+            spawnBurstParticlesAt(world, centerX, centerY, z, particleTypes);
+        }
+
+        for (int i = 0; i <= segments / 4; i++) {
+            double t = (double) i / (segments / 4);
+            double offset = t * scale * 0.3;
+
+            spawnBurstParticlesAt(world, centerX - scale + offset, centerY, centerZ + scale - offset, particleTypes);
+            spawnBurstParticlesAt(world, centerX + scale - offset, centerY, centerZ + scale - offset, particleTypes);
+            spawnBurstParticlesAt(world, centerX - scale + offset, centerY, centerZ - scale + offset, particleTypes);
+            spawnBurstParticlesAt(world, centerX + scale - offset, centerY, centerZ - scale + offset, particleTypes);
+        }
+    }
+
+    private static void spawnCirclePattern(Level world, double centerX, double centerY, double centerZ,
+                                           double radius, int repetitions, List<S2CMessageRaidFlareBurst.ParticleData> particleTypes) {
+        int particleCount = 20;
+        for (int rep = 0; rep < repetitions; rep++) {
+            double repRadius = radius * (rep + 1) / repetitions;
+            for (int i = 0; i < particleCount; i++) {
+                double angle = (Math.PI * 2 * i) / particleCount;
+                double x = centerX + Math.cos(angle) * repRadius;
+                double z = centerZ + Math.sin(angle) * repRadius;
+                spawnBurstParticlesAt(world, x, centerY, z, particleTypes);
+            }
+        }
+    }
+
+    private static void spawnDefaultBurst(Level world, double x, double y, double z,
+                                          List<S2CMessageRaidFlareBurst.ParticleData> particleTypes) {
+        spawnBurstParticlesAt(world, x, y, z, particleTypes);
+    }
+
+    private static void spawnBurstParticlesAt(Level world, double x, double y, double z,
+                                              List<S2CMessageRaidFlareBurst.ParticleData> particleTypes) {
+        for (S2CMessageRaidFlareBurst.ParticleData particleData : particleTypes) {
+            ParticleOptions particle = getParticleWithColor(particleData.particleId, particleData.color);
+            if (particle == null) continue;
+
+            for (int i = 0; i < particleData.count; i++) {
+                double offsetX = (world.random.nextDouble() - 0.5) * particleData.spread;
+                double offsetY = (world.random.nextDouble() - 0.5) * particleData.spread;
+                double offsetZ = (world.random.nextDouble() - 0.5) * particleData.spread;
+
+                double velX = (world.random.nextDouble() - 0.5) * particleData.speed * 2;
+                double velY = (world.random.nextDouble() - 0.5) * particleData.speed * 2;
+                double velZ = (world.random.nextDouble() - 0.5) * particleData.speed * 2;
+
+                world.addParticle(particle,
+                        x + offsetX, y + offsetY, z + offsetZ,
+                        velX, velY, velZ);
+            }
+        }
+    }
+
+    private static ParticleOptions getParticleTypeFromString(String particleId) {
+        try {
+            ResourceLocation location = new ResourceLocation(particleId);
+            return (ParticleOptions) BuiltInRegistries.PARTICLE_TYPE.get(location);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private static ParticleOptions getParticleWithColor(String particleId, int color) {
+        if (particleId.equals("minecraft:dust")) {
+            float r = ((color >> 16) & 0xFF) / 255.0f;
+            float g = ((color >> 8) & 0xFF) / 255.0f;
+            float b = (color & 0xFF) / 255.0f;
+            return new DustParticleOptions(new Vector3f(r, g, b), 1.0f);
+        }
+        return getParticleTypeFromString(particleId);
     }
     public static void handleSyncUpgradeRegistry(S2CMessageSyncUpgradeRegistry message) {
         Minecraft.getInstance().execute(() -> {
@@ -282,7 +587,7 @@ public class ClientPlayHandler {
             int shooterId = message.getShooterId();
             boolean enchanted = message.isEnchanted();
             ParticleOptions data = message.getParticleData();
-            boolean isVisible = true;
+            boolean isVisible = message.isVisible();
             double trailThickness = message.getTrailThickness();
 
             for(int i = 0; i < message.getCount(); i++)

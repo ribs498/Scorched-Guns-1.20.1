@@ -49,6 +49,12 @@ public class ArmorRenderHandler {
                 if (armorStack.getItem() instanceof DiamondSteelArmorItem) {
                     hideSecondLayerForSlot(playerModel, slot);
                 }
+                if (armorStack.getItem() instanceof RedcoatArmorItem) {
+                    hideSecondLayerForSlot(playerModel, slot);
+                }
+                if (armorStack.getItem() instanceof ScrapArmorItem) {
+                    hideSecondLayerForSlot(playerModel, slot);
+                }
             }
         }
     }

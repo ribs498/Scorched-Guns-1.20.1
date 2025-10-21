@@ -1,0 +1,59 @@
+{
+  "raid_id": "treated_brass",
+  "burst_delay": 20,
+  "duration": 60,
+  "trail_particles": [
+    {
+      "particle": "minecraft:flame",
+      "count": 3,
+      "spread": 0.3,
+      "speed": 0.12,
+      "color": "#B8860B"
+    },
+    {
+      "particle": "minecraft:smoke",
+      "count": 2,
+      "spread": 0.3,
+      "speed": 0.1,
+      "color": "#8B7355"
+    }
+  ],
+  "burst_particles": [
+    {
+      "particle": "minecraft:electric_spark",
+      "count": 210,
+      "spread": 0.35,
+      "speed": 0.45,
+      "color": "#DAA520"
+    },
+    {
+      "particle": "minecraft:crit",
+      "count": 70,
+      "spread": 0.5,
+      "speed": 0.35,
+      "color": "#CD7F32"
+    },
+    {
+      "particle": "minecraft:lava",
+      "count": 30,
+      "spread": 0.4,
+      "speed": 0.25,
+      "color": "#B8860B"
+    },
+    {
+      "particle": "minecraft:flash",
+      "count": 20,
+      "spread": 0.3,
+      "speed": 0.2,
+      "color": "#FFD700"
+    }
+  ],
+  "pattern": {
+    "type": "double_helix",
+    "repetitions": 5,
+    "scale": 5.5
+  },
+  "burst_sound": "minecraft:block.anvil.land",
+  "burst_sound_volume": 1.7,
+  "burst_sound_pitch": 1.2
+}

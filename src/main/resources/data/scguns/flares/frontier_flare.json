@@ -1,0 +1,31 @@
+{
+  "raid_id": "frontier",
+  "burst_delay": 20,
+  "duration": 60,
+  "trail_particles": [
+    {
+      "particle": "minecraft:flame",
+      "count": 2,
+      "spread": 0.3,
+      "speed": 0.1,
+      "color": "#FF0000"
+    }
+  ],
+  "burst_particles": [
+    {
+      "particle": "minecraft:electric_spark",
+      "count": 130,
+      "spread": 0.2,
+      "speed": 0.3,
+      "color": "#FFFFFF"
+    }
+  ],
+  "pattern": {
+    "type": "star",
+    "repetitions": 3,
+    "scale": 4.0
+  },
+  "burst_sound": "minecraft:entity.firework_rocket.large_blast",
+  "burst_sound_volume": 1.5,
+  "burst_sound_pitch": 0.8
+}

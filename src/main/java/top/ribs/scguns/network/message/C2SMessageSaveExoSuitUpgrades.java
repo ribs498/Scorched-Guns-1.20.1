@@ -18,9 +18,6 @@ import top.ribs.scguns.network.PacketHandler;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Network message to save ExoSuit upgrades from client to server
- */
 public class C2SMessageSaveExoSuitUpgrades extends PlayMessage<C2SMessageSaveExoSuitUpgrades> {
     private List<ItemStack> upgradeStacks;
 
@@ -35,7 +32,6 @@ public class C2SMessageSaveExoSuitUpgrades extends PlayMessage<C2SMessageSaveExo
     @Override
     public void encode(C2SMessageSaveExoSuitUpgrades message, FriendlyByteBuf buffer) {
         buffer.writeInt(message.upgradeStacks.size());
-
         for (ItemStack stack : message.upgradeStacks) {
             buffer.writeItem(stack);
         }
@@ -45,11 +41,9 @@ public class C2SMessageSaveExoSuitUpgrades extends PlayMessage<C2SMessageSaveExo
     public C2SMessageSaveExoSuitUpgrades decode(FriendlyByteBuf buffer) {
         int size = buffer.readInt();
         List<ItemStack> stacks = new ArrayList<>();
-
         for (int i = 0; i < size; i++) {
             stacks.add(buffer.readItem());
         }
-
         return new C2SMessageSaveExoSuitUpgrades(stacks);
     }
 
@@ -61,19 +55,24 @@ public class C2SMessageSaveExoSuitUpgrades extends PlayMessage<C2SMessageSaveExo
                 ItemStack menuArmorPiece = menu.getArmorPiece();
 
                 if (!menuArmorPiece.isEmpty() && menuArmorPiece.getItem() instanceof ExoSuitItem exoSuit) {
-                    CompoundTag upgradeData = getCompoundTag(message);
-
+                    CompoundTag upgradeData = createUpgradeData(message);
                     ExoSuitData.setUpgradeData(menuArmorPiece, upgradeData);
 
                     EquipmentSlot armorSlot = getEquipmentSlotForArmorType(exoSuit.getType());
                     ItemStack equippedPiece = serverPlayer.getItemBySlot(armorSlot);
 
-                    if (!equippedPiece.isEmpty() && equippedPiece.getItem() instanceof ExoSuitItem) {
+                    // Only sync if the menu armor piece IS the equipped piece
+                    if (!equippedPiece.isEmpty() &&
+                            equippedPiece.getItem() instanceof ExoSuitItem &&
+                            ItemStack.isSameItemSameTags(menuArmorPiece, equippedPiece)) {
+
                         ExoSuitData.setUpgradeData(equippedPiece, upgradeData);
                         serverPlayer.setItemSlot(armorSlot, equippedPiece);
 
-                        List<ServerPlayer> playersToSync = serverPlayer.serverLevel().getEntitiesOfClass(ServerPlayer.class,
-                                serverPlayer.getBoundingBox().inflate(128.0));
+                        List<ServerPlayer> playersToSync = serverPlayer.serverLevel().getEntitiesOfClass(
+                                ServerPlayer.class,
+                                serverPlayer.getBoundingBox().inflate(128.0)
+                        );
 
                         if (!playersToSync.contains(serverPlayer)) {
                             playersToSync.add(serverPlayer);
@@ -92,7 +91,7 @@ public class C2SMessageSaveExoSuitUpgrades extends PlayMessage<C2SMessageSaveExo
         context.setHandled(true);
     }
 
-    private static @NotNull CompoundTag getCompoundTag(C2SMessageSaveExoSuitUpgrades message) {
+    private static @NotNull CompoundTag createUpgradeData(C2SMessageSaveExoSuitUpgrades message) {
         CompoundTag upgradeData = new CompoundTag();
         ListTag upgradeList = new ListTag();
 
@@ -120,26 +119,5 @@ public class C2SMessageSaveExoSuitUpgrades extends PlayMessage<C2SMessageSaveExo
             case LEGGINGS -> EquipmentSlot.LEGS;
             case BOOTS -> EquipmentSlot.FEET;
         };
-    }
-    private static void saveUpgradesToArmor(ItemStack armorPiece, ExoSuitItem exoSuit, List<ItemStack> upgradeStacks) {
-        CompoundTag upgradeData = new CompoundTag();
-        ListTag upgradeList = new ListTag();
-
-        for (int i = 0; i < upgradeStacks.size() && i < exoSuit.getMaxUpgradeSlots(); i++) {
-            ItemStack upgradeStack = upgradeStacks.get(i);
-            if (!upgradeStack.isEmpty()) {
-                CompoundTag slotTag = new CompoundTag();
-                slotTag.putInt("Slot", i);
-
-                // Create a separate NBT tag for the ItemStack data
-                CompoundTag itemTag = new CompoundTag();
-                upgradeStack.save(itemTag);
-                slotTag.put("Item", itemTag);
-
-                upgradeList.add(slotTag);
-            }
-        }
-        upgradeData.put("Upgrades", upgradeList);
-        ExoSuitData.setUpgradeData(armorPiece, upgradeData);
     }
 }

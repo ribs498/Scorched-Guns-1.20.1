@@ -103,6 +103,10 @@ public class RarityUtils {
 
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "advanced_exo_suit_core"), Constants.SCORCHED);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "the_pact"), Constants.SCORCHED);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "music_disc_mass_destruction"), Constants.SCORCHED);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "music_disc_mass_destruction_extended"), Constants.SCORCHED);
+
+
 
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "felix_memorial"), Constants.PIGLISH);
 
@@ -111,6 +115,17 @@ public class RarityUtils {
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "big_bore"), Constants.BIZARRE);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "osborne_slug"), Constants.BIZARRE);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "ribs_glory"), Constants.PIGLISH);
+
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "rusty_medal"), Constants.RUSTY);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "labor_trophy"), Constants.BIZARRE);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "snapped_cogwheel"), Constants.WRECKER);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "ceremonial_cod"), Constants.DIAMOND_STEEL);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "cog_heart"), Constants.TREATED_BRASS);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "gold_idol"), Constants.PIGLISH);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "leviathan_tooth"), Constants.OCEANIC);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "sculk_tome"), Constants.DEEP_DARK);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "shulker_core"), Constants.ENDISH);
+
 
     }
 

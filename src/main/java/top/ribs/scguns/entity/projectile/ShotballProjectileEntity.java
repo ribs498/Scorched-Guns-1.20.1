@@ -12,6 +12,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -52,8 +53,8 @@ public class ShotballProjectileEntity extends ProjectileEntity {
     private static final float VERTICAL_KNOCKBACK_BOOST = 0.4F;
     private static final float SPLASH_KNOCKBACK_RADIUS = 5.0F;
     private static final float SPLASH_KNOCKBACK_FALLOFF = 0.5F;
-
-
+    private static final float WOOD_BREAK_CHANCE_BASE = 0.95F;
+    private static final float WOOD_BREAK_CHANCE_PER_BOUNCE = 0.25F;
 
     private int bouncesLeft;
     private float currentDamageMultiplier = 1.0F;
@@ -99,13 +100,35 @@ public class ShotballProjectileEntity extends ProjectileEntity {
             this.remove(RemovalReason.KILLED);
         }
     }
+
+    private float calculateWoodBreakChance() {
+        int bouncesUsed = MAX_BOUNCES - bouncesLeft;
+        return WOOD_BREAK_CHANCE_BASE - (bouncesUsed * WOOD_BREAK_CHANCE_PER_BOUNCE);
+    }
+
+    private void tryBreakWoodenBlock(BlockState state, BlockPos pos) {
+        if (!Config.COMMON.gameplay.griefing.enableGlassBreaking.get()) {
+            return;
+        }
+
+        if (!state.is(BlockTags.PLANKS) && !state.is(BlockTags.WOODEN_DOORS) &&
+                !state.is(BlockTags.WOODEN_TRAPDOORS) && !state.is(BlockTags.WOODEN_FENCES)) {
+            return;
+        }
+
+        float breakChance = calculateWoodBreakChance();
+        if (this.random.nextFloat() < breakChance) {
+            this.level().destroyBlock(pos, true);
+            this.level().playSound(null, pos, SoundEvents.WOOD_BREAK, SoundSource.BLOCKS, 1.0F, 0.8F);
+        }
+    }
+
     private void applyKnockback(Entity target, Vec3 hitPos) {
         if (!(target instanceof LivingEntity)) {
             return;
         }
 
         Vec3 knockbackDirection = target.position().subtract(this.position()).normalize();
-
         Vec3 knockbackVec = getVec3(knockbackDirection);
 
         target.push(knockbackVec.x, knockbackVec.y, knockbackVec.z);
@@ -126,7 +149,6 @@ public class ShotballProjectileEntity extends ProjectileEntity {
     }
 
     private void applySplashKnockback(Entity primaryTarget, Vec3 hitPos, float primaryKnockbackStrength) {
-
         AABB searchBox = new AABB(hitPos.x - SPLASH_KNOCKBACK_RADIUS,
                 hitPos.y - SPLASH_KNOCKBACK_RADIUS,
                 hitPos.z - SPLASH_KNOCKBACK_RADIUS,
@@ -142,9 +164,7 @@ public class ShotballProjectileEntity extends ProjectileEntity {
 
             if (distance <= SPLASH_KNOCKBACK_RADIUS) {
                 float distanceFalloff = (float) (1.0 - (distance / SPLASH_KNOCKBACK_RADIUS));
-
                 Vec3 splashDirection = nearbyEntity.position().subtract(hitPos).normalize();
-
                 float splashStrength = primaryKnockbackStrength * SPLASH_KNOCKBACK_FALLOFF * distanceFalloff;
 
                 Vec3 splashKnockback = new Vec3(
@@ -164,6 +184,7 @@ public class ShotballProjectileEntity extends ProjectileEntity {
             }
         }
     }
+
     private boolean isShooterRelatedEntity(Entity entity) {
         if (this.shooter == null) {
             return false;
@@ -188,6 +209,7 @@ public class ShotballProjectileEntity extends ProjectileEntity {
 
         return false;
     }
+
     private void handleCustomCollisions(Vec3 startVec, Vec3 endVec) {
         BlockHitResult blockResult = this.level().clip(new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
 
@@ -203,7 +225,6 @@ public class ShotballProjectileEntity extends ProjectileEntity {
         EntityResult closestEntity = null;
         if (!entityResults.isEmpty()) {
             for (EntityResult entityResult : entityResults) {
-
                 double dist = startVec.distanceToSqr(entityResult.getHitPos());
                 if (dist < entityDistance) {
                     entityDistance = dist;
@@ -215,7 +236,7 @@ public class ShotballProjectileEntity extends ProjectileEntity {
         if (blockDistance < entityDistance && blockResult.getType() != HitResult.Type.MISS) {
             this.handleBlockCollision(blockResult);
         } else if (closestEntity != null) {
-           this.handleEntityCollision(closestEntity);
+            this.handleEntityCollision(closestEntity);
         }
     }
 
@@ -242,6 +263,8 @@ public class ShotballProjectileEntity extends ProjectileEntity {
         BlockPos pos = result.getBlockPos();
         BlockState state = this.level().getBlockState(pos);
         Direction face = result.getDirection();
+
+        tryBreakWoodenBlock(state, pos);
 
         if (state.getBlock() instanceof top.ribs.scguns.interfaces.IDamageable damageable) {
             damageable.onBlockDamaged(this.level(), state, pos, this, this.getDamage() * currentDamageMultiplier,
@@ -310,7 +333,6 @@ public class ShotballProjectileEntity extends ProjectileEntity {
                     knockbackStrength *= (float) Math.pow(KNOCKBACK_MULTIPLIER_PER_BOUNCE, bouncesUsed);
 
                     applyKnockback(entity, hitVec);
-
                     applySplashKnockback(entity, hitVec, knockbackStrength);
                 }
 
@@ -498,7 +520,7 @@ public class ShotballProjectileEntity extends ProjectileEntity {
                     bounceArray,
                     projectileProps,
                     player.getId(),
-                    data, false);
+                    data, true);
 
             double radius = Config.COMMON.network.projectileTrackingRange.get();
             PacketHandler.getPlayChannel().sendToNearbyPlayers(

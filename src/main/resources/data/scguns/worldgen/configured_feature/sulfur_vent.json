@@ -1,0 +1,17 @@
+{
+  "type": "scguns:vent",
+  "config": {
+    "vent_block": "scguns:sulfur_vent",
+    "min_height": 1,
+    "max_height": 3,
+    "base_block": "minecraft:magma_block",
+    "required_below_blocks": [
+      "minecraft:netherrack"
+    ],
+    "place_base_block": true,
+    "requires_waterlogged": false,
+    "check_active_limit": true,
+    "max_active_nearby": 1,
+    "check_radius": 48
+  }
+}

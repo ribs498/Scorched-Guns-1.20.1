@@ -1,0 +1,34 @@
+{
+  "activation": {
+    "baseBlock": "minecraft:magma_block",
+    "requiresWaterlogged": false
+  },
+  "power": {
+    "maxPower": 5,
+    "baseTickInterval": 100,
+    "tickWiggleRoom": 40
+  },
+  "production": {
+    "outputs": [
+      {
+        "item": "scguns:sulfur_dust",
+        "weight": 19
+      },
+      {
+        "item": "minecraft:blaze_powder",
+        "weight": 1
+      }
+    ],
+    "productionChance": 0.6
+  },
+  "placement": {
+    "enabled": true,
+    "blockToPlace": "scguns:sulfur_layer",
+    "radius": 7,
+    "placementChance": 0.4
+  },
+  "particles": {
+    "showActive": true,
+    "activeSound": "minecraft:block.fire.ambient"
+  }
+}

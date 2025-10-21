@@ -20,7 +20,7 @@ public class ModCommonEventBus {
         event.put(ModEntities.COG_KNIGHT.get(), CogKnightEntity.createAttributes().build());
         event.put(ModEntities.SKY_CARRIER.get(), SkyCarrierEntity.createAttributes().build());
         event.put(ModEntities.DISSIDENT.get(), DissidentEntity.createAttributes().build());
-        event.put(ModEntities.REDCOAT.get(), RedcoatEntity.createAttributes().build());
+        event.put(ModEntities.VIVENTRUM.get(), ViventrumEntity.createAttributes().build());
         event.put(ModEntities.SCAMP_TANK.get(), ScampTankEntity.createAttributes().build());
         event.put(ModEntities.BLUNDERER.get(), BlundererEntity.createAttributes().build());
         event.put(ModEntities.HIVE.get(), HiveEntity.createAttributes().build());
@@ -31,6 +31,8 @@ public class ModCommonEventBus {
         event.put(ModEntities.THE_MERCHANT.get(), TheMerchantEntity.createAttributes().build());
         event.put(ModEntities.TRAUMA_UNIT.get(), TraumaUnitEntity.createAttributes().build());
         event.put(ModEntities.SCAMPLER.get(), ScamplerEntity.createAttributes().build());
+        event.put(ModEntities.ADJUDICATOR.get(), AdjudicatorEntity.createAttributes().build());
+        event.put(ModEntities.SUBJUGATOR.get(), SubjugatorEntity.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -79,13 +81,7 @@ public class ModCommonEventBus {
                 DissidentEntity::checkMonsterSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.OR
         );
-        event.register(
-                ModEntities.REDCOAT.get(),
-                SpawnPlacements.Type.ON_GROUND,
-                Heightmap.Types.WORLD_SURFACE,
-                RedcoatEntity::checkMonsterSpawnRules,
-                SpawnPlacementRegisterEvent.Operation.OR
-        );
+
 
         event.register(
                 ModEntities.HIVE.get(),

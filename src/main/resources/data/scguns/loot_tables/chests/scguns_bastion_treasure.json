@@ -21,11 +21,21 @@
         },
         {
           "type": "minecraft:item",
-          "name": "scguns:piglin_blueprint"
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:gold_flare"
         },
         {
           "type": "minecraft:item",
-          "name": "scguns:treated_brass_blueprint"
+          "name": "scguns:blueprint_scrap"
         },
         {
           "type": "minecraft:item",

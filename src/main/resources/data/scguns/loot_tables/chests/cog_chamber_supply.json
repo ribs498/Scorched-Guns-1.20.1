@@ -193,7 +193,7 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "minecraft:tnt"
+          "name": "scguns:powder_keg"
         },
         {
           "type": "minecraft:item",
@@ -214,8 +214,45 @@
         },
         {
           "type": "minecraft:item",
-          "name": "scguns:treated_brass_blueprint",
-          "weight": 4
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 1.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:blueprint_scrap"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 1.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:treated_brass_flare"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 1.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:diamond_steel_flare"
         },
         {
           "type": "minecraft:item",
@@ -231,7 +268,7 @@
               "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "scguns:m22_waltz",
+          "name": "scguns:treated_brass_boots",
           "weight": 1
         },
         {
@@ -265,7 +302,7 @@
               "function": "minecraft:enchant_randomly"
             }
           ],
-          "name": "scguns:grandle_og",
+          "name": "scguns:treated_brass_leggings",
           "weight": 2
         }
       ],

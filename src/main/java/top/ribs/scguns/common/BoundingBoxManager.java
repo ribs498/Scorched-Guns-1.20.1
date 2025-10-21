@@ -97,7 +97,6 @@ public class BoundingBoxManager
         registerHeadshotBox(ModEntities.COG_MINION.get(), new BasicHeadshotBox<>(8.0, 24.0));
         registerHeadshotBox(ModEntities.COG_KNIGHT.get(), new BasicHeadshotBox<>(8.0, 24.0));
         registerHeadshotBox(ModEntities.TRAUMA_UNIT.get(), new BasicHeadshotBox<>(8.0, 24.0));
-        registerHeadshotBox(ModEntities.REDCOAT.get(), new BasicHeadshotBox<>(8.0, 24.0));
         registerHeadshotBox(ModEntities.BLUNDERER.get(), new BasicHeadshotBox<>(8.0, 24.0));
         registerHeadshotBox(ModEntities.HIVE.get(), new BasicHeadshotBox<>(8.0, 18.0));
         registerHeadshotBox(ModEntities.DISSIDENT.get(), new BasicHeadshotBox<>(8.0, 18.0));

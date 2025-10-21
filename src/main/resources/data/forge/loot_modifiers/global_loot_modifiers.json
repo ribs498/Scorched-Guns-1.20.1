@@ -13,6 +13,7 @@
     "scguns:add_loot_piglin_trading",
     "scguns:add_loot_stronghold_corridor",
     "scguns:add_loot_tinkers_citadel_vault",
-    "scguns:add_loot_tinkers_workshop_vault"
+    "scguns:add_loot_tinkers_workshop_vault",
+    "scguns:shulker_core_from_shulker"
   ]
 }

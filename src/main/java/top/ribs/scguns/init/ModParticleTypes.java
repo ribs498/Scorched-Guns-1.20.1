@@ -53,4 +53,6 @@ public class ModParticleTypes {
     public static final RegistryObject<SimpleParticleType> TURRET_MUZZLE_FLASH = REGISTER.register("turret_muzzle_flash", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> LASER = REGISTER.register("laser", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> SMALL_LASER = REGISTER.register("small_laser", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> ACID_BUBBLE = REGISTER.register("acid_bubble", () -> new SimpleParticleType(true));
 }
+

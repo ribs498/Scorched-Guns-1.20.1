@@ -2,9 +2,9 @@ package top.ribs.scguns.blockentity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.SimpleContainer;
@@ -12,7 +12,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -23,29 +22,23 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.jetbrains.annotations.NotNull;
-import top.ribs.scguns.block.GeothermalVentBlock;
-import top.ribs.scguns.block.SulfurVentBlock;
+import top.ribs.scguns.Reference;
+import top.ribs.scguns.block.VentBlock;
 import top.ribs.scguns.block.VentCollectorBlock;
 import top.ribs.scguns.client.screen.VentCollectorMenu;
-import top.ribs.scguns.init.ModTags;
+import top.ribs.scguns.common.VentCollectorConfig;
+import top.ribs.scguns.common.VentManager;
 import top.ribs.scguns.init.ModBlockEntities;
-import top.ribs.scguns.init.ModItems;
 
 import javax.annotation.Nullable;
-import java.util.List;
 import java.util.Random;
 
 public class VentCollectorBlockEntity extends BlockEntity implements MenuProvider {
-    private static final int BASE_TICK_INTERVAL = 100;
-    private static final int TICK_WIGGLE_ROOM = 60;
-    private static final float POWER_SPEED_MULTIPLIER = 0.35f;
-    private static final int MAX_FILTER_CHARGE = 64;
-    private static final int WEAK_FILTER_CHARGE = 4;
-    private static final int STRONG_FILTER_CHARGE = 8;
-    private static final float FILTER_CONSUMPTION_CHANCE = 0.5f;
-    private static final int FILTER_PROCESS_COOLDOWN = 2;
-    private static final int PUSH_COOLDOWN = 5;
+    private static final ResourceLocation DEFAULT_CONFIG_ID = new ResourceLocation(Reference.MOD_ID, "vent_collector");
+
     private int pushCooldown = 0;
     private int filterProcessCooldown = 0;
     private final ItemStackHandler itemHandler = new ItemStackHandler(4) {
@@ -60,20 +53,22 @@ public class VentCollectorBlockEntity extends BlockEntity implements MenuProvide
         @Override
         public boolean isItemValid(int slot, @NotNull ItemStack stack) {
             if (slot == 0) {
-                return stack.is(ModTags.Items.WEAK_FILTER) || stack.is(ModTags.Items.STRONG_FILTER);
+                return isValidFilterItem(stack);
             }
-            return slot > 0 && (stack.is(ModTags.Items.GEOTHERMAL_VENT_OUTPUT) || stack.is(ModTags.Items.SULFUR_VENT_OUTPUT));
+            return slot > 0;
         }
 
         @Override
         @NotNull
         public ItemStack insertItem(int slot, @NotNull ItemStack stack, boolean simulate) {
-            if (slot > 0 && (stack.is(ModTags.Items.GEOTHERMAL_VENT_OUTPUT) || stack.is(ModTags.Items.SULFUR_VENT_OUTPUT))) {
+            if (slot == 0) {
                 return super.insertItem(slot, stack, simulate);
             }
-            return slot == 0 ? super.insertItem(slot, stack, simulate) : stack;
+            if (slot > 0) {
+                return super.insertItem(slot, stack, simulate);
+            }
+            return stack;
         }
-
     };
 
     private final LazyOptional<IItemHandler> itemHandlerOptional = LazyOptional.of(() -> itemHandler);
@@ -82,89 +77,147 @@ public class VentCollectorBlockEntity extends BlockEntity implements MenuProvide
     private int filterCharge;
     private final Random random = new Random();
 
+    private VentCollectorConfig config;
+
     public VentCollectorBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.VENT_COLLECTOR.get(), pos, state);
         this.productionCounter = 0;
-        this.currentTickInterval = calculateNextTickInterval();
+        this.currentTickInterval = 100;
         this.filterCharge = 0;
+        reloadConfig();
+    }
+
+    public void reloadConfig() {
+        this.config = VentManager.getVentCollectorConfig(DEFAULT_CONFIG_ID);
+        if (this.config == null) {
+            this.config = new VentCollectorConfig();
+        }
+    }
+
+    public boolean isValidFilterItem(ItemStack stack) {
+        if (this.config == null) return false;
+
+        for (VentCollectorConfig.Filters.FilterItem filterItem : this.config.getFilters().getFilterItems()) {
+            if (filterItem.isTag()) {
+                ResourceLocation tagLocation = filterItem.getIdentifier();
+                if (stack.is(net.minecraft.tags.TagKey.create(
+                        net.minecraft.core.registries.Registries.ITEM, tagLocation))) {
+                    return true;
+                }
+            } else {
+                ResourceLocation itemLocation = filterItem.getIdentifier();
+                net.minecraft.world.item.Item item = net.minecraftforge.registries.ForgeRegistries.ITEMS.getValue(itemLocation);
+                if (item != null && stack.is(item)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public int getFilterCharge() {
         return this.filterCharge;
     }
 
-    private int calculateNextTickInterval() {
-        return BASE_TICK_INTERVAL + random.nextInt(TICK_WIGGLE_ROOM);
+    public int getMaxFilterCharge() {
+        if (this.config == null) return 64;
+        return this.config.getFilters().getMaxCharge();
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, VentCollectorBlockEntity blockEntity) {
         if (!level.isClientSide) {
             BlockState belowState = level.getBlockState(pos.below());
-            boolean isGeothermalVentBelow = belowState.getBlock() instanceof GeothermalVentBlock;
-            boolean isSulfurVentBelow = belowState.getBlock() instanceof SulfurVentBlock;
-            boolean isActive = (isGeothermalVentBelow && belowState.getValue(GeothermalVentBlock.ACTIVE)) ||
-                    (isSulfurVentBelow && belowState.getValue(SulfurVentBlock.ACTIVE));
 
-            if (isActive && blockEntity.filterCharge > 0) {
-                int ventPower = 1;
-                if (isGeothermalVentBelow) {
-                    ventPower = belowState.getValue(GeothermalVentBlock.VENT_POWER);
-                } else {
-                    ventPower = belowState.getValue(SulfurVentBlock.VENT_POWER);
-                }
+            if (!(belowState.getBlock() instanceof VentBlock ventBlock)) {
+                return;
+            }
 
-                float speedMultiplier = 1 + (ventPower - 1) * POWER_SPEED_MULTIPLIER;
-                blockEntity.productionCounter += (int) speedMultiplier;
+            boolean isActive = belowState.getValue(VentBlock.ACTIVE);
 
-                if (blockEntity.productionCounter >= blockEntity.currentTickInterval) {
-                    blockEntity.productionCounter = 0;
-                    blockEntity.currentTickInterval = blockEntity.calculateNextTickInterval();
+            if (!isActive) {
+                return;
+            }
 
-                    boolean produced;
-                    if (isGeothermalVentBelow) {
-                        produced = blockEntity.produceFromTag(ModTags.Items.GEOTHERMAL_VENT_OUTPUT);
-                    } else {
-                        produced = blockEntity.produceFromTag(ModTags.Items.SULFUR_VENT_OUTPUT);
-                    }
+            if (blockEntity.filterCharge <= 0) {
+                return;
+            }
 
-                    if (produced && blockEntity.random.nextFloat() < FILTER_CONSUMPTION_CHANCE) {
-                        blockEntity.filterCharge--;
-                    }
+            int ventPower = belowState.getValue(VentBlock.VENT_POWER);
 
+            float speedMultiplier = blockEntity.getSpeedMultiplier(ventPower);
+            blockEntity.productionCounter += (int) speedMultiplier;
+
+            if (blockEntity.productionCounter >= blockEntity.currentTickInterval) {
+                blockEntity.productionCounter = 0;
+
+                blockEntity.currentTickInterval = blockEntity.calculateNextTickInterval(ventBlock);
+
+                if (!ventBlock.shouldProduce(level.random)) {
                     blockEntity.setChanged();
                     level.sendBlockUpdated(pos, state, state, 3);
+                    return;
                 }
+                ItemStack producedItem = ventBlock.selectRandomOutput(level.random);
+
+                if (producedItem.isEmpty()) {
+                    return;
+                }
+                boolean produced = blockEntity.insertProducedItem(producedItem);
+
+                if (produced) {
+                    if (blockEntity.shouldConsumeFilter()) {
+                        blockEntity.filterCharge--;
+                    }
+                }
+
+                blockEntity.setChanged();
+                level.sendBlockUpdated(pos, state, state, 3);
             }
 
             if (blockEntity.filterProcessCooldown > 0) {
                 blockEntity.filterProcessCooldown--;
             } else {
                 blockEntity.processFilterItem();
-                blockEntity.filterProcessCooldown = FILTER_PROCESS_COOLDOWN;
+                blockEntity.filterProcessCooldown = blockEntity.getFilterProcessCooldown();
             }
 
             if (blockEntity.pushCooldown > 0) {
                 blockEntity.pushCooldown--;
             } else {
                 blockEntity.pushItemsToAdjacentInventories(level, pos);
-                blockEntity.pushCooldown = PUSH_COOLDOWN;
+                blockEntity.pushCooldown = blockEntity.getPushCooldown();
             }
         }
     }
 
-    private boolean produceFromTag(net.minecraft.tags.TagKey<Item> tag) {
-        List<Item> tagItems = new java.util.ArrayList<>();
-        for (var holder : BuiltInRegistries.ITEM.getTagOrEmpty(tag)) {
-            tagItems.add(holder.value());
-        }
+    private float getSpeedMultiplier(int ventPower) {
+        if (this.config == null) return 1 + (ventPower - 1) * 0.35f;
+        float multiplier = this.config.getProcessing().getPowerSpeedMultiplier();
+        return 1 + (ventPower - 1) * multiplier;
+    }
 
-        if (tagItems.isEmpty()) {
-            return false;
-        }
-        Item selectedItem = tagItems.get(random.nextInt(tagItems.size()));
-        ItemStack producedItem = new ItemStack(selectedItem, 1);
+    private boolean shouldConsumeFilter() {
+        if (this.config == null) return random.nextFloat() < 0.5f;
+        return random.nextFloat() < this.config.getFilters().getConsumptionChance();
+    }
 
-        return insertProducedItem(producedItem);
+    private int getFilterProcessCooldown() {
+        if (this.config == null) return 2;
+        return this.config.getFilters().getProcessCooldown();
+    }
+
+    private int getPushCooldown() {
+        if (this.config == null) return 5;
+        return this.config.getProcessing().getPushCooldown();
+    }
+
+    private int calculateNextTickInterval(VentBlock ventBlock) {
+        if (ventBlock.config == null) {
+            ventBlock.reloadConfig();
+            if (ventBlock.config == null) return 100;
+        }
+        return ventBlock.config.getPower().getBaseTickInterval() +
+                random.nextInt(ventBlock.config.getPower().getTickWiggleRoom());
     }
 
     private boolean insertProducedItem(ItemStack producedItem) {
@@ -179,19 +232,38 @@ public class VentCollectorBlockEntity extends BlockEntity implements MenuProvide
 
     private void processFilterItem() {
         ItemStack filterStack = itemHandler.getStackInSlot(0);
-        if (!filterStack.isEmpty()) {
-            int chargeToAdd = 0;
-            if (filterStack.is(ModTags.Items.WEAK_FILTER)) {
-                chargeToAdd = WEAK_FILTER_CHARGE;
-            } else if (filterStack.is(ModTags.Items.STRONG_FILTER)) {
-                chargeToAdd = STRONG_FILTER_CHARGE;
+        if (filterStack.isEmpty() || this.config == null) {
+            return;
+        }
+
+        int maxCharge = this.config.getFilters().getMaxCharge();
+        if (filterCharge >= maxCharge) {
+            return;
+        }
+
+        for (VentCollectorConfig.Filters.FilterItem filterItem : this.config.getFilters().getFilterItems()) {
+            boolean matches = false;
+
+            if (filterItem.isTag()) {
+                ResourceLocation tagLocation = filterItem.getIdentifier();
+                matches = filterStack.is(net.minecraft.tags.TagKey.create(
+                        net.minecraft.core.registries.Registries.ITEM, tagLocation));
+            } else {
+                ResourceLocation itemLocation = filterItem.getIdentifier();
+                net.minecraft.world.item.Item item = net.minecraftforge.registries.ForgeRegistries.ITEMS.getValue(itemLocation);
+                matches = item != null && filterStack.is(item);
             }
 
-            int chargeNeeded = MAX_FILTER_CHARGE - filterCharge;
-            if (chargeToAdd > 0 && chargeNeeded >= chargeToAdd) {
-                filterCharge += chargeToAdd;
-                filterStack.shrink(1);
-                setChanged();
+            if (matches) {
+                int chargeToAdd = filterItem.getChargeAmount();
+                int chargeNeeded = maxCharge - filterCharge;
+
+                if (chargeNeeded >= chargeToAdd) {
+                    filterCharge += chargeToAdd;
+                    filterStack.shrink(1);
+                    setChanged();
+                    return;
+                }
             }
         }
     }

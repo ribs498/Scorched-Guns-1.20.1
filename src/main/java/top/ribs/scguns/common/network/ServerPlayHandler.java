@@ -229,10 +229,14 @@ public class ServerPlayHandler {
         }
 
         if (!projectileProps.shouldHideProjectile()) {
-            sendProjectileTrail(player, spawnedProjectiles, projectileProps);
+            sendProjectileTrail(player, spawnedProjectiles, projectileProps, false);
         }
     }
-    private static void sendProjectileTrail(ServerPlayer player, ProjectileEntity[] projectiles, Gun.Projectile projectileProps) {
+    private static void sendProjectileTrail(ServerPlayer player, ProjectileEntity[] projectiles, Gun.Projectile projectileProps, boolean b) {
+        if(projectileProps.shouldHideTrail()) {
+            return;
+        }
+
         double spawnX = player.getX();
         double spawnY = player.getY() + 1.0;
         double spawnZ = player.getZ();
@@ -243,7 +247,8 @@ public class ServerPlayHandler {
                 projectiles,
                 projectileProps,
                 player.getId(),
-                data, true);
+                data,
+                true);
 
         PacketHandler.getPlayChannel().sendToNearbyPlayers(
                 () -> LevelLocation.create(player.level(), spawnX, spawnY, spawnZ, radius),

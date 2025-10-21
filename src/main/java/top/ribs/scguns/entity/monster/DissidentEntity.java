@@ -1,12 +1,14 @@
 package top.ribs.scguns.entity.monster;
 
 import net.minecraft.core.Vec3i;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
@@ -18,11 +20,14 @@ import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.ribs.scguns.init.ModSounds;
 
 import java.util.EnumSet;
 
@@ -81,6 +86,46 @@ public class DissidentEntity extends Monster {
         } else {
             attackAnimationState.stop();
         }
+    }
+    @Override
+    public double getPassengersRidingOffset() {
+        return (double)this.getBbHeight() * 0.9D;
+    }
+
+    @Nullable
+    public LivingEntity getControllingPassenger() {
+        Entity entity = this.getFirstPassenger();
+        if (entity instanceof Mob) {
+            return (Mob)entity;
+        }
+        return null;
+    }
+
+    @Override
+    protected void updateControlFlags() {
+        boolean flag = !(this.getControllingPassenger() instanceof Mob);
+        boolean flag1 = !(this.getVehicle() instanceof net.minecraft.world.entity.vehicle.Boat);
+        this.goalSelector.setControlFlag(Goal.Flag.MOVE, flag);
+        this.goalSelector.setControlFlag(Goal.Flag.JUMP, flag && flag1);
+        this.goalSelector.setControlFlag(Goal.Flag.LOOK, flag);
+    }
+    @Override
+    @Nullable
+    public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty, MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData, @Nullable CompoundTag pDataTag) {
+        pSpawnData = super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
+
+        if (pLevel.getRandom().nextFloat() < 0.25F) {
+            Zombie babyZombie = EntityType.ZOMBIE.create(pLevel.getLevel());
+            if (babyZombie != null) {
+                babyZombie.setBaby(true);
+                babyZombie.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+                babyZombie.finalizeSpawn(pLevel, pDifficulty, pReason, null, null);
+                babyZombie.startRiding(this);
+                pLevel.addFreshEntity(babyZombie);
+            }
+        }
+
+        return pSpawnData;
     }
     public void setAttacking(boolean attacking) {
         this.entityData.set(ATTACKING, attacking);
@@ -161,13 +206,13 @@ public class DissidentEntity extends Monster {
     @Nullable
     @Override
     protected SoundEvent getHurtSound(DamageSource pDamageSource) {
-        return SoundEvents.ZOMBIE_HORSE_HURT;
+        return ModSounds.DISSIDENT_HURT.get();
     }
 
     @Nullable
     @Override
     protected SoundEvent getDeathSound() {
-        return SoundEvents.ZOMBIE_HORSE_DEATH;
+        return ModSounds.DISSIDENT_DIE.get();
     }
 
     public float getAttackSoundVolume() {
@@ -272,7 +317,7 @@ public class DissidentEntity extends Monster {
         }
     }
 
-    public class LeapAttackGoal extends Goal {
+    public static class LeapAttackGoal extends Goal {
         private final DissidentEntity mob;
         private final double leapStrength;
         private final double maxLeapDistance;
@@ -318,7 +363,6 @@ public class DissidentEntity extends Monster {
             this.leapTicks = 30;
             this.mob.setLeaping(true);
 
-            // Calculate leap direction and perform the leap
             double dx = this.target.getX() - this.mob.getX();
             double dy = this.target.getY() - this.mob.getY();
             double dz = this.target.getZ() - this.mob.getZ();
@@ -383,7 +427,6 @@ public class DissidentEntity extends Monster {
                 this.mob.setAttacking(true);
             }
 
-            // End the leap
             this.leapTicks = 0;
         }
     }

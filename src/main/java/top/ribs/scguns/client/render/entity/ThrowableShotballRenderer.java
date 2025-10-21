@@ -8,15 +8,12 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
 import top.ribs.scguns.entity.throwable.ThrowableShotballEntity;
 
 import javax.annotation.Nullable;
 
-/**
- * Specific renderer for throwable shotballs with spinning animation
- */
+
 public class ThrowableShotballRenderer extends EntityRenderer<ThrowableShotballEntity> {
 
     public ThrowableShotballRenderer(EntityRendererProvider.Context context) {
@@ -38,7 +35,7 @@ public class ThrowableShotballRenderer extends EntityRenderer<ThrowableShotballE
         poseStack.mulPose(Axis.YP.rotationDegrees(spin * 1.5F));
         poseStack.mulPose(Axis.ZP.rotationDegrees(spin));
 
-        poseStack.scale(0.25F, 0.25F, 0.25F);
+        poseStack.scale(1.0F, 1.0F, 1.0F);
 
         Minecraft.getInstance().getItemRenderer().renderStatic(
                 entity.getItem(),

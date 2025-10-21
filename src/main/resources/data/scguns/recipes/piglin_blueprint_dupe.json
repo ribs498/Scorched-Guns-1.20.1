@@ -3,10 +3,10 @@
   "category": "equipment",
   "key": {
     "H": {
-      "item": "minecraft:gold_ingot"
+      "item": "scguns:blueprint_scrap"
     },
     "Q": {
-      "item": "scguns:piglin_blueprint"
+      "item": "scguns:gold_idol"
     },
     "Z": {
       "item": "minecraft:paper"

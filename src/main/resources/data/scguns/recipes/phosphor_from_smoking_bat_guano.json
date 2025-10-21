@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smoking",
+  "category": "misc",
+  "group": "guano",
+  "cookingtime": 100,
+  "experience": 0.7,
+  "ingredient": {
+    "item": "scguns:bat_guano"
+  },
+  "result": "scguns:phosphor_dust"
+}

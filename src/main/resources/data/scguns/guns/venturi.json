@@ -40,7 +40,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 15.5,
+    "damage": 16.0,
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:buckshot",

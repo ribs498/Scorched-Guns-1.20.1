@@ -15,6 +15,25 @@
         }
         ]
     },
+  "entity.dissident.hurt": {
+    "subtitle": "subtitle.scguns.dissident.hurt",
+    "sounds": [
+      {
+        "name": "scguns:entity/dissident/hurt"
+      }
+    ]
+  },
+    "entity.dissident.die": {
+        "subtitle": "subtitle.scguns.dissident.die",
+        "sounds": [
+        {
+            "name": "scguns:entity/dissident/die"
+        }
+        ]
+    },
+
+
+
   "item.lever.lever": {
     "subtitle": "subtitle.scguns.mag_in",
     "sounds": [

@@ -1,0 +1,168 @@
+{
+  "raid_id": "wrecker",
+  "raid_level": 3,
+
+  "boss": {
+    "entity_type": "minecraft:husk",
+    "custom_name": "translation:raid.boss.scguns.wrecker",
+    "fixed_health": 160.0,
+    "weapon": {
+      "item": "scguns:stigg",
+      "drop_chance": 0.25
+    },
+    "armor": [
+      {
+        "item": "scguns:cog_knight_helmet",
+        "slot": "head",
+        "drop_chance": 0.2
+      },
+      {
+        "item": "scguns:cog_knight_chestplate",
+        "slot": "chest",
+        "drop_chance": 0.2
+      },
+      {
+        "item": "scguns:cog_knight_leggings",
+        "slot": "legs",
+        "drop_chance": 0.15
+      },
+      {
+        "item": "scguns:cog_knight_boots",
+        "slot": "feet",
+        "drop_chance": 0.15
+      }
+    ],
+    "effects": [
+      {
+        "effect": "minecraft:regeneration",
+        "amplifier": 0,
+        "duration": -1,
+        "ambient": false,
+        "visible": false
+      }
+    ],
+    "ai_difficulty": 4,
+    "ai_type": "TACTICAL",
+    "special_loot_table": "scguns:raids/wrecker_boss"
+  },
+
+  "henchmen": {
+    "types": [
+      {
+        "entity_type": "minecraft:husk",
+        "weight": 4.0,
+        "health_multiplier": 1.3,
+        "weapons": [
+          "scguns:tl_runner",
+          "scguns:kalaskah",
+          "scguns:stilletto",
+          "minecraft:iron_axe"
+        ],
+        "armor": [
+          {
+            "item": "scguns:adrien_helm",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "scguns:adrien_chestplate",
+            "slot": "chest",
+            "chance": 0.4
+          },
+            {
+                "item": "scguns:adrien_leggings",
+                "slot": "legs",
+                "chance": 0.4
+            },
+            {
+                "item": "scguns:adrien_boots",
+                "slot": "feet",
+                "chance": 0.4
+            }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "minecraft:husk",
+        "weight": 2.0,
+        "fixed_health": 30.0,
+        "weapons": [
+          "scguns:mokova",
+          "scguns:mak_mkii",
+          "scguns:basker",
+          "minecraft:iron_sword"
+        ],
+        "armor": [
+          {
+            "item": "scguns:cog_knight_helmet",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "scguns:cog_knight_chestplate",
+            "slot": "chest",
+            "chance": 0.4
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "minecraft:husk",
+        "weight": 1.5,
+        "health_multiplier": 1.4,
+        "weapons": [
+          "scguns:killer_23",
+          "scguns:homemaker",
+          "minecraft:cog_mace"
+        ],
+        "armor": [
+          {
+            "item": "scguns:anthralite_respirator",
+            "slot": "head",
+            "chance": 0.5
+          },
+          {
+            "item": "scguns:cog_knight_chestplate",
+            "slot": "chest",
+            "chance": 0.6
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": true,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 3,
+        "ai_type": "DEFAULT"
+      }
+    ],
+    "spawn_interval_ticks": 300,
+    "max_alive": 10,
+    "spawn_radius": 15,
+    "spawn_attempts_per_wave": 4
+  },
+
+  "spawn_conditions": {
+    "min_players_nearby": 1,
+    "search_radius": 64,
+    "valid_dimensions": [
+      "minecraft:overworld"
+    ],
+    "announcement_message": "translation:raid.announcement.scguns.wrecker"
+  }
+}

@@ -3,10 +3,10 @@
   "category": "equipment",
   "key": {
     "H": {
-      "item": "scguns:treated_brass_ingot"
+      "item": "scguns:blueprint_scrap"
     },
     "Q": {
-      "item": "scguns:treated_brass_blueprint"
+      "item": "scguns:cog_heart"
     },
     "Z": {
       "item": "minecraft:paper"

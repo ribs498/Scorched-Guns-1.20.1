@@ -1,0 +1,10 @@
+{
+  "type": "minecraft:smelting",
+  "category": "misc",
+  "cookingtime": 200,
+  "experience": 0.1,
+  "ingredient": {
+    "item": "scguns:asgharian_tiles"
+  },
+  "result": "scguns:cracked_asgharian_tiles"
+}

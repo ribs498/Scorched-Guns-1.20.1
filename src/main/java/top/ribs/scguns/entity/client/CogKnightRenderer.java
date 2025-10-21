@@ -24,7 +24,7 @@ public class CogKnightRenderer extends MobRenderer<CogKnightEntity, CogKnightMod
                        MultiBufferSource pBuffer, int pPackedLight) {
         pMatrixStack.pushPose();
         pMatrixStack.translate(0.0D, 0.35D, 0.0D);
-        pMatrixStack.scale(0.9f, 0.9f, 0.9f);
+        pMatrixStack.scale(1.0f, 1.0f, 1.0f);
 
         super.render(pEntity, pEntityYaw, pPartialTicks, pMatrixStack, pBuffer, pPackedLight);
 

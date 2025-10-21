@@ -31,7 +31,6 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
     protected double minRange;
 
     protected float accuracyModifier = 1.0F;
-    protected float fireRateModifier = 1.0F;
 
     protected int strafingTime = -1;
     protected boolean shouldStrafe = false;
@@ -61,6 +60,7 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
         this.speedModifier = speedModifier;
         this.attackTime = -1;
         this.aiType = aiType;
+        shooter.addTag("AI_" + aiType.name());
 
         if (gunStack.getItem() instanceof GunItem gunItem) {
             Gun gun = gunItem.getModifiedGun(gunStack);
@@ -87,18 +87,20 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
         float difficultyBonus = 1.0F + ((difficulty - 1) * 0.3F);
         this.accuracyModifier = baseAccuracy * difficultyBonus;
 
-        this.fireRateModifier = getFireRateModifier(shooter.level().getDifficulty());
-
         this.burstAmount = 2 + (difficulty / 2);
-        this.burstTimer = Math.max(10, 30 - (difficulty * 4));
+
+        float burstDelayMultiplier = getBurstDelayMultiplier(shooter.level().getDifficulty());
+        float configBurstMultiplier = Config.COMMON.gameplay.mobBurstDelayMultiplier.get().floatValue();
+        this.burstTimer = Math.max(1, (int)((30 - (difficulty * 4)) * burstDelayMultiplier * configBurstMultiplier));
     }
 
-    private float getFireRateModifier(Difficulty difficulty) {
+
+    private float getBurstDelayMultiplier(Difficulty difficulty) {
         return switch(difficulty) {
-            case PEACEFUL -> 1.5F;
-            case EASY -> 1.25F;
+            case PEACEFUL -> 2.0F;
+            case EASY -> 1.5F;
             case NORMAL -> 1.0F;
-            case HARD -> 0.75F;
+            case HARD -> 0.6F;
         };
     }
 
@@ -128,6 +130,7 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
         this.isReloading = false;
         this.strafingTime = -1;
         this.shouldStrafe = false;
+        this.shooter.removeTag("AI_" + this.aiType.name());
     }
 
     @Override
@@ -256,10 +259,12 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
             if (inRange && canSeeTarget && this.seeTime >= 5 && !isRetreating) {
                 if (this.shooter.getMainHandItem().getTag().getInt("AmmoCount") > 0) {
                     if (--this.attackTime <= 0) {
+                        float configBurstMultiplier = Config.COMMON.gameplay.mobBurstDelayMultiplier.get().floatValue();
+
                         if (remainingBursts <= 0 && burstResetTimer <= 0) {
                             remainingBursts = 1 + this.shooter.level().random.nextInt(this.burstAmount);
                             burstIntervalTimer = 1 + this.shooter.level().random.nextInt(this.burstTimer);
-                            burstResetTimer = 40 + this.shooter.level().random.nextInt(40);
+                            burstResetTimer = Math.max(5, (int)((40 + this.shooter.level().random.nextInt(40)) * configBurstMultiplier));
                         }
 
                         if (this.shooter.hasEffect(ModEffects.BLINDED.get()) && !this.aiType.equals(AIType.TACTICAL)) {
@@ -317,7 +322,7 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
 
         int baseRate = gun.getGeneral().getRate();
         float configMultiplier = Config.COMMON.gameplay.mobFireRateMultiplier.get().floatValue();
-        this.attackTime = (int)(baseRate * this.fireRateModifier * configMultiplier);
+        this.attackTime = (int)(baseRate * configMultiplier);
 
         consumeAmmo(heldItem);
         if (this.shooter.getMainHandItem().getItem() instanceof GunItem) {

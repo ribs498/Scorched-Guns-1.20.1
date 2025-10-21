@@ -55,7 +55,7 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         this.gravity = spawnedProjectiles[0].getModifiedGravity();
         this.shooterId = shooterId;
         this.particleData = particleData;
-        this.trailThickness = projectileProps.getTrailThickness(); // Add this
+        this.trailThickness = projectileProps.getTrailThickness();
     }
 
     public S2CMessageBulletTrail(ProjectileEntity[] spawnedProjectiles, Gun.Projectile projectileProps, int shooterId, ParticleOptions particleData, boolean isVisible)
@@ -79,7 +79,7 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         this.shooterId = shooterId;
         this.particleData = particleData;
         this.isVisible = isVisible;
-        this.trailThickness = projectileProps.getTrailThickness(); // Add this
+        this.trailThickness = projectileProps.getTrailThickness();
     }
 
     public S2CMessageBulletTrail(int[] entityIds, Vec3[] positions, Vec3[] motions, ItemStack item,
@@ -99,7 +99,7 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         this.enchanted = enchanted;
         this.particleData = particleData;
         this.isVisible = isVisible;
-        this.trailThickness = trailThickness; // Add this
+        this.trailThickness = trailThickness;
     }
 
     @Override
@@ -122,7 +122,7 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         buffer.writeId(BuiltInRegistries.PARTICLE_TYPE, message.particleData.getType());
         buffer.writeBoolean(message.isVisible);
         message.particleData.writeToNetwork(buffer);
-        buffer.writeDouble(message.trailThickness); // Add this
+        buffer.writeDouble(message.trailThickness);
     }
 
     @Override
@@ -149,10 +149,10 @@ public class S2CMessageBulletTrail extends PlayMessage<S2CMessageBulletTrail>
         if (type == null) type = ParticleTypes.CRIT;
         boolean isVisible = buffer.readBoolean();
         ParticleOptions particleData = this.readParticle(buffer, type);
-        double trailThickness = buffer.readDouble(); // Add this
+        double trailThickness = buffer.readDouble();
         return new S2CMessageBulletTrail(entityIds, positions, motions, item, trailColor,
                 trailLengthMultiplier, life, gravity, shooterId,
-                enchanted, particleData, isVisible, trailThickness); // Add parameter
+                enchanted, particleData, isVisible, trailThickness);
     }
     public double getTrailThickness() {
         return this.trailThickness;

@@ -1,0 +1,174 @@
+{
+  "raid_id": "blood_moon",
+
+  "boss": {
+    "entity_type": "minecraft:husk",
+    "custom_name": "translation:raid.boss.scguns.antique",
+    "fixed_health": 80.0,
+    "weapon": {
+      "item": "scguns:astella",
+      "drop_chance": 0.25
+    },
+    "armor": [
+      {
+        "item": "scguns:redcoat_hat",
+        "slot": "head",
+        "drop_chance": 0.2
+      },
+      {
+        "item": "scguns:redcoat_coat",
+        "slot": "chest",
+        "drop_chance": 0.2
+      },
+      {
+        "item": "scguns:redcoat_pants",
+        "slot": "legs",
+        "drop_chance": 0.15
+      },
+      {
+        "item": "scguns:redcoat_boots",
+        "slot": "feet",
+        "drop_chance": 0.15
+      }
+    ],
+    "effects": [
+      {
+        "effect": "minecraft:regeneration",
+        "amplifier": 1,
+        "duration": -1,
+        "ambient": false,
+        "visible": false
+      }
+    ],
+    "ai_difficulty": 4,
+    "ai_type": "TACTICAL",
+    "special_loot_table": "scguns:raids/antique_boss",
+    "mount": {
+      "entity_type": "minecraft:horse",
+      "health_multiplier": 1.0,
+      "armor": [
+        {
+          "item": "minecraft:iron_horse_armor",
+          "slot": "chest",
+          "drop_chance": 0.3
+        }
+      ],
+      "effects": [
+        {
+          "effect": "minecraft:speed",
+          "amplifier": 1,
+          "duration": 2000,
+          "ambient": true,
+          "visible": false
+        }
+      ],
+      "drops_loot": false
+    }
+  },
+
+  "henchmen": {
+    "types": [
+      {
+        "entity_type": "minecraft:zombie",
+        "weight": 4.0,
+        "fixed_health": 24.0,
+        "weapons": [
+          "scguns:locust",
+          "scguns:earths_corpse",
+          "minecraft:netherite_sword",
+          "minecraft:netherite_axe"
+        ],
+        "armor": [
+          {
+            "item": "scguns:redcoat_hat",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "scguns:redcoat_coat",
+            "slot": "chest",
+            "chance": 0.4
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "minecraft:skeleton",
+        "weight": 2.0,
+        "fixed_health": 20.0,
+        "weapons": [
+          "scguns:sterilizer",
+          "scguns:prima_materia",
+          "minecraft:netherite_sword",
+          "minecraft:netherite_axe"
+        ],
+        "armor": [
+          {
+            "item": "scguns:redcoat_hat",
+            "slot": "head",
+            "chance": 1.0
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "minecraft:husk",
+        "weight": 1.5,
+        "health_multiplier": 1.4,
+        "weapons": [
+          "scguns:fencer_thumper",
+          "scguns:repeating_musket",
+          "minecraft:iron_sword",
+          "minecraft:stone_axe"
+        ],
+        "armor": [
+          {
+            "item": "scguns:redcoat_hat",
+            "slot": "head",
+            "chance": 0.5
+          },
+          {
+            "item": "scguns:redcoat_coat",
+            "slot": "chest",
+            "chance": 0.6
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": true,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 3,
+        "ai_type": "DEFAULT"
+      }
+    ],
+    "spawn_interval_ticks": 200,
+    "max_alive": 6,
+    "spawn_radius": 15,
+    "spawn_attempts_per_wave": 2
+  },
+
+  "spawn_conditions": {
+    "min_players_nearby": 1,
+    "search_radius": 64,
+    "valid_dimensions": [
+      "minecraft:overworld"
+    ],
+    "announcement_message": "translation:raid.announcement.scguns.antique"
+  }
+}

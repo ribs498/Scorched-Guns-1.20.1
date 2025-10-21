@@ -126,15 +126,29 @@ public class AimingHandler
             inCriticalPhase = tag.getBoolean("InCriticalReloadPhase");
             Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
 
-            // Handle reload stopping animation completion
             if (!isReloading && !inCriticalPhase && heldItem.getItem() instanceof AnimatedGunItem animatedGun) {
                 String reloadState = tag.getString("scguns:ReloadState");
                 if (reloadState.equals("STOPPING") && !tag.getBoolean("scguns:IsPlayingReloadStop")) {
                     animatedGun.cleanupReloadState(tag);
                 }
+
+                // CRITICAL FIX: Clean up any lingering manual reload tags
+                if (gun.getReloads().getReloadType() == ReloadType.MANUAL) {
+                    if (tag.getBoolean("IsManualReload") ||
+                            tag.getBoolean("InReloadLoop") ||
+                            tag.contains("LastReloadStateChange") ||
+                            tag.contains("ManualReloadInitialized")) {
+                        tag.remove("IsManualReload");
+                        tag.remove("InReloadLoop");
+                        tag.remove("PendingStopTransition");
+                        tag.remove("PendingStopTime");
+                        tag.remove("LastReloadStateChange");
+                        tag.remove("ManualReloadInitialized");
+                        tag.remove("scguns:ReloadState");
+                    }
+                }
             }
 
-            // If reloading or in critical phase, force aiming off
             if (inCriticalPhase && gun.getReloads().getReloadType() != ReloadType.MANUAL) {
                 this.aiming = false;
                 wasKeyPressed = KeyBinds.getAimMapping().isDown();
@@ -147,7 +161,6 @@ public class AimingHandler
             }
         }
 
-        // Block aiming input during reload
         if(isReloading || inCriticalPhase) {
             this.aiming = false;
             wasKeyPressed = KeyBinds.getAimMapping().isDown();
@@ -241,7 +254,6 @@ public class AimingHandler
         if(mc.player.isSpectator())
             return false;
 
-        // CRITICAL: Block aiming during reload
         if(ModSyncedDataKeys.RELOADING.getValue(mc.player)) {
             return false;
         }
@@ -249,7 +261,8 @@ public class AimingHandler
         ItemStack heldItem = mc.player.getMainHandItem();
         if(heldItem.getItem() instanceof GunItem) {
             CompoundTag tag = heldItem.getOrCreateTag();
-            if(tag.getBoolean("InCriticalReloadPhase")) {
+            String reloadState = tag.getString("scguns:ReloadState");
+            if(!reloadState.isEmpty() && !reloadState.equals("NONE")) {
                 return false;
             }
         }

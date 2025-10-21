@@ -24,32 +24,44 @@
     {
       "item": "scguns:musket",
       "weight": 1.0,
-      "drop_chance": 0.3
+      "drop_chance": 0.3,
+      "min_durability": 0.1,
+      "max_durability": 0.5
     },
     {
       "item": "scguns:blunderbuss",
       "weight": 1.0,
-      "drop_chance": 0.3
+      "drop_chance": 0.3,
+      "min_durability": 0.1,
+      "max_durability": 0.5
     },
     {
       "item": "scguns:doublet",
       "weight": 1.0,
-      "drop_chance": 0.3
+      "drop_chance": 0.3,
+      "min_durability": 0.1,
+      "max_durability": 0.5
     },
     {
       "item": "scguns:repeating_musket",
       "weight": 1.0,
-      "drop_chance": 0.3
+      "drop_chance": 0.3,
+      "min_durability": 0.1,
+      "max_durability": 0.5
     },
     {
       "item": "scguns:longarm",
       "weight": 1.0,
-      "drop_chance": 0.3
+      "drop_chance": 0.3,
+      "min_durability": 0.1,
+      "max_durability": 0.5
     },
     {
       "item": "scguns:fencer_carabine",
       "weight": 1.0,
-      "drop_chance": 0.3
+      "drop_chance": 0.3,
+      "min_durability": 0.1,
+      "max_durability": 0.5
     },
     {
       "item": "minecraft:wooden_sword",

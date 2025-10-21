@@ -124,6 +124,9 @@ public class MeleeAttackHandler {
                 }
             }
         }
+
+        setMeleeCooldown(player, heldItem, gunItem);
+
         player.level().playSound(
                 null,
                 player.getX(),
@@ -162,7 +165,6 @@ public class MeleeAttackHandler {
                 player.connection.send(particlePacket);
             }
         }
-        setMeleeCooldown(player, heldItem, gunItem);
     }
 
     @NotNull

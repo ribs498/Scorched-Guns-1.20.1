@@ -1072,6 +1072,10 @@ public enum WeaponType {
         private boolean hideProjectile = false;
         @Optional
         private double trailThickness = 1.0;
+        @Optional
+        private float knockbackStrength = 0.3F;
+
+
         @Override
         public CompoundTag serializeNBT() {
             CompoundTag tag = new CompoundTag();
@@ -1106,6 +1110,7 @@ public enum WeaponType {
             tag.putBoolean("IsSoulFire", this.isSoulFire);
             tag.putBoolean("HideProjectile", this.hideProjectile);
             tag.putDouble("TrailThickness", this.trailThickness);
+            tag.putFloat("KnockbackStrength", this.knockbackStrength);
             return tag;
         }
 
@@ -1115,7 +1120,7 @@ public enum WeaponType {
                 this.item = new ResourceLocation(tag.getString("Item"));
             }
             if (tag.contains("CasingType", Tag.TAG_STRING)) {
-                this.casingType = new ResourceLocation(tag.getString("CasingType")); // Deserialize casingType
+                this.casingType = new ResourceLocation(tag.getString("CasingType"));
             }
             if (tag.contains("EjectsCasing", Tag.TAG_ANY_NUMERIC)) {
                 this.ejectsCasing = tag.getBoolean("EjectsCasing");
@@ -1181,6 +1186,9 @@ public enum WeaponType {
             if (tag.contains("TrailThickness", Tag.TAG_ANY_NUMERIC)) {
                 this.trailThickness = tag.getDouble("TrailThickness");
             }
+            if (tag.contains("KnockbackStrength", Tag.TAG_ANY_NUMERIC)) {
+                this.knockbackStrength = tag.getFloat("KnockbackStrength");
+            }
         }
 
         public JsonObject toJsonObject() {
@@ -1221,6 +1229,7 @@ public enum WeaponType {
             if (this.hideProjectile) object.addProperty("hideProjectile", true);
             if(this.hideTrail) object.addProperty("hideTrail", true);
             if(this.trailThickness != 1.0) object.addProperty("trailThickness", this.trailThickness);
+            if(this.knockbackStrength != 0.3F) object.addProperty("knockbackStrength", this.knockbackStrength);
             return object;
         }
 
@@ -1251,7 +1260,13 @@ public enum WeaponType {
             projectile.hideProjectile = this.hideProjectile;
             projectile.hideTrail = this.hideTrail;
             projectile.trailThickness = this.trailThickness;
+            projectile.knockbackStrength = this.knockbackStrength;
             return projectile;
+        }
+
+
+        public float getKnockbackStrength() {
+            return this.knockbackStrength;
         }
         public boolean shouldHideTrail() {
             return this.hideTrail;
@@ -1395,10 +1410,6 @@ public enum WeaponType {
             return this.casingParticle;
         }
 
-        public boolean hideTrail()
-        {
-            return this.hideTrail;
-        }
     }
 
     public static class Sounds implements INBTSerializable<CompoundTag> {

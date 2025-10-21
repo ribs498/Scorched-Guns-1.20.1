@@ -21,7 +21,6 @@ public class GunItemStackRenderer extends BlockEntityWithoutLevelRenderer
     @Override
     public void renderByItem(ItemStack stack, ItemDisplayContext display, PoseStack poseStack, MultiBufferSource source, int light, int overlay)
     {
-        // Hack to remove transforms created by ItemRenderer#render
         poseStack.popPose();
 
         poseStack.pushPose();
@@ -35,7 +34,6 @@ public class GunItemStackRenderer extends BlockEntityWithoutLevelRenderer
         }
         poseStack.popPose();
 
-        // Push the stack again since we popped the pose prior
         poseStack.pushPose();
     }
 }

@@ -4,7 +4,22 @@
     {
       "bonus_rolls": 0.0,
       "entries": [
-
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 2.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "scguns:gold_flare",
+          "weight": 2
+        },
         {
           "type": "minecraft:item",
           "functions": [
@@ -23,8 +38,8 @@
         },
         {
           "type": "minecraft:item",
-          "name": "scguns:piglin_blueprint",
-          "weight": 0.2
+          "name": "scguns:blueprint_scrap",
+          "weight": 0.1
         }
       ],
       "rolls": 1.0

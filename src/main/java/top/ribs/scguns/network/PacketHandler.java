@@ -61,6 +61,7 @@ public class PacketHandler
                 .registerPlayMessage(S2CMessageEntityMuzzleFlash.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .registerPlayMessage(S2CMessageEntityCasingEject.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .registerPlayMessage(S2CMessageSyncUpgradeRegistry.class, MessageDirection.PLAY_CLIENT_BOUND)
+                .registerPlayMessage(S2CMessageRaidFlareBurst.class, MessageDirection.PLAY_CLIENT_BOUND)
                 .build();
 
     }

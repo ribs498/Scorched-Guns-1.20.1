@@ -1,14 +1,14 @@
 package top.ribs.scguns.common.exosuit;
 
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.block.SulfurVentBlock;
+import top.ribs.scguns.common.SulfurGasCloud;
 import top.ribs.scguns.item.exosuit.GasMaskModuleItem;
 
 /**
@@ -35,13 +35,11 @@ public class ExoSuitGasMaskHandler {
     }
 
     private static void handleGasMask(Player player) {
-        if (!hasGasMaskModule(player)) {
+        if (hasGasMaskModule(player)) {
             return;
         }
 
-        boolean inGasArea = isPlayerInGasArea(player);
-
-        if (!inGasArea) {
+        if (!isPlayerInGasArea(player)) {
             return;
         }
 
@@ -51,19 +49,17 @@ public class ExoSuitGasMaskHandler {
                 ExoSuitPowerManager.consumeEnergyForUpgrade(player, "breathing", gasMaskUpgrade);
             }
         }
-
     }
+
     private static boolean hasGasMaskModule(Player player) {
-        return !findGasMaskModule(player).isEmpty();
+        return findGasMaskModule(player).isEmpty();
     }
 
     private static ItemStack findGasMaskModule(Player player) {
-        // Get helmet
         for (ItemStack armorStack : player.getArmorSlots()) {
             if (armorStack.getItem() instanceof top.ribs.scguns.item.animated.ExoSuitItem exosuit &&
                     exosuit.getType() == net.minecraft.world.item.ArmorItem.Type.HELMET) {
 
-                // Check for breathing upgrade (gas mask uses same slot as rebreather)
                 for (int slot = 0; slot < 4; slot++) {
                     ItemStack upgradeItem = ExoSuitData.getUpgradeInSlot(armorStack, slot);
                     if (!upgradeItem.isEmpty()) {
@@ -81,32 +77,12 @@ public class ExoSuitGasMaskHandler {
     }
 
     private static boolean isPlayerInGasArea(Player player) {
-        BlockPos playerPos = player.blockPosition();
-
-        int checkRadius = SulfurVentBlock.EFFECT_RADIUS + 2;
-
-        for (BlockPos checkPos : BlockPos.betweenClosed(
-                playerPos.offset(-checkRadius, -checkRadius, -checkRadius),
-                playerPos.offset(checkRadius, checkRadius, checkRadius))) {
-
-            BlockState state = player.level().getBlockState(checkPos);
-            if (state.getBlock() instanceof SulfurVentBlock) {
-                boolean isActive = state.getValue(SulfurVentBlock.ACTIVE);
-                boolean isBaseVent = state.getValue(SulfurVentBlock.VENT_TYPE) == SulfurVentBlock.SulfurVentType.BASE;
-
-                if (isActive && isBaseVent) {
-                    double distanceSquared = playerPos.distSqr(checkPos);
-                    if (distanceSquared <= SulfurVentBlock.EFFECT_RADIUS_SQUARED) {
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
+        Vec3 playerPos = player.position();
+        return SulfurGasCloud.isInGasEffectArea(player.level(), playerPos, SulfurVentBlock.EFFECT_RADIUS);
     }
 
     public static boolean hasProtection(Player player) {
-        if (!hasGasMaskModule(player)) {
+        if (hasGasMaskModule(player)) {
             return false;
         }
 

@@ -42,6 +42,7 @@
     }
   },
   "projectile": {
+    "knockbackStrength": 0.65,
     "advantage": "scguns:fire",
     "damage": 15.0,
     "item": "scguns:grapeshot",

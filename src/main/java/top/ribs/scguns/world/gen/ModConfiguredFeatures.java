@@ -24,9 +24,7 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> ANTHRALITE_ORE_KEY = registerKey("anthralite_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SULFUR_ORE_KEY = registerKey("sulfur_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> NETHER_SULFUR_ORE_KEY = registerKey("nether_sulfur_ore");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> GEOTHERMAL_VENT_KEY = registerKey("geothermal_vent");
-    public  static final ResourceKey<ConfiguredFeature<?, ?>> SULFUR_VENT_KEY = registerKey("sulfur_vent");
-    public static final ResourceKey<ConfiguredFeature<?, ?>> VEHEMENT_COAL_ORE_KEY = registerKey("vehement_coal_ore");
+   public static final ResourceKey<ConfiguredFeature<?, ?>> VEHEMENT_COAL_ORE_KEY = registerKey("vehement_coal_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> RICH_PHOSPHORITE_ORE_KEY = registerKey("rich_phosphorite");
     public static final ResourceKey<ConfiguredFeature<?, ?>> PHOSPHORITE_KEY = registerKey("phosphorite");
 
@@ -70,9 +68,7 @@ public class ModConfiguredFeatures {
         register(context, NETHER_SULFUR_ORE_KEY, Feature.ORE, new OreConfiguration(netherSulfurOres, 12));
         register(context, VEHEMENT_COAL_ORE_KEY, Feature.ORE, new OreConfiguration(netherVehementCoalOres, 6));
 
-        // Geothermal Vent Configuration
-        register(context, GEOTHERMAL_VENT_KEY, ModFeatures.GEOTHERMAL_VENT_FEATURE.get(), NoneFeatureConfiguration.INSTANCE);
-        register(context, SULFUR_VENT_KEY, ModFeatures.SULFUR_VENT_FEATURE.get(), NoneFeatureConfiguration.INSTANCE);
+
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {

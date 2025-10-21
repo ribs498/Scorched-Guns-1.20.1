@@ -53,6 +53,7 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 8.5,
+    "armorPen": 2.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:standard_copper_round",

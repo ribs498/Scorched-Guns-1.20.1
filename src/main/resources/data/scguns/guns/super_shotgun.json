@@ -40,7 +40,8 @@
     }
   },
   "projectile": {
-    "advantage": "scguns:wither",
+    "knockbackStrength": 0.65,
+    "advantage": "scguns:piglin",
     "damage": 23.0,
     "item": "scguns:shotgun_shell",
     "casingType": "scguns:small_copper_casing",

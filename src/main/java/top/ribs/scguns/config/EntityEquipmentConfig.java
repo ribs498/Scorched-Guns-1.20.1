@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import top.ribs.scguns.util.GunCurseUtil;
 
 import javax.annotation.Nullable;
 import java.io.InputStreamReader;
@@ -159,6 +160,7 @@ public class EntityEquipmentConfig {
         if (entry == null) return;
 
         ItemStack stack = entry.createItemStack(mob.getRandom());
+        GunCurseUtil.applyCurseIfRoll(stack, mob.getRandom());
         mob.setItemSlot(EquipmentSlot.MAINHAND, stack);
         mob.setDropChance(EquipmentSlot.MAINHAND, entry.dropChance);
     }
@@ -176,6 +178,8 @@ public class EntityEquipmentConfig {
                 CONFIGS.clear();
                 loadConfig(resourceManager, "cog_minion");
                 loadConfig(resourceManager, "cog_knight");
+                loadConfig(resourceManager, "adjudicator");
+                loadConfig(resourceManager, "subjugator");
             }
         });
     }

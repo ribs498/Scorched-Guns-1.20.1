@@ -101,7 +101,7 @@ public class Config
         public final ForgeConfigSpec.DoubleValue dynamicCrosshairDotThreshold;
         public final ForgeConfigSpec.DoubleValue dynamicCrosshairMaxScale;
         public final ForgeConfigSpec.BooleanValue renderArms;
-
+        public final ForgeConfigSpec.BooleanValue enablePerformanceSulfurCloud;
 
 
         public Display(ForgeConfigSpec.Builder builder)
@@ -134,6 +134,7 @@ public class Config
                         .comment("The maximum scale factor for the dynamic crosshair when spread is high")
                         .defineInRange("dynamicCrosshairMaxScale", 8.0, 1.0, 20.0);
                 this.renderArms = builder.comment("If true, renders the player's arms when holding a gun").define("renderArms", true);
+                this.enablePerformanceSulfurCloud = builder.comment("If true, enables a performance mode for the sulfur smoke particle which reduces the max number of particles.").define("enablePerformanceSulfurCloud", false);
             }
             builder.pop();
         }
@@ -233,7 +234,7 @@ public class Config
         public final ProjectileSpread projectileSpread;
         public final Gunsmith Gunsmith;
         public final ExoSuitCores exoSuitCores;
-
+        public final Raids raids;
 
 
         public Common(ForgeConfigSpec.Builder builder)
@@ -250,6 +251,26 @@ public class Config
                 this.projectileSpread = new ProjectileSpread(builder);
                 this.Gunsmith = new Gunsmith(builder);
                 this.exoSuitCores = new ExoSuitCores(builder);
+                this.raids = new Raids(builder);
+            }
+            builder.pop();
+        }
+    }
+    public static class Raids {
+        public final ForgeConfigSpec.BooleanValue raidsEnabled;
+        public final ForgeConfigSpec.DoubleValue nightlyRaidChance;
+
+        public Raids(ForgeConfigSpec.Builder builder) {
+            builder.comment("Mini-Raid Configuration").push("raids");
+            {
+                this.raidsEnabled = builder
+                        .comment("If enabled, mini-raids can spawn at night based on player progression.")
+                        .define("raidsEnabled", true);
+
+                this.nightlyRaidChance = builder
+                        .comment("Chance each night for a raid to spawn near a valid player (0.0 = never, 1.0 = always).",
+                                "Set to 0.0 to effectively disable raids without turning off the system entirely.")
+                        .defineInRange("nightlyRaidChance", 0.2D, 0.0D, 1.0D);
             }
             builder.pop();
         }
@@ -305,7 +326,6 @@ public class Config
         public final ForgeConfigSpec.BooleanValue enableHeadShots;
         public final ForgeConfigSpec.DoubleValue headShotDamageMultiplier;
         public final ForgeConfigSpec.BooleanValue ignoreLeaves;
-        public final ForgeConfigSpec.BooleanValue enableKnockback;
         public final ForgeConfigSpec.DoubleValue knockbackStrength;
         public final ForgeConfigSpec.BooleanValue improvedHitboxes;
         public final ForgeConfigSpec.DoubleValue enemyBulletDamage;
@@ -322,6 +342,9 @@ public class Config
         public final ForgeConfigSpec.IntValue playerGunfireVolume;
         public final ForgeConfigSpec.IntValue mobGunfireVolume;
         public final ForgeConfigSpec.DoubleValue mobFireRateMultiplier;
+        public final ForgeConfigSpec.DoubleValue mobBurstDelayMultiplier;
+        public final ForgeConfigSpec.DoubleValue mobGunDamageMultiplier;
+
 
         public Gameplay(ForgeConfigSpec.Builder builder)
         {
@@ -337,7 +360,6 @@ public class Config
                 this.enableHeadShots = builder.comment("Enables the check for head shots for players. Projectiles that hit the head of a player will have increased damage.").define("enableHeadShots", true);
                 this.headShotDamageMultiplier = builder.comment("The value to multiply the damage by if projectile hit the players head").defineInRange("headShotDamageMultiplier", 1.25, 1.0, Double.MAX_VALUE);
                 this.ignoreLeaves = builder.comment("If true, projectiles will ignore leaves when checking for collision").define("ignoreLeaves", true);
-                this.enableKnockback = builder.comment("If true, projectiles will cause knockback when an entity is hit. By default this is set to true to match the behaviour of Minecraft.").define("enableKnockback", true);
                 this.knockbackStrength = builder.comment("Sets the strength of knockback when shot by a bullet projectile. Knockback must be enabled for this to take effect. If value is equal to zero, knockback will use default minecraft value").defineInRange("knockbackStrength", 0.15, 0.0, 1.0);
                 this.improvedHitboxes = builder.comment("If true, improves the accuracy of weapons by considering the ping of the player. This has no affect on singleplayer. This will add a little overhead if enabled.").define("improvedHitboxes", false);
                 this.enemyBulletDamage = builder.comment("Damage dealt by the Enemy Guns")
@@ -370,6 +392,12 @@ public class Config
                 this.mobFireRateMultiplier = builder
                         .comment("Global multiplier for mob fire rate. 1.0 = normal speed, 0.5 = faster (half delay), 2.0 = slower (double delay). Lower values = faster shooting.")
                         .defineInRange("mobFireRateMultiplier", 1.0, 0.1, 5.0);
+                this.mobBurstDelayMultiplier = builder
+                        .comment("Multiplier for delay between bursts. Higher = longer delays between bursts. 1.0 = normal, 2.0 = double delay.")
+                        .defineInRange("mobBurstDelayMultiplier", 1.0, 0.1, 5.0);
+                this.mobGunDamageMultiplier = builder
+                        .comment("Global multiplier for mob gun damage. 1.0 = normal damage, 0.5 = half damage, 2.0 = double damage. Affects all projectile damage from mobs.")
+                        .defineInRange("mobGunDamageMultiplier", 1.0, 0.01, 100.0);
             }
             builder.pop();
         }
@@ -381,6 +409,7 @@ public class Config
     public static class Griefing
     {
         public final ForgeConfigSpec.BooleanValue enableBlockRemovalOnExplosions;
+        public final ForgeConfigSpec.BooleanValue enableMobExplosionBlockRemoval;
         public final ForgeConfigSpec.BooleanValue enableGlassBreaking;
         public final ForgeConfigSpec.BooleanValue fragileBlockDrops;
         public final ForgeConfigSpec.DoubleValue fragileBaseBreakChance;
@@ -393,6 +422,7 @@ public class Config
             builder.comment("Properties related to gun griefing").push("griefing");
             {
                 this.enableBlockRemovalOnExplosions = builder.comment("If enabled, allows block removal on explosions").define("enableBlockRemovalOnExplosions", false);
+                this.enableMobExplosionBlockRemoval = builder.comment("If enabled, allows block removal on explosions from mob weapons. Only applies if enableBlockRemovalOnExplosions is also true").define("enableMobExplosionBlockRemoval", false);
                 this.enableGlassBreaking = builder.comment("If enabled, allows guns to shoot out glass and other fragile objects").define("enableGlassBreaking", true);
                 this.fragileBlockDrops = builder.comment("If enabled, fragile blocks will drop their loot when broken").define("fragileBlockDrops", true);
                 this.fragileBaseBreakChance = builder.comment("The base chance that a fragile block is broken when impacted by a bullet. The hardness of a block will scale this value; the harder the block, the lower the final calculated chance will be.").defineInRange("fragileBlockBreakChance", 1.0, 0.0, 1.0);

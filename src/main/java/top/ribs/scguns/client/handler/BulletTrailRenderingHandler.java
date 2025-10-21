@@ -14,6 +14,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
+import net.minecraftforge.client.event.RenderLevelStageEvent;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.joml.Matrix3f;
@@ -155,6 +156,26 @@ public class BulletTrailRenderingHandler
             this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, -1 - size, 1, 1, 0.15625F, 0.3125F, -1, 0, 0, light);
             this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, -1 - size, 1, -1, 0.0F, 0.3125F, -1, 0, 0, light);
 
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, -1 - size, -1, -1, 0.0F, 0.15625F, -1, 0, 0, light);
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, -1 - size, 1, -1, 0.0F, 0.3125F, -1, 0, 0, light);
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, 1, 1, -1, 0.15625F, 0.3125F, 1, 0, 0, light);
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, 1, -1, -1, 0.15625F, 0.15625F, 1, 0, 0, light);
+
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, 1, -1, -1, 0.0F, 0.15625F, 0, 0, -1, light);
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, 1, 1, -1, 0.0F, 0.3125F, 0, 0, -1, light);
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, 1, 1, 1, 0.15625F, 0.3125F, 0, 0, -1, light);
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, 1, -1, 1, 0.15625F, 0.15625F, 0, 0, -1, light);
+
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, 1, -1, 1, 0.0F, 0.15625F, 1, 0, 0, light);
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, 1, 1, 1, 0.0F, 0.3125F, 1, 0, 0, light);
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, -1 - size, 1, 1, 0.15625F, 0.3125F, 1, 0, 0, light);
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, -1 - size, -1, 1, 0.15625F, 0.15625F, 1, 0, 0, light);
+
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, -1 - size, -1, 1, 0.0F, 0.15625F, 0, 0, 1, light);
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, -1 - size, 1, 1, 0.0F, 0.3125F, 0, 0, 1, light);
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, -1 - size, 1, -1, 0.15625F, 0.3125F, 0, 0, 1, light);
+            this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, -1 - size, -1, -1, 0.15625F, 0.15625F, 0, 0, 1, light);
+
             this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, 1, 1, -1, 0.0F, 0.15625F, 1, 0, 0, light);
             this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, 1, 1, 1, 0.15625F, 0.15625F, 1, 0, 0, light);
             this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, 1, -1, 1, 0.15625F, 0.3125F, 1, 0, 0, light);
@@ -168,6 +189,8 @@ public class BulletTrailRenderingHandler
                 this.vertex(red, green, blue, matrix4f, matrix3f, vertexConsumer, -1 - size, 1, 1, 0.0F, 0.15625F, 0, 1, 0, light);
             }
         }
+
+        renderTypeBuffer.endBatch();
 
         poseStack.popPose();
     }
@@ -185,5 +208,11 @@ public class BulletTrailRenderingHandler
                 .uv2(pPackedLight)
                 .normal(pNormal, (float)pNormalX, (float)pNormalY, (float)pNormalZ)
                 .endVertex();
+    }
+    @SubscribeEvent
+    public static void onRenderLevelStage(RenderLevelStageEvent event) {
+        if(event.getStage() == RenderLevelStageEvent.Stage.AFTER_PARTICLES) {
+            BulletTrailRenderingHandler.get().render(event.getPoseStack(), event.getPartialTick());
+        }
     }
 }

@@ -1,0 +1,155 @@
+{
+  "raid_id": "piglin",
+  "raid_level": 4,
+
+  "boss": {
+    "entity_type": "minecraft:piglin",
+    "custom_name": "translation:raid.boss.scguns.piglin",
+    "fixed_health": 250.0,
+    "weapon": {
+      "item": "scguns:vulcanic_repeater",
+      "drop_chance": 0.25
+    },
+    "armor": [
+      {
+        "item": "minecraft:golden_helmet",
+        "slot": "head",
+        "drop_chance": 0.2
+      },
+      {
+        "item": "minecraft:golden_chestplate",
+        "slot": "chest",
+        "drop_chance": 0.2
+      },
+      {
+        "item": "minecraft:golden_leggings",
+        "slot": "legs",
+        "drop_chance": 0.15
+      },
+      {
+        "item": "minecraft:golden_boots",
+        "slot": "feet",
+        "drop_chance": 0.15
+      }
+    ],
+    "effects": [
+      {
+        "effect": "minecraft:regeneration",
+        "amplifier": 0,
+        "duration": -1,
+        "ambient": false,
+        "visible": false
+      }
+    ],
+    "ai_difficulty": 4,
+    "ai_type": "TACTICAL",
+    "special_loot_table": "scguns:raids/piglin_boss"
+  },
+
+  "henchmen": {
+    "types": [
+      {
+        "entity_type": "scguns:hornlin",
+        "weight": 4.0,
+        "health_multiplier": 1.3,
+        "weapons": [
+          "scguns:pyroclastic_flow",
+          "scguns:freyr",
+          "minecraft:golden_axe",
+          "minecraft:golden_sword"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:golden_helmet",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:golden_chestplate",
+            "slot": "chest",
+            "chance": 0.4
+          },
+            {
+                "item": "minecraft:golden_leggings",
+                "slot": "legs",
+                "chance": 0.4
+            },
+            {
+                "item": "minecraft:golden_boots",
+                "slot": "feet",
+                "chance": 0.4
+            }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "minecraft:piglin_brute",
+        "weight": 2.0,
+        "fixed_health": 40.0,
+        "weapons": [
+          "scguns:mangalitsa",
+          "scguns:freyr",
+          "minecraft:trotters"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:golden_helmet",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:golden_chestplate",
+            "slot": "chest",
+            "chance": 0.4
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "minecraft:ghast",
+        "weight": 4.0,
+        "fixed_health": 24.0,
+        "weapons": [
+        ],
+        "armor": [
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      }
+    ],
+    "spawn_interval_ticks": 300,
+    "max_alive": 15,
+    "spawn_radius": 15,
+    "spawn_attempts_per_wave": 4
+  },
+
+  "spawn_conditions": {
+    "min_players_nearby": 1,
+    "search_radius": 64,
+    "valid_dimensions": [
+      "minecraft:overworld",
+      "minecraft:the_nether"
+    ],
+    "announcement_message": "translation:raid.announcement.scguns.piglin"
+  }
+}

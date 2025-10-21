@@ -23,6 +23,7 @@ import top.ribs.scguns.entity.ai.GunAttackGoal;
 import top.ribs.scguns.entity.player.PlayerGunProgression;
 import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.item.GunItem;
+import top.ribs.scguns.util.GunCurseUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,10 +95,6 @@ public class GunnerMobSpawner {
 
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingTickEvent event) {
-        if (!GunMobValues.enabled) {
-            return;
-        }
-
         if (!(event.getEntity() instanceof PathfinderMob mob)) {
             return;
         }
@@ -108,8 +105,17 @@ public class GunnerMobSpawner {
 
         ItemStack heldItem = mob.getMainHandItem();
 
-        if (mob.getTags().contains("MobGunner") && mob instanceof AbstractPiglin abstractPiglin && abstractPiglin.level().dimension() == Level.OVERWORLD) {
-            abstractPiglin.setImmuneToZombification(true);
+        if (mob instanceof AbstractPiglin abstractPiglin && abstractPiglin.level().dimension() == Level.OVERWORLD) {
+            for (String tag : mob.getTags()) {
+                if (tag.startsWith("RaidMember_") || mob.getTags().contains("MobGunner")) {
+                    abstractPiglin.setImmuneToZombification(true);
+                    break;
+                }
+            }
+        }
+
+        if (!GunMobValues.enabled) {
+            return;
         }
 
         if (mob.getTags().contains("MobGunner") && !(heldItem.getItem() instanceof GunItem)) {
@@ -165,6 +171,7 @@ public class GunnerMobSpawner {
             }
 
             ItemStack modifiedGun = createModifiedGun(mob, gun);
+            GunCurseUtil.applyCurseIfRoll(modifiedGun, mob.getRandom());
             mob.setItemSlot(EquipmentSlot.MAINHAND, modifiedGun);
 
             extendFollowRange(mob);
@@ -266,6 +273,7 @@ public class GunnerMobSpawner {
         }
 
         ItemStack modifiedGun = createModifiedGun(mob, gun);
+        GunCurseUtil.applyCurseIfRoll(modifiedGun, mob.getRandom());
         mob.setItemSlot(EquipmentSlot.MAINHAND, modifiedGun);
 
         extendFollowRange(mob);
@@ -299,6 +307,11 @@ public class GunnerMobSpawner {
     public static void reassessWeaponGoal(PathfinderMob mob) {
         if (mob.level().isClientSide || hasGunAttackGoal(mob)) {
             return;
+        }
+        for (String tag : mob.getTags()) {
+            if (tag.startsWith("RaidMember_")) {
+                return;
+            }
         }
 
         AIType aiType = AIType.values()[mob.getRandom().nextInt(AIType.values().length)];

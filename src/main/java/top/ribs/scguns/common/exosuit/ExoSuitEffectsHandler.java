@@ -9,12 +9,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import top.ribs.scguns.item.animated.ExoSuitItem;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
-/**
- * Handles applying and removing effects from ExoSuit upgrades
- * FIXED: Using completely unique UUIDs to avoid conflicts with vanilla armor
- */
 public class ExoSuitEffectsHandler {
 
     private static final UUID HELMET_ARMOR_UUID = UUID.fromString("f47ac10b-58cc-4372-a567-0e02b2c3d479");
@@ -37,17 +35,20 @@ public class ExoSuitEffectsHandler {
     private static final UUID BOOTS_KNOCKBACK_UUID = UUID.fromString("6ba7b81a-9dad-11d1-80b4-00c04fd430c8");
     private static final UUID BOOTS_SPEED_UUID = UUID.fromString("6ba7b81b-9dad-11d1-80b4-00c04fd430c8");
 
-    /**
-     * Applies all effects from equipped ExoSuit pieces
-     */
+    private static final String EXOSUIT_TAG = "ExoSuitEffect";
+    private static final Map<UUID, Map<String, Boolean>> activeExoSuitEffects = new HashMap<>();
+
     public static void applyExoSuitEffects(Player player) {
         removeExoSuitEffects(player);
+
+        Map<String, Boolean> playerEffects = activeExoSuitEffects.computeIfAbsent(player.getUUID(), k -> new HashMap<>());
+        playerEffects.clear();
+
         for (ItemStack armorStack : player.getArmorSlots()) {
             if (armorStack.getItem() instanceof ExoSuitItem exosuit) {
-                applyArmorPieceEffects(player, armorStack, exosuit);
+                applyArmorPieceEffects(player, armorStack, exosuit, playerEffects);
             }
         }
-
     }
 
     public static ExoSuitUpgrade.Effects getTotalEffects(Player player) {
@@ -79,9 +80,6 @@ public class ExoSuitEffectsHandler {
         return totalEffects;
     }
 
-    /**
-     * Removes all ExoSuit effects from a player
-     */
     public static void removeExoSuitEffects(Player player) {
         removeAttributeModifier(player, Attributes.ARMOR, HELMET_ARMOR_UUID);
         removeAttributeModifier(player, Attributes.ARMOR_TOUGHNESS, HELMET_TOUGHNESS_UUID);
@@ -103,30 +101,44 @@ public class ExoSuitEffectsHandler {
         removeAttributeModifier(player, Attributes.KNOCKBACK_RESISTANCE, BOOTS_KNOCKBACK_UUID);
         removeAttributeModifier(player, Attributes.MOVEMENT_SPEED, BOOTS_SPEED_UUID);
 
-        if (player.hasEffect(MobEffects.NIGHT_VISION)) {
-            MobEffectInstance effect = player.getEffect(MobEffects.NIGHT_VISION);
-            if (effect != null && effect.getDuration() > 50 && effect.getDuration() <= 400) {
-                player.removeEffect(MobEffects.NIGHT_VISION);
-            }
+        Map<String, Boolean> playerEffects = activeExoSuitEffects.get(player.getUUID());
+        if (playerEffects == null) {
+            return;
         }
-        if (player.hasEffect(MobEffects.JUMP)) {
-            MobEffectInstance effect = player.getEffect(MobEffects.JUMP);
-            if (effect != null && effect.getDuration() > 50 && effect.getDuration() <= 200) {
-                player.removeEffect(MobEffects.JUMP);
-            }
+
+        if (Boolean.TRUE.equals(playerEffects.get("nightVision"))) {
+            removeExoSuitEffect(player, MobEffects.NIGHT_VISION);
         }
-        if (player.hasEffect(MobEffects.WATER_BREATHING)) {
-            MobEffectInstance effect = player.getEffect(MobEffects.WATER_BREATHING);
-            if (effect != null && effect.getDuration() > 60 && effect.getDuration() <= 200) {
-                player.removeEffect(MobEffects.WATER_BREATHING);
-            }
+
+        if (Boolean.TRUE.equals(playerEffects.get("jumpBoost"))) {
+            removeExoSuitEffect(player, MobEffects.JUMP);
+        }
+
+        if (Boolean.TRUE.equals(playerEffects.get("waterBreathing"))) {
+            removeExoSuitEffect(player, MobEffects.WATER_BREATHING);
+        }
+
+        playerEffects.clear();
+    }
+
+    private static void removeExoSuitEffect(Player player, net.minecraft.world.effect.MobEffect effect) {
+        if (!player.hasEffect(effect)) {
+            return;
+        }
+
+        MobEffectInstance currentEffect = player.getEffect(effect);
+        if (currentEffect == null) {
+            return;
+        }
+
+        int maxDuration = effect == MobEffects.NIGHT_VISION ? 400 : 200;
+
+        if (currentEffect.getDuration() <= maxDuration && !currentEffect.isAmbient() && !currentEffect.isVisible() && currentEffect.getAmplifier() <= 1) {
+            player.removeEffect(effect);
         }
     }
 
-    /**
-     * Applies effects from a single armor piece
-     */
-    private static void applyArmorPieceEffects(Player player, ItemStack armorStack, ExoSuitItem exosuit) {
+    private static void applyArmorPieceEffects(Player player, ItemStack armorStack, ExoSuitItem exosuit, Map<String, Boolean> playerEffects) {
         ExoSuitUpgrade.Effects totalEffects = calculateTotalEffects(player, armorStack);
 
         UUID[] uuids = getUUIDsForArmorType(exosuit.getType());
@@ -159,31 +171,31 @@ public class ExoSuitEffectsHandler {
                     AttributeModifier.Operation.MULTIPLY_TOTAL);
         }
 
-        if (totalEffects.hasNightVision()) {
-            if (shouldApplyNightVision(player, armorStack)) {
-                MobEffectInstance currentNightVision = player.getEffect(MobEffects.NIGHT_VISION);
-                if (currentNightVision == null || currentNightVision.getDuration() < 40) {
-                    player.addEffect(new MobEffectInstance(MobEffects.NIGHT_VISION, 400, 0, false, false, false));
-                }
-            }
+        if (totalEffects.hasNightVision() && shouldApplyNightVision(player, armorStack)) {
+            applyExoSuitEffect(player, MobEffects.NIGHT_VISION, 400, 0);
+            playerEffects.put("nightVision", true);
         }
 
-        if (totalEffects.getJumpBoost() > 0) {
-            if (shouldApplyJumpBoost(player, armorStack)) {
-                int amplifier = Math.max(0, (int) (totalEffects.getJumpBoost() * 5) - 1);
-                MobEffectInstance currentJump = player.getEffect(MobEffects.JUMP);
-                if (currentJump == null || currentJump.getDuration() < 40) {
-                    player.addEffect(new MobEffectInstance(MobEffects.JUMP, 200, amplifier, false, false, false));
-                }
-            }
+        if (totalEffects.getJumpBoost() > 0 && shouldApplyJumpBoost(player, armorStack)) {
+            int amplifier = Math.max(0, (int) (totalEffects.getJumpBoost() * 5) - 1);
+            applyExoSuitEffect(player, MobEffects.JUMP, 200, amplifier);
+            playerEffects.put("jumpBoost", true);
         }
+
         if (shouldApplyWaterBreathing(player, armorStack)) {
-            MobEffectInstance currentWaterBreathing = player.getEffect(MobEffects.WATER_BREATHING);
-            if (currentWaterBreathing == null || currentWaterBreathing.getDuration() < 60) {
-                player.addEffect(new MobEffectInstance(MobEffects.WATER_BREATHING, 200, 0, false, false, false));
-            }
+            applyExoSuitEffect(player, MobEffects.WATER_BREATHING, 200, 0);
+            playerEffects.put("waterBreathing", true);
         }
     }
+
+    private static void applyExoSuitEffect(Player player, net.minecraft.world.effect.MobEffect effect, int duration, int amplifier) {
+        MobEffectInstance currentEffect = player.getEffect(effect);
+
+        if (currentEffect == null || currentEffect.getDuration() < 40) {
+            player.addEffect(new MobEffectInstance(effect, duration, amplifier, false, false, false));
+        }
+    }
+
     private static boolean shouldApplyNightVision(Player player, ItemStack armorStack) {
         if (!(armorStack.getItem() instanceof ExoSuitItem exosuit) ||
                 exosuit.getType() != net.minecraft.world.item.ArmorItem.Type.HELMET) {
@@ -217,6 +229,7 @@ public class ExoSuitEffectsHandler {
         if (!ExoSuitPowerManager.isPowerEnabled(player, "mobility")) {
             return false;
         }
+
         for (int slot = 0; slot < 4; slot++) {
             ItemStack upgradeItem = ExoSuitData.getUpgradeInSlot(armorStack, slot);
             if (!upgradeItem.isEmpty()) {
@@ -234,9 +247,11 @@ public class ExoSuitEffectsHandler {
                 exosuit.getType() != net.minecraft.world.item.ArmorItem.Type.HELMET) {
             return false;
         }
+
         if (!player.isInWater() && !player.isUnderWater()) {
             return false;
         }
+
         for (int slot = 0; slot < 4; slot++) {
             ItemStack upgradeItem = ExoSuitData.getUpgradeInSlot(armorStack, slot);
             if (!upgradeItem.isEmpty()) {
@@ -291,6 +306,7 @@ public class ExoSuitEffectsHandler {
 
         return totalEffects;
     }
+
     private static ExoSuitUpgrade getUpgradeForSlotContext(ItemStack upgradeItem, int slotIndex, String armorContext) {
         String slotType = determineSlotType(armorContext, slotIndex);
 
@@ -300,6 +316,7 @@ public class ExoSuitEffectsHandler {
         }
         return ExoSuitUpgradeManager.getUpgradeForItem(upgradeItem);
     }
+
     private static String determineSlotType(String armorContext, int slotIndex) {
         return switch (armorContext) {
             case "helmet" -> switch (slotIndex) {
@@ -341,6 +358,7 @@ public class ExoSuitEffectsHandler {
         }
         return "unknown";
     }
+
     private static boolean requiresPowerAndEnabled(Player player, ExoSuitUpgrade upgrade, ItemStack upgradeItem) {
         String upgradeType = upgrade.getType();
 
@@ -359,13 +377,11 @@ public class ExoSuitEffectsHandler {
 
         return true;
     }
+
     private static boolean isEnergyUpgrade(ItemStack upgradeItem) {
         return upgradeItem.getItem() instanceof top.ribs.scguns.item.exosuit.EnergyUpgradeItem;
     }
 
-    /**
-     * Gets the appropriate UUIDs for an armor type
-     */
     private static UUID[] getUUIDsForArmorType(net.minecraft.world.item.ArmorItem.Type type) {
         return switch (type) {
             case HELMET -> new UUID[]{HELMET_ARMOR_UUID, HELMET_TOUGHNESS_UUID, HELMET_KNOCKBACK_UUID, HELMET_SPEED_UUID};
@@ -375,14 +391,10 @@ public class ExoSuitEffectsHandler {
         };
     }
 
-    /**
-     * Helper method to add an attribute modifier
-     */
     private static void addAttributeModifier(Player player, net.minecraft.world.entity.ai.attributes.Attribute attribute,
                                              UUID uuid, String name, double value, AttributeModifier.Operation operation) {
         AttributeInstance instance = player.getAttribute(attribute);
         if (instance != null) {
-            // FIXED: Check if modifier already exists before adding
             if (instance.getModifier(uuid) == null) {
                 AttributeModifier modifier = new AttributeModifier(uuid, name, value, operation);
                 instance.addPermanentModifier(modifier);
@@ -390,13 +402,14 @@ public class ExoSuitEffectsHandler {
         }
     }
 
-    /**
-     * Helper method to remove an attribute modifier
-     */
     private static void removeAttributeModifier(Player player, net.minecraft.world.entity.ai.attributes.Attribute attribute, UUID uuid) {
         AttributeInstance instance = player.getAttribute(attribute);
         if (instance != null) {
             instance.removeModifier(uuid);
         }
+    }
+
+    public static void cleanupPlayerData(UUID playerId) {
+        activeExoSuitEffects.remove(playerId);
     }
 }

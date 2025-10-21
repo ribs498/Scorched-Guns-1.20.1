@@ -4,6 +4,7 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.Ingredient;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.init.ModItems;
@@ -11,6 +12,10 @@ import java.util.function.Supplier;
 
 public enum ModArmorMaterials implements ArmorMaterial {
 
+    SCRAP("scrap", 6, new int[]{ 5, 6, 6, 4 }, 9,
+            SoundEvents.ARMOR_EQUIP_LEATHER, 0.5f, 0.05f, () -> Ingredient.of(Items.COPPER_INGOT)),
+    REDCOAT("redcoat", 12, new int[]{ 2, 4, 3, 2 }, 9,
+            SoundEvents.ARMOR_EQUIP_LEATHER, 0.0f, 0.0f, () -> Ingredient.of(Items.LEATHER)),
     ADRIEN("adrien", 22, new int[]{ 3, 6, 6, 4 }, 8,
             SoundEvents.ARMOR_EQUIP_IRON, 0.5f, 0.1f, () -> Ingredient.of(ModItems.TREATED_IRON_INGOT.get())),
     ANTHRALITE("anthralite", 32, new int[]{ 2, 4, 3, 2 }, 12,
@@ -23,6 +28,8 @@ public enum ModArmorMaterials implements ArmorMaterial {
             SoundEvents.ARMOR_EQUIP_IRON, 0.0f, 0.15f, () -> Ingredient.of(ModItems.ANCIENT_BRASS.get())),
     EXO_SUIT("exo_suit", 200, new int[]{ 1, 1, 1, 1 }, 6,
             SoundEvents.ARMOR_EQUIP_NETHERITE, 0.0f, 0.0f, () -> Ingredient.of(ModItems.TREATED_IRON_INGOT.get()));
+
+
 
     private final String name;
     private final int durabilityMultiplier;

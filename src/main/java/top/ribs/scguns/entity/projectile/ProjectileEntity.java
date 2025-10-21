@@ -87,7 +87,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     static final Predicate<Entity> PROJECTILE_TARGETS = input -> input != null && input.isPickable() && !input.isSpectator();
     public static final Predicate<BlockState> IGNORE_LEAVES = input -> input != null && Config.COMMON.gameplay.ignoreLeaves.get() && input.getBlock() instanceof LeavesBlock;
 
-    private long worldDay;
     protected int shooterId;
     protected LivingEntity shooter;
     protected Gun modifiedGun;
@@ -104,7 +103,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     private int soundTime = 0;
     private float chargeProgress;
     protected float armorBypassAmount = 2.0F;
-
+    private float modifiedKnockback;
     public ProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
     }
@@ -130,7 +129,8 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         float baseArmorBypass = this.projectile.getArmorPen();
         float puncturingBypass = GunEnchantmentHelper.getPuncturingArmorBypass(weapon);
         this.setArmorBypassAmount(baseArmorBypass + puncturingBypass);
-
+        float baseKnockback = this.projectile.getKnockbackStrength();
+        this.modifiedKnockback = GunEnchantmentHelper.getHeavyShotKnockback(weapon, baseKnockback);
         AttributeInstance additionalDamageAttr = shooter.getAttribute(SCAttributes.ADDITIONAL_BULLET_DAMAGE.get());
         this.attributeAdditionalDamage = additionalDamageAttr != null ? (float) additionalDamageAttr.getValue() : 0.0F;
 
@@ -140,7 +140,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.entitySize = new EntityDimensions(this.projectile.getSize(), this.projectile.getSize(), false);
         this.modifiedGravity = modifiedGun.getProjectile().isGravity() ? GunModifierHelper.getModifiedProjectileGravity(weapon, -0.04) : 0.0;
         this.life = GunModifierHelper.getModifiedProjectileLife(weapon, this.projectile.getLife());
-        this.worldDay = worldIn.getDayTime() / 24000L;
+
 
         /* Get speed and set motion */
         Vec3 dir = this.getDirection(shooter, weapon, item, modifiedGun);
@@ -179,6 +179,9 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             }
             this.item = ammoStack;
         }
+    }
+    public float getModifiedKnockback() {
+        return this.modifiedKnockback;
     }
     private float calculateChargeSpeedMultiplier(float chargeProgress) {
         chargeProgress = Mth.clamp(chargeProgress, 0.0f, 1.0f);
@@ -484,7 +487,9 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     public EntityResult getHitResult(Entity entity, Vec3 startVec, Vec3 endVec) {
         double expandHeight = entity instanceof Player && !entity.isCrouching() ? 0.0625 : 0.0;
         AABB boundingBox = entity.getBoundingBox();
-        if (Config.COMMON.gameplay.improvedHitboxes.get() && entity instanceof ServerPlayer && this.shooter != null) {
+        if (Config.COMMON.gameplay.improvedHitboxes.get() &&
+                entity instanceof ServerPlayer &&
+                this.shooter instanceof ServerPlayer) {
             int ping = (int) Math.floor((((ServerPlayer) this.shooter).latency / 1000.0) * 20.0 + 0.5);
             boundingBox = BoundingBoxManager.getBoundingBox((Player) entity, ping);
         }
@@ -1081,7 +1086,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             return;
 
         DamageSource source = entity instanceof ProjectileEntity projectile ? entity.damageSources().explosion(entity, projectile.getShooter()) : null;
-        Explosion.BlockInteraction mode = Config.COMMON.gameplay.griefing.enableBlockRemovalOnExplosions.get() && !forceNone ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP;
+
+        boolean allowBlockRemoval = Config.COMMON.gameplay.griefing.enableBlockRemovalOnExplosions.get() && !forceNone;
+        if (allowBlockRemoval && entity instanceof ProjectileEntity projectile) {
+            LivingEntity shooter = projectile.getShooter();
+            if (shooter != null && !(shooter instanceof Player)) {
+                allowBlockRemoval = Config.COMMON.gameplay.griefing.enableMobExplosionBlockRemoval.get();
+            }
+        }
+
+        Explosion.BlockInteraction mode = allowBlockRemoval ? Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP;
         Explosion explosion = new ProjectileExplosion(world, entity, source, null, entity.getX(), entity.getY(), entity.getZ(), radius, false, mode) {
             @Override
             protected float getEntityDamageAmount(Entity entity, double distance) {
@@ -1120,7 +1134,16 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
         DamageSource source = entity instanceof ProjectileEntity projectile ?
                 entity.damageSources().explosion(entity, projectile.getShooter()) : null;
-        Explosion.BlockInteraction mode = Config.COMMON.gameplay.griefing.enableBlockRemovalOnExplosions.get() && !forceNone ?
+
+        boolean allowBlockRemoval = Config.COMMON.gameplay.griefing.enableBlockRemovalOnExplosions.get() && !forceNone;
+        if (allowBlockRemoval && entity instanceof ProjectileEntity projectile) {
+            LivingEntity shooter = projectile.getShooter();
+            if (shooter != null && !(shooter instanceof Player)) {
+                allowBlockRemoval = Config.COMMON.gameplay.griefing.enableMobExplosionBlockRemoval.get();
+            }
+        }
+
+        Explosion.BlockInteraction mode = allowBlockRemoval ?
                 Explosion.BlockInteraction.DESTROY : Explosion.BlockInteraction.KEEP;
 
         Explosion explosion = new RocketExplosion(world, entity, source, null, entity.getX(), entity.getY(), entity.getZ(), radius, damage, false, mode);
@@ -1140,7 +1163,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if (!explosion.interactsWithBlocks()) {
             explosion.clearToBlow();
         }
-
     }
 
 

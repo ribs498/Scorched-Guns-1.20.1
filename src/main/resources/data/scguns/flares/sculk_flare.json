@@ -1,0 +1,59 @@
+{
+  "raid_id": "sculk",
+  "burst_delay": 20,
+  "duration": 60,
+  "trail_particles": [
+    {
+      "particle": "minecraft:sculk_soul",
+      "count": 4,
+      "spread": 0.3,
+      "speed": 0.08,
+      "color": "#006666"
+    },
+    {
+      "particle": "minecraft:sculk_charge_pop",
+      "count": 2,
+      "spread": 0.2,
+      "speed": 0.1,
+      "color": "#00FFCC"
+    }
+  ],
+  "burst_particles": [
+    {
+      "particle": "minecraft:electric_spark",
+      "count": 220,
+      "spread": 0.35,
+      "speed": 0.45,
+      "color": "#00FFCC"
+    },
+    {
+      "particle": "minecraft:sculk_soul",
+      "count": 80,
+      "spread": 0.6,
+      "speed": 0.3,
+      "color": "#006666"
+    },
+    {
+      "particle": "minecraft:sculk_charge",
+      "count": 50,
+      "spread": 0.5,
+      "speed": 0.35,
+      "color": "#003333"
+    },
+    {
+      "particle": "minecraft:sonic_boom",
+      "count": 15,
+      "spread": 0.3,
+      "speed": 0.2,
+      "color": "#00CCCC"
+    }
+  ],
+  "pattern": {
+    "type": "skulk_pulse",
+    "repetitions": 4,
+    "scale": 6.0
+  },
+  "burst_sound": "minecraft:block.sculk_shrieker.shriek",
+  "burst_sound_volume": 1.8,
+  "burst_sound_pitch": 0.7
+}

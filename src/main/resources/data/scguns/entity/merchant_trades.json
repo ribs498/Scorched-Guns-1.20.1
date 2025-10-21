@@ -10,39 +10,39 @@
       {
         "buy_item": {
           "item": "minecraft:emerald",
-          "count": 35
+          "count": 15
         },
         "sell_item": {
-          "item": "scguns:copper_blueprint",
+          "item": "scguns:copper_flare",
           "count": 1
         },
-        "max_uses": 2,
+        "max_uses": 5,
         "xp_reward": 5,
         "price_multiplier": 0.05
       },
       {
         "buy_item": {
           "item": "minecraft:amethyst_shard",
-          "count": 12
+          "count": 3
         },
         "sell_item": {
-          "item": "scguns:iron_blueprint",
+          "item": "scguns:iron_flare",
           "count": 1
         },
-        "max_uses": 2,
+        "max_uses": 12,
         "xp_reward": 5,
         "price_multiplier": 0.05
       },
       {
         "buy_item": {
           "item": "scguns:ancient_brass",
-          "count": 45
+          "count": 13
         },
         "sell_item": {
-          "item": "scguns:wrecker_blueprint",
+          "item": "scguns:wrecker_flare",
           "count": 1
         },
-        "max_uses": 2,
+        "max_uses": 7,
         "xp_reward": 5,
         "price_multiplier": 0.05
       },
@@ -52,8 +52,8 @@
           "count": 2
         },
         "sell_item": {
-          "item": "scguns:ocean_blueprint",
-          "count": 1
+          "item": "scguns:ocean_flare",
+          "count": 6
         },
         "max_uses": 2,
         "xp_reward": 5,
@@ -65,8 +65,8 @@
           "count": 2
         },
         "sell_item": {
-          "item": "scguns:piglin_blueprint",
-          "count": 1
+          "item": "scguns:gold_flare",
+          "count": 12
         },
         "max_uses": 2,
         "xp_reward": 5,
@@ -75,28 +75,28 @@
       {
         "buy_item": {
           "item": "minecraft:echo_shard",
-          "count": 6
-        },
-        "sell_item": {
-          "item": "scguns:deep_dark_blueprint",
           "count": 1
         },
-        "max_uses": 2,
+        "sell_item": {
+          "item": "scguns:sculk_flare",
+          "count": 4
+        },
+        "max_uses": 3,
         "xp_reward": 5,
         "price_multiplier": 0.05
       },
       {
         "buy_item": {
-          "item": "scguns:diamond_steel_block",
-          "count": 5
+          "item": "scguns:diamond_steel_ingot",
+          "count": 1
         },
         "buy_item_2": {
           "item": "scguns:energy_core",
-          "count": 3
+          "count": 1
         },
         "sell_item": {
-          "item": "scguns:diamond_steel_blueprint",
-          "count": 1
+          "item": "scguns:diamond_flare",
+          "count": 4
         },
         "max_uses": 2,
         "xp_reward": 5,
@@ -104,18 +104,18 @@
       },
       {
         "buy_item": {
-          "item": "scguns:treated_brass_block",
+          "item": "scguns:treated_brass_ingot",
           "count": 5
         },
         "buy_item_2": {
           "item": "scguns:plasma_core",
-          "count": 3
-        },
-        "sell_item": {
-          "item": "scguns:treated_brass_blueprint",
           "count": 1
         },
-        "max_uses": 2,
+        "sell_item": {
+          "item": "scguns:treated_brass_flare",
+          "count": 3
+        },
+        "max_uses": 4,
         "xp_reward": 5,
         "price_multiplier": 0.05
       },
@@ -125,10 +125,23 @@
           "count": 1
         },
         "sell_item": {
-          "item": "scguns:end_blueprint",
+          "item": "scguns:shulker_core",
           "count": 1
         },
         "max_uses": 2,
+        "xp_reward": 5,
+        "price_multiplier": 0.05
+      },
+      {
+        "buy_item": {
+          "item": "scguns:vehement_coal",
+          "count": 3
+        },
+        "sell_item": {
+          "item": "scguns:blueprint_scrap",
+          "count": 1
+        },
+        "max_uses": 3,
         "xp_reward": 5,
         "price_multiplier": 0.05
       }

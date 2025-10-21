@@ -19,7 +19,17 @@
         },
         {
           "type": "minecraft:item",
-          "name": "scguns:end_blueprint"
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 3.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:blueprint_scrap"
         }
       ]
     }

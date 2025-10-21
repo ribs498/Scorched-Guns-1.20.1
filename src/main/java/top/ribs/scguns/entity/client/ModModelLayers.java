@@ -18,8 +18,6 @@ public class ModModelLayers {
             new ResourceLocation(Reference.MOD_ID, "supply_scamp_layer"), "main");
     public static final ModelLayerLocation DISSIDENT_LAYER = new ModelLayerLocation(
             new ResourceLocation(Reference.MOD_ID, "dissident_layer"), "main");
-    public static final ModelLayerLocation REDCOAT_LAYER = new ModelLayerLocation(
-            new ResourceLocation(Reference.MOD_ID, "redcoat_layer"), "main");
     public static final ModelLayerLocation HIVE_LAYER = new ModelLayerLocation(
             new ResourceLocation(Reference.MOD_ID, "hive_layer"), "main");
     public static final ModelLayerLocation SWARM_LAYER = new ModelLayerLocation(
@@ -40,5 +38,11 @@ public class ModModelLayers {
             new ResourceLocation(Reference.MOD_ID, "scamp_rocket_layer"), "main");
     public static final ModelLayerLocation SCAMPLER_LAYER = new ModelLayerLocation(
             new ResourceLocation(Reference.MOD_ID, "scampler_layer"), "main");
+    public static final ModelLayerLocation ADJUDICATOR_LAYER = new ModelLayerLocation(
+            new ResourceLocation(Reference.MOD_ID, "adjudicator_layer"), "main");
+    public static final ModelLayerLocation SUBJUGATOR_LAYER = new ModelLayerLocation(
+            new ResourceLocation(Reference.MOD_ID, "subjugator_layer"), "main");
+    public static final ModelLayerLocation VIVENTRUM_LAYER = new ModelLayerLocation(
+            new ResourceLocation(Reference.MOD_ID, "viventrum_layer"), "main");
 
 }

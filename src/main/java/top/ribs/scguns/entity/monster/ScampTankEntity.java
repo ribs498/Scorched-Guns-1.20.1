@@ -119,7 +119,7 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
             BossEvent.BossBarOverlay.PROGRESS
     );
 
-    private int avoidanceTimer = 0;
+    private final int avoidanceTimer = 0;
     private int noLineOfSightTimer = 0;
     private static final int NO_LOS_THRESHOLD = 60;
     private boolean isAggressivelyRepositioning = false;
@@ -129,9 +129,10 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     public ScampTankEntity(EntityType<? extends ScampTankEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.setMaxUpStep(2.0F);
-        this.bossEvent.setVisible(true);
+        this.bossEvent.setVisible(false);
         this.xpReward = XP_REWARD_BOSS;
         this.setPersistenceRequired();
+        this.setHealth(this.getMaxHealth());
     }
     @Override
     public boolean requiresCustomPersistence() {
@@ -988,6 +989,13 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
         }
 
         return false;
+    }
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        super.setTarget(target);
+        if (target != null && !this.level().isClientSide) {
+            this.bossEvent.setVisible(true);
+        }
     }
     private void handleCombat() {
         LivingEntity target = this.getTarget();

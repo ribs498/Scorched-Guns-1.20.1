@@ -1,0 +1,23 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "#": {
+      "item": "scguns:treated_brass_gun_frame"
+    },
+    "X": {
+      "item": "scguns:gun_barrel"
+    },
+    "Q": {
+      "item": "scguns:gun_grip"
+    }
+  },
+  "pattern": [
+    "  X",
+    " # ",
+    "Q  "
+  ],
+  "result": {
+    "item": "scguns:flare_pistol"
+  }
+}

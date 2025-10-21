@@ -25,6 +25,7 @@
   "modules": {
   },
   "projectile": {
+    "visible": true,
     "advantage": "scguns:none",
     "damage": 15.5,
     "gravity": false,

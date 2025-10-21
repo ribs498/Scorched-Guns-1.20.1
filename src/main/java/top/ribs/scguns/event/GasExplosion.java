@@ -30,10 +30,8 @@ public class GasExplosion {
     }
 
     public void explode() {
-        // Trigger the explosion sound and particle effects
         level.playSound(null, centerPos.getX(), centerPos.getY(), centerPos.getZ(), SoundEvents.CAT_HISS, SoundSource.BLOCKS, 2.0F, 1.0F);
 
-        // Apply gas effects
         for (int i = 0; i < duration; i++) {
             level.scheduleTick(centerPos, level.getBlockState(centerPos).getBlock(), i * 20);
         }

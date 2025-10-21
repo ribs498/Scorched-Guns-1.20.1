@@ -439,9 +439,15 @@ public class GunEventBus {
                 }
 
                 if (acceleratorLevel > 0 && damageAmount > 0) {
-                    float extraWearChance = 0.15f * acceleratorLevel;
-                    if (Math.random() < extraWearChance) {
-                        damageAmount *= 2;
+                    float catastrophicChance = 0.07f * acceleratorLevel;
+                    if (Math.random() < catastrophicChance) {
+                        damageAmount *= 8;
+                    }
+                    else {
+                        float extraWearChance = 0.25f * acceleratorLevel;
+                        if (Math.random() < extraWearChance) {
+                            damageAmount *= 2;
+                        }
                     }
                 }
 
@@ -558,29 +564,7 @@ public class GunEventBus {
             }
         }
     }
-    public static void ejectCasingGeneric(Level level, LivingEntity entity, Gun gun, boolean mirror) {
-        if (!level.isClientSide()) return;
 
-        Vec3 lookVec = entity.getLookAngle();
-        Vec3 rightVec = new Vec3(-lookVec.z, 0, lookVec.x).normalize();
-        Vec3 forwardVec = new Vec3(lookVec.x, 0, lookVec.z).normalize();
-
-        double offsetX = (mirror ? -rightVec.x : rightVec.x) * 0.5 + forwardVec.x * 0.5;
-        double offsetY = entity.getEyeHeight() - 0.4;
-        double offsetZ = (mirror ? -rightVec.z : rightVec.z) * 0.5 + forwardVec.z * 0.5;
-
-        Vec3 particlePos = entity.getPosition(1).add(offsetX, offsetY, offsetZ);
-        ResourceLocation particleLocation = gun.getProjectile().getCasingParticle();
-
-        if (particleLocation != null) {
-            ParticleType<?> particleType = ForgeRegistries.PARTICLE_TYPES.getValue(particleLocation);
-            if (particleType instanceof SimpleParticleType simpleParticleType) {
-                level.addParticle(simpleParticleType,
-                        particlePos.x, particlePos.y, particlePos.z,
-                        0, 0, 0);
-            }
-        }
-    }
 
 
     public static void spawnCasingInWorld(Level level, Player player, ItemStack casingStack) {

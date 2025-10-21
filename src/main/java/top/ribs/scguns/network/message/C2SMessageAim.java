@@ -6,8 +6,6 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
-import top.ribs.scguns.common.Gun;
-import top.ribs.scguns.common.ReloadType;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GunItem;
 
@@ -33,6 +31,7 @@ public class C2SMessageAim extends PlayMessage<C2SMessageAim>
     {
         return new C2SMessageAim(buffer.readBoolean());
     }
+
     @Override
     public void handle(C2SMessageAim message, MessageContext context) {
         context.execute(() ->
@@ -42,27 +41,22 @@ public class C2SMessageAim extends PlayMessage<C2SMessageAim>
             {
                 boolean currentlyReloading = ModSyncedDataKeys.RELOADING.getValue(player);
 
+                if(currentlyReloading) {
+                    ModSyncedDataKeys.AIMING.setValue(player, false);
+                    return;
+                }
                 ItemStack heldItem = player.getMainHandItem();
-                boolean inCriticalPhase = false;
-
                 if(heldItem.getItem() instanceof GunItem) {
                     CompoundTag tag = heldItem.getOrCreateTag();
-                    inCriticalPhase = tag.getBoolean("InCriticalReloadPhase");
+                    boolean inCriticalPhase = tag.getBoolean("InCriticalReloadPhase");
 
-                    Gun gun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
-                    boolean isManualReload = gun.getReloads().getReloadType() == ReloadType.MANUAL;
-                    String reloadState = tag.getString("scguns:ReloadState");
-
-                    if(currentlyReloading || inCriticalPhase ||
-                            (isManualReload && (!reloadState.isEmpty() && !reloadState.equals("NONE")))) {
+                    if(inCriticalPhase) {
                         ModSyncedDataKeys.AIMING.setValue(player, false);
                         return;
                     }
                 }
 
-                if(!currentlyReloading && !inCriticalPhase) {
-                    ModSyncedDataKeys.AIMING.setValue(player, message.aiming);
-                }
+                ModSyncedDataKeys.AIMING.setValue(player, message.aiming);
             }
         });
         context.setHandled(true);

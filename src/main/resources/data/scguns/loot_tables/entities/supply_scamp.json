@@ -131,6 +131,34 @@
           "name": "scguns:powder_and_ball"
         },
         {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 1.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:copper_flare"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 1.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:iron_flare"
+        },
+        {
           "type": "minecraft:empty",
           "weight": 2
         }
@@ -141,17 +169,21 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "scguns:wrecker_blueprint",
-          "weight": 1
-        },
-        {
-          "type": "minecraft:item",
-          "name": "scguns:copper_blueprint",
-          "weight": 5
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:blueprint_scrap"
         },
         {
           "type": "minecraft:empty",
-          "weight": 14
+          "weight": 3
         }
       ]
     }

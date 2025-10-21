@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "scguns:pebbles"
+    },
+    {
+      "item": "scguns:charcoal"
+    },
+    {
+      "item": "scguns:bat_guano"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "item": "minecraft:gunpowder"
+  }
+}

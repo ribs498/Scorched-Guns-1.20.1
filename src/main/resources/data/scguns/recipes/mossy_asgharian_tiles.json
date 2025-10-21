@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "Q":     [
+      {
+        "item": "minecraft:vine"
+      },
+      {
+        "item": "minecraft:moss_block"
+      }
+    ],
+    "R": {
+      "item": "scguns:asgharian_tiles"
+    }
+  },
+  "pattern": [
+    "RQ "
+  ],
+  "result": {
+    "item": "scguns:mossy_asgharian_tiles"
+  }
+}

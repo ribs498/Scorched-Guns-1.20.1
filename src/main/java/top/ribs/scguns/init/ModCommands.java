@@ -10,7 +10,13 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import top.ribs.scguns.entity.player.PlayerGunProgression;
 import top.ribs.scguns.event.GunProgressionEventHandler;
-
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.server.level.ServerLevel;
+import top.ribs.scguns.config.RaidConfig;
+import top.ribs.scguns.entity.raid.RaidManager;
+import top.ribs.scguns.entity.raid.ActiveRaid;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class ModCommands {
@@ -53,12 +59,138 @@ public class ModCommands {
                                         )
                                 )
                         )
+                        .then(Commands.literal("raid")
+                                .then(Commands.literal("start")
+                                        .then(Commands.argument("raid_id", StringArgumentType.string())
+                                                .suggests((context, builder) -> {
+                                                    for (RaidConfig.RaidData raid : RaidConfig.getAllRaids()) {
+                                                        builder.suggest(raid.raidId());
+                                                    }
+                                                    return builder.buildFuture();
+                                                })
+                                                .executes(context -> {
+                                                    String raidId = StringArgumentType.getString(context, "raid_id");
+                                                    return executeStartRaidById(context.getSource(), raidId);
+                                                })
+                                        )
+                                )
+                                .then(Commands.literal("stop")
+                                        .executes(context -> executeStopAllRaids(context.getSource()))
+                                )
+                                .then(Commands.literal("list")
+                                        .executes(context -> executeListRaids(context.getSource()))
+                                )
+                                .then(Commands.literal("listall")
+                                        .executes(context -> executeListAllAvailableRaids(context.getSource()))
+                                )
+                                .then(Commands.literal("startnext")
+                                        .executes(context -> executeStartNextRaid(context.getSource()))
+                                )
+                        )
         );
+    }
+
+    private static int executeStartRaidById(CommandSourceStack source, String raidId) {
+        if (!source.hasPermission(2)) {
+            source.sendFailure(Component.translatable("commands.scguns.no_permission"));
+            return 0;
+        }
+
+        ServerLevel serverLevel = source.getLevel();
+        RaidConfig.RaidData raidConfig = RaidConfig.getRaidById(raidId);
+
+        if (raidConfig == null) {
+            source.sendFailure(Component.translatable("commands.scguns.raid.no_config", raidId));
+            return 0;
+        }
+
+        Vec3 sourcePos = source.getPosition();
+        RaidManager manager = RaidManager.get(serverLevel);
+        manager.startRaid(raidConfig, serverLevel, sourcePos);
+
+        Component raidName = Component.literal(raidConfig.raidId()).withStyle(ChatFormatting.GOLD);
+        source.sendSuccess(() -> Component.translatable("commands.scguns.raid.started", raidName), true);
+
+        return 1;
+    }
+
+    private static int executeListAllAvailableRaids(CommandSourceStack source) {
+        if (!source.hasPermission(2)) {
+            source.sendFailure(Component.translatable("commands.scguns.no_permission"));
+            return 0;
+        }
+
+        Collection<RaidConfig.RaidData> progressionRaids = RaidConfig.getProgressionRaids();
+        Collection<RaidConfig.RaidData> customRaids = RaidConfig.getCustomRaids();
+
+        source.sendSuccess(() -> Component.literal("=== Available Raids ===").withStyle(ChatFormatting.GOLD), false);
+
+        if (!progressionRaids.isEmpty()) {
+            source.sendSuccess(() -> Component.literal("Progression Raids:").withStyle(ChatFormatting.YELLOW), false);
+            for (RaidConfig.RaidData raid : progressionRaids) {
+                String levelStr = raid.raidLevel() != null ? "Level " + raid.raidLevel() : "NONE";
+                source.sendSuccess(() -> Component.literal("  - " + raid.raidId() + " (" + levelStr + ")")
+                        .withStyle(ChatFormatting.WHITE), false);
+            }
+        }
+
+        if (!customRaids.isEmpty()) {
+            source.sendSuccess(() -> Component.literal("Custom Raids:").withStyle(ChatFormatting.AQUA), false);
+            for (RaidConfig.RaidData raid : customRaids) {
+                source.sendSuccess(() -> Component.literal("  - " + raid.raidId())
+                        .withStyle(ChatFormatting.WHITE), false);
+            }
+        }
+
+        if (progressionRaids.isEmpty() && customRaids.isEmpty()) {
+            source.sendSuccess(() -> Component.literal("No raids configured!").withStyle(ChatFormatting.RED), false);
+        }
+
+        return 1;
+    }
+
+    private static int executeStartNextRaid(CommandSourceStack source) {
+        if (!source.hasPermission(2)) {
+            source.sendFailure(Component.translatable("commands.scguns.no_permission"));
+            return 0;
+        }
+
+        if (!(source.getEntity() instanceof ServerPlayer player)) {
+            source.sendFailure(Component.translatable("commands.scguns.requires_player"));
+            return 0;
+        }
+
+        ServerLevel serverLevel = source.getLevel();
+        PlayerGunProgression progression = PlayerGunProgression.get(player);
+        int currentRaidLevel = progression.getCurrentRaidLevel();
+
+        if (currentRaidLevel == 0) {
+            source.sendFailure(Component.translatable("commands.scguns.unlock_gun"));
+            return 0;
+        }
+
+        List<RaidConfig.RaidData> nextLevelRaids = RaidConfig.getRaidsAtLevel(currentRaidLevel + 1);
+
+        if (nextLevelRaids.isEmpty()) {
+            source.sendFailure(Component.literal("No higher level raids available!"));
+            return 0;
+        }
+
+        RaidConfig.RaidData raidConfig = nextLevelRaids.get(0);
+
+        Vec3 sourcePos = source.getPosition();
+        RaidManager manager = RaidManager.get(serverLevel);
+        manager.startRaid(raidConfig, serverLevel, sourcePos);
+
+        Component raidName = Component.literal(raidConfig.raidId()).withStyle(ChatFormatting.GOLD);
+        source.sendSuccess(() -> Component.translatable("commands.scguns.raid.started", raidName), true);
+
+        return 1;
     }
 
     private static int executeSetProgression(CommandSourceStack source, ServerPlayer player, String tierName) {
         if (!source.hasPermission(2)) {
-            source.sendFailure(Component.literal("You do not have permission to execute this command"));
+            source.sendFailure(Component.translatable("commands.scguns.no_permission"));
             return 0;
         }
 
@@ -66,7 +198,7 @@ public class ModCommands {
         try {
             tier = PlayerGunProgression.GunTier.valueOf(tierName.toUpperCase());
         } catch (IllegalArgumentException e) {
-            source.sendFailure(Component.literal("Invalid tier: " + tierName));
+            source.sendFailure(Component.translatable("commands.scguns.progression.invalid_tier", tierName));
             return 0;
         }
 
@@ -79,54 +211,50 @@ public class ModCommands {
         Component tierComponent = Component.translatable("gun_tier.scguns." + tier.name().toLowerCase())
                 .withStyle(ChatFormatting.GOLD);
 
-        source.sendSuccess(() -> Component.literal("Set ")
-                .append(player.getDisplayName())
-                .append("'s progression to ")
-                .append(tierComponent), true);
+        source.sendSuccess(() -> Component.translatable("commands.scguns.progression.set",
+                player.getDisplayName(), tierComponent), true);
 
         return 1;
     }
 
     private static int executeClearProgression(CommandSourceStack source, ServerPlayer player) {
         if (!source.hasPermission(2)) {
-            source.sendFailure(Component.literal("You do not have permission to execute this command"));
+            source.sendFailure(Component.translatable("commands.scguns.no_permission"));
             return 0;
         }
 
         PlayerGunProgression progression = new PlayerGunProgression();
         PlayerGunProgression.save(player, progression);
 
-        player.sendSystemMessage(Component.literal("Your gun progression has been reset")
+        player.sendSystemMessage(Component.translatable("commands.scguns.progression.reset")
                 .withStyle(ChatFormatting.RED));
 
-        source.sendSuccess(() -> Component.literal("Cleared ")
-                .append(player.getDisplayName())
-                .append("'s gun progression"), true);
+        source.sendSuccess(() -> Component.translatable("commands.scguns.progression.cleared",
+                player.getDisplayName()), true);
 
         return 1;
     }
 
     private static int executeCheckProgression(CommandSourceStack source, ServerPlayer player) {
         if (!source.hasPermission(2)) {
-            source.sendFailure(Component.literal("You do not have permission to execute this command"));
+            source.sendFailure(Component.translatable("commands.scguns.no_permission"));
             return 0;
         }
 
         PlayerGunProgression progression = PlayerGunProgression.get(player);
         PlayerGunProgression.GunTier currentTier = progression.getCurrentTier();
+        int raidLevel = progression.getCurrentRaidLevel();
         List<PlayerGunProgression.GunTier> availableTiers = progression.getAvailableMobTiers();
 
         Component tierComponent = Component.translatable("gun_tier.scguns." + currentTier.name().toLowerCase())
                 .withStyle(ChatFormatting.GOLD);
 
-        if (availableTiers.isEmpty()) {
-            source.sendSuccess(() -> player.getDisplayName()
-                    .copy()
-                    .append(" - Current Tier: ")
-                    .append(tierComponent)
-                    .append(" | Mob Tiers: None"), false);
-        } else {
-            Component mobTiersMessage = Component.literal("");
+        source.sendSuccess(() -> Component.literal("Player: ").append(player.getDisplayName()), false);
+        source.sendSuccess(() -> Component.literal("Gun Tier: ").append(tierComponent), false);
+        source.sendSuccess(() -> Component.literal("Raid Level: " + raidLevel).withStyle(ChatFormatting.AQUA), false);
+
+        if (!availableTiers.isEmpty()) {
+            Component mobTiersMessage = Component.literal("Available Mob Tiers: ");
             for (int i = 0; i < availableTiers.size(); i++) {
                 PlayerGunProgression.GunTier mobTier = availableTiers.get(i);
                 Component mobTierComponent = Component.translatable("gun_tier.scguns." + mobTier.name().toLowerCase())
@@ -140,12 +268,86 @@ public class ModCommands {
             }
 
             Component finalMobTiersMessage = mobTiersMessage;
-            source.sendSuccess(() -> player.getDisplayName()
-                    .copy()
-                    .append(" - Current Tier: ")
-                    .append(tierComponent)
-                    .append(" | Mob Tiers: ")
-                    .append(finalMobTiersMessage), false);
+            source.sendSuccess(() -> finalMobTiersMessage, false);
+        }
+
+        List<RaidConfig.RaidData> availableRaids = RaidConfig.getRaidsForLevel(raidLevel);
+        if (!availableRaids.isEmpty()) {
+            source.sendSuccess(() -> Component.literal("Available Raids (" + availableRaids.size() + "):").withStyle(ChatFormatting.GREEN), false);
+            for (RaidConfig.RaidData raid : availableRaids) {
+                String levelStr = raid.raidLevel() != null ? " (Level " + raid.raidLevel() + ")" : "";
+                source.sendSuccess(() -> Component.literal("  - " + raid.raidId() + levelStr), false);
+            }
+        }
+
+        return 1;
+    }
+
+    private static int executeStopAllRaids(CommandSourceStack source) {
+        if (!source.hasPermission(2)) {
+            source.sendFailure(Component.translatable("commands.scguns.no_permission"));
+            return 0;
+        }
+
+        ServerLevel serverLevel = source.getLevel();
+
+        RaidManager manager = RaidManager.get(serverLevel);
+        Collection<ActiveRaid> activeRaids = manager.getActiveRaids();
+
+        if (activeRaids.isEmpty()) {
+            source.sendFailure(Component.translatable("commands.scguns.raid.none_active"));
+            return 0;
+        }
+
+        int count = 0;
+        for (ActiveRaid raid : new ArrayList<>(activeRaids)) {
+            raid.endRaid(false);
+            count++;
+        }
+
+        int finalCount = count;
+        source.sendSuccess(() -> Component.translatable("commands.scguns.raid.stopped", finalCount), true);
+
+        return 1;
+    }
+
+    private static int executeListRaids(CommandSourceStack source) {
+        if (!source.hasPermission(2)) {
+            source.sendFailure(Component.translatable("commands.scguns.no_permission"));
+            return 0;
+        }
+
+        ServerLevel serverLevel = source.getLevel();
+
+        RaidManager manager = RaidManager.get(serverLevel);
+        Collection<ActiveRaid> activeRaids = manager.getActiveRaids();
+
+        if (activeRaids.isEmpty()) {
+            source.sendSuccess(() -> Component.translatable("commands.scguns.raid.list_none"), false);
+            return 1;
+        }
+
+        source.sendSuccess(() -> Component.translatable("commands.scguns.raid.list_header")
+                .withStyle(ChatFormatting.GOLD), false);
+
+        for (ActiveRaid raid : activeRaids) {
+            Integer raidLevel = raid.getRaidLevel();
+            Component raidInfo;
+
+            if (raidLevel != null) {
+                raidInfo = Component.literal(raid.getConfig().raidId() + " (Level " + raidLevel + ")")
+                        .withStyle(ChatFormatting.YELLOW);
+            } else {
+                raidInfo = Component.literal(raid.getConfig().raidId() + " (Custom)")
+                        .withStyle(ChatFormatting.AQUA);
+            }
+
+            int henchmenCount = raid.getAliveHenchmenCount();
+            long duration = raid.getRaidDuration() / 20;
+
+            Component finalRaidInfo = raidInfo;
+            source.sendSuccess(() -> Component.translatable("commands.scguns.raid.list_entry",
+                    finalRaidInfo, henchmenCount, duration), false);
         }
 
         return 1;

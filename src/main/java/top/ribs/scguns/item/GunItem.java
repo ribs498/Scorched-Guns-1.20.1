@@ -63,7 +63,6 @@ public class GunItem extends Item implements IColored, IMeta {
         baseDamage = GunModifierHelper.getModifiedProjectileDamage(stack, baseDamage);
         baseDamage = GunEnchantmentHelper.getAcceleratorDamage(stack, baseDamage);
         baseDamage = GunEnchantmentHelper.getHeavyShotDamage(stack, baseDamage);
-        baseDamage = GunEnchantmentHelper.getPuncturingDamageReductionForTooltip(stack, baseDamage);
 
 
         baseDamage *= Config.COMMON.gameplay.globalDamageMultiplier.get().floatValue();

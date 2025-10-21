@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "scguns:block/guano_candle"
+    },
+    "lit=true": {
+      "model": "scguns:block/guano_candle_lit"
+    }
+  }
+}

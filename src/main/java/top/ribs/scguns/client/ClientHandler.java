@@ -80,8 +80,11 @@ public class ClientHandler {
             updateMouseSensitivity();
             Minecraft mc = Minecraft.getInstance();
             if (mc.player != null && mc.screen == null && KeyBinds.KEY_MELEE.consumeClick()) {
-                if (mc.player.getMainHandItem().getItem() instanceof GunItem) {
-                    PacketHandler.getPlayChannel().sendToServer(new C2SMessageMeleeAttack());
+                ItemStack heldItem = mc.player.getMainHandItem();
+                if (heldItem.getItem() instanceof GunItem) {
+                    if (!MeleeAttackHandler.isMeleeOnCooldown(mc.player, heldItem)) {
+                        PacketHandler.getPlayChannel().sendToServer(new C2SMessageMeleeAttack());
+                    }
                 }
             }
         }
@@ -211,24 +214,28 @@ public class ClientHandler {
         EntityRenderers.register(ModEntities.COG_KNIGHT.get(), CogKnightRenderer::new);
         EntityRenderers.register(ModEntities.SKY_CARRIER.get(), SkyCarrierRenderer::new);
         EntityRenderers.register(ModEntities.SUPPLY_SCAMP.get(), SupplyScampRenderer::new);
-        EntityRenderers.register(ModEntities.REDCOAT.get(), RedcoatRenderer::new);
         EntityRenderers.register(ModEntities.HIVE.get(), HiveRenderer::new);
         EntityRenderers.register(ModEntities.SWARM.get(), SwarmRenderer::new);
         EntityRenderers.register(ModEntities.DISSIDENT.get(), DissidentRenderer::new);
+        EntityRenderers.register(ModEntities.VIVENTRUM.get(), ViventrumRenderer::new);
         EntityRenderers.register(ModEntities.HORNLIN.get(), HornlinRenderer::new);
         EntityRenderers.register(ModEntities.ZOMBIFIED_HORNLIN.get(), ZombifiedHornlinRenderer::new);
         EntityRenderers.register(ModEntities.TRAUMA_UNIT.get(), TraumaUnitRenderer::new);
         EntityRenderers.register(ModEntities.THE_MERCHANT.get(), TheMerchantRenderer::new);
 
         EntityRenderers.register(ModEntities.BLUNDERER.get(), BlundererRenderer::new);
+        EntityRenderers.register(ModEntities.ADJUDICATOR.get(), AdjudicatorRenderer::new);
+        EntityRenderers.register(ModEntities.SUBJUGATOR.get(), SubjugatorRenderer::new);
         EntityRenderers.register(ModEntities.SIGNAL_BEACON.get(), SignalBeaconRenderer::new);
         EntityRenderers.register(ModEntities.BRASS_BOLT.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.TRAUMA_HOOK.get(), TraumaHookRenderer::new);
         EntityRenderers.register(ModEntities.SCAMP_TANK.get(), ScampTankRenderer::new);
         EntityRenderers.register(ModEntities.SCAMP_ROCKET.get(), ScampRocketRenderer::new);
         EntityRenderers.register(ModEntities.SCAMPLER.get(), ScamplerRenderer::new);
+        EntityRenderers.register(ModEntities.RAID_FLARE.get(), RaidFlareRenderer::new);
+
         EntityRenderers.register(ModEntities.BEACON_PROJECTILE.get(), (context) ->
-                new EntityRenderer<BeaconProjectileEntity>(context) {
+                new EntityRenderer<>(context) {
                     @Override
                     public ResourceLocation getTextureLocation(BeaconProjectileEntity entity) {
                         return new ResourceLocation("minecraft", "textures/item/beacon.png");

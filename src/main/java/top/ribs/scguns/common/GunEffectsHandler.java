@@ -64,6 +64,11 @@ public class GunEffectsHandler {
     };
 
     public static void handleGunEffects(ServerPlayer player, ItemStack heldItem, Gun modifiedGun) {
+        // Skip all effects if player is in creative mode
+        if (player.isCreative()) {
+            return;
+        }
+
         if (!Config.COMMON.aggroMobs.enabled.get() && !Config.COMMON.fleeingMobs.enabled.get()) {
             return;
         }

@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "R": {
+      "item": "scguns:asgharian_brick_slab"
+    }
+  },
+  "pattern": [
+    "R  ",
+    "R  "
+  ],
+  "result": {
+    "item": "scguns:chiseled_asgharian_bricks"
+  }
+}

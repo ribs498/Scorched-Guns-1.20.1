@@ -5,11 +5,25 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "scguns:iron_blueprint"
+          "name": "scguns:copper_flare"
         },
         {
           "type": "minecraft:item",
-          "name": "scguns:copper_blueprint"
+          "name": "scguns:iron_flare"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:blueprint_scrap"
         },
         {
           "type": "minecraft:item",
@@ -23,6 +37,19 @@
             }
           ],
           "name": "scguns:flintlock_pistol"
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "function": "minecraft:set_damage",
+              "damage": {
+                "min": 0.15,
+                "max": 0.4
+              }
+            }
+          ],
+          "name": "scguns:longarm"
         },
         {
           "type": "minecraft:empty",

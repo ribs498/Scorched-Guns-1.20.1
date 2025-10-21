@@ -14,6 +14,7 @@ import top.ribs.scguns.Reference;
 import top.ribs.scguns.ScorchedGuns;
 import top.ribs.scguns.common.Attachments;
 import top.ribs.scguns.common.GunModifiers;
+import top.ribs.scguns.entity.player.PlayerGunProgression;
 import top.ribs.scguns.item.*;
 import top.ribs.scguns.item.ammo_boxes.*;
 
@@ -1458,6 +1459,16 @@ public class ModItems {
     public static final RegistryObject<Item> ADRIEN_CHESTPLATE = REGISTER.register("adrien_chestplate", () -> new AdrienArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<Item> ADRIEN_LEGGINGS = REGISTER.register("adrien_leggings", () -> new AdrienArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.LEGGINGS, new Item.Properties()));
     public static final RegistryObject<Item> ADRIEN_BOOTS = REGISTER.register("adrien_boots", () -> new AdrienArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.BOOTS, new Item.Properties()));
+    public static final RegistryObject<Item> REDCOAT_HAT = REGISTER.register("redcoat_hat", () -> new RedcoatArmorItem(ModArmorMaterials.REDCOAT, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> REDCOAT_COAT = REGISTER.register("redcoat_coat", () -> new RedcoatArmorItem(ModArmorMaterials.REDCOAT, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<Item> REDCOAT_PANTS = REGISTER.register("redcoat_pants", () -> new RedcoatArmorItem(ModArmorMaterials.REDCOAT, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    public static final RegistryObject<Item> REDCOAT_BOOTS = REGISTER.register("redcoat_boots", () -> new RedcoatArmorItem(ModArmorMaterials.REDCOAT, ArmorItem.Type.BOOTS, new Item.Properties()));
+    public static final RegistryObject<Item> SCRAP_HELMET = REGISTER.register("scrap_helmet", () -> new ScrapArmorItem(ModArmorMaterials.SCRAP, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> SCRAP_CHESTPLATE = REGISTER.register("scrap_chestplate", () -> new ScrapArmorItem(ModArmorMaterials.SCRAP, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
+    public static final RegistryObject<Item> SCRAP_LEGGINGS = REGISTER.register("scrap_leggings", () -> new ScrapArmorItem(ModArmorMaterials.SCRAP, ArmorItem.Type.LEGGINGS, new Item.Properties()));
+    public static final RegistryObject<Item> SCRAP_BOOTS = REGISTER.register("scrap_boots", () -> new ScrapArmorItem(ModArmorMaterials.SCRAP, ArmorItem.Type.BOOTS, new Item.Properties()));
+
+
     public static final RegistryObject<Item> COG_KNIGHT_HELMET = REGISTER.register("cog_knight_helmet", () -> new CogKnightArmorItem(ModArmorMaterials.ANCIENT_BRASS, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> COG_KNIGHT_CHESTPLATE = REGISTER.register("cog_knight_chestplate", () -> new CogKnightArmorItem(ModArmorMaterials.ANCIENT_BRASS, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<Item> COG_KNIGHT_LEGGINGS = REGISTER.register("cog_knight_leggings", () -> new CogKnightArmorItem(ModArmorMaterials.ANCIENT_BRASS, ArmorItem.Type.LEGGINGS, new Item.Properties()));
@@ -1523,6 +1534,83 @@ public class ModItems {
     public static final RegistryObject<Item> TREATED_BRASS_CHESTPLATE = REGISTER.register("treated_brass_chestplate", () -> new ArmorItem(ModArmorMaterials.TREATED_BRASS, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<Item> TREATED_BRASS_LEGGINGS = REGISTER.register("treated_brass_leggings", () -> new ArmorItem(ModArmorMaterials.TREATED_BRASS, ArmorItem.Type.LEGGINGS, new Item.Properties()));
     public static final RegistryObject<Item> TREATED_BRASS_BOOTS = REGISTER.register("treated_brass_boots", () -> new ArmorItem(ModArmorMaterials.TREATED_BRASS, ArmorItem.Type.BOOTS, new Item.Properties()));
+
+    public static final RegistryObject<Item> WHITE_FLAG = REGISTER.register("white_flag",
+            () -> new WhiteFlagItem(new Item.Properties().stacksTo(16)));
+
+    public static final RegistryObject<Item> FLARE_PISTOL = REGISTER.register("flare_pistol",
+            () -> new FlarePistolItem(new Item.Properties().stacksTo(1)));
+
+    public static final RegistryObject<Item> ANTIQUE_FLARE = REGISTER.register("antique_flare",
+            () -> new RaidFlareItem(new Item.Properties().stacksTo(16), "antique"));
+
+    public static final RegistryObject<Item> FRONTIER_FLARE = REGISTER.register("frontier_flare",
+            () -> new RaidFlareItem(new Item.Properties().stacksTo(16), "frontier"));
+
+    public static final RegistryObject<Item> COPPER_FLARE = REGISTER.register("copper_flare",
+            () -> new RaidFlareItem(new Item.Properties().stacksTo(16), "copper"));
+
+    public static final RegistryObject<Item> IRON_FLARE = REGISTER.register("iron_flare",
+            () -> new RaidFlareItem(new Item.Properties().stacksTo(16), "iron"));
+
+    public static final RegistryObject<Item> WRECKER_FLARE = REGISTER.register("wrecker_flare",
+            () -> new RaidFlareItem(new Item.Properties().stacksTo(16), "wrecker"));
+
+    public static final RegistryObject<Item> DIAMOND_STEEL_FLARE = REGISTER.register("diamond_steel_flare",
+            () -> new RaidFlareItem(new Item.Properties().stacksTo(16), "diamond_steel"));
+
+    public static final RegistryObject<Item> TREATED_BRASS_FLARE = REGISTER.register("treated_brass_flare",
+            () -> new RaidFlareItem(new Item.Properties().stacksTo(16), "treated_brass"));
+
+    public static final RegistryObject<Item> GOLD_FLARE = REGISTER.register("gold_flare",
+            () -> new RaidFlareItem(new Item.Properties().stacksTo(16), "piglin"));
+
+    public static final RegistryObject<Item> SCULK_FLARE = REGISTER.register("sculk_flare",
+            () -> new RaidFlareItem(new Item.Properties().stacksTo(16), "sculk"));
+
+    public static final RegistryObject<Item> OCEAN_FLARE = REGISTER.register("ocean_flare",
+            () -> new RaidFlareItem(new Item.Properties().stacksTo(16), "ocean"));
+
+
+    public static final RegistryObject<Item> RUSTY_MEDAL = REGISTER.register("rusty_medal",
+            () -> new TooltipItem(new Item.Properties(),
+                    "item.scguns.rusty_medal.tooltip",
+                    "item.scguns.found_in_raids"));
+
+    public static final RegistryObject<Item> LABOR_TROPHY = REGISTER.register("labor_trophy",
+            () -> new TooltipItem(new Item.Properties(),
+                    "item.scguns.labor_trophy.tooltip",
+                    "item.scguns.found_in_raids"));
+    public static final RegistryObject<Item> GOLD_IDOL = REGISTER.register("gold_idol",
+            () -> new TooltipItem(new Item.Properties(),
+                    "item.scguns.gold_idol.tooltip",
+                    "item.scguns.found_in_raids"));
+    public static final RegistryObject<Item> SNAPPED_COGWHEEL = REGISTER.register("snapped_cogwheel",
+            () -> new TooltipItem(new Item.Properties(),
+                    "item.scguns.snapped_cogwheel.tooltip",
+                    "item.scguns.found_in_raids"));
+    public static final RegistryObject<Item> COG_HEART = REGISTER.register("cog_heart",
+            () -> new TooltipItem(new Item.Properties(),
+                    "item.scguns.cog_heart.tooltip",
+                    "item.scguns.found_in_raids"));
+    public static final RegistryObject<Item> SHULKER_CORE = REGISTER.register("shulker_core",
+            () -> new TooltipItem(new Item.Properties(),
+                    "item.scguns.shulker_core.tooltip",
+                    "item.scguns.shulker_core.tooltip_2"));
+    public static final RegistryObject<Item> CERIMONIAL_COD = REGISTER.register("ceremonial_cod",
+            () -> new TooltipItem(new Item.Properties(),
+                    "item.scguns.ceremonial_cod.tooltip",
+                    "item.scguns.found_in_raids"));
+    public static final RegistryObject<Item> SCULK_TOME = REGISTER.register("sculk_tome",
+            () -> new TooltipItem(new Item.Properties(),
+                    "item.scguns.sculk_tome.tooltip",
+                    "item.scguns.found_in_raids"));
+    public static final RegistryObject<Item> LEVIATHAN_TOOTH = REGISTER.register("leviathan_tooth",
+            () -> new TooltipItem(new Item.Properties(),
+                    "item.scguns.leviathan_tooth.tooltip",
+                    "item.scguns.found_in_raids"));
+
+    public static final RegistryObject<Item> BLUEPRINT_SCRAP = REGISTER.register("blueprint_scrap", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> ANTIQUE_BLUEPRINT = REGISTER.register("antique_blueprint", () -> new BlueprintItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> FRONTIER_BLUEPRINT = REGISTER.register("frontier_blueprint", () -> new BlueprintItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> COPPER_BLUEPRINT = REGISTER.register("copper_blueprint", () -> new BlueprintItem(new Item.Properties().stacksTo(1)));
@@ -1551,7 +1639,8 @@ public class ModItems {
     public static final RegistryObject<Item> SULFUR_CHUNK = REGISTER.register("sulfur_chunk", () -> new FuelItem(new Item.Properties(), 800));
     public static final RegistryObject<Item> COMPOSITE_FILTER = REGISTER.register("composite_filter", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> SULFUR_DUST = REGISTER.register("sulfur_dust", () -> new SulfurDustItem(new Item.Properties()));
-    public static final RegistryObject<Item> PHOSPHOR_DUST = REGISTER.register("phosphor_dust", () -> new Item(new Item.Properties()));
+    public static final RegistryObject<Item> BAT_GUANO = REGISTER.register("bat_guano", () -> new BatGuanoItem(new Item.Properties()));
+    public static final RegistryObject<Item> PHOSPHOR_DUST = REGISTER.register("phosphor_dust", () -> new PhosphorItem(new Item.Properties()));
     public static final RegistryObject<Item> BUCKSHOT = REGISTER.register("buckshot", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> FLECHETTE = REGISTER.register("flechette", () -> new Item(new Item.Properties()));
     public static final RegistryObject<Item> NEEDLE = REGISTER.register("needle", () -> new Item(new Item.Properties()));
@@ -1764,14 +1853,18 @@ public class ModItems {
     public static final RegistryObject<Item> SCAMP_PACKAGE = REGISTER.register("scamp_package", () -> new ScampPackageItem(new Item.Properties().stacksTo(1)));
     public static final RegistryObject<Item> COG_LOCATOR = REGISTER.register("cog_locator", () -> new CogLocatorItem(new Item.Properties().stacksTo(1).rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> THE_PACT = REGISTER.register("the_pact", () -> new ThePactItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+
+    public static final RegistryObject<Item> VICIOUS_ACID_BUCKET = REGISTER.register("vicious_acid_bucket",
+            () -> new BucketItem(ModFluids.VICIOUS_ACID_SOURCE,
+                    new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1)));
     // Mobs
     public static final RegistryObject<Item> COG_MINION_SPAWN_EGG = REGISTER.register("cog_minion_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.COG_MINION, 0x76501f, 0x7f8080, new Item.Properties()));
     public static final RegistryObject<Item> COG_KNIGHT_SPAWN_EGG = REGISTER.register("cog_knight_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.COG_KNIGHT, 0xf7cb6c, 0xbf8e55, new Item.Properties()));
     public static final RegistryObject<Item> TRAUMA_UNIT_SPAWN_EGG = REGISTER.register("trauma_unit_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.TRAUMA_UNIT, 0xf7cb6c, 0xF2ECEB, new Item.Properties()));
     public static final RegistryObject<Item> SKY_CARRIER_SPAWN_EGG = REGISTER.register("sky_carrier_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.SKY_CARRIER, 0xffeb8c, 0x4f4f4f, new Item.Properties()));
     public static final RegistryObject<Item> SUPPLY_SCAMP_SPAWN_EGG = REGISTER.register("supply_scamp_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.SUPPLY_SCAMP, 0xffeb8c, 0x9f9b93, new Item.Properties()));
-    public static final RegistryObject<Item> REDCOAT_SPAWN_EGG = REGISTER.register("redcoat_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.REDCOAT, 0xa02727, 0x74913a, new Item.Properties()));
     public static final RegistryObject<Item> DISSIDENT_SPAWN_EGG = REGISTER.register("dissident_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.DISSIDENT, 0x202428, 0xab6621, new Item.Properties()));
+    public static final RegistryObject<Item> VIVENTRUM_SPAWN_EGG = REGISTER.register("viventrum_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.VIVENTRUM, 0x9c9a9a, 0x1a1a1a, new Item.Properties()));
     public static final RegistryObject<Item> HIVE_SPAWN_EGG = REGISTER.register("hive_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.HIVE, 0x9c9a9a, 0x474545, new Item.Properties()));
     public static final RegistryObject<Item> SWARM_SPAWN_EGG = REGISTER.register("swarm_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.SWARM, 0x535050, 0x151515, new Item.Properties()));
     public static final RegistryObject<Item> HORNLIN_SPAWN_EGG = REGISTER.register("hornlin_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.HORNLIN, 0xa2593a, 0x9c3f69, new Item.Properties()));
@@ -1781,7 +1874,8 @@ public class ModItems {
     public static final RegistryObject<Item> SIGNAL_BEACON_SPAWN_EGG = REGISTER.register("signal_beacon_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.SIGNAL_BEACON, 0xf7cb6c, 0xED1127, new Item.Properties()));
     public static final RegistryObject<Item> SCAMP_TANK_SPAWN_EGG = REGISTER.register("scamp_tank_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.SCAMP_TANK, 0xffeb8c, 0x4f4f4f, new Item.Properties()));
     public static final RegistryObject<Item> SCAMPLER_SPAWN_EGG = REGISTER.register("scampler_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.SCAMPLER, 0xffeb8c, 0xa02727, new Item.Properties()));
-
+    public static final RegistryObject<Item> ADJUDICATOR_SPAWN_EGG = REGISTER.register("adjudicator_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.ADJUDICATOR, 0x202428, 0x1A5E69, new Item.Properties()));
+    public static final RegistryObject<Item> SUBJUGATOR_SPAWN_EGG = REGISTER.register("subjugator_spawn_egg", () -> new ForgeSpawnEggItem(ModEntities.SUBJUGATOR, 0x202428, 0x11514D, new Item.Properties()));
     public static void register(IEventBus eventBus) {
         REGISTER.register(eventBus);
     }

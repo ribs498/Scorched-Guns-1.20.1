@@ -1,6 +1,37 @@
 {
-	"parent": "minecraft:item/handheld",
-	"textures": {
-		"layer0": "scguns:item/stun_grenade"
-	}
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "0": "scguns:items/stun_grenade",
+    "particle": "scguns:item/stun_grenade"
+  },
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "scguns:item/stun_grenade_3d"
+  },
+  "perspectives": {
+    "firstperson_righthand": {
+      "parent": "scguns:item/stun_grenade_2d"
+    },
+    "firstperson_lefthand": {
+      "parent": "scguns:item/stun_grenade_2d"
+    },
+    "thirdperson_righthand": {
+      "parent": "scguns:item/stun_grenade_2d"
+    },
+    "thirdperson_lefthand": {
+      "parent": "scguns:item/stun_grenade_2d"
+    },
+    "fixed": {
+      "parent": "scguns:item/stun_grenade_2d"
+    },
+    "gui": {
+      "parent": "scguns:item/stun_grenade_2d"
+    },
+    "ground": {
+      "parent": "scguns:item/stun_grenade_2d"
+    },
+    "frame": {
+      "parent": "scguns:item/stun_grenade_2d"
+    }
+  }
 }

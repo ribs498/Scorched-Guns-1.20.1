@@ -40,9 +40,9 @@ public class S2CMessageMeleeAttack extends PlayMessage<S2CMessageMeleeAttack> {
         context.execute(() -> {
             LocalPlayer player = Minecraft.getInstance().player;
             if (player != null) {
-                if (message.heldItem.getItem() instanceof GunItem gunItem) {
-                    ClientMeleeAttackHandler.startMeleeAnimation(gunItem, message.heldItem);
-
+                ItemStack currentHeldItem = player.getMainHandItem();
+                if (currentHeldItem.getItem() instanceof GunItem gunItem) {
+                    ClientMeleeAttackHandler.startMeleeAnimation(gunItem, currentHeldItem);
                 }
             }
         });

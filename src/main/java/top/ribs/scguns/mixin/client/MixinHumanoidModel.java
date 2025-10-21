@@ -45,7 +45,6 @@ public abstract class MixinHumanoidModel {
         HumanoidArm mainArm = mob.getMainArm();
         boolean rightHanded = mainArm == HumanoidArm.RIGHT;
 
-        // Reset all arm rotations
         this.rightArm.xRot = 0;
         this.rightArm.yRot = 0;
         this.rightArm.zRot = 0;
@@ -53,7 +52,6 @@ public abstract class MixinHumanoidModel {
         this.leftArm.yRot = 0;
         this.leftArm.zRot = 0;
 
-        // Ensure arms are visible
         this.rightArm.visible = true;
         this.leftArm.visible = true;
 

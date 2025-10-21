@@ -39,6 +39,7 @@
     }
   },
   "projectile": {
+    "knockbackStrength": 1.5,
     "advantage": "scguns:illager",
     "damage": 15.0,
     "ejectsCasing": true,

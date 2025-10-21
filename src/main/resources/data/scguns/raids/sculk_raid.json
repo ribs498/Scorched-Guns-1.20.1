@@ -1,0 +1,217 @@
+{
+  "raid_id": "sculk",
+  "raid_level": 4,
+
+  "boss": {
+    "entity_type": "minecraft:vindicator",
+    "custom_name": "translation:raid.boss.scguns.sculk",
+    "fixed_health": 180.0,
+    "weapon": {
+      "item": "scguns:forlorn_hope",
+      "drop_chance": 0.35
+    },
+    "armor": [
+      {
+        "item": "minecraft:diamond_helmet",
+        "slot": "head",
+        "drop_chance": 0.25
+      },
+      {
+        "item": "minecraft:diamond_chestplate",
+        "slot": "chest",
+        "drop_chance": 0.25
+      },
+      {
+        "item": "minecraft:diamond_leggings",
+        "slot": "legs",
+        "drop_chance": 0.2
+      },
+      {
+        "item": "minecraft:diamond_boots",
+        "slot": "feet",
+        "drop_chance": 0.2
+      }
+    ],
+    "effects": [
+      {
+        "effect": "minecraft:regeneration",
+        "amplifier": 0,
+        "duration": -1,
+        "ambient": false,
+        "visible": false
+      }
+    ],
+    "ai_difficulty": 5,
+    "ai_type": "TACTICAL",
+    "special_loot_table": "scguns:raids/sculk_boss",
+    "mount": {
+      "entity_type": "minecraft:ravager",
+      "health_multiplier": 2.0,
+      "armor": [],
+      "effects": [
+        {
+          "effect": "minecraft:speed",
+          "amplifier": 1,
+          "duration": -1,
+          "ambient": true,
+          "visible": false
+        },
+        {
+          "effect": "minecraft:resistance",
+          "amplifier": 1,
+          "duration": -1,
+          "ambient": true,
+          "visible": false
+        }
+      ],
+      "drops_loot": false
+    }
+  },
+
+  "henchmen": {
+    "types": [
+      {
+        "entity_type": "minecraft:vindicator",
+        "weight": 4.0,
+        "health_multiplier": 1.5,
+        "weapons": [
+          "scguns:whispers",
+          "scguns:sculk_resonator",
+          "scguns:echoes_2",
+          "minecraft:iron_axe"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:diamond_helmet",
+            "slot": "head",
+            "chance": 0.6
+          },
+          {
+            "item": "minecraft:diamond_chestplate",
+            "slot": "chest",
+            "chance": 0.5
+          },
+          {
+            "item": "minecraft:diamond_leggings",
+            "slot": "legs",
+            "chance": 0.4
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 4,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "minecraft:pillager",
+        "weight": 3.5,
+        "fixed_health": 40.0,
+        "weapons": [
+          "scguns:whispers",
+          "scguns:echoes_2",
+          "scguns:sculk_resonator",
+          "minecraft:crossbow"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:chainmail_helmet",
+            "slot": "head",
+            "chance": 0.7
+          },
+          {
+            "item": "minecraft:chainmail_chestplate",
+            "slot": "chest",
+            "chance": 0.6
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 3,
+        "ai_type": "TACTICAL"
+      },
+      {
+        "entity_type": "minecraft:evoker",
+        "weight": 1.5,
+        "fixed_health": 50.0,
+        "weapons": [],
+        "armor": [
+          {
+            "item": "minecraft:diamond_helmet",
+            "slot": "head",
+            "chance": 0.8
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:resistance",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": true,
+            "visible": false
+          },
+          {
+            "effect": "minecraft:regeneration",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": true,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "COWARD"
+      },
+      {
+        "entity_type": "minecraft:witch",
+        "weight": 1.0,
+        "fixed_health": 45.0,
+        "weapons": [],
+        "armor": [],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          },
+          {
+            "effect": "minecraft:fire_resistance",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": true,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "COWARD"
+      }
+    ],
+    "spawn_interval_ticks": 300,
+    "max_alive": 14,
+    "spawn_radius": 20,
+    "spawn_attempts_per_wave": 3
+  },
+
+  "spawn_conditions": {
+    "min_players_nearby": 1,
+    "search_radius": 64,
+    "valid_dimensions": [
+      "minecraft:overworld"
+    ],
+    "announcement_message": "translation:raid.announcement.scguns.sculk"
+  }
+}

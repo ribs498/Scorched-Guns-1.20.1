@@ -28,7 +28,7 @@ public class ProjectileRenderer extends EntityRenderer<ProjectileEntity>
     @Override
     public void render(ProjectileEntity entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource renderTypeBuffer, int light)
     {
-        if(entity.getProjectile().isVisible() || entity.tickCount <= 1)
+        if(entity.getProjectile().isVisible() || entity.tickCount <= 2)
         {
             return;
         }
@@ -39,7 +39,7 @@ public class ProjectileRenderer extends EntityRenderer<ProjectileEntity>
         {
             poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
             poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-            Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(), ItemDisplayContext.GROUND, light, OverlayTexture.NO_OVERLAY, poseStack, renderTypeBuffer, entity.level(), 0);
+            Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(), ItemDisplayContext.NONE, light, OverlayTexture.NO_OVERLAY, poseStack, renderTypeBuffer, entity.level(), 0);
         }
         else
         {

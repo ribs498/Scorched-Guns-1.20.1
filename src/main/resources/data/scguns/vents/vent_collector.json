@@ -1,0 +1,21 @@
+{
+  "filters": {
+    "maxCharge": 64,
+    "consumptionChance": 0.5,
+    "processCooldown": 2,
+    "filterItems": [
+      {
+        "tag": "scguns:weak_filter",
+        "chargeAmount": 4
+      },
+      {
+        "item": "scguns:composite_filter",
+        "chargeAmount": 8
+      }
+    ]
+  },
+  "processing": {
+    "powerSpeedMultiplier": 0.35,
+    "pushCooldown": 5
+  }
+}

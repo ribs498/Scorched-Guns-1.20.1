@@ -12,14 +12,11 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.lwjgl.glfw.GLFW;
 import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animation.AnimationController;
 import top.ribs.scguns.Config;
-import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.client.KeyBinds;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.common.ReloadType;
@@ -29,7 +26,6 @@ import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.item.animated.AnimatedGunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.*;
-import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
 
 import java.util.Objects;
@@ -357,9 +353,16 @@ public class ReloadHandler {
                         tag.putBoolean("scguns:IsPlayingReloadStop", true);
                         PacketHandler.getPlayChannel().sendToServer(new C2SMessageReload(false));
                     } else {
+                        // FIX: Ensure complete cleanup when manually stopping reload
                         animatedGun.cleanupReloadState(tag);
                         ModSyncedDataKeys.RELOADING.setValue(player, false);
                         tag.remove("InCriticalReloadPhase");
+                        tag.remove("IsManualReload");
+                        tag.remove("InReloadLoop");
+                        tag.remove("PendingStopTransition");
+                        tag.remove("PendingStopTime");
+                        tag.remove("LastReloadStateChange");
+                        tag.remove("ManualReloadInitialized");
                         PacketHandler.getPlayChannel().sendToServer(new C2SMessageReload(false));
                     }
                 } else {

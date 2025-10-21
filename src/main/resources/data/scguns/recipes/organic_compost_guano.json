@@ -1,0 +1,33 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "category": "dirt",
+  "key": {
+    "M": {
+      "item": "minecraft:dirt"
+    },
+    "L": {
+      "item": "scguns:bat_guano"
+    },
+    "X": {
+      "item": "farmersdelight:straw"
+    },
+    "Q": {
+      "item": "minecraft:bone_meal"
+    }
+
+  },
+  "pattern": [
+    "MLL",
+    "XXQ",
+    "QQQ"
+  ],
+  "result": {
+    "item": "farmersdelight:organic_compost"
+  }
+}

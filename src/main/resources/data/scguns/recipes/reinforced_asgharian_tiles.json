@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "X": {
+      "item": "minecraft:iron_ingot"
+    },
+    "#": {
+      "tag": "scguns:asgharian_bricks"
+    }
+  },
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "result": {
+    "item": "scguns:reinforced_asgharian_tiles",
+    "count": 8
+  }
+}

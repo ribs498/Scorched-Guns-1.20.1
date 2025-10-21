@@ -17,6 +17,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import top.ribs.scguns.Config;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.init.ModTags;
@@ -29,7 +30,19 @@ public class SulfurGasCloud {
     private static final float INNER_ZONE_RATIO = 0.25f;
     private static final double PARTICLE_RENDER_DISTANCE = 256.0;
 
+    private static final int PERF_BASE_CLOUD_PARTICLES = 8;
+    private static final int PERF_BASE_DUST_PARTICLES = 5;
+    private static final int PERF_MAX_CLOUD_PARTICLES = 15;
+    private static final int PERF_MAX_DUST_PARTICLES = 10;
+
+    private static final int FULL_BASE_CLOUD_PARTICLES = 40;
+    private static final int FULL_BASE_DUST_PARTICLES = 25;
+
     public static void spawnCloudParticlesForced(ServerLevel serverLevel, Vec3 center, double radius, int particleCount, RandomSource random) {
+        if (Config.CLIENT.display.enablePerformanceSulfurCloud.get()) {
+            particleCount = Math.min(particleCount, PERF_MAX_CLOUD_PARTICLES);
+        }
+
         List<ServerPlayer> nearbyPlayers = getNearbyPlayers(serverLevel, center, PARTICLE_RENDER_DISTANCE);
 
         for (int i = 0; i < particleCount; i++) {
@@ -54,6 +67,7 @@ public class SulfurGasCloud {
             }
         }
     }
+
     public static void destroyNatureInArea(Level level, Vec3 center, double radius, RandomSource random) {
         if (level.isClientSide) return;
 
@@ -85,6 +99,7 @@ public class SulfurGasCloud {
             }
         }
     }
+
     private static boolean shouldDestroyBlock(BlockState blockState) {
         return blockState.is(net.minecraft.tags.BlockTags.FLOWERS) ||
                 blockState.is(net.minecraft.tags.BlockTags.CROPS) ||
@@ -109,64 +124,7 @@ public class SulfurGasCloud {
                 blockState.is(Blocks.KELP) ||
                 blockState.is(Blocks.KELP_PLANT);
     }
-    public static void placeSulfurLayers(Level level, Vec3 center, double radius, RandomSource random) {
-        if (level.isClientSide) return;
 
-        if (random.nextInt(100) > 65) return;
-
-        BlockPos centerPos = BlockPos.containing(center);
-        int blockRadius = (int) Math.ceil(radius);
-
-        List<BlockPos> validPositions = new java.util.ArrayList<>();
-
-        for (BlockPos checkPos : BlockPos.betweenClosed(
-                centerPos.offset(-blockRadius, -1, -blockRadius),
-                centerPos.offset(blockRadius, 1, blockRadius))) {
-
-            if (center.distanceTo(Vec3.atCenterOf(checkPos)) <= radius) {
-                if (canPlaceSulfurLayer(level, checkPos)) {
-                    validPositions.add(checkPos.immutable());
-                }
-            }
-        }
-        if (!validPositions.isEmpty()) {
-            int placeCount = Math.min(1 + random.nextInt(2), validPositions.size());
-            for (int i = 0; i < placeCount; i++) {
-                BlockPos posToPlace = validPositions.get(random.nextInt(validPositions.size()));
-                placeSulfurLayer(level, posToPlace);
-                validPositions.remove(posToPlace);
-            }
-        }
-    }
-    private static boolean canPlaceSulfurLayer(Level level, BlockPos pos) {
-        BlockState currentState = level.getBlockState(pos);
-        BlockState belowState = level.getBlockState(pos.below());
-        if (currentState.isAir()) {
-            return belowState.isFaceSturdy(level, pos.below(), net.minecraft.core.Direction.UP);
-        } else if (currentState.getBlock() instanceof top.ribs.scguns.block.SulfurLayerBlock) {
-            int currentLayers = currentState.getValue(net.minecraft.world.level.block.SnowLayerBlock.LAYERS);
-            return currentLayers < 8;
-        }
-
-        return false;
-    }
-    private static void placeSulfurLayer(Level level, BlockPos pos) {
-        BlockState currentState = level.getBlockState(pos);
-
-        if (currentState.getBlock() instanceof top.ribs.scguns.block.SulfurLayerBlock) {
-            int currentLayers = currentState.getValue(net.minecraft.world.level.block.SnowLayerBlock.LAYERS);
-            if (currentLayers < 8) {
-                level.setBlock(pos, currentState.setValue(
-                        net.minecraft.world.level.block.SnowLayerBlock.LAYERS, currentLayers + 1), 3);
-            }
-        } else if (currentState.isAir()) {
-            BlockState sulfurLayer = top.ribs.scguns.init.ModBlocks.SULFUR_LAYER.get()
-                    .defaultBlockState()
-                    .setValue(net.minecraft.world.level.block.SnowLayerBlock.LAYERS, 1);
-            level.setBlock(pos, sulfurLayer, 3);
-        }
-
-    }
     private static void destroyBlock(Level level, BlockPos pos) {
         level.getBlockState(pos);
         BlockState belowState = level.getBlockState(pos.below());
@@ -175,7 +133,12 @@ public class SulfurGasCloud {
         }
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
     }
+
     public static void spawnDustParticlesForced(ServerLevel serverLevel, Vec3 center, double radius, int particleCount, RandomSource random) {
+        if (Config.CLIENT.display.enablePerformanceSulfurCloud.get()) {
+            particleCount = Math.min(particleCount, PERF_MAX_DUST_PARTICLES);
+        }
+
         List<ServerPlayer> nearbyPlayers = getNearbyPlayers(serverLevel, center, PARTICLE_RENDER_DISTANCE);
 
         for (int i = 0; i < particleCount; i++) {
@@ -248,6 +211,31 @@ public class SulfurGasCloud {
         }
     }
 
+    public static boolean isInGasEffectArea(Level level, Vec3 position, int checkRadius) {
+        BlockPos centerPos = BlockPos.containing(position);
+
+        for (BlockPos checkPos : BlockPos.betweenClosed(
+                centerPos.offset(-checkRadius, -checkRadius, -checkRadius),
+                centerPos.offset(checkRadius, checkRadius, checkRadius))) {
+
+            BlockState state = level.getBlockState(checkPos);
+            if (state.getBlock() instanceof top.ribs.scguns.block.SulfurVentBlock) {
+                boolean isActive = state.getValue(top.ribs.scguns.block.VentBlock.ACTIVE);
+                boolean isBaseVent = state.getValue(top.ribs.scguns.block.VentBlock.VENT_TYPE) ==
+                        top.ribs.scguns.block.VentBlock.VentType.BASE;
+
+                if (isActive && isBaseVent) {
+                    Vec3 ventPos = Vec3.atCenterOf(checkPos);
+                    double distanceSquared = position.distanceToSqr(ventPos);
+                    if (distanceSquared <= top.ribs.scguns.block.SulfurVentBlock.EFFECT_RADIUS_SQUARED) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     private static void damageGasMask(LivingEntity entity, ItemStack helmet) {
         String lastDamageKey = "LastHelmetDamageTick";
         long lastDamage = entity.getPersistentData().getLong(lastDamageKey);
@@ -279,17 +267,24 @@ public class SulfurGasCloud {
         if (level.isClientSide) return;
 
         ServerLevel serverLevel = (ServerLevel) level;
+        int baseCloudParticles;
+        int baseDustParticles;
 
-        int baseCloudParticles = 40;
-        int baseDustParticles = 25;
+        if (Config.CLIENT.display.enablePerformanceSulfurCloud.get()) {
+            baseCloudParticles = PERF_BASE_CLOUD_PARTICLES;
+            baseDustParticles = PERF_BASE_DUST_PARTICLES;
+        } else {
+            baseCloudParticles = FULL_BASE_CLOUD_PARTICLES;
+            baseDustParticles = FULL_BASE_DUST_PARTICLES;
+        }
 
         int cloudParticles = Math.round(baseCloudParticles * intensity);
         int dustParticles = Math.round(baseDustParticles * intensity);
+
         spawnCloudParticlesForced(serverLevel, center, radius, cloudParticles, random);
         spawnDustParticlesForced(serverLevel, center, radius, dustParticles, random);
     }
 
-    // Fire detection and explosion methods (moved from SulfurVentBlock)
     public static boolean isFireInArea(Level level, Vec3 center, double radius) {
         BlockPos centerPos = BlockPos.containing(center);
         int blockRadius = (int) Math.ceil(radius);
@@ -347,6 +342,7 @@ public class SulfurGasCloud {
             }
         }
     }
+
     public static boolean isTemporaryLightInArea(Level level, Vec3 center, double radius) {
         BlockPos centerPos = BlockPos.containing(center);
         int blockRadius = (int) Math.ceil(radius);

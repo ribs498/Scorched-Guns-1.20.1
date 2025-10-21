@@ -193,6 +193,14 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.ADRIEN_LEGGINGS.get());
                         pOutput.accept(ModItems.ADRIEN_BOOTS.get());
                         pOutput.accept(ModItems.BRASS_MASK.get());
+                        pOutput.accept(ModItems.SCRAP_HELMET.get());
+                        pOutput.accept(ModItems.SCRAP_CHESTPLATE.get());
+                        pOutput.accept(ModItems.SCRAP_LEGGINGS.get());
+                        pOutput.accept(ModItems.SCRAP_BOOTS.get());
+                        pOutput.accept(ModItems.REDCOAT_HAT.get());
+                        pOutput.accept(ModItems.REDCOAT_COAT.get());
+                        pOutput.accept(ModItems.REDCOAT_PANTS.get());
+                        pOutput.accept(ModItems.REDCOAT_BOOTS.get());
                         pOutput.accept(ModItems.COG_MACE.get());
                         pOutput.accept(ModItems.COG_KNIGHT_HELMET.get());
                         pOutput.accept(ModItems.COG_KNIGHT_CHESTPLATE.get());
@@ -214,6 +222,9 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.REPAIR_KIT.get());
                         pOutput.accept(ModItems.COMPOSITE_FILTER.get());
                         pOutput.accept(ModItems.RANGE_FINDER.get());
+
+
+
 
                         pOutput.accept(ModItems.EXO_SUIT_CORE.get());
                         pOutput.accept(ModItems.ADVANCED_EXO_SUIT_CORE.get());
@@ -241,6 +252,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.RAW_PHOSPHOR.get());
                         pOutput.accept(ModItems.PHOSPHOR_DUST.get());
                         pOutput.accept(ModItems.NITER_DUST.get());
+                        pOutput.accept(ModItems.BAT_GUANO.get());
                         pOutput.accept(ModItems.GUNPOWDER_DUST.get());
                         pOutput.accept(ModItems.AUREOUS_SLAG.get());
                         pOutput.accept(ModItems.SHEOL.get());
@@ -292,6 +304,31 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.BULLET_MOLD.get());
                         pOutput.accept(ModItems.GUN_PARTS_MOLD.get());
                         pOutput.accept(ModItems.DISC_MOLD.get());
+                        pOutput.accept(ModItems.WHITE_FLAG.get());
+
+                        pOutput.accept(ModItems.FLARE_PISTOL.get());
+                        pOutput.accept(ModItems.ANTIQUE_FLARE.get());
+                        pOutput.accept(ModItems.FRONTIER_FLARE.get());
+                        pOutput.accept(ModItems.COPPER_FLARE.get());
+                        pOutput.accept(ModItems.IRON_FLARE.get());
+                        pOutput.accept(ModItems.WRECKER_FLARE.get());
+                        pOutput.accept(ModItems.OCEAN_FLARE.get());
+                        pOutput.accept(ModItems.GOLD_FLARE.get());
+                        pOutput.accept(ModItems.SCULK_FLARE.get());
+                        pOutput.accept(ModItems.TREATED_BRASS_FLARE.get());
+                        pOutput.accept(ModItems.DIAMOND_STEEL_FLARE.get());
+
+                        pOutput.accept(ModItems.BLUEPRINT_SCRAP.get());
+                        pOutput.accept(ModItems.RUSTY_MEDAL.get());
+                        pOutput.accept(ModItems.LABOR_TROPHY.get());
+                        pOutput.accept(ModItems.SNAPPED_COGWHEEL.get());
+                        pOutput.accept(ModItems.LEVIATHAN_TOOTH.get());
+                        pOutput.accept(ModItems.CERIMONIAL_COD.get());
+                        pOutput.accept(ModItems.COG_HEART.get());
+                        pOutput.accept(ModItems.GOLD_IDOL.get());
+                        pOutput.accept(ModItems.SCULK_TOME.get());
+                        pOutput.accept(ModItems.SHULKER_CORE.get());
+
                         pOutput.accept(ModItems.ANTIQUE_BLUEPRINT.get());
                         pOutput.accept(ModItems.FRONTIER_BLUEPRINT.get());
                         pOutput.accept(ModItems.COPPER_BLUEPRINT.get());
@@ -502,10 +539,19 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.ASGHARIAN_BRICK_WALL.get());
                         pOutput.accept(ModBlocks.ASGHARIAN_PILLAR.get());
                         pOutput.accept(ModBlocks.CRACKED_ASGHARIAN_BRICKS.get());
+                        pOutput.accept(ModBlocks.MOSSY_ASGHARIAN_BRICKS.get());
+                        pOutput.accept(ModBlocks.CHISELED_ASGHARIAN_BRICKS.get());
+                        pOutput.accept(ModBlocks.POLISHED_ASGHARIAN_PANEL.get());
+                        pOutput.accept(ModBlocks.ASGHARIAN_TILES.get());
+                        pOutput.accept(ModBlocks.CRACKED_ASGHARIAN_TILES.get());
+                        pOutput.accept(ModBlocks.MOSSY_ASGHARIAN_TILES.get());
+                        pOutput.accept(ModBlocks.REINFORCED_ASGHARIAN_TILES.get());
+
                         pOutput.accept(ModBlocks.TREATED_BRASS_PLATES.get());
                         pOutput.accept(ModBlocks.CUT_TREATED_BRASS.get());
                         pOutput.accept(ModBlocks.TREATED_IRON_GRATE.get());
                         pOutput.accept(ModBlocks.SANDBAG.get());
+                        pOutput.accept(ModBlocks.GUANO_CANDLE.get());
                         pOutput.accept(ModBlocks.SUPPLY_CRATE.get());
                         pOutput.accept(ModBlocks.POWDER_KEG.get());
                         pOutput.accept(ModBlocks.NITRO_KEG.get());
@@ -547,7 +593,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.MOB_TRAP.get());
                         pOutput.accept(ModBlocks.FELIX_MEMORIAL.get());
 
-
+                        pOutput.accept(ModItems.VICIOUS_ACID_BUCKET.get());
 
                         pOutput.accept(ModItems.COG_KNIGHT_SPAWN_EGG.get());
                         pOutput.accept(ModItems.TRAUMA_UNIT_SPAWN_EGG.get());
@@ -555,7 +601,9 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.SKY_CARRIER_SPAWN_EGG.get());
                         pOutput.accept(ModItems.SUPPLY_SCAMP_SPAWN_EGG.get());
                         pOutput.accept(ModItems.DISSIDENT_SPAWN_EGG.get());
-                        pOutput.accept(ModItems.REDCOAT_SPAWN_EGG.get());
+                        pOutput.accept(ModItems.ADJUDICATOR_SPAWN_EGG.get());
+                        pOutput.accept(ModItems.SUBJUGATOR_SPAWN_EGG.get());
+                       // pOutput.accept(ModItems.VIVENTRUM_SPAWN_EGG.get());
                         pOutput.accept(ModItems.BLUNDERER_SPAWN_EGG.get());
                         pOutput.accept(ModItems.HORNLIN_SPAWN_EGG.get());
                         pOutput.accept(ModItems.ZOMBIFIED_HORNLIN_SPAWN_EGG.get());
@@ -564,6 +612,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.SIGNAL_BEACON_SPAWN_EGG.get());
                         pOutput.accept(ModItems.SCAMP_TANK_SPAWN_EGG.get());
                         pOutput.accept(ModItems.SCAMPLER_SPAWN_EGG.get());
+
                        // pOutput.accept(ModItems.THE_MERCHANT_SPAWN_EGG.get());
                     })
                     .build());

@@ -49,6 +49,7 @@
   "projectile": {
     "advantage": "scguns:illager",
     "damage": 10.5,
+    "armorPen": 1.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:standard_copper_round",

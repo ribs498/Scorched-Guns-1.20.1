@@ -40,6 +40,7 @@ public class ParticleFactoryRegistry
         event.registerSpriteSet(ModParticleTypes.TURRET_MUZZLE_FLASH.get(), TurretMuzzleFlashParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.LASER.get(), LaserParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.SMALL_LASER.get(), SmallLaserParticle.Provider::new);
+        event.registerSpriteSet(ModParticleTypes.ACID_BUBBLE.get(), AcidBubbleParticle.Provider::new);
 
         event.registerSpriteSet(ModParticleTypes.PLASMA_EXPLOSION.get(), PlasmaExplosionParticle.Provider::new);
         event.registerSpriteSet(ModParticleTypes.ROCKET_EXPLOSION.get(), RocketExplosionParticle.Provider::new);

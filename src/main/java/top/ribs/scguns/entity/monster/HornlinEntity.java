@@ -97,7 +97,6 @@ public class HornlinEntity extends Monster implements RangedAttackMob, IGoldCons
         super.tick();
 
         if (!this.level().isClientSide) {
-            // Decrement cooldowns
             if (this.goldEatingCooldown > 0) {
                 this.goldEatingCooldown--;
             }
@@ -205,7 +204,16 @@ public class HornlinEntity extends Monster implements RangedAttackMob, IGoldCons
     }
 
     public boolean isConverting() {
-        return this.level().dimension() == Level.OVERWORLD && !this.isNoAi();
+        if (this.level().dimension() != Level.OVERWORLD || this.isNoAi()) {
+            return false;
+        }
+
+        if (this.getTags().contains("MobGunner")) {
+            return false;
+        }
+
+        ItemStack mainHandItem = this.getMainHandItem();
+        return !(mainHandItem.getItem() instanceof top.ribs.scguns.item.GunItem);
     }
 
     private void convertToZombifiedHornlin() {

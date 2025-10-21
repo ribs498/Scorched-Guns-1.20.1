@@ -26,7 +26,7 @@ import net.minecraft.world.level.Level;
 
 public class RocketEntity extends ProjectileEntity
 {
-    private static final float EXPLOSION_RADIUS = 5.0f;
+    private static final float EXPLOSION_RADIUS = 7.0f;
     private static final float SHIELD_DISABLE_CHANCE = 1.0f;
 
     public RocketEntity(EntityType<? extends ProjectileEntity> entityType, Level worldIn)

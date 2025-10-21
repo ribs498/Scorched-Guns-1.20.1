@@ -8,7 +8,6 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.world.entity.Entity;
 import top.ribs.scguns.entity.animations.ModAnimationDefinitions;
-import top.ribs.scguns.entity.monster.RedcoatEntity;
 import top.ribs.scguns.entity.monster.SkyCarrierEntity;
 
 public class SkyCarrierModel<T extends Entity> extends HierarchicalModel<T> {

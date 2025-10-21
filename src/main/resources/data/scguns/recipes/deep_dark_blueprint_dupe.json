@@ -3,10 +3,10 @@
   "category": "equipment",
   "key": {
     "H": {
-      "item": "minecraft:echo_shard"
+      "item": "scguns:blueprint_scrap"
     },
     "Q": {
-      "item": "scguns:deep_dark_blueprint"
+      "item": "scguns:sculk_tome"
     },
     "Z": {
       "item": "minecraft:paper"

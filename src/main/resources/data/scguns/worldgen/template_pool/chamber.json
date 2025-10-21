@@ -113,6 +113,15 @@
     {
       "weight": 6,
       "element": {
+        "location": "scguns:chambers/chamber_corner_2",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 6,
+      "element": {
         "location": "scguns:chambers/chamber_tower",
         "processors": "scguns:generic",
         "projection": "rigid",

@@ -1,6 +1,7 @@
 package top.ribs.scguns.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
@@ -12,7 +13,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import top.ribs.scguns.block.SulfurLayerBlock;
 import top.ribs.scguns.init.ModBlocks;
 
 public class SulfurDustItem extends Item {
@@ -28,14 +28,16 @@ public class SulfurDustItem extends Item {
         ItemStack itemstack = context.getItemInHand();
 
         BlockState blockstate = world.getBlockState(blockpos);
+
         if (blockstate.getBlock() instanceof BonemealableBlock) {
-            if (applyCoinFlipEffect(itemstack, world, blockpos, player)) {
+            if (applyVolatileFertilizer(itemstack, world, blockpos, player)) {
                 if (!world.isClientSide) {
                     world.levelEvent(1505, blockpos, 0);
                 }
                 return InteractionResult.sidedSuccess(world.isClientSide);
             }
         }
+
         if (blockstate.is(ModBlocks.SULFUR_LAYER.get())) {
             int i = blockstate.getValue(SnowLayerBlock.LAYERS);
             if (i < 8) {
@@ -46,8 +48,10 @@ public class SulfurDustItem extends Item {
                 return InteractionResult.SUCCESS;
             }
         }
+
         BlockPos blockposAbove = blockpos.above();
-        if (world.getBlockState(blockposAbove).isAir()) {
+        BlockState stateAbove = world.getBlockState(blockposAbove);
+        if (stateAbove.isAir() && blockstate.isFaceSturdy(world, blockpos, Direction.UP)) {
             BlockState newState = ModBlocks.SULFUR_LAYER.get().defaultBlockState();
             world.setBlock(blockposAbove, newState, 2);
             if (player == null || !player.getAbilities().instabuild) {
@@ -59,27 +63,36 @@ public class SulfurDustItem extends Item {
         return InteractionResult.FAIL;
     }
 
-    public static boolean applyCoinFlipEffect(ItemStack stack, Level world, BlockPos pos, Player player) {
+    public static boolean applyVolatileFertilizer(ItemStack stack, Level world, BlockPos pos, Player player) {
         BlockState blockstate = world.getBlockState(pos);
         if (blockstate.getBlock() instanceof BonemealableBlock bonemealableblock) {
             if (bonemealableblock.isValidBonemealTarget(world, pos, blockstate, world.isClientSide)) {
-                if (world instanceof ServerLevel) {
+                if (world instanceof ServerLevel serverLevel) {
                     RandomSource random = world.getRandom();
 
                     if (random.nextBoolean()) {
-                        if (bonemealableblock.isBonemealSuccess(world, random, pos, blockstate)) {
-                            bonemealableblock.performBonemeal((ServerLevel) world, random, pos, blockstate);
-                            if (random.nextBoolean()) {
-                                BlockState newState = world.getBlockState(pos);
-                                if (newState.getBlock() instanceof BonemealableBlock newBonemealable &&
-                                        newBonemealable.isBonemealSuccess(world, random, pos, newState)) {
-                                    newBonemealable.performBonemeal((ServerLevel) world, random, pos, newState);
+                        int stages = 3 + random.nextInt(2);
+                        for (int i = 0; i < stages; i++) {
+                            BlockState currentState = world.getBlockState(pos);
+                            if (currentState.getBlock() instanceof BonemealableBlock currentBonemeal) {
+                                if (currentBonemeal.isValidBonemealTarget(world, pos, currentState, false)) {
+                                    if (currentBonemeal.isBonemealSuccess(world, random, pos, currentState)) {
+                                        currentBonemeal.performBonemeal(serverLevel, random, pos, currentState);
+
+                                        if (i > 0) {
+                                            world.levelEvent(1505, pos, 0);
+                                        }
+                                    }
+                                } else {
+                                    break;
                                 }
                             }
                         }
                     } else {
-                        world.levelEvent(2001, pos, 0);
+                        world.destroyBlock(pos, true);
+                        world.levelEvent(2001, pos, net.minecraft.world.level.block.Block.getId(blockstate));
                     }
+
                     stack.shrink(1);
                 }
                 return true;

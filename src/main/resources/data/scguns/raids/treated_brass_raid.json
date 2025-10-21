@@ -1,0 +1,239 @@
+{
+  "raid_id": "treated_brass",
+  "raid_level": 4,
+
+  "boss": {
+    "entity_type": "minecraft:husk",
+    "custom_name": "translation:raid.boss.scguns.treated_brass",
+    "fixed_health": 250.0,
+    "weapon": {
+      "item": "scguns:howler_conversion",
+      "drop_chance": 0.35
+    },
+    "armor": [
+      {
+        "item": "scguns:treated_brass_helmet",
+        "slot": "head",
+        "drop_chance": 0.3
+      },
+      {
+        "item": "scguns:treated_brass_chestplate",
+        "slot": "chest",
+        "drop_chance": 0.25
+      },
+      {
+        "item": "scguns:treated_brass_leggings",
+        "slot": "legs",
+        "drop_chance": 0.2
+      },
+      {
+        "item": "scguns:treated_brass_boots",
+        "slot": "feet",
+        "drop_chance": 0.2
+      }
+    ],
+    "effects": [
+      {
+        "effect": "minecraft:regeneration",
+        "amplifier": 1,
+        "duration": -1,
+        "ambient": false,
+        "visible": false
+      },
+      {
+        "effect": "minecraft:glowing",
+        "amplifier": 0,
+        "duration": -1,
+        "ambient": true,
+        "visible": true
+      },
+      {
+        "effect": "minecraft:speed",
+        "amplifier": 0,
+        "duration": -1,
+        "ambient": true,
+        "visible": false
+      }
+    ],
+    "ai_difficulty": 5,
+    "ai_type": "TACTICAL",
+    "special_loot_table": "scguns:raids/treated_brass_boss"
+  },
+
+  "henchmen": {
+    "types": [
+      {
+        "entity_type": "scguns:cog_minion",
+        "weight": 5.0,
+        "health_multiplier": 1.4,
+        "weapons": [
+          "scguns:m22_waltz",
+          "scguns:cogloader",
+            "minecraft:iron_axe",
+            "minecraft:diamond_pickaxe"
+        ],
+        "armor": [
+          {
+            "item": "scguns:treated_brass_helmet",
+            "slot": "head",
+            "chance": 0.7
+          },
+          {
+            "item": "scguns:treated_brass_chestplate",
+            "slot": "chest",
+            "chance": 0.5
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 3,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "minecraft:husk",
+        "weight": 4.0,
+        "health_multiplier": 1.5,
+        "weapons": [
+          "scguns:grandle_og",
+          "scguns:jackhammer",
+          "scguns:cog_mace",
+          "minecraft:iron_axe"
+        ],
+        "armor": [
+          {
+            "item": "scguns:treated_brass_helmet",
+            "slot": "head",
+            "chance": 0.8
+          },
+          {
+            "item": "scguns:treated_brass_chestplate",
+            "slot": "chest",
+            "chance": 0.6
+          },
+          {
+            "item": "scguns:treated_brass_leggings",
+            "slot": "legs",
+            "chance": 0.4
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 4,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scguns:cog_knight",
+        "weight": 2.0,
+        "fixed_health": 55.0,
+        "weapons": [
+          "scguns:grandle",
+          "scguns:jackhammer",
+          "scguns:cog_mace",
+          "minecraft:iron_axe"
+        ],
+        "armor": [],
+        "effects": [
+          {
+            "effect": "minecraft:resistance",
+            "amplifier": 1,
+            "duration": -1,
+            "ambient": true,
+            "visible": false
+          },
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": true,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 3,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scguns:sky_carrier",
+        "weight": 1.0,
+        "fixed_health": 60.0,
+        "weapons": [],
+        "armor": [],
+        "effects": [
+          {
+            "effect": "minecraft:resistance",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": true,
+            "visible": false
+          },
+          {
+            "effect": "minecraft:regeneration",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": true,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 3,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scguns:trauma_unit",
+        "weight": 0.8,
+        "fixed_health": 55.0,
+        "weapons": [],
+        "armor": [
+          {
+            "item": "scguns:treated_brass_helmet",
+            "slot": "head",
+            "chance": 0.5
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 1,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          },
+          {
+            "effect": "minecraft:regeneration",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": true,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "COWARD"
+      }
+    ],
+    "spawn_interval_ticks": 300,
+    "max_alive": 15,
+    "spawn_radius": 22,
+    "spawn_attempts_per_wave": 4
+  },
+
+  "spawn_conditions": {
+    "min_players_nearby": 1,
+    "search_radius": 64,
+    "valid_dimensions": [
+      "minecraft:overworld"
+    ],
+    "announcement_message": "translation:raid.announcement.scguns.treated_brass"
+  }
+}

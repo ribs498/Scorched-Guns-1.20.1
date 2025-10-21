@@ -106,11 +106,10 @@ public class DissidentModel<T extends Entity> extends HierarchicalModel<T> {
 			this.animate(dissisdent.idleAnimationState, ModAnimationDefinitions.DISSIDENT_IDLE, ageInTicks, 1f);
 			this.animate(dissisdent.attackAnimationState, ModAnimationDefinitions.DISSIDENT_ATTACK, ageInTicks, 1f);
 
-			// Add head rotation logic
-			float clampedYaw = Mth.clamp(netHeadYaw, -45.0F, 45.0F); // Limit yaw to +/- 45 degrees
-			float clampedPitch = Mth.clamp(headPitch, -20.0F, 20.0F); // Limit pitch to +/- 20 degrees
+			float clampedYaw = Mth.clamp(netHeadYaw, -45.0F, 45.0F);
+			float clampedPitch = Mth.clamp(headPitch, -20.0F, 20.0F);
 
-			this.head.yRot = clampedYaw * ((float)Math.PI / 180F); // Convert degrees to radians and apply
+			this.head.yRot = clampedYaw * ((float)Math.PI / 180F);
 			this.head.xRot = clampedPitch * ((float)Math.PI / 180F);
 		}
 	}

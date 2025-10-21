@@ -1,0 +1,59 @@
+{
+  "raid_id": "diamond_steel",
+  "burst_delay": 20,
+  "duration": 60,
+  "trail_particles": [
+    {
+      "particle": "minecraft:electric_spark",
+      "count": 4,
+      "spread": 0.3,
+      "speed": 0.15,
+      "color": "#00BFFF"
+    },
+    {
+      "particle": "minecraft:glow",
+      "count": 3,
+      "spread": 0.2,
+      "speed": 0.1,
+      "color": "#4169E1"
+    }
+  ],
+  "burst_particles": [
+    {
+      "particle": "minecraft:electric_spark",
+      "count": 250,
+      "spread": 0.4,
+      "speed": 0.5,
+      "color": "#00CED1"
+    },
+    {
+      "particle": "minecraft:enchant",
+      "count": 100,
+      "spread": 0.6,
+      "speed": 0.4,
+      "color": "#4169E1"
+    },
+    {
+      "particle": "minecraft:glow",
+      "count": 60,
+      "spread": 0.5,
+      "speed": 0.35,
+      "color": "#1E90FF"
+    },
+    {
+      "particle": "minecraft:end_rod",
+      "count": 40,
+      "spread": 0.4,
+      "speed": 0.3,
+      "color": "#00BFFF"
+    }
+  ],
+  "pattern": {
+    "type": "ring",
+    "repetitions": 6,
+    "scale": 6.0
+  },
+  "burst_sound": "minecraft:block.beacon.activate",
+  "burst_sound_volume": 2.0,
+  "burst_sound_pitch": 1.3
+}

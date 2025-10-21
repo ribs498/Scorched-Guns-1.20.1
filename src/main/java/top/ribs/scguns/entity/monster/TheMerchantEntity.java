@@ -58,7 +58,7 @@ public class TheMerchantEntity extends PathfinderMob implements Merchant {
 
     private boolean summonedByPact = false;
 
-    private static final int DEFAULT_DESPAWN_TIME = 500;
+    private static final int DEFAULT_DESPAWN_TIME = 5000;
     private static final int MAX_DAMAGE_BEFORE_VANISH = 3;
     private static final Logger LOGGER = LogManager.getLogger(TheMerchantEntity.class);
     private int teleportCooldown = 0;

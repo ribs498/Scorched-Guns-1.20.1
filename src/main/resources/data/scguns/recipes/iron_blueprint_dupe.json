@@ -3,10 +3,10 @@
   "category": "equipment",
   "key": {
     "H": {
-      "item": "minecraft:iron_ingot"
+      "item": "scguns:blueprint_scrap"
     },
     "Q": {
-      "item": "scguns:iron_blueprint"
+      "item": "scguns:labor_trophy"
     },
     "Z": {
       "item": "minecraft:paper"

@@ -3,10 +3,10 @@
   "category": "equipment",
   "key": {
     "H": {
-      "item": "scguns:diamond_steel_ingot"
+      "item": "scguns:blueprint_scrap"
     },
     "Q": {
-      "item": "scguns:diamond_steel_blueprint"
+      "item": "scguns:ceremonial_cod"
     },
     "Z": {
       "item": "minecraft:paper"

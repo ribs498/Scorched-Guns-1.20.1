@@ -61,7 +61,7 @@ public class ModEvents {
             // Level 2 Trades
             trades.get(2).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 25),
-                    new ItemStack(ModItems.COPPER_BLUEPRINT.get(), 1),
+                    new ItemStack(ModItems.COPPER_FLARE.get(), 1),
                     2, 12, 0.05f));
 
             // Level 3 Trades
@@ -123,7 +123,7 @@ public class ModEvents {
                     1, 25, 0.05f));
             trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 25),
-                    new ItemStack(ModItems.IRON_BLUEPRINT.get(), 1),
+                    new ItemStack(ModItems.IRON_FLARE.get(), 1),
                     1, 30, 0.05f));
             trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(ModItems.NITRO_POWDER.get(), 1),
@@ -131,7 +131,7 @@ public class ModEvents {
                     8, 25, 0.05f));
             trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(ModItems.ANCIENT_BRASS.get(), 32),
-                    new ItemStack(ModItems.WRECKER_BLUEPRINT.get(), 1),
+                    new ItemStack(ModItems.WRECKER_FLARE.get(), 1),
                     8, 25, 0.05f));
         }
     }

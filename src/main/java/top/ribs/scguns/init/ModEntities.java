@@ -82,15 +82,18 @@ public class ModEntities
     public static final RegistryObject<EntityType<SkyCarrierEntity>> SKY_CARRIER = REGISTER.register("sky_carrier", () -> EntityType.Builder.of(SkyCarrierEntity::new, MobCategory.MONSTER).sized(1.4F, 1.7F).build("sky_carrier"));
     public static final RegistryObject<EntityType<HiveEntity>> HIVE = REGISTER.register("hive", () -> EntityType.Builder.of(HiveEntity::new, MobCategory.MONSTER).sized(0.8F, 2.0F).build("hive"));
     public static final RegistryObject<EntityType<SwarmEntity>> SWARM = REGISTER.register("swarm", () -> EntityType.Builder.of(SwarmEntity::new, MobCategory.MONSTER).sized(0.8F, 2.0F).build("swarm"));
-    public static final RegistryObject<EntityType<RedcoatEntity>> REDCOAT = REGISTER.register("redcoat", () -> EntityType.Builder.of(RedcoatEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F).build("redcoat"));
     public static final RegistryObject<EntityType<SupplyScampEntity>> SUPPLY_SCAMP = REGISTER.register("supply_scamp", () -> EntityType.Builder.of(SupplyScampEntity::new, MobCategory.CREATURE).sized(1.0F, 1.3F).build("supply_scamp"));
     public static final RegistryObject<EntityType<DissidentEntity>> DISSIDENT = REGISTER.register("dissident", () -> EntityType.Builder.of(DissidentEntity::new, MobCategory.MONSTER).sized(1.4F, 1.7F).build("dissident"));
+    public static final RegistryObject<EntityType<ViventrumEntity>> VIVENTRUM = REGISTER.register("viventrum", () -> EntityType.Builder.of(ViventrumEntity::new, MobCategory.MONSTER).sized(0.6F, 1.8F).build("viventrum"));
     public static final RegistryObject<EntityType<HornlinEntity>> HORNLIN = REGISTER.register("hornlin", () -> EntityType.Builder.of(HornlinEntity::new, MobCategory.MONSTER).sized(1.4F, 1.7F).build("hornlin"));
     public static final RegistryObject<EntityType<ZombifiedHornlinEntity>> ZOMBIFIED_HORNLIN = REGISTER.register("zombified_hornlin", () -> EntityType.Builder.of(ZombifiedHornlinEntity::new, MobCategory.MONSTER).sized(1.4F, 1.7F).build("zombified_hornlin"));
     public static final RegistryObject<EntityType<TheMerchantEntity>> THE_MERCHANT = REGISTER.register("the_merchant", () ->
             EntityType.Builder.of((EntityType<TheMerchantEntity> entityType, Level level) -> new TheMerchantEntity(entityType, level), MobCategory.MONSTER)
                     .sized(1.5F, 2.25F)
                     .build("the_merchant"));
+
+    public static final RegistryObject<EntityType<AdjudicatorEntity>> ADJUDICATOR = REGISTER.register("adjudicator", () -> EntityType.Builder.of(AdjudicatorEntity::new, MobCategory.MONSTER).sized(0.8F, 2.2F).build("adjudicator"));
+    public static final RegistryObject<EntityType<SubjugatorEntity>> SUBJUGATOR = REGISTER.register("subjugator", () -> EntityType.Builder.of(SubjugatorEntity::new, MobCategory.MONSTER).sized(1.0F, 2.5F).build("subjugator"));
     public static final RegistryObject<EntityType<BlundererEntity>> BLUNDERER = REGISTER.register("blunderer", () -> EntityType.Builder.of(BlundererEntity::new, MobCategory.MONSTER).sized(0.8F, 1.7F).build("blunderer"));
     public static final RegistryObject<EntityType<TraumaUnitEntity>> TRAUMA_UNIT = REGISTER.register("trauma_unit", () -> EntityType.Builder.of(TraumaUnitEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F).build("trauma_unit"));
     public static final RegistryObject<EntityType<ScampTankEntity>> SCAMP_TANK = REGISTER.register("scamp_tank", () -> EntityType.Builder.of(ScampTankEntity::new, MobCategory.MONSTER).sized(5.0F, 4F).build("scamp_tank"));
@@ -109,6 +112,15 @@ public class ModEntities
             .setUpdateInterval(3)
             .setShouldReceiveVelocityUpdates(true)
             .build("trauma_hook"));
+
+    public static final RegistryObject<EntityType<RaidFlareEntity>> RAID_FLARE = REGISTER.register("raid_flare", () ->
+            EntityType.Builder.<RaidFlareEntity>of(RaidFlareEntity::new, MobCategory.MISC)
+                    .sized(0.25F, 0.25F)
+                    .setTrackingRange(100)
+                    .setUpdateInterval(1)
+                    .fireImmune()
+                    .setShouldReceiveVelocityUpdates(true).build("raid_flare"));
+
 
     public static final RegistryObject<EntityType<EnemyProjectileEntity>> BRASS_BOLT = REGISTER.register("brass_bolt", () ->
             EntityType.Builder.<EnemyProjectileEntity>of(EnemyProjectileEntity::new, MobCategory.MISC)

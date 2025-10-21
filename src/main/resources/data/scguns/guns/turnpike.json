@@ -13,7 +13,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 17,
+    "rate": 16,
     "recoilAngle": 3.7,
     "recoilKick": 1.8,
     "spread": 1.0,
@@ -50,7 +50,7 @@
   },
   "projectile": {
     "advantage": "scguns:bot",
-    "damage": 14.0,
+    "damage": 14.5,
     "armorPen": 1.0,
     "ejectsCasing": true,
     "gravity": false,

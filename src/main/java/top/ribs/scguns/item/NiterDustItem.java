@@ -1,6 +1,7 @@
 package top.ribs.scguns.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionResult;
@@ -17,7 +18,6 @@ import net.minecraft.world.level.material.Fluids;
 import top.ribs.scguns.block.NiterLayerBlock;
 import top.ribs.scguns.init.ModBlocks;
 
-
 public class NiterDustItem extends Item {
     public NiterDustItem(Properties properties) {
         super(properties);
@@ -33,21 +33,13 @@ public class NiterDustItem extends Item {
         BlockState blockstate = world.getBlockState(blockpos);
 
         if (blockstate.getBlock() instanceof BonemealableBlock) {
-            if (applyWeakerBonemeal(itemstack, world, blockpos, player)) {
+            if (applyReliableFertilizer(itemstack, world, blockpos, player)) {
                 if (!world.isClientSide) {
                     world.levelEvent(1505, blockpos, 0);
                 }
                 return InteractionResult.sidedSuccess(world.isClientSide);
             }
         }
-
-        if (blockstate.getBlock() instanceof BonemealableBlock) {
-            BonemealableBlock bonemealableblock = (BonemealableBlock) blockstate.getBlock();
-            if (!bonemealableblock.isValidBonemealTarget(world, blockpos, blockstate, world.isClientSide)) {
-                return InteractionResult.FAIL;
-            }
-        }
-        world.getFluidState(blockpos);
 
         if (blockstate.is(ModBlocks.NITER_LAYER.get())) {
             int i = blockstate.getValue(SnowLayerBlock.LAYERS);
@@ -61,9 +53,11 @@ public class NiterDustItem extends Item {
         }
 
         BlockPos blockposAbove = blockpos.above();
+        BlockState stateAbove = world.getBlockState(blockposAbove);
         FluidState fluidStateAbove = world.getFluidState(blockposAbove);
 
-        if (world.getBlockState(blockposAbove).isAir() || fluidStateAbove.getType() == Fluids.WATER || fluidStateAbove.getType() == Fluids.FLOWING_WATER) {
+        if ((stateAbove.isAir() || fluidStateAbove.getType() == Fluids.WATER || fluidStateAbove.getType() == Fluids.FLOWING_WATER)
+                && blockstate.isFaceSturdy(world, blockpos, Direction.UP)) {
             BlockState newState = ModBlocks.NITER_LAYER.get().defaultBlockState()
                     .setValue(NiterLayerBlock.WATERLOGGED, fluidStateAbove.getType() == Fluids.WATER || fluidStateAbove.getType() == Fluids.FLOWING_WATER);
             world.setBlock(blockposAbove, newState, 2);
@@ -76,18 +70,33 @@ public class NiterDustItem extends Item {
         return InteractionResult.FAIL;
     }
 
-    public static boolean applyWeakerBonemeal(ItemStack stack, Level world, BlockPos pos, Player player) {
+    public static boolean applyReliableFertilizer(ItemStack stack, Level world, BlockPos pos, Player player) {
         BlockState blockstate = world.getBlockState(pos);
-        if (blockstate.getBlock() instanceof BonemealableBlock) {
-            BonemealableBlock bonemealableblock = (BonemealableBlock) blockstate.getBlock();
+        if (blockstate.getBlock() instanceof BonemealableBlock bonemealableblock) {
             if (bonemealableblock.isValidBonemealTarget(world, pos, blockstate, world.isClientSide)) {
-                if (world instanceof ServerLevel) {
+                if (world instanceof ServerLevel serverLevel) {
                     RandomSource random = world.getRandom();
-                    if (random.nextInt(3) == 0) {
-                        if (bonemealableblock.isBonemealSuccess(world, random, pos, blockstate)) {
-                            bonemealableblock.performBonemeal((ServerLevel) world, random, pos, blockstate);
+
+                    if (bonemealableblock.isBonemealSuccess(world, random, pos, blockstate)) {
+                        bonemealableblock.performBonemeal(serverLevel, random, pos, blockstate);
+                    }
+
+                    if (random.nextFloat() < 0.33f) {
+                        Direction[] directions = Direction.Plane.HORIZONTAL.stream().toArray(Direction[]::new);
+                        Direction randomDirection = directions[random.nextInt(directions.length)];
+                        BlockPos adjacentPos = pos.relative(randomDirection);
+                        BlockState adjacentState = world.getBlockState(adjacentPos);
+
+                        if (adjacentState.getBlock() instanceof BonemealableBlock adjacentBonemeal) {
+                            if (adjacentBonemeal.isValidBonemealTarget(world, adjacentPos, adjacentState, false)) {
+                                if (adjacentBonemeal.isBonemealSuccess(world, random, adjacentPos, adjacentState)) {
+                                    adjacentBonemeal.performBonemeal(serverLevel, random, adjacentPos, adjacentState);
+                                    world.levelEvent(1505, adjacentPos, 0);
+                                }
+                            }
                         }
                     }
+
                     stack.shrink(1);
                 }
                 return true;

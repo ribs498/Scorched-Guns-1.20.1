@@ -68,6 +68,21 @@
               "function": "minecraft:set_count"
             }
           ]
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:blueprint_scrap",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 6.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ]
         }
       ],
       "rolls": 3.0

@@ -1,0 +1,199 @@
+{
+  "raid_id": "ocean",
+  "raid_level": 3,
+
+  "boss": {
+    "entity_type": "minecraft:drowned",
+    "custom_name": "translation:raid.boss.scguns.ocean",
+    "fixed_health": 180.0,
+    "weapon": {
+      "item": "scguns:sequoia",
+      "drop_chance": 0.3
+    },
+    "armor": [
+      {
+        "item": "minecraft:turtle_helmet",
+        "slot": "head",
+        "drop_chance": 0.25
+      },
+      {
+        "item": "minecraft:diamond_chestplate",
+        "slot": "chest",
+        "drop_chance": 0.2
+      },
+      {
+        "item": "minecraft:chainmail_leggings",
+        "slot": "legs",
+        "drop_chance": 0.15
+      },
+      {
+        "item": "minecraft:chainmail_boots",
+        "slot": "feet",
+        "drop_chance": 0.15
+      }
+    ],
+    "effects": [
+      {
+        "effect": "minecraft:regeneration",
+        "amplifier": 0,
+        "duration": -1,
+        "ambient": false,
+        "visible": false
+      },
+      {
+        "effect": "minecraft:water_breathing",
+        "amplifier": 0,
+        "duration": -1,
+        "ambient": true,
+        "visible": false
+      },
+      {
+        "effect": "minecraft:dolphins_grace",
+        "amplifier": 1,
+        "duration": -1,
+        "ambient": true,
+        "visible": false
+      }
+    ],
+    "ai_difficulty": 5,
+    "ai_type": "TACTICAL",
+    "special_loot_table": "scguns:raids/ocean_boss"
+  },
+
+  "henchmen": {
+    "types": [
+      {
+        "entity_type": "minecraft:drowned",
+        "weight": 5.0,
+        "health_multiplier": 1.4,
+        "weapons": [
+          "scguns:marlin",
+          "scguns:bomb_lance",
+          "scguns:floundergat",
+          "minecraft:trident"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:turtle_helmet",
+            "slot": "head",
+            "chance": 0.7
+          },
+          {
+            "item": "minecraft:chainmail_chestplate",
+            "slot": "chest",
+            "chance": 0.5
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:water_breathing",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": true,
+            "visible": false
+          },
+          {
+            "effect": "minecraft:dolphins_grace",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": true,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 3,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "minecraft:drowned",
+        "weight": 3.0,
+        "fixed_health": 35.0,
+        "weapons": [
+          "scguns:sequoia",
+          "minecraft:trident"
+        ],
+        "armor": [
+          {
+            "item": "minecraft:turtle_helmet",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:chainmail_chestplate",
+            "slot": "chest",
+            "chance": 0.6
+          },
+          {
+            "item": "minecraft:chainmail_leggings",
+            "slot": "legs",
+            "chance": 0.4
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:water_breathing",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": true,
+            "visible": false
+          },
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 4,
+        "ai_type": "TACTICAL"
+      },
+      {
+        "entity_type": "minecraft:zombie",
+        "weight": 2.0,
+        "health_multiplier": 1.2,
+        "weapons": [
+          "scguns:marlin",
+          "scguns:floundergat",
+          "minecraft:iron_sword",
+          "minecraft:iron_axe"
+        ],
+        "armor": [
+          {
+            "item": "scguns:redcoat_hat",
+            "slot": "head",
+            "chance": 1.0
+          },
+          {
+            "item": "minecraft:leather_chestplate",
+            "slot": "chest",
+            "chance": 0.5
+          }
+        ],
+        "effects": [
+          {
+            "effect": "minecraft:speed",
+            "amplifier": 0,
+            "duration": -1,
+            "ambient": false,
+            "visible": false
+          }
+        ],
+        "ai_difficulty": 2,
+        "ai_type": "RECKLESS"
+      }
+    ],
+    "spawn_interval_ticks": 300,
+    "max_alive": 12,
+    "spawn_radius": 18,
+    "spawn_attempts_per_wave": 4
+  },
+
+  "spawn_conditions": {
+    "min_players_nearby": 1,
+    "search_radius": 64,
+    "valid_dimensions": [
+      "minecraft:overworld"
+    ],
+    "announcement_message": "translation:raid.announcement.scguns.ocean"
+  }
+}

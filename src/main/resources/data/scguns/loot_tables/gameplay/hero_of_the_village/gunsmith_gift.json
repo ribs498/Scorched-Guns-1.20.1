@@ -19,6 +19,14 @@
         {
           "type": "minecraft:item",
           "name": "scguns:flintlock_pistol"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:wrecker_flare"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:iron_flare"
         }
       ],
       "rolls": 1.0

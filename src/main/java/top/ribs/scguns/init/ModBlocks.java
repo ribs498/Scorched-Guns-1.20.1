@@ -27,6 +27,19 @@ public class ModBlocks {
 
     public static final DeferredRegister<Block> REGISTER = DeferredRegister.create(ForgeRegistries.BLOCKS, Reference.MOD_ID);
 
+
+    public static final RegistryObject<LiquidBlock> VICIOUS_ACID_BLOCK = REGISTER.register("vicious_acid_block",
+            () -> new ViciousAcidBlock(ModFluids.VICIOUS_ACID_SOURCE, BlockBehaviour.Properties.copy(Blocks.WATER)
+                    .noCollission()
+                    .strength(100.0F)
+                    .lightLevel((state) -> 4)
+                    .noLootTable()));
+
+    public static final RegistryObject<Block> VICIOUS_ACID_CAULDRON = REGISTER.register("vicious_acid_cauldron",
+            () -> new ViciousAcidCauldronBlock(BlockBehaviour.Properties.copy(Blocks.CAULDRON)
+                    .lightLevel((state) -> 4)));
+
+
     public static final RegistryObject<Block> FAKE_SOUL_FIRE = REGISTER.register("fake_soul_fire",
             () -> new FakeSoulFireBlock(BlockBehaviour.Properties.copy(Blocks.SOUL_FIRE), 2.0F));
 
@@ -252,8 +265,18 @@ public class ModBlocks {
     public static final RegistryObject<Block> SULFUR_LAYER = register("sulfur",
             () -> new SulfurLayerBlock(BlockBehaviour.Properties.copy(Blocks.SAND)));
 
+    public static final RegistryObject<Block> BAT_GUANO_LAYER = register("bat_guano_layer",
+            () -> new BatGuanoLayerBlock(BlockBehaviour.Properties.copy(Blocks.SAND)));
+
+    public static final RegistryObject<Block> PHOSPHOR_LAYER = register("phosphor_layer",
+            () -> new PhosphorLayerBlock(BlockBehaviour.Properties.copy(Blocks.SAND)));
+
     public static final RegistryObject<Block> NITER_BLOCK = register("niter_block",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.SAND)));
+
+    public static final RegistryObject<Block> GUANO_CANDLE = register("guano_candle",
+            () -> new GuanoCandleBlock(BlockBehaviour.Properties.copy(Blocks.CANDLE)
+                    .lightLevel((state) -> state.getValue(CandleBlock.LIT) ? 10 : 0)));
 
     public static final RegistryObject<Block> PENETRATOR = register("penetrator",
             () -> new PenetratorBlock(BlockBehaviour.Properties.copy(Blocks.STONE)
@@ -364,6 +387,36 @@ public class ModBlocks {
                     .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
                     .strength(4.0F)));
     public static final RegistryObject<Block> ASGHARIAN_BRICKS = register("asgharian_bricks",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
+                    .strength(4.0F)));
+
+    public static final RegistryObject<Block> REINFORCED_ASGHARIAN_TILES = register("reinforced_asgharian_tiles",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
+                    .strength(6.0F)));
+
+    public static final RegistryObject<Block> ASGHARIAN_TILES = register("asgharian_tiles",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
+                    .strength(4.0F)));
+    public static final RegistryObject<Block> CRACKED_ASGHARIAN_TILES = register("cracked_asgharian_tiles",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
+                    .strength(4.0F)));
+    public static final RegistryObject<Block> MOSSY_ASGHARIAN_BRICKS = register("mossy_asgharian_bricks",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
+                    .strength(4.0F)));
+    public static final RegistryObject<Block> MOSSY_ASGHARIAN_TILES = register("mossy_asgharian_tiles",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
+                    .strength(4.0F)));
+    public static final RegistryObject<Block> CHISELED_ASGHARIAN_BRICKS = register("chiseled_asgharian_bricks",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
+                    .strength(4.0F)));
+    public static final RegistryObject<Block> POLISHED_ASGHARIAN_PANEL = register("polished_asgharian_panel",
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
                     .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.PLING)
                     .strength(4.0F)));

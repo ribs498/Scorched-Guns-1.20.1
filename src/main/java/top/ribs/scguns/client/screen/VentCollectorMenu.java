@@ -9,7 +9,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import top.ribs.scguns.blockentity.VentCollectorBlockEntity;
-import top.ribs.scguns.init.ModTags;
 
 import java.util.Objects;
 
@@ -31,15 +30,13 @@ public class VentCollectorMenu extends AbstractContainerMenu {
         this.itemHandler = this.blockEntity.getItemHandler();
         this.data = data;
 
-        // Filter slot
         this.addSlot(new SlotItemHandler(itemHandler, 0, 80, 53) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(ModTags.Items.WEAK_FILTER) || stack.is(ModTags.Items.STRONG_FILTER);
+                return blockEntity.isValidFilterItem(stack);
             }
         });
 
-        // Output slots (read-only)
         this.addSlot(new SlotItemHandler(itemHandler, 1, 62, 17) {
             @Override
             public boolean mayPlace(ItemStack stack) {
@@ -59,14 +56,12 @@ public class VentCollectorMenu extends AbstractContainerMenu {
             }
         });
 
-        // Player inventory
         for (int row = 0; row < 3; ++row) {
             for (int col = 0; col < 9; ++col) {
                 this.addSlot(new Slot(playerInventory, col + row * 9 + 9, 8 + col * 18, 84 + row * 18));
             }
         }
 
-        // Player hotbar
         for (int col = 0; col < 9; ++col) {
             this.addSlot(new Slot(playerInventory, col, 8 + col * 18, 142));
         }
@@ -76,6 +71,10 @@ public class VentCollectorMenu extends AbstractContainerMenu {
 
     public int getFilterCharge() {
         return data.get(0);
+    }
+
+    public int getMaxFilterCharge() {
+        return blockEntity.getMaxFilterCharge();
     }
 
     @Override

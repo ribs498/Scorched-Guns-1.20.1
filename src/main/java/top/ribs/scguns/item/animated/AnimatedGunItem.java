@@ -140,10 +140,13 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
 
         CompoundTag tag = stack.getOrCreateTag();
         tag.remove("IsDroppedItem");
+        ItemStack mainHand = null;
         if (entity instanceof Player player) {
-            ItemStack mainHand = player.getMainHandItem();
+            mainHand = player.getMainHandItem();
             if (mainHand != stack && GeoItem.getId(mainHand) != GeoItem.getId(stack)) {
                 tag.remove("_InitializedThisSession");
+                tag.remove("IsDrawn");
+                tag.remove("DrawnTick");
             }
         }
 
@@ -429,7 +432,17 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
         boolean isFirstTick = !wasDrawn && !nbtCompound.getBoolean("_InitializedThisSession");
         if (isFirstTick) {
             handleFirstTickInitialization(nbtCompound, animationController, stack, player);
+            return;
         }
+
+        boolean isMeleeActive = ModSyncedDataKeys.MELEE.getValue(player);
+        if (isMeleeActive) {
+            Gun modifiedGun = ((GunItem) stack.getItem()).getModifiedGun(stack);
+            if (modifiedGun.getGeneral().usesCustomMeleeAnimation()) {
+                return;
+            }
+        }
+
         handleAnimationStateFixes(nbtCompound, animationController, stack, player);
         handleMainAnimationLogic(nbtCompound, animationController, stack, player);
     }
@@ -463,9 +476,13 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
                                                ItemStack stack, Player player) {
         ModSyncedDataKeys.RELOADING.getValue(player);
         nbtCompound.putBoolean("_InitializedThisSession", true);
-        nbtCompound.putBoolean("IsDrawn", true);
-        nbtCompound.putInt("DrawnTick", 0);
-        this.drawTick = 0;
+
+        if (!nbtCompound.getBoolean("IsDrawn")) {
+            nbtCompound.putBoolean("IsDrawn", true);
+            nbtCompound.putInt("DrawnTick", 0);
+            this.drawTick = 0;
+        }
+
         if (animationController != null) {
             boolean hasNoAnimation = animationController.getCurrentAnimation() == null;
             boolean isStopped = animationController.getAnimationState() == AnimationController.State.STOPPED;
@@ -492,7 +509,14 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
         if (animationController != null) {
             boolean hasNoAnimation = animationController.getCurrentAnimation() == null;
             boolean isStopped = animationController.getAnimationState() == AnimationController.State.STOPPED;
-            ModSyncedDataKeys.RELOADING.getValue(player);
+
+            boolean isMeleeActive = ModSyncedDataKeys.MELEE.getValue(player);
+            if (isMeleeActive) {
+                Gun modifiedGun = ((GunItem) stack.getItem()).getModifiedGun(stack);
+                if (modifiedGun.getGeneral().usesCustomMeleeAnimation()) {
+                    return;
+                }
+            }
 
             if ((hasNoAnimation || isStopped) &&
                     !nbtCompound.getBoolean("scguns:IsReloading") &&
@@ -557,7 +581,9 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
                 !isAnimationPlaying(animationController, "carbine_draw") &&
                 !isAnimationPlaying(animationController, "jam") &&
                 !isAnimationPlaying(animationController, "melee") &&
+                !isAnimationPlaying(animationController, "carbine_melee") &&
                 !isAnimationPlaying(animationController, "bayonet") &&
+                !isAnimationPlaying(animationController, "carbine_bayonet") &&
                 !isAnimationPlaying(animationController, "shoot") &&
                 !isAnimationPlaying(animationController, "shoot1") &&
                 !isAnimationPlaying(animationController, "carbine_shoot") &&
@@ -568,7 +594,6 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
                 !isAnimationPlaying(animationController, "carbine_inspect") &&
                 !isAnimationPlaying(animationController, "reload_stop") &&
                 !isAnimationPlaying(animationController, "carbine_reload_stop");
-
     }
 
     @OnlyIn(Dist.CLIENT)
@@ -587,6 +612,13 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
         nbt.remove("scguns:IsReloading");
         nbt.remove("scguns:IsPlayingReloadStop");
         nbt.remove("scguns:ReloadComplete");
+        nbt.remove("IsManualReload");
+        nbt.remove("InReloadLoop");
+        nbt.remove("PendingStopTransition");
+        nbt.remove("PendingStopTime");
+        nbt.remove("LastReloadStateChange");
+        nbt.remove("ManualReloadInitialized");
+        nbt.remove("InCriticalReloadPhase");
 
         String currentState = nbt.getString(RELOAD_STATE);
         if (currentState.equals("STOPPING")) {

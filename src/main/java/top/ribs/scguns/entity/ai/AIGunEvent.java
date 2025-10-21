@@ -9,7 +9,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -18,14 +17,11 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.Config;
-import top.ribs.scguns.client.handler.GunRenderingHandler;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.common.ProjectileManager;
-import top.ribs.scguns.common.SpreadTracker;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
 import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.init.ModEffects;
-import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.interfaces.IProjectileFactory;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.network.PacketHandler;
@@ -34,6 +30,8 @@ import top.ribs.scguns.network.message.S2CMessageEntityCasingEject;
 import top.ribs.scguns.network.message.S2CMessageEntityMuzzleFlash;
 import top.ribs.scguns.util.GunEnchantmentHelper;
 import top.ribs.scguns.util.GunModifierHelper;
+
+import java.util.Objects;
 
 
 public class AIGunEvent {
@@ -66,18 +64,20 @@ public class AIGunEvent {
             accuracyModifier *= 0.75F;
         }
 
-        float aiDamageMultiplier = getAIDamageMultiplier(level.getDifficulty());
+        float difficultyDamageMultiplier = getDifficultyDamageMultiplier(level.getDifficulty());
+        float configDamageMultiplier = Config.COMMON.gameplay.mobGunDamageMultiplier.get().floatValue();
+        float finalDamageMultiplier = difficultyDamageMultiplier * configDamageMultiplier;
 
         for (int i = 0; i < count; ++i) {
-            IProjectileFactory factory = ProjectileManager.getInstance().getFactory(BuiltInRegistries.ITEM.getKey(projectileProps.getItem()));
+            IProjectileFactory factory = ProjectileManager.getInstance().getFactory(BuiltInRegistries.ITEM.getKey(Objects.requireNonNull(projectileProps.getItem())));
             ProjectileEntity projectileEntity = factory.create(level, shooter, itemStack, (GunItem) itemStack.getItem(), modifiedGun);
             projectileEntity.setWeapon(itemStack);
 
             float originalDamage = Gun.getAdditionalDamage(itemStack);
-            float scaledDamage = originalDamage * aiDamageMultiplier;
+            float scaledDamage = originalDamage * finalDamageMultiplier;
             projectileEntity.setAdditionalDamage(scaledDamage);
 
-            projectileEntity.getPersistentData().putFloat("AIDamageScale", aiDamageMultiplier);
+            projectileEntity.getPersistentData().putFloat("AIDamageScale", finalDamageMultiplier);
 
             Vec3 dir = getDirection(shooter, target, itemStack, (GunItem) itemStack.getItem(), modifiedGun, accuracyModifier);
 
@@ -103,7 +103,7 @@ public class AIGunEvent {
         double r = Config.COMMON.network.projectileTrackingRange.get();
 
         ParticleOptions data = GunEnchantmentHelper.getParticle(itemStack);
-        boolean isVisible = !modifiedGun.getProjectile().hideTrail();
+        boolean isVisible = !modifiedGun.getProjectile().shouldHideTrail();
         S2CMessageBulletTrail messageBulletTrail = new S2CMessageBulletTrail(spawnedProjectiles, projectileProps, shooter.getId(), data, isVisible);
         PacketHandler.getPlayChannel().sendToNearbyPlayers(
                 () -> LevelLocation.create(level, radius, y1, z1, r),
@@ -112,13 +112,28 @@ public class AIGunEvent {
 
         if (modifiedGun.getDisplay().getFlash() != null) {
             float randomValue = level.random.nextFloat();
-            S2CMessageEntityMuzzleFlash flashMessage = new S2CMessageEntityMuzzleFlash(shooter.getId(), randomValue);
+
+            Vec3 weaponOrigin = top.ribs.scguns.client.util.PropertyHelper.getModelOrigin(
+                    itemStack,
+                    top.ribs.scguns.client.util.PropertyHelper.GUN_DEFAULT_ORIGIN
+            );
+            Vec3 flashPosition = top.ribs.scguns.client.util.PropertyHelper.getMuzzleFlashPosition(
+                    itemStack,
+                    modifiedGun
+            ).subtract(weaponOrigin);
+
+            S2CMessageEntityMuzzleFlash flashMessage = new S2CMessageEntityMuzzleFlash(
+                    shooter.getId(),
+                    randomValue,
+                    flashPosition,
+                    false
+            );
+
             PacketHandler.getPlayChannel().sendToNearbyPlayers(
                     () -> LevelLocation.create(level, radius, y1, z1, r),
                     flashMessage
             );
         }
-
         if (Config.COMMON.gameplay.spawnCasings.get()) {
             if (modifiedGun.getProjectile().ejectsCasing() && !modifiedGun.getProjectile().ejectDuringReload()) {
                 ResourceLocation particleLocation = modifiedGun.getProjectile().getCasingParticle();
@@ -145,12 +160,12 @@ public class AIGunEvent {
         }
     }
 
-    private static float getAIDamageMultiplier(Difficulty difficulty) {
+    private static float getDifficultyDamageMultiplier(Difficulty difficulty) {
         return switch(difficulty) {
             case PEACEFUL -> 0.05F;
-            case EASY -> 0.1F;
-            case NORMAL -> 0.2F;
-            case HARD -> 0.3F;
+            case EASY -> 0.25F;
+            case NORMAL -> 0.45F;
+            case HARD -> 0.6F;
         };
     }
 

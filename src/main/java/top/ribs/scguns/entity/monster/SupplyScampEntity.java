@@ -11,10 +11,7 @@ import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.world.Container;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.*;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -29,6 +26,7 @@ import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.BarrelBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -41,7 +39,11 @@ import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.init.ModSounds;
-
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.gameevent.GameEvent;
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.*;
 
 public class SupplyScampEntity extends TamableAnimal {
@@ -55,6 +57,8 @@ public class SupplyScampEntity extends TamableAnimal {
             SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Optional<BlockPos>> PATROL_ORIGIN =
             SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
+    private static final EntityDataAccessor<Boolean> WEARING_PUMPKIN =
+            SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.BOOLEAN);
 
     private static final int PATROL_COOLDOWN = 15;
     private int patrolCooldownTimer = PATROL_COOLDOWN;
@@ -181,55 +185,45 @@ public class SupplyScampEntity extends TamableAnimal {
             }
         }
 
-        // Priority 2: Look for items if inventory not too full
         if (totalItems < 25) {
             ItemEntity nearestItem = findNearestItem();
             if (nearestItem != null && this.distanceToSqr(nearestItem) <= ITEM_DETECTION_RANGE * ITEM_DETECTION_RANGE) {
                 if (this.distanceToSqr(nearestItem) > ITEM_PICKUP_RANGE * ITEM_PICKUP_RANGE) {
                     this.getNavigation().moveTo(nearestItem, 1.0);
-                    return; // Only return when actively moving to item
+                    return;
                 } else {
                     pickUpItem(nearestItem);
-                    // DON'T return here - let it continue to patrol after picking up
                 }
             }
         }
-
-        // Priority 3: Normal patrol movement (this should ALWAYS execute when not moving to barrel/item)
         if (this.patrolTimer <= 0) {
-            // 50% chance to move, 50% chance to stay still for a bit
             if (this.random.nextFloat() < 0.5) {
-                // Pick a new random patrol target
                 this.currentPatrolTarget = patrolOrigin.get().offset(
                         this.random.nextInt(PATROL_RADIUS * 2) - PATROL_RADIUS,
                         0,
                         this.random.nextInt(PATROL_RADIUS * 2) - PATROL_RADIUS
                 );
                 this.getNavigation().moveTo(this.currentPatrolTarget.getX() + 0.5, this.currentPatrolTarget.getY(), this.currentPatrolTarget.getZ() + 0.5, 0.8);
-                this.patrolTimer = PATROL_DURATION; // Set timer for how long to move
+                this.patrolTimer = PATROL_DURATION;
             } else {
-                // Stay still for a moment
                 this.getNavigation().stop();
                 this.currentPatrolTarget = null;
-                this.patrolTimer = PATROL_MOVE_INTERVAL / 2; // Shorter idle time
+                this.patrolTimer = PATROL_MOVE_INTERVAL / 2;
             }
         } else {
-            // Timer is running, decrement it
             this.patrolTimer--;
 
-            // Check if we reached our patrol destination
             if (this.currentPatrolTarget != null && this.distanceToSqr(Vec3.atCenterOf(this.currentPatrolTarget)) < 4.0) {
                 this.getNavigation().stop();
                 this.currentPatrolTarget = null;
-                this.patrolTimer = 20; // Short pause before next movement
+                this.patrolTimer = 20;
             }
         }
 
-        // Safety check: if too far from patrol origin, return to it
         if (this.distanceToSqr(Vec3.atCenterOf(patrolOrigin.get())) > (PATROL_RADIUS + 3) * (PATROL_RADIUS + 3)) {
             this.getNavigation().moveTo(patrolOrigin.get().getX() + 0.5, patrolOrigin.get().getY(), patrolOrigin.get().getZ() + 0.5, 1.0);
             this.currentPatrolTarget = null;
-            this.patrolTimer = 40; // Reset timer after returning
+            this.patrolTimer = 40;
         }
     }
     private BlockPos findNearestBarrel() {
@@ -319,9 +313,8 @@ public class SupplyScampEntity extends TamableAnimal {
     }
 
     private void checkForItems() {
-        // Only check for items if we're not already patrolling (this method is called separately)
         if (this.isPatrolling()) {
-            return; // Let handlePatrolling deal with items during patrol
+            return;
         }
 
         ItemEntity nearestItem = findNearestItem();
@@ -496,7 +489,28 @@ public class SupplyScampEntity extends TamableAnimal {
                     }
                     return InteractionResult.SUCCESS;
                 }
+                if (itemstack.getItem() == Items.SHEARS && this.isWearingPumpkin()) {
+                    if (!this.level().isClientSide) {
+                        this.setWearingPumpkin(false);
+                        this.gameEvent(GameEvent.SHEAR, player);
+                        itemstack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(hand));
 
+                        this.spawnAtLocation(Items.CARVED_PUMPKIN);
+                        this.playSound(SoundEvents.PUMPKIN_CARVE, 1.0F, 1.0F);
+                    }
+                    return InteractionResult.sidedSuccess(this.level().isClientSide);
+                }
+                if ((itemstack.is(Items.CARVED_PUMPKIN) || itemstack.is(Items.JACK_O_LANTERN))
+                        && !this.isWearingPumpkin()) {
+                    if (!this.level().isClientSide) {
+                        this.setWearingPumpkin(true);
+                        if (!player.getAbilities().instabuild) {
+                            itemstack.shrink(1);
+                        }
+                        this.playSound(SoundEvents.ARMOR_EQUIP_GENERIC, 1.0F, 1.0F);
+                    }
+                    return InteractionResult.sidedSuccess(this.level().isClientSide);
+                }
                 // Dyeing
                 if (itemstack.getItem() instanceof DyeItem) {
                     DyeColor dyeColor = ((DyeItem) itemstack.getItem()).getDyeColor();
@@ -507,17 +521,14 @@ public class SupplyScampEntity extends TamableAnimal {
                     return InteractionResult.SUCCESS;
                 }
 
-                // Simple state cycling on shift-click
                 if (player.isShiftKeyDown()) {
                     if (this.isOrderedToSit()) {
-                        // Start patrolling - check for nearby barrels
                         this.setOrderedToSit(false);
                         this.setSitting(false);
                         this.setPatrolling(true);
                         this.setPatrolOrigin(this.blockPosition());
                         this.spawnPatrolOriginParticles();
 
-                        // Check if there's a barrel nearby and give feedback
                         BlockPos nearestBarrel = findNearestBarrel();
                         if (nearestBarrel == null) {
                             player.displayClientMessage(Component.translatable("message.supply_scamp.patrolling_no_barrel"), true);
@@ -526,12 +537,10 @@ public class SupplyScampEntity extends TamableAnimal {
                         }
 
                     } else if (this.isPatrolling()) {
-                        // Start following
                         this.setPatrolling(false);
                         this.setOrderedToSit(false);
                         player.displayClientMessage(Component.translatable("message.supply_scamp.following"), true);
                     } else {
-                        // Sit
                         this.setOrderedToSit(true);
                         this.setSitting(true);
                         this.setPatrolling(false);
@@ -602,21 +611,25 @@ public class SupplyScampEntity extends TamableAnimal {
         this.entityData.define(MASK_COLOR, 0);
         this.entityData.define(PATROL_ORIGIN, Optional.empty());
         this.entityData.define(STATIONARY, false);
-
+        this.entityData.define(WEARING_PUMPKIN, false);
+    }
+    public boolean isWearingPumpkin() {
+        return this.entityData.get(WEARING_PUMPKIN);
     }
 
+    public void setWearingPumpkin(boolean wearing) {
+        this.entityData.set(WEARING_PUMPKIN, wearing);
+    }
+
+    private static boolean isHalloweenSeason() {
+        LocalDate date = LocalDate.now();
+        return date.getMonth() == Month.OCTOBER;
+    }
     @Override
     protected void updateWalkAnimation(float partialTick) {
         float f = (this.getPose() == Pose.STANDING) ? Math.min(partialTick * 6F, 1f) : 0f;
         this.walkAnimation.update(f, 0.2f);
     }
-
-    @Nullable
-    @Override
-    protected SoundEvent getAmbientSound() {
-        return SoundEvents.VEX_AMBIENT;
-    }
-
     @Nullable
     @Override
     protected SoundEvent getHurtSound(@NotNull DamageSource damageSource) {
@@ -646,7 +659,18 @@ public class SupplyScampEntity extends TamableAnimal {
     public void setPersistenceRequired() {
         super.setPersistenceRequired();
     }
+    @Override
+    public SpawnGroupData finalizeSpawn(@NotNull ServerLevelAccessor level, @NotNull DifficultyInstance difficulty,
+                                        @NotNull MobSpawnType reason, @Nullable SpawnGroupData spawnData,
+                                        @Nullable CompoundTag dataTag) {
+        spawnData = super.finalizeSpawn(level, difficulty, reason, spawnData, dataTag);
 
+        if (isHalloweenSeason() && this.random.nextFloat() < 0.85f) {
+            this.setWearingPumpkin(true);
+        }
+
+        return spawnData;
+    }
     @Override
     public void addAdditionalSaveData(@NotNull CompoundTag compound) {
         super.addAdditionalSaveData(compound);
@@ -670,8 +694,8 @@ public class SupplyScampEntity extends TamableAnimal {
         });
         compound.put("Items", listnbt);
         compound.putInt("MaskColor", this.getMaskColor());
+        compound.putBoolean("WearingPumpkin", this.isWearingPumpkin());
 
-        // Save barrel closing state
         if (scheduledBarrelClose != null) {
             compound.putInt("BarrelCloseX", scheduledBarrelClose.getX());
             compound.putInt("BarrelCloseY", scheduledBarrelClose.getY());
@@ -705,7 +729,9 @@ public class SupplyScampEntity extends TamableAnimal {
         if (compound.contains("MaskColor", 3)) {
             this.setMaskColor(compound.getInt("MaskColor"));
         }
-
+        if (compound.contains("WearingPumpkin")) {
+            this.setWearingPumpkin(compound.getBoolean("WearingPumpkin"));
+        }
         // Load barrel closing state
         if (compound.contains("BarrelCloseX")) {
             scheduledBarrelClose = new BlockPos(

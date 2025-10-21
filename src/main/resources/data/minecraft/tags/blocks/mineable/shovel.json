@@ -4,6 +4,8 @@
     "scguns:niter",
     "scguns:niter_block",
     "scguns:sulfur",
-    "scguns:sandbag"
+    "scguns:sandbag",
+    "scguns:bat_guano_layer",
+    "scguns:phosphor_layer"
   ]
 }

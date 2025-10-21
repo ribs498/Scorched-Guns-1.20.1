@@ -3,10 +3,10 @@
   "category": "equipment",
   "key": {
     "H": {
-      "item": "minecraft:chorus_fruit"
+      "item": "scguns:blueprint_scrap"
     },
     "Q": {
-      "item": "scguns:end_blueprint"
+      "item": "scguns:shulker_core"
     },
     "Z": {
       "item": "minecraft:paper"

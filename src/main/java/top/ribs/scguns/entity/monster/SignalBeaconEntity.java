@@ -28,6 +28,7 @@ public class SignalBeaconEntity extends Mob {
     private int idleAnimationTimeout = 0;
     private static final int LIFESPAN_TICKS = 100;
     private int lifespan;
+    private boolean hasSpawnedCarriers = false;
 
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
@@ -43,7 +44,8 @@ public class SignalBeaconEntity extends Mob {
         super.tick();
 
         if (!this.level().isClientSide()) {
-            if (--this.lifespan <= 0) {
+            if (--this.lifespan <= 0 && !hasSpawnedCarriers && !this.isDeadOrDying()) {
+                hasSpawnedCarriers = true;
                 spawnSkyCarriers();
                 this.discard();
             }
@@ -65,6 +67,11 @@ public class SignalBeaconEntity extends Mob {
         }
     }
 
+    @Override
+    public void die(net.minecraft.world.damagesource.DamageSource pDamageSource) {
+        hasSpawnedCarriers = true;
+        super.die(pDamageSource);
+    }
 
     private void setupAnimationStates() {
         if (this.idleAnimationTimeout <= 0) {
@@ -150,7 +157,7 @@ public class SignalBeaconEntity extends Mob {
         BlockPos groundCheck = new BlockPos((int)exactX, (int)exactY - 5, (int)exactZ);
         for (int i = 0; i < 5; i++) {
             if (!serverLevel.getBlockState(groundCheck.below(i)).isAir()) {
-                break; // Found ground
+                break;
             }
             if (i == 4) {
                 return false;
@@ -164,4 +171,3 @@ public class SignalBeaconEntity extends Mob {
         return serverLevel.getWorldBorder().isWithinBounds(blockPos);
     }
 }
-

@@ -54,6 +54,7 @@
     }
   },
   "projectile": {
+    "knockbackStrength": 0.65,
     "advantage": "scguns:none",
     "damage": 21.0,
     "ejectsCasing": true,

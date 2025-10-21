@@ -1,5 +1,11 @@
 {
   "type": "minecraft:smithing_transform",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
   "addition": {
     "item": "scguns:anthralite_ingot"
   },

@@ -1,0 +1,18 @@
+{
+  "type": "scguns:vent",
+  "config": {
+    "vent_block": "scguns:geothermal_vent",
+    "min_height": 1,
+    "max_height": 5,
+    "base_block": "minecraft:magma_block",
+    "required_below_blocks": [
+      "minecraft:gravel",
+      "minecraft:sand"
+    ],
+    "place_base_block": true,
+    "requires_waterlogged": true,
+    "check_active_limit": false,
+    "max_active_nearby": 1,
+    "check_radius": 48
+  }
+}

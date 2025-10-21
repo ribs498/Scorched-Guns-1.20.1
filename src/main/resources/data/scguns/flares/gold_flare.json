@@ -1,0 +1,52 @@
+{
+  "raid_id": "piglin",
+  "burst_delay": 20,
+  "duration": 60,
+  "trail_particles": [
+    {
+      "particle": "minecraft:flame",
+      "count": 3,
+      "spread": 0.3,
+      "speed": 0.12,
+      "color": "#FFD700"
+    },
+    {
+      "particle": "minecraft:soul_fire_flame",
+      "count": 2,
+      "spread": 0.2,
+      "speed": 0.1,
+      "color": "#FF8C00"
+    }
+  ],
+  "burst_particles": [
+    {
+      "particle": "minecraft:electric_spark",
+      "count": 200,
+      "spread": 0.3,
+      "speed": 0.4,
+      "color": "#FFD700"
+    },
+    {
+      "particle": "minecraft:lava",
+      "count": 60,
+      "spread": 0.5,
+      "speed": 0.25,
+      "color": "#FF4500"
+    },
+    {
+      "particle": "minecraft:soul_fire_flame",
+      "count": 40,
+      "spread": 0.4,
+      "speed": 0.3,
+      "color": "#8B0000"
+    }
+  ],
+  "pattern": {
+    "type": "pig_snout",
+    "repetitions": 1,
+    "scale": 5.0
+  },
+  "burst_sound": "minecraft:entity.piglin.celebrate",
+  "burst_sound_volume": 2.0,
+  "burst_sound_pitch": 0.8
+}

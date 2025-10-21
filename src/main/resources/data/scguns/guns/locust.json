@@ -55,6 +55,7 @@
     }
   },
   "projectile": {
+    "knockbackStrength": 0.5,
     "advantage": "scguns:none",
     "damage": 21.0,
     "armorPen": 3.5,

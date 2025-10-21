@@ -1,6 +1,37 @@
 {
-	"parent": "minecraft:item/handheld",
-	"textures": {
-		"layer0": "scguns:item/swarm_bomb"
-	}
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "0": "scguns:items/swarm_bomb",
+    "particle": "scguns:item/swarm_bomb"
+  },
+  "loader": "forge:separate_transforms",
+  "base": {
+    "parent": "scguns:item/swarm_bomb_3d"
+  },
+  "perspectives": {
+    "firstperson_righthand": {
+      "parent": "scguns:item/swarm_bomb_2d"
+    },
+    "firstperson_lefthand": {
+      "parent": "scguns:item/swarm_bomb_2d"
+    },
+    "thirdperson_righthand": {
+      "parent": "scguns:item/swarm_bomb_2d"
+    },
+    "thirdperson_lefthand": {
+      "parent": "scguns:item/swarm_bomb_2d"
+    },
+    "fixed": {
+      "parent": "scguns:item/swarm_bomb_2d"
+    },
+    "gui": {
+      "parent": "scguns:item/swarm_bomb_2d"
+    },
+    "ground": {
+      "parent": "scguns:item/swarm_bomb_2d"
+    },
+    "frame": {
+      "parent": "scguns:item/swarm_bomb_2d"
+    }
+  }
 }

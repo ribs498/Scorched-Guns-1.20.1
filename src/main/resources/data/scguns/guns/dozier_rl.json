@@ -46,6 +46,7 @@
     }
   },
   "projectile": {
+    "visible": true,
     "advantage": "scguns:none",
     "damage": 28.0,
     "ejectsCasing": false,

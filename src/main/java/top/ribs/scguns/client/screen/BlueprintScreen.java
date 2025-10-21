@@ -17,6 +17,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
+import net.minecraftforge.registries.ForgeRegistries;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.C2SMessageSetBlueprintRecipe;
 
@@ -39,10 +40,11 @@ public class BlueprintScreen extends Screen {
     private BlueprintPageButton prevPageButton;
 
     private final ItemStack blueprintStack;
-    private final List<GunBenchRecipe> availableRecipes = new ArrayList<>();
+    private final List<DisplayEntry> displayEntries = new ArrayList<>();
 
     private static final List<String> GUN_ORDER = Arrays.asList(
-            // ANTIQUE
+
+            /// ANTIQUE
             "flintlock_pistol", "handcannon", "musket", "blunderbuss", "doublet", "repeating_musket",
             "longarm", "fencer_carabine", "fencer_thumper", "laser_musket", "plasmabuss",
 
@@ -50,50 +52,71 @@ public class BlueprintScreen extends Screen {
             "pax", "winnie","winnie_millend", "red_raydar", "callwell", "callwell_conversion", "callwell_terminal", "saketini",
             "saketini_ironport", "big_bore",
 
-            // COPPER
+            /// COPPER
             "scrapper", "rusty_gnat", "umax_pistol", "makeshift_rifle", "boomstick", "bruiser",
             "llr_director", "birdfeeder", "arc_worker",
 
-            // IRON
+           /// IRON
             "defender_pistol", "trenchur", "greaser_smg", "m3_carabine", "m3_marksman","combat_shotgun", "venturi",
             "iron_javelin", "iron_spear", "auvtomag", "pulsar", "gyrojet_pistol", "brawler",
             "crusader", "mk43_rifle", "rocket_rifle", "ultra_knight_hawk",
 
-            // OCEAN
+           //OCEAN
             "floundergat", "marlin", "bomb_lance", "hullbreaker", "sequoia",
 
-            // WRECKER
-            "mokova", "mak_mkii", "stilleto", "railworker",
+            /// WRECKER
+            "mokova", "mak_mkii", "stilleto", "railworker", "stiletto",
             "turnpike", "killer_23", "homemaker", "kalaskah", "basker", "tl_runner", "stigg", "whizzbanger",
 
-            // DIAMOND STEEL
+           //DIAMONDSTEEL
             "krauser", "soul_drummer", "uppercut", "micina", "valora", "prush_gun", "drill", "drill_conversion", "lockewood",
             "rg_jigsaw","nailer", "inertial",
             "mas_55", "inquisitor", "plasgun", "cyclone", "shard_culler",
 
-            // TREATED BRASS
+           //TREATEDBRASS
             "m22_waltz", "waltz_conversion", "osgood_50", "grandle_og", "grandle", "cogloader", "gale", "jackhammer",
             "howler", "howler_conversion", "gauss_rifle", "niami", "spitfire", "gattaler",
             "thunderhead", "scratches", "cr4k_mining_laser", "dozier_rl",
 
-            // PIGLIN
-            "empty_blasphemy", "pyroclastic_flow", "freyr", "mangalitsa", "vulcanic_repeater", "super_shotgun",
+            //PIGLIN
+            "empty_blasphemy", "blasphemy", "pyroclastic_flow", "freyr", "mangalitsa", "vulcanic_repeater", "super_shotgun",
 
-            //DEEPDARK
+           //SCULK
             "whispers", "echoes_2", "sculk_resonator", "forlorn_hope",
 
-            // END
+           /// END
             "carapice", "shellurker", "weevil", "dark_matter", "lone_wonder", "raygun",
 
             // SCORCHED
-                "prima_materia", "rat_king_and_queen", "locust", "sterilizer", "newborn_cyst", "earths_corpse",
+            "prima_materia", "rat_king_and_queen", "locust", "sterilizer", "newborn_cyst", "earths_corpse",
             "flayed_god", "nervepinch", "terra_incognita", "astella",
 
-            //EXOSUIT
+            // EXOSUIT
             "exo_suit_helmet", "exo_suit_chestplate", "exo_suit_leggings", "exo_suit_boots"
     );
 
-    private record RecipeSlot(int x, int y, int index) {
+    private static final List<String> LORE_ONLY_ITEMS = Arrays.asList(
+            "blasphemy", "super_shotgun"
+    );
+
+    private record RecipeSlot(int x, int y, int index) {}
+
+    private static class DisplayEntry {
+        final GunBenchRecipe recipe;
+        final ItemStack itemStack;
+        final boolean hasRecipe;
+
+        DisplayEntry(GunBenchRecipe recipe) {
+            this.recipe = recipe;
+            this.itemStack = null;
+            this.hasRecipe = true;
+        }
+
+        DisplayEntry(ItemStack itemStack) {
+            this.recipe = null;
+            this.itemStack = itemStack;
+            this.hasRecipe = false;
+        }
     }
 
     public static class BlueprintPageButton extends Button {
@@ -113,19 +136,16 @@ public class BlueprintScreen extends Screen {
         this.blueprintStack = blueprintStack;
         this.hand = hand;
         Arrays.fill(recipeItems, ItemStack.EMPTY);
-        loadAvailableRecipes();
+        loadAvailableEntries();
         loadActiveRecipeAsCurrentPage();
     }
 
-    /**
-     * If there's an active recipe set for this blueprint, find it in the available recipes
-     * and set the current page to that recipe.
-     */
     private void loadActiveRecipeAsCurrentPage() {
         ResourceLocation activeRecipeId = getActiveRecipe(blueprintStack);
         if (activeRecipeId != null) {
-            for (int i = 0; i < availableRecipes.size(); i++) {
-                if (availableRecipes.get(i).getId().equals(activeRecipeId)) {
+            for (int i = 0; i < displayEntries.size(); i++) {
+                DisplayEntry entry = displayEntries.get(i);
+                if (entry.hasRecipe && entry.recipe.getId().equals(activeRecipeId)) {
                     currentPage = i;
                     loadCurrentPageRecipe();
                     return;
@@ -136,9 +156,13 @@ public class BlueprintScreen extends Screen {
     }
 
     private void loadCurrentPageRecipe() {
-        if (currentPage < availableRecipes.size()) {
-            GunBenchRecipe recipe = availableRecipes.get(currentPage);
-            loadRecipeIntoSlots(recipe);
+        if (currentPage < displayEntries.size()) {
+            DisplayEntry entry = displayEntries.get(currentPage);
+            if (entry.hasRecipe) {
+                loadRecipeIntoSlots(entry.recipe);
+            } else {
+                loadLoreItemIntoSlots(entry.itemStack);
+            }
         }
     }
 
@@ -155,18 +179,18 @@ public class BlueprintScreen extends Screen {
         int centerX = (this.width - IMAGE_WIDTH) / 2;
         int centerY = 2;
 
-        recipeSlots.add(new RecipeSlot(centerX + 26, centerY + 17, 0)); // SLOT_TOP_INTERNAL_1
-        recipeSlots.add(new RecipeSlot(centerX + 44, centerY + 17, 1)); // SLOT_TOP_INTERNAL_2
-        recipeSlots.add(new RecipeSlot(centerX + 62, centerY + 17, 2)); // SLOT_TOP_BARREL_1
-        recipeSlots.add(new RecipeSlot(centerX + 80, centerY + 17, 3)); // SLOT_TOP_BARREL_2
-        recipeSlots.add(new RecipeSlot(centerX + 26, centerY + 35, 4)); // SLOT_INTERNAL_1
-        recipeSlots.add(new RecipeSlot(centerX + 44, centerY + 35, 5)); // SLOT_INTERNAL_2
-        recipeSlots.add(new RecipeSlot(centerX + 62, centerY + 35, 6)); // SLOT_BARREL_1
-        recipeSlots.add(new RecipeSlot(centerX + 80, centerY + 35, 7)); // SLOT_BARREL_2
-        recipeSlots.add(new RecipeSlot(centerX + 26, centerY + 53, 8)); // SLOT_GRIP
-        recipeSlots.add(new RecipeSlot(centerX + 62, centerY + 53, 9)); // SLOT_MAGAZINE
-        recipeSlots.add(new RecipeSlot(centerX + 116, centerY + 17, 11)); // SLOT_BLUEPRINT
-        recipeSlots.add(new RecipeSlot(centerX + 140, centerY + 44, 10)); // SLOT_OUTPUT
+        recipeSlots.add(new RecipeSlot(centerX + 26, centerY + 17, 0));
+        recipeSlots.add(new RecipeSlot(centerX + 44, centerY + 17, 1));
+        recipeSlots.add(new RecipeSlot(centerX + 62, centerY + 17, 2));
+        recipeSlots.add(new RecipeSlot(centerX + 80, centerY + 17, 3));
+        recipeSlots.add(new RecipeSlot(centerX + 26, centerY + 35, 4));
+        recipeSlots.add(new RecipeSlot(centerX + 44, centerY + 35, 5));
+        recipeSlots.add(new RecipeSlot(centerX + 62, centerY + 35, 6));
+        recipeSlots.add(new RecipeSlot(centerX + 80, centerY + 35, 7));
+        recipeSlots.add(new RecipeSlot(centerX + 26, centerY + 53, 8));
+        recipeSlots.add(new RecipeSlot(centerX + 62, centerY + 53, 9));
+        recipeSlots.add(new RecipeSlot(centerX + 116, centerY + 17, 11));
+        recipeSlots.add(new RecipeSlot(centerX + 140, centerY + 44, 10));
     }
 
     protected void createMenuControls() {
@@ -176,22 +200,29 @@ public class BlueprintScreen extends Screen {
                         .build()
         );
 
-        this.addRenderableWidget(
-                Button.builder(Component.translatable("screen.scguns.blueprint.button.set_recipe"), (button) -> this.setActiveRecipe())
-                        .bounds(this.width / 2 - 100, 220, 200, 20)
-                        .build()
-        );
+        DisplayEntry currentEntry = currentPage < displayEntries.size() ? displayEntries.get(currentPage) : null;
+        boolean canSetRecipe = currentEntry != null && currentEntry.hasRecipe;
+
+        Button setRecipeButton = Button.builder(
+                Component.translatable("screen.scguns.blueprint.button.set_recipe"),
+                (button) -> this.setActiveRecipe()
+        ).bounds(this.width / 2 - 100, 220, 200, 20).build();
+
+        setRecipeButton.active = canSetRecipe;
+        this.addRenderableWidget(setRecipeButton);
 
         createPageControls();
     }
 
     private void setActiveRecipe() {
-        if (currentPage < availableRecipes.size()) {
-            GunBenchRecipe currentRecipe = availableRecipes.get(currentPage);
-
-            PacketHandler.getPlayChannel().sendToServer(new C2SMessageSetBlueprintRecipe(hand, currentRecipe.getId().toString()));
-
-            saveActiveRecipe(blueprintStack, currentRecipe);
+        if (currentPage < displayEntries.size()) {
+            DisplayEntry entry = displayEntries.get(currentPage);
+            if (entry.hasRecipe) {
+                PacketHandler.getPlayChannel().sendToServer(
+                        new C2SMessageSetBlueprintRecipe(hand, entry.recipe.getId().toString())
+                );
+                saveActiveRecipe(blueprintStack, entry.recipe);
+            }
         }
         this.onClose();
     }
@@ -243,44 +274,48 @@ public class BlueprintScreen extends Screen {
         }
     }
 
-    private void loadAvailableRecipes() {
+    private void loadAvailableEntries() {
         Level level = Minecraft.getInstance().level;
         if (level == null) return;
 
-        availableRecipes.clear();
-
+        displayEntries.clear();
         List<GunBenchRecipe> allRecipes = level.getRecipeManager().getAllRecipesFor(GunBenchRecipe.Type.INSTANCE);
 
+        // Add recipe-based entries
         if (blueprintStack.isEmpty()) {
-            availableRecipes.addAll(allRecipes);
+            for (GunBenchRecipe recipe : allRecipes) {
+                displayEntries.add(new DisplayEntry(recipe));
+            }
         } else {
             for (GunBenchRecipe recipe : allRecipes) {
                 if (recipe.getBlueprint().test(blueprintStack)) {
-                    availableRecipes.add(recipe);
-                } else {
-                    if (!recipe.getBlueprint().isEmpty()) {
-                        recipe.getBlueprint().getItems();
-                    }
+                    displayEntries.add(new DisplayEntry(recipe));
                 }
             }
         }
-        sortRecipesByProgression();
 
-        maxPages = Math.max(1, availableRecipes.size());
+        // Add lore-only items
+        for (String itemName : LORE_ONLY_ITEMS) {
+            ResourceLocation itemLocation = new ResourceLocation("scguns", itemName);
+            net.minecraft.world.item.Item item = ForgeRegistries.ITEMS.getValue(itemLocation);
+            if (item != null) {
+                displayEntries.add(new DisplayEntry(new ItemStack(item)));
+            }
+        }
+
+        sortEntriesByProgression();
+
+        maxPages = Math.max(1, displayEntries.size());
         currentPage = 0;
     }
 
-    /**
-     * Sorts available recipes based on the hardcoded GUN_ORDER list.
-     * Items not in the list will be placed at the end in their original order.
-     */
-    private void sortRecipesByProgression() {
-        availableRecipes.sort((recipe1, recipe2) -> {
+    private void sortEntriesByProgression() {
+        displayEntries.sort((entry1, entry2) -> {
             Level level = Minecraft.getInstance().level;
             if (level == null) return 0;
 
-            String item1Name = getItemNameFromRecipe(recipe1, level);
-            String item2Name = getItemNameFromRecipe(recipe2, level);
+            String item1Name = getItemNameFromEntry(entry1, level);
+            String item2Name = getItemNameFromEntry(entry2, level);
 
             int index1 = getOrderIndex(item1Name);
             int index2 = getOrderIndex(item2Name);
@@ -289,13 +324,13 @@ public class BlueprintScreen extends Screen {
         });
     }
 
-    /**
-     * Extracts the item name from a recipe's result item
-     */
-    private String getItemNameFromRecipe(GunBenchRecipe recipe, Level level) {
-        ItemStack resultItem = recipe.getResultItem(level.registryAccess());
+    private String getItemNameFromEntry(DisplayEntry entry, Level level) {
+        ItemStack resultItem = entry.hasRecipe ?
+                entry.recipe.getResultItem(level.registryAccess()) :
+                entry.itemStack;
+
         if (!resultItem.isEmpty()) {
-            ResourceLocation itemLocation = net.minecraftforge.registries.ForgeRegistries.ITEMS.getKey(resultItem.getItem());
+            ResourceLocation itemLocation = ForgeRegistries.ITEMS.getKey(resultItem.getItem());
             if (itemLocation != null) {
                 return itemLocation.getPath();
             }
@@ -303,10 +338,6 @@ public class BlueprintScreen extends Screen {
         return "";
     }
 
-    /**
-     * Gets the order index for an item name. Items not in the hardcoded list
-     * get a high index (placed at the end).
-     */
     private int getOrderIndex(String itemName) {
         int index = GUN_ORDER.indexOf(itemName);
         return index == -1 ? Integer.MAX_VALUE : index;
@@ -338,6 +369,11 @@ public class BlueprintScreen extends Screen {
         recipeItems[10] = recipe.getResultItem(level.registryAccess()).copy();
     }
 
+    private void loadLoreItemIntoSlots(ItemStack item) {
+        clearRecipeItems();
+        recipeItems[10] = item.copy();
+    }
+
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         this.renderBackground(guiGraphics);
@@ -354,14 +390,16 @@ public class BlueprintScreen extends Screen {
         renderItemTooltips(guiGraphics, mouseX, mouseY);
     }
 
-
     private void renderGunInfo(GuiGraphics guiGraphics, int centerX, int centerY) {
-        if (currentPage < availableRecipes.size()) {
-            GunBenchRecipe recipe = availableRecipes.get(currentPage);
+        if (currentPage < displayEntries.size()) {
+            DisplayEntry entry = displayEntries.get(currentPage);
             Level level = Minecraft.getInstance().level;
             if (level == null) return;
 
-            ItemStack resultItem = recipe.getResultItem(level.registryAccess());
+            ItemStack resultItem = entry.hasRecipe ?
+                    entry.recipe.getResultItem(level.registryAccess()) :
+                    entry.itemStack;
+
             if (!resultItem.isEmpty()) {
                 String gunName = Component.translatable(resultItem.getDescriptionId()).getString();
                 PoseStack poseStack = guiGraphics.pose();

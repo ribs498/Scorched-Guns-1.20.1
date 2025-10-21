@@ -11,7 +11,7 @@
     "weaponType": "sniper",
     "alwaysSpread": false,
     "fireMode": "scguns:pulse",
-    "fireTimer": 18,
+    "fireTimer": 25,
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 8,
@@ -43,7 +43,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 23.0,
+    "damage": 24.0,
     "armorPen": 7.5,
     "ejectsCasing": true,
     "gravity": false,

@@ -11,7 +11,6 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
 import org.jetbrains.annotations.NotNull;
-import top.ribs.scguns.entity.animations.ModAnimationDefinitions;
 import top.ribs.scguns.entity.monster.CogKnightEntity;
 import top.ribs.scguns.item.GunItem;
 
@@ -21,18 +20,34 @@ public class CogKnightModel<T extends Entity> extends HierarchicalModel<T> imple
     private final ModelPart leftArm;
     private final ModelPart rightArm;
     private final ModelPart torso;
+    private final ModelPart cog;
+    private final ModelPart cog2;
+
+    private final PartPose headDefault;
+    private final PartPose leftArmDefault;
+    private final PartPose rightArmDefault;
+    private final PartPose torsoDefault;
+    private final PartPose mainDefault;
 
     private float attackStartTime = -1;
     private int lastAttackTimeout = 0;
     private static final float ATTACK_DURATION = 12.0f;
 
-
     public CogKnightModel(ModelPart root) {
         this.main = root.getChild("CogKnight");
-        this.head = this.main.getChild("Full").getChild("Head");
-        this.leftArm = this.main.getChild("Full").getChild("LeftArm");
-        this.rightArm = this.main.getChild("Full").getChild("RightArm");
-        this.torso = this.main.getChild("Full").getChild("Torso");
+        ModelPart full = this.main.getChild("Full");
+        this.head = full.getChild("Head");
+        this.leftArm = full.getChild("LeftArm");
+        this.rightArm = full.getChild("RightArm");
+        this.torso = full.getChild("Torso");
+        this.cog = this.torso.getChild("Cog");
+        this.cog2 = this.torso.getChild("Cog2");
+
+        this.headDefault = this.head.storePose();
+        this.leftArmDefault = this.leftArm.storePose();
+        this.rightArmDefault = this.rightArm.storePose();
+        this.torsoDefault = this.torso.storePose();
+        this.mainDefault = this.main.storePose();
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -97,34 +112,51 @@ public class CogKnightModel<T extends Entity> extends HierarchicalModel<T> imple
 
     @Override
     public void setupAnim(@NotNull T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.root().getAllParts().forEach(ModelPart::resetPose);
+
+        this.main.loadPose(this.mainDefault);
+        this.head.loadPose(this.headDefault);
+        this.leftArm.loadPose(this.leftArmDefault);
+        this.rightArm.loadPose(this.rightArmDefault);
+        this.torso.loadPose(this.torsoDefault);
 
         if (entity instanceof CogKnightEntity cogKnight) {
+            boolean isHoldingGun = cogKnight.getMainHandItem().getItem() instanceof GunItem;
 
-            this.animateWalk(ModAnimationDefinitions.COG_KNIGHT_WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
-            this.animate(cogKnight.idleAnimationState, ModAnimationDefinitions.COG_KNIGHT_IDLE, ageInTicks, 1f);
-
-            float bobAmount = Mth.sin(ageInTicks * 0.1f) * 0.05f;
+            float bobAmount = Mth.sin(ageInTicks * 0.05f);
             this.main.y += bobAmount;
 
             if (limbSwingAmount > 0.01f) {
-                this.main.xRot = limbSwingAmount * 0.15f;
+                float walkSway = Mth.sin(limbSwing * 0.6f) * limbSwingAmount * 0.3f;
+                this.main.zRot = walkSway * 0.1f;
+                this.torso.yRot = walkSway * 0.05f;
+
+                if (!isHoldingGun && !cogKnight.isCharging() && !cogKnight.isAttacking()) {
+                    float hoverAngle = limbSwingAmount * 0.4f;
+                    float tinySwing = Mth.sin(ageInTicks * 0.15f) * 0.05f;
+
+                    this.leftArm.xRot = hoverAngle + tinySwing;
+                    this.rightArm.xRot = hoverAngle - tinySwing;
+                }
             }
 
-            boolean isHoldingGun = cogKnight.getMainHandItem().getItem() instanceof GunItem;
+            float backCogSpeed = 0.1f;
+            float propellerSpeed = 0.4f;
 
             if (cogKnight.isCharging()) {
-                this.main.xRot = -0.3f;
+                backCogSpeed = 0.3f;
 
+                this.main.xRot = -0.3f;
                 this.leftArm.xRot = -1.5f;
                 this.leftArm.zRot = -0.2f;
 
                 float chargeTime = ageInTicks * 0.8f;
                 this.leftArm.xRot += Mth.cos(chargeTime) * 0.1f;
-
                 this.torso.zRot = Mth.sin(ageInTicks * 0.6f) * 0.1f;
+
             } else if (cogKnight.isAttacking() && cogKnight.getAttackTimeout() > 0) {
+                backCogSpeed = 0.25f;
                 animateAttackSmooth(cogKnight.getAttackTimeout(), ageInTicks);
+
             } else if (isHoldingGun) {
                 this.leftArm.xRot = -1.5708f;
                 this.leftArm.yRot = 0.0f;
@@ -134,6 +166,10 @@ public class CogKnightModel<T extends Entity> extends HierarchicalModel<T> imple
                 this.rightArm.yRot = 0.6f;
                 this.rightArm.zRot = 0.2f;
             }
+
+            this.cog2.yRot = (ageInTicks * propellerSpeed) % ((float)Math.PI * 2);
+
+            this.cog.zRot = (ageInTicks * backCogSpeed) % ((float)Math.PI * 2);
 
             float clampedYaw = Mth.clamp(netHeadYaw, -75.0F, 75.0F);
             float clampedPitch = Mth.clamp(headPitch, -30.0F, 30.0F);
@@ -159,7 +195,6 @@ public class CogKnightModel<T extends Entity> extends HierarchicalModel<T> imple
         lastAttackTimeout = attackTimeout;
 
         float elapsedTime = (ageInTicks - attackStartTime);
-
         float attackProgress = elapsedTime / ATTACK_DURATION;
         attackProgress = Mth.clamp(attackProgress, 0.0f, 1.0f);
 
@@ -175,11 +210,13 @@ public class CogKnightModel<T extends Entity> extends HierarchicalModel<T> imple
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
         main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
+
     @Override
     public void translateToHand(HumanoidArm pSide, PoseStack pPoseStack) {
         if (pSide == HumanoidArm.LEFT) {
-            pPoseStack.translate(0.0625, 0.4375, 0.0);
+            float mainYOffset = this.main.y;
 
+            pPoseStack.translate(0.0625, 0.4375 + mainYOffset / 16.0f, 0.0);
             this.leftArm.translateAndRotate(pPoseStack);
 
             float armRotation = this.leftArm.xRot;
@@ -187,9 +224,12 @@ public class CogKnightModel<T extends Entity> extends HierarchicalModel<T> imple
             float dynamicOffset = 0.6f;
 
             boolean isCharging = armRotation < -1.4f && armZRot < -0.2f;
+            boolean isHoldingGun = Math.abs(armRotation + 1.5708f) < 0.1f;
 
             if (isCharging) {
                 pPoseStack.translate(-0.35, 0.5, -0.2);
+            } else if (isHoldingGun) {
+                pPoseStack.translate(-0.25, dynamicOffset - 0.1, 0.05);
             } else if (armRotation < -0.5f) {
                 dynamicOffset += Math.abs(armRotation + 0.3f) * 0.1f;
                 pPoseStack.translate(-0.25, dynamicOffset, 0.0);
@@ -198,6 +238,7 @@ public class CogKnightModel<T extends Entity> extends HierarchicalModel<T> imple
             }
         }
     }
+
     @Override
     public ModelPart root() {
         return main;

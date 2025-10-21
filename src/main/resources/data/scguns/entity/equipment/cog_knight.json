@@ -18,37 +18,51 @@
     {
       "item": "scguns:anthralite_sword",
       "weight": 8.0,
-      "drop_chance": 0.4,
+      "drop_chance": 0.2,
       "min_durability": 0.5,
       "max_durability": 1.0
     },
     {
       "item": "minecraft:golden_sword",
       "weight": 10.0,
-      "drop_chance": 0.4,
+      "drop_chance": 0.3,
       "min_durability": 0.5,
       "max_durability": 1.0
     },
     {
       "item": "minecraft:diamond_sword",
       "weight": 4.0,
-      "drop_chance": 0.4,
+      "drop_chance": 0.2,
       "min_durability": 0.5,
       "max_durability": 1.0
     },
     {
-      "item": "scguns:niami",
-      "weight": 6.0,
-      "drop_chance": 0.5,
-      "min_durability": 0.5,
-      "max_durability": 1.0
-    },
-    {
-      "item": "scguns:grandle_og",
-      "weight": 6.0,
-      "drop_chance": 0.5,
+      "item": "scguns:scrapper",
+      "weight": 3.0,
+      "drop_chance": 0.1,
       "min_durability": 0.1,
-      "max_durability": 0.3
+      "max_durability": 0.2
+    },
+    {
+      "item": "scguns:pax",
+      "weight": 2.0,
+      "drop_chance": 0.1,
+      "min_durability": 0.1,
+      "max_durability": 0.2
+    },
+    {
+      "item": "scguns:saketini",
+      "weight": 3.0,
+      "drop_chance": 0.3,
+      "min_durability": 0.5,
+      "max_durability": 1.0
+    },
+    {
+      "item": "scguns:callwell",
+      "weight": 3.0,
+      "drop_chance": 0.3,
+      "min_durability": 0.5,
+      "max_durability": 1.0
     }
   ]
 }

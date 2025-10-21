@@ -8,7 +8,7 @@
     }
   },
   "general": {
-    "weaponType": "rifle",
+    "weaponType": "lmg",
     "alwaysSpread": false,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",

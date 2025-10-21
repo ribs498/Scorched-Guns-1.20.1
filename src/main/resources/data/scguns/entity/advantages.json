@@ -67,6 +67,14 @@
       "target_tags": [
         "scguns:wither"
       ]
+    },
+    "scguns:piglin": {
+      "multiplier": 1.5,
+      "causes_fire": false,
+      "fire_duration": 0,
+      "target_tags": [
+        "scguns:piglin"
+      ]
     }
   }
 }

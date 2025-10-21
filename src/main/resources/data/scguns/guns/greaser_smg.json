@@ -45,12 +45,12 @@
     "zoom": {
       "fovModifier": 0.6,
       "yOffset": 6.9,
-      "zOffset": 0.75
+      "zOffset": -0.75
     }
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 7.5,
+    "damage": 7.0,
     "armorPen": 1.0,
     "ejectsCasing": true,
     "item": "scguns:compact_advanced_round",

@@ -8,7 +8,7 @@
     }
   },
   "general": {
-    "weaponType": "rifle",
+    "weaponType": "sniper",
     "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
@@ -43,7 +43,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 17.0,
+    "damage": 21.0,
     "armorPen": 7.0,
     "ejectsCasing": true,
     "item": "scguns:sculk_cell",
@@ -60,7 +60,7 @@
   },
   "reloads": {
     "emptyMagTimer": 30,
-    "maxAmmo": 5,
+    "maxAmmo": 3,
     "reloadItem": "scguns:sculk_cell",
     "reloadTimer": 35,
     "reloadType": "scguns:mag_fed"

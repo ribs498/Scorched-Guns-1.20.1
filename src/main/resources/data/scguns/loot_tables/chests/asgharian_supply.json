@@ -249,7 +249,21 @@
         },
         {
           "type": "minecraft:item",
-          "name": "scguns:diamond_steel_blueprint",
+          "functions": [
+            {
+              "function": "minecraft:set_count",
+              "count": {
+                "min": 0.0,
+                "max": 2.0,
+                "type": "minecraft:uniform"
+              }
+            }
+          ],
+          "name": "scguns:diamond_steel_flare"
+        },
+        {
+          "type": "minecraft:item",
+          "name": "scguns:blueprint_scrap",
           "weight": 3
         },
         {

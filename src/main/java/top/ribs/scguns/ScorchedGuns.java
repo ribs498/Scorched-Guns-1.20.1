@@ -24,10 +24,7 @@ import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.client.CustomGunManager;
 import top.ribs.scguns.client.handler.*;
 import top.ribs.scguns.client.screen.*;
-import top.ribs.scguns.common.BoundingBoxManager;
-import top.ribs.scguns.common.NetworkGunManager;
-import top.ribs.scguns.common.ProjectileManager;
-import top.ribs.scguns.common.TurretManager;
+import top.ribs.scguns.common.*;
 import top.ribs.scguns.common.exosuit.ExoSuitUpgradeManager;
 import top.ribs.scguns.compat.CreateModCondition;
 import top.ribs.scguns.compat.FarmersDelightModCondition;
@@ -44,6 +41,7 @@ import top.ribs.scguns.init.ModBlockEntities;
 import top.ribs.scguns.client.ClientHandler;
 import top.ribs.scguns.init.*;
 import top.ribs.scguns.network.PacketHandler;
+import top.ribs.scguns.util.ModCauldronInteraction;
 import top.ribs.scguns.world.VillageStructures;
 import java.io.IOException;
 import java.io.InputStream;
@@ -97,6 +95,8 @@ public class ScorchedGuns {
         ModSounds.REGISTER.register(bus);
         ModVillagers.register(bus);
         ModFeatures.register(bus);
+        ModFluids.FLUID_TYPES.register(modEventBus);
+        ModFluids.FLUIDS.register(modEventBus);
         ModLootModifiers.LOOT_MODIFIERS.register(bus);
         ModPointOfInterestTypes.REGISTER.register(bus);
         ModRecipes.register(modEventBus);
@@ -116,6 +116,8 @@ public class ScorchedGuns {
             CraftingHelper.register(IEModCondition.Serializer.INSTANCE);
             CraftingHelper.register(SoulFiredModCondition.Serializer.INSTANCE);
             MinecraftForge.EVENT_BUS.register(BeamHandler.class);
+            MinecraftForge.EVENT_BUS.register(BulletTrailRenderingHandler.get());
+
         });
 
         MinecraftForge.EVENT_BUS.register(this);
@@ -129,6 +131,9 @@ public class ScorchedGuns {
         MinecraftForge.EVENT_BUS.register(EntityEquipmentConfig.class);
         MinecraftForge.EVENT_BUS.register(ProjectileAdvantageConfig.class);
         MinecraftForge.EVENT_BUS.register(TurretManager.class);
+        MinecraftForge.EVENT_BUS.register(VentManager.class);
+        MinecraftForge.EVENT_BUS.register(RaidConfig.class);
+        MinecraftForge.EVENT_BUS.register(RaidFlareConfig.class);
 
         if (SCULK_HORDE_LOADED) {
             MinecraftForge.EVENT_BUS.register(SculkHordeEvents.class);
@@ -181,6 +186,7 @@ public class ScorchedGuns {
             FrameworkAPI.registerSyncedDataKey(ModSyncedDataKeys.BURSTCOUNT);
             FrameworkAPI.registerSyncedDataKey(ModSyncedDataKeys.ONBURSTCOOLDOWN);
             FrameworkAPI.registerSyncedDataKey(ModSyncedDataKeys.MELEE);
+            ModCauldronInteraction.register();
             MinecraftForge.EVENT_BUS.register(TemporaryLightManager.class);
             // Register login data
             FrameworkAPI.registerLoginData(new ResourceLocation(Reference.MOD_ID, "network_gun_manager"), NetworkGunManager.LoginData::new);

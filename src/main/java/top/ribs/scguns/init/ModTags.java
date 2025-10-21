@@ -26,6 +26,7 @@ public class ModTags
         public static final TagKey<Block> FRAGILE = tag("fragile");
         public static final TagKey<Block> SCULK_BLOCKS = tag("sculk_blocks");
         public static final TagKey<Block> TANK_BREAKABLE = tag("tank_breakable");
+        public static final TagKey<Block> ASGHARIAN_BRICKS = tag("asgharian_bricks");
         private static TagKey<Block> tag(String name)
         {
             return BlockTags.create(new ResourceLocation(Reference.MOD_ID, name));
@@ -116,6 +117,7 @@ public class ModTags
 
     public static class Entities
     {
+        public static final TagKey<EntityType<?>> ASGHARIAN_MOB_TYPES = tag("asgharian_mob_types");
         public static final TagKey<EntityType<?>> DISABLE_BULLET_TRAIL = tag("disable_bullet_trail");
         public static final TagKey<EntityType<?>> GUNNER = tag("gunner");
         public static final TagKey<EntityType<?>> CANNOT_BE_LACERATED = tag("cannot_be_lacerated");

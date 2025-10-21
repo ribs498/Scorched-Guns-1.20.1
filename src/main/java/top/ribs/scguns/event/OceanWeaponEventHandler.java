@@ -12,8 +12,14 @@ import net.minecraftforge.fml.common.Mod;
 import top.ribs.scguns.init.ModItems;
 import top.ribs.scguns.init.ModTags;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 @Mod.EventBusSubscriber(modid = "scguns")
 public class OceanWeaponEventHandler {
+
+    private static final Map<UUID, Boolean> appliedDolphinGrace = new HashMap<>();
 
     @SubscribeEvent
     public static void onEquipmentChange(LivingEquipmentChangeEvent event) {
@@ -33,17 +39,26 @@ public class OceanWeaponEventHandler {
         ItemStack mainHandItem = player.getMainHandItem();
         ItemStack offHandItem = player.getOffhandItem();
 
-        boolean holdingSpecialItem = isOceanWeapon(mainHandItem) || isOceanWeapon(offHandItem);
+        boolean holdingOceanWeapon = isOceanWeapon(mainHandItem) || isOceanWeapon(offHandItem);
         boolean isInWater = player.isEyeInFluid(FluidTags.WATER);
         MobEffectInstance dolphinGraceEffect = player.getEffect(MobEffects.DOLPHINS_GRACE);
 
-        if (holdingSpecialItem && isInWater) {
-            if (dolphinGraceEffect == null || dolphinGraceEffect.getAmplifier() < 0 || dolphinGraceEffect.getDuration() <= 10) {
-                player.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 60, 0, false, false, true));
+        UUID playerId = player.getUUID();
+        boolean wasAppliedByUs = appliedDolphinGrace.getOrDefault(playerId, false);
+
+        if (holdingOceanWeapon && isInWater) {
+            if (dolphinGraceEffect == null || dolphinGraceEffect.getDuration() <= 10) {
+                player.addEffect(new MobEffectInstance(MobEffects.DOLPHINS_GRACE, 60, 0, false, false, false));
+                appliedDolphinGrace.put(playerId, true);
+            } else if (dolphinGraceEffect.getDuration() > 60) {
+                appliedDolphinGrace.put(playerId, false);
             }
         } else {
-            if (dolphinGraceEffect != null) {
+            if (wasAppliedByUs && dolphinGraceEffect != null && dolphinGraceEffect.getDuration() <= 60) {
                 player.removeEffect(MobEffects.DOLPHINS_GRACE);
+                appliedDolphinGrace.remove(playerId);
+            } else if (!holdingOceanWeapon || !isInWater) {
+                appliedDolphinGrace.remove(playerId);
             }
         }
     }

@@ -7,6 +7,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.client.render.entity.*;
+import top.ribs.scguns.entity.client.RaidFlareRenderer;
 import top.ribs.scguns.init.ModEntities;
 
 /**
@@ -48,17 +49,19 @@ public class GunEntityRenderers
         event.registerEntityRenderer(ModEntities.ADVANCED_ROUND_PROJECTILE.get(), ProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.SHATTER_ROUND_PROJECTILE.get(), ProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.GIBBS_ROUND_PROJECTILE.get(), ProjectileRenderer::new);
-        event.registerEntityRenderer(ModEntities.SHOTBALL_PROJECTILE.get(), ProjectileRenderer::new);
+        event.registerEntityRenderer(ModEntities.SHOTBALL_PROJECTILE.get(), ShotballRenderer::new);
         event.registerEntityRenderer(ModEntities.THROWABLE_GRENADE.get(), ThrowableGrenadeRenderer::new);
         event.registerEntityRenderer(ModEntities.THROWABLE_STUN_GRENADE.get(), ThrowableGrenadeRenderer::new);
-        event.registerEntityRenderer(ModEntities.THROWABLE_MOLOTOV_COCKTAIL.get(), ThrowableGrenadeRenderer::new);
-        event.registerEntityRenderer(ModEntities.THROWABLE_HELLFIRE_BOMB.get(), ThrowableGrenadeRenderer::new);
-        event.registerEntityRenderer(ModEntities.THROWABLE_BEACON_GRENADE.get(), ThrowableGrenadeRenderer::new);
-        event.registerEntityRenderer(ModEntities.THROWABLE_GAS_GRENADE.get(), ThrowableGrenadeRenderer::new);
+        event.registerEntityRenderer(ModEntities.THROWABLE_MOLOTOV_COCKTAIL.get(), ThrowableItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.THROWABLE_HELLFIRE_BOMB.get(), ThrowableItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.THROWABLE_BEACON_GRENADE.get(), ThrowableItemRenderer::new);
+        event.registerEntityRenderer(ModEntities.THROWABLE_GAS_GRENADE.get(), ThrowableItemRenderer::new);
         event.registerEntityRenderer(ModEntities.THROWABLE_CHOKE_BOMB.get(), ThrowableGrenadeRenderer::new);
-        event.registerEntityRenderer(ModEntities.THROWABLE_SWARM_BOMB.get(), ThrowableGrenadeRenderer::new);
+        event.registerEntityRenderer(ModEntities.THROWABLE_SWARM_BOMB.get(), ThrowableItemRenderer::new);
         event.registerEntityRenderer(ModEntities.THROWABLE_SHOTBALL.get(), ThrowableShotballRenderer::new);
-        event.registerEntityRenderer(ModEntities.THROWABLE_NAIL_BOMB.get(), ThrowableGrenadeRenderer::new);
+        event.registerEntityRenderer(ModEntities.THROWABLE_NAIL_BOMB.get(), ThrowableItemRenderer::new);
+
+        event.registerEntityRenderer(ModEntities.RAID_FLARE.get(), RaidFlareRenderer::new);
 
     }
 }

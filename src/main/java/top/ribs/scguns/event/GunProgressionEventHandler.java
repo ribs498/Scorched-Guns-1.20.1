@@ -9,6 +9,7 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.ribs.scguns.Reference;
+import top.ribs.scguns.config.RaidConfig;
 import top.ribs.scguns.entity.player.PlayerGunProgression;
 
 import java.util.List;
@@ -28,6 +29,21 @@ public class GunProgressionEventHandler {
                 PlayerGunProgression.save(player, progression);
                 sendTierUnlockedMessage(player, progression.getCurrentTier());
             }
+        }
+    }
+
+    @SubscribeEvent
+    public static void onPlayerClone(PlayerEvent.Clone event) {
+        if (event.isWasDeath()) {
+            Player oldPlayer = event.getOriginal();
+            Player newPlayer = event.getEntity();
+
+            oldPlayer.reviveCaps();
+
+            PlayerGunProgression oldProgression = PlayerGunProgression.get(oldPlayer);
+            PlayerGunProgression.save(newPlayer, oldProgression);
+
+            oldPlayer.invalidateCaps();
         }
     }
 
@@ -99,5 +115,38 @@ public class GunProgressionEventHandler {
 
             player.sendSystemMessage(mobMessage);
         }
+
+        sendRaidUnlockedMessage(player, tier);
+    }
+
+    private static void sendRaidUnlockedMessage(Player player, PlayerGunProgression.GunTier tier) {
+        int raidLevel = tier.getRaidLevel();
+
+        if (raidLevel <= 0) {
+            return;
+        }
+
+        List<RaidConfig.RaidData> availableRaids = RaidConfig.getRaidsForLevel(raidLevel);
+
+        if (availableRaids.isEmpty()) {
+            return;
+        }
+
+        Component raidMessage = Component.translatable("progression.scguns.raids_can_spawn")
+                .withStyle(ChatFormatting.DARK_GRAY);
+
+        for (int i = 0; i < availableRaids.size(); i++) {
+            RaidConfig.RaidData raid = availableRaids.get(i);
+            Component raidComponent = Component.translatable("raid.scguns." + raid.raidId())
+                    .withStyle(ChatFormatting.DARK_RED);
+
+            raidMessage = raidMessage.copy().append(raidComponent);
+
+            if (i < availableRaids.size() - 1) {
+                raidMessage = raidMessage.copy().append(Component.literal(", ").withStyle(ChatFormatting.DARK_GRAY));
+            }
+        }
+
+        player.sendSystemMessage(raidMessage);
     }
 }

@@ -2,32 +2,26 @@
   "feature": "scguns:patch_sulfur_vent",
   "placement": [
     {
-      "type": "minecraft:height_range",
-      "height": {
-        "type": "uniform",
-        "min_inclusive": {
-          "above_bottom": 0
-        },
-        "max_inclusive": {
-          "below_top": 0
-        }
-      }
+      "type": "minecraft:count",
+      "count": 5
     },
     {
       "type": "minecraft:in_square"
     },
     {
-      "type": "minecraft:biome"
-    },
-    {
-      "type": "minecraft:count",
-      "count": {
-        "type": "uniform",
-        "value": {
-          "min_inclusive": 1,
-          "max_inclusive": 3
+      "type": "minecraft:height_range",
+      "height": {
+        "type": "minecraft:uniform",
+        "min_inclusive": {
+          "above_bottom": 10
+        },
+        "max_inclusive": {
+          "below_top": 10
         }
       }
+    },
+    {
+      "type": "minecraft:biome"
     }
   ]
 }

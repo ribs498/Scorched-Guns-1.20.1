@@ -9,6 +9,7 @@ import top.ribs.scguns.entity.monster.SupplyScampEntity;
 public class SupplyScampRenderer extends MobRenderer<SupplyScampEntity, SupplyScampModel<SupplyScampEntity>> {
     public SupplyScampRenderer(EntityRendererProvider.Context pContext) {
         super(pContext, new SupplyScampModel<>(pContext.bakeLayer(ModModelLayers.SUPPLY_SCAMP_LAYER)), 0.7f);
+        this.addLayer(new SupplyScampPumpkinLayer(this));
     }
     @Override
     public ResourceLocation getTextureLocation(SupplyScampEntity pEntity) {

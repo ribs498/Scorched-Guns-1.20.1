@@ -130,6 +130,7 @@ public class ExoSuitEventHandler {
             ExoSuitNightVisionHandler.onPlayerLogout(event.getEntity());
         }
         ExoSuitPowerManager.cleanupPlayerData(event.getEntity().getUUID());
+        ExoSuitEffectsHandler.cleanupPlayerData(event.getEntity().getUUID());
     }
     @SubscribeEvent
     public static void onLivingEquipmentChange(LivingEquipmentChangeEvent event) {

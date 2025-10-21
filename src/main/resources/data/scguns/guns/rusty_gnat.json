@@ -49,7 +49,7 @@
   },
   "projectile": {
     "advantage": "scguns:none",
-    "damage": 4.5,
+    "damage": 5.0,
     "ejectsCasing": true,
     "item": "scguns:compact_copper_round",
     "casingType": "scguns:small_copper_casing",

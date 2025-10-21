@@ -123,7 +123,7 @@ public class AdvancedComposterBlock extends BaseEntityBlock {
     @Override
     public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
         if (state.getValue(LEVEL) == 7) {
-            level.scheduleTick(pos, this, 20); // Schedule tick for processing
+            level.scheduleTick(pos, this, 20);
         }
     }
 
@@ -142,7 +142,7 @@ public class AdvancedComposterBlock extends BaseEntityBlock {
                     ((AdvancedComposterBlockEntity) blockEntity).startComposting();
                 }
             }
-            playComposterEffects(level, pos, state); // Add this line
+            playComposterEffects(level, pos, state);
             return newState;
         }
         return state;
@@ -166,7 +166,7 @@ public class AdvancedComposterBlock extends BaseEntityBlock {
             if (!level.isClientSide) {
                 return extractProduce(player, state, level, pos);
             }
-            return InteractionResult.sidedSuccess(level.isClientSide);
+            return InteractionResult.sidedSuccess(true);
         } else {
             return InteractionResult.PASS;
         }
@@ -211,12 +211,12 @@ public class AdvancedComposterBlock extends BaseEntityBlock {
             double d1 = pos.getY() + 1.0D;
             double d2 = pos.getZ() + 0.5D;
 
-            int particleChance = (currentLevel == 7) ? 10 : 5; // Higher chance at level 7 for fewer particles
+            int particleChance = (currentLevel == 7) ? 10 : 5;
 
             if (random.nextInt(particleChance) == 0) {
                 double offsetX = (random.nextDouble() - 0.5D) * 0.5D;
                 double offsetZ = (random.nextDouble() - 0.5D) * 0.5D;
-                double offsetY = random.nextDouble() * 0.1D; // Small vertical offset
+                double offsetY = random.nextDouble() * 0.1D;
 
                 level.addParticle(ModParticleTypes.SULFUR_DUST.get(),
                         d0 + offsetX,

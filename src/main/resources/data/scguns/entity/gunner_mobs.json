@@ -3,7 +3,7 @@
     "minecraft:pillager": {
       "spawn_chance": 0.3,
       "ai_difficulty": 2,
-      "weapon_drop_chance": 0.2,
+      "weapon_drop_chance": 0.5,
       "weapons": [
         "scguns:pax",
         "scguns:winnie",

@@ -1,0 +1,52 @@
+{
+  "raid_id": "wrecker",
+  "burst_delay": 20,
+  "duration": 60,
+  "trail_particles": [
+    {
+      "particle": "minecraft:flame",
+      "count": 3,
+      "spread": 0.4,
+      "speed": 0.15,
+      "color": "#8B4513"
+    },
+    {
+      "particle": "minecraft:large_smoke",
+      "count": 2,
+      "spread": 0.3,
+      "speed": 0.1,
+      "color": "#4A4A4A"
+    }
+  ],
+  "burst_particles": [
+    {
+      "particle": "minecraft:electric_spark",
+      "count": 200,
+      "spread": 0.35,
+      "speed": 0.45,
+      "color": "#DAA520"
+    },
+    {
+      "particle": "minecraft:angry_villager",
+      "count": 40,
+      "spread": 0.6,
+      "speed": 0.25,
+      "color": "#8B4513"
+    },
+    {
+      "particle": "minecraft:lava",
+      "count": 25,
+      "spread": 0.4,
+      "speed": 0.2,
+      "color": "#FF8C00"
+    }
+  ],
+  "pattern": {
+    "type": "spiral",
+    "repetitions": 6,
+    "scale": 5.5
+  },
+  "burst_sound": "minecraft:entity.firework_rocket.large_blast",
+  "burst_sound_volume": 1.8,
+  "burst_sound_pitch": 0.6
+}
