@@ -1,0 +1,98 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"textures": {
+		"1": "scguns:item/choke_bomb_3d"
+	},
+	"elements": [
+		{
+			"from": [7.35, -0.1, 7.45],
+			"to": [8.55, 7.9, 8.65],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.85, 4.9, 7.39693]},
+			"faces": {
+				"north": {"uv": [0, 0, 1.5, 10], "texture": "#1"},
+				"east": {"uv": [2, 0, 3.5, 10], "texture": "#1"},
+				"south": {"uv": [4, 0, 5.5, 10], "texture": "#1"},
+				"west": {"uv": [6, 0, 7.5, 10], "texture": "#1"},
+				"up": {"uv": [12.5, 4.5, 11, 3], "texture": "#1"},
+				"down": {"uv": [12.5, 5, 11, 6.5], "texture": "#1"}
+			}
+		},
+		{
+			"from": [7.55, 7.3, 5.85],
+			"to": [8.35, 7.7, 7.05],
+			"rotation": {"angle": 0, "axis": "x", "origin": [7.95, 7.7, 6.45]},
+			"faces": {
+				"north": {"uv": [12, 8, 13, 8.5], "texture": "#1"},
+				"east": {"uv": [12, 7, 13.5, 7.5], "texture": "#1"},
+				"south": {"uv": [13, 8, 12, 8.5], "texture": "#1"},
+				"west": {"uv": [12, 7, 13.5, 7.5], "texture": "#1"},
+				"up": {"uv": [12, 8.5, 11, 7], "texture": "#1"},
+				"down": {"uv": [12, 7, 11, 8.5], "texture": "#1"}
+			}
+		},
+		{
+			"from": [7.55, 6.9, 5.85],
+			"to": [8.35, 7.3, 5.85],
+			"rotation": {"angle": 0, "axis": "x", "origin": [7.95, 7.7, 6.45]},
+			"faces": {
+				"north": {"uv": [13, 8, 12, 8.5], "texture": "#1"},
+				"east": {"uv": [12, 7, 13.5, 7.5], "texture": "#1"},
+				"south": {"uv": [13, 8, 12, 8.5], "texture": "#1"},
+				"west": {"uv": [12, 7, 13.5, 7.5], "texture": "#1"},
+				"up": {"uv": [12, 8.5, 11, 7], "texture": "#1"},
+				"down": {"uv": [12, 7, 11, 8.5], "texture": "#1"}
+			}
+		},
+		{
+			"from": [6.95, 7.3, 7.05],
+			"to": [8.95, 7.7, 9.05],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.85, 4.9, 7.39693]},
+			"faces": {
+				"north": {"uv": [11, 9, 13.5, 9.5], "texture": "#1"},
+				"east": {"uv": [11, 9, 13.5, 9.5], "texture": "#1"},
+				"south": {"uv": [11, 9, 13.5, 9.5], "texture": "#1"},
+				"west": {"uv": [11, 9, 13.5, 9.5], "texture": "#1"},
+				"up": {"uv": [13.5, 2.5, 11, 0], "texture": "#1"},
+				"down": {"uv": [11, 0, 13.5, 2.5], "texture": "#1"}
+			}
+		},
+		{
+			"from": [6.75, 7.9, 6.85],
+			"to": [9.15, 11.9, 9.25],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.85, 4.9, 7.39693]},
+			"faces": {
+				"north": {"uv": [8, 0, 11, 5], "texture": "#1"},
+				"east": {"uv": [8, 5, 11, 10], "texture": "#1"},
+				"south": {"uv": [0, 10, 3, 15], "texture": "#1"},
+				"west": {"uv": [3, 10, 6, 15], "texture": "#1"},
+				"up": {"uv": [9, 13, 6, 10], "texture": "#1"},
+				"down": {"uv": [12, 10, 9, 13], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 2.5, 1.5]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 2.5, 1.5]
+		},
+		"firstperson_righthand": {
+			"rotation": [166.25, 79, -180],
+			"translation": [0, 6.25, 0]
+		},
+		"firstperson_lefthand": {
+			"rotation": [166.25, 79, -180],
+			"translation": [0, 6.25, 0]
+		}
+	},
+	"groups": [
+		{
+			"name": "grenade",
+			"origin": [7.75, 12, 8.25],
+			"color": 0,
+			"children": [0, 1, 2, 3, 4]
+		}
+	]
+}
