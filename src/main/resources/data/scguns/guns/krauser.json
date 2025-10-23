@@ -48,6 +48,9 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 9.5,
+    "damageFalloffStart": 12.0,
+    "damageFalloffEnd": 30.0,
+    "damageFalloffMinMultiplier": 0.45,
     "armorPen": 1.0,
     "gravity": false,
     "item": "scguns:compact_advanced_round",

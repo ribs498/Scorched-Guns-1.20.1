@@ -2,6 +2,7 @@ package top.ribs.scguns.entity.raid;
 
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
@@ -313,7 +314,7 @@ public class RaidManager {
 
         for (int attempt = 0; attempt < 15; attempt++) {
             double angle = random.nextDouble() * Math.PI * 2;
-            double distance = 15 + random.nextDouble() * (25 - 20);
+            double distance = 25 + random.nextDouble() * (35 - 20);
 
             double x = center.x + Math.cos(angle) * distance;
             double z = center.z + Math.sin(angle) * distance;
@@ -381,17 +382,8 @@ public class RaidManager {
         RaidSaveData saveData = RaidSaveData.get(level);
         saveData.saveActiveRaid(raid);
 
-        LOGGER.info("Started raid: {} (Level: {}) at position {}",
-                config.raidId(), raidLevel != null ? raidLevel : "Custom", spawnPos);
     }
-    public void startRaidById(String raidId, ServerLevel level, Vec3 spawnPos) {
-        RaidConfig.RaidData config = RaidConfig.getRaidById(raidId);
-        if (config != null) {
-            startRaid(config, level, spawnPos);
-        } else {
-            LOGGER.warn("Attempted to start raid with unknown ID: {}", raidId);
-        }
-    }
+
     @Nullable
     private ServerPlayer findNearestPlayer(ServerLevel level, Vec3 pos) {
         ServerPlayer nearest = null;
@@ -436,6 +428,12 @@ public class RaidManager {
 
         if (bossData.weapon() != null) {
             ItemStack weaponStack = createModifiedGun(boss, bossData.weapon().item());
+
+            if (bossData.weapon().nbt() != null) {
+                CompoundTag existingTag = weaponStack.getOrCreateTag();
+                existingTag.merge(bossData.weapon().nbt());
+            }
+
             boss.setItemSlot(EquipmentSlot.MAINHAND, weaponStack);
             boss.setDropChance(EquipmentSlot.MAINHAND, bossData.weapon().dropChance());
         }
@@ -450,7 +448,13 @@ public class RaidManager {
             };
 
             if (slot != null) {
-                boss.setItemSlot(slot, new ItemStack(armorEntry.item()));
+                ItemStack armorStack = new ItemStack(armorEntry.item());
+
+                if (armorEntry.nbt() != null) {
+                    armorStack.setTag(armorEntry.nbt().copy());
+                }
+
+                boss.setItemSlot(slot, armorStack);
                 boss.setDropChance(slot, armorEntry.dropChance());
             }
         }
@@ -507,7 +511,13 @@ public class RaidManager {
             };
 
             if (slot != null) {
-                mount.setItemSlot(slot, new ItemStack(armorEntry.item()));
+                ItemStack armorStack = new ItemStack(armorEntry.item());
+
+                if (armorEntry.nbt() != null) {
+                    armorStack.setTag(armorEntry.nbt().copy());
+                }
+
+                mount.setItemSlot(slot, armorStack);
                 mount.setDropChance(slot, armorEntry.dropChance());
             }
         }
@@ -591,16 +601,16 @@ public class RaidManager {
         henchman.addTag("AI_" + type.aiType().name());
         henchman.setPersistenceRequired();
 
-        net.minecraftforge.event.ForgeEventFactory.onFinalizeSpawn(henchman, level,
-                level.getCurrentDifficultyAt(henchman.blockPosition()),
-                net.minecraft.world.entity.MobSpawnType.EVENT, null, null);
-
         if (!type.weapons().isEmpty()) {
             Item weaponItem = type.weapons().get(level.random.nextInt(type.weapons().size()));
             ItemStack weaponStack = createModifiedGun(henchman, weaponItem);
             henchman.setItemSlot(EquipmentSlot.MAINHAND, weaponStack);
             henchman.setDropChance(EquipmentSlot.MAINHAND, 0.05f);
         }
+
+        net.minecraftforge.event.ForgeEventFactory.onFinalizeSpawn(henchman, level,
+                level.getCurrentDifficultyAt(henchman.blockPosition()),
+                net.minecraft.world.entity.MobSpawnType.EVENT, null, null);
 
         for (RaidConfig.ArmorEntry armorEntry : type.armor()) {
             if (level.random.nextFloat() > armorEntry.dropChance()) continue;
@@ -614,7 +624,12 @@ public class RaidManager {
             };
 
             if (slot != null) {
-                henchman.setItemSlot(slot, new ItemStack(armorEntry.item()));
+                ItemStack armorStack = new ItemStack(armorEntry.item());
+                if (armorEntry.nbt() != null) {
+                    armorStack.setTag(armorEntry.nbt().copy());
+                }
+
+                henchman.setItemSlot(slot, armorStack);
                 henchman.setDropChance(slot, 0.05f);
             }
         }

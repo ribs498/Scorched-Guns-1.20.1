@@ -20,6 +20,7 @@ import top.ribs.scguns.Reference;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.entity.ai.AIType;
 import top.ribs.scguns.entity.ai.GunAttackGoal;
+import top.ribs.scguns.entity.player.GunTier;
 import top.ribs.scguns.entity.player.PlayerGunProgression;
 import top.ribs.scguns.init.ModTags;
 import top.ribs.scguns.item.GunItem;
@@ -62,10 +63,10 @@ public class GunnerMobSpawner {
         Player nearestPlayer = entity.level().getNearestPlayer(entity, 64.0);
         if (nearestPlayer != null) {
             PlayerGunProgression progression = PlayerGunProgression.get(nearestPlayer);
-            List<PlayerGunProgression.GunTier> availableTiers = progression.getAvailableMobTiers();
+            List<GunTier> availableTiers = progression.getAvailableMobTiers();
 
             boolean hasValidTiers = false;
-            for (PlayerGunProgression.GunTier tier : availableTiers) {
+            for (GunTier tier : availableTiers) {
                 if (TieredWeaponConfig.hasTierWeapons(tier)) {
                     hasValidTiers = true;
                     break;
@@ -185,7 +186,7 @@ public class GunnerMobSpawner {
         }
 
         PlayerGunProgression progression = PlayerGunProgression.get(nearestPlayer);
-        List<PlayerGunProgression.GunTier> availableTiers = progression.getAvailableMobTiers();
+        List<GunTier> availableTiers = progression.getAvailableMobTiers();
 
         if (availableTiers.isEmpty()) {
             return;
@@ -193,8 +194,8 @@ public class GunnerMobSpawner {
 
         boolean isElite = (mob.getRandom().nextFloat() < GunMobValues.eliteChance && GunMobValues.elitesEnabled);
 
-        List<PlayerGunProgression.GunTier> validTiers = new ArrayList<>();
-        for (PlayerGunProgression.GunTier tier : availableTiers) {
+        List<GunTier> validTiers = new ArrayList<>();
+        for (GunTier tier : availableTiers) {
             if (isElite) {
                 if (EliteTierConfig.hasEliteData(tier)) {
                     validTiers.add(tier);
@@ -210,7 +211,7 @@ public class GunnerMobSpawner {
             return;
         }
 
-        PlayerGunProgression.GunTier selectedTier;
+        GunTier selectedTier;
         float rand = mob.getRandom().nextFloat();
 
         if (rand < 0.6f) {

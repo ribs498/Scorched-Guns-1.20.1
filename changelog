@@ -1,48 +1,16 @@
-
-- Added Raids!
-- Overhauled Blueprint system, now require blueprint scraps (found in structures, mob drops)
-- Each tier of raid drops a required trophy item to craft the next tier's blueprint
-- Added Flare gun to manually call raids
-- Added Flares to call raids, found in structures, mob drops, and trades.
-
-- Rebalanced Heavy Shot, Hyper Velocity and Sharpshooter to be more in line with each other
-- Heavy Shot: 12.5% damage increase, -15% fire rate, 25% recoil increase, 20% kick increase, additional knockback per level
-- Heavy Shot lowered to uncommon rarity
-- Hyper Velocity: 25% projectile speed, 6% damage increase, 25% chance of dealing double durability damage per shot, 7% chance to deal 8 damage per level
-- Sharpshooter: 5.0 armor bypass per level,6% fire rate decrease, 10% increased recoil, 5% crit chance increase per level
-- Removed complicated damage decrease for sharpshooter
-
-- Fixed Sculk gun sound effect
-- Added Halloween stuff for scamps
-- Added more entity gun behavior to config
-- added gun knockback stat to guns, bunch of guns now do more knockback
-- added player check before stuff for improved hitboxes, shouldnt crash game now
-- Gun effects no longer trigger when in creative
-- Bunch of new great textures mainly for exo suit stuff from JaDn
-- Added config for mob block destruction using guns
-- Vents and Vent Collectors are now data driven
-- Added Blaze powder as a rare drop for sulfur vents
-- Added config for performance sulfur cloud, much less particles
-- Overhauled cog chambers
-- Fixed some bugs with Scamppanzer
-- Added 3d models for throwables
-- Removed Redcoat (rip)
-- Added the Redcoat armor set
-- Added the Scrap Armor set
-- Added the Subjugator Mob
-- Added the Adjudicator Mob
-- Added Bat Guano, bats will sometimes poop out guano, can be smoked into Phosphor Dust, or used as fertilizer
-- Added Guano Candle, a light source that can slowly attract bats
-- Added some guano recipes for Farmers delight Compost
-- Added placeable phosphor
-- Tweaked Phosphor, Sulfur and Niter effects on crops to be different
-- Increased Mob gun damage by default
-- Added Vicious Acid, can destroy curses!
-- Added some new threats to structures
-- Fixed some more exo suit bugs (who's suprised)
-- Fixed dolphins grace bug
-- Fixed The Merchants despawn time being too small
-- Added new dissident sounds thanks to the Razzler
-- Fixed Hornlin leg armor position
-- Added a bunch of new Asgharian Bricks thanks to Albatroz once again
-- Hullbreaker can now break wooden blocks
+- Fixed the dissident sounds (provided by Razzller)
+- Fixed fake soul fire stacking on itself
+- added fixed mold textures (thanks to jadn once again)
+- fixed blueprint bug
+- Removed some additional remnants of redcoat stuff
+- increased distance from player for raid spawning
+- allowed for raid boss/henchmen to spawn with nbt stuff
+- fixed raid henchmen sometimes spawning with incorrect tier stuff
+- Fixed Charge weapons maintaining charge after swapped
+- improved a bunch of the stuff regarding sky carriers, visual and mechanical
+- Curse of binding now works on attachments (creative mode allows removal still)
+- Gun tiers restructured, easier for addons to add new tiers
+- Added damage falloff for all guns
+- Extended barrel and muzzle brake attachments now increases damage falloff range
+- Fixed the bumpstock to work more consistently, has a variable increase depending on initial fire rate so all guns benefit
+- Fixed double application of damage decrease for standard silencer oop

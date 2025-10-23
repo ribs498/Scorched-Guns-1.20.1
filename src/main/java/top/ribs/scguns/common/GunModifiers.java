@@ -36,7 +36,7 @@ public class GunModifiers
         @Override
         public float modifyProjectileDamage(float damage)
         {
-            return damage * 0.9F;
+            return damage * 0.95F;
         }
     };
     public static final IGunModifier INCREASED_DAMAGE = new IGunModifier()
@@ -342,7 +342,13 @@ public class GunModifiers
     public static final IGunModifier BUMP_STOCK_MODIFIER = new IGunModifier() {
         @Override
         public int modifyFireRate(int rate) {
-            return Math.max((int)(rate * 1.1f), 1);
+            if (rate <= 3) {
+                return Math.max(rate - 1, 1);
+            } else if (rate <= 10) {
+                return Math.max((int)(rate * 0.75f), 1);
+            } else {
+                return Math.max((int)(rate * 0.85f), 1);
+            }
         }
 
         @Override
@@ -371,10 +377,17 @@ public class GunModifiers
         public float recoilModifier() {
             return 0.95F;
         }
+
+        @Override
+        public float modifyDamageFalloffStart(float range) {
+            return range * 1.10F;
+        }
+
+        @Override
+        public float modifyDamageFalloffEnd(float range) {
+            return range * 1.10F;
+        }
     };
-
-
-
 
     public static final IGunModifier SLUG_SPLITTER_MODIFIER = new IGunModifier() {
 
@@ -383,7 +396,7 @@ public class GunModifiers
     public static final IGunModifier EXTENDED_BARREL_MODIFIER = new IGunModifier() {
         @Override
         public double modifyProjectileSpeed(double speed) {
-            return speed * 1.25;
+            return speed * 1.15;
         }
 
         @Override
@@ -393,7 +406,7 @@ public class GunModifiers
 
         @Override
         public float recoilModifier(ItemStack weapon) {
-            return isCarbineCandidate(weapon) ? 0.9F : 1.15F;
+            return isCarbineCandidate(weapon) ? 0.8F : 1.25F;
         }
 
         @Override
@@ -406,6 +419,16 @@ public class GunModifiers
             return damage * 1.1F;
         }
 
+        @Override
+        public float modifyDamageFalloffStart(float range) {
+            return range * 1.25F;
+        }
+
+        @Override
+        public float modifyDamageFalloffEnd(float range) {
+            return range * 1.25F;
+        }
+
         private boolean isCarbineCandidate(ItemStack weapon) {
             return ((GunItem) weapon.getItem()).isOneHandedCarbineCandidate(weapon);
         }
@@ -415,7 +438,7 @@ public class GunModifiers
         }
     };
 
-        public static final IGunModifier SILENCER_MODIFIER = new IGunModifier() {
+    public static final IGunModifier SILENCER_MODIFIER = new IGunModifier() {
         @Override
         public float modifyProjectileDamage(float damage) {
             return damage * 0.9F;

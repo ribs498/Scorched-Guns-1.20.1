@@ -82,6 +82,8 @@ public class MeleeAttackHandler {
         banzaiActiveItem = ItemStack.EMPTY;
     }
 
+    // Update the performMeleeAttack method in MeleeAttackHandler.java
+
     public static void performMeleeAttack(ServerPlayer player) {
         if (player == null) {
             return;
@@ -139,6 +141,15 @@ public class MeleeAttackHandler {
         );
 
         if (heldItem.getItem() instanceof AnimatedGunItem) {
+            Gun gun = gunItem.getModifiedGun(heldItem);
+
+            if (gun.getGeneral().usesCustomMeleeAnimation()) {
+                CompoundTag tag = heldItem.getOrCreateTag();
+                tag.putBoolean("scguns:IsMelee", true);
+                tag.putLong("MeleeStartTime", System.currentTimeMillis());
+                ModSyncedDataKeys.MELEE.setValue(player, true);
+            }
+
             AnimationController<GeoAnimatable> controller = ((AnimatedGunItem)heldItem.getItem())
                     .getAnimatableInstanceCache()
                     .getManagerForId(GeoItem.getId(heldItem))

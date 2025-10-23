@@ -61,7 +61,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
     protected Modules modules = new Modules();
     private final GripType baseGripType = GripType.ONE_HANDED;
 
-public enum WeaponType {
+    public enum WeaponType {
         pistol,
         magnum,
         smg,
@@ -1058,10 +1058,8 @@ public enum WeaponType {
         @Optional
         @Nullable
         private ResourceLocation impactEffect;
-
         @Optional
         private int impactEffectDuration = 100;
-
         @Optional
         private int impactEffectAmplifier = 0;
         @Optional
@@ -1074,7 +1072,12 @@ public enum WeaponType {
         private double trailThickness = 1.0;
         @Optional
         private float knockbackStrength = 0.3F;
-
+        @Optional
+        private float damageFalloffStart = 0.0F;
+        @Optional
+        private float damageFalloffEnd = 0.0F;
+        @Optional
+        private float damageFalloffMinMultiplier = 1.0F;
 
         @Override
         public CompoundTag serializeNBT() {
@@ -1111,6 +1114,9 @@ public enum WeaponType {
             tag.putBoolean("HideProjectile", this.hideProjectile);
             tag.putDouble("TrailThickness", this.trailThickness);
             tag.putFloat("KnockbackStrength", this.knockbackStrength);
+            tag.putFloat("DamageFalloffStart", this.damageFalloffStart);
+            tag.putFloat("DamageFalloffEnd", this.damageFalloffEnd);
+            tag.putFloat("DamageFalloffMinMultiplier", this.damageFalloffMinMultiplier);
             return tag;
         }
 
@@ -1189,6 +1195,15 @@ public enum WeaponType {
             if (tag.contains("KnockbackStrength", Tag.TAG_ANY_NUMERIC)) {
                 this.knockbackStrength = tag.getFloat("KnockbackStrength");
             }
+            if (tag.contains("DamageFalloffStart", Tag.TAG_ANY_NUMERIC)) {
+                this.damageFalloffStart = tag.getFloat("DamageFalloffStart");
+            }
+            if (tag.contains("DamageFalloffEnd", Tag.TAG_ANY_NUMERIC)) {
+                this.damageFalloffEnd = tag.getFloat("DamageFalloffEnd");
+            }
+            if (tag.contains("DamageFalloffMinMultiplier", Tag.TAG_ANY_NUMERIC)) {
+                this.damageFalloffMinMultiplier = tag.getFloat("DamageFalloffMinMultiplier");
+            }
         }
 
         public JsonObject toJsonObject() {
@@ -1230,6 +1245,9 @@ public enum WeaponType {
             if(this.hideTrail) object.addProperty("hideTrail", true);
             if(this.trailThickness != 1.0) object.addProperty("trailThickness", this.trailThickness);
             if(this.knockbackStrength != 0.3F) object.addProperty("knockbackStrength", this.knockbackStrength);
+            if(this.damageFalloffStart != 0.0F) object.addProperty("damageFalloffStart", this.damageFalloffStart);
+            if(this.damageFalloffEnd != 0.0F) object.addProperty("damageFalloffEnd", this.damageFalloffEnd);
+            if(this.damageFalloffMinMultiplier != 1.0F) object.addProperty("damageFalloffMinMultiplier", this.damageFalloffMinMultiplier);
             return object;
         }
 
@@ -1261,6 +1279,9 @@ public enum WeaponType {
             projectile.hideTrail = this.hideTrail;
             projectile.trailThickness = this.trailThickness;
             projectile.knockbackStrength = this.knockbackStrength;
+            projectile.damageFalloffStart = this.damageFalloffStart;
+            projectile.damageFalloffEnd = this.damageFalloffEnd;
+            projectile.damageFalloffMinMultiplier = this.damageFalloffMinMultiplier;
             return projectile;
         }
 
@@ -1408,6 +1429,18 @@ public enum WeaponType {
 
         public ResourceLocation getCasingParticle() {
             return this.casingParticle;
+        }
+
+        public float getDamageFalloffStart() {
+            return this.damageFalloffStart;
+        }
+
+        public float getDamageFalloffEnd() {
+            return this.damageFalloffEnd;
+        }
+
+        public float getDamageFalloffMinMultiplier() {
+            return this.damageFalloffMinMultiplier;
         }
 
     }

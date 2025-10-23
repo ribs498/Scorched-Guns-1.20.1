@@ -40,13 +40,15 @@
     }
   },
   "projectile": {
-
+    "damageFalloffStart": 4.0,
+    "damageFalloffEnd": 12.0,
+    "damageFalloffMinMultiplier": 0.2,
     "advantage": "scguns:none",
     "damage": 8.0,
     "gravity": false,
     "ejectsCasing": false,
     "item": "scguns:blaze_fuel",
-    "life": 6,
+    "life": 8,
     "size": 0.05,
     "speed": 1.25,
     "trailLengthMultiplier": 2.0,

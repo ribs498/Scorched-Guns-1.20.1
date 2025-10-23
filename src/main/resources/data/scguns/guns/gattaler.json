@@ -37,6 +37,9 @@
   },
   "projectile": {
     "advantage": "scguns:none",
+    "damageFalloffStart": 18.0,
+    "damageFalloffEnd": 45.0,
+    "damageFalloffMinMultiplier": 0.65,
     "damage": 6.5,
     "armorPen": 1.0,
     "gravity": false,

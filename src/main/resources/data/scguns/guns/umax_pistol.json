@@ -40,6 +40,9 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 4.0,
+    "damageFalloffStart": 11.0,
+    "damageFalloffEnd": 28.0,
+    "damageFalloffMinMultiplier": 0.45,
     "ejectsCasing": false,
     "gravity": true,
     "item": "scguns:standard_bullet",

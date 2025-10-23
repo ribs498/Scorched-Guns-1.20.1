@@ -31,6 +31,11 @@ public class FakeSoulFireBlock extends BaseFireBlock {
     @Override
     public boolean canSurvive(BlockState pState, LevelReader pLevel, BlockPos pPos) {
         BlockState belowState = pLevel.getBlockState(pPos.below());
+        BlockState aboveState = pLevel.getBlockState(pPos.above());
+        if (aboveState.getBlock() instanceof BaseFireBlock) {
+            return false;
+        }
+
         return belowState.isFaceSturdy(pLevel, pPos.below(), Direction.UP) ||
                 !belowState.isAir();
     }

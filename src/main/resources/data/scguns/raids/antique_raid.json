@@ -8,7 +8,15 @@
     "fixed_health": 80.0,
     "weapon": {
       "item": "scguns:fencer_carabine",
-      "drop_chance": 0.25
+      "drop_chance": 0.25,
+      "nbt": {
+        "Enchantments": [
+          {
+            "id": "scguns:puncturing",
+            "lvl": 1
+          }
+        ]
+      }
     },
     "armor": [
       {

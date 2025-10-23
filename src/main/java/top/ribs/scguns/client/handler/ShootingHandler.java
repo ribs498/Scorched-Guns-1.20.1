@@ -459,7 +459,7 @@ public class ShootingHandler
                     wasHoldingFireWhenEmpty = false;
                     hasReleasedFireSinceEmpty = false;
                     player.getMainHandItem();
-                    ChargeHandler.clearLastChargeProgress(player.getUUID());
+                    ChargeHandler.resetCharge(player.getUUID());
                 }
             }
             if (ModSyncedDataKeys.RELOADING.getValue(player)) {

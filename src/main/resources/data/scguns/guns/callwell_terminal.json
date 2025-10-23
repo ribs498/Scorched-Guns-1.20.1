@@ -52,8 +52,11 @@
   },
   "projectile": {
     "knockbackStrength": 0.7,
+    "damageFalloffStart": 7.0,
+    "damageFalloffEnd": 18.0,
+    "damageFalloffMinMultiplier": 0.35,
     "advantage": "scguns:illager",
-    "damage": 16.0,
+    "damage": 18.0,
     "ejectsCasing": true,
     "item": "scguns:shotgun_shell",
     "casingType": "scguns:small_copper_casing",

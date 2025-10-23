@@ -53,6 +53,9 @@
   },
   "projectile": {
     "advantage": "scguns:wither",
+    "damageFalloffStart": 11.0,
+    "damageFalloffEnd": 28.0,
+    "damageFalloffMinMultiplier": 0.45,
     "damage": 9.5,
     "ejectsCasing": true,
     "item": "scguns:hog_round",

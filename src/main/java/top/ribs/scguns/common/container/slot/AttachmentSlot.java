@@ -12,11 +12,7 @@ import top.ribs.scguns.init.ModSounds;
 import top.ribs.scguns.item.*;
 import top.ribs.scguns.item.attachment.IAttachment;
 
-/**
- * Author: MrCrayfish
- */
-public class AttachmentSlot extends Slot
-{
+public class AttachmentSlot extends Slot {
     private final AttachmentContainer container;
     private final ItemStack weapon;
     private final IAttachment.Type type;
@@ -52,17 +48,33 @@ public class AttachmentSlot extends Slot
     public boolean mayPlace(ItemStack stack)
     {
         if(!(this.weapon.getItem() instanceof GunItem))
-        {
             return false;
-        }
+
         GunItem item = (GunItem) this.weapon.getItem();
         Gun modifiedGun = item.getModifiedGun(this.weapon);
-        if (!(stack.getItem() instanceof IAttachment attachment))
-        {
-            return false;
-        }
 
-        return attachment.getType() == this.type && modifiedGun.canAttachType(this.type) && attachment.canAttachTo(this.weapon);
+        if(!(stack.getItem() instanceof IAttachment attachment))
+            return false;
+
+        ItemStack currentItem = this.getItem();
+        if(!currentItem.isEmpty() && EnchantmentHelper.hasBindingCurse(currentItem))
+            return false;
+
+        return attachment.getType() == this.type &&
+                modifiedGun.canAttachType(this.type) &&
+                attachment.canAttachTo(this.weapon);
+    }
+
+    @Override
+    public void set(ItemStack stack)
+    {
+        ItemStack currentItem = this.getItem();
+        if(!currentItem.isEmpty() && EnchantmentHelper.hasBindingCurse(currentItem))
+        {
+            if(!this.player.isCreative())
+                return;
+        }
+        super.set(stack);
     }
 
     @Override

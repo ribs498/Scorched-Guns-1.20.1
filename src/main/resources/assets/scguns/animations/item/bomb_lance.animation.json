@@ -924,8 +924,8 @@
 			}
 		},
 		"bayonet": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 0.3333,
+			"loop": true,
+			"animation_length": 0.5,
 			"bones": {
 				"right_arm": {
 					"rotation": {
@@ -1008,8 +1008,8 @@
 			}
 		},
 		"melee": {
-			"loop": "hold_on_last_frame",
-			"animation_length": 0.3333,
+			"loop": true,
+			"animation_length": 0.5,
 			"bones": {
 				"right_arm": {
 					"rotation": {

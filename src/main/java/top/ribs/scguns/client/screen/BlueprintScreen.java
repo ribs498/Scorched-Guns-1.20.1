@@ -79,7 +79,7 @@ public class BlueprintScreen extends Screen {
             "thunderhead", "scratches", "cr4k_mining_laser", "dozier_rl",
 
             //PIGLIN
-            "empty_blasphemy", "blasphemy", "pyroclastic_flow", "freyr", "mangalitsa", "vulcanic_repeater", "super_shotgun",
+            "empty_blasphemy", "blasphemy", "pyroclastic_flow", "freyr", "mangalitsa", "vulcanic_repeater", "trotters", "super_shotgun",
 
            //SCULK
             "whispers", "echoes_2", "sculk_resonator", "forlorn_hope",
@@ -281,7 +281,6 @@ public class BlueprintScreen extends Screen {
         displayEntries.clear();
         List<GunBenchRecipe> allRecipes = level.getRecipeManager().getAllRecipesFor(GunBenchRecipe.Type.INSTANCE);
 
-        // Add recipe-based entries
         if (blueprintStack.isEmpty()) {
             for (GunBenchRecipe recipe : allRecipes) {
                 displayEntries.add(new DisplayEntry(recipe));
@@ -292,14 +291,18 @@ public class BlueprintScreen extends Screen {
                     displayEntries.add(new DisplayEntry(recipe));
                 }
             }
-        }
 
-        // Add lore-only items
-        for (String itemName : LORE_ONLY_ITEMS) {
-            ResourceLocation itemLocation = new ResourceLocation("scguns", itemName);
-            net.minecraft.world.item.Item item = ForgeRegistries.ITEMS.getValue(itemLocation);
-            if (item != null) {
-                displayEntries.add(new DisplayEntry(new ItemStack(item)));
+            ResourceLocation piglinBlueprintId = new ResourceLocation("scguns", "piglin_blueprint");
+            net.minecraft.world.item.Item piglinBlueprintItem = ForgeRegistries.ITEMS.getValue(piglinBlueprintId);
+
+            if (piglinBlueprintItem != null && blueprintStack.getItem() == piglinBlueprintItem) {
+                for (String itemName : LORE_ONLY_ITEMS) {
+                    ResourceLocation itemLocation = new ResourceLocation("scguns", itemName);
+                    net.minecraft.world.item.Item item = ForgeRegistries.ITEMS.getValue(itemLocation);
+                    if (item != null) {
+                        displayEntries.add(new DisplayEntry(new ItemStack(item)));
+                    }
+                }
             }
         }
 

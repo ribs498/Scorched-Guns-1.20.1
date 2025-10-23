@@ -38,6 +38,9 @@
   "projectile": {
     "visible": true,
     "advantage": "scguns:heavy",
+    "damageFalloffStart": 18.0,
+    "damageFalloffEnd": 45.0,
+    "damageFalloffMinMultiplier": 0.65,
     "damage": 23.0,
     "gravity": true,
     "item": "scguns:shotball",

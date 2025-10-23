@@ -462,6 +462,9 @@ public class GunRenderingHandler {
 
             Gun modifiedGun = gunItem.getModifiedGun(heldItem);
             if (modifiedGun.getGeneral().usesCustomMeleeAnimation() && heldItem.getItem() instanceof AnimatedGunItem) {
+                CompoundTag tag = heldItem.getOrCreateTag();
+                tag.putBoolean("scguns:IsMelee", true);
+                tag.putLong("MeleeStartTime", currentTime);
                 ModSyncedDataKeys.MELEE.setValue(player, true);
                 return;
             }
@@ -475,11 +478,16 @@ public class GunRenderingHandler {
             ModSyncedDataKeys.MELEE.setValue(player, true);
         }
     }
+
     private void updateCustomMeleeAnimation() {
         LocalPlayer player = Minecraft.getInstance().player;
         if (player == null) return;
 
         ItemStack heldItem = player.getMainHandItem();
+        if (!(heldItem.getItem() instanceof GunItem gunItem)) return;
+
+        Gun gun = gunItem.getModifiedGun(heldItem);
+        if (!gun.getGeneral().usesCustomMeleeAnimation()) return;
         if (!(heldItem.getItem() instanceof AnimatedGunItem)) return;
 
         CompoundTag tag = heldItem.getOrCreateTag();

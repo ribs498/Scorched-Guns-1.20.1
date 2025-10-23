@@ -104,6 +104,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     private float chargeProgress;
     protected float armorBypassAmount = 2.0F;
     private float modifiedKnockback;
+    private double distanceTraveled = 0.0;
     public ProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
     }
@@ -314,10 +315,33 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     public float getaFloat() {
         float initialDamage = (this.projectile.getDamage() + this.additionalDamage + this.attributeAdditionalDamage);
         initialDamage *= (float) this.attributeDamageMultiplier;
+
         if (this.projectile.isDamageReduceOverLife()) {
             float modifier = ((float) this.projectile.getLife() - (float) (this.tickCount - 1)) / (float) this.projectile.getLife();
             initialDamage *= modifier;
         }
+
+        if (this.projectile.getDamageFalloffStart() > 0 && this.projectile.getDamageFalloffEnd() > this.projectile.getDamageFalloffStart()) {
+            float falloffStart = this.projectile.getDamageFalloffStart();
+            float falloffEnd = this.projectile.getDamageFalloffEnd();
+            float minMultiplier = this.projectile.getDamageFalloffMinMultiplier();
+
+            if (!this.weapon.isEmpty()) {
+                falloffStart = GunModifierHelper.getModifiedDamageFalloffStart(this.weapon, falloffStart);
+                falloffEnd = GunModifierHelper.getModifiedDamageFalloffEnd(this.weapon, falloffEnd);
+            }
+
+            if (this.distanceTraveled > falloffStart) {
+                if (this.distanceTraveled >= falloffEnd) {
+                    initialDamage *= minMultiplier;
+                } else {
+                    float falloffProgress = (float) ((this.distanceTraveled - falloffStart) / (falloffEnd - falloffStart));
+                    float damageMultiplier = 1.0F - (falloffProgress * (1.0F - minMultiplier));
+                    initialDamage *= damageMultiplier;
+                }
+            }
+        }
+
         return initialDamage / this.general.getProjectileAmount();
     }
 
@@ -349,6 +373,12 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         super.tick();
         this.updateHeading();
         this.onProjectileTick();
+
+        // Track distance traveled for falloff calculation
+        if (this.tickCount > 0) {
+            Vec3 deltaMovement = this.getDeltaMovement();
+            this.distanceTraveled += deltaMovement.length();
+        }
 
         if (!this.level().isClientSide()) {
             Vec3 startVec = this.position();
@@ -884,6 +914,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.general.deserializeNBT(compound.getCompound("General"));
         this.modifiedGravity = compound.getDouble("ModifiedGravity");
         this.life = compound.getInt("MaxLife");
+        this.distanceTraveled = compound.getDouble("DistanceTraveled");
     }
 
     @Override
@@ -892,6 +923,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         compound.put("General", this.general.serializeNBT());
         compound.putDouble("ModifiedGravity", this.modifiedGravity);
         compound.putInt("MaxLife", this.life);
+        compound.putDouble("DistanceTraveled", this.distanceTraveled);
     }
 
     @Override

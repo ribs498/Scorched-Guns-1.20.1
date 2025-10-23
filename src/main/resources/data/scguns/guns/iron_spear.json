@@ -54,6 +54,9 @@
   },
   "projectile": {
     "knockbackStrength": 0.5,
+    "damageFalloffStart": 45.0,
+    "damageFalloffEnd": 100.0,
+    "damageFalloffMinMultiplier": 0.85,
     "advantage": "scguns:heavy",
     "damage": 18.5,
     "armorPen": 4.0,

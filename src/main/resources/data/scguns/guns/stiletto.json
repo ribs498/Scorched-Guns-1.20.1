@@ -43,6 +43,9 @@
   "projectile": {
     "advantage": "scguns:heavy",
     "damage": 22.5,
+    "damageFalloffStart": 35.0,
+    "damageFalloffEnd": 90.0,
+    "damageFalloffMinMultiplier": 0.85,
     "armorPen": 4.0,
     "gravity": false,
     "item": "scguns:krahg_round",

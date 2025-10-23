@@ -46,6 +46,9 @@
   "projectile": {
     "advantage": "scguns:undead",
     "damage": 15.5,
+    "damageFalloffStart": 18.0,
+    "damageFalloffEnd": 40.0,
+    "damageFalloffMinMultiplier": 0.6,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:ramrod_round",

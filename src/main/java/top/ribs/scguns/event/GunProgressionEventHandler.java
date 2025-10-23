@@ -10,6 +10,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.config.RaidConfig;
+import top.ribs.scguns.entity.player.GunTier;
 import top.ribs.scguns.entity.player.PlayerGunProgression;
 
 import java.util.List;
@@ -82,12 +83,12 @@ public class GunProgressionEventHandler {
         }
     }
 
-    public static void sendTierUnlockedMessage(Player player, PlayerGunProgression.GunTier tier) {
-        if (tier == PlayerGunProgression.GunTier.NONE) {
+    public static void sendTierUnlockedMessage(Player player, GunTier tier) {
+        if (tier == null || tier.getLevel() == 0) {
             return;
         }
 
-        Component tierName = Component.translatable("gun_tier.scguns." + tier.name().toLowerCase())
+        Component tierName = Component.translatable("gun_tier.scguns." + tier.getId())
                 .withStyle(ChatFormatting.GOLD, ChatFormatting.BOLD);
 
         Component message = Component.translatable("progression.scguns.tier_unlocked", tierName)
@@ -95,15 +96,15 @@ public class GunProgressionEventHandler {
 
         player.sendSystemMessage(message);
 
-        List<PlayerGunProgression.GunTier> availableTiers = tier.getAvailableMobTiers();
+        List<GunTier> availableTiers = tier.getAvailableMobTiers();
 
         if (!availableTiers.isEmpty()) {
             Component mobMessage = Component.translatable("progression.scguns.enemies_can_spawn")
                     .withStyle(ChatFormatting.GRAY);
 
             for (int i = 0; i < availableTiers.size(); i++) {
-                PlayerGunProgression.GunTier mobTier = availableTiers.get(i);
-                Component tierComponent = Component.translatable("gun_tier.scguns." + mobTier.name().toLowerCase())
+                GunTier mobTier = availableTiers.get(i);
+                Component tierComponent = Component.translatable("gun_tier.scguns." + mobTier.getId())
                         .withStyle(ChatFormatting.RED);
 
                 mobMessage = mobMessage.copy().append(tierComponent);
@@ -119,7 +120,7 @@ public class GunProgressionEventHandler {
         sendRaidUnlockedMessage(player, tier);
     }
 
-    private static void sendRaidUnlockedMessage(Player player, PlayerGunProgression.GunTier tier) {
+    private static void sendRaidUnlockedMessage(Player player, GunTier tier) {
         int raidLevel = tier.getRaidLevel();
 
         if (raidLevel <= 0) {

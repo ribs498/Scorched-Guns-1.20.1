@@ -47,6 +47,9 @@
   "projectile": {
     "advantage": "scguns:illager",
     "damage": 7.0,
+    "damageFalloffStart": 12.0,
+    "damageFalloffEnd": 30.0,
+    "damageFalloffMinMultiplier": 0.45,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:compact_copper_round",

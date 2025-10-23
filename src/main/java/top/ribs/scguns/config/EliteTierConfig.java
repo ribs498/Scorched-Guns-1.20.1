@@ -17,7 +17,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import top.ribs.scguns.entity.player.PlayerGunProgression;
+import top.ribs.scguns.entity.player.GunTier;
+import top.ribs.scguns.entity.player.GunTierRegistry;
 
 import javax.annotation.Nullable;
 import java.io.InputStreamReader;
@@ -27,7 +28,7 @@ import java.util.*;
 @Mod.EventBusSubscriber(modid = "scguns")
 public class EliteTierConfig {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Map<PlayerGunProgression.GunTier, EliteData> ELITE_TIERS = new EnumMap<>(PlayerGunProgression.GunTier.class);
+    private static final Map<String, EliteData> ELITE_TIERS = new HashMap<>();
     private static final ResourceLocation CONFIG_LOCATION = new ResourceLocation("scguns", "entity/elite_tiers.json");
 
     public record ArmorPiece(Item item, String slot, float chance) {
@@ -69,41 +70,41 @@ public class EliteTierConfig {
 
                     if (json != null) {
                         for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
-                            String tierName = entry.getKey();
+                            String tierIdOrName = entry.getKey();
                             JsonObject tierData = entry.getValue().getAsJsonObject();
 
-                            try {
-                                PlayerGunProgression.GunTier tier = PlayerGunProgression.GunTier.valueOf(tierName);
-
-                                List<Item> weapons = new ArrayList<>();
-                                if (tierData.has("weapons")) {
-                                    JsonArray weaponsArray = tierData.getAsJsonArray("weapons");
-                                    for (JsonElement weaponElement : weaponsArray) {
-                                        String weaponId = weaponElement.getAsString();
-                                        Item weapon = ForgeRegistries.ITEMS.getValue(new ResourceLocation(weaponId));
-                                        if (weapon != null) {
-                                            weapons.add(weapon);
-                                        } else {
-                                            LOGGER.warn("Unknown elite weapon for tier {}: {}", tierName, weaponId);
-                                        }
-                                    }
-                                }
-
-                                List<ArmorPiece> armor = new ArrayList<>();
-                                if (tierData.has("armor")) {
-                                    JsonArray armorArray = tierData.getAsJsonArray("armor");
-                                    for (JsonElement armorElement : armorArray) {
-                                        ArmorPiece piece = ArmorPiece.fromJson(armorElement.getAsJsonObject());
-                                        if (piece != null) {
-                                            armor.add(piece);
-                                        }
-                                    }
-                                }
-
-                                ELITE_TIERS.put(tier, new EliteData(weapons, armor));
-                            } catch (IllegalArgumentException e) {
-                                LOGGER.error("Invalid tier name in elite config: {}", tierName);
+                            GunTier tier = GunTierRegistry.getTier(tierIdOrName.toLowerCase());
+                            if (tier == null) {
+                                LOGGER.warn("Unknown tier in elite config: {}", tierIdOrName);
+                                continue;
                             }
+
+                            List<Item> weapons = new ArrayList<>();
+                            if (tierData.has("weapons")) {
+                                JsonArray weaponsArray = tierData.getAsJsonArray("weapons");
+                                for (JsonElement weaponElement : weaponsArray) {
+                                    String weaponId = weaponElement.getAsString();
+                                    Item weapon = ForgeRegistries.ITEMS.getValue(new ResourceLocation(weaponId));
+                                    if (weapon != null) {
+                                        weapons.add(weapon);
+                                    } else {
+                                        LOGGER.warn("Unknown elite weapon for tier {}: {}", tierIdOrName, weaponId);
+                                    }
+                                }
+                            }
+
+                            List<ArmorPiece> armor = new ArrayList<>();
+                            if (tierData.has("armor")) {
+                                JsonArray armorArray = tierData.getAsJsonArray("armor");
+                                for (JsonElement armorElement : armorArray) {
+                                    ArmorPiece piece = ArmorPiece.fromJson(armorElement.getAsJsonObject());
+                                    if (piece != null) {
+                                        armor.add(piece);
+                                    }
+                                }
+                            }
+
+                            ELITE_TIERS.put(tier.getId(), new EliteData(weapons, armor));
                         }
                     }
 
@@ -118,12 +119,14 @@ public class EliteTierConfig {
     }
 
     @Nullable
-    public static EliteData getEliteData(PlayerGunProgression.GunTier tier) {
-        return ELITE_TIERS.get(tier);
+    public static EliteData getEliteData(GunTier tier) {
+        if (tier == null) return null;
+        return ELITE_TIERS.get(tier.getId());
     }
 
-    public static boolean hasEliteData(PlayerGunProgression.GunTier tier) {
-        EliteData data = ELITE_TIERS.get(tier);
+    public static boolean hasEliteData(GunTier tier) {
+        if (tier == null) return false;
+        EliteData data = ELITE_TIERS.get(tier.getId());
         return data != null && data.hasEliteWeapons();
     }
 

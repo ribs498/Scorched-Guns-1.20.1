@@ -10,7 +10,8 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
-import top.ribs.scguns.entity.player.PlayerGunProgression;
+import top.ribs.scguns.entity.player.GunTier;
+import top.ribs.scguns.entity.player.GunTierRegistry;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,6 +40,18 @@ public class ModTags
 
     public static class Items
     {
+
+        public static final TagKey<Item> SHOTGUN_AMMO = tag("shotgun_ammo");
+        public static final TagKey<Item> RIFLE_AMMO = tag("rifle_ammo");
+        public static final TagKey<Item> PISTOL_AMMO = tag("pistol_ammo");
+        public static final TagKey<Item> ENERGY_AMMO = tag("energy_ammo");
+        public static final TagKey<Item> MAGNUM_AMMO = tag("magnum_ammo");
+        public static final TagKey<Item> SPECIAL_AMMO = tag("special_ammo");
+        public static final TagKey<Item> ROCKET_AMMO = tag("rocket_ammo");
+        public static final TagKey<Item> AMMO = tag("ammo");
+
+
+
         public static final TagKey<Item> DOES_NOT_EJECT_CASINGS = tag("does_not_eject_casings");
         public static final TagKey<Item> SINGLE_SHOT = tag("single_shot");
         public static final TagKey<Item> NON_COLLATERAL = tag("non_collateral");
@@ -74,41 +87,45 @@ public class ModTags
 
         public static final TagKey<Item> ENTITY_BLACKLISTED_GUN = tag("entity_blacklisted_gun");
 
-        public static boolean isInTierTag(ItemStack stack, PlayerGunProgression.GunTier tier) {
-            if (stack.isEmpty() || tier.getTagName() == null) {
+        /**
+         * Checks if an item is in the tag for the given tier.
+         * This is the new registry-based method that works with custom tiers from addons.
+         */
+        public static boolean isInTierTag(ItemStack stack, GunTier tier) {
+            if (stack.isEmpty() || tier == null || tier.getTagName() == null) {
                 return false;
             }
 
-            return switch (tier) {
-                case ANTIQUE -> stack.is(ANTIQUE_GUN_TIER);
-                case FRONTIER -> stack.is(FRONTIER_GUN_TIER);
-                case COPPER -> stack.is(COPPER_GUN_TIER);
-                case IRON -> stack.is(IRON_GUN_TIER);
-                case WRECKER -> stack.is(WRECKER_GUN_TIER);
-                case OCEAN -> stack.is(OCEAN_GUN_TIER);
-                case DIAMOND_STEEL -> stack.is(DIAMOND_STEEL_GUN_TIER);
-                case TREATED_BRASS -> stack.is(TREATED_BRASS_GUN_TIER);
-                case PIGLIN -> stack.is(PIGLIN_GUN_TIER);
-                case DEEP_DARK -> stack.is(DEEP_DARK_GUN_TIER);
-                case END -> stack.is(END_GUN_TIER);
-                case SCORCHED -> stack.is(SCORCHED_GUN_TIER);
-                default -> false;
-            };
+            TagKey<Item> tierTag = ItemTags.create(new ResourceLocation(Reference.MOD_ID, tier.getTagName()));
+            return stack.is(tierTag);
         }
-        public static PlayerGunProgression.GunTier getTierForItem(ItemStack stack) {
+
+        /**
+         * Gets the tier for a given item by checking all registered tiers.
+         * Returns the highest tier that matches the item.
+         */
+        public static GunTier getTierForItem(ItemStack stack) {
             if (stack.isEmpty()) {
                 return null;
             }
 
-            for (PlayerGunProgression.GunTier tier : PlayerGunProgression.GunTier.values()) {
-                if (tier == PlayerGunProgression.GunTier.NONE) continue;
+            GunTier highestTier = null;
+            int highestLevel = -1;
+
+            for (GunTier tier : GunTierRegistry.getAllTiers()) {
+                if (tier.getTagName() == null) continue;
+
                 if (isInTierTag(stack, tier)) {
-                    return tier;
+                    if (tier.getLevel() > highestLevel) {
+                        highestLevel = tier.getLevel();
+                        highestTier = tier;
+                    }
                 }
             }
 
-            return null;
+            return highestTier;
         }
+
         private static TagKey<Item> tag(String name)
         {
             return ItemTags.create(new ResourceLocation(Reference.MOD_ID, name));

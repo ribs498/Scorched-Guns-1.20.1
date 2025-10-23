@@ -39,10 +39,12 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
     private static final EntityDataAccessor<Boolean> DATA_IS_CHARGING = SynchedEntityData.defineId(SkyCarrierEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Integer> MUZZLE_FLASH_TIMER = SynchedEntityData.defineId(SkyCarrierEntity.class, EntityDataSerializers.INT);
     private static final EntityDataAccessor<Boolean> DATA_IS_PHASING = SynchedEntityData.defineId(SkyCarrierEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> DATA_IS_CHARGE_ATTACKING = SynchedEntityData.defineId(SkyCarrierEntity.class, EntityDataSerializers.BOOLEAN);
 
     public final AnimationState idleAnimationState = new AnimationState();
     private int idleAnimationTimeout = 0;
     private int shootCooldown = 0;
+    private int chargeAttackCooldown = 0;
 
     private Vec3 initialTargetPosition = null;
     private int phasingTimer = 0;
@@ -50,7 +52,7 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
 
     public SkyCarrierEntity(EntityType<? extends SkyCarrierEntity> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-        this.moveControl = new SkyCarrierMoveControl(this, 5.0, 8.0, 2.0, 0.6, 0.1);
+        this.moveControl = new SkyCarrierMoveControl(this, 5.0, 8.0, 2.0, 0.9, 0.15);
     }
 
     public void setInitialTarget(Vec3 targetPosition) {
@@ -66,6 +68,14 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
     public void setPhasing(boolean phasing) {
         this.entityData.set(DATA_IS_PHASING, phasing);
         this.noPhysics = phasing;
+    }
+
+    public boolean isChargeAttacking() {
+        return this.entityData.get(DATA_IS_CHARGE_ATTACKING);
+    }
+
+    public void setChargeAttacking(boolean charging) {
+        this.entityData.set(DATA_IS_CHARGE_ATTACKING, charging);
     }
 
     @Override
@@ -100,7 +110,6 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
     public void tick() {
         super.tick();
 
-        // Handle phasing logic
         if (!this.level().isClientSide() && this.isPhasing()) {
             handlePhasing();
         }
@@ -117,6 +126,10 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
                     fireProjectile();
                     shootCooldown = 20;
                 }
+            }
+
+            if (chargeAttackCooldown > 0) {
+                chargeAttackCooldown--;
             }
         }
 
@@ -200,6 +213,7 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
         this.entityData.define(DATA_IS_CHARGING, false);
         this.entityData.define(MUZZLE_FLASH_TIMER, 0);
         this.entityData.define(DATA_IS_PHASING, false);
+        this.entityData.define(DATA_IS_CHARGE_ATTACKING, false);
     }
 
     @Override
@@ -250,17 +264,24 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
         private final double minDistance;
         private final double maxDistance;
         private final double bufferZone;
-        private final double approachSpeed;
+        private final double maxSpeed;
         private final double backingSpeed;
 
-        public SkyCarrierMoveControl(SkyCarrierEntity skyCarrier, double minDistance, double maxDistance, double bufferZone, double approachSpeed, double backingSpeed) {
+        private Vec3 currentVelocity = Vec3.ZERO;
+        private float currentYaw = 0;
+        private float targetYaw = 0;
+        private int chargeTicks = 0;
+        private Vec3 chargeDirection = Vec3.ZERO;
+
+        public SkyCarrierMoveControl(SkyCarrierEntity skyCarrier, double minDistance, double maxDistance, double bufferZone, double maxSpeed, double backingSpeed) {
             super(skyCarrier);
             this.skyCarrier = skyCarrier;
             this.minDistance = minDistance;
             this.maxDistance = maxDistance;
             this.bufferZone = bufferZone;
-            this.approachSpeed = approachSpeed;
+            this.maxSpeed = maxSpeed;
             this.backingSpeed = backingSpeed;
+            this.currentYaw = skyCarrier.getYRot();
         }
 
         @Override
@@ -269,8 +290,13 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
                 return;
             }
 
+            if (this.skyCarrier.isChargeAttacking()) {
+                handleChargeAttack();
+                return;
+            }
+
             LivingEntity target = this.skyCarrier.getTarget();
-            Vec3 movementVector = Vec3.ZERO;
+            Vec3 desiredVelocity = Vec3.ZERO;
 
             AABB repulsionBox = this.skyCarrier.getBoundingBox().inflate(2.0);
             List<SkyCarrierEntity> nearbyCarriers = this.skyCarrier.level().getEntitiesOfClass(SkyCarrierEntity.class, repulsionBox, e -> e != this.skyCarrier);
@@ -290,22 +316,126 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
                 double distance = directionToTarget.length();
 
                 if (distance < minDistance) {
-                    movementVector = directionToTarget.normalize().reverse().scale(backingSpeed);
-                    updateRotationTowardsTarget(targetPos);
+                    desiredVelocity = directionToTarget.normalize().reverse().scale(backingSpeed);
+
+                    if (this.skyCarrier.chargeAttackCooldown <= 0 && this.skyCarrier.getRandom().nextFloat() < 0.08f) {
+                        initiateChargeAttack(directionToTarget.normalize());
+                        return;
+                    }
                 } else if (distance > maxDistance + bufferZone) {
-                    movementVector = directionToTarget.normalize().scale(approachSpeed);
-                    updateRotationTowardsDirection(movementVector);
+                    desiredVelocity = directionToTarget.normalize().scale(maxSpeed);
                 } else if (distance < minDistance - bufferZone) {
-                    movementVector = directionToTarget.normalize().reverse().scale(backingSpeed);
-                    updateRotationTowardsTarget(targetPos);
-                } else {
-                    updateRotationTowardsDirection(directionToTarget.normalize());
+                    desiredVelocity = directionToTarget.normalize().reverse().scale(backingSpeed);
                 }
-                movementVector = movementVector.add(repulsionVector.scale(0.3));
-                this.skyCarrier.setDeltaMovement(movementVector);
+
+                desiredVelocity = desiredVelocity.add(repulsionVector.scale(0.3));
             } else {
                 handleIdleMovement();
+                return;
             }
+
+            double acceleration = 0.15;
+            double deceleration = 0.88;
+
+            currentVelocity = currentVelocity.scale(deceleration);
+            Vec3 accelerationVec = desiredVelocity.subtract(currentVelocity).scale(acceleration);
+            currentVelocity = currentVelocity.add(accelerationVec);
+
+            double currentSpeed = currentVelocity.length();
+            if (currentSpeed > maxSpeed) {
+                currentVelocity = currentVelocity.normalize().scale(maxSpeed);
+            }
+
+            this.skyCarrier.setDeltaMovement(currentVelocity);
+
+            if (target != null) {
+                double dx = target.getX() - this.skyCarrier.getX();
+                double dz = target.getZ() - this.skyCarrier.getZ();
+                targetYaw = (float) (Math.atan2(dz, dx) * (180.0 / Math.PI) - 90.0);
+            } else if (currentVelocity.lengthSqr() > 0.001) {
+                float movementYaw = (float) (Math.atan2(currentVelocity.z, currentVelocity.x) * (180.0 / Math.PI) - 90.0);
+                targetYaw = movementYaw;
+            }
+
+            float yawDifference = Mth.wrapDegrees(targetYaw - currentYaw);
+            float maxTurnSpeed = 9.0f;
+            float turnAmount = Mth.clamp(yawDifference, -maxTurnSpeed, maxTurnSpeed);
+
+            currentYaw = Mth.wrapDegrees(currentYaw + turnAmount);
+
+            this.skyCarrier.setYRot(currentYaw);
+            this.skyCarrier.yBodyRot = currentYaw;
+            this.skyCarrier.yHeadRot = currentYaw;
+        }
+
+        private void initiateChargeAttack(Vec3 direction) {
+            this.skyCarrier.setChargeAttacking(true);
+            this.chargeDirection = direction;
+            this.chargeTicks = 15;
+            this.skyCarrier.chargeAttackCooldown = 100;
+            this.skyCarrier.level().playSound(null, this.skyCarrier.getX(), this.skyCarrier.getY(),
+                    this.skyCarrier.getZ(), SoundEvents.IRON_GOLEM_ATTACK, SoundSource.HOSTILE, 0.8F, 1.5F);
+        }
+
+        private void handleChargeAttack() {
+            if (chargeTicks > 0) {
+                chargeTicks--;
+
+                double chargeSpeed = 1.2;
+                this.skyCarrier.setDeltaMovement(chargeDirection.scale(chargeSpeed));
+
+                LivingEntity target = this.skyCarrier.getTarget();
+                if (target != null) {
+                    AABB collisionBox = this.skyCarrier.getBoundingBox().inflate(0.5);
+                    if (collisionBox.intersects(target.getBoundingBox())) {
+                        performChargeImpact(target);
+                        return;
+                    }
+                }
+
+                AABB nearbyBox = this.skyCarrier.getBoundingBox().inflate(1.5);
+                List<LivingEntity> nearbyEntities = this.skyCarrier.level().getEntitiesOfClass(
+                        LivingEntity.class,
+                        nearbyBox,
+                        entity -> entity != this.skyCarrier && entity instanceof Player
+                );
+
+                for (LivingEntity entity : nearbyEntities) {
+                    if (this.skyCarrier.hasLineOfSight(entity)) {
+                        performChargeImpact(entity);
+                        return;
+                    }
+                }
+
+                if (chargeTicks <= 0) {
+                    this.skyCarrier.setChargeAttacking(false);
+                }
+            } else {
+                this.skyCarrier.setChargeAttacking(false);
+            }
+        }
+
+        private void performChargeImpact(LivingEntity target) {
+            float damage = 4.0f;
+            target.hurt(this.skyCarrier.damageSources().mobAttack(this.skyCarrier), damage);
+
+            Vec3 targetPos = target.position();
+            Vec3 carrierPos = this.skyCarrier.position();
+            Vec3 knockbackDir = targetPos.subtract(carrierPos).normalize();
+
+            double knockbackStrength = 1.5;
+            target.setDeltaMovement(
+                    knockbackDir.x * knockbackStrength,
+                    0.4,
+                    knockbackDir.z * knockbackStrength
+            );
+            target.hurtMarked = true;
+
+            this.skyCarrier.level().playSound(null, this.skyCarrier.getX(), this.skyCarrier.getY(),
+                    this.skyCarrier.getZ(), SoundEvents.IRON_GOLEM_DAMAGE, SoundSource.HOSTILE, 1.0F, 1.2F);
+
+            this.skyCarrier.setChargeAttacking(false);
+            this.chargeTicks = 0;
         }
 
         private void handleIdleMovement() {
@@ -314,30 +444,25 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
                 double distance = direction.length();
                 if (distance < 1.0) {
                     this.operation = Operation.WAIT;
-                    this.skyCarrier.setDeltaMovement(Vec3.ZERO);
+                    currentVelocity = currentVelocity.scale(0.85);
+                    this.skyCarrier.setDeltaMovement(currentVelocity);
                 } else {
-                    direction = direction.normalize().scale(approachSpeed);
-                    this.skyCarrier.setDeltaMovement(direction);
-                    updateRotationTowardsDirection(direction);
+                    Vec3 desiredVelocity = direction.normalize().scale(Math.min(maxSpeed * 0.7, distance * 0.2));
+
+                    currentVelocity = currentVelocity.scale(0.88).add(desiredVelocity.subtract(currentVelocity).scale(0.15));
+                    this.skyCarrier.setDeltaMovement(currentVelocity);
+
+                    if (currentVelocity.lengthSqr() > 0.001) {
+                        targetYaw = (float) (Math.atan2(currentVelocity.z, currentVelocity.x) * (180.0 / Math.PI) - 90.0);
+                        float yawDifference = Mth.wrapDegrees(targetYaw - currentYaw);
+                        currentYaw = Mth.wrapDegrees(currentYaw + Mth.clamp(yawDifference, -9.0f, 9.0f));
+
+                        this.skyCarrier.setYRot(currentYaw);
+                        this.skyCarrier.yBodyRot = currentYaw;
+                        this.skyCarrier.yHeadRot = currentYaw;
+                    }
                 }
             }
-        }
-
-        private void updateRotationTowardsTarget(Vec3 targetPos) {
-            double dx = targetPos.x - this.skyCarrier.getX();
-            double dz = targetPos.z - this.skyCarrier.getZ();
-            float targetYaw = (float) (Math.atan2(dz, dx) * (180.0 / Math.PI) - 90.0);
-            this.skyCarrier.setYRot(targetYaw);
-            this.skyCarrier.yBodyRot = this.skyCarrier.getYRot();
-            this.skyCarrier.yHeadRot = this.skyCarrier.getYRot();
-        }
-
-        private void updateRotationTowardsDirection(Vec3 direction) {
-            if (direction.lengthSqr() == 0) return;
-            float targetYaw = (float) (Math.atan2(direction.z, direction.x) * (180.0 / Math.PI) - 90.0);
-            this.skyCarrier.setYRot(targetYaw);
-            this.skyCarrier.yBodyRot = this.skyCarrier.getYRot();
-            this.skyCarrier.yHeadRot = this.skyCarrier.getYRot();
         }
     }
 
@@ -377,10 +502,12 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
 
     private static class SkyCarrierFaceAndBackAwayFromTargetGoal extends Goal {
         private final SkyCarrierEntity skyCarrier;
+        private float currentYaw;
 
         public SkyCarrierFaceAndBackAwayFromTargetGoal(SkyCarrierEntity skyCarrier) {
             this.skyCarrier = skyCarrier;
-            this.setFlags(EnumSet.of(Flag.MOVE, Flag.LOOK));
+            this.currentYaw = skyCarrier.getYRot();
+            this.setFlags(EnumSet.of(Flag.LOOK));
         }
 
         @Override
@@ -402,9 +529,12 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
                 Vec3 vectorToTarget = targetPos.subtract(ourPos).normalize();
                 float targetYaw = -((float) Math.atan2(vectorToTarget.x, vectorToTarget.z)) * (180F / (float) Math.PI);
                 targetYaw = Mth.wrapDegrees(targetYaw);
-                this.skyCarrier.setYRot(targetYaw);
-                this.skyCarrier.yBodyRot = this.skyCarrier.getYRot();
-                this.skyCarrier.yHeadRot = this.skyCarrier.yBodyRot;
+
+                float yawDiff = Mth.wrapDegrees(targetYaw - currentYaw);
+                float turnSpeed = 4.0f;
+                currentYaw = Mth.wrapDegrees(currentYaw + Mth.clamp(yawDiff, -turnSpeed, turnSpeed));
+
+                this.skyCarrier.yHeadRot = currentYaw;
             }
         }
     }

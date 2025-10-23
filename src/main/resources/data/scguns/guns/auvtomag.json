@@ -44,6 +44,9 @@
     }
   },
   "projectile": {
+    "damageFalloffStart": 18.0,
+    "damageFalloffEnd": 40.0,
+    "damageFalloffMinMultiplier": 0.6,
     "knockbackStrength": 0.8,
     "advantage": "scguns:undead",
     "damage": 15.0,

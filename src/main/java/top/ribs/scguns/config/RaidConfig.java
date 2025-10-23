@@ -1,6 +1,9 @@
 package top.ribs.scguns.config;
 
 import com.google.gson.*;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.packs.resources.*;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -13,6 +16,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.entity.ai.AIType;
 
 import javax.annotation.Nullable;
@@ -33,8 +37,8 @@ public class RaidConfig {
         }
     }
 
-    public record WeaponEntry(Item item, float dropChance) {}
-    public record ArmorEntry(Item item, String slot, float dropChance) {}
+    public record WeaponEntry(Item item, float dropChance, @Nullable CompoundTag nbt) {}
+    public record ArmorEntry(Item item, String slot, float dropChance, @Nullable CompoundTag nbt) {}
     public record EffectEntry(MobEffect effect, int amplifier, int duration, boolean ambient, boolean visible) {}
 
     public record BossData(
@@ -251,7 +255,11 @@ public class RaidConfig {
                 JsonObject weaponObj = json.getAsJsonObject("weapon");
                 Item weaponItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(weaponObj.get("item").getAsString()));
                 float dropChance = weaponObj.has("drop_chance") ? weaponObj.get("drop_chance").getAsFloat() : 0.085f;
-                weapon = new WeaponEntry(weaponItem, dropChance);
+                CompoundTag nbt = null;
+                if (weaponObj.has("nbt")) {
+                    nbt = parseNBT(weaponObj.getAsJsonObject("nbt"));
+                }
+                weapon = new WeaponEntry(weaponItem, dropChance, nbt);
             }
 
             List<ArmorEntry> armor = new ArrayList<>();
@@ -262,8 +270,12 @@ public class RaidConfig {
                     Item armorItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(armorObj.get("item").getAsString()));
                     String slot = armorObj.get("slot").getAsString();
                     float dropChance = armorObj.has("drop_chance") ? armorObj.get("drop_chance").getAsFloat() : 0.085f;
+                    CompoundTag nbt = null;
+                    if (armorObj.has("nbt")) {
+                        nbt = parseNBT(armorObj.getAsJsonObject("nbt"));
+                    }
                     if (armorItem != null) {
-                        armor.add(new ArmorEntry(armorItem, slot, dropChance));
+                        armor.add(new ArmorEntry(armorItem, slot, dropChance, nbt));
                     }
                 }
             }
@@ -309,8 +321,12 @@ public class RaidConfig {
                     Item armorItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(armorObj.get("item").getAsString()));
                     String slot = armorObj.get("slot").getAsString();
                     float dropChance = armorObj.has("drop_chance") ? armorObj.get("drop_chance").getAsFloat() : 0.085f;
+                    CompoundTag nbt = null;
+                    if (armorObj.has("nbt")) {
+                        nbt = parseNBT(armorObj.getAsJsonObject("nbt"));
+                    }
                     if (armorItem != null) {
-                        armor.add(new ArmorEntry(armorItem, slot, dropChance));
+                        armor.add(new ArmorEntry(armorItem, slot, dropChance, nbt));
                     }
                 }
             }
@@ -362,8 +378,12 @@ public class RaidConfig {
                             Item armorItem = ForgeRegistries.ITEMS.getValue(new ResourceLocation(armorObj.get("item").getAsString()));
                             String slot = armorObj.get("slot").getAsString();
                             float chance = armorObj.has("chance") ? armorObj.get("chance").getAsFloat() : 0.5f;
+                            CompoundTag nbt = null;
+                            if (armorObj.has("nbt")) {
+                                nbt = parseNBT(armorObj.getAsJsonObject("nbt"));
+                            }
                             if (armorItem != null) {
-                                armor.add(new ArmorEntry(armorItem, slot, chance));
+                                armor.add(new ArmorEntry(armorItem, slot, chance, nbt));
                             }
                         }
                     }
@@ -390,6 +410,95 @@ public class RaidConfig {
             LOGGER.error("Error parsing henchmen data", e);
             return null;
         }
+    }
+    @Nullable
+    private static CompoundTag parseNBT(JsonObject json) {
+        try {
+            CompoundTag tag = new CompoundTag();
+
+            for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
+                String key = entry.getKey();
+                JsonElement value = entry.getValue();
+
+                if (value.isJsonPrimitive()) {
+                    JsonPrimitive primitive = value.getAsJsonPrimitive();
+                    if (primitive.isNumber()) {
+                        if (primitive.getAsString().contains(".")) {
+                            tag.putFloat(key, primitive.getAsFloat());
+                        } else {
+                            tag.putInt(key, primitive.getAsInt());
+                        }
+                    } else if (primitive.isString()) {
+                        tag.putString(key, primitive.getAsString());
+                    } else if (primitive.isBoolean()) {
+                        tag.putBoolean(key, primitive.getAsBoolean());
+                    }
+                } else if (value.isJsonArray()) {
+                    JsonArray array = value.getAsJsonArray();
+                    switch (key) {
+                        case "Enchantments" -> {
+                            ListTag enchantments = getTags(array);
+                            tag.put(key, enchantments);
+                        }
+                        case "Lore" -> {
+                            ListTag loreList = new ListTag();
+                            for (JsonElement elem : array) {
+                                loreList.add(StringTag.valueOf(elem.getAsString()));
+                            }
+                            tag.put(key, loreList);
+                        }
+                        case "AttributeModifiers" -> {
+                            ListTag modifiers = new ListTag();
+                            for (JsonElement elem : array) {
+                                if (elem.isJsonObject()) {
+                                    modifiers.add(parseNBT(elem.getAsJsonObject()));
+                                }
+                            }
+                            tag.put(key, modifiers);
+                        }
+                        default -> {
+                            ListTag list = new ListTag();
+                            for (JsonElement elem : array) {
+                                if (elem.isJsonObject()) {
+                                    list.add(parseNBT(elem.getAsJsonObject()));
+                                } else if (elem.isJsonPrimitive()) {
+                                    JsonPrimitive prim = elem.getAsJsonPrimitive();
+                                    if (prim.isString()) {
+                                        list.add(StringTag.valueOf(prim.getAsString()));
+                                    } else if (prim.isNumber()) {
+                                        CompoundTag numTag = new CompoundTag();
+                                        numTag.putInt("value", prim.getAsInt());
+                                        list.add(numTag);
+                                    }
+                                }
+                            }
+                            tag.put(key, list);
+                        }
+                    }
+                } else if (value.isJsonObject()) {
+                    tag.put(key, Objects.requireNonNull(parseNBT(value.getAsJsonObject())));
+                }
+            }
+
+            return tag;
+        } catch (Exception e) {
+            LOGGER.error("Error parsing NBT data", e);
+            return null;
+        }
+    }
+
+    private static @NotNull ListTag getTags(JsonArray array) {
+        ListTag enchantments = new ListTag();
+        for (JsonElement elem : array) {
+            if (elem.isJsonObject()) {
+                JsonObject enchObj = elem.getAsJsonObject();
+                CompoundTag enchTag = new CompoundTag();
+                enchTag.putString("id", enchObj.get("id").getAsString());
+                enchTag.putInt("lvl", enchObj.get("lvl").getAsInt());
+                enchantments.add(enchTag);
+            }
+        }
+        return enchantments;
     }
 
     @Nullable
@@ -440,7 +549,7 @@ public class RaidConfig {
             }
 
             String announcement = json.has("announcement_message") ?
-                    json.get("announcement_message").getAsString() : "§c§lA raid approaches!";
+                    json.get("announcement_message").getAsString() : "Â§cÂ§lA raid approaches!";
 
             return new SpawnConditions(minPlayers, searchRadius, validDimensions, announcement);
 

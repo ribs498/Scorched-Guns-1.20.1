@@ -6,20 +6,37 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import top.ribs.scguns.entity.animations.ModAnimationDefinitions;
+import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.entity.monster.SkyCarrierEntity;
 
 public class SkyCarrierModel<T extends Entity> extends HierarchicalModel<T> {
     private final ModelPart SkyCarrier;
+    private final ModelPart Full;
     private final ModelPart head;
     private final ModelPart Flash;
+    private final ModelPart propLeft;
+    private final ModelPart propRight;
+    private final ModelPart propBack;
+    private final ModelPart body;
+    private final ModelPart actualHead;
+    private final ModelPart armRight;
+    private final ModelPart armLeft;
 
     public SkyCarrierModel(ModelPart root) {
-
         this.SkyCarrier = root.getChild("SkyCarrier");
-        this.head = this.SkyCarrier.getChild("Full").getChild("Gun");
-        this.Flash = this.SkyCarrier.getChild("Full").getChild("Gun").getChild("Flash");
+        this.Full = this.SkyCarrier.getChild("Full");
+
+        this.head = this.Full.getChild("Gun");
+        this.Flash = this.head.getChild("Flash");
+        this.propLeft = this.Full.getChild("WingL").getChild("Prop2");
+        this.propRight = this.Full.getChild("WingR").getChild("Prop3");
+        this.propBack = this.Full.getChild("BackCog");
+        this.body = this.Full.getChild("body");
+        this.actualHead = this.Full.getChild("Wheel");
+        this.armRight = this.Full.getChild("ArmRight");
+        this.armLeft = this.Full.getChild("ArmLeft");
     }
     public static LayerDefinition createBodyLayer() {
         MeshDefinition meshdefinition = new MeshDefinition();
@@ -159,17 +176,73 @@ public class SkyCarrierModel<T extends Entity> extends HierarchicalModel<T> {
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-
         SkyCarrierEntity skyCarrier = (SkyCarrierEntity) entity;
         this.root().getAllParts().forEach(ModelPart::resetPose);
-        this.animateWalk(ModAnimationDefinitions.SKY_CARRIER_WALK, limbSwing, limbSwingAmount, 1.7f, 2.5f);
-        this.animate(((SkyCarrierEntity) entity).idleAnimationState, ModAnimationDefinitions.SKY_CARRIER_IDLE, ageInTicks, 2f);
+
+        Vec3 velocity = skyCarrier.getDeltaMovement();
+        float speed = Mth.sqrt((float) velocity.horizontalDistanceSqr());
+        float verticalSpeed = (float) velocity.y;
+
+        float propSpinSpeed = 1.5f + (speed * 4.0f) + Math.abs(verticalSpeed) * 2.0f;
+
+        if (skyCarrier.isChargeAttacking()) {
+            propSpinSpeed *= 2.0f;
+        }
+
+        this.propLeft.xRot = ageInTicks * propSpinSpeed;
+        this.propRight.xRot = ageInTicks * propSpinSpeed;
+        this.propBack.yRot = ageInTicks * propSpinSpeed;
+
+        float forwardMovement = (float) velocity.z;
+        float strafeMovement = (float) velocity.x;
+
+        float targetXRot = -forwardMovement * 0.8f;
+        float targetZRot = strafeMovement * 0.9f;
+
+        if (skyCarrier.isChargeAttacking()) {
+            targetXRot = -0.3f;
+            this.body.xRot = Mth.lerp(0.3f, this.body.xRot, targetXRot);
+            this.body.zRot = Mth.lerp(0.3f, this.body.zRot, 0.0f);
+        } else {
+            targetXRot = Mth.clamp(targetXRot, -0.4f, 0.4f);
+            targetZRot = Mth.clamp(targetZRot, -0.5f, 0.5f);
+
+            this.body.xRot = Mth.lerp(0.15f, this.body.xRot, targetXRot);
+            this.body.zRot = Mth.lerp(0.15f, this.body.zRot, targetZRot);
+
+            if (verticalSpeed > 0.05f) {
+                this.body.xRot = Mth.lerp(0.1f, this.body.xRot, -0.15f);
+            } else if (verticalSpeed < -0.05f) {
+                this.body.xRot = Mth.lerp(0.1f, this.body.xRot, 0.15f);
+            }
+        }
+
+        if (!skyCarrier.isChargeAttacking()) {
+            float hoverBob = Mth.sin(ageInTicks * 0.08f) * 0.15f;
+            float hoverRoll = Mth.cos(ageInTicks * 0.06f) * 0.03f;
+            float hoverPitch = Mth.sin(ageInTicks * 0.05f) * 0.02f;
+
+            this.Full.y += hoverBob;
+            this.Full.zRot += hoverRoll;
+            this.Full.xRot += hoverPitch;
+        }
+
+        float headBob = Mth.cos(ageInTicks * 0.1f) * 0.03f;
+        this.actualHead.y = -2.547f + headBob;
+
+        float armSwing = Mth.cos(ageInTicks * 0.3f) * 0.05f;
+        float armBob = Mth.sin(ageInTicks * 0.25f) * 0.03f;
+
+        this.armRight.zRot = 1.2217f + armSwing;
+        this.armRight.y = -7.5f + armBob;
+
+        this.armLeft.zRot = 1.2217f - armSwing;
+        this.armLeft.y = -7.5f - armBob;
 
         this.head.yRot = netHeadYaw * ((float)Math.PI / 180F);
         this.head.xRot = headPitch * ((float)Math.PI / 180F);
 
-        boolean muzzleFlashVisible = skyCarrier.isMuzzleFlashVisible();
-        this.Flash.visible = muzzleFlashVisible;
+        this.Flash.visible = skyCarrier.isMuzzleFlashVisible();
     }
 
 

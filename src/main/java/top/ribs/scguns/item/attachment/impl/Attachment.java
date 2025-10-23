@@ -77,6 +77,7 @@ public abstract class Attachment
         int baseRate = 10;
         double baseReloadSpeed = 1.0;
         int baseAmmoCapacity = 30;
+        float baseFalloffRange = 20.0f;
 
         for (IGunModifier modifier : modifiers) {
             stats.additionalDamage += modifier.additionalDamage();
@@ -90,6 +91,8 @@ public abstract class Attachment
             baseRate = modifier.modifyFireRate(baseRate);
             baseReloadSpeed = modifier.modifyReloadSpeed(baseReloadSpeed);
             stats.ammoCapacity = modifier.modifyAmmoCapacity(baseAmmoCapacity);
+            baseFalloffRange = modifier.modifyDamageFalloffStart(baseFalloffRange);
+
             if (modifier == GunModifiers.EXTENDED_BARREL_MODIFIER) {
                 baseRecoil *= 1.15F;
                 baseKick *= 1.2F;
@@ -97,6 +100,11 @@ public abstract class Attachment
                 baseRecoil *= modifier.recoilModifier();
                 baseKick *= modifier.kickModifier();
             }
+
+            if (modifier == GunModifiers.BUMP_STOCK_MODIFIER) {
+                stats.hasDurabilityPenalty = true;
+            }
+
             if (modifier.silencedFire()) stats.silenced = true;
         }
 
@@ -106,9 +114,18 @@ public abstract class Attachment
         stats.adsSpeedMultiplier = (baseAdsSpeed - 1.0);
         stats.recoilReduction = (1.0f - baseRecoil);
         stats.kickReduction = (1.0f - baseKick);
-        stats.fireRateChange = (baseRate - 10) / 10.0f;
+
+        // Fire rate: lower ticks = faster shooting = positive change
+        // Calculate as RPM increase percentage
+        if (baseRate != 10) {
+            float baseRPM = 1200.0f / 10.0f;
+            float modifiedRPM = 1200.0f / baseRate;
+            stats.fireRateChange = (modifiedRPM - baseRPM) / baseRPM;
+        }
+
         stats.reloadSpeedChange = (1.0 - baseReloadSpeed);
         stats.capacityMultiplier = (stats.ammoCapacity - baseAmmoCapacity) / (float)baseAmmoCapacity;
+        stats.rangeMultiplier = (baseFalloffRange - 20.0f) / 20.0f;
 
         return stats;
     }
@@ -148,6 +165,13 @@ public abstract class Attachment
             String speedText = (stats.speedMultiplier > 0 ? "+" : "") + PERCENTAGE_FORMAT.format(stats.speedMultiplier * 100) + "%";
             Component tooltip = Component.translatable("tooltip.scguns.attachment.projectile_speed", speedText)
                     .withStyle(stats.speedMultiplier > 0 ? ChatFormatting.GREEN : ChatFormatting.RED);
+            tooltips.add(tooltip);
+        }
+
+        if (Math.abs(stats.rangeMultiplier) > 0.001f) {
+            String rangeText = "+" + PERCENTAGE_FORMAT.format(stats.rangeMultiplier * 100) + "%";
+            Component tooltip = Component.translatable("tooltip.scguns.attachment.effective_range", rangeText)
+                    .withStyle(ChatFormatting.GREEN);
             tooltips.add(tooltip);
         }
     }
@@ -202,7 +226,14 @@ public abstract class Attachment
                     .withStyle(ChatFormatting.AQUA);
             tooltips.add(tooltip);
         }
+
+        if (stats.hasDurabilityPenalty) {
+            Component tooltip = Component.translatable("tooltip.scguns.attachment.durability_penalty")
+                    .withStyle(ChatFormatting.GOLD);
+            tooltips.add(tooltip);
+        }
     }
+
     private static class AttachmentStats {
         float additionalDamage = 0f;
         float damageMultiplier = 0f;
@@ -217,5 +248,7 @@ public abstract class Attachment
         int ammoCapacity = 30;
         float capacityMultiplier = 0f;
         boolean silenced = false;
+        float rangeMultiplier = 0f;
+        boolean hasDurabilityPenalty = false;
     }
 }

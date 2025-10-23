@@ -26,7 +26,7 @@ public class ViciousAcidBlock extends LiquidBlock {
     private static final int ARMOR_DAMAGE = 3;
     private static final int HELD_ITEM_DAMAGE = 5;
     private static final int DROPPED_ITEM_DAMAGE = 5;
-    private static final float CURSE_REMOVAL_CHANCE = 0.03F;
+    private static final float ENCHANTMENT_REMOVAL_CHANCE = 0.15F;
 
     public ViciousAcidBlock(Supplier<? extends FlowingFluid> fluid, Properties properties) {
         super(fluid, properties);
@@ -51,7 +51,7 @@ public class ViciousAcidBlock extends LiquidBlock {
                     return;
                 }
 
-                if (tryRemoveCurse(stack, level, entity.blockPosition())) {
+                if (tryRemoveEnchantment(stack, level, entity.blockPosition())) {
                     return;
                 }
 
@@ -87,7 +87,7 @@ public class ViciousAcidBlock extends LiquidBlock {
                     continue;
                 }
 
-                if (tryRemoveCurse(stack, level, entity.blockPosition())) {
+                if (tryRemoveEnchantment(stack, level, entity.blockPosition())) {
                     continue;
                 }
 
@@ -107,7 +107,7 @@ public class ViciousAcidBlock extends LiquidBlock {
         ItemStack mainHand = entity.getMainHandItem();
         if (!mainHand.isEmpty()) {
             if (mainHand.isDamageableItem() && mainHand.getDamageValue() < mainHand.getMaxDamage() - 1) {
-                if (!tryRemoveCurse(mainHand, level, entity.blockPosition())) {
+                if (!tryRemoveEnchantment(mainHand, level, entity.blockPosition())) {
                     if (mainHand.isDamageableItem()) {
                         int newDamage = mainHand.getDamageValue() + HELD_ITEM_DAMAGE;
                         if (newDamage >= mainHand.getMaxDamage() - 1) {
@@ -123,7 +123,7 @@ public class ViciousAcidBlock extends LiquidBlock {
         ItemStack offHand = entity.getOffhandItem();
         if (!offHand.isEmpty()) {
             if (offHand.isDamageableItem() && offHand.getDamageValue() < offHand.getMaxDamage() - 1) {
-                if (!tryRemoveCurse(offHand, level, entity.blockPosition())) {
+                if (!tryRemoveEnchantment(offHand, level, entity.blockPosition())) {
                     if (offHand.isDamageableItem()) {
                         int newDamage = offHand.getDamageValue() + HELD_ITEM_DAMAGE;
                         if (newDamage >= offHand.getMaxDamage() - 1) {
@@ -137,33 +137,27 @@ public class ViciousAcidBlock extends LiquidBlock {
         }
     }
 
-    private boolean tryRemoveCurse(ItemStack stack, Level level, BlockPos pos) {
-        if (stack.isEmpty() || level.random.nextFloat() > CURSE_REMOVAL_CHANCE) {
+    private boolean tryRemoveEnchantment(ItemStack stack, Level level, BlockPos pos) {
+        if (stack.isEmpty() || level.random.nextFloat() > ENCHANTMENT_REMOVAL_CHANCE) {
             return false;
         }
 
         Map<Enchantment, Integer> enchantments = EnchantmentHelper.getEnchantments(stack);
-        List<Enchantment> curses = new ArrayList<>();
 
-        for (Enchantment enchantment : enchantments.keySet()) {
-            if (enchantment.isCurse()) {
-                curses.add(enchantment);
-            }
+        if (enchantments.isEmpty()) {
+            return false;
         }
 
-        if (!curses.isEmpty()) {
-            Enchantment curseToRemove = curses.get(level.random.nextInt(curses.size()));
-            enchantments.remove(curseToRemove);
-            EnchantmentHelper.setEnchantments(enchantments, stack);
+        List<Enchantment> allEnchants = new ArrayList<>(enchantments.keySet());
+        Enchantment toRemove = allEnchants.get(level.random.nextInt(allEnchants.size()));
+        enchantments.remove(toRemove);
+        EnchantmentHelper.setEnchantments(enchantments, stack);
 
-            spawnCurseRemovalParticles(level, pos);
-            return true;
-        }
-
-        return false;
+        spawnEnchantmentRemovalParticles(level, pos);
+        return true;
     }
 
-    private void spawnCurseRemovalParticles(Level level, BlockPos pos) {
+    private void spawnEnchantmentRemovalParticles(Level level, BlockPos pos) {
         if (level instanceof ServerLevel serverLevel) {
             for (int i = 0; i < 20; i++) {
                 double offsetX = level.random.nextGaussian() * 0.3;

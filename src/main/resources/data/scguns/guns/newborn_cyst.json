@@ -59,6 +59,9 @@
   "projectile": {
     "knockbackStrength": 0.6,
     "advantage": "scguns:none",
+    "damageFalloffStart": 22.0,
+    "damageFalloffEnd": 55.0,
+    "damageFalloffMinMultiplier": 0.7,
     "damage": 35,
     "casingParticle": "scguns:bearpack_shell",
     "ejectDuringReload": true,

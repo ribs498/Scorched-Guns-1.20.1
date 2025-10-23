@@ -200,7 +200,7 @@ public class DissidentEntity extends Monster {
     @Nullable
     @Override
     protected SoundEvent getAmbientSound() {
-        return SoundEvents.ZOMBIE_HORSE_AMBIENT;
+        return ModSounds.DISSIDENT_IDLE.get();
     }
 
     @Nullable

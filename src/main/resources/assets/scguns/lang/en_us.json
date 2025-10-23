@@ -1640,7 +1640,8 @@
   "tooltip.scguns.attachment.reload_speed": "  • Reload Speed: %s",
   "tooltip.scguns.attachment.ammo_capacity": "  • Ammo Capacity: %s",
   "tooltip.scguns.attachment.silenced": "  • Silenced",
-
+  "tooltip.scguns.attachment.effective_range": "  • Effective Range: %s",
+  "tooltip.scguns.attachment.durability_penalty": " • Increased Gun Wear",
   "tooltip.scguns.attachment.comparison": "vs Base Weapon:",
   "tooltip.scguns.attachment.stats.damage": "§6Damage",
   "tooltip.scguns.attachment.stats.accuracy": "§bAccuracy",

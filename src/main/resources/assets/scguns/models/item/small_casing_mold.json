@@ -1,7 +1,9 @@
 {
-	"credit": "Made with Blockbench",
 	"parent": "item/generated",
 	"textures": {
 		"layer0": "scguns:item/small_casing_mold"
-	}
+	},
+	"overrides": [
+		{ "predicate": { "custom_model_data": 1 }, "model": "scguns:item/i_see_no_small_casing_mold" }
+	]
 }

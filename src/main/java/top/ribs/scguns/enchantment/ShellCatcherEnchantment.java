@@ -9,7 +9,7 @@ public class ShellCatcherEnchantment extends GunEnchantment
 {
     public ShellCatcherEnchantment()
     {
-        super(Rarity.UNCOMMON, EnchantmentTypes.SHELL_CATCHER_COMPATIBLE, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.WEAPON);
+        super(Rarity.UNCOMMON, EnchantmentTypes.SHELL_CATCHER_COMPATIBLE, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.AMMO);
     }
     @Override
     public int getMaxLevel()
@@ -28,4 +28,3 @@ public class ShellCatcherEnchantment extends GunEnchantment
         return this.getMinCost(level) + 20;
     }
 }
-

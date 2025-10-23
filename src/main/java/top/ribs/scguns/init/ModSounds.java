@@ -96,7 +96,7 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> SCAMP_DIE = register("entity.scamp.die");
     public static final RegistryObject<SoundEvent> DISSIDENT_HURT = register("entity.dissident.hurt");
     public static final RegistryObject<SoundEvent> DISSIDENT_DIE = register("entity.dissident.die");
-
+    public static final RegistryObject<SoundEvent> DISSIDENT_IDLE = register("entity.dissident.idle");
 
     //bullet flyby sounds
     public static final RegistryObject<SoundEvent> BULLET_FLYBY = register("bullet.flyby1"); //TODO: Set this to an actual sound later.

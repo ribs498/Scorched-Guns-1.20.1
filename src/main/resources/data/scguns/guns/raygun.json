@@ -37,6 +37,9 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 23.0,
+    "damageFalloffStart": 10.0,
+    "damageFalloffEnd": 26.0,
+    "damageFalloffMinMultiplier": 0.48,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:energy_cell",

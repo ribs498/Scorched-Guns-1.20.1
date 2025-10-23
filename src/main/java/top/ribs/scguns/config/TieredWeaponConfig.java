@@ -17,8 +17,10 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import top.ribs.scguns.entity.player.PlayerGunProgression;
+import top.ribs.scguns.entity.player.GunTier;
+import top.ribs.scguns.entity.player.GunTierRegistry;
 
+import javax.annotation.Nullable;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
@@ -26,7 +28,7 @@ import java.util.*;
 @Mod.EventBusSubscriber(modid = "scguns")
 public class TieredWeaponConfig {
     private static final Logger LOGGER = LogManager.getLogger();
-    private static final Map<PlayerGunProgression.GunTier, List<Item>> TIER_WEAPONS = new EnumMap<>(PlayerGunProgression.GunTier.class);
+    private static final Map<String, List<Item>> TIER_WEAPONS = new HashMap<>();
     private static final ResourceLocation CONFIG_LOCATION = new ResourceLocation("scguns", "entity/tier_weapons.json");
 
     public static void loadConfig(ResourceManager resourceManager) {
@@ -40,27 +42,27 @@ public class TieredWeaponConfig {
 
                     if (json != null) {
                         for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
-                            String tierName = entry.getKey();
+                            String tierIdOrName = entry.getKey();
                             JsonArray weaponsArray = entry.getValue().getAsJsonArray();
 
-                            try {
-                                PlayerGunProgression.GunTier tier = PlayerGunProgression.GunTier.valueOf(tierName);
-                                List<Item> weapons = new ArrayList<>();
-
-                                for (JsonElement weaponElement : weaponsArray) {
-                                    String weaponId = weaponElement.getAsString();
-                                    Item weapon = ForgeRegistries.ITEMS.getValue(new ResourceLocation(weaponId));
-                                    if (weapon != null) {
-                                        weapons.add(weapon);
-                                    } else {
-                                        LOGGER.warn("Unknown weapon item for tier {}: {}", tierName, weaponId);
-                                    }
-                                }
-
-                                TIER_WEAPONS.put(tier, weapons);
-                            } catch (IllegalArgumentException e) {
-                                LOGGER.error("Invalid tier name: {}", tierName);
+                            GunTier tier = GunTierRegistry.getTier(tierIdOrName.toLowerCase());
+                            if (tier == null) {
+                                LOGGER.warn("Unknown tier in tier_weapons.json: {}", tierIdOrName);
+                                continue;
                             }
+
+                            List<Item> weapons = new ArrayList<>();
+                            for (JsonElement weaponElement : weaponsArray) {
+                                String weaponId = weaponElement.getAsString();
+                                Item weapon = ForgeRegistries.ITEMS.getValue(new ResourceLocation(weaponId));
+                                if (weapon != null) {
+                                    weapons.add(weapon);
+                                } else {
+                                    LOGGER.warn("Unknown weapon item for tier {}: {}", tierIdOrName, weaponId);
+                                }
+                            }
+
+                            TIER_WEAPONS.put(tier.getId(), weapons);
                         }
                     }
 
@@ -80,20 +82,25 @@ public class TieredWeaponConfig {
         LOGGER.info("Loading default tiered weapon configuration");
     }
 
-    public static Item getRandomWeaponForTier(PlayerGunProgression.GunTier tier, RandomSource random) {
-        List<Item> weapons = TIER_WEAPONS.get(tier);
+    @Nullable
+    public static Item getRandomWeaponForTier(GunTier tier, RandomSource random) {
+        if (tier == null) return null;
+
+        List<Item> weapons = TIER_WEAPONS.get(tier.getId());
         if (weapons == null || weapons.isEmpty()) {
             return null;
         }
         return weapons.get(random.nextInt(weapons.size()));
     }
 
-    public static List<Item> getWeaponsForTier(PlayerGunProgression.GunTier tier) {
-        return TIER_WEAPONS.getOrDefault(tier, Collections.emptyList());
+    public static List<Item> getWeaponsForTier(GunTier tier) {
+        if (tier == null) return Collections.emptyList();
+        return TIER_WEAPONS.getOrDefault(tier.getId(), Collections.emptyList());
     }
 
-    public static boolean hasTierWeapons(PlayerGunProgression.GunTier tier) {
-        List<Item> weapons = TIER_WEAPONS.get(tier);
+    public static boolean hasTierWeapons(GunTier tier) {
+        if (tier == null) return false;
+        List<Item> weapons = TIER_WEAPONS.get(tier.getId());
         return weapons != null && !weapons.isEmpty();
     }
 

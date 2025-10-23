@@ -31,6 +31,9 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 22.0,
+    "damageFalloffStart": 8.0,
+    "damageFalloffEnd": 20.0,
+    "damageFalloffMinMultiplier": 0.4,
     "ejectsCasing": false,
     "gravity": true,
     "item": "scguns:flechette",

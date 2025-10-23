@@ -1,4 +1,4 @@
-package top.ribs.scguns.client.screen.widget;
+package top.ribs.scguns.client.screen;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.SlotItemHandler;
 import top.ribs.scguns.blockentity.ThermolithBlockEntity;
-import top.ribs.scguns.client.screen.ModMenuTypes;
 
 import java.util.Objects;
 

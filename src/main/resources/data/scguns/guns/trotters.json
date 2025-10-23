@@ -51,6 +51,9 @@
   "projectile": {
     "advantage": "scguns:wither",
     "damage": 18.0,
+    "damageFalloffStart": 35.0,
+    "damageFalloffEnd": 90.0,
+    "damageFalloffMinMultiplier": 0.85,
     "ejectsCasing": true,
     "ejectDuringReload": true,
     "gravity": false,

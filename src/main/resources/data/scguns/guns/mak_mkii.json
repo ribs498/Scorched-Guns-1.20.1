@@ -43,6 +43,9 @@
   "projectile": {
     "advantage": "scguns:bot",
     "damage": 4.5,
+    "damageFalloffStart": 8.0,
+    "damageFalloffEnd": 22.0,
+    "damageFalloffMinMultiplier": 0.35,
     "gravity": false,
     "ejectsCasing": true,
     "item": "scguns:compact_copper_round",

@@ -196,15 +196,15 @@ public class Config
             {
                 this.basicCoreCapacity = builder
                         .comment("Energy capacity for Basic ExoSuit Core")
-                        .defineInRange("basicCoreCapacity", 25000, 1000, 100000);
+                        .defineInRange("basicCoreCapacity", 30000, 1000, 100000);
 
                 this.advancedCoreCapacity = builder
                         .comment("Energy capacity for Advanced ExoSuit Core")
-                        .defineInRange("advancedCoreCapacity", 40000, 1000, 100000);
+                        .defineInRange("advancedCoreCapacity", 60000, 1000, 100000);
 
                 this.eliteCoreCapacity = builder
                         .comment("Energy capacity for Elite ExoSuit Core")
-                        .defineInRange("eliteCoreCapacity", 65000, 1000, 100000);
+                        .defineInRange("eliteCoreCapacity", 70000, 1000, 100000);
             }
             builder.pop();
         }

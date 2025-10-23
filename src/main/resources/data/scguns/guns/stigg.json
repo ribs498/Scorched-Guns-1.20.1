@@ -52,6 +52,9 @@
   "projectile": {
     "advantage": "scguns:bot",
     "damage": 10.0,
+    "damageFalloffStart": 28.0,
+    "damageFalloffEnd": 65.0,
+    "damageFalloffMinMultiplier": 0.75,
     "armorPen": 2.0,
     "ejectsCasing": true,
     "gravity": false,

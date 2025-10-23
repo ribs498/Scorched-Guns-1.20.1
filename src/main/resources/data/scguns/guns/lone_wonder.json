@@ -44,6 +44,9 @@
   "projectile": {
     "advantage": "scguns:water",
     "damage":23.0,
+    "damageFalloffStart": 18.0,
+    "damageFalloffEnd": 45.0,
+    "damageFalloffMinMultiplier": 0.65,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:shock_cell",

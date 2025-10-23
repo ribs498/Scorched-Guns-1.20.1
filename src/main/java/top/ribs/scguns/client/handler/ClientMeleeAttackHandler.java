@@ -11,36 +11,23 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
-import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.item.GunItem;
 
 public class ClientMeleeAttackHandler {
     public static void startMeleeAnimation(GunItem gunItem, ItemStack heldItem) {
         if (Minecraft.getInstance().player != null) {
-            ItemStack actualHeldItem = Minecraft.getInstance().player.getMainHandItem();
-
-            if (!(actualHeldItem.getItem() instanceof GunItem)) {
-                return;
-            }
-
-            boolean isOnCooldown = MeleeAttackHandler.isMeleeOnCooldown(Minecraft.getInstance().player, actualHeldItem);
+            boolean isOnCooldown = MeleeAttackHandler.isMeleeOnCooldown(Minecraft.getInstance().player, heldItem);
             if (isOnCooldown) {
                 return;
             }
+            GunRenderingHandler.get().startMeleeAnimation(heldItem);
 
-            Gun modifiedGun = ((GunItem)actualHeldItem.getItem()).getModifiedGun(actualHeldItem);
-            boolean usesCustomAnimation = modifiedGun.getGeneral().usesCustomMeleeAnimation();
-
-            if (!usesCustomAnimation) {
-                GunRenderingHandler.get().startMeleeAnimation(actualHeldItem);
-            }
-
-            if (((GunItem)actualHeldItem.getItem()).hasBayonet(actualHeldItem)) {
+            if (gunItem.hasBayonet(heldItem)) {
                 GunRenderingHandler.get().startBayonetStabAnimation();
             }
 
             GunRenderingHandler.get().startThirdPersonMeleeAnimation();
-            updateMeleeCooldownHUD((GunItem)actualHeldItem.getItem(), actualHeldItem);
+            updateMeleeCooldownHUD(gunItem, heldItem);
         }
     }
 

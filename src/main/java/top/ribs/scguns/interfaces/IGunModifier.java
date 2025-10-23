@@ -80,6 +80,14 @@ public interface IGunModifier
     {
         return damage;
     }
+    default float modifyDamageFalloffStart (float falloffStart)
+    {
+        return falloffStart;
+    }
+    default float modifyDamageFalloffEnd (float falloffEnd)
+    {
+        return falloffEnd;
+    }
 
     /**
      * Modify the speed of the projectile.

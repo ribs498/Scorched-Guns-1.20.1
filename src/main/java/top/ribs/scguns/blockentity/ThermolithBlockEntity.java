@@ -26,14 +26,13 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.block.ThermolithBlock;
-import top.ribs.scguns.client.screen.widget.ThermolithMenu;
+import top.ribs.scguns.client.screen.ThermolithMenu;
 import top.ribs.scguns.init.ModBlockEntities;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class ThermolithBlockEntity extends BlockEntity implements MenuProvider {
     private static final ResourceLocation THERMOLITH_INGREDIENT_TAG = new ResourceLocation("scguns", "thermolith_ingredient");

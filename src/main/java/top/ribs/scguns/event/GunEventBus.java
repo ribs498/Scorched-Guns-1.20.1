@@ -451,6 +451,20 @@ public class GunEventBus {
                     }
                 }
 
+                if (stack.getItem() instanceof GunItem gunItem) {
+                    ItemStack stockStack = Gun.getAttachment(IAttachment.Type.STOCK, stack);
+                    if (!stockStack.isEmpty() && stockStack.getItem() instanceof IAttachment<?> attachment) {
+                        for (top.ribs.scguns.interfaces.IGunModifier modifier : attachment.getProperties().getModifiers()) {
+                            if (modifier == GunModifiers.BUMP_STOCK_MODIFIER && damageAmount > 0) {
+                                if (Math.random() < 0.20) {
+                                    damageAmount *= 2;
+                                }
+                                break;
+                            }
+                        }
+                    }
+                }
+
                 if (currentDamage >= (maxDamage - damageAmount)) {
                     if (currentDamage >= (maxDamage - damageAmount - 1)) {
                         level.playSound(player, player.blockPosition(), SoundEvents.ITEM_BREAK, SoundSource.PLAYERS, 1.0F, 1.0F);

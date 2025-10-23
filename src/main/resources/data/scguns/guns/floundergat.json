@@ -43,6 +43,9 @@
   },
   "projectile": {
     "knockbackStrength": 0.65,
+    "damageFalloffStart": 8.0,
+    "damageFalloffEnd": 20.0,
+    "damageFalloffMinMultiplier": 0.4,
     "advantage": "scguns:fire",
     "damage": 15.0,
     "item": "scguns:grapeshot",

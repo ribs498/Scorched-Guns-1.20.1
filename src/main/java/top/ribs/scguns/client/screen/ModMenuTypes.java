@@ -11,7 +11,6 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import top.ribs.scguns.Reference;
-import top.ribs.scguns.client.screen.widget.ThermolithMenu;
 
 
 public class ModMenuTypes {

@@ -48,9 +48,12 @@
     }
   },
   "projectile": {
+    "damageFalloffStart": 6.0,
+    "damageFalloffEnd": 18.0,
+    "damageFalloffMinMultiplier": 0.3,
     "knockbackStrength": 0.8,
     "advantage": "scguns:none",
-    "damage": 17.0,
+    "damage": 17.5,
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:grapeshot",

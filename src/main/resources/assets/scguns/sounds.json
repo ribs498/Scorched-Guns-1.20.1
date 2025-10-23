@@ -31,7 +31,14 @@
         }
         ]
     },
-
+  "entity.dissident.idle": {
+    "subtitle": "subtitle.scguns.dissident.idle",
+    "sounds": [
+      {
+        "name": "scguns:entity/dissident/idle"
+      }
+    ]
+  },
 
 
   "item.lever.lever": {

@@ -38,7 +38,7 @@ import top.ribs.scguns.client.render.gun.ModelOverrides;
 import top.ribs.scguns.client.render.gun.model.*;
 import top.ribs.scguns.client.screen.*;
 import top.ribs.scguns.client.screen.VentCollectorScreen;
-import top.ribs.scguns.client.screen.widget.ThermolithScreen;
+import top.ribs.scguns.client.screen.ThermolithScreen;
 import top.ribs.scguns.client.util.PropertyHelper;
 import top.ribs.scguns.debug.IEditorMenu;
 import top.ribs.scguns.debug.client.screen.EditorScreen;

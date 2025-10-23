@@ -64,7 +64,11 @@ public class ChargeHandler {
             }
         }
     }
-
+    public static void resetCharge(UUID playerId) {
+        playerChargeTime.remove(playerId);
+        playerMaxChargeTime.remove(playerId);
+        lastChargeProgress.remove(playerId);
+    }
     public static float getChargeProgress(@Nullable Player player, ItemStack weapon) {
         if (player == null || !(weapon.getItem() instanceof GunItem)) {
             return 0f;

@@ -328,4 +328,30 @@ public class GunModifierHelper
         }
         return Mth.clamp(speed, 0.01, Double.MAX_VALUE);
     }
+
+    public static float getModifiedDamageFalloffStart(ItemStack weapon, float range)
+    {
+        for(int i = 0; i < IAttachment.Type.values().length; i++)
+        {
+            IGunModifier[] modifiers = getModifiers(weapon, IAttachment.Type.values()[i]);
+            for(IGunModifier modifier : modifiers)
+            {
+                range = modifier.modifyDamageFalloffStart(range);
+            }
+        }
+        return Math.max(range, 0.0F);
+    }
+
+    public static float getModifiedDamageFalloffEnd(ItemStack weapon, float range)
+    {
+        for(int i = 0; i < IAttachment.Type.values().length; i++)
+        {
+            IGunModifier[] modifiers = getModifiers(weapon, IAttachment.Type.values()[i]);
+            for(IGunModifier modifier : modifiers)
+            {
+                range = modifier.modifyDamageFalloffEnd(range);
+            }
+        }
+        return Math.max(range, 0.0F);
+    }
 }

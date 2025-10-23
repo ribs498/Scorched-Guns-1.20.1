@@ -36,6 +36,9 @@
   },
   "projectile": {
     "visible": true,
+    "damageFalloffStart": 10.0,
+    "damageFalloffEnd": 26.0,
+    "damageFalloffMinMultiplier": 0.48,
     "advantage": "scguns:none",
     "damage": 10.0,
     "gravity": false,

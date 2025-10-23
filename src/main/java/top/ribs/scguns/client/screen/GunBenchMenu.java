@@ -13,6 +13,8 @@ import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import org.jetbrains.annotations.NotNull;
+import top.ribs.scguns.entity.player.PlayerGunProgression;
+import top.ribs.scguns.event.GunProgressionEventHandler;
 import top.ribs.scguns.item.BlueprintItem;
 
 import java.util.Optional;
@@ -51,7 +53,6 @@ public class GunBenchMenu extends AbstractContainerMenu {
         this.player = playerInventory.player;
         container.startOpen(playerInventory.player);
 
-        // Add custom slots with correct indexes
         this.addSlot(new Slot(container, SLOT_TOP_INTERNAL_1, 26, 17));
         this.addSlot(new Slot(container, SLOT_TOP_INTERNAL_2, 44, 17));
         this.addSlot(new Slot(container, SLOT_TOP_BARREL_1, 62, 17));
@@ -71,7 +72,6 @@ public class GunBenchMenu extends AbstractContainerMenu {
             @Override
             public void setChanged() {
                 super.setChanged();
-                // When blueprint slot changes, attempt auto-crafting
                 attemptAutoCrafting();
             }
         });
@@ -84,6 +84,15 @@ public class GunBenchMenu extends AbstractContainerMenu {
             @Override
             public void onTake(Player player, ItemStack stack) {
                 super.onTake(player, stack);
+
+                if (!player.level().isClientSide && !stack.isEmpty()) {
+                    PlayerGunProgression progression = PlayerGunProgression.get(player);
+                    if (progression.checkAndUpdateFromItem(stack)) {
+                        PlayerGunProgression.save(player, progression);
+                        GunProgressionEventHandler.sendTierUnlockedMessage(player, progression.getCurrentTier());
+                    }
+                }
+
                 consumeIngredients();
             }
         });
@@ -114,9 +123,6 @@ public class GunBenchMenu extends AbstractContainerMenu {
         this.slotsChanged(container);
     }
 
-    /**
-     * Attempts to automatically populate the crafting grid when a blueprint with an active recipe is placed
-     */
     private void attemptAutoCrafting() {
         containerAccess.execute((level, pos) -> {
             if (level.isClientSide) return;
@@ -168,12 +174,8 @@ public class GunBenchMenu extends AbstractContainerMenu {
         });
     }
 
-    /**
-     * Searches player inventory for an item matching the ingredient and removes one if found
-     */
     private ItemStack findAndRemoveIngredientFromInventory(Ingredient ingredient) {
-        // Check main inventory first
-        for (int i = 9; i < player.getInventory().getContainerSize(); i++) { // Skip hotbar initially
+        for (int i = 9; i < player.getInventory().getContainerSize(); i++) {
             ItemStack stack = player.getInventory().getItem(i);
             if (!stack.isEmpty() && ingredient.test(stack)) {
                 ItemStack result = stack.copy();
@@ -183,7 +185,6 @@ public class GunBenchMenu extends AbstractContainerMenu {
             }
         }
 
-        // Check hotbar if nothing found in main inventory
         for (int i = 0; i < 9; i++) {
             ItemStack stack = player.getInventory().getItem(i);
             if (!stack.isEmpty() && ingredient.test(stack)) {

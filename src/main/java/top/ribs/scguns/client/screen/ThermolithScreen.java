@@ -1,4 +1,4 @@
-package top.ribs.scguns.client.screen.widget;
+package top.ribs.scguns.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gui.GuiGraphics;

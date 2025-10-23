@@ -6,7 +6,7 @@ public class ReclaimedEnchantment extends GunEnchantment
 {
     public ReclaimedEnchantment()
     {
-        super(Rarity.RARE, EnchantmentTypes.GUN, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.WEAPON);
+        super(Rarity.RARE, EnchantmentTypes.GUN, new EquipmentSlot[]{EquipmentSlot.MAINHAND}, Type.AMMO);
     }
 
     @Override

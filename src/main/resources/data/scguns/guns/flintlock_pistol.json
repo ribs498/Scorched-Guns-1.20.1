@@ -42,6 +42,9 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 10.0,
+    "damageFalloffStart": 12.0,
+    "damageFalloffEnd": 30.0,
+    "damageFalloffMinMultiplier": 0.45,
     "ejectsCasing": false,
     "gravity": false,
     "item": "scguns:powder_and_ball",

@@ -31,6 +31,8 @@ import top.ribs.scguns.compat.FarmersDelightModCondition;
 import top.ribs.scguns.compat.IEModCondition;
 import top.ribs.scguns.compat.SoulFiredModCondition;
 import top.ribs.scguns.config.*;
+import top.ribs.scguns.entity.player.GunTierRegistry;
+import top.ribs.scguns.entity.player.GunTiers;
 import top.ribs.scguns.event.SculkHordeEvents;
 import top.ribs.scguns.entity.projectile.*;
 import top.ribs.scguns.entity.throwable.GrenadeEntity;
@@ -178,6 +180,10 @@ public class ScorchedGuns {
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
+            GunTiers.init();
+            GunTierRegistry.lock();
+
+
             PacketHandler.init();
             GunMobValues.init();
             FrameworkAPI.registerSyncedDataKey(ModSyncedDataKeys.AIMING);

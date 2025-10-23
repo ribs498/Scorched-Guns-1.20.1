@@ -34,6 +34,9 @@
   "projectile": {
     "advantage": "scguns:none",
     "damage": 15.5,
+    "damageFalloffStart": 20.0,
+    "damageFalloffEnd": 50.0,
+    "damageFalloffMinMultiplier": 0.65,
     "gravity": false,
     "ejectsCasing": true,
     "item": "scguns:shulkshot",

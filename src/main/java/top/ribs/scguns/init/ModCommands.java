@@ -8,6 +8,8 @@ import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
+import top.ribs.scguns.entity.player.GunTier;
+import top.ribs.scguns.entity.player.GunTierRegistry;
 import top.ribs.scguns.entity.player.PlayerGunProgression;
 import top.ribs.scguns.event.GunProgressionEventHandler;
 import net.minecraft.world.phys.Vec3;
@@ -29,8 +31,8 @@ public class ModCommands {
                                         .then(Commands.argument("player", EntityArgument.player())
                                                 .then(Commands.argument("tier", StringArgumentType.string())
                                                         .suggests((context, builder) -> {
-                                                            for (PlayerGunProgression.GunTier tier : PlayerGunProgression.GunTier.values()) {
-                                                                builder.suggest(tier.name().toLowerCase());
+                                                            for (GunTier tier : GunTierRegistry.getAllTiers()) {
+                                                                builder.suggest(tier.getId());
                                                             }
                                                             return builder.buildFuture();
                                                         })
@@ -169,20 +171,19 @@ public class ModCommands {
             return 0;
         }
 
-        List<RaidConfig.RaidData> nextLevelRaids = RaidConfig.getRaidsAtLevel(currentRaidLevel + 1);
-
-        if (nextLevelRaids.isEmpty()) {
-            source.sendFailure(Component.literal("No higher level raids available!"));
+        List<RaidConfig.RaidData> availableRaids = RaidConfig.getRaidsForLevel(currentRaidLevel);
+        if (availableRaids.isEmpty()) {
+            source.sendFailure(Component.translatable("commands.scguns.raid.none_for_level", currentRaidLevel));
             return 0;
         }
 
-        RaidConfig.RaidData raidConfig = nextLevelRaids.get(0);
+        RaidConfig.RaidData selectedRaid = availableRaids.get(serverLevel.getRandom().nextInt(availableRaids.size()));
 
         Vec3 sourcePos = source.getPosition();
         RaidManager manager = RaidManager.get(serverLevel);
-        manager.startRaid(raidConfig, serverLevel, sourcePos);
+        manager.startRaid(selectedRaid, serverLevel, sourcePos);
 
-        Component raidName = Component.literal(raidConfig.raidId()).withStyle(ChatFormatting.GOLD);
+        Component raidName = Component.literal(selectedRaid.raidId()).withStyle(ChatFormatting.GOLD);
         source.sendSuccess(() -> Component.translatable("commands.scguns.raid.started", raidName), true);
 
         return 1;
@@ -194,11 +195,20 @@ public class ModCommands {
             return 0;
         }
 
-        PlayerGunProgression.GunTier tier;
-        try {
-            tier = PlayerGunProgression.GunTier.valueOf(tierName.toUpperCase());
-        } catch (IllegalArgumentException e) {
+        GunTier tier = GunTierRegistry.getTier(tierName.toLowerCase());
+
+        if (tier == null) {
             source.sendFailure(Component.translatable("commands.scguns.progression.invalid_tier", tierName));
+
+            // Show available tiers
+            source.sendFailure(Component.literal("Available tiers: ").withStyle(ChatFormatting.GRAY));
+            StringBuilder tiersList = new StringBuilder();
+            for (GunTier availableTier : GunTierRegistry.getAllTiers()) {
+                if (tiersList.length() > 0) tiersList.append(", ");
+                tiersList.append(availableTier.getId());
+            }
+            source.sendFailure(Component.literal(tiersList.toString()).withStyle(ChatFormatting.YELLOW));
+
             return 0;
         }
 
@@ -208,7 +218,7 @@ public class ModCommands {
 
         GunProgressionEventHandler.sendTierUnlockedMessage(player, tier);
 
-        Component tierComponent = Component.translatable("gun_tier.scguns." + tier.name().toLowerCase())
+        Component tierComponent = Component.translatable("gun_tier.scguns." + tier.getId())
                 .withStyle(ChatFormatting.GOLD);
 
         source.sendSuccess(() -> Component.translatable("commands.scguns.progression.set",
@@ -242,22 +252,23 @@ public class ModCommands {
         }
 
         PlayerGunProgression progression = PlayerGunProgression.get(player);
-        PlayerGunProgression.GunTier currentTier = progression.getCurrentTier();
+        GunTier currentTier = progression.getCurrentTier();
         int raidLevel = progression.getCurrentRaidLevel();
-        List<PlayerGunProgression.GunTier> availableTiers = progression.getAvailableMobTiers();
+        List<GunTier> availableTiers = progression.getAvailableMobTiers();
 
-        Component tierComponent = Component.translatable("gun_tier.scguns." + currentTier.name().toLowerCase())
+        Component tierComponent = Component.translatable("gun_tier.scguns." + currentTier.getId())
                 .withStyle(ChatFormatting.GOLD);
 
         source.sendSuccess(() -> Component.literal("Player: ").append(player.getDisplayName()), false);
-        source.sendSuccess(() -> Component.literal("Gun Tier: ").append(tierComponent), false);
+        source.sendSuccess(() -> Component.literal("Gun Tier: ").append(tierComponent)
+                .append(" (Level " + currentTier.getLevel() + ")").withStyle(ChatFormatting.GRAY), false);
         source.sendSuccess(() -> Component.literal("Raid Level: " + raidLevel).withStyle(ChatFormatting.AQUA), false);
 
         if (!availableTiers.isEmpty()) {
             Component mobTiersMessage = Component.literal("Available Mob Tiers: ");
             for (int i = 0; i < availableTiers.size(); i++) {
-                PlayerGunProgression.GunTier mobTier = availableTiers.get(i);
-                Component mobTierComponent = Component.translatable("gun_tier.scguns." + mobTier.name().toLowerCase())
+                GunTier mobTier = availableTiers.get(i);
+                Component mobTierComponent = Component.translatable("gun_tier.scguns." + mobTier.getId())
                         .withStyle(ChatFormatting.RED);
 
                 mobTiersMessage = mobTiersMessage.copy().append(mobTierComponent);

@@ -46,8 +46,8 @@ public class ModEvents {
                     new ItemStack(Items.EMERALD, 1),
                     16, 5, 0.02f));
             trades.get(1).add((pTrader, pRandom) -> new MerchantOffer(
-                    new ItemStack(Items.EMERALD, 6),
-                    new ItemStack(ModItems.SMALL_CASING_MOLD.get(), 1),
+                    new ItemStack(Items.EMERALD, 15),
+                    new ItemStack(ModItems.LONGARM.get(), 1),
                     3, 10, 0.05f));
             trades.get(1).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 2),
@@ -92,8 +92,8 @@ public class ModEvents {
 
             // Level 4 Trades
             trades.get(4).add((pTrader, pRandom) -> new MerchantOffer(
-                    new ItemStack(Items.EMERALD, 13),
-                    new ItemStack(ModItems.SPEED_MAG.get(), 1),
+                    new ItemStack(Items.EMERALD, 25),
+                    new ItemStack(ModItems.FENCER_CARABINE.get(), 1),
                     4, 20, 0.05f));
             trades.get(4).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 16),
@@ -109,17 +109,17 @@ public class ModEvents {
                     12, 20, 0.05f));
             trades.get(4).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 1),
-                    new ItemStack(ModItems.LARGE_CASING_MOLD.get(), 1),
+                    new ItemStack(ModItems.BLANK_MOLD.get(), 1),
                     5, 20, 0.05f));
 
             // Level 5 Trades
             trades.get(4).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 32),
-                    new ItemStack(ModItems.MAKESHIFT_RIFLE.get(), 1),
+                    new ItemStack(ModItems.SAKETINI.get(), 1),
                     1, 25, 0.05f));
             trades.get(4).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 35),
-                    new ItemStack(ModItems.BIRDFEEDER.get(), 1),
+                    new ItemStack(ModItems.WINNIE_MILLEND.get(), 1),
                     1, 25, 0.05f));
             trades.get(5).add((pTrader, pRandom) -> new MerchantOffer(
                     new ItemStack(Items.EMERALD, 25),
