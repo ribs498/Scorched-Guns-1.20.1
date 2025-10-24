@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.properties.NoteBlockInstrument;
 import net.minecraft.world.level.material.MapColor;
-import net.minecraft.world.level.material.PushReaction;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
@@ -447,11 +446,39 @@ public class ModBlocks {
             () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                     .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.FLUTE)
                     .strength(2.5F)));
+
     public static final RegistryObject<Block> TREATED_IRON_GRATE = register("treated_iron_grate",
-            () -> new TreatedIronGrateBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+            () -> new GrateBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
                     .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.IRON_XYLOPHONE)
                     .strength(3.0F)
                     .noOcclusion()));
+
+    public static final RegistryObject<Block> TREATED_BRASS_GRATE = register("treated_brass_grate",
+            () -> new GrateBlock(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.FLUTE)
+                    .strength(3.0F)
+                    .noOcclusion()));
+
+    public static final RegistryObject<Block> CHISELED_TREATED_BRASS_BLOCK = register("chiseled_treated_brass_block",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.FLUTE)
+                    .strength(3.0F)));
+    public static final RegistryObject<Block> TREATED_BRASS_TILES = register("treated_brass_tiles",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.IRON_BLOCK)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.FLUTE)
+                    .strength(3.0F)));
+    public static final RegistryObject<Block> TREATED_BRASS_LAMP = register("treated_brass_lamp",
+            () -> new RedstoneLampBlock(BlockBehaviour.Properties.copy(Blocks.REDSTONE_LAMP)
+                    .requiresCorrectToolForDrops().instrument(NoteBlockInstrument.FLUTE)
+                    .strength(3.0F)
+                    .lightLevel((state) -> state.getValue(RedstoneLampBlock.LIT) ? 15 : 0)));
+
+    public static final RegistryObject<Block> SCORCHED_BLOCK = register("scorched_block",
+            () -> new Block(BlockBehaviour.Properties.copy(Blocks.STONE)
+                    .requiresCorrectToolForDrops()
+                    .strength(5.5F)
+                    .lightLevel((state) -> 7)));
+
 
     public static final RegistryObject<Block> SANDBAG = register("sandbag",
             () -> new SandbagBlock(BlockBehaviour.Properties.copy(Blocks.SANDSTONE)

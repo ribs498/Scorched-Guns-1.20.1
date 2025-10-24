@@ -136,6 +136,7 @@ public class EnemyTurretBlockEntity extends BlockEntity {
                         && player.isAlive()
                         && !player.isCreative()
                         && !player.isSpectator()
+                        && !player.isInvisible()
                         && hasLineOfSight(level, turretPos, player));
 
         if (!potentialTargets.isEmpty()) {
@@ -228,6 +229,12 @@ public class EnemyTurretBlockEntity extends BlockEntity {
         }
 
         Vec3 muzzlePos = getMuzzlePosition(yaw, pitch);
+
+        if (!level.isClientSide) {
+            PacketHandler.getPlayChannel().sendToTrackingChunk(() -> level.getChunkAt(worldPosition),
+                    new S2CMessageMuzzleFlash(muzzlePos, yaw, pitch));
+        }
+
         Vec3 targetPos = new Vec3(target.getX(), target.getY() + target.getEyeHeight() * 0.5, target.getZ());
         Vec3 direction = targetPos.subtract(muzzlePos).normalize();
         direction = direction.add(
@@ -345,19 +352,17 @@ public class EnemyTurretBlockEntity extends BlockEntity {
         return a + t * (b - a);
     }
 
-    // Getters and setters
     public float getYaw() { return yaw; }
     public float getPitch() { return pitch; }
     public float getPreviousYaw() { return previousYaw; }
     public float getPreviousPitch() { return previousPitch; }
     public float getRecoilPitchOffset() { return recoilPitchOffset; }
 
-    // Method to set damage multiplier
     public void setDamageMultiplier(float multiplier) {
         this.damageMultiplier = multiplier;
     }
     public void setFireRateMultiplier(float multiplier) {
-        this.fireRateMultiplier = Math.max(0.1F, multiplier); // Prevent division by zero/negative values
+        this.fireRateMultiplier = Math.max(0.1F, multiplier);
     }
     public float getFireRateMultiplier() {
         return fireRateMultiplier;

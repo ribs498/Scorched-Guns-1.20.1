@@ -27,7 +27,8 @@
         "item": "scguns:compact_advanced_round",
         "bulletType": "scguns:compact_advanced_round",
         "casingType": "scguns:small_brass_casing",
-        "damage": 6.5
+        "damage": 6.5,
+        "armorPenetration": 2
       },
       {
         "item": "scguns:hog_round",

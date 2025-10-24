@@ -22,13 +22,14 @@
     "rate": 16,
     "recoilAngle": 17.0,
     "recoilKick": 2.0,
-    "spread": 12.0,
+    "spread": 10.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 55,
     "criticalChance": 0.1,
     "playerKnockBack": true,
-    "playerKnockBackStrength": 0.34
+    "playerKnockBackStrength": 0.34,
+    "trailThickness": 0.5
   },
   "modules": {
     "attachments": {

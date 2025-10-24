@@ -42,9 +42,9 @@ public class BlueprintScreen extends Screen {
     private final ItemStack blueprintStack;
     private final List<DisplayEntry> displayEntries = new ArrayList<>();
 
-    private static final List<String> GUN_ORDER = Arrays.asList(
+    private static final List<String> GUN_ORDER = new ArrayList<>(Arrays.asList(
 
-            /// ANTIQUE
+            //ANTIQUE
             "flintlock_pistol", "handcannon", "musket", "blunderbuss", "doublet", "repeating_musket",
             "longarm", "fencer_carabine", "fencer_thumper", "laser_musket", "plasmabuss",
 
@@ -52,28 +52,28 @@ public class BlueprintScreen extends Screen {
             "pax", "winnie","winnie_millend", "red_raydar", "callwell", "callwell_conversion", "callwell_terminal", "saketini",
             "saketini_ironport", "big_bore",
 
-            /// COPPER
+           //COPPER
             "scrapper", "rusty_gnat", "umax_pistol", "makeshift_rifle", "boomstick", "bruiser",
             "llr_director", "birdfeeder", "arc_worker",
 
-           /// IRON
+            //IRON
             "defender_pistol", "trenchur", "greaser_smg", "m3_carabine", "m3_marksman","combat_shotgun", "venturi",
             "iron_javelin", "iron_spear", "auvtomag", "pulsar", "gyrojet_pistol", "brawler",
             "crusader", "mk43_rifle", "rocket_rifle", "ultra_knight_hawk",
 
-           //OCEAN
+            //OCEAN
             "floundergat", "marlin", "bomb_lance", "hullbreaker", "sequoia",
 
-            /// WRECKER
+            //WRECKER
             "mokova", "mak_mkii", "stilleto", "railworker", "stiletto",
             "turnpike", "killer_23", "homemaker", "kalaskah", "basker", "tl_runner", "stigg", "whizzbanger",
 
-           //DIAMONDSTEEL
+            //DIAMONDSTEEL
             "krauser", "soul_drummer", "uppercut", "micina", "valora", "prush_gun", "drill", "drill_conversion", "lockewood",
             "rg_jigsaw","nailer", "inertial",
             "mas_55", "inquisitor", "plasgun", "cyclone", "shard_culler",
 
-           //TREATEDBRASS
+            //TREATEDBRASS
             "m22_waltz", "waltz_conversion", "osgood_50", "grandle_og", "grandle", "cogloader", "gale", "jackhammer",
             "howler", "howler_conversion", "gauss_rifle", "niami", "spitfire", "gattaler",
             "thunderhead", "scratches", "cr4k_mining_laser", "dozier_rl",
@@ -81,23 +81,84 @@ public class BlueprintScreen extends Screen {
             //PIGLIN
             "empty_blasphemy", "blasphemy", "pyroclastic_flow", "freyr", "mangalitsa", "vulcanic_repeater", "trotters", "super_shotgun",
 
-           //SCULK
+            //SCULK
             "whispers", "echoes_2", "sculk_resonator", "forlorn_hope",
 
-           /// END
+            //END
             "carapice", "shellurker", "weevil", "dark_matter", "lone_wonder", "raygun",
 
-            // SCORCHED
+            //SCORCHED
             "prima_materia", "rat_king_and_queen", "locust", "sterilizer", "newborn_cyst", "earths_corpse",
             "flayed_god", "nervepinch", "terra_incognita", "astella",
 
-            // EXOSUIT
+            //EXOSUIT
             "exo_suit_helmet", "exo_suit_chestplate", "exo_suit_leggings", "exo_suit_boots"
-    );
+    ));
 
-    private static final List<String> LORE_ONLY_ITEMS = Arrays.asList(
-            "blasphemy", "super_shotgun"
-    );
+    private static final Map<ResourceLocation, List<String>> LORE_ONLY_ITEMS = new HashMap<>();
+
+    static {
+        LORE_ONLY_ITEMS.put(
+                new ResourceLocation("scguns", "piglin_blueprint"),
+                new ArrayList<>(Arrays.asList("blasphemy", "super_shotgun"))
+        );
+    }
+
+    /**
+     * Register a gun item in the ordering list at the end.
+     * Call this during mod initialization for addons.
+     */
+    public static void registerGunOrder(String itemName) {
+        if (!GUN_ORDER.contains(itemName)) {
+            GUN_ORDER.add(itemName);
+        }
+    }
+
+    /**
+     * Register multiple gun items in the ordering list at the end.
+     */
+    public static void registerGunOrder(List<String> itemNames) {
+        for (String itemName : itemNames) {
+            registerGunOrder(itemName);
+        }
+    }
+
+    /**
+     * Insert a gun item at a specific position in the ordering list.
+     */
+    public static void insertGunOrder(int index, String itemName) {
+        if (!GUN_ORDER.contains(itemName)) {
+            GUN_ORDER.add(Math.min(index, GUN_ORDER.size()), itemName);
+        }
+    }
+
+    /**
+     * Register a lore-only item for a specific blueprint type.
+     */
+    public static void registerLoreOnlyItem(ResourceLocation blueprintId, String itemName) {
+        LORE_ONLY_ITEMS.computeIfAbsent(blueprintId, k -> new ArrayList<>()).add(itemName);
+    }
+
+    /**
+     * Register multiple lore-only items for a specific blueprint type.
+     */
+    public static void registerLoreOnlyItems(ResourceLocation blueprintId, List<String> itemNames) {
+        LORE_ONLY_ITEMS.computeIfAbsent(blueprintId, k -> new ArrayList<>()).addAll(itemNames);
+    }
+
+    /**
+     * Get the current gun ordering list (for reference).
+     */
+    public static List<String> getGunOrder() {
+        return new ArrayList<>(GUN_ORDER);
+    }
+
+    /**
+     * Get lore-only items for a specific blueprint (for reference).
+     */
+    public static List<String> getLoreOnlyItems(ResourceLocation blueprintId) {
+        return new ArrayList<>(LORE_ONLY_ITEMS.getOrDefault(blueprintId, Collections.emptyList()));
+    }
 
     private record RecipeSlot(int x, int y, int index) {}
 
@@ -291,16 +352,16 @@ public class BlueprintScreen extends Screen {
                     displayEntries.add(new DisplayEntry(recipe));
                 }
             }
-
-            ResourceLocation piglinBlueprintId = new ResourceLocation("scguns", "piglin_blueprint");
-            net.minecraft.world.item.Item piglinBlueprintItem = ForgeRegistries.ITEMS.getValue(piglinBlueprintId);
-
-            if (piglinBlueprintItem != null && blueprintStack.getItem() == piglinBlueprintItem) {
-                for (String itemName : LORE_ONLY_ITEMS) {
-                    ResourceLocation itemLocation = new ResourceLocation("scguns", itemName);
-                    net.minecraft.world.item.Item item = ForgeRegistries.ITEMS.getValue(itemLocation);
-                    if (item != null) {
-                        displayEntries.add(new DisplayEntry(new ItemStack(item)));
+            ResourceLocation blueprintItemId = ForgeRegistries.ITEMS.getKey(blueprintStack.getItem());
+            if (blueprintItemId != null) {
+                List<String> loreItems = LORE_ONLY_ITEMS.get(blueprintItemId);
+                if (loreItems != null) {
+                    for (String itemName : loreItems) {
+                        ResourceLocation itemLocation = new ResourceLocation(blueprintItemId.getNamespace(), itemName);
+                        net.minecraft.world.item.Item item = ForgeRegistries.ITEMS.getValue(itemLocation);
+                        if (item != null) {
+                            displayEntries.add(new DisplayEntry(new ItemStack(item)));
+                        }
                     }
                 }
             }

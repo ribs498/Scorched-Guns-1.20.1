@@ -34,7 +34,7 @@
     ],
     "effects": [
       {
-        "effect": "minecraft:regeneration",
+        "effect": "minecraft:speed",
         "amplifier": 0,
         "duration": -1,
         "ambient": false,
@@ -51,13 +51,6 @@
       "effects": [
         {
           "effect": "minecraft:speed",
-          "amplifier": 1,
-          "duration": -1,
-          "ambient": true,
-          "visible": false
-        },
-        {
-          "effect": "minecraft:resistance",
           "amplifier": 1,
           "duration": -1,
           "ambient": true,
@@ -200,10 +193,10 @@
         "ai_type": "COWARD"
       }
     ],
-    "spawn_interval_ticks": 300,
-    "max_alive": 14,
+    "spawn_interval_ticks": 600,
+    "max_alive": 10,
     "spawn_radius": 20,
-    "spawn_attempts_per_wave": 3
+    "spawn_attempts_per_wave": 5
   },
 
   "spawn_conditions": {

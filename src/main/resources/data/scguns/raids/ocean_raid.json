@@ -34,7 +34,7 @@
     ],
     "effects": [
       {
-        "effect": "minecraft:regeneration",
+        "effect": "minecraft:speed",
         "amplifier": 0,
         "duration": -1,
         "ambient": false,
@@ -182,10 +182,10 @@
         "ai_type": "RECKLESS"
       }
     ],
-    "spawn_interval_ticks": 300,
-    "max_alive": 12,
+    "spawn_interval_ticks": 600,
+    "max_alive": 10,
     "spawn_radius": 18,
-    "spawn_attempts_per_wave": 4
+    "spawn_attempts_per_wave": 5
   },
 
   "spawn_conditions": {

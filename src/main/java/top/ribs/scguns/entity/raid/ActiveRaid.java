@@ -1,5 +1,6 @@
 package top.ribs.scguns.entity.raid;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -12,13 +13,14 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.phys.Vec3;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import top.ribs.scguns.Config;
 import top.ribs.scguns.config.RaidConfig;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 public class ActiveRaid {
-    private static final Logger LOGGER = LogManager.getLogger();
+    //private static final Logger LOGGER = LogManager.getLogger();
     private static final int BOSS_VALIDATION_TICKS = 200;
     private static final int BOSS_REVALIDATION_INTERVAL = 100;
     private static final int TARGET_UPDATE_INTERVAL = 40;
@@ -43,6 +45,7 @@ public class ActiveRaid {
     private int ticksSinceLoad = 0;
     private int ticksSinceLastValidation = 0;
     private int ticksSinceTargetUpdate = 0;
+    private int ticksSinceStart = 0;
 
     public ActiveRaid(Integer raidLevel, RaidConfig.RaidData config, ServerLevel level, Vec3 spawnCenter, long startTime) {
         this.raidId = UUID.randomUUID();
@@ -58,6 +61,7 @@ public class ActiveRaid {
         this.bossConfirmed = false;
         this.mountUUID = null;
         this.targetPlayerUUID = null;
+        this.ticksSinceStart = 0;
 
         createBossBar();
     }
@@ -74,6 +78,11 @@ public class ActiveRaid {
         raid.bossConfirmed = false;
         raid.ticksSinceLoad = 0;
 
+        long elapsedTime = level.getGameTime() - data.startTime();
+        raid.ticksSinceStart = (int) Math.min(elapsedTime, Integer.MAX_VALUE);
+//        LOGGER.info("Restored raid {} - elapsed time: {} ticks ({} minutes)",
+//                raid.raidId, raid.ticksSinceStart, raid.ticksSinceStart / (60 * 20));
+
         return raid;
     }
 
@@ -86,25 +95,45 @@ public class ActiveRaid {
         } else if (bossName != null) {
             title = Component.literal(bossName);
         } else {
-            title = Component.literal("§c§lRaid Boss: " + config.raidId());
+            title = Component.literal("Â§cÂ§lRaid Boss: " + config.raidId());
         }
 
         this.bossBar = new ServerBossEvent(title, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_10);
         this.bossBar.setProgress(1.0f);
         this.bossBar.setVisible(true);
     }
+
     public void setActive(boolean active) {
         this.isActive = active;
     }
+
     public ServerBossEvent getBossBar() {
         return bossBar;
     }
+
     public void tick() {
         if (!isActive) return;
 
         ticksSinceLoad++;
         ticksSinceLastValidation++;
         ticksSinceTargetUpdate++;
+        ticksSinceStart++;
+
+        int timeoutMinutes = Config.COMMON.raids.raidTimeoutMinutes.get();
+        if (timeoutMinutes > 0) {
+            int timeoutTicks = timeoutMinutes * 60 * 20;
+
+            if (ticksSinceStart >= timeoutTicks) {
+//                LOGGER.info("Raid {} timed out after {} minutes", raidId, timeoutMinutes);
+                announceToNearbyPlayers(
+                        Component.translatable("raid.scguns.timeout")
+                                .withStyle(ChatFormatting.RED),
+                        Math.max(256.0, config.spawnConditions().searchRadius())
+                );
+                endRaid(false);
+                return;
+            }
+        }
 
         if (!validateBoss()) return;
 
@@ -120,6 +149,7 @@ public class ActiveRaid {
 
         LivingEntity boss = getBoss();
         if (boss == null || !boss.isAlive()) {
+//            LOGGER.warn("Raid {} boss is null or dead - ending raid", raidId);
             endRaid(bossConfirmed);
             return;
         }
@@ -144,7 +174,7 @@ public class ActiveRaid {
 
     private void updateMobTargets() {
         ServerPlayer targetPlayer = getTargetPlayer(level);
-        if (targetPlayer == null || targetPlayer.isSpectator() || !targetPlayer.isAlive()) {
+        if (targetPlayer == null || targetPlayer.isSpectator() || targetPlayer.isCreative() || !targetPlayer.isAlive()) {
             targetPlayer = findNewTargetPlayer();
             if (targetPlayer != null) {
                 targetPlayerUUID = targetPlayer.getUUID();
@@ -193,6 +223,7 @@ public class ActiveRaid {
 
     private boolean validateBoss() {
         if (bossUUID == null) {
+//            LOGGER.error("Raid {} has null boss UUID - ending raid", raidId);
             endRaid(false);
             return false;
         }
@@ -203,10 +234,12 @@ public class ActiveRaid {
         if (boss != null && boss.isAlive()) {
             bossConfirmed = true;
             ticksSinceLoad = 0;
+//            LOGGER.info("Raid {} boss confirmed and active", raidId);
             return true;
         }
 
         if (ticksSinceLoad >= BOSS_VALIDATION_TICKS) {
+            //LOGGER.error("Raid {} boss failed to load after {} ticks - ending raid", raidId, BOSS_VALIDATION_TICKS);
             endRaid(false);
             return false;
         }
@@ -361,29 +394,53 @@ public class ActiveRaid {
             bossBar.removeAllPlayers();
         }
 
-        cleanupHenchmen();
-        cleanupMount();
+        cleanupBoss(bossDefeated);
+        cleanupHenchmen(bossDefeated);
+        cleanupMount(bossDefeated);
 
-        LOGGER.info("Raid {} ended. Boss defeated: {}", raidId, bossDefeated);
+        //LOGGER.info("Raid {} ended. Boss defeated: {}", raidId, bossDefeated);
     }
 
-    private void cleanupHenchmen() {
+    private void cleanupBoss(boolean wasBossDefeated) {
+        if (bossUUID == null) return;
+
+        Entity entity = level.getEntity(bossUUID);
+        if (entity instanceof Mob boss) {
+            boss.removeTag("RaidBoss");
+            boss.removeTag("RaidMember_" + raidId);
+
+            if (!wasBossDefeated && boss.isAlive()) {
+                boss.discard();
+                //LOGGER.info("Despawned raid boss for failed raid {}", raidId);
+            }
+        }
+    }
+
+    private void cleanupHenchmen(boolean wasBossDefeated) {
         for (UUID uuid : new HashSet<>(henchmenUUIDs)) {
             Entity entity = level.getEntity(uuid);
             if (entity instanceof Mob mob) {
                 mob.removeTag("RaidHenchman");
                 mob.removeTag("RaidMember_" + raidId);
+
+                if (!wasBossDefeated && mob.isAlive()) {
+                    mob.discard();
+                }
             }
         }
         henchmenUUIDs.clear();
     }
 
-    private void cleanupMount() {
+    private void cleanupMount(boolean wasBossDefeated) {
         if (mountUUID != null) {
             Entity entity = level.getEntity(mountUUID);
             if (entity instanceof Mob mob) {
                 mob.removeTag("RaidMount");
                 mob.removeTag("RaidMember_" + raidId);
+
+                if (!wasBossDefeated && mob.isAlive()) {
+                    mob.discard();
+                }
             }
         }
     }
@@ -400,6 +457,20 @@ public class ActiveRaid {
 
     public long getRaidDuration() {
         return level.getGameTime() - startTime;
+    }
+
+    public int getRemainingTicks() {
+        int timeoutMinutes = Config.COMMON.raids.raidTimeoutMinutes.get();
+        if (timeoutMinutes <= 0) return -1;
+
+        int timeoutTicks = timeoutMinutes * 60 * 20;
+        return Math.max(0, timeoutTicks - ticksSinceStart);
+    }
+
+    public int getRemainingMinutes() {
+        int remainingTicks = getRemainingTicks();
+        if (remainingTicks < 0) return -1;
+        return remainingTicks / (60 * 20);
     }
 
     public void setBossConfirmed(boolean b) {

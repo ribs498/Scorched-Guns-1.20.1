@@ -12,10 +12,20 @@ public class GunModifiers
 {
     public static final IGunModifier LONG_SCOPE_SENSITIVITY_COMPENSATION = new IGunModifier()
     {
+        @Override
+        public double modifySensitivity(double sensitivity)
+        {
+            return sensitivity * 1.001;
+        }
     };
 
     public static final IGunModifier MEDIUM_SCOPE_SENSITIVITY_COMPENSATION = new IGunModifier()
     {
+        @Override
+        public double modifySensitivity(double sensitivity)
+        {
+            return sensitivity * 1.001;
+        }
     };
     public static final IGunModifier SILENCED = new IGunModifier()
     {

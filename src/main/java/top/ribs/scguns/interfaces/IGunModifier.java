@@ -29,7 +29,10 @@ public interface IGunModifier
     default float recoilModifier(ItemStack weapon) {
         return recoilModifier();
     }
-
+    default double modifySensitivity(double sensitivity)
+    {
+        return sensitivity;
+    }
 
 
     default float kickModifier(ItemStack weapon) {

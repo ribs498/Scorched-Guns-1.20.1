@@ -313,6 +313,16 @@ public abstract class TurretBlockEntity extends BlockEntity implements MenuProvi
 
         double finalDamage = getDamageForAmmoType(ammoType) + damageModifier;
         projectile.setBaseDamage(finalDamage);
+        projectile.setArmorPenetration(ammoType.getArmorPenetration());
+
+        String bulletType = ammoType.getBulletType().toString();
+        if (bulletType.equals("scguns:bear_pack_shell")) {
+            projectile.setMobPenetration(1);
+        } else if (bulletType.equals("scguns:gibbs_round")) {
+            projectile.setGibbsRound(true);
+        } else if (bulletType.equals("scguns:shatter_round")) {
+            projectile.setShatterRound(true);
+        }
 
         assert this.level != null;
         this.level.addFreshEntity(projectile);
@@ -324,6 +334,11 @@ public abstract class TurretBlockEntity extends BlockEntity implements MenuProvi
         double pelletDamage = finalDamage / pelletCount;
         float spreadAngle = this.config.getCombat().getSpreadAngle();
 
+        String bulletType = ammoType.getBulletType().toString();
+        boolean isBearPackShell = bulletType.equals("scguns:bear_pack_shell");
+        boolean isGibbsRound = bulletType.equals("scguns:gibbs_round");
+        boolean isShatterRound = bulletType.equals("scguns:shatter_round");
+
         for (int i = 0; i < pelletCount; i++) {
             Vec3 spreadDirection = applySpread(baseDirection, spreadAngle);
             TurretProjectileEntity projectile = createProjectile();
@@ -332,6 +347,15 @@ public abstract class TurretBlockEntity extends BlockEntity implements MenuProvi
             double speed = this.config.getCombat().getProjectileSpeed();
             projectile.shoot(spreadDirection.x, spreadDirection.y, spreadDirection.z, (float) speed, 0.0F);
             projectile.setBaseDamage(pelletDamage);
+            projectile.setArmorPenetration(ammoType.getArmorPenetration());
+
+            if (isBearPackShell) {
+                projectile.setMobPenetration(1);
+            } else if (isGibbsRound) {
+                projectile.setGibbsRound(true);
+            } else if (isShatterRound) {
+                projectile.setShatterRound(true);
+            }
 
             assert this.level != null;
             this.level.addFreshEntity(projectile);
@@ -668,6 +692,7 @@ public abstract class TurretBlockEntity extends BlockEntity implements MenuProvi
                         (hasEnemyLog && (whitelistedEntityUUIDs.contains(entity.getUUID()) ||
                                 whitelistedEntityTypes.contains(EntityType.getKey(entity.getType()).toString()))))
                         && !(entity instanceof EnderMan)
+                        && (!entity.isInvisible() || this.hasRangeModule)
                         && (!finalIsPlayerTargetingModule || (entity instanceof Player && !((Player) entity).isCreative()))
                         && (!finalIsHostileTargetingModule ||
                         (entity.getType().getCategory() == MobCategory.MONSTER ||

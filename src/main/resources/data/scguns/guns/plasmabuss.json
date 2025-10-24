@@ -52,7 +52,8 @@
     "size": 6.0,
     "speed": 5.0,
     "trailLengthMultiplier": 1.0,
-    "trailColor": 3329330
+    "trailColor": 3329330,
+    "trailThickness": 0.5
   },
   "reloads": {
     "emptyMagTimer": 50,

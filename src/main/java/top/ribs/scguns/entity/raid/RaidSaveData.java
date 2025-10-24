@@ -21,6 +21,7 @@ public class RaidSaveData extends SavedData {
 
     private final Map<UUID, ActiveRaidData> activeRaidData = new HashMap<>();
     private final Map<ResourceLocation, ScheduledRaidData> scheduledRaids = new HashMap<>();
+    private final Map<ResourceLocation, Long> lastRaidDayByDimension = new HashMap<>();
 
     public record ActiveRaidData(
             UUID raidId,
@@ -186,6 +187,12 @@ public class RaidSaveData extends SavedData {
         }
         tag.put("ScheduledRaids", scheduledRaidsList);
 
+        CompoundTag lastRaidDaysTag = new CompoundTag();
+        for (Map.Entry<ResourceLocation, Long> entry : lastRaidDayByDimension.entrySet()) {
+            lastRaidDaysTag.putLong(entry.getKey().toString(), entry.getValue());
+        }
+        tag.put("LastRaidDays", lastRaidDaysTag);
+
         return tag;
     }
 
@@ -208,6 +215,19 @@ public class RaidSaveData extends SavedData {
                 ScheduledRaidData raidData = ScheduledRaidData.load(scheduledRaidsList.getCompound(i));
                 if (raidData != null) {
                     data.scheduledRaids.put(raidData.dimension, raidData);
+                }
+            }
+        }
+
+        if (tag.contains("LastRaidDays")) {
+            CompoundTag lastRaidDaysTag = tag.getCompound("LastRaidDays");
+            for (String key : lastRaidDaysTag.getAllKeys()) {
+                try {
+                    ResourceLocation dimension = new ResourceLocation(key);
+                    long lastDay = lastRaidDaysTag.getLong(key);
+                    data.lastRaidDayByDimension.put(dimension, lastDay);
+                } catch (Exception e) {
+                    LOGGER.warn("Failed to load last raid day for dimension: {}", key);
                 }
             }
         }
@@ -260,6 +280,20 @@ public class RaidSaveData extends SavedData {
         if (scheduledRaids.remove(dimension) != null) {
             setDirty();
         }
+    }
+
+    public void setLastRaidDay(ResourceLocation dimension, long day) {
+        lastRaidDayByDimension.put(dimension, day);
+        setDirty();
+    }
+
+    public long getLastRaidDay(ResourceLocation dimension) {
+        return lastRaidDayByDimension.getOrDefault(dimension, -1000L);
+    }
+
+    public boolean canScheduleRaid(ResourceLocation dimension, long currentDay, int minDaysBetween) {
+        long lastRaidDay = getLastRaidDay(dimension);
+        return currentDay - lastRaidDay >= minDaysBetween;
     }
 
     public void cleanupInvalidRaids(ServerLevel level) {

@@ -24,16 +24,24 @@
   "ammunition": {
     "acceptedAmmo": [
       {
+        "item": "scguns:shatter_round",
+        "bulletType": "scguns:shatter_round",
+        "casingType": "scguns:medium_brass_casing",
+        "damage": 12.0
+      },
+      {
         "item": "scguns:gibbs_round",
         "bulletType": "scguns:gibbs_round",
         "casingType": "scguns:medium_diamond_steel_casing",
-        "damage": 15.0
+        "damage": 15.0,
+        "armorPenetration": 4
       },
       {
         "item": "scguns:krahg_round",
         "bulletType": "scguns:krahg_round",
         "casingType": "scguns:large_brass_casing",
-        "damage": 26.0
+        "damage": 26.0,
+        "armorPenetration": 6
       }
     ],
     "casingEjectChance": 0.65

@@ -1,39 +1,34 @@
 {
-  "type": "minecraft:crafting_shaped",
+  "type": "minecraft:crafting_shapeless",
   "category": "building",
-  "key": {
-    "Q": {
+  "ingredients": [
+    {
       "item": "minecraft:redstone"
     },
-    "A": {
+    {
       "item": "scguns:nitro_powder"
     },
-    "X": {
+    {
       "item": "scguns:sulfur_dust"
     },
-    "M": {
+    {
       "item": "scguns:phosphor_dust"
     },
-    "L": {
+    {
       "item": "minecraft:water_bucket"
     },
-    "I": {
+    {
       "item": "scguns:niter_dust"
     },
-    "O": {
+    {
       "item": "minecraft:glowstone_dust"
     },
-    "B": {
+    {
       "item": "scguns:plasma"
     },
-    "D": {
+    {
       "item": "minecraft:blaze_powder"
     }
-  },
-  "pattern": [
-    "QAX",
-    "MLI",
-    "OBD"
   ],
   "result": {
     "item": "scguns:vicious_acid_bucket",

@@ -270,6 +270,8 @@ public class Turret implements INBTSerializable<CompoundTag> {
             @Optional
             private ResourceLocation casingType;
             private double damage = 5.0; // Default damage value
+            @Optional
+            private float armorPenetration = 0.0F;
 
             @Override
             public CompoundTag serializeNBT() {
@@ -280,6 +282,7 @@ public class Turret implements INBTSerializable<CompoundTag> {
                     tag.putString("CasingType", this.casingType.toString());
                 }
                 tag.putDouble("Damage", this.damage);
+                tag.putFloat("ArmorPenetration", this.armorPenetration);
                 return tag;
             }
 
@@ -297,6 +300,9 @@ public class Turret implements INBTSerializable<CompoundTag> {
                 if (tag.contains("Damage", Tag.TAG_ANY_NUMERIC)) {
                     this.damage = tag.getDouble("Damage");
                 }
+                if (tag.contains("ArmorPenetration", Tag.TAG_ANY_NUMERIC)) {
+                    this.armorPenetration = tag.getFloat("ArmorPenetration");
+                }
             }
 
             public JsonObject toJsonObject() {
@@ -307,6 +313,9 @@ public class Turret implements INBTSerializable<CompoundTag> {
                     object.addProperty("casingType", this.casingType.toString());
                 }
                 object.addProperty("damage", this.damage);
+                if (this.armorPenetration != 0.0F) {
+                    object.addProperty("armorPenetration", this.armorPenetration);
+                }
                 return object;
             }
 
@@ -316,6 +325,7 @@ public class Turret implements INBTSerializable<CompoundTag> {
                 ammo.bulletType = this.bulletType;
                 ammo.casingType = this.casingType;
                 ammo.damage = this.damage;
+                ammo.armorPenetration = this.armorPenetration;
                 return ammo;
             }
 
@@ -328,11 +338,13 @@ public class Turret implements INBTSerializable<CompoundTag> {
             @Nullable
             public ResourceLocation getCasingType() { return this.casingType; }
             public double getDamage() { return this.damage; }
+            public float getArmorPenetration() { return this.armorPenetration; }
 
             public void setItem(ResourceLocation item) { this.item = item; }
             public void setBulletType(ResourceLocation bulletType) { this.bulletType = bulletType; }
             public void setCasingType(ResourceLocation casingType) { this.casingType = casingType; }
             public void setDamage(double damage) { this.damage = damage; }
+            public void setArmorPenetration(float armorPenetration) { this.armorPenetration = armorPenetration; }
         }
 
         @Override

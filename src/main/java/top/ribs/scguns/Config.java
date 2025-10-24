@@ -259,6 +259,8 @@ public class Config
     public static class Raids {
         public final ForgeConfigSpec.BooleanValue raidsEnabled;
         public final ForgeConfigSpec.DoubleValue nightlyRaidChance;
+        public final ForgeConfigSpec.IntValue minDaysBetweenRaids;
+        public final ForgeConfigSpec.IntValue raidTimeoutMinutes;
 
         public Raids(ForgeConfigSpec.Builder builder) {
             builder.comment("Mini-Raid Configuration").push("raids");
@@ -271,6 +273,18 @@ public class Config
                         .comment("Chance each night for a raid to spawn near a valid player (0.0 = never, 1.0 = always).",
                                 "Set to 0.0 to effectively disable raids without turning off the system entirely.")
                         .defineInRange("nightlyRaidChance", 0.2D, 0.0D, 1.0D);
+
+                this.minDaysBetweenRaids = builder
+                        .comment("Minimum number of days that must pass between natural raid spawns.",
+                                "Set to 0 to allow raids every night (if chance succeeds).",
+                                "Set to 1 to allow raids every other night.",
+                                "Set to 2 or higher to space out raids further.")
+                        .defineInRange("minDaysBetweenRaids", 2, 0, 100);
+
+                this.raidTimeoutMinutes = builder
+                        .comment("Time in minutes before a raid automatically fails if the boss is not defeated.",
+                                "Default: 10 minutes")
+                        .defineInRange("raidTimeoutMinutes", 10, 0, 60);
             }
             builder.pop();
         }

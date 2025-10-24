@@ -4,13 +4,34 @@
 - fixed blueprint bug
 - Removed some additional remnants of redcoat stuff
 - increased distance from player for raid spawning
+- added config for days between raids
 - allowed for raid boss/henchmen to spawn with nbt stuff
 - fixed raid henchmen sometimes spawning with incorrect tier stuff
+- added config timeout for raid bosses (default 10 minute raid)
+- White flag despawns henchmen too
+- Raids shouldnt crash if boss despawns
 - Fixed Charge weapons maintaining charge after swapped
 - improved a bunch of the stuff regarding sky carriers, visual and mechanical
 - Curse of binding now works on attachments (creative mode allows removal still)
 - Gun tiers restructured, easier for addons to add new tiers
 - Added damage falloff for all guns
+- Scaled down the laser sight slightly
 - Extended barrel and muzzle brake attachments now increases damage falloff range
 - Fixed the bumpstock to work more consistently, has a variable increase depending on initial fire rate so all guns benefit
+- Its tooltip just displays increased fire rate since its varies significantly per gun
 - Fixed double application of damage decrease for standard silencer oop
+- Enemy turrets ignore players with invisiblity
+- Player turrets ignore entities with invisiblity (unless range module attached)
+- Turret projectiles more closely match the behavior of the rounds it fires, (gibbs increase xp, etc)
+- Added shatter round compat for turrets
+- Removed gibbs from basic turret, added shatter rounds
+- Buffed Bearpack damage for turret
+- Added Armor penetration variable to Turret Json
+- Added bunch of new EPIC blocks thansk to Jadn!
+- Fixed Anthralite knife not being able to harvest grass
+- Bayonets serve as knives as well
+- Readded the sensitivity multiplier for scopes
+- POSSIBLY fixed scope bug with choppy input, havent pinpointed whats causing it but made some changes that might help
+- Fixed cogknight held item position
+- overhauled blaze rod projectile (used by nervepinch) a lot cooler now
+- Tweaked some trade recipes

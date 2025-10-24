@@ -59,6 +59,12 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
         this.initialTargetPosition = targetPosition;
         this.phasingTimer = MAX_PHASING_TIME;
         this.setPhasing(true);
+
+        Vec3 direction = targetPosition.subtract(this.position()).normalize();
+        float targetYaw = (float) (Math.atan2(direction.z, direction.x) * (180.0 / Math.PI) - 90.0);
+        this.setYRot(targetYaw);
+        this.yBodyRot = targetYaw;
+        this.yHeadRot = targetYaw;
     }
 
     public boolean isPhasing() {
@@ -110,8 +116,15 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
     public void tick() {
         super.tick();
 
-        if (!this.level().isClientSide() && this.isPhasing()) {
-            handlePhasing();
+        if (!this.level().isClientSide()) {
+            if (this.isPhasing()) {
+                if (this.getTarget() != null) {
+                    this.setPhasing(false);
+                    this.initialTargetPosition = null;
+                } else {
+                    handlePhasing();
+                }
+            }
         }
 
         if (this.level().isClientSide()) {
@@ -124,7 +137,7 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
                 LivingEntity target = this.getTarget();
                 if (target != null && this.distanceToSqr(target) < 625.0 && !this.isPhasing()) {
                     fireProjectile();
-                    shootCooldown = 20;
+                    shootCooldown = 15;
                 }
             }
 
@@ -153,6 +166,11 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
         } else {
             Vec3 direction = this.initialTargetPosition.subtract(this.position()).normalize();
             this.setDeltaMovement(direction.scale(0.3));
+
+            float targetYaw = (float) (Math.atan2(direction.z, direction.x) * (180.0 / Math.PI) - 90.0);
+            this.setYRot(targetYaw);
+            this.yBodyRot = targetYaw;
+            this.yHeadRot = targetYaw;
         }
     }
 
@@ -185,7 +203,7 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createLivingAttributes()
-                .add(Attributes.MAX_HEALTH, 22D)
+                .add(Attributes.MAX_HEALTH, 32D)
                 .add(Attributes.FOLLOW_RANGE, 50D)
                 .add(Attributes.ARMOR_TOUGHNESS, 0.1f)
                 .add(Attributes.ATTACK_KNOCKBACK, 0.0f)
@@ -232,7 +250,7 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
     }
 
     public void triggerMuzzleFlash() {
-        this.entityData.set(MUZZLE_FLASH_TIMER, 10);
+        this.entityData.set(MUZZLE_FLASH_TIMER, 6);
     }
 
     public boolean isMuzzleFlashVisible() {
@@ -348,14 +366,9 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
 
             this.skyCarrier.setDeltaMovement(currentVelocity);
 
-            if (target != null) {
-                double dx = target.getX() - this.skyCarrier.getX();
-                double dz = target.getZ() - this.skyCarrier.getZ();
-                targetYaw = (float) (Math.atan2(dz, dx) * (180.0 / Math.PI) - 90.0);
-            } else if (currentVelocity.lengthSqr() > 0.001) {
-                float movementYaw = (float) (Math.atan2(currentVelocity.z, currentVelocity.x) * (180.0 / Math.PI) - 90.0);
-                targetYaw = movementYaw;
-            }
+            double dx = target.getX() - this.skyCarrier.getX();
+            double dz = target.getZ() - this.skyCarrier.getZ();
+            targetYaw = (float) (Math.atan2(dz, dx) * (180.0 / Math.PI) - 90.0);
 
             float yawDifference = Mth.wrapDegrees(targetYaw - currentYaw);
             float maxTurnSpeed = 9.0f;

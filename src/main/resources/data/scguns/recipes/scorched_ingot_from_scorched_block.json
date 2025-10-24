@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "group": "anthralite_ingot",
+  "ingredients": [
+    {
+      "item": "scguns:scorched_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "scguns:scorched_ingot"
+  }
+}

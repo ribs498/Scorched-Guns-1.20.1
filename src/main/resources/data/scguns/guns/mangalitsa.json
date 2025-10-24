@@ -17,7 +17,7 @@
     "rate": 13,
     "recoilAngle": 12.0,
     "recoilKick": 2.3,
-    "spread": 5.5,
+    "spread": 5.25,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20,
     "meleeReach": 3.5,
@@ -54,7 +54,7 @@
   "projectile": {
     "knockbackStrength": 0.65,
     "advantage": "scguns:wither",
-    "damage": 22.0,
+    "damage": 22.5,
     "damageFalloffStart": 7.0,
     "damageFalloffEnd": 18.0,
     "damageFalloffMinMultiplier": 0.35,
@@ -65,7 +65,8 @@
     "life": 40,
     "size": 0.05,
     "speed": 5.0,
-    "trailLengthMultiplier": 2.0
+    "trailLengthMultiplier": 2.0,
+    "trailThickness": 0.5
   },
   "reloads": {
     "emptyMagTimer": 0,

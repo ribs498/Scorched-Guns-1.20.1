@@ -147,11 +147,15 @@ public class ModEvents {
                 1, 12, 0.15f));
         trades.add((pTrader, pRandom) -> new MerchantOffer(
                 new ItemStack(Items.EMERALD, 24),
-                new ItemStack(ModItems.WRECKER_BLUEPRINT.get(), 1),
+                new ItemStack(ModItems.WRECKER_FLARE.get(), 1),
                 1, 12, 0.15f));
         trades.add((pTrader, pRandom) -> new MerchantOffer(
                 new ItemStack(Items.EMERALD, 29),
-                new ItemStack(ModItems.WRECKER_BLUEPRINT.get(), 1),
+                new ItemStack(ModItems.WRECKER_FLARE.get(), 1),
+                1, 12, 0.15f));
+        trades.add((pTrader, pRandom) -> new MerchantOffer(
+                new ItemStack(Items.EMERALD, 29),
+                new ItemStack(ModItems.OCEAN_FLARE.get(), 1),
                 1, 12, 0.15f));
         rareTrades.add((pTrader, pRandom) -> new MerchantOffer(
                 new ItemStack(Items.EMERALD, 23),

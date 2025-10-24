@@ -71,6 +71,11 @@
     "scguns:polished_asgharian_panel",
     "scguns:mossy_asgharian_bricks",
     "scguns:chiseled_asgharian_bricks",
-    "scguns:reinforced_asgharian_tiles"
+    "scguns:reinforced_asgharian_tiles",
+    "scguns:scorched_block",
+    "scguns:treated_brass_lamp",
+    "scguns:treated_brass_grate",
+    "scguns:chiseled_treated_brass_block",
+    "scguns:treated_brass_tiles"
   ]
 }

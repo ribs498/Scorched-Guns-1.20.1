@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "scguns:block/treated_brass_lamp"
+    },
+    "lit=true": {
+      "model": "scguns:block/treated_brass_lamp_lit"
+    }
+  }
+}

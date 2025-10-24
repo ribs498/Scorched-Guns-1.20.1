@@ -1,7 +1,9 @@
 {
-  "raid.scguns.warning": "You feel like you're being watched",
+  "raid.scguns.warning": "The Air Reeks of Sulfur...",
   "raid.scguns.defeated": "Raid Defeated!",
   "raid.scguns.failed": "Raid Failed!",
+  "raid.scguns.timeout": "Raid Failed: Time's up!",
+  "raid.scguns.surrendered": "Raid Surrendered! The boss has spared you.",
 
   "raid.scguns.antique": "Antique Raid",
   "raid.boss.scguns.antique": "Colonel Jil",
@@ -470,9 +472,8 @@
 
   "item.scguns.white_flag": "White Flag",
   "item.scguns.white_flag.desc": "Ends the current raid and removes the boss",
-  "item.scguns.white_flag.warning": "Use this to surrender when overwhelmed",
   "item.scguns.white_flag.no_raid": "No active raid to surrender!",
-  "raid.scguns.surrendered": "Raid Surrendered! The boss has spared you.",
+
 
   "item.scguns.raid_flare.need_pistol": "Use a Flare Pistol to fire this flare",
   "item.scguns.raid_flare.requires_pistol": "Requires Flare Pistol to use",
@@ -509,6 +510,16 @@
   "block.scguns.mossy_asgharian_tiles": "Mossy Asgharian Tiles",
   "block.scguns.cracked_asgharian_tiles": "Cracked Asgharian Tiles",
   "block.scguns.polished_asgharian_panel": "Polished Asgharian Panel",
+
+  "block.scguns.treated_brass_tiles": "Treated Brass Tiles",
+  "block.scguns.chiseled_treated_brass_block": "Chiseled Treated Brass Block",
+  "block.scguns.treated_brass_lamp": "Treated Brass Lamp",
+  "block.scguns.treated_brass_grate": "Treated Brass Grate",
+  "block.scguns.scorched_block": "Scorched Block",
+
+
+
+
 
   "item.scguns.cog_mace": "Cog Mace",
   "item.scguns.air_canister": "Air Canister",
@@ -1641,7 +1652,7 @@
   "tooltip.scguns.attachment.ammo_capacity": "  • Ammo Capacity: %s",
   "tooltip.scguns.attachment.silenced": "  • Silenced",
   "tooltip.scguns.attachment.effective_range": "  • Effective Range: %s",
-  "tooltip.scguns.attachment.durability_penalty": " • Increased Gun Wear",
+  "tooltip.scguns.attachment.durability_penalty": "  • Increased Gun Wear",
   "tooltip.scguns.attachment.comparison": "vs Base Weapon:",
   "tooltip.scguns.attachment.stats.damage": "§6Damage",
   "tooltip.scguns.attachment.stats.accuracy": "§bAccuracy",

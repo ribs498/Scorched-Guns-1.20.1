@@ -55,7 +55,5 @@ public class WhiteFlagItem extends Item {
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         tooltip.add(Component.translatable("item.scguns.white_flag.desc")
                 .withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.scguns.white_flag.warning")
-                .withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
     }
 }

@@ -222,10 +222,10 @@
         "ai_type": "COWARD"
       }
     ],
-    "spawn_interval_ticks": 300,
-    "max_alive": 15,
+    "spawn_interval_ticks": 600,
+    "max_alive": 12,
     "spawn_radius": 22,
-    "spawn_attempts_per_wave": 4
+    "spawn_attempts_per_wave": 6
   },
 
   "spawn_conditions": {

@@ -51,7 +51,7 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
     protected Vec3 lastKnownPosition;
 
     protected int burstAmount = 3;
-    protected int burstTimer = 20;
+    protected int burstTimer = 15;
 
     protected static final float ROTATION_SPEED = 15.0F;
 

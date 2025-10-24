@@ -456,7 +456,7 @@ public class GunEventBus {
                     if (!stockStack.isEmpty() && stockStack.getItem() instanceof IAttachment<?> attachment) {
                         for (top.ribs.scguns.interfaces.IGunModifier modifier : attachment.getProperties().getModifiers()) {
                             if (modifier == GunModifiers.BUMP_STOCK_MODIFIER && damageAmount > 0) {
-                                if (Math.random() < 0.20) {
+                                if (Math.random() < 0.30) {
                                     damageAmount *= 2;
                                 }
                                 break;

@@ -37,7 +37,7 @@ import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class RaidManager {
-    private static final Logger LOGGER = LogManager.getLogger();
+   // private static final Logger LOGGER = LogManager.getLogger();
     private static final UUID BOSS_HEALTH_MODIFIER_UUID = UUID.fromString("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
     private static final UUID MOUNT_HEALTH_MODIFIER_UUID = UUID.fromString("b2c3d4e5-f6a7-8901-bcde-f12345678901");
 
@@ -87,6 +87,13 @@ public class RaidManager {
                 mount.discard();
             }
 
+            for (UUID henchmanUUID : raid.getHenchmenUUIDs()) {
+                Entity henchman = level.getEntity(henchmanUUID);
+                if (henchman != null && henchman.isAlive()) {
+                    henchman.discard();
+                }
+            }
+
             raid.announceToNearbyPlayers(
                     Component.translatable("raid.scguns.surrendered")
                             .withStyle(ChatFormatting.YELLOW),
@@ -105,7 +112,7 @@ public class RaidManager {
             RaidSaveData saveData = RaidSaveData.get(level);
             saveData.removeActiveRaid(raid.getRaidId());
 
-            LOGGER.info("Raid {} surrendered via white flag", raid.getRaidId());
+            //LOGGER.info("Raid {} surrendered via white flag", raid.getRaidId());
         }
     }
     @SubscribeEvent
@@ -131,7 +138,7 @@ public class RaidManager {
             RaidConfig.RaidData config = RaidConfig.getRaidById(data.configRaidId());
 
             if (config == null) {
-                LOGGER.warn("Could not restore raid - no config for raid ID: {}", data.configRaidId());
+                //LOGGER.warn("Could not restore raid - no config for raid ID: {}", data.configRaidId());
                 continue;
             }
 
@@ -146,7 +153,7 @@ public class RaidManager {
             restored++;
         }
 
-        LOGGER.info("Restored {} active raids", restored);
+        //LOGGER.info("Restored {} active raids", restored);
     }
     public void startRaidFromPlayer(RaidConfig.RaidData config, ServerLevel level, ServerPlayer player) {
         if (hasActiveRaid()) return;
@@ -228,44 +235,137 @@ public class RaidManager {
         RaidSaveData saveData = RaidSaveData.get(level);
 
         if (dayTime >= NIGHT_START && dayTime < NIGHT_START + 20) {
-            if (hasActiveRaid()) return;
+            if (dayTime == NIGHT_START) {
+//                LOGGER.info("=== RAID SCHEDULING CHECK === Day: {}, Time: {}, Dimension: {}",
+//                        currentDay, dayTime, dimension);
+            }
+
+            if (hasActiveRaid()) {
+                if (dayTime == NIGHT_START) {
+                    //LOGGER.info("  âŒ Blocked: Active raid already exists");
+                }
+                return;
+            }
 
             RaidSaveData.ScheduledRaidData scheduled = saveData.getScheduledRaid(dimension);
 
-            if (scheduled == null) {
-                if (level.random.nextFloat() < Config.COMMON.raids.nightlyRaidChance.get()) {
+            if (scheduled != null && scheduled.scheduledDay() < currentDay) {
+                if (dayTime == NIGHT_START) {
+                    //LOGGER.warn("  ðŸ§¹ Cleaning up stale raid schedule from day {}", scheduled.scheduledDay());
+                }
+                saveData.removeScheduledRaid(dimension);
+                scheduled = null;
+            }
+
+            if (scheduled != null) {
+                if (dayTime == NIGHT_START) {
+                    //LOGGER.info("  âŒ Blocked: Raid already scheduled for tonight (Day: {})", scheduled.scheduledDay());
+                }
+                return;
+            }
+
+            if (!Config.COMMON.raids.raidsEnabled.get()) {
+                if (dayTime == NIGHT_START) {
+                    //LOGGER.info("  âŒ Blocked: Raids disabled in config");
+                }
+                return;
+            }
+
+            if (dayTime == NIGHT_START) {
+                float raidChance = Config.COMMON.raids.nightlyRaidChance.get().floatValue();
+                float roll = level.random.nextFloat();
+
+//                LOGGER.info("  ðŸŽ² Chance Roll: {}/{} ({})",
+//                        String.format("%.3f", roll),
+//                        String.format("%.3f", raidChance),
+//                        roll < raidChance ? "âœ“ SUCCESS" : "âœ— FAILED");
+
+                if (roll < raidChance) {
                     scheduleRaidForTonight(level, dimension, currentDay, saveData);
                 }
             }
         }
 
         if (dayTime >= RAID_SPAWN_TIME && dayTime < RAID_SPAWN_TIME + 20) {
-            if (hasActiveRaid()) return;
+            if (dayTime == RAID_SPAWN_TIME) {
+                //LOGGER.info("=== RAID SPAWN CHECK === Day: {}, Time: {}", currentDay, dayTime);
+            }
+
+            if (hasActiveRaid()) {
+                if (dayTime == RAID_SPAWN_TIME) {
+                    //LOGGER.info("  âŒ Blocked: Active raid already exists");
+                }
+                return;
+            }
 
             RaidSaveData.ScheduledRaidData scheduled = saveData.getScheduledRaid(dimension);
 
-            if (scheduled != null && scheduled.scheduledDay() == currentDay) {
-                ServerPlayer player = level.getServer().getPlayerList().getPlayer(scheduled.targetPlayerUUID());
-
-                if (player != null && !player.isRemoved() && !player.isSpectator()) {
-                    Vec3 playerPos = player.position();
-                    Vec3 spawnPos = findRaidSpawnLocation(level, playerPos);
-
-                    if (spawnPos != null) {
-                        RaidConfig.RaidData config = RaidConfig.getRaidById(scheduled.raidId());
-                        if (config != null) {
-                            startRaid(config, level, spawnPos);
-                        }
-                    }
+            if (scheduled == null) {
+                if (dayTime == RAID_SPAWN_TIME) {
+                    //LOGGER.info("  â„¹ No raid scheduled for tonight");
                 }
-
-                saveData.removeScheduledRaid(dimension);
+                return;
             }
+
+            if (dayTime == RAID_SPAWN_TIME) {
+//                LOGGER.info("  âœ“ Scheduled Raid Found: {} (Scheduled Day: {}, Current Day: {})",
+//                        scheduled.raidId(), scheduled.scheduledDay(), currentDay);
+            }
+
+            if (scheduled.scheduledDay() != currentDay) {
+                if (dayTime == RAID_SPAWN_TIME) {
+//                    LOGGER.warn("  âš  Day mismatch! Scheduled: {}, Current: {} - removing stale schedule",
+//                            scheduled.scheduledDay(), currentDay);
+                }
+                saveData.removeScheduledRaid(dimension);
+                return;
+            }
+
+            ServerPlayer player = level.getServer().getPlayerList().getPlayer(scheduled.targetPlayerUUID());
+
+            if (player == null || player.isRemoved() || player.isSpectator()) {
+                if (dayTime == RAID_SPAWN_TIME) {
+                    //LOGGER.warn("  âš  Target player invalid - cancelling raid");
+                }
+                saveData.removeScheduledRaid(dimension);
+                return;
+            }
+
+            Vec3 playerPos = player.position();
+            Vec3 spawnPos = findRaidSpawnLocation(level, playerPos);
+
+            if (spawnPos == null) {
+                if (dayTime == RAID_SPAWN_TIME) {
+                    //LOGGER.warn("  âš  No valid spawn location found - delaying raid");
+                }
+                return;
+            }
+
+            RaidConfig.RaidData config = RaidConfig.getRaidById(scheduled.raidId());
+            if (config == null) {
+                if (dayTime == RAID_SPAWN_TIME) {
+                   // LOGGER.error("  âŒ Raid config not found: {}", scheduled.raidId());
+                }
+                saveData.removeScheduledRaid(dimension);
+                return;
+            }
+
+            if (dayTime == RAID_SPAWN_TIME) {
+               // LOGGER.info("  ðŸš€ STARTING RAID: {} at {}", config.raidId(), spawnPos);
+            }
+
+            startRaid(config, level, spawnPos);
+            saveData.removeScheduledRaid(dimension);
         }
     }
 
     private void scheduleRaidForTonight(ServerLevel level, ResourceLocation dimension, long currentDay, RaidSaveData saveData) {
-        if (hasActiveRaid()) return;
+       // LOGGER.info("  â†’ Attempting to schedule raid for Day {}...", currentDay);
+
+        if (hasActiveRaid()) {
+           // LOGGER.info("     âŒ Failed: Active raid exists");
+            return;
+        }
 
         List<ServerPlayer> validPlayers = new ArrayList<>();
         for (ServerPlayer player : level.players()) {
@@ -274,21 +374,42 @@ public class RaidManager {
             }
         }
 
-        if (validPlayers.isEmpty()) return;
+        if (validPlayers.isEmpty()) {
+           // LOGGER.warn("     âŒ Failed: No valid players (all spectator/creative)");
+            return;
+        }
 
         ServerPlayer targetPlayer = validPlayers.get(level.random.nextInt(validPlayers.size()));
         PlayerGunProgression progression = PlayerGunProgression.get(targetPlayer);
-
         int raidLevel = progression.getCurrentRaidLevel();
 
-        if (raidLevel == 0) return;
+//        LOGGER.info("     Player: {} | Tier: {} | Raid Level: {}",
+//                targetPlayer.getName().getString(),
+//                progression.getCurrentTier().getId(),
+//                raidLevel);
+
+        if (raidLevel == 0) {
+//            LOGGER.warn("     âŒ Failed: Player raid level is 0 (no tiered guns picked up)");
+            return;
+        }
 
         RaidConfig.RaidData selectedRaid = selectRaidForLevel(raidLevel, level.random);
-        if (selectedRaid == null) return;
+
+        if (selectedRaid == null) {
+            //LOGGER.error("     âŒ Failed: No raid config for level {}", raidLevel);
+            return;
+        }
+
+        //LOGGER.info("     âœ“ Selected: {} (Level {})", selectedRaid.raidId(), raidLevel);
 
         saveData.scheduleRaid(dimension, targetPlayer, selectedRaid.raidId(), currentDay);
+
+        //LOGGER.info("     ðŸ“… Scheduled for Day: {} (current: {})", currentDay, currentDay);
+       // LOGGER.info("     âœ… RAID SCHEDULED FOR TONIGHT!");
+
         targetPlayer.sendSystemMessage(Component.translatable("raid.scguns.warning"));
     }
+
     @Nullable
     private RaidConfig.RaidData selectRaidForLevel(int playerRaidLevel, net.minecraft.util.RandomSource random) {
         List<RaidConfig.RaidData> availableRaids = RaidConfig.getRaidsForLevel(playerRaidLevel);

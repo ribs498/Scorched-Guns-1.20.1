@@ -24,16 +24,17 @@
   "ammunition": {
     "acceptedAmmo": [
       {
-        "item": "scguns:gibbs_round",
-        "bulletType": "scguns:gibbs_round",
-        "casingType": "scguns:medium_diamond_steel_casing",
-        "damage": 12.0
+        "item": "scguns:shatter_round",
+        "bulletType": "scguns:shatter_round",
+        "casingType": "scguns:medium_brass_casing",
+        "damage": 11.0
       },
       {
         "item": "scguns:advanced_round",
         "bulletType": "scguns:advanced_round",
         "casingType": "scguns:medium_brass_casing",
-        "damage": 9.0
+        "damage": 10.0,
+        "armorPenetration": 2.0
       },
       {
         "item": "scguns:standard_copper_round",

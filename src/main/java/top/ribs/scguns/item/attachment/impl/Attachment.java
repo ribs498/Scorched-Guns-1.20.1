@@ -103,6 +103,7 @@ public abstract class Attachment
 
             if (modifier == GunModifiers.BUMP_STOCK_MODIFIER) {
                 stats.hasDurabilityPenalty = true;
+                stats.isFireRateWeaponDependent = true;
             }
 
             if (modifier.silencedFire()) stats.silenced = true;
@@ -199,10 +200,16 @@ public abstract class Attachment
         }
 
         if (Math.abs(stats.fireRateChange) > 0.001f) {
-            String rateText = (stats.fireRateChange > 0 ? "+" : "") + PERCENTAGE_FORMAT.format(stats.fireRateChange * 100) + "%";
-            Component tooltip = Component.translatable("tooltip.scguns.attachment.fire_rate", rateText)
-                    .withStyle(stats.fireRateChange > 0 ? ChatFormatting.GREEN : ChatFormatting.RED);
-            tooltips.add(tooltip);
+            if (stats.isFireRateWeaponDependent) {
+                Component tooltip = Component.translatable("tooltip.scguns.attachment.fire_rate.increased")
+                        .withStyle(ChatFormatting.GREEN);
+                tooltips.add(tooltip);
+            } else {
+                String rateText = (stats.fireRateChange > 0 ? "+" : "") + PERCENTAGE_FORMAT.format(stats.fireRateChange * 100) + "%";
+                Component tooltip = Component.translatable("tooltip.scguns.attachment.fire_rate", rateText)
+                        .withStyle(stats.fireRateChange > 0 ? ChatFormatting.GREEN : ChatFormatting.RED);
+                tooltips.add(tooltip);
+            }
         }
 
         if (Math.abs(stats.reloadSpeedChange) > 0.001) {
@@ -250,5 +257,6 @@ public abstract class Attachment
         boolean silenced = false;
         float rangeMultiplier = 0f;
         boolean hasDurabilityPenalty = false;
+        boolean isFireRateWeaponDependent = false;
     }
 }

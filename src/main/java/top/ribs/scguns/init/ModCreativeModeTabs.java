@@ -319,16 +319,6 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.DIAMOND_STEEL_FLARE.get());
 
                         pOutput.accept(ModItems.BLUEPRINT_SCRAP.get());
-                        pOutput.accept(ModItems.RUSTY_MEDAL.get());
-                        pOutput.accept(ModItems.LABOR_TROPHY.get());
-                        pOutput.accept(ModItems.SNAPPED_COGWHEEL.get());
-                        pOutput.accept(ModItems.LEVIATHAN_TOOTH.get());
-                        pOutput.accept(ModItems.CERIMONIAL_COD.get());
-                        pOutput.accept(ModItems.COG_HEART.get());
-                        pOutput.accept(ModItems.GOLD_IDOL.get());
-                        pOutput.accept(ModItems.SCULK_TOME.get());
-                        pOutput.accept(ModItems.SHULKER_CORE.get());
-
                         pOutput.accept(ModItems.ANTIQUE_BLUEPRINT.get());
                         pOutput.accept(ModItems.FRONTIER_BLUEPRINT.get());
                         pOutput.accept(ModItems.COPPER_BLUEPRINT.get());
@@ -342,6 +332,17 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModItems.END_BLUEPRINT.get());
                         pOutput.accept(ModItems.SCORCHED_BLUEPRINT.get());
                         pOutput.accept(ModItems.EXO_SUIT_BLUEPRINT.get());
+
+                        pOutput.accept(ModItems.RUSTY_MEDAL.get());
+                        pOutput.accept(ModItems.LABOR_TROPHY.get());
+                        pOutput.accept(ModItems.SNAPPED_COGWHEEL.get());
+                        pOutput.accept(ModItems.LEVIATHAN_TOOTH.get());
+                        pOutput.accept(ModItems.CERIMONIAL_COD.get());
+                        pOutput.accept(ModItems.COG_HEART.get());
+                        pOutput.accept(ModItems.GOLD_IDOL.get());
+                        pOutput.accept(ModItems.SCULK_TOME.get());
+                        pOutput.accept(ModItems.SHULKER_CORE.get());
+
 
                         pOutput.accept(ModItems.SMALL_COPPER_CASING.get());
                         pOutput.accept(ModItems.MEDIUM_COPPER_CASING.get());
@@ -506,6 +507,7 @@ public class ModCreativeModeTabs {
                         pOutput.accept(ModBlocks.DIAMOND_STEEL_BLOCK.get());
                         pOutput.accept(ModBlocks.VEHEMENT_COAL_BLOCK.get());
                         pOutput.accept(ModBlocks.PLASMA_BLOCK.get());
+                        pOutput.accept(ModBlocks.SCORCHED_BLOCK.get());
                         pOutput.accept(ModBlocks.NITER_BLOCK.get());
                         pOutput.accept(ModBlocks.NITER_GLASS.get());
 
@@ -549,6 +551,10 @@ public class ModCreativeModeTabs {
 
                         pOutput.accept(ModBlocks.TREATED_BRASS_PLATES.get());
                         pOutput.accept(ModBlocks.CUT_TREATED_BRASS.get());
+                        pOutput.accept(ModBlocks.TREATED_BRASS_TILES.get());
+                        pOutput.accept(ModBlocks.CHISELED_TREATED_BRASS_BLOCK.get());
+                        pOutput.accept(ModBlocks.TREATED_BRASS_LAMP.get());
+                        pOutput.accept(ModBlocks.TREATED_BRASS_GRATE.get());
                         pOutput.accept(ModBlocks.TREATED_IRON_GRATE.get());
                         pOutput.accept(ModBlocks.SANDBAG.get());
                         pOutput.accept(ModBlocks.GUANO_CANDLE.get());

@@ -1,6 +1,6 @@
 {
 	"credit": "Made with Blockbench",
-	"parent": "item/generated",
+    "parent": "minecraft:item/handheld",
 	"textures": {
 		"layer0": "scguns:item/white_flag"
 	}

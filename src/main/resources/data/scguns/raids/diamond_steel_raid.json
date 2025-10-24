@@ -210,10 +210,10 @@
         "ai_type": "DEFAULT"
       }
     ],
-    "spawn_interval_ticks": 300,
-    "max_alive": 14,
+    "spawn_interval_ticks": 600,
+    "max_alive": 12,
     "spawn_radius": 20,
-    "spawn_attempts_per_wave": 4
+    "spawn_attempts_per_wave": 5
   },
 
   "spawn_conditions": {

@@ -1,5 +1,9 @@
 {
   "values": [
-    "scguns:anthralite_knife"
+    "scguns:anthralite_knife",
+    "scguns:anthralite_bayonet",
+    "scguns:iron_bayonet",
+    "scguns:diamond_bayonet",
+    "scguns:netherite_bayonet"
   ]
 }

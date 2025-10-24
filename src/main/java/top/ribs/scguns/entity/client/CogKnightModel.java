@@ -16,6 +16,7 @@ import top.ribs.scguns.item.GunItem;
 
 public class CogKnightModel<T extends Entity> extends HierarchicalModel<T> implements ArmedModel {
     private final ModelPart main;
+    private final ModelPart full;
     private final ModelPart head;
     private final ModelPart leftArm;
     private final ModelPart rightArm;
@@ -35,7 +36,7 @@ public class CogKnightModel<T extends Entity> extends HierarchicalModel<T> imple
 
     public CogKnightModel(ModelPart root) {
         this.main = root.getChild("CogKnight");
-        ModelPart full = this.main.getChild("Full");
+        this.full = this.main.getChild("Full");
         this.head = full.getChild("Head");
         this.leftArm = full.getChild("LeftArm");
         this.rightArm = full.getChild("RightArm");
@@ -93,8 +94,6 @@ public class CogKnightModel<T extends Entity> extends HierarchicalModel<T> imple
                 .texOffs(59, 57).addBox(-2.0F, -4.0F, -4.0F, 2.0F, 5.0F, 7.0F, new CubeDeformation(0.0F))
                 .texOffs(39, 57).addBox(-6.0F, 7.0F, -3.0F, 5.0F, 7.0F, 5.0F, new CubeDeformation(0.0F))
                 .texOffs(58, 11).addBox(-5.0F, 14.0F, -3.0F, 5.0F, 4.0F, 5.0F, new CubeDeformation(0.0F)), PartPose.offset(-6.0F, -7.8889F, 0.1111F));
-        PartDefinition LeftHand = LeftArm.addOrReplaceChild("LeftHand", CubeListBuilder.create(), PartPose.offset(0.0F, 0.0F, 0.0F));
-        PartDefinition RightHand = Full.addOrReplaceChild("RightHand", CubeListBuilder.create(), PartPose.offset(6.0F, -7.8889F, 0.1111F));
         PartDefinition RightArm = Full.addOrReplaceChild("RightArm", CubeListBuilder.create().texOffs(16, 62).mirror().addBox(1.0F, 0.0F, -2.0F, 4.0F, 7.0F, 4.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(49, 46).mirror().addBox(2.0F, -3.0F, -4.0F, 4.0F, 4.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false)
                 .texOffs(59, 57).mirror().addBox(0.0F, -4.0F, -4.0F, 2.0F, 5.0F, 7.0F, new CubeDeformation(0.0F)).mirror(false)
@@ -214,28 +213,12 @@ public class CogKnightModel<T extends Entity> extends HierarchicalModel<T> imple
     @Override
     public void translateToHand(HumanoidArm pSide, PoseStack pPoseStack) {
         if (pSide == HumanoidArm.LEFT) {
-            float mainYOffset = this.main.y;
-
-            pPoseStack.translate(0.0625, 0.4375 + mainYOffset / 16.0f, 0.0);
+            this.main.translateAndRotate(pPoseStack);
+            this.full.translateAndRotate(pPoseStack);
             this.leftArm.translateAndRotate(pPoseStack);
 
-            float armRotation = this.leftArm.xRot;
-            float armZRot = this.leftArm.zRot;
-            float dynamicOffset = 0.6f;
-
-            boolean isCharging = armRotation < -1.4f && armZRot < -0.2f;
-            boolean isHoldingGun = Math.abs(armRotation + 1.5708f) < 0.1f;
-
-            if (isCharging) {
-                pPoseStack.translate(-0.35, 0.5, -0.2);
-            } else if (isHoldingGun) {
-                pPoseStack.translate(-0.25, dynamicOffset - 0.1, 0.05);
-            } else if (armRotation < -0.5f) {
-                dynamicOffset += Math.abs(armRotation + 0.3f) * 0.1f;
-                pPoseStack.translate(-0.25, dynamicOffset, 0.0);
-            } else {
-                pPoseStack.translate(-0.25, dynamicOffset, 0.0);
-            }
+            pPoseStack.translate(-0.2, 0.5, -0.1);
+            pPoseStack.scale(0.85F, 0.85F, 0.85F);
         }
     }
 

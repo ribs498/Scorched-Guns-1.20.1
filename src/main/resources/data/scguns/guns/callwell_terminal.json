@@ -17,7 +17,7 @@
     "rate": 16,
     "recoilAngle": 8.0,
     "recoilKick": 3.0,
-    "spread": 6.5,
+    "spread": 5.5,
     "meleeDamage": 3.0,
     "meleeReach": 3.5,
     "meleeCooldownTicks": 20,
@@ -64,7 +64,8 @@
     "life": 40,
     "size": 0.05,
     "speed": 5.0,
-    "trailLengthMultiplier": 2.0
+    "trailLengthMultiplier": 2.0,
+    "trailThickness": 0.5
   },
   "reloads": {
     "emptyMagTimer": 50,
