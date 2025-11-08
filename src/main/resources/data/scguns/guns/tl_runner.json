@@ -9,18 +9,13 @@
   },
   "general": {
     "weaponType": "plasma",
-    "alwaysSpread": false,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:one_handed",
     "rate": 11,
-    "recoilAngle": 5.0,
-    "recoilKick": 2.0,
-    "spread": 3.0,
     "meleeDamage": 2.0,
     "meleeCooldownTicks": 10,
     "meleeReach": 2.5,
     "hotBarrelRate": 24,
-    "criticalChance": 0.15,
     "isRevolver": true
   },
   "modules": {
@@ -41,6 +36,10 @@
     }
   },
   "projectile": {
+    "recoilAngle": 5.0,
+    "recoilKick": 2.0,
+    "spread": 3.0,
+    "criticalChance": 0.15,
     "advantage": "scguns:bot",
     "damage": 14.5,
     "damageFalloffStart": 18.0,

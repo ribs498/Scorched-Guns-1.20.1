@@ -44,10 +44,18 @@ public class C2SMessageEjectCasing extends PlayMessage<C2SMessageEjectCasing> {
                         double roll = Math.random();
 
                         if (roll < finalChance) {
-                            boolean addedToPouch = GunEventBus.addCasingToPouch(player, casingStack);
+                            if (enchantmentLevel > 0) {
+                                boolean addedDirectly = GunEventBus.addCasingDirectly(player, casingStack);
 
-                            if (!addedToPouch) {
-                                GunEventBus.spawnCasingInWorld(player.level(), player, casingStack);
+                                if (!addedDirectly) {
+                                    GunEventBus.spawnCasingInWorld(player.level(), player, casingStack);
+                                }
+                            } else {
+                                boolean addedToPouch = GunEventBus.addCasingToPouch(player, casingStack);
+
+                                if (!addedToPouch) {
+                                    GunEventBus.spawnCasingInWorld(player.level(), player, casingStack);
+                                }
                             }
                         }
                     }

@@ -1,0 +1,37 @@
+{
+  "type": "create:crushing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "scguns:minksy"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "scguns:diamond_steel_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:diamond_steel_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:energy_core"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:heavy_gun_parts"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_barrel"
+    }
+  ]
+}

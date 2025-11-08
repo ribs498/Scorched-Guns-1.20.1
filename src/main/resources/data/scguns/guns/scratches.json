@@ -3,20 +3,13 @@
   },
   "general": {
     "weaponType": "heavy",
-    "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:mini_gun_5",
     "baseGripType": "scguns:mini_gun_5",
-    "projectileAmount": 8,
     "rate": 4,
-    "recoilAngle": 3.5,
-    "recoilKick": 3.0,
-    "spread": 4.5,
+    "hotBarrelRate": 40,
     "meleeDamage": 4.5,
     "meleeCooldownTicks": 20,
-    "energyUse": 25.0,
-    "hotBarrelRate": 40,
-    "criticalChance": 0.05,
     "speedModifier": 0.95,
     "isRevolver": true,
     "enableGunLight": false
@@ -29,6 +22,13 @@
     }
   },
   "projectile": {
+    "projectileAmount": 8,
+    "alwaysSpread": true,
+    "recoilAngle": 3.5,
+    "recoilKick": 3.0,
+    "spread": 4.5,
+    "energyUse": 25.0,
+    "criticalChance": 0.05,
     "advantage": "scguns:none",
     "damage": 22.0,
     "damageFalloffStart": 8.0,
@@ -56,10 +56,9 @@
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",
-    "enchantedFire": "scguns:item.rusty_gnat.fire",
-    "fire": "scguns:item.rusty_gnat.fire",
+    "enchantedFire": "scguns:item.rail.fire",
+    "fire": "scguns:item.rail.fire",
     "reload": "scguns:item.gauss.reload",
-    "silencedFire": "scguns:item.rusty_gnat.silenced_fire",
     "flyby": "scguns:bullet.flyby1"
   }
 }

@@ -1,0 +1,37 @@
+{
+  "type": "create:crushing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "scguns:blooper"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "minecraft:copper_ingot"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:copper_gun_frame"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:firing_unit"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:heavy_gun_parts"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:heavy_gun_barrel"
+    }
+  ]
+}

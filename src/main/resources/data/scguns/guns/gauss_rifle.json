@@ -8,21 +8,16 @@
     }
   },
   "general": {
-    "weaponType": "plasma",
-    "alwaysSpread": true,
     "fireMode": "scguns:pulse",
     "fireTimer": 25,
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 7,
-    "recoilAngle": 3.5,
-    "recoilKick": 1.0,
-    "spread": 1.5,
+    "weaponType": "plasma",
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
     "meleeReach": 3.5,
-    "hotBarrelRate": 55,
-    "criticalChance": 0.05
+    "hotBarrelRate": 55
   },
   "modules": {
     "attachments": {
@@ -49,8 +44,13 @@
     }
   },
   "projectile": {
+    "alwaysSpread": true,
+    "recoilAngle": 3.5,
+    "recoilKick": 1.0,
+    "spread": 3.0,
+    "criticalChance": 0.05,
     "advantage": "scguns:none",
-    "damage": 24.5,
+    "damage": 26.0,
     "damageFalloffStart": 35.0,
     "damageFalloffEnd": 90.0,
     "damageFalloffMinMultiplier": 0.85,
@@ -66,7 +66,7 @@
   },
   "reloads": {
     "emptyMagTimer": 30,
-    "maxAmmo": 8,
+    "maxAmmo": 7,
     "reloadItem": "scguns:energy_cell",
     "reloadTimer": 30,
     "reloadType": "scguns:mag_fed"

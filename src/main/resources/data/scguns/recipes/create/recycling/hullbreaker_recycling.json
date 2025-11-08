@@ -35,10 +35,6 @@
     },
     {
       "chance": 0.3,
-      "item": "scguns:treated_iron_ingot"
-    },
-    {
-      "chance": 0.3,
       "item": "scguns:firing_unit"
     },
     {

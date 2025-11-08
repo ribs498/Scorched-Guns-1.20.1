@@ -12,14 +12,10 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
     "rate": 5,
-    "recoilAngle": 0.5,
-    "recoilKick": 0.33,
-    "spread": 3.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 15,
     "meleeReach": 2.5,
-    "hotBarrelRate": 15,
-    "criticalChance": 0.05
+    "hotBarrelRate": 15
   },
   "modules": {
     "attachments": {
@@ -42,6 +38,10 @@
     }
   },
   "projectile": {
+    "recoilAngle": 0.5,
+    "recoilKick": 0.33,
+    "spread": 3.0,
+    "criticalChance": 0.05,
     "visible": true,
     "advantage": "scguns:none",
     "damageFalloffStart": 10.0,

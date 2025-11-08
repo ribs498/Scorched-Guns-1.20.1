@@ -12,9 +12,9 @@
     },
     "armor": [
       {
-        "item": "minecraft:golden_helmet",
+        "item": "scguns:netherite_respirator",
         "slot": "head",
-        "drop_chance": 0.2
+        "drop_chance": 0.0
       },
       {
         "item": "minecraft:golden_chestplate",
@@ -60,7 +60,7 @@
         ],
         "armor": [
           {
-            "item": "minecraft:golden_helmet",
+            "item": "scguns:anthralite_respirator",
             "slot": "head",
             "chance": 1.0
           },
@@ -69,16 +69,16 @@
             "slot": "chest",
             "chance": 0.4
           },
-            {
-                "item": "minecraft:golden_leggings",
-                "slot": "legs",
-                "chance": 0.4
-            },
-            {
-                "item": "minecraft:golden_boots",
-                "slot": "feet",
-                "chance": 0.4
-            }
+          {
+            "item": "minecraft:golden_leggings",
+            "slot": "legs",
+            "chance": 0.4
+          },
+          {
+            "item": "minecraft:golden_boots",
+            "slot": "feet",
+            "chance": 0.4
+          }
         ],
         "effects": [
           {
@@ -103,7 +103,7 @@
         ],
         "armor": [
           {
-            "item": "minecraft:golden_helmet",
+            "item": "scguns:anthralite_respirator",
             "slot": "head",
             "chance": 1.0
           },
@@ -117,9 +117,9 @@
         "ai_type": "DEFAULT"
       },
       {
-        "entity_type": "minecraft:ghast",
-        "weight": 4.0,
-        "fixed_health": 24.0,
+        "entity_type": "scguns:mother_ghast",
+        "health_multiplier": 0.75,
+        "weight": 1.0,
         "weapons": [
         ],
         "armor": [

@@ -76,7 +76,7 @@ public class RecoilHandler {
 
         if(Minecraft.getInstance().player == null) return;
 
-        float baseRecoilAngle = modifiedGun.getGeneral().getRecoilAngle();
+        float baseRecoilAngle = modifiedGun.getProjectile().getRecoilAngle();
         float exoSuitModifiedRecoil = ExoSuitRecoilHelper.getModifiedRecoilAngle(Minecraft.getInstance().player, baseRecoilAngle);
 
         float recoilModifier = 1.0F - GunModifierHelper.getRecoilModifier(heldItem);
@@ -155,7 +155,7 @@ public class RecoilHandler {
             this.gunRecoilNormal = amount < 0.5 ? 2 * amount * amount : -1 + (4 - 2 * amount) * amount;
         }
 
-        float baseRecoilAngle = modifiedGun.getGeneral().getRecoilAngle();
+        float baseRecoilAngle = modifiedGun.getProjectile().getRecoilAngle();
         if(Minecraft.getInstance().player != null) {
             float exoSuitModifiedRecoil = ExoSuitRecoilHelper.getModifiedRecoilAngle(Minecraft.getInstance().player, baseRecoilAngle);
 

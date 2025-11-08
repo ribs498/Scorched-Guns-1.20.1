@@ -31,6 +31,7 @@ import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.ribs.scguns.Config;
 import top.ribs.scguns.config.EntityEquipmentConfig;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
@@ -69,7 +70,6 @@ public class CogKnightEntity extends Monster {
                 effect == MobEffects.MOVEMENT_SLOWDOWN ||
                 effect == MobEffects.DIG_SLOWDOWN ||
                 effect == MobEffects.HARM ||
-                effect == ModEffects.SULFUR_POISONING.get() ||
                 effect == MobEffects.HEAL) {
             return false;
         }
@@ -119,8 +119,8 @@ public class CogKnightEntity extends Monster {
         super.die(source);
         if (!this.level().isClientSide) {
             if (source.getEntity() instanceof Player) {
-                float rand = this.random.nextFloat();
-                if (rand < 0.15f) {
+                float spawnChance = Config.COMMON.gameplay.cogBeaconSpawnChance.get().floatValue();
+                if (spawnChance > 0 && this.random.nextFloat() < spawnChance) {
                     SignalBeaconEntity beacon = new SignalBeaconEntity(ModEntities.SIGNAL_BEACON.get(), this.level());
                     beacon.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                     this.level().addFreshEntity(beacon);
@@ -182,7 +182,7 @@ public class CogKnightEntity extends Monster {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
                                         MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData,
                                         @Nullable CompoundTag pDataTag) {
-        EntityEquipmentConfig.equipEntity(this, "cog_knight");
+        EntityEquipmentConfig.equipEntity(this, "scguns:cog_knight");
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 

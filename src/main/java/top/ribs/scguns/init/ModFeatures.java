@@ -10,6 +10,8 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import top.ribs.scguns.Reference;
+import top.ribs.scguns.world.NiterPatchConfiguration;
+import top.ribs.scguns.world.NiterPatchFeature;
 import top.ribs.scguns.world.VentFeature;
 import top.ribs.scguns.world.VentFeatureConfiguration;
 
@@ -20,6 +22,10 @@ public class ModFeatures {
 
     public static final RegistryObject<Feature<VentFeatureConfiguration>> VENT_FEATURE = FEATURES.register("vent",
             () -> new VentFeature(VentFeatureConfiguration.CODEC));
+
+    public static final RegistryObject<Feature<NiterPatchConfiguration>> NITER_PATCH = FEATURES.register("niter_patch",
+            () -> new NiterPatchFeature(NiterPatchConfiguration.CODEC));
+
 
     public static void register(IEventBus bus) {
         FEATURES.register(bus);

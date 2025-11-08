@@ -117,8 +117,10 @@ public class AimingHandler
         if(player == null)
             return;
 
-        boolean isReloading = ModSyncedDataKeys.RELOADING.getValue(player);
         ItemStack heldItem = player.getMainHandItem();
+
+
+        boolean isReloading = ModSyncedDataKeys.RELOADING.getValue(player);
         boolean inCriticalPhase = false;
 
         if (heldItem.getItem() instanceof GunItem) {
@@ -132,7 +134,6 @@ public class AimingHandler
                     animatedGun.cleanupReloadState(tag);
                 }
 
-                // CRITICAL FIX: Clean up any lingering manual reload tags
                 if (gun.getReloads().getReloadType() == ReloadType.MANUAL) {
                     if (tag.getBoolean("IsManualReload") ||
                             tag.getBoolean("InReloadLoop") ||
@@ -261,6 +262,17 @@ public class AimingHandler
         ItemStack heldItem = mc.player.getMainHandItem();
         if(heldItem.getItem() instanceof GunItem) {
             CompoundTag tag = heldItem.getOrCreateTag();
+
+            if(tag.contains("OldScopeType")) {
+                tag.remove("OldScopeType");
+            }
+            if(tag.contains("ScopeCacheTime")) {
+                long cacheTime = tag.getLong("ScopeCacheTime");
+                if(System.currentTimeMillis() - cacheTime > 5000) {
+                    tag.remove("ScopeCacheTime");
+                }
+            }
+
             String reloadState = tag.getString("scguns:ReloadState");
             if(!reloadState.isEmpty() && !reloadState.equals("NONE")) {
                 return false;

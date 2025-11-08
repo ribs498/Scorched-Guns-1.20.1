@@ -1,0 +1,44 @@
+{
+  "type": "create:mechanical_crafting",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "minecraft:smooth_stone"
+    },
+    "S": {
+      "item": "scguns:copper_disc"
+    },
+    "X": {
+      "item": "scguns:gun_magazine"
+    },
+    "P": {
+      "item": "minecraft:iron_ingot"
+    },
+    "I": {
+    "item": "minecraft:redstone"
+    },
+    "B": {
+    "item": "scguns:anthralite_ingot"
+    }
+  },
+  "pattern": [
+    " PI ",
+    "LRSB",
+    "Q X "
+  ],
+  "result": {
+    "item": "scguns:teslock_rifle"
+  }
+}

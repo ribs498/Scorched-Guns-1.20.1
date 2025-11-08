@@ -1,0 +1,22 @@
+{
+  "id": "scguns:blunderer",
+  "equipment_chance": 1.0,
+  "items": [
+    {
+      "item": "scguns:kiln_gun",
+      "weight": 16.0,
+      "drop_chance": 0.3,
+      "min_durability": 0.2,
+      "max_durability": 0.6,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:war_axe",
+      "weight": 16.0,
+      "drop_chance": 0.6,
+      "min_durability": 0.5,
+      "max_durability": 0.8,
+      "slot": "mainhand"
+    }
+  ]
+}

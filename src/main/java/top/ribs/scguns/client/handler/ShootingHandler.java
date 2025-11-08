@@ -51,7 +51,8 @@ public class ShootingHandler
     private int bufferTimer = 0;
     private boolean lastFireKeyState = false;
     private static final int BUFFER_DURATION = 4;
-
+    private int switchCooldown = 0;
+    private ItemStack lastHeldItem = ItemStack.EMPTY;
     public static ShootingHandler get()
     {
         if(instance == null)
@@ -450,7 +451,11 @@ public class ShootingHandler
             if (PlayerReviveHelper.isBleeding(player))
                 return;
 
-            if (!isSameWeapon(player)) {
+            // UPDATE SLOT FIRST, before checking isSameWeapon
+            boolean weaponChanged = !isSameWeapon(player);
+            slot = player.getInventory().selected;
+
+            if (weaponChanged) {
                 ModSyncedDataKeys.BURSTCOUNT.setValue(player, 0);
                 if (player.getMainHandItem().getItem() instanceof GunItem) {
                     burstCounter = 0;
@@ -458,10 +463,17 @@ public class ShootingHandler
                     fireTimer = 0;
                     wasHoldingFireWhenEmpty = false;
                     hasReleasedFireSinceEmpty = false;
-                    player.getMainHandItem();
                     ChargeHandler.resetCharge(player.getUUID());
+                    switchCooldown = 5;
                 }
+                lastHeldItem = player.getMainHandItem().copy();
             }
+
+            if (switchCooldown > 0) {
+                switchCooldown--;
+                return;
+            }
+
             if (ModSyncedDataKeys.RELOADING.getValue(player)) {
                 burstCounter = 0;
                 burstCooldownTimer = 0;
@@ -536,7 +548,6 @@ public class ShootingHandler
                     }
                 }
             }
-            slot = player.getInventory().selected;
         }
     }
 

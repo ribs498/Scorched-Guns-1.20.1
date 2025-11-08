@@ -56,6 +56,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
     protected General general = new General();
     protected Reloads reloads = new Reloads();
     protected Projectile projectile = new Projectile();
+    protected List<Projectile> alternateProjectiles = new ArrayList<>();
     protected Sounds sounds = new Sounds();
     protected Display display = new Display();
     protected Modules modules = new Modules();
@@ -169,7 +170,41 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
     }
 
     public Projectile getProjectile() {
+        if (this.general.allowsAmmoChange() && !this.alternateProjectiles.isEmpty()) {
+            int currentIndex = this.general.getCurrentAmmoTypeIndex();
+            if (currentIndex > 0 && currentIndex <= this.alternateProjectiles.size()) {
+                return this.alternateProjectiles.get(currentIndex - 1);
+            }
+        }
         return this.projectile;
+    }
+
+    public Projectile getProjectile(ItemStack gunStack) {
+        if (this.general.allowsAmmoChange() && !this.alternateProjectiles.isEmpty()) {
+
+            CompoundTag tag = gunStack.getOrCreateTag();
+            if (tag.contains("Gun", Tag.TAG_COMPOUND)) {
+                CompoundTag gunTag = tag.getCompound("Gun");
+                if (gunTag.contains("General", Tag.TAG_COMPOUND)) {
+                    CompoundTag generalTag = gunTag.getCompound("General");
+                    if (generalTag.contains("CurrentAmmoTypeIndex", Tag.TAG_ANY_NUMERIC)) {
+                        int currentIndex = generalTag.getInt("CurrentAmmoTypeIndex");
+                        if (currentIndex > 0 && currentIndex <= this.alternateProjectiles.size()) {
+                            return this.alternateProjectiles.get(currentIndex - 1);
+                        }
+                    }
+                }
+            }
+        }
+        return this.projectile;
+    }
+
+    public Item getCurrentAmmoItem() {
+        return this.getProjectile().getItem();
+    }
+
+    public Item getCurrentAmmoItem(ItemStack gunStack) {
+        return this.getProjectile(gunStack).getItem();
     }
 
     public Sounds getSounds() {
@@ -222,20 +257,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         private GripType gripType = GripType.ONE_HANDED;
         @Ignored
         private GripType baseGripType = GripType.ONE_HANDED;
-        //@Optional
-        private float recoilAngle;
-        @Optional
-        private float recoilKick;
         @Optional
         private float recoilDurationOffset;
         @Optional
         private float recoilAdsReduction = 0.2F;
-        @Optional
-        private int projectileAmount = 1;
-        @Optional
-        private boolean alwaysSpread;
-        @Optional
-        private float spread;
         @Optional
         private float restingSpread = 0F;
         @Optional
@@ -248,8 +273,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         public int meleeCooldownTicks = 15;
         @Optional
         private float meleeReach = 3.0F;
-        @Optional
-        private int energyUse = 0;
+
         @Optional
         private String beamColor;
         @Optional
@@ -271,12 +295,6 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         @Optional
         private boolean hasCameraShake = true;
         @Optional
-        private float criticalChance = 0.0F;
-        @Optional
-        private boolean playerKnockBack = false;
-        @Optional
-        private float playerKnockBackStrength = 0.0F;
-        @Optional
         private boolean isRevolver = false;
         @Optional
         private float speedModifier = 1.0F;
@@ -287,7 +305,11 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         @Optional
         private boolean usesCustomMeleeAnimation = false;
         @Optional
-        private float critDamageMultiplier = 1.5F;
+        private boolean allowAmmoChange = false;
+        @Optional
+        private List<String> availableAmmoTypes = new ArrayList<>();
+        @Optional
+        private int currentAmmoTypeIndex = 0;
 
         @Override
         public CompoundTag serializeNBT() {
@@ -301,20 +323,14 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             tag.putInt("FireTimer", this.fireTimer);
             tag.putString("GripType", this.gripType.id().toString());
             tag.putString("BaseGripType", this.baseGripType.id().toString());
-            tag.putFloat("RecoilAngle", this.recoilAngle);
-            tag.putFloat("RecoilKick", this.recoilKick);
             tag.putFloat("RecoilDurationOffset", this.recoilDurationOffset);
             tag.putFloat("RecoilAdsReduction", this.recoilAdsReduction);
-            tag.putInt("ProjectileAmount", this.projectileAmount);
-            tag.putBoolean("AlwaysSpread", this.alwaysSpread);
-            tag.putFloat("Spread", this.spread);
             tag.putFloat("RestingSpread", this.restingSpread);
+            tag.putFloat("SpreadAdsReduction", this.spreadAdsReduction);
             tag.putFloat("MeleeDamage", this.meleeDamage);
             tag.putFloat("MeleeCooldownTicks", this.meleeCooldownTicks);
             tag.putFloat("MeleeReach", this.meleeReach);
             tag.putBoolean("InfiniteAmmo", this.infiniteAmmo);
-            tag.putInt("EnergyUse", this.energyUse);
-
             if (this.beamColor != null && !this.beamColor.isEmpty()) {
                 tag.putString("BeamColor", this.beamColor);
             }
@@ -337,15 +353,22 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             tag.putBoolean("EnableMining", this.enableMining);
             tag.putFloat("MiningSpeed", this.miningSpeed);
             tag.putBoolean("HasCameraShake", this.hasCameraShake);
-            tag.putFloat("CriticalChance", this.criticalChance);
-            tag.putBoolean("PlayerKnockBack", this.playerKnockBack);
-            tag.putFloat("PlayerKnockBackStrength", this.playerKnockBackStrength);
             tag.putBoolean("IsRevolver", this.isRevolver);
             tag.putFloat("SpeedModifier", this.speedModifier);
             tag.putBoolean("IsSilenced", this.isSilenced);
             tag.putBoolean("EnableGunLight", this.enableGunLight);
             tag.putBoolean("UsesCustomMeleeAnimation", this.usesCustomMeleeAnimation);
-            tag.putFloat("CritDamageMultiplier", this.critDamageMultiplier);
+            tag.putBoolean("AllowAmmoChange", this.allowAmmoChange);
+            tag.putInt("CurrentAmmoTypeIndex", this.currentAmmoTypeIndex);
+
+            if (!this.availableAmmoTypes.isEmpty()) {
+                net.minecraft.nbt.ListTag listTag = new net.minecraft.nbt.ListTag();
+                for (String ammoType : this.availableAmmoTypes) {
+                    listTag.add(net.minecraft.nbt.StringTag.valueOf(ammoType));
+                }
+                tag.put("AvailableAmmoTypes", listTag);
+            }
+
             return tag;
         }
 
@@ -378,26 +401,11 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("BaseGripType", Tag.TAG_STRING)) {
                 this.baseGripType = GripType.getType(ResourceLocation.tryParse(tag.getString("BaseGripType")));
             }
-            if (tag.contains("RecoilAngle", Tag.TAG_ANY_NUMERIC)) {
-                this.recoilAngle = tag.getFloat("RecoilAngle");
-            }
-            if (tag.contains("RecoilKick", Tag.TAG_ANY_NUMERIC)) {
-                this.recoilKick = tag.getFloat("RecoilKick");
-            }
             if (tag.contains("RecoilDurationOffset", Tag.TAG_ANY_NUMERIC)) {
                 this.recoilDurationOffset = tag.getFloat("RecoilDurationOffset");
             }
             if (tag.contains("RecoilAdsReduction", Tag.TAG_ANY_NUMERIC)) {
                 this.recoilAdsReduction = tag.getFloat("RecoilAdsReduction");
-            }
-            if (tag.contains("ProjectileAmount", Tag.TAG_ANY_NUMERIC)) {
-                this.projectileAmount = tag.getInt("ProjectileAmount");
-            }
-            if (tag.contains("AlwaysSpread", Tag.TAG_ANY_NUMERIC)) {
-                this.alwaysSpread = tag.getBoolean("AlwaysSpread");
-            }
-            if (tag.contains("Spread", Tag.TAG_ANY_NUMERIC)) {
-                this.spread = tag.getFloat("Spread");
             }
             if (tag.contains("RestingSpread", Tag.TAG_ANY_NUMERIC)) {
                 this.restingSpread = tag.getFloat("RestingSpread");
@@ -417,9 +425,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("InfiniteAmmo", Tag.TAG_ANY_NUMERIC)) {
                 this.infiniteAmmo = tag.getBoolean("InfiniteAmmo");
             }
-            if (tag.contains("EnergyUse", Tag.TAG_ANY_NUMERIC)) {
-                this.energyUse = tag.getInt("EnergyUse");
-            }
+
             if (tag.contains("BeamColor", Tag.TAG_STRING)) {
                 this.beamColor = tag.getString("BeamColor");
             }
@@ -450,15 +456,6 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("HasCameraShake", Tag.TAG_ANY_NUMERIC)) {
                 this.hasCameraShake = tag.getBoolean("HasCameraShake");
             }
-            if (tag.contains("CriticalChance", Tag.TAG_ANY_NUMERIC)) {
-                this.criticalChance = tag.getFloat("CriticalChance");
-            }
-            if (tag.contains("PlayerKnockBack", Tag.TAG_ANY_NUMERIC)) {
-                this.playerKnockBack = tag.getBoolean("PlayerKnockBack");
-            }
-            if (tag.contains("PlayerKnockBackStrength", Tag.TAG_ANY_NUMERIC)) {
-                this.playerKnockBackStrength = tag.getFloat("PlayerKnockBackStrength");
-            }
             if (tag.contains("IsRevolver", Tag.TAG_ANY_NUMERIC)) {
                 this.isRevolver = tag.getBoolean("IsRevolver");
             }
@@ -474,21 +471,27 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("UsesCustomMeleeAnimation", Tag.TAG_ANY_NUMERIC)) {
                 this.usesCustomMeleeAnimation = tag.getBoolean("UsesCustomMeleeAnimation");
             }
-            if (tag.contains("CritDamageMultiplier", Tag.TAG_ANY_NUMERIC)) {
-                this.critDamageMultiplier = tag.getFloat("CritDamageMultiplier");
+            if (tag.contains("AllowAmmoChange", Tag.TAG_ANY_NUMERIC)) {
+                this.allowAmmoChange = tag.getBoolean("AllowAmmoChange");
+            }
+            if (tag.contains("CurrentAmmoTypeIndex", Tag.TAG_ANY_NUMERIC)) {
+                this.currentAmmoTypeIndex = tag.getInt("CurrentAmmoTypeIndex");
+            }
+            if (tag.contains("AvailableAmmoTypes", Tag.TAG_LIST)) {
+                this.availableAmmoTypes.clear();
+                net.minecraft.nbt.ListTag list = tag.getList("AvailableAmmoTypes", Tag.TAG_STRING);
+                for (int i = 0; i < list.size(); i++) {
+                    this.availableAmmoTypes.add(list.getString(i));
+                }
             }
         }
 
         public JsonObject toJsonObject() {
             Preconditions.checkArgument(this.rate > 0, "Rate must be more than zero");
             Preconditions.checkArgument(this.hotBarrelRate >= 0, "Hot barrel rate must be more than or equal to zero");
-            Preconditions.checkArgument(this.recoilAngle >= 0.0F, "Recoil angle must be more than or equal to zero");
-            Preconditions.checkArgument(this.recoilKick >= 0.0F, "Recoil kick must be more than or equal to zero");
             Preconditions.checkArgument(this.recoilDurationOffset >= 0.0F && this.recoilDurationOffset <= 1.0F, "Recoil duration offset must be between 0.0 and 1.0");
             Preconditions.checkArgument(this.recoilAdsReduction >= 0.0F && this.recoilAdsReduction <= 1.0F, "Recoil ads reduction must be between 0.0 and 1.0");
-            Preconditions.checkArgument(this.projectileAmount >= 1, "Projectile amount must be more than or equal to one");
-            Preconditions.checkArgument(this.spread >= 0.0F, "Spread must be more than or equal to zero");
-            Preconditions.checkArgument(this.restingSpread >= 0.0F, "Spread must be more than or equal to zero");
+            Preconditions.checkArgument(this.restingSpread >= 0.0F, "Resting spread must be more than or equal to zero");
             Preconditions.checkArgument(this.spreadAdsReduction >= 0.0F && this.spreadAdsReduction <= 1.0F, "Spread ADS reduction must be between 0.0 and 1.0");
 
             JsonObject object = new JsonObject();
@@ -502,20 +505,14 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (this.fireTimer != 0) object.addProperty("fireTimer", this.fireTimer);
             object.addProperty("gripType", this.gripType.id().toString());
             object.addProperty("baseGripType", this.baseGripType.id().toString());
-            if (this.recoilAngle != 0.0F) object.addProperty("recoilAngle", this.recoilAngle);
-            if (this.recoilKick != 0.0F) object.addProperty("recoilKick", this.recoilKick);
             if (this.recoilDurationOffset != 0.0F)
                 object.addProperty("recoilDurationOffset", this.recoilDurationOffset);
             if (this.recoilAdsReduction != 0.2F) object.addProperty("recoilAdsReduction", this.recoilAdsReduction);
-            if (this.projectileAmount != 1) object.addProperty("projectileAmount", this.projectileAmount);
-            if (this.alwaysSpread) object.addProperty("alwaysSpread", true);
-            if (this.spread != 0.0F) object.addProperty("spread", this.spread);
-            if (this.restingSpread != 0.0F) object.addProperty("restingSpread", this.spread);
-            if (this.spreadAdsReduction != 0.5F) object.addProperty("spreadAdsReduction", this.spread);
+            if (this.restingSpread != 0.0F) object.addProperty("restingSpread", this.restingSpread);
+            if (this.spreadAdsReduction != 0.5F) object.addProperty("spreadAdsReduction", this.spreadAdsReduction);
             if (this.meleeDamage != 0.0F) object.addProperty("meleeDamage", this.meleeDamage);
             if (this.meleeCooldownTicks != 15) object.addProperty("meleeCooldownTicks", this.meleeCooldownTicks);
             if (this.meleeReach != 3.0F) object.addProperty("meleeReach", this.meleeReach);
-            if (this.energyUse != 0) object.addProperty("energyUse", this.energyUse);
             if (this.beamColor != null && !this.beamColor.isEmpty()) {
                 object.addProperty("beamColor", this.beamColor);
             }
@@ -548,15 +545,6 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (!this.hasCameraShake) {
                 object.addProperty("hasCameraShake", false);
             }
-            if (this.criticalChance != 0.0F) {
-                object.addProperty("criticalChance", this.criticalChance);
-            }
-            if (this.playerKnockBack) {
-                object.addProperty("playerKnockBack", true);
-            }
-            if (this.playerKnockBackStrength != 0.0F) {
-                object.addProperty("playerKnockBackStrength", this.playerKnockBackStrength);
-            }
             if (this.isRevolver) {
                 object.addProperty("isRevolver", true);
             }
@@ -572,8 +560,8 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (this.usesCustomMeleeAnimation) {
                 object.addProperty("usesCustomMeleeAnimation", true);
             }
-            if (this.critDamageMultiplier != 1.5F) {
-                object.addProperty("critDamageMultiplier", this.critDamageMultiplier);
+            if (this.allowAmmoChange) {
+                object.addProperty("allowAmmoChange", true);
             }
             return object;
         }
@@ -592,21 +580,14 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             general.fireTimer = this.fireTimer;
             general.gripType = this.gripType;
             general.baseGripType = this.baseGripType;
-            general.recoilAngle = this.recoilAngle;
-            general.recoilKick = this.recoilKick;
             general.recoilDurationOffset = this.recoilDurationOffset;
             general.recoilAdsReduction = this.recoilAdsReduction;
-            general.projectileAmount = this.projectileAmount;
-            general.alwaysSpread = this.alwaysSpread;
-            general.spread = this.spread;
             general.restingSpread = this.restingSpread;
             general.spreadAdsReduction = this.spreadAdsReduction;
             general.infiniteAmmo = this.infiniteAmmo;
             general.meleeDamage = this.meleeDamage;
             general.meleeCooldownTicks = this.meleeCooldownTicks;
             general.meleeReach = this.meleeReach;
-            general.energyUse = this.energyUse;
-
             general.beamMaxDistance = this.beamMaxDistance;
             general.beamAmmoConsumptionDelay = this.beamAmmoConsumptionDelay;
             general.beamDamageDelay = this.beamDamageDelay;
@@ -617,19 +598,15 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             general.enableMining = this.enableMining;
             general.miningSpeed = this.miningSpeed;
             general.hasCameraShake = this.hasCameraShake;
-            general.criticalChance = this.criticalChance;
-            general.playerKnockBack = this.playerKnockBack;
-            general.playerKnockBackStrength = this.playerKnockBackStrength;
             general.isRevolver = this.isRevolver;
             general.speedModifier = this.speedModifier;
             general.isSilenced = this.isSilenced;
             general.enableGunLight = this.enableGunLight;
             general.usesCustomMeleeAnimation = this.usesCustomMeleeAnimation;
-            general.critDamageMultiplier = this.critDamageMultiplier;
+            general.allowAmmoChange = this.allowAmmoChange;
+            general.availableAmmoTypes = new ArrayList<>(this.availableAmmoTypes);
+            general.currentAmmoTypeIndex = this.currentAmmoTypeIndex;
             return general;
-        }
-        public float getCritDamageMultiplier() {
-            return this.critDamageMultiplier;
         }
 
         public boolean usesCustomMeleeAnimation() {
@@ -641,17 +618,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         public float getSpeedModifier() {
             return this.speedModifier;
         }
-        public boolean hasPlayerKnockBack() {
-            return this.playerKnockBack;
-        }
-        public float getPlayerKnockBackStrength() {
-            return this.playerKnockBackStrength;
-        }
 
         public boolean isRevolver() {
             return this.isRevolver;
         }
-        public float getCriticalChance() {return this.criticalChance;}
         public boolean hasCameraShake() {
             return this.hasCameraShake;
         }
@@ -683,13 +653,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             return this.beamDamageDelay;
         }
 
-        public int getEnergyUse() {
-            return this.energyUse;
-        }
 
-        public void setEnergyUse(int energyUse) {
-            this.energyUse = energyUse;
-        }
 
         public float getMeleeDamage() {
             return this.meleeDamage;
@@ -759,20 +723,6 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
 
 
         /**
-         * @return The amount of recoil this gun produces upon firing in degrees
-         */
-        public float getRecoilAngle() {
-            return this.recoilAngle;
-        }
-
-        /**
-         * @return The amount of kick this gun produces upon firing
-         */
-        public float getRecoilKick() {
-            return this.recoilKick;
-        }
-
-        /**
          * @return The duration offset for recoil. This reduces the duration of recoil animation
          */
         public float getRecoilDurationOffset() {
@@ -784,28 +734,6 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
          */
         public float getRecoilAdsReduction() {
             return this.recoilAdsReduction;
-        }
-
-        /**
-         * @return The amount of projectiles this weapon fires
-         */
-        public int getProjectileAmount() {
-            return this.projectileAmount;
-        }
-
-        /**
-         * @return If this weapon should always spread it's projectiles according to {@link #getSpread()}
-         */
-        public boolean isAlwaysSpread() {
-            return this.alwaysSpread;
-        }
-
-        /**
-         * @return The maximum amount of degrees applied to the initial pitch and yaw direction of
-         * the fired projectile.
-         */
-        public float getSpread() {
-            return this.spread;
         }
 
         public boolean isAuto() {
@@ -843,6 +771,22 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         }
         public boolean isSilenced() {
             return this.isSilenced;
+        }
+
+        public boolean allowsAmmoChange() {
+            return this.allowAmmoChange;
+        }
+
+        public List<String> getAvailableAmmoTypes() {
+            return this.availableAmmoTypes;
+        }
+
+        public int getCurrentAmmoTypeIndex() {
+            return this.currentAmmoTypeIndex;
+        }
+
+        public void setCurrentAmmoTypeIndex(int index) {
+            this.currentAmmoTypeIndex = index;
         }
 
     }
@@ -1024,6 +968,10 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
     }
 
     public static class Projectile implements INBTSerializable<CompoundTag> {
+        @Optional
+        private int energyUse = 0;
+        @Optional
+        private int durabilityDamage = 1;
         public ResourceLocation item;
         public ResourceLocation casingType;
         @Optional
@@ -1079,9 +1027,31 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         @Optional
         private float damageFalloffMinMultiplier = 1.0F;
 
+        @Optional
+        private int projectileAmount = 1;
+        @Optional
+        private float recoilAngle = 0.0F;
+        @Optional
+        private float recoilKick = 0.0F;
+        @Optional
+        private boolean alwaysSpread = false;
+        @Optional
+        private float spread = 0.0F;
+        @Optional
+        private float criticalChance = 0.0F;
+        @Optional
+        private float critDamageMultiplier = 1.5F;
+        @Optional
+        private boolean playerKnockBack = false;
+        @Optional
+        private float playerKnockBackStrength = 0.0F;
+
+
         @Override
         public CompoundTag serializeNBT() {
             CompoundTag tag = new CompoundTag();
+            tag.putInt("EnergyUse", this.energyUse);
+            tag.putInt("DurabilityDamage", this.durabilityDamage);
             tag.putString("Item", this.item.toString());
             tag.putBoolean("EjectsCasing", this.ejectsCasing);
             tag.putBoolean("Visible", this.visible);
@@ -1117,11 +1087,27 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             tag.putFloat("DamageFalloffStart", this.damageFalloffStart);
             tag.putFloat("DamageFalloffEnd", this.damageFalloffEnd);
             tag.putFloat("DamageFalloffMinMultiplier", this.damageFalloffMinMultiplier);
+            tag.putInt("ProjectileAmount", this.projectileAmount);
+            tag.putFloat("RecoilAngle", this.recoilAngle);
+            tag.putFloat("RecoilKick", this.recoilKick);
+            tag.putFloat("Spread", this.spread);
+            tag.putBoolean("AlwaysSpread", this.alwaysSpread);
+            tag.putFloat("CriticalChance", this.criticalChance);
+            tag.putFloat("CritDamageMultiplier", this.critDamageMultiplier);
+            tag.putBoolean("PlayerKnockBack", this.playerKnockBack);
+            tag.putFloat("PlayerKnockBackStrength", this.playerKnockBackStrength);
             return tag;
         }
 
         @Override
         public void deserializeNBT(CompoundTag tag) {
+
+            if (tag.contains("EnergyUse", Tag.TAG_ANY_NUMERIC)) {
+                this.energyUse = tag.getInt("EnergyUse");
+            }
+            if (tag.contains("DurabilityDamage", Tag.TAG_ANY_NUMERIC)) {
+                this.durabilityDamage = tag.getInt("DurabilityDamage");
+            }
             if (tag.contains("Item", Tag.TAG_STRING)) {
                 this.item = new ResourceLocation(tag.getString("Item"));
             }
@@ -1204,16 +1190,47 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if (tag.contains("DamageFalloffMinMultiplier", Tag.TAG_ANY_NUMERIC)) {
                 this.damageFalloffMinMultiplier = tag.getFloat("DamageFalloffMinMultiplier");
             }
+            if (tag.contains("ProjectileAmount", Tag.TAG_ANY_NUMERIC)) {
+                this.projectileAmount = tag.getInt("ProjectileAmount");
+            }
+            if (tag.contains("RecoilAngle", Tag.TAG_ANY_NUMERIC)) {
+                this.recoilAngle = tag.getFloat("RecoilAngle");
+            }
+            if (tag.contains("RecoilKick", Tag.TAG_ANY_NUMERIC)) {
+                this.recoilKick = tag.getFloat("RecoilKick");
+            }
+            if (tag.contains("Spread", Tag.TAG_ANY_NUMERIC)) {
+                this.spread = tag.getFloat("Spread");
+            }
+            if (tag.contains("AlwaysSpread", Tag.TAG_ANY_NUMERIC)) {
+                this.alwaysSpread = tag.getBoolean("AlwaysSpread");
+            }
+            if (tag.contains("CriticalChance", Tag.TAG_ANY_NUMERIC)) {
+                this.criticalChance = tag.getFloat("CriticalChance");
+            }
+            if (tag.contains("CritDamageMultiplier", Tag.TAG_ANY_NUMERIC)) {
+                this.critDamageMultiplier = tag.getFloat("CritDamageMultiplier");
+            }
+            if (tag.contains("PlayerKnockBack", Tag.TAG_ANY_NUMERIC)) {
+                this.playerKnockBack = tag.getBoolean("PlayerKnockBack");
+            }
+            if (tag.contains("PlayerKnockBackStrength", Tag.TAG_ANY_NUMERIC)) {
+                this.playerKnockBackStrength = tag.getFloat("PlayerKnockBackStrength");
+            }
         }
 
         public JsonObject toJsonObject() {
+
             Preconditions.checkArgument(this.damage >= 0.0F, "Damage must be more than or equal to zero");
             Preconditions.checkArgument(this.size >= 0.0F, "Projectile size must be more than or equal to zero");
             Preconditions.checkArgument(this.speed >= 0.0, "Projectile speed must be more than or equal to zero");
             Preconditions.checkArgument(this.life > 0, "Projectile life must be more than zero");
             Preconditions.checkArgument(this.trailLengthMultiplier >= 0.0, "Projectile trail length multiplier must be more than or equal to zero");
+            Preconditions.checkArgument(this.projectileAmount >= 1, "Projectile amount must be more than or equal to one");
+            Preconditions.checkArgument(this.spread >= 0.0F, "Spread must be more than or equal to zero");
             JsonObject object = new JsonObject();
             object.addProperty("item", this.item.toString());
+            if (this.energyUse != 0) object.addProperty("energyUse", this.energyUse);
             if (this.ejectsCasing) object.addProperty("ejectsCasing", true);
             if (this.visible) object.addProperty("visible", true);
             object.addProperty("damage", this.damage);
@@ -1248,11 +1265,22 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             if(this.damageFalloffStart != 0.0F) object.addProperty("damageFalloffStart", this.damageFalloffStart);
             if(this.damageFalloffEnd != 0.0F) object.addProperty("damageFalloffEnd", this.damageFalloffEnd);
             if(this.damageFalloffMinMultiplier != 1.0F) object.addProperty("damageFalloffMinMultiplier", this.damageFalloffMinMultiplier);
+            if (this.projectileAmount != 1) object.addProperty("projectileAmount", this.projectileAmount);
+            if (this.recoilAngle != 0.0F) object.addProperty("recoilAngle", this.recoilAngle);
+            if (this.recoilKick != 0.0F) object.addProperty("recoilKick", this.recoilKick);
+            if (this.spread != 0.0F) object.addProperty("spread", this.spread);
+            if (this.alwaysSpread) object.addProperty("alwaysSpread", true);
+            if (this.criticalChance != 0.0F) object.addProperty("criticalChance", this.criticalChance);
+            if (this.critDamageMultiplier != 1.5F) object.addProperty("critDamageMultiplier", this.critDamageMultiplier);
+            if (this.playerKnockBack) object.addProperty("playerKnockBack", true);
+            if (this.playerKnockBackStrength != 0.0F) object.addProperty("playerKnockBackStrength", this.playerKnockBackStrength);
+            if (this.durabilityDamage != 1) object.addProperty("durabilityDamage", this.durabilityDamage);
             return object;
         }
 
         public Projectile copy() {
             Projectile projectile = new Projectile();
+            projectile.energyUse = this.energyUse;
             projectile.item = this.item;
             projectile.ejectsCasing = this.ejectsCasing;
             projectile.visible = this.visible;
@@ -1282,10 +1310,22 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             projectile.damageFalloffStart = this.damageFalloffStart;
             projectile.damageFalloffEnd = this.damageFalloffEnd;
             projectile.damageFalloffMinMultiplier = this.damageFalloffMinMultiplier;
+            projectile.projectileAmount = this.projectileAmount;
+            projectile.recoilAngle = this.recoilAngle;
+            projectile.recoilKick = this.recoilKick;
+            projectile.spread = this.spread;
+            projectile.alwaysSpread = this.alwaysSpread;
+            projectile.criticalChance = this.criticalChance;
+            projectile.critDamageMultiplier = this.critDamageMultiplier;
+            projectile.playerKnockBack = this.playerKnockBack;
+            projectile.playerKnockBackStrength = this.playerKnockBackStrength;
+            projectile.durabilityDamage = this.durabilityDamage;
             return projectile;
         }
 
-
+        public int getDurabilityDamage() {
+            return this.durabilityDamage;
+        }
         public float getKnockbackStrength() {
             return this.knockbackStrength;
         }
@@ -1325,10 +1365,28 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
             return ForgeRegistries.ITEMS.getValue(this.item);
         }
 
+        public @org.jetbrains.annotations.Nullable Item getItem(General general) {
+            if (general != null && general.allowsAmmoChange() && !general.getAvailableAmmoTypes().isEmpty()) {
+                int currentIndex = general.getCurrentAmmoTypeIndex();
+                if (currentIndex >= 0 && currentIndex < general.getAvailableAmmoTypes().size()) {
+                    String ammoType = general.getAvailableAmmoTypes().get(currentIndex);
+                    ResourceLocation ammoLocation = new ResourceLocation(ammoType.contains(":") ? ammoType : Reference.MOD_ID + ":" + ammoType);
+                    return ForgeRegistries.ITEMS.getValue(ammoLocation);
+                }
+            }
+            return this.getItem();
+        }
+
         public boolean firesArrows() {
             return this.firesArrows;
         }
+        public int getEnergyUse() {
+            return this.energyUse;
+        }
 
+        public void setEnergyUse(int energyUse) {
+            this.energyUse = energyUse;
+        }
         /**
          * @return If this projectile ejects a casing/shell when fired
          */
@@ -1424,7 +1482,39 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         }
 
         public float getSpread() {
-            return 0.0F;
+            return this.spread;
+        }
+
+        public int getProjectileAmount() {
+            return this.projectileAmount;
+        }
+
+        public float getRecoilAngle() {
+            return this.recoilAngle;
+        }
+
+        public float getRecoilKick() {
+            return this.recoilKick;
+        }
+
+        public boolean isAlwaysSpread() {
+            return this.alwaysSpread;
+        }
+
+        public float getCriticalChance() {
+            return this.criticalChance;
+        }
+
+        public float getCritDamageMultiplier() {
+            return this.critDamageMultiplier;
+        }
+
+        public boolean hasPlayerKnockBack() {
+            return this.playerKnockBack;
+        }
+
+        public float getPlayerKnockBackStrength() {
+            return this.playerKnockBackStrength;
         }
 
         public ResourceLocation getCasingParticle() {
@@ -1442,6 +1532,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         public float getDamageFalloffMinMultiplier() {
             return this.damageFalloffMinMultiplier;
         }
+
 
     }
 
@@ -2439,6 +2530,15 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         tag.put("General", this.general.serializeNBT());
         tag.put("Reloads", this.reloads.serializeNBT());
         tag.put("Projectile", this.projectile.serializeNBT());
+
+        if (!this.alternateProjectiles.isEmpty()) {
+            net.minecraft.nbt.ListTag alternateList = new net.minecraft.nbt.ListTag();
+            for (Projectile altProjectile : this.alternateProjectiles) {
+                alternateList.add(altProjectile.serializeNBT());
+            }
+            tag.put("AlternateProjectiles", alternateList);
+        }
+
         tag.put("Sounds", this.sounds.serializeNBT());
         tag.put("Display", this.display.serializeNBT());
         tag.put("Modules", this.modules.serializeNBT());
@@ -2456,6 +2556,17 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         if (tag.contains("Projectile", Tag.TAG_COMPOUND)) {
             this.projectile.deserializeNBT(tag.getCompound("Projectile"));
         }
+
+        if (tag.contains("AlternateProjectiles", Tag.TAG_LIST)) {
+            this.alternateProjectiles.clear();
+            net.minecraft.nbt.ListTag alternateList = tag.getList("AlternateProjectiles", Tag.TAG_COMPOUND);
+            for (int i = 0; i < alternateList.size(); i++) {
+                Projectile altProjectile = new Projectile();
+                altProjectile.deserializeNBT(alternateList.getCompound(i));
+                this.alternateProjectiles.add(altProjectile);
+            }
+        }
+
         if (tag.contains("Sounds", Tag.TAG_COMPOUND)) {
             this.sounds.deserializeNBT(tag.getCompound("Sounds"));
         }
@@ -2472,10 +2583,70 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         object.add("general", this.general.toJsonObject());
         object.add("reloads", this.reloads.toJsonObject());
         object.add("projectile", this.projectile.toJsonObject());
+
+        for (int i = 0; i < this.alternateProjectiles.size(); i++) {
+            object.add("projectile_" + (i + 1), this.alternateProjectiles.get(i).toJsonObject());
+        }
+
         GunJsonUtil.addObjectIfNotEmpty(object, "sounds", this.sounds.toJsonObject());
         GunJsonUtil.addObjectIfNotEmpty(object, "display", this.display.toJsonObject());
         GunJsonUtil.addObjectIfNotEmpty(object, "modules", this.modules.toJsonObject());
         return object;
+    }
+
+    public void loadAlternateProjectilesFromJson(JsonObject jsonObject) {
+        this.alternateProjectiles.clear();
+
+        if (this.general.allowsAmmoChange()) {
+            this.general.getAvailableAmmoTypes().clear();
+
+            if (this.projectile.item != null) {
+                this.general.getAvailableAmmoTypes().add(this.projectile.item.toString());
+            }
+        }
+
+        int index = 1;
+        while (jsonObject.has("projectile_" + index)) {
+            try {
+                JsonObject projJson = jsonObject.getAsJsonObject("projectile_" + index);
+                Projectile altProjectile = new Projectile();
+
+                CompoundTag nbt = new CompoundTag();
+                projJson.entrySet().forEach(entry -> {
+                    String jsonKey = entry.getKey();
+                    String nbtKey = Character.toUpperCase(jsonKey.charAt(0)) + jsonKey.substring(1);
+                    com.google.gson.JsonElement value = entry.getValue();
+                    if (value.isJsonPrimitive()) {
+                        com.google.gson.JsonPrimitive prim = value.getAsJsonPrimitive();
+                        if (prim.isString()) {
+                            String stringValue = prim.getAsString();
+                            if (jsonKey.equals("item") && !stringValue.contains(":")) {
+                                stringValue = Reference.MOD_ID + ":" + stringValue;
+                            }
+                            nbt.putString(nbtKey, stringValue);
+                        } else if (prim.isNumber()) {
+                            if (prim.getAsString().contains(".")) {
+                                nbt.putDouble(nbtKey, prim.getAsDouble());
+                            } else {
+                                nbt.putInt(nbtKey, prim.getAsInt());
+                            }
+                        } else if (prim.isBoolean()) {
+                            nbt.putBoolean(nbtKey, prim.getAsBoolean());
+                        }
+                    }
+                });
+                altProjectile.deserializeNBT(nbt);
+                this.alternateProjectiles.add(altProjectile);
+                if (this.general.allowsAmmoChange() && altProjectile.item != null) {
+                    this.general.getAvailableAmmoTypes().add(altProjectile.item.toString());
+                }
+                index++;
+            } catch (Exception e) {
+                ScorchedGuns.LOGGER.error("Failed to load projectile_{}: {}", index, e.getMessage());
+                e.printStackTrace();
+                break;
+            }
+        }
     }
 
     public static Gun create(CompoundTag tag) {
@@ -2493,6 +2664,9 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         gun.general = this.general.copy();
         gun.reloads = this.reloads.copy();
         gun.projectile = this.projectile.copy();
+        for (Projectile altProjectile : this.alternateProjectiles) {
+            gun.alternateProjectiles.add(altProjectile.copy());
+        }
         gun.sounds = this.sounds.copy();
         gun.display = this.display.copy();
         gun.modules = this.modules.copy();
@@ -2930,12 +3104,12 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         }
 
         public Builder setRecoilAngle(float recoilAngle) {
-            this.gun.general.recoilAngle = recoilAngle;
+            this.gun.projectile.recoilAngle = recoilAngle;
             return this;
         }
 
         public Builder setRecoilKick(float recoilKick) {
-            this.gun.general.recoilKick = recoilKick;
+            this.gun.projectile.recoilKick = recoilKick;
             return this;
         }
 
@@ -2950,17 +3124,17 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
         }
 
         public Builder setProjectileAmount(int projectileAmount) {
-            this.gun.general.projectileAmount = projectileAmount;
+            this.gun.projectile.projectileAmount = projectileAmount;
             return this;
         }
 
         public Builder setAlwaysSpread(boolean alwaysSpread) {
-            this.gun.general.alwaysSpread = alwaysSpread;
+            this.gun.projectile.alwaysSpread = alwaysSpread;
             return this;
         }
 
         public Builder setSpread(float spread) {
-            this.gun.general.spread = spread;
+            this.gun.projectile.spread = spread;
             return this;
         }
 

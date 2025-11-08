@@ -16,16 +16,6 @@ import java.util.List;
  */
 public class GunModifierHelper
 {
-    public static double getModifiedMouseSensitivity(ItemStack weapon, double baseSensitivity) {
-        double sensitivity = baseSensitivity;
-        for(int i = 0; i < IAttachment.Type.values().length; i++) {
-            IGunModifier[] modifiers = getModifiers(weapon, IAttachment.Type.values()[i]);
-            for(IGunModifier modifier : modifiers) {
-                sensitivity = modifier.modifyMouseSensitivity(sensitivity);
-            }
-        }
-        return Math.max(sensitivity, 0.01);
-    }
 
     private static final IGunModifier[] EMPTY = {};
 
@@ -286,7 +276,7 @@ public class GunModifierHelper
         float chance = 0F;
 
         if (weapon.getItem() instanceof GunItem gunItem) {
-            chance += gunItem.getModifiedGun(weapon).getGeneral().getCriticalChance();
+            chance += gunItem.getModifiedGun(weapon).getProjectile().getCriticalChance();
         }
         for(int i = 0; i < IAttachment.Type.values().length; i++)
         {

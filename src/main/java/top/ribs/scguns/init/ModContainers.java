@@ -3,12 +3,11 @@ package top.ribs.scguns.init;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import top.ribs.scguns.Reference;
-import top.ribs.scguns.common.container.*;
+import top.ribs.scguns.client.screen.AttachmentContainer;
 
 /**
  * Author: MrCrayfish

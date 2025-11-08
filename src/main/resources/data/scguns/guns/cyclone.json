@@ -13,18 +13,18 @@
     "gripType": "scguns:mini_gun_2",
     "baseGripType": "scguns:mini_gun_2",
     "rate": 6,
-    "recoilAngle": 2.0,
-    "recoilKick": 3.0,
-    "spread": 3.0,
     "meleeDamage": 4.0,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 12,
-    "criticalChance": 0.05,
     "speedModifier": 0.9
   },
   "modules": {
   },
   "projectile": {
+    "recoilAngle": 2.0,
+    "recoilKick": 3.0,
+    "spread": 3.0,
+    "criticalChance": 0.05,
     "visible": true,
     "advantage": "scguns:none",
     "damageFalloffStart": 35.0,

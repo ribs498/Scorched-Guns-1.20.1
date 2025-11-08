@@ -1,0 +1,72 @@
+{
+  "type": "create:sequenced_assembly",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "ingredient": {
+    "item": "scguns:small_iron_casing"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "item": "scguns:frog_dart"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_frog_dart"
+        },
+        [
+          {
+            "item": "scguns:gunpowder_dust"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_frog_dart"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_frog_dart"
+        },
+        [
+          {
+            "item": "scguns:needle"
+          }
+        ]
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_frog_dart"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "scguns:unfinished_frog_dart"
+        }
+      ],
+      "results": [
+        {
+          "item": "scguns:unfinished_frog_dart"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "scguns:unfinished_frog_dart"
+  }
+}

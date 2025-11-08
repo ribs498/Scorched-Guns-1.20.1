@@ -1,0 +1,46 @@
+{
+  "id": "scguns:finforcer",
+  "equipment_chance": 1.0,
+  "items": [
+    {
+      "item": "minecraft:trident",
+      "weight": 8.0,
+      "drop_chance": 0.3,
+      "min_durability": 0.5,
+      "max_durability": 1.0,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:marlin",
+      "weight": 8.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.5,
+      "max_durability": 1.0,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:spirulida",
+      "weight": 5.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.5,
+      "max_durability": 1.0,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:floundergat",
+      "weight": 8.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.5,
+      "max_durability": 1.0,
+      "slot": "mainhand"
+    },
+    {
+      "item": "scguns:diamond_bayonet",
+      "weight": 8.0,
+      "drop_chance": 0.2,
+      "min_durability": 0.5,
+      "max_durability": 1.0,
+      "slot": "mainhand"
+    }
+  ]
+}

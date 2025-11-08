@@ -41,7 +41,7 @@ public class RaidEventHandler {
     }
 
     private static boolean shouldAddBlunderer(Raid raid, int wave) {
-        return wave > 1; // Example: add Blunderer from wave 2 onwards
+        return wave > 1;
     }
 
     private static boolean isBlundererAlreadyInRaid(Raid raid) {

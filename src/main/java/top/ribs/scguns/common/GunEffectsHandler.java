@@ -1,6 +1,9 @@
 package top.ribs.scguns.common;
 
+import net.minecraft.core.BlockPos;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.tags.GameEventTags;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.TamableAnimal;
@@ -9,6 +12,7 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.sounds.SoundSource;
 import top.ribs.scguns.Config;
@@ -26,9 +30,7 @@ public class GunEffectsHandler {
 
     private static final Map<UUID, Long> lastEffectTime = new ConcurrentHashMap<>();
     private static final long EFFECT_COOLDOWN_MS = 250;
-
     private static final int MAX_ENTITIES_PER_SHOT = 25;
-
     private static final Map<UUID, Integer> shotCounter = new ConcurrentHashMap<>();
 
     private static final Predicate<LivingEntity> FLEEING_ENTITIES = entity -> {
@@ -49,7 +51,6 @@ public class GunEffectsHandler {
         if (entity.getSoundSource() == SoundSource.HOSTILE) {
             return true;
         }
-
         if (entity.getType() == EntityType.PIGLIN ||
                 entity.getType() == EntityType.PIGLIN_BRUTE ||
                 entity.getType() == ModEntities.HORNLIN.get() ||
@@ -58,18 +59,13 @@ public class GunEffectsHandler {
                 entity.getType() == EntityType.ENDERMAN) {
             return true;
         }
-
         return !Config.COMMON.aggroMobs.exemptEntities.get()
                 .contains(EntityType.getKey(entity.getType()).toString());
     };
 
     public static void handleGunEffects(ServerPlayer player, ItemStack heldItem, Gun modifiedGun) {
-        // Skip all effects if player is in creative mode
-        if (player.isCreative()) {
-            return;
-        }
-
-        if (!Config.COMMON.aggroMobs.enabled.get() && !Config.COMMON.fleeingMobs.enabled.get()) {
+        if (player.isCreative() ||
+                (!Config.COMMON.aggroMobs.enabled.get() && !Config.COMMON.fleeingMobs.enabled.get())) {
             return;
         }
 
@@ -93,6 +89,10 @@ public class GunEffectsHandler {
         Level world = player.level();
         boolean isSilenced = GunModifierHelper.isSilencedFire(heldItem);
 
+        if (!isSilenced && world instanceof ServerLevel serverLevel) {
+            triggerSculkSensor(serverLevel, player);
+        }
+
         double effectRadius = getEffectRadius(isSilenced);
         List<LivingEntity> nearbyEntities = getOptimizedNearbyEntities(world, player, effectRadius);
 
@@ -100,9 +100,15 @@ public class GunEffectsHandler {
             if (entity == player) continue;
             handleEntityReaction(entity, player, isSilenced);
         }
+
         if (player.tickCount % 1200 == 0) {
             cleanupOldEntries(currentTime);
         }
+    }
+
+    private static void triggerSculkSensor(ServerLevel level, ServerPlayer player) {
+        BlockPos playerPos = player.blockPosition();
+        level.gameEvent(GameEvent.PROJECTILE_SHOOT, playerPos, GameEvent.Context.of(player));
     }
 
     private static double getEffectRadius(boolean isSilenced) {
@@ -135,11 +141,13 @@ public class GunEffectsHandler {
     }
 
     private static void handleEntityReaction(LivingEntity entity, ServerPlayer player, boolean isSilenced) {
-        if (!isSilenced && shouldEntityFlee(entity)) {
-            handleFleeingBehavior(entity, player);
-        }
-        if (!isSilenced && shouldEntityAggro(entity)) {
-            handleAggroBehavior(entity, player);
+        if (!isSilenced) {
+            if (shouldEntityFlee(entity)) {
+                applyKnockbackEffect(entity, player);
+            }
+            if (shouldEntityAggro(entity)) {
+                handleAggroBehavior(entity, player);
+            }
         }
     }
 
@@ -147,11 +155,7 @@ public class GunEffectsHandler {
         return Config.COMMON.fleeingMobs.enabled.get() &&
                 FLEEING_ENTITIES.test(entity) &&
                 !isTamedMob(entity) &&
-                !hasPassengers(entity);
-    }
-
-    private static boolean hasPassengers(LivingEntity entity) {
-        return !entity.getPassengers().isEmpty();
+                entity.getPassengers().isEmpty();
     }
 
     private static boolean shouldEntityAggro(LivingEntity entity) {
@@ -162,38 +166,27 @@ public class GunEffectsHandler {
         if (entity instanceof TamableAnimal tamableAnimal) {
             return tamableAnimal.isTame();
         }
-
         if (entity instanceof AbstractHorse horse) {
             return horse.isTamed();
         }
-
-
         return false;
     }
 
-    private static void handleFleeingBehavior(LivingEntity entity, ServerPlayer player) {
+    private static void applyKnockbackEffect(LivingEntity entity, ServerPlayer player) {
         double deltaX = entity.getX() - player.getX();
         double deltaZ = entity.getZ() - player.getZ();
         double distance = Math.sqrt(deltaX * deltaX + deltaZ * deltaZ);
 
         if (distance > 0) {
-            double knockbackStrength = getFleeKnockbackStrength(entity);
+            double knockbackStrength = getKnockbackStrength(entity);
             double normalizedX = deltaX / distance;
             double normalizedZ = deltaZ / distance;
 
             entity.knockback(knockbackStrength, -normalizedX, -normalizedZ);
-
-            if (entity instanceof net.minecraft.world.entity.Mob mob) {
-                double fleeDistance = entity instanceof Animal ? 16.0 : 12.0;
-                double fleeX = entity.getX() + normalizedX * fleeDistance;
-                double fleeZ = entity.getZ() + normalizedZ * fleeDistance;
-
-                mob.getNavigation().moveTo(fleeX, entity.getY(), fleeZ, 1.2);
-            }
         }
     }
 
-    private static double getFleeKnockbackStrength(LivingEntity entity) {
+    private static double getKnockbackStrength(LivingEntity entity) {
         if (entity.getType().is(ModTags.Entities.HEAVY)) {
             return 0.4;
         }
@@ -231,9 +224,7 @@ public class GunEffectsHandler {
 
     private static void cleanupOldEntries(long currentTime) {
         long expireTime = currentTime - (EFFECT_COOLDOWN_MS * 20);
-
         lastEffectTime.entrySet().removeIf(entry -> entry.getValue() < expireTime);
-
         shotCounter.clear();
     }
 }

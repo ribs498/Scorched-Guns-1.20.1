@@ -44,5 +44,13 @@ public class ModModelLayers {
             new ResourceLocation(Reference.MOD_ID, "subjugator_layer"), "main");
     public static final ModelLayerLocation VIVENTRUM_LAYER = new ModelLayerLocation(
             new ResourceLocation(Reference.MOD_ID, "viventrum_layer"), "main");
+    public static final ModelLayerLocation MOTHER_GHAST_LAYER = new ModelLayerLocation(
+            new ResourceLocation(Reference.MOD_ID, "mother_ghast_layer"), "main");
+    public static final ModelLayerLocation FINFORCER_LAYER = new ModelLayerLocation(
+            new ResourceLocation(Reference.MOD_ID, "finforcer_layer"), "main");
+    public static final ModelLayerLocation PRAETOR_LAYER = new ModelLayerLocation(
+            new ResourceLocation(Reference.MOD_ID, "praetor_layer"), "main");
+    public static final ModelLayerLocation SULFURHEAD_LAYER = new ModelLayerLocation(
+            new ResourceLocation(Reference.MOD_ID, "sulfurhead_layer"), "main");
 
 }

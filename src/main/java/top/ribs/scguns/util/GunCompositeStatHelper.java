@@ -36,7 +36,7 @@ public class GunCompositeStatHelper {
     }
 
     public static float getCompositeSpread(ItemStack weapon, Gun modifiedGun) {
-        return GunModifierHelper.getModifiedSpread(weapon, modifiedGun.getGeneral().getSpread());
+        return GunModifierHelper.getModifiedSpread(weapon, modifiedGun.getProjectile().getSpread());
     }
 
     public static float getCompositeMinSpread(ItemStack weapon, Gun modifiedGun) {

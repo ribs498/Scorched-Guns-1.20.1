@@ -25,9 +25,7 @@ public class MouseHandlerMixin
     private double sensitivity(double original)
     {
         float additionalAdsSensitivity = 1.0F;
-        float scopeSensitivityBoost = 1.0F;
         Minecraft mc = Minecraft.getInstance();
-
         if(mc.player != null && !mc.player.getMainHandItem().isEmpty() && mc.options.getCameraType() == CameraType.FIRST_PERSON)
         {
             ItemStack heldItem = mc.player.getMainHandItem();
@@ -39,21 +37,14 @@ public class MouseHandlerMixin
                     if(modifiedGun.getModules().getZoom() != null)
                     {
                         float modifier = Gun.getFovModifier(heldItem, modifiedGun);
-                        additionalAdsSensitivity = Mth.clamp(1.0F - (1.0F / modifier) / 10F, 0.0F, 1.0F);
+                        modifier = Mth.clamp(modifier, 0.1F, 10.0F);
 
-                        if(modifier <= 0.15F) {
-                            scopeSensitivityBoost = 2.5F;
-                        } else if(modifier <= 0.25F) {
-                            scopeSensitivityBoost = 1.8F;
-                        }
+                        additionalAdsSensitivity = Mth.clamp((float) Math.pow(modifier, 0.25), 0.5F, 1.0F);
                     }
                 }
             }
         }
-
         double adsSensitivity = Config.CLIENT.controls.aimDownSightSensitivity.get();
-        double adsProgress = AimingHandler.get().getNormalisedAdsProgress();
-
-        return original * (1.0 - (1.0 - adsSensitivity) * adsProgress) * additionalAdsSensitivity * scopeSensitivityBoost;
+        return original * (1.0 - (1.0 - adsSensitivity) * AimingHandler.get().getNormalisedAdsProgress()) * additionalAdsSensitivity;
     }
 }

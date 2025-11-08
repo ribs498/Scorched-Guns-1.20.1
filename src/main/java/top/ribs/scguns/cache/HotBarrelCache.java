@@ -112,7 +112,7 @@ public class HotBarrelCache {
 
     public static void cleanupOldEntries() {
         long currentTime = System.currentTimeMillis();
-        long maxAge = 300000; // 5 minutes
+        long maxAge = 300000;
 
         HOT_BARREL_CACHE.entrySet().removeIf(entry ->
                 currentTime - entry.getValue().lastUpdateTime > maxAge

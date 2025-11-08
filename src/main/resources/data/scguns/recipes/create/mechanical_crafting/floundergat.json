@@ -15,7 +15,7 @@
       "tag": "minecraft:planks"
     },
     "L": {
-      "item": "minecraft:heart_of_the_sea"
+      "item": "scguns:firing_unit"
     },
     "R": {
       "item": "scguns:gun_parts"
@@ -27,7 +27,7 @@
       "item": "scguns:ocean_blueprint"
     },
     "E": {
-      "item": "scguns:anthralite_ingot"
+      "item": "scguns:treated_brass_ingot"
     }
   },
   "pattern": [

@@ -265,8 +265,8 @@ public class GunRenderingHandler {
     public void updateMuzzleFlash() {
         entityIdForMuzzleFlash.removeAll(this.entityIdForDrawnMuzzleFlash);
         entityIdToRandomValue.keySet().removeAll(this.entityIdForDrawnMuzzleFlash);
-        entityIdToFlashPosition.keySet().removeAll(this.entityIdForDrawnMuzzleFlash); // NEW
-        entityIdToUseEnchantedTexture.keySet().removeAll(this.entityIdForDrawnMuzzleFlash); // NEW
+        entityIdToFlashPosition.keySet().removeAll(this.entityIdForDrawnMuzzleFlash);
+        entityIdToUseEnchantedTexture.keySet().removeAll(this.entityIdForDrawnMuzzleFlash);
         this.entityIdForDrawnMuzzleFlash.clear();
         this.entityIdForDrawnMuzzleFlash.addAll(entityIdForMuzzleFlash);
     }
@@ -865,8 +865,8 @@ public class GunRenderingHandler {
                 1.0F - GunModifierHelper.getRecoilModifier(mc.player, item) :
                 1.0F - GunModifierHelper.getRecoilModifier(item);
 
-        double kick = gun.getGeneral().getRecoilKick() * 0.0625 * recoilNormal * RecoilHandler.get().getAdsRecoilReduction(gun);
-        float recoilLift = (float) (gun.getGeneral().getRecoilAngle() * recoilNormal) * (float) RecoilHandler.get().getAdsRecoilReduction(gun);
+        double kick = gun.getProjectile().getRecoilKick() * 0.0625 * recoilNormal * RecoilHandler.get().getAdsRecoilReduction(gun);
+        float recoilLift = (float) (gun.getProjectile().getRecoilAngle() * recoilNormal) * (float) RecoilHandler.get().getAdsRecoilReduction(gun);
         float recoilSwayAmount = (float) (2F + 1F * (1.0 - AimingHandler.get().getNormalisedAdsProgress()));
         float recoilSway = (float) ((RecoilHandler.get().getGunRecoilRandom() * recoilSwayAmount - recoilSwayAmount / 2F) * recoilNormal);
 
@@ -933,8 +933,13 @@ public class GunRenderingHandler {
 
     private void renderAttachments(@Nullable LivingEntity entity, ItemDisplayContext display, ItemStack stack, PoseStack poseStack, MultiBufferSource renderTypeBuffer, int light, float partialTicks) {
 
+        // AnimatedGunItem handles its own attachments when using the animated renderer
+        // This includes first-person and GUI contexts
         if (stack.getItem() instanceof AnimatedGunItem &&
-                (display == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND || display == ItemDisplayContext.FIRST_PERSON_LEFT_HAND)) {
+                (display == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND ||
+                        display == ItemDisplayContext.FIRST_PERSON_LEFT_HAND ||
+                        display == ItemDisplayContext.GUI ||
+                        display == ItemDisplayContext.GROUND)) {
             return;
         }
 
@@ -1009,7 +1014,7 @@ public class GunRenderingHandler {
             // Render the attachments
             renderAttachments(entity, display, stack, poseStack, renderTypeBuffer, light, partialTicks);
 
-            // Render muzzle flash if applicable
+            // Render muzzle flash
             renderMuzzleFlash(entity, poseStack, renderTypeBuffer, stack, display, partialTicks);
 
             poseStack.popPose();

@@ -12,16 +12,11 @@
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "projectileAmount": 2,
-    "rate": 4,
-    "recoilAngle": 0.5,
-    "recoilKick": 0.5,
-    "spread": 2.0,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
     "meleeReach": 3.5,
-    "hotBarrelRate": 25,
-    "criticalChance": 0.05
+    "hotBarrelRate": 25
+
   },
   "modules": {
     "attachments": {
@@ -37,6 +32,13 @@
     }
   },
   "projectile": {
+    "alwaysSpread": true,
+    "projectileAmount": 2,
+    "rate": 4,
+    "recoilAngle": 0.5,
+    "recoilKick": 0.5,
+    "criticalChance": 0.05,
+    "spread": 2.0,
     "visible": true,
     "damageFalloffStart": 12.0,
     "damageFalloffEnd": 30.0,

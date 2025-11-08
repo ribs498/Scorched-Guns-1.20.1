@@ -8,6 +8,7 @@ import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.config.RaidConfig;
 import top.ribs.scguns.entity.player.GunTier;
@@ -84,6 +85,10 @@ public class GunProgressionEventHandler {
     }
 
     public static void sendTierUnlockedMessage(Player player, GunTier tier) {
+        if (!Config.CLIENT.display.showProgressionMessages.get()) {
+            return;
+        }
+
         if (tier == null || tier.getLevel() == 0) {
             return;
         }

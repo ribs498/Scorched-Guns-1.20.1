@@ -34,6 +34,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.ForgeEventFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.ribs.scguns.Config;
 import top.ribs.scguns.client.screen.SupplyScampMenuProvider;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
@@ -59,7 +60,14 @@ public class SupplyScampEntity extends TamableAnimal {
             SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.OPTIONAL_BLOCK_POS);
     private static final EntityDataAccessor<Boolean> WEARING_PUMPKIN =
             SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> PARTYING =
+            SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> ARMOR_PLATES =
+            SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.INT);
+    private static final EntityDataAccessor<Integer> HEAVY_ARMOR_PLATES =
+            SynchedEntityData.defineId(SupplyScampEntity.class, EntityDataSerializers.INT);
 
+    private static final int MAX_ARMOR_PLATES = 4;
     private static final int PATROL_COOLDOWN = 15;
     private int patrolCooldownTimer = PATROL_COOLDOWN;
 
@@ -79,8 +87,6 @@ public class SupplyScampEntity extends TamableAnimal {
     private static final int INVENTORY_SIZE = 27;
 
     public final SimpleContainer inventory = new SimpleContainer(INVENTORY_SIZE);
-    private static final int ANIMATION_UPDATE_INTERVAL = 5;
-    private int animationUpdateTimer = ANIMATION_UPDATE_INTERVAL;
 
     public SupplyScampEntity(EntityType<? extends TamableAnimal> entityType, Level level) {
         super(entityType, level);
@@ -100,26 +106,19 @@ public class SupplyScampEntity extends TamableAnimal {
                 effect == MobEffects.WEAKNESS ||
                 effect == MobEffects.MOVEMENT_SLOWDOWN ||
                 effect == MobEffects.DIG_SLOWDOWN ||
-                effect == MobEffects.HARM ||
-                effect == ModEffects.SULFUR_POISONING.get()
+                effect == MobEffects.HARM
         ) {
             return false;
         }
 
         return super.canBeAffected(pPotionEffect);
     }
-    public final AnimationState idleAnimationState = new AnimationState();
-    public final AnimationState panicAnimationState = new AnimationState();
-    public final AnimationState sitAnimationState = new AnimationState();
-    public int panicAnimationTimeout = 0;
-    public int idleAnimationTimeout = 0;
 
     @Override
     public void tick() {
         super.tick();
 
         if (!this.level().isClientSide && this.isAlive() && this.isTame()) {
-            // Handle scheduled barrel closing
             if (scheduledBarrelClose != null && barrelCloseTimer > 0) {
                 barrelCloseTimer--;
                 if (barrelCloseTimer <= 0) {
@@ -149,10 +148,6 @@ public class SupplyScampEntity extends TamableAnimal {
             } else {
                 itemCooldownTimer--;
             }
-        }
-
-        if (this.level().isClientSide) {
-            setupAnimationStates();
         }
     }
     private void handlePatrolling() {
@@ -365,62 +360,22 @@ public class SupplyScampEntity extends TamableAnimal {
         return this.entityData.get(PATROL_ORIGIN);
     }
 
-    private void setupAnimationStates() {
-        if (animationUpdateTimer > 0) {
-            animationUpdateTimer--;
-            return;
-        }
-        animationUpdateTimer = ANIMATION_UPDATE_INTERVAL;
-
-        if (this.isSitting()) {
-            if (!sitAnimationState.isStarted()) {
-                sitAnimationState.start(this.tickCount);
-            }
-            sitAnimationState.updateTime(this.tickCount, 1.0f);
-            panicAnimationState.stop();
-            idleAnimationState.stop();
-            return;
-        } else {
-            sitAnimationState.stop();
-        }
-
-        if (this.isPanicked()) {
-            if (panicAnimationTimeout <= 0) {
-                panicAnimationTimeout = 50;
-                panicAnimationState.start(this.tickCount);
-            }
-            panicAnimationState.updateTime(this.tickCount, 1.0f);
-            idleAnimationState.stop();
-            --panicAnimationTimeout;
-        } else {
-            panicAnimationState.stop();
-        }
-
-        if (!this.isSitting() && !this.isPanicked()) {
-            if (idleAnimationTimeout <= 0) {
-                idleAnimationTimeout = 60;
-                idleAnimationState.start(this.tickCount);
-            }
-            idleAnimationState.updateTime(this.tickCount, 1.0f);
-            --idleAnimationTimeout;
-        } else {
-            idleAnimationState.stop();
-        }
-    }
-
     public boolean canBreatheUnderwater() {
         return true;
     }
 
     @Override
-    public void die(DamageSource pCause) {
-        super.die(pCause);
+    public void die(DamageSource source) {
+        super.die(source);
         if (!this.level().isClientSide) {
-            float rand = this.random.nextFloat();
-            if (rand < 0.35f) {
-                SignalBeaconEntity beacon = new SignalBeaconEntity(ModEntities.SIGNAL_BEACON.get(), this.level());
-                beacon.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
-                this.level().addFreshEntity(beacon);
+            if (source.getEntity() instanceof Player) {
+                float baseChance = Config.COMMON.gameplay.cogBeaconSpawnChance.get().floatValue();
+                float spawnChance = baseChance * 2.0f;
+                if (baseChance > 0 && this.random.nextFloat() < spawnChance) {
+                    SignalBeaconEntity beacon = new SignalBeaconEntity(ModEntities.SIGNAL_BEACON.get(), this.level());
+                    beacon.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
+                    this.level().addFreshEntity(beacon);
+                }
             }
         }
     }
@@ -449,7 +404,7 @@ public class SupplyScampEntity extends TamableAnimal {
 
     public static AttributeSupplier.Builder createAttributes() {
         return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 24D)
+                .add(Attributes.MAX_HEALTH, 28D)
                 .add(Attributes.FOLLOW_RANGE, 24D)
                 .add(Attributes.MOVEMENT_SPEED, 0.31D)
                 .add(Attributes.ARMOR_TOUGHNESS, 3.0f)
@@ -521,7 +476,53 @@ public class SupplyScampEntity extends TamableAnimal {
                     return InteractionResult.SUCCESS;
                 }
 
-                if (player.isShiftKeyDown()) {
+                if (player.isShiftKeyDown() && itemstack.getItem() == ModItems.ARMOR_PLATE.get()) {
+                    if (this.getArmorPlates() + this.getHeavyArmorPlates() >= MAX_ARMOR_PLATES) {
+                        player.displayClientMessage(Component.translatable("message.mechanical_entity.max_armor_plates"), true);
+                        return InteractionResult.FAIL;
+                    }
+
+                    this.addArmorPlate(false);
+                    if (!player.getAbilities().instabuild) {
+                        itemstack.shrink(1);
+                    }
+                    this.playSound(SoundEvents.ARMOR_EQUIP_IRON, 0.5F, 1.0F);
+
+                    int currentTotal = this.getArmorPlates() + this.getHeavyArmorPlates();
+                    player.displayClientMessage(Component.translatable("message.mechanical_entity.armor_plating_added", currentTotal, MAX_ARMOR_PLATES), true);
+                    return InteractionResult.SUCCESS;
+                }
+
+                if (player.isShiftKeyDown() && itemstack.getItem() == ModItems.HEAVY_ARMOR_PLATE.get()) {
+                    if (this.getArmorPlates() + this.getHeavyArmorPlates() >= MAX_ARMOR_PLATES) {
+                        player.displayClientMessage(Component.translatable("message.mechanical_entity.max_armor_plates"), true);
+                        return InteractionResult.FAIL;
+                    }
+
+                    this.addArmorPlate(true);
+                    if (!player.getAbilities().instabuild) {
+                        itemstack.shrink(1);
+                    }
+                    this.playSound(SoundEvents.ARMOR_EQUIP_NETHERITE, 0.5F, 1.0F);
+
+                    int currentTotal = this.getArmorPlates() + this.getHeavyArmorPlates();
+                    player.displayClientMessage(Component.translatable("message.mechanical_entity.heavy_armor_plating_added", currentTotal, MAX_ARMOR_PLATES), true);
+                    return InteractionResult.SUCCESS;
+                }
+
+                if (player.isShiftKeyDown() && itemstack.getItem() instanceof net.minecraft.world.item.AxeItem && (this.getArmorPlates() > 0 || this.getHeavyArmorPlates() > 0)) {
+                    boolean wasHeavy = this.removeArmorPlate();
+                    this.playSound(SoundEvents.ARMOR_STAND_BREAK, 0.5F, 1.0F);
+
+                    ItemStack droppedPlate = new ItemStack(wasHeavy ? ModItems.HEAVY_ARMOR_PLATE.get() : ModItems.ARMOR_PLATE.get());
+                    this.spawnAtLocation(droppedPlate);
+
+                    int currentTotal = this.getArmorPlates() + this.getHeavyArmorPlates();
+                    player.displayClientMessage(Component.translatable("message.mechanical_entity.armor_plating_removed", currentTotal, MAX_ARMOR_PLATES), true);
+                    return InteractionResult.SUCCESS;
+                }
+
+                if (player.isShiftKeyDown() && itemstack.isEmpty()) {
                     if (this.isOrderedToSit()) {
                         this.setOrderedToSit(false);
                         this.setSitting(false);
@@ -577,6 +578,53 @@ public class SupplyScampEntity extends TamableAnimal {
         }
     }
 
+    public int getArmorPlates() {
+        return this.entityData.get(ARMOR_PLATES);
+    }
+
+    public int getHeavyArmorPlates() {
+        return this.entityData.get(HEAVY_ARMOR_PLATES);
+    }
+
+    public void setArmorPlates(int plates) {
+        this.entityData.set(ARMOR_PLATES, plates);
+        updateArmorFromPlates();
+    }
+
+    public void setHeavyArmorPlates(int plates) {
+        this.entityData.set(HEAVY_ARMOR_PLATES, plates);
+        updateArmorFromPlates();
+    }
+
+    public void addArmorPlate(boolean isHeavy) {
+        int total = this.getArmorPlates() + this.getHeavyArmorPlates();
+        if (total < MAX_ARMOR_PLATES) {
+            if (isHeavy) {
+                this.setHeavyArmorPlates(this.getHeavyArmorPlates() + 1);
+            } else {
+                this.setArmorPlates(this.getArmorPlates() + 1);
+            }
+        }
+    }
+
+    public boolean removeArmorPlate() {
+        if (this.getHeavyArmorPlates() > 0) {
+            this.setHeavyArmorPlates(this.getHeavyArmorPlates() - 1);
+            return true;
+        } else if (this.getArmorPlates() > 0) {
+            this.setArmorPlates(this.getArmorPlates() - 1);
+            return false;
+        }
+        return false;
+    }
+
+    private void updateArmorFromPlates() {
+        int regularPlates = this.getArmorPlates();
+        int heavyPlates = this.getHeavyArmorPlates();
+        int totalArmor = regularPlates + (heavyPlates * 2);
+        Objects.requireNonNull(this.getAttribute(Attributes.ARMOR)).setBaseValue(6.0 + totalArmor);
+    }
+
     private static final int[] DYE_COLOR_TO_MASK_INDEX = new int[]{
             15, // WHITE
             14, // ORANGE
@@ -612,6 +660,20 @@ public class SupplyScampEntity extends TamableAnimal {
         this.entityData.define(PATROL_ORIGIN, Optional.empty());
         this.entityData.define(STATIONARY, false);
         this.entityData.define(WEARING_PUMPKIN, false);
+        this.entityData.define(PARTYING, false);
+        this.entityData.define(ARMOR_PLATES, 0);
+        this.entityData.define(HEAVY_ARMOR_PLATES, 0);
+    }
+    public boolean isPartying() {
+        return this.entityData.get(PARTYING);
+    }
+
+    public void setPartying(boolean partying) {
+        this.entityData.set(PARTYING, partying);
+    }
+    @Override
+    public void setRecordPlayingNearby(@NotNull BlockPos pos, boolean playing) {
+        this.setPartying(playing && this.isTame());
     }
     public boolean isWearingPumpkin() {
         return this.entityData.get(WEARING_PUMPKIN);
@@ -650,6 +712,18 @@ public class SupplyScampEntity extends TamableAnimal {
                 if (!itemStack.isEmpty()) {
                     this.spawnAtLocation(itemStack);
                 }
+            }
+
+            int regularPlates = this.getArmorPlates();
+            if (regularPlates > 0) {
+                ItemStack armorPlates = new ItemStack(ModItems.ARMOR_PLATE.get(), regularPlates);
+                this.spawnAtLocation(armorPlates);
+            }
+
+            int heavyPlates = this.getHeavyArmorPlates();
+            if (heavyPlates > 0) {
+                ItemStack heavyArmorPlates = new ItemStack(ModItems.HEAVY_ARMOR_PLATE.get(), heavyPlates);
+                this.spawnAtLocation(heavyArmorPlates);
             }
         }
         super.remove(reason);
@@ -695,6 +769,8 @@ public class SupplyScampEntity extends TamableAnimal {
         compound.put("Items", listnbt);
         compound.putInt("MaskColor", this.getMaskColor());
         compound.putBoolean("WearingPumpkin", this.isWearingPumpkin());
+        compound.putInt("ArmorPlates", this.getArmorPlates());
+        compound.putInt("HeavyArmorPlates", this.getHeavyArmorPlates());
 
         if (scheduledBarrelClose != null) {
             compound.putInt("BarrelCloseX", scheduledBarrelClose.getX());
@@ -731,6 +807,12 @@ public class SupplyScampEntity extends TamableAnimal {
         }
         if (compound.contains("WearingPumpkin")) {
             this.setWearingPumpkin(compound.getBoolean("WearingPumpkin"));
+        }
+        if (compound.contains("ArmorPlates")) {
+            this.setArmorPlates(compound.getInt("ArmorPlates"));
+        }
+        if (compound.contains("HeavyArmorPlates")) {
+            this.setHeavyArmorPlates(compound.getInt("HeavyArmorPlates"));
         }
         // Load barrel closing state
         if (compound.contains("BarrelCloseX")) {
@@ -773,10 +855,10 @@ public class SupplyScampEntity extends TamableAnimal {
     public void setTame(boolean tamed) {
         super.setTame(tamed);
         if (tamed) {
-            Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(36.0);
-            this.setHealth(36.0F);
+            Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(42.0);
+            this.setHealth(42.0F);
         } else {
-            Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(8.0);
+            Objects.requireNonNull(this.getAttribute(Attributes.MAX_HEALTH)).setBaseValue(24.0);
         }
         this.goalSelector.removeAllGoals(goal -> true);
         this.registerGoals();

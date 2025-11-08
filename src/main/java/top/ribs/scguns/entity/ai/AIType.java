@@ -4,5 +4,6 @@ public enum AIType {
     DEFAULT,
     TACTICAL,
     RECKLESS,
-    COWARD
+    COWARD,
+    SMART
 }

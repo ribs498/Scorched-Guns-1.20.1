@@ -26,7 +26,7 @@ public class RocketRifleModel implements IOverrideModel {
 
         //Renders the static parts of the model.
         RenderUtil.renderModel(SpecialModels.ROCKET_RIFLE_MAIN.getModel(), stack, matrixStack, buffer, light, overlay);
-        
+
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
             if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.ROCKET_RIFLE_STOCK_WOODEN.getModel(), stack, matrixStack, buffer, light, overlay);
@@ -37,7 +37,10 @@ public class RocketRifleModel implements IOverrideModel {
             else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
                 RenderUtil.renderModel(SpecialModels.ROCKET_RIFLE_STOCK_HEAVY.getModel(), stack, matrixStack, buffer, light, overlay);
 
+        } else {
+            RenderUtil.renderModel(SpecialModels.ROCKET_RIFLE_STANDARD_GRIP.getModel(), stack, matrixStack, buffer, light, overlay);
         }
+        
         if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.UNDER_BARREL)) {
             if (Gun.getAttachment(IAttachment.Type.UNDER_BARREL, stack).getItem() == ModItems.VERTICAL_GRIP.get())
                 RenderUtil.renderModel(SpecialModels.ROCKET_RIFLE_GRIP_VERTICAL.getModel(), stack, matrixStack, buffer, light, overlay);

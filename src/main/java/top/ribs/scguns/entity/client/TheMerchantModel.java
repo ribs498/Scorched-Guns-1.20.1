@@ -8,19 +8,57 @@ import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import top.ribs.scguns.entity.animations.ModAnimationDefinitions;
-import top.ribs.scguns.entity.monster.DissidentEntity;
 import top.ribs.scguns.entity.monster.TheMerchantEntity;
 
 public class TheMerchantModel<T extends Entity> extends HierarchicalModel<T> {
     private final ModelPart main;
     private final ModelPart torso;
     private final ModelPart head;
+    private final ModelPart leftArm;
+    private final ModelPart rightArm;
+    private final ModelPart leftLeg;
+    private final ModelPart rightLeg;
+    private final ModelPart backpack;
+    private final ModelPart post;
+    private final ModelPart lantern;
+
+    private final PartPose mainDefault;
+    private final PartPose torsoDefault;
+    private final PartPose headDefault;
+    private final PartPose leftArmDefault;
+    private final PartPose rightArmDefault;
+    private final PartPose leftLegDefault;
+    private final PartPose rightLegDefault;
+    private final PartPose backpackDefault;
+    private final PartPose postDefault;
+    private final PartPose lanternDefault;
+
+    private int twitchCooldown = 0;
+    private boolean twitchingLeftArm = false;
+    private float twitchProgress = 0f;
 
     public TheMerchantModel(ModelPart root) {
         this.main = root.getChild("Full");
         this.torso = this.main.getChild("Torso");
         this.head = this.torso.getChild("Head");
+        this.leftArm = this.torso.getChild("LeftArm");
+        this.rightArm = this.torso.getChild("RightArm");
+        this.leftLeg = this.torso.getChild("LeftLeg");
+        this.rightLeg = this.torso.getChild("RightLeg");
+        this.backpack = this.torso.getChild("Backpack");
+        this.post = this.backpack.getChild("Post");
+        this.lantern = this.post.getChild("Lantern");
+
+        this.mainDefault = this.main.storePose();
+        this.torsoDefault = this.torso.storePose();
+        this.headDefault = this.head.storePose();
+        this.leftArmDefault = this.leftArm.storePose();
+        this.rightArmDefault = this.rightArm.storePose();
+        this.leftLegDefault = this.leftLeg.storePose();
+        this.rightLegDefault = this.rightLeg.storePose();
+        this.backpackDefault = this.backpack.storePose();
+        this.postDefault = this.post.storePose();
+        this.lanternDefault = this.lantern.storePose();
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -124,33 +162,92 @@ public class TheMerchantModel<T extends Entity> extends HierarchicalModel<T> {
 
         return LayerDefinition.create(meshdefinition, 256, 256);
     }
-	@Override
-	public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-		this.root().getAllParts().forEach(ModelPart::resetPose);
 
-		if (entity instanceof TheMerchantEntity) {
-            TheMerchantEntity theMerchant = (TheMerchantEntity) entity;
-			this.animateWalk(ModAnimationDefinitions.THE_MERCHANT_WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
-			this.animate(theMerchant.idleAnimationState, ModAnimationDefinitions.THE_MERCHANT_IDLE, ageInTicks, 1f);
-			//this.animate(theMerchant.attackAnimationState, ModAnimationDefinitions.DISSIDENT_ATTACK, ageInTicks, 1f);
+    @Override
+    public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        this.main.loadPose(this.mainDefault);
+        this.torso.loadPose(this.torsoDefault);
+        this.head.loadPose(this.headDefault);
+        this.leftArm.loadPose(this.leftArmDefault);
+        this.rightArm.loadPose(this.rightArmDefault);
+        this.leftLeg.loadPose(this.leftLegDefault);
+        this.rightLeg.loadPose(this.rightLegDefault);
+        this.backpack.loadPose(this.backpackDefault);
+        this.post.loadPose(this.postDefault);
+        this.lantern.loadPose(this.lanternDefault);
 
-			// Add head rotation logic
-			float clampedYaw = Mth.clamp(netHeadYaw, -45.0F, 45.0F); // Limit yaw to +/- 45 degrees
-			float clampedPitch = Mth.clamp(headPitch, -20.0F, 20.0F); // Limit pitch to +/- 20 degrees
+        if (entity instanceof TheMerchantEntity merchant) {
+            float heavyBob = Mth.sin(ageInTicks * 0.04f) * 0.3f;
+            this.main.y += heavyBob;
 
-			this.head.yRot = clampedYaw * ((float)Math.PI / 180F); // Convert degrees to radians and apply
-			this.head.xRot = clampedPitch * ((float)Math.PI / 180F);
-		}
-	}
+            float lanternSwing = Mth.sin(ageInTicks * 0.08f) * 0.1f;
+            this.post.zRot = lanternSwing;
+            this.lantern.xRot = lanternSwing * 0.5f;
 
+            if (limbSwingAmount > 0.01f) {
+                float walkSpeed = limbSwing * 0.5f;
+                float walkIntensity = limbSwingAmount * 0.8f;
 
+                this.leftLeg.xRot = Mth.cos(walkSpeed) * walkIntensity;
+                this.rightLeg.xRot = Mth.cos(walkSpeed + (float)Math.PI) * walkIntensity;
 
-	@Override
-	public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-		main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
-	}
-	@Override
-	public ModelPart root() {
-		return main;
-	}
+                this.main.xRot = Mth.sin(walkSpeed) * walkIntensity * 0.15f;
+                this.torso.zRot = Mth.sin(walkSpeed * 0.5f) * walkIntensity * 0.1f;
+
+                float armSwing = Mth.sin(walkSpeed * 0.5f) * walkIntensity * 0.3f;
+                this.leftArm.xRot = armSwing;
+                this.rightArm.xRot = -armSwing;
+                this.leftArm.zRot = -0.1f;
+                this.rightArm.zRot = 0.1f;
+
+                float weightShift = Mth.sin(walkSpeed) * walkIntensity * 0.2f;
+                this.main.y += Math.abs(weightShift);
+
+                twitchCooldown = 0;
+                twitchProgress = 0f;
+            } else {
+                this.torso.xRot = Mth.sin(ageInTicks * 0.08f) * 0.02f;
+
+                if (twitchCooldown <= 0) {
+                    if (merchant.getRandom().nextFloat() < 0.002f) {
+                        twitchingLeftArm = merchant.getRandom().nextBoolean();
+                        twitchProgress = 0f;
+                        twitchCooldown = 200 + merchant.getRandom().nextInt(200);
+                    }
+                } else {
+                    twitchCooldown--;
+                }
+
+                if (twitchProgress < 1.0f) {
+                    twitchProgress += 0.15f;
+
+                    float twitchCurve = Mth.sin(twitchProgress * (float)Math.PI);
+                    float twitchAmount = twitchCurve * 0.4f;
+
+                    if (twitchingLeftArm) {
+                        this.leftArm.xRot += twitchAmount;
+                        this.leftArm.zRot -= twitchAmount * 0.3f;
+                    } else {
+                        this.rightArm.xRot += twitchAmount;
+                        this.rightArm.zRot += twitchAmount * 0.3f;
+                    }
+                }
+            }
+
+            float clampedYaw = Mth.clamp(netHeadYaw, -45.0F, 45.0F);
+            float clampedPitch = Mth.clamp(headPitch, -20.0F, 20.0F);
+            this.head.yRot = clampedYaw * ((float)Math.PI / 180F);
+            this.head.xRot = clampedPitch * ((float)Math.PI / 180F);
+        }
+    }
+
+    @Override
+    public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
+        main.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+    }
+
+    @Override
+    public ModelPart root() {
+        return main;
+    }
 }

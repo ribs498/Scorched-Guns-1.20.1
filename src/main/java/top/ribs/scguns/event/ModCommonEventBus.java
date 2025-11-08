@@ -31,8 +31,12 @@ public class ModCommonEventBus {
         event.put(ModEntities.THE_MERCHANT.get(), TheMerchantEntity.createAttributes().build());
         event.put(ModEntities.TRAUMA_UNIT.get(), TraumaUnitEntity.createAttributes().build());
         event.put(ModEntities.SCAMPLER.get(), ScamplerEntity.createAttributes().build());
+        event.put(ModEntities.SULFURHEAD.get(), SulfurheadEntity.createAttributes().build());
         event.put(ModEntities.ADJUDICATOR.get(), AdjudicatorEntity.createAttributes().build());
         event.put(ModEntities.SUBJUGATOR.get(), SubjugatorEntity.createAttributes().build());
+        event.put(ModEntities.MOTHER_GHAST.get(), MotherGhastEntity.createAttributes().build());
+        event.put(ModEntities.FINFORCER.get(), FinforcerEntity.createAttributes().build());
+        event.put(ModEntities.PRAETOR.get(), PraetorEntity.createAttributes().build());
     }
 
     @SubscribeEvent
@@ -81,7 +85,20 @@ public class ModCommonEventBus {
                 DissidentEntity::checkMonsterSpawnRules,
                 SpawnPlacementRegisterEvent.Operation.OR
         );
-
+        event.register(
+                ModEntities.PRAETOR.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.WORLD_SURFACE,
+                DissidentEntity::checkMonsterSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.OR
+        );
+        event.register(
+                ModEntities.SULFURHEAD.get(),
+                SpawnPlacements.Type.ON_GROUND,
+                Heightmap.Types.WORLD_SURFACE,
+                DissidentEntity::checkMonsterSpawnRules,
+                SpawnPlacementRegisterEvent.Operation.OR
+        );
 
         event.register(
                 ModEntities.HIVE.get(),

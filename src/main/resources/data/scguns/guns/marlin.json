@@ -2,25 +2,20 @@
   "display": {
     "flash": {
       "size": 1.0,
-      "yOffset": 3.8,
-      "zOffset": -9.3,
+      "yOffset": 4.0,
+      "zOffset": -9.6,
       "textureLocation": "muzzle_flash_1"
     }
   },
   "general": {
     "weaponType": "rifle",
-    "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 12.0,
-    "recoilAngle": 3.0,
-    "recoilKick": 1.0,
-    "spread": 3.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 22,
-    "criticalChance": 0.2
+    "hotBarrelRate": 22
   },
   "modules": {
     "attachments": {
@@ -30,7 +25,7 @@
       },
       "scope": {
         "size": 0.7,
-        "yOffset": 4.5,
+        "yOffset": 4.75,
         "zOffset": 5.2
       },
       "stock": {
@@ -43,31 +38,35 @@
     },
     "zoom": {
       "fovModifier": 0.6,
-      "yOffset": 4.9,
+      "yOffset": 5.15,
       "zOffset": 1.2
     }
   },
   "projectile": {
+    "recoilAngle": 7.0,
+    "recoilKick": 2.5,
+    "spread": 1.0,
+    "criticalChance": 0.15,
     "advantage": "scguns:fire",
-    "damage": 15.0,
-    "damageFalloffStart": 22.0,
-    "damageFalloffEnd": 55.0,
-    "damageFalloffMinMultiplier": 0.7,
-    "armorPen": 3.0,
+    "damage": 18.0,
+    "damageFalloffStart": 28.0,
+    "damageFalloffEnd": 66.0,
+    "damageFalloffMinMultiplier": 0.75,
+    "armorPen": 3.5,
     "ejectsCasing": true,
     "gravity": false,
-    "item": "scguns:advanced_round",
-    "casingType": "scguns:medium_brass_casing",
-    "casingParticle": "scguns:brass_casing",
+    "item": "scguns:gibbs_round",
+    "casingType": "scguns:medium_diamond_steel_casing",
+    "casingParticle": "scguns:diamond_steel_casing",
     "life": 55,
     "size": 0.1,
-    "speed": 9.0,
+    "speed": 10.0,
     "trailLengthMultiplier": 4.0
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 10,
-    "reloadItem": "scguns:advanced_round",
+    "maxAmmo": 7,
+    "reloadItem": "scguns:gibbs_round",
     "reloadTimer": 15,
     "reloadType": "scguns:manual"
   },

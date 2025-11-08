@@ -873,6 +873,9 @@
 				},
 				"1.1667": {
 					"effect": "reload_mag_out"
+				},
+				"2.125": {
+					"effect": "bolt_release"
 				}
 			},
 			"particle_effects": {
@@ -1781,6 +1784,9 @@
 				},
 				"1.1667": {
 					"effect": "reload_mag_out"
+				},
+				"2.125": {
+					"effect": "bolt_release"
 				}
 			},
 			"particle_effects": {

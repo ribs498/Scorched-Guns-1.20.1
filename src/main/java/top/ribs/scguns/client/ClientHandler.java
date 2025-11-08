@@ -61,9 +61,7 @@ import java.lang.reflect.Field;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
 public class ClientHandler {
     private static Field mouseOptionsField;
-    private static double currentScopeSensitivityModifier = 1.0;
-    private static boolean isCurrentlyScoped = false;
-    private static double originalMouseSensitivity = -1;
+
     public static void registerClientHandlers(IEventBus bus) {
         FrameworkClientAPI.registerDataLoader(MetaLoader.getInstance());
        // onRegisterCreativeTab(bus);
@@ -77,7 +75,6 @@ public class ClientHandler {
     @SubscribeEvent
     public static void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase == TickEvent.Phase.END) {
-            updateMouseSensitivity();
             Minecraft mc = Minecraft.getInstance();
             if (mc.player != null && mc.screen == null && KeyBinds.KEY_MELEE.consumeClick()) {
                 ItemStack heldItem = mc.player.getMainHandItem();
@@ -89,54 +86,7 @@ public class ClientHandler {
             }
         }
     }
-    private static void updateMouseSensitivity() {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || mc.level == null) return;
 
-        ItemStack heldItem = mc.player.getMainHandItem();
-        boolean shouldBeScoped = heldItem.getItem() instanceof GunItem && AimingHandler.get().isAiming();
-
-        if (shouldBeScoped && !isCurrentlyScoped) {
-            double sensitivityModifier = GunModifierHelper.getModifiedMouseSensitivity(heldItem, 1.0);
-            currentScopeSensitivityModifier = sensitivityModifier;
-            applyScopeSensitivity(sensitivityModifier);
-            isCurrentlyScoped = true;
-
-        } else if (!shouldBeScoped && isCurrentlyScoped) {
-            restoreOriginalSensitivity();
-            currentScopeSensitivityModifier = 1.0;
-            isCurrentlyScoped = false;
-
-        } else if (shouldBeScoped) {
-            double newModifier = GunModifierHelper.getModifiedMouseSensitivity(heldItem, 1.0);
-            if (newModifier != currentScopeSensitivityModifier) {
-                currentScopeSensitivityModifier = newModifier;
-                applyScopeSensitivity(newModifier);
-            }
-        }
-    }
-
-    private static void applyScopeSensitivity(double modifier) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.options == null) return;
-
-        if (originalMouseSensitivity < 0) {
-            originalMouseSensitivity = mc.options.sensitivity().get();
-        }
-        double newSensitivity = originalMouseSensitivity * modifier;
-
-        newSensitivity = Math.max(0.01, Math.min(1.0, newSensitivity));
-        mc.options.sensitivity().set(newSensitivity);
-    }
-
-    private static void restoreOriginalSensitivity() {
-        if (originalMouseSensitivity >= 0) {
-            Minecraft mc = Minecraft.getInstance();
-            if (mc.options != null) {
-                mc.options.sensitivity().set(originalMouseSensitivity);
-            }
-        }
-    }
     private static void onClientSetup(FMLClientSetupEvent event) {
         event.enqueueWork(() -> {
             Minecraft.getInstance().getTextureManager().register(
@@ -222,18 +172,23 @@ public class ClientHandler {
         EntityRenderers.register(ModEntities.ZOMBIFIED_HORNLIN.get(), ZombifiedHornlinRenderer::new);
         EntityRenderers.register(ModEntities.TRAUMA_UNIT.get(), TraumaUnitRenderer::new);
         EntityRenderers.register(ModEntities.THE_MERCHANT.get(), TheMerchantRenderer::new);
-
+        EntityRenderers.register(ModEntities.SULFUR_GAS_CLOUD.get(), SulfurGasCloudRenderer::new);
         EntityRenderers.register(ModEntities.BLUNDERER.get(), BlundererRenderer::new);
         EntityRenderers.register(ModEntities.ADJUDICATOR.get(), AdjudicatorRenderer::new);
+
         EntityRenderers.register(ModEntities.SUBJUGATOR.get(), SubjugatorRenderer::new);
         EntityRenderers.register(ModEntities.SIGNAL_BEACON.get(), SignalBeaconRenderer::new);
-        EntityRenderers.register(ModEntities.BRASS_BOLT.get(), EnemyProjectileRenderer::new);
+        EntityRenderers.register(ModEntities.ENEMY_PROJECTILE.get(), EnemyProjectileRenderer::new);
         EntityRenderers.register(ModEntities.TRAUMA_HOOK.get(), TraumaHookRenderer::new);
         EntityRenderers.register(ModEntities.SCAMP_TANK.get(), ScampTankRenderer::new);
+
         EntityRenderers.register(ModEntities.SCAMP_ROCKET.get(), ScampRocketRenderer::new);
         EntityRenderers.register(ModEntities.SCAMPLER.get(), ScamplerRenderer::new);
         EntityRenderers.register(ModEntities.RAID_FLARE.get(), RaidFlareRenderer::new);
-
+        EntityRenderers.register(ModEntities.MOTHER_GHAST.get(), MotherGhastRenderer::new);
+        EntityRenderers.register(ModEntities.FINFORCER.get(), FinforcerRenderer::new);
+        EntityRenderers.register(ModEntities.PRAETOR.get(), PraetorRenderer::new);
+        EntityRenderers.register(ModEntities.SULFURHEAD.get(), SulfurheadRenderer::new);
         EntityRenderers.register(ModEntities.BEACON_PROJECTILE.get(), (context) ->
                 new EntityRenderer<>(context) {
                     @Override
@@ -259,6 +214,7 @@ public class ClientHandler {
 
         CuriosRendererRegistry.register(ModItems.AIR_CANISTER.get(), AirCanisterRenderer::new);
         CuriosRendererRegistry.register(ModItems.REINFORCED_AIR_CANISTER.get(), AirCanisterRenderer::new);
+        CuriosRendererRegistry.register(ModItems.CREATIVE_AIR_CANISTER.get(), AirCanisterRenderer::new);
 
 
 
@@ -312,6 +268,7 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.VULCANIC_REPEATER.get(), new VulcanicRepeaterModel());
         ModelOverrides.register(ModItems.SCRATCHES.get(), new ScratchesModel());
         ModelOverrides.register(ModItems.OSGOOD_50.get(), new Osgood50Model());
+        ModelOverrides.register(ModItems.KILN_GUN.get(), new KilnGunModel());
         ModelOverrides.register(ModItems.GALE.get(), new GaleModel());
         ModelOverrides.register(ModItems.WALTZ_CONVERSION.get(), new WaltzConversionModel());
         ModelOverrides.register(ModItems.UMAX_PISTOL.get(), new UmaxPistolModel());
@@ -335,6 +292,7 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.LASER_MUSKET.get(), new LaserMusketModel());
         ModelOverrides.register(ModItems.PLASMABUSS.get(), new PlasmabussModel());
         ModelOverrides.register(ModItems.JACKHAMMER.get(), new JackhammerModel());
+        ModelOverrides.register(ModItems.JR_WRISTBREAKER.get(), new JrWristbreakerModel());
         ModelOverrides.register(ModItems.KILLER_23.get(), new Killer23Model());
         ModelOverrides.register(ModItems.HOMEMAKER.get(), new HomemakerModel());
         ModelOverrides.register(ModItems.RIBS_GLORY.get(), new RibsGloryModel());
@@ -350,6 +308,11 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.BLUNDERBUSS.get(), new BlunderbussModel());
         ModelOverrides.register(ModItems.LONGARM.get(), new LongarmModel());
         ModelOverrides.register(ModItems.DOUBLET.get(), new DoubletModel());
+        ModelOverrides.register(ModItems.LIBERTAS.get(), new LibertasModel());
+        ModelOverrides.register(ModItems.TESLOCK_RIFLE.get(), new TeslockRifleModel());
+        ModelOverrides.register(ModItems.ZILK_45.get(), new Zilk45Model());
+        ModelOverrides.register(ModItems.SPIRULIDA.get(), new SpirulidaModel());
+        ModelOverrides.register(ModItems.WHISTLER.get(), new WhistlerModel());
         ModelOverrides.register(ModItems.ASTELLA.get(), new AstellaModel());
         ModelOverrides.register(ModItems.BRAWLER.get(), new BrawlerModel());
         ModelOverrides.register(ModItems.FLOUNDERGAT.get(), new FloundergatModel());
@@ -369,6 +332,11 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.BIRDFEEDER.get(), new BirdfeederModel());
         ModelOverrides.register(ModItems.NAILER.get(), new NailerModel());
         ModelOverrides.register(ModItems.TURNPIKE.get(), new TurnpikeModel());
+        ModelOverrides.register(ModItems.TRUANT.get(), new TruantModel());
+        ModelOverrides.register(ModItems.HAMMER_GL.get(), new HammerGlModel());
+        ModelOverrides.register(ModItems.HYPERBARIA.get(), new HyperbariaModel());
+        ModelOverrides.register(ModItems.BLOOPER.get(), new BlooperModel());
+        ModelOverrides.register(ModItems.TRIQUETRA.get(), new TriquetraModel());
         ModelOverrides.register(ModItems.BASKER.get(), new BaskerModel());
         ModelOverrides.register(ModItems.WEEVIL.get(), new WeevilModel());
         ModelOverrides.register(ModItems.TL_RUNNER.get(), new TlRunnerModel());
@@ -402,6 +370,7 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.GRANDLE_OG.get(), new GrandleOgModel());
         ModelOverrides.register(ModItems.UPPERCUT.get(), new UppercutModel());
         ModelOverrides.register(ModItems.MAS_55.get(), new Mas55Model());
+        ModelOverrides.register(ModItems.MAS_PEDDLER.get(), new MasPeddlerModel());
          ModelOverrides.register(ModItems.CYCLONE.get(), new CycloneModel());
          ModelOverrides.register(ModItems.SOUL_DRUMMER.get(), new SoulDrummerModel());
         ModelOverrides.register(ModItems.VALORA.get(), new ValoraModel());
@@ -409,6 +378,7 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.M22_WALTZ.get(), new M22WaltzModel());
         ModelOverrides.register(ModItems.TRENCHUR.get(), new TrenchurModel());
         ModelOverrides.register(ModItems.MICINA.get(), new MicinaModel());
+        ModelOverrides.register(ModItems.MINKSY.get(), new MinksyModel());
         ModelOverrides.register(ModItems.MANGALITSA.get(), new MangalitsaModel());
         ModelOverrides.register(ModItems.NIAMI.get(), new NiamiModel());
         ModelOverrides.register(ModItems.CRUSADER.get(), new CrusaderModel());
@@ -450,6 +420,9 @@ public class ClientHandler {
         if (mc.player != null && mc.screen == null && event.getAction() == GLFW.GLFW_PRESS) {
             if (KeyBinds.KEY_ATTACHMENTS.isDown()) {
                 PacketHandler.getPlayChannel().sendToServer(new C2SMessageAttachments());
+            }
+            if (KeyBinds.KEY_SWAP_AMMO.isDown()) {
+                PacketHandler.getPlayChannel().sendToServer(new C2SMessageSwapAmmo());
             }
             if (hasAnyExoSuitEquipped(mc.player)) {
                 if (KeyBinds.KEY_ENABLE_EXO_HELMET.consumeClick()) {

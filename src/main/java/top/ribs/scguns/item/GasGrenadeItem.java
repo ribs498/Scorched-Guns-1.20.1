@@ -84,7 +84,7 @@ public class GasGrenadeItem extends AmmoItem
             {
                 if(!(entityLiving instanceof Player) || !((Player) entityLiving).isCreative())
                     stack.shrink(1);
-                float radius = 10.0F; // Set the desired radius here
+                float radius = 10.0F;
                 ThrowableGrenadeEntity grenade = this.create(worldIn, entityLiving, this.maxCookTime - duration, radius);
                 grenade.shootFromRotation(entityLiving, entityLiving.getXRot(), entityLiving.getYRot(), 0.0F, Math.min(1.0F, duration / 10F), 1.0F);
                 worldIn.addFreshEntity(grenade);

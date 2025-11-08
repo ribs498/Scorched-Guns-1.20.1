@@ -14,7 +14,6 @@ public class S2CMessageBeamUpdate extends PlayMessage<S2CMessageBeamUpdate> {
     private Vec3 startPos;
     private Vec3 endPos;
 
-    // Default constructor required for decoding
     public S2CMessageBeamUpdate() {}
 
     public S2CMessageBeamUpdate(UUID playerId, Vec3 startPos, Vec3 endPos) {

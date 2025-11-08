@@ -1,0 +1,87 @@
+{
+  "display": {
+    "flash": {
+      "size": 1.2,
+      "yOffset": 5.8,
+      "zOffset": -13.5,
+      "textureLocation": "muzzle_flash_8"
+    },
+    "beamOrigin": {
+      "horizontalOffset": 0.15,
+      "verticalOffset": -0.05,
+      "forwardOffset": 0.4,
+      "aimHorizontalOffset": 0.0
+    }
+  },
+  "general": {
+    "weaponType": "laser",
+    "hasCameraShake": false,
+    "fireMode": "scguns:semi_beam",
+    "beamColor": "#d309d3",
+    "secondaryBeamColor": "#ff4fff",
+    "enchantedBeamColor": "#16d716",
+    "enchantedSecondaryBeamColor": "#84dd84",
+    "gripType": "scguns:two_handed",
+    "baseGripType": "scguns:two_handed",
+    "rate": 10,
+    "meleeDamage": 3.5,
+    "meleeCooldownTicks": 20,
+    "meleeReach": 3.5,
+    "hotBarrelRate": 20,
+    "beamAmmoConsumptionDelay": 6000,
+    "beamDamageDelay": 0,
+    "beamMaxDistance": 150.0
+  },
+  "modules": {
+    "attachments": {
+      "scope": {
+        "yOffset": 6.4,
+        "zOffset": 3.0
+      },
+      "stock": {
+        "scale": 0.0
+      },
+      "underBarrel": {
+        "yOffset": 1.0,
+        "zOffset": 1.0
+      }
+    },
+    "zoom": {
+      "fovModifier": 0.6,
+      "yOffset": 7.0,
+      "zOffset": 0.75
+    }
+  },
+  "projectile": {
+    "recoilAngle": 1.5,
+    "recoilKick": 1.0,
+    "spread": 0.1,
+    "criticalChance": 0.05,
+    "advantage": "scguns:none",
+    "damage": 16,
+    "ejectsCasing": false,
+    "gravity": false,
+    "item": "scguns:energy_core",
+    "life": 40,
+    "size": 1.0,
+    "speed": 7.0,
+    "trailLengthMultiplier": 2.0
+  },
+  "reloads": {
+    "emptyMagTimer": 50,
+    "maxAmmo": 15,
+    "reloadItem": "scguns:energy_core",
+    "reloadByproduct": "scguns:depleted_energy_core",
+    "byproductChance": 0.7,
+    "reloadTimer": 27,
+    "reloadType": "scguns:single_item"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.plasma.fire",
+    "preFire": "scguns:item.gauss.pre_fire",
+    "fire": "scguns:item.plasma.fire",
+    "reload": "scguns:item.pistol.reload",
+    "flyby": "scguns:bullet.flyby1"
+  }
+}

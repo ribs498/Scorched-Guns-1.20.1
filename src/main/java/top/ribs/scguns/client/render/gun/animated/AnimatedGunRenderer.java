@@ -620,8 +620,8 @@ public class AnimatedGunRenderer extends GeoItemRenderer<AnimatedGunItem> implem
             recoilReduction = 1.0F - GunModifierHelper.getRecoilModifier(item);
         }
 
-        double kick = gun.getGeneral().getRecoilKick() * 0.0625 * recoilNormal * GunRecoilHandler.get().getAdsRecoilReduction(gun);
-        float recoilLift = (float) (gun.getGeneral().getRecoilAngle() * recoilNormal) * (float) GunRecoilHandler.get().getAdsRecoilReduction(gun);
+        double kick = gun.getProjectile().getRecoilKick() * 0.0625 * recoilNormal * GunRecoilHandler.get().getAdsRecoilReduction(gun);
+        float recoilLift = (float) (gun.getProjectile().getRecoilAngle() * recoilNormal) * (float) GunRecoilHandler.get().getAdsRecoilReduction(gun);
         float recoilSwayAmount = (float) (2.0 + (1.0 - AimingHandler.get().getNormalisedAdsProgress()));
         float recoilSway = (float) ((GunRecoilHandler.get().getGunRecoilRandom() * recoilSwayAmount - recoilSwayAmount / 2.0F) * recoilNormal);
 

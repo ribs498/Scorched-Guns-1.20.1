@@ -30,6 +30,18 @@ public class PrimaMateriaModel implements IOverrideModel {
         renderBarrelAndAttachments(stack, matrixStack, buffer, light, overlay);
         renderMagazineAttachments(stack, matrixStack, buffer, light, overlay);
 
+        if (Gun.hasAttachmentEquipped(stack, IAttachment.Type.STOCK)) {
+            if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WOODEN_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.PRIMA_MATERIA_WOODEN_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.LIGHT_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.PRIMA_MATERIA_LIGHT_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.WEIGHTED_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.PRIMA_MATERIA_WEIGHTED_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
+            else if (Gun.getAttachment(IAttachment.Type.STOCK, stack).getItem() == ModItems.BUMP_STOCK.get())
+                RenderUtil.renderModel(SpecialModels.PRIMA_MATERIA_WEIGHTED_STOCK.getModel(), stack, matrixStack, buffer, light, overlay);
+
+        }
+
     }
 
     private void renderBarrelAndAttachments(ItemStack stack, PoseStack matrixStack, MultiBufferSource buffer, int light, int overlay) {

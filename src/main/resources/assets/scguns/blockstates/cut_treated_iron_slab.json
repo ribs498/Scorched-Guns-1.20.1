@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "scguns:block/cut_treated_iron_slab"
+    },
+    "type=double": {
+      "model": "scguns:block/cut_treated_iron"
+    },
+    "type=top": {
+      "model": "scguns:block/cut_treated_iron_slab_top"
+    }
+  }
+}

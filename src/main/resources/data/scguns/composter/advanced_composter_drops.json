@@ -1,0 +1,24 @@
+{
+  "min_drops": 2,
+  "max_drops": 3,
+  "drops": [
+    {
+      "item": "minecraft:bone_meal",
+      "weight": 120,
+      "min_count": 1,
+      "max_count": 2
+    },
+    {
+      "item": "scguns:phosphor_dust",
+      "weight": 10,
+      "min_count": 1,
+      "max_count": 1
+    },
+    {
+      "item": "scguns:niter_dust",
+      "weight": 10,
+      "min_count": 1,
+      "max_count": 1
+    }
+  ]
+}

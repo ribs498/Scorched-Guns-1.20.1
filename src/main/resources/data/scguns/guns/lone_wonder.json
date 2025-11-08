@@ -9,19 +9,13 @@
   },
   "general": {
     "weaponType": "shock",
-    "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 5,
-    "projectileAmount": 6,
-    "recoilAngle": 3.0,
-    "recoilKick": 1.5,
-    "spread": 3.0,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 10,
-    "criticalChance": 0.05
+    "hotBarrelRate": 10
   },
   "modules": {
     "attachments": {
@@ -42,6 +36,12 @@
     }
   },
   "projectile": {
+    "alwaysSpread": true,
+    "projectileAmount": 5,
+    "recoilAngle": 3.0,
+    "recoilKick": 1.5,
+    "spread": 3.0,
+    "criticalChance": 0.05,
     "advantage": "scguns:water",
     "damage":23.0,
     "damageFalloffStart": 18.0,

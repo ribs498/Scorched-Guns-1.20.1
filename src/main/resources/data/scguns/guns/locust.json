@@ -14,21 +14,16 @@
   },
   "general": {
     "weaponType": "rifle",
-    "alwaysSpread": false,
     "fireMode": "scguns:burst",
     "burstAmount": 3,
     "burstCooldown": 10,
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 2,
-    "recoilAngle": 2.25,
-    "recoilKick": 0.75,
-    "spread": 2.0,
     "meleeDamage": 7.0,
     "meleeCooldownTicks": 15,
     "meleeReach": 4.0,
-    "hotBarrelRate": 5,
-    "criticalChance": 0.05
+    "hotBarrelRate": 5
   },
   "modules": {
     "attachments": {
@@ -55,6 +50,10 @@
     }
   },
   "projectile": {
+    "recoilAngle": 2.25,
+    "recoilKick": 0.75,
+    "spread": 2.0,
+    "criticalChance": 0.05,
     "knockbackStrength": 0.5,
     "advantage": "scguns:none",
     "damageFalloffStart": 28.0,

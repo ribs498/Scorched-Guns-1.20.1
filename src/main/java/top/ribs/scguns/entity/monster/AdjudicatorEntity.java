@@ -69,7 +69,7 @@ public class AdjudicatorEntity extends Monster implements RangedAttackMob {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
                                         MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData,
                                         @Nullable CompoundTag pDataTag) {
-        EntityEquipmentConfig.equipEntity(this, "adjudicator");
+        EntityEquipmentConfig.equipEntity(this, "scguns:adjudicator");
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 

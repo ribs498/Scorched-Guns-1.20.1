@@ -9,18 +9,13 @@
   },
   "general": {
     "weaponType": "pistol",
-    "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
     "rate": 6,
-    "recoilAngle": 5.0,
-    "recoilKick": 2.0,
-    "spread": 3.0,
     "meleeDamage": 6.5,
     "meleeCooldownTicks": 10,
     "meleeReach": 2.5,
     "hotBarrelRate": 24,
-    "criticalChance": 0.2,
     "isRevolver": true
   },
   "modules": {
@@ -42,6 +37,10 @@
     }
   },
   "projectile": {
+    "recoilAngle": 5.0,
+    "recoilKick": 2.0,
+    "criticalChance": 0.2,
+    "spread": 3.0,
     "advantage": "scguns:none",
     "damage": 9.5,
     "damageFalloffStart": 14.0,

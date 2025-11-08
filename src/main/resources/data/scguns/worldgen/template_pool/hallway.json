@@ -14,7 +14,25 @@
     {
       "weight": 15,
       "element": {
+        "location": "scguns:hallways/hallway_long_2",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 15,
+      "element": {
         "location": "scguns:hallways/hallway_small",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 15,
+      "element": {
+        "location": "scguns:hallways/hallway_turret",
         "processors": "scguns:generic",
         "projection": "rigid",
         "element_type": "minecraft:single_pool_element"

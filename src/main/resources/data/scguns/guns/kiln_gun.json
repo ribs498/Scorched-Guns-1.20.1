@@ -1,0 +1,71 @@
+{
+  "display": {
+    "flash": {
+      "size": 1.7,
+      "yOffset": 6.0,
+      "zOffset": -15.0,
+      "textureLocation": "muzzle_flash_1",
+      "spawnParticles": true,
+      "particleType": "minecraft:campfire_cosy_smoke",
+      "particleCount": 6,
+      "particleSpread": 0.5,
+      "particleRingRadius": 0.5
+    }
+  },
+  "general": {
+    "weaponType": "shotgun",
+    "fireMode": "scguns:semi_automatic",
+    "gripType": "scguns:mini_gun_5",
+    "baseGripType": "scguns:mini_gun_5",
+    "rate": 10,
+    "meleeDamage": 4.0,
+    "meleeCooldownTicks": 20,
+    "hotBarrelRate": 55,
+    "speedModifier": 0.8
+  },
+  "modules": {
+    "attachments": {
+      "stock": {
+        "scale": 0.0
+      }
+    }
+  },
+  "projectile": {
+    "alwaysSpread": true,
+    "projectileAmount": 17,
+    "recoilAngle": 18.0,
+    "recoilKick": 4.0,
+    "spread": 10.0,
+    "criticalChance": 0.1,
+    "playerKnockBack": true,
+    "playerKnockBackStrength": 0.7,
+    "knockbackStrength": 0.65,
+    "advantage": "scguns:none",
+    "damage": 27.0,
+    "damageFalloffStart": 13.0,
+    "damageFalloffEnd": 32.0,
+    "damageFalloffMinMultiplier": 0.5,
+    "ejectsCasing": true,
+    "gravity": false,
+    "item": "scguns:bearpack_shell",
+    "casingType": "scguns:medium_brass_casing",
+    "casingParticle": "scguns:bearpack_shell",
+    "life": 35,
+    "size": 0.05,
+    "speed": 4.0,
+    "trailLengthMultiplier": 2.0,
+    "trailThickness": 0.5
+  },
+  "reloads": {
+    "emptyMagTimer": 50,
+    "maxAmmo": 2,
+    "reloadTimer": 100,
+    "reloadType": "scguns:manual"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.blackpowder.fire",
+    "fire": "scguns:item.blackpowder.fire",
+    "reload": "scguns:item.gauss.reload"
+  }
+}

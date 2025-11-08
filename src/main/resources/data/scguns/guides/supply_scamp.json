@@ -1,0 +1,31 @@
+{
+  "id": "scguns:supply_scamp",
+  "title": "info.scguns.supply_scamp_guide.title",
+
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.scguns.supply_scamp_guide.page1"
+    },
+    {
+      "type": "text",
+      "text": "info.scguns.supply_scamp_guide.page2"
+    },
+    {
+      "type": "text",
+      "text": "info.scguns.supply_scamp_guide.page3"
+    },
+    {
+      "type": "text",
+      "text": "info.scguns.supply_scamp_guide.page4"
+    },
+    {
+      "type": "text",
+      "text": "info.scguns.supply_scamp_guide.page5"
+    },
+    {
+      "type": "text",
+      "text": "info.scguns.supply_scamp_guide.page6"
+    }
+  ]
+}

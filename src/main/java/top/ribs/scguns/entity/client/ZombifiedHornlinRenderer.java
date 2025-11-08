@@ -49,68 +49,57 @@ public class ZombifiedHornlinRenderer extends HumanoidMobRenderer<ZombifiedHornl
                            T entity, float limbSwing, float limbSwingAmount,
                            float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
 
-            if (!entity.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).isEmpty()) {
-                poseStack.pushPose();
-                poseStack.scale(1.1F, 1.0F, 1.1F);
-                this.renderHelmetOnly(poseStack, buffer, packedLight, entity, limbSwing, limbSwingAmount,
-                        partialTicks, ageInTicks, netHeadYaw, headPitch);
-                poseStack.popPose();
+            boolean hasHelmet = !entity.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD).isEmpty();
+            boolean hasBodyArmor = !entity.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.CHEST).isEmpty()
+                    || !entity.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.LEGS).isEmpty()
+                    || !entity.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.FEET).isEmpty();
+
+            if (!hasHelmet && !hasBodyArmor) {
+                return;
             }
 
-            poseStack.pushPose();
-            poseStack.scale(1.2F, 1.05F, 1.35F);
-            this.renderBodyArmorOnly(poseStack, buffer, packedLight, entity, limbSwing, limbSwingAmount,
-                    partialTicks, ageInTicks, netHeadYaw, headPitch);
-            poseStack.popPose();
-        }
+            ItemStack helmetItem = entity.getItemBySlot(net.minecraft.world.entity.EquipmentSlot.HEAD);
 
-        private void renderHelmetOnly(PoseStack poseStack, MultiBufferSource buffer, int packedLight,
-                                      T entity, float limbSwing, float limbSwingAmount,
-                                      float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+            if (hasHelmet) {
+                this.innerModel.body.visible = false;
+                this.innerModel.rightArm.visible = false;
+                this.innerModel.leftArm.visible = false;
+                this.innerModel.rightLeg.visible = false;
+                this.innerModel.leftLeg.visible = false;
+                this.outerModel.body.visible = false;
+                this.outerModel.rightArm.visible = false;
+                this.outerModel.leftArm.visible = false;
+                this.outerModel.rightLeg.visible = false;
+                this.outerModel.leftLeg.visible = false;
 
-            this.innerModel.body.visible = false;
-            this.innerModel.rightArm.visible = false;
-            this.innerModel.leftArm.visible = false;
-            this.innerModel.rightLeg.visible = false;
-            this.innerModel.leftLeg.visible = false;
+                poseStack.pushPose();
+                poseStack.scale(1.21F, 1.0F, 1.05F);
+                super.render(poseStack, buffer, packedLight, entity, limbSwing, limbSwingAmount,
+                        partialTicks, ageInTicks, netHeadYaw, headPitch);
+                poseStack.popPose();
 
-            this.outerModel.body.visible = false;
-            this.outerModel.rightArm.visible = false;
-            this.outerModel.leftArm.visible = false;
-            this.outerModel.rightLeg.visible = false;
-            this.outerModel.leftLeg.visible = false;
+                this.innerModel.body.visible = true;
+                this.innerModel.rightArm.visible = true;
+                this.innerModel.leftArm.visible = true;
+                this.innerModel.rightLeg.visible = true;
+                this.innerModel.leftLeg.visible = true;
+                this.outerModel.body.visible = true;
+                this.outerModel.rightArm.visible = true;
+                this.outerModel.leftArm.visible = true;
+                this.outerModel.rightLeg.visible = true;
+                this.outerModel.leftLeg.visible = true;
+            }
+            if (hasBodyArmor) {
+                entity.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, ItemStack.EMPTY);
 
-            super.render(poseStack, buffer, packedLight, entity, limbSwing, limbSwingAmount,
-                    partialTicks, ageInTicks, netHeadYaw, headPitch);
+                poseStack.pushPose();
+                poseStack.scale(1.2F, 1.05F, 1.35F);
+                super.render(poseStack, buffer, packedLight, entity, limbSwing, limbSwingAmount,
+                        partialTicks, ageInTicks, netHeadYaw, headPitch);
+                poseStack.popPose();
 
-            this.innerModel.body.visible = true;
-            this.innerModel.rightArm.visible = true;
-            this.innerModel.leftArm.visible = true;
-            this.innerModel.rightLeg.visible = true;
-            this.innerModel.leftLeg.visible = true;
-
-            this.outerModel.body.visible = true;
-            this.outerModel.rightArm.visible = true;
-            this.outerModel.leftArm.visible = true;
-            this.outerModel.rightLeg.visible = true;
-            this.outerModel.leftLeg.visible = true;
-        }
-
-        private void renderBodyArmorOnly(PoseStack poseStack, MultiBufferSource buffer, int packedLight,
-                                         T entity, float limbSwing, float limbSwingAmount,
-                                         float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-
-            this.innerModel.head.visible = false;
-            this.innerModel.hat.visible = false;
-            this.outerModel.head.visible = false;
-            this.outerModel.hat.visible = false;
-
-            super.render(poseStack, buffer, packedLight, entity, limbSwing, limbSwingAmount,
-                    partialTicks, ageInTicks, netHeadYaw, headPitch);
-            this.innerModel.head.visible = true;
-            this.innerModel.hat.visible = true;
-            this.outerModel.head.visible = true;
-            this.outerModel.hat.visible = true;
+                entity.setItemSlot(net.minecraft.world.entity.EquipmentSlot.HEAD, helmetItem);
+            }
         }
     }
 

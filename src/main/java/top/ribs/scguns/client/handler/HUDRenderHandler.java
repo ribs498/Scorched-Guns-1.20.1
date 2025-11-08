@@ -392,7 +392,7 @@ public class HUDRenderHandler {
         int reserveColor = (reserveAmmo <= 0 && !Gun.hasUnlimitedReloads(heldItem)) ? 0x555555 : 0xAAAAAA;
         guiGraphics.drawString(mc.font, cachedReserveAmmoText, ammoPosX, reserveAmmoPosY, reserveColor);
 
-        ItemStack ammoItemStack = new ItemStack(Objects.requireNonNull(cachedGun.getProjectile().getItem()));
+        ItemStack ammoItemStack = new ItemStack(Objects.requireNonNull(cachedGun.getProjectile(heldItem).getItem()));
         renderAmmoTypeTexture(ammoItemStack, ammoPosX - 20, ammoPosY, guiGraphics, mc);
 
         RenderSystem.disableBlend();
@@ -499,10 +499,10 @@ public class HUDRenderHandler {
         prevHitMarkerTime = 0;
     }
 
-    private static void fetchReserveAmmo(Player player, Gun gun) {
-        reserveAmmo = Gun.getReserveAmmoCount(player, gun.getProjectile().getItem());
+    private static void fetchReserveAmmo(Player player, Gun gun, ItemStack gunStack) {
+        reserveAmmo = Gun.getReserveAmmoCount(player, gun.getProjectile(gunStack).getItem());
         ammoAutoUpdateTimer = 0;
-        markHudDirty(); // Mark for text cache update
+        markHudDirty();
     }
 
     public static void stageReserveAmmoUpdate() {
@@ -514,7 +514,7 @@ public class HUDRenderHandler {
         ItemStack heldItem = player.getMainHandItem();
         if (heldItem.getItem() instanceof GunItem) {
             Gun modifiedGun = ((GunItem) heldItem.getItem()).getModifiedGun(heldItem);
-            fetchReserveAmmo(player, modifiedGun);
+            fetchReserveAmmo(player, modifiedGun, heldItem);
         }
     }
 
@@ -577,7 +577,6 @@ public class HUDRenderHandler {
 
         Minecraft mc = Minecraft.getInstance();
 
-        // Power Core Display with caching
         ItemStack chestplate = getEquippedExoSuitChestplate(player);
         if (!chestplate.isEmpty()) {
             ItemStack powerCore = findPowerCoreInChestplate(chestplate);
@@ -591,7 +590,6 @@ public class HUDRenderHandler {
                     int energyPercent = (energyStored * 100) / maxEnergy;
                     ChatFormatting energyColor = getEnergyColorForHUD(energyPercent);
 
-                    // Update cached power text only when changed
                     if (energyPercent != lastEnergyPercent || energyColor != lastEnergyColor) {
                         cachedPowerText = Component.translatable("tooltip.scguns.exosuit.energy_level", energyPercent)
                                 .withStyle(energyColor);
@@ -642,7 +640,6 @@ public class HUDRenderHandler {
             currentY += lineHeight;
         }
 
-        // Boots Mobility Module Display
         ItemStack boots = getEquippedExoSuitBoots(player);
         if (!boots.isEmpty() && hasMobilityModule(boots)) {
             boolean mobilityEnabled = ExoSuitPowerManager.isPowerEnabled(player, "mobility");

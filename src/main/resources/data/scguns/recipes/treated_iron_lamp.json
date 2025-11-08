@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "X": {
+      "item": "minecraft:sea_lantern"
+    },
+    "#": {
+      "tag": "scguns:treated_iron_plates"
+    }
+  },
+  "pattern": [
+    " # ",
+    "#X#",
+    " # "
+  ],
+  "result": {
+    "item": "scguns:treated_iron_lamp",
+    "count": 4
+  }
+}

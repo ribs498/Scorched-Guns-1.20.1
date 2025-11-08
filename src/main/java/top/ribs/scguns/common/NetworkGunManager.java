@@ -88,9 +88,12 @@ public class NetworkGunManager extends SimplePreparableReloadListener<Map<GunIte
                     {
                         try(Reader reader = new BufferedReader(new InputStreamReader(resource.open(), StandardCharsets.UTF_8)))
                         {
-                            Gun gun = GsonHelper.fromJson(GSON_INSTANCE, reader, Gun.class);
+                            com.google.gson.JsonObject jsonObject = GsonHelper.parse(reader);
+                            Gun gun = GSON_INSTANCE.fromJson(jsonObject, Gun.class);
+
                             if(gun != null && Validator.isValidObject(gun))
                             {
+                                gun.loadAlternateProjectilesFromJson(jsonObject);
                                 map.put((GunItem) item, gun);
                             }
                             else

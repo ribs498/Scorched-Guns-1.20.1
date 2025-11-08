@@ -35,6 +35,7 @@ public class EntityEquipmentConfig {
             Item item,
             float spawnWeight,
             float dropChance,
+            EquipmentSlot slot,
             @Nullable Float minDurability,
             @Nullable Float maxDurability
     ) {
@@ -53,11 +54,12 @@ public class EntityEquipmentConfig {
 
     public record EquipmentData(
             float equipmentChance,
-            List<EquipmentEntry> entries
+            Map<EquipmentSlot, List<EquipmentEntry>> entriesBySlot
     ) {
         @Nullable
-        public EquipmentEntry selectRandom(RandomSource random) {
-            if (entries.isEmpty()) return null;
+        public EquipmentEntry selectRandom(EquipmentSlot slot, RandomSource random) {
+            List<EquipmentEntry> entries = entriesBySlot.get(slot);
+            if (entries == null || entries.isEmpty()) return null;
 
             float totalWeight = 0;
             for (EquipmentEntry entry : entries) {
@@ -78,27 +80,35 @@ public class EntityEquipmentConfig {
         }
     }
 
-    public static void loadConfig(ResourceManager resourceManager, String entityId) {
-        ResourceLocation location = new ResourceLocation("scguns", "entity/equipment/" + entityId + ".json");
-
+    public static void loadConfig(ResourceManager resourceManager, ResourceLocation configLocation) {
         try {
-            Resource resource = resourceManager.getResource(location).orElse(null);
+            Resource resource = resourceManager.getResource(configLocation).orElse(null);
             if (resource != null) {
                 try (InputStreamReader reader = new InputStreamReader(resource.open(), StandardCharsets.UTF_8)) {
                     Gson gson = new Gson();
                     JsonObject json = gson.fromJson(reader, JsonObject.class);
 
+                    if (!json.has("id")) {
+                        LOGGER.warn("Equipment config missing 'id' field: {}", configLocation);
+                        return;
+                    }
+
+                    String entityId = json.get("id").getAsString();
                     EquipmentData data = parseEquipmentData(json);
+
                     if (data != null) {
                         CONFIGS.put(entityId, data);
-                        LOGGER.info("Loaded equipment config for {}: {} entries", entityId, data.entries.size());
+                        int totalEntries = data.entriesBySlot.values().stream()
+                                .mapToInt(List::size).sum();
+                        LOGGER.info("Loaded equipment config for {} from {}: {} entries across {} slots",
+                                entityId, configLocation, totalEntries, data.entriesBySlot.size());
                     }
                 }
             } else {
-                LOGGER.warn("Equipment config not found: {}", location);
+                LOGGER.warn("Equipment config not found: {}", configLocation);
             }
         } catch (Exception e) {
-            LOGGER.error("Failed to load equipment config: {}", location, e);
+            LOGGER.error("Failed to load equipment config: {}", configLocation, e);
         }
     }
 
@@ -106,7 +116,7 @@ public class EntityEquipmentConfig {
         float equipmentChance = json.has("equipment_chance") ?
                 json.get("equipment_chance").getAsFloat() : 0.75f;
 
-        List<EquipmentEntry> entries = new ArrayList<>();
+        Map<EquipmentSlot, List<EquipmentEntry>> entriesBySlot = new HashMap<>();
 
         if (json.has("items")) {
             JsonArray itemsArray = json.getAsJsonArray("items");
@@ -114,12 +124,12 @@ public class EntityEquipmentConfig {
                 JsonObject itemObj = element.getAsJsonObject();
                 EquipmentEntry entry = parseEntry(itemObj);
                 if (entry != null) {
-                    entries.add(entry);
+                    entriesBySlot.computeIfAbsent(entry.slot, k -> new ArrayList<>()).add(entry);
                 }
             }
         }
 
-        return new EquipmentData(equipmentChance, entries);
+        return new EquipmentData(equipmentChance, entriesBySlot);
     }
 
     @Nullable
@@ -134,10 +144,24 @@ public class EntityEquipmentConfig {
 
             float spawnWeight = json.has("weight") ? json.get("weight").getAsFloat() : 1.0f;
             float dropChance = json.has("drop_chance") ? json.get("drop_chance").getAsFloat() : 0.2f;
+
+            EquipmentSlot slot = EquipmentSlot.MAINHAND;
+            if (json.has("slot")) {
+                String slotName = json.get("slot").getAsString().toLowerCase();
+                slot = switch (slotName) {
+                    case "head", "helmet" -> EquipmentSlot.HEAD;
+                    case "chest", "chestplate" -> EquipmentSlot.CHEST;
+                    case "legs", "leggings" -> EquipmentSlot.LEGS;
+                    case "feet", "boots" -> EquipmentSlot.FEET;
+                    case "offhand" -> EquipmentSlot.OFFHAND;
+                    default -> EquipmentSlot.MAINHAND;
+                };
+            }
+
             Float minDurability = json.has("min_durability") ? json.get("min_durability").getAsFloat() : null;
             Float maxDurability = json.has("max_durability") ? json.get("max_durability").getAsFloat() : null;
 
-            return new EquipmentEntry(item, spawnWeight, dropChance, minDurability, maxDurability);
+            return new EquipmentEntry(item, spawnWeight, dropChance, slot, minDurability, maxDurability);
 
         } catch (Exception e) {
             LOGGER.error("Error parsing equipment entry", e);
@@ -156,13 +180,19 @@ public class EntityEquipmentConfig {
 
         if (mob.getRandom().nextFloat() >= data.equipmentChance) return;
 
-        EquipmentEntry entry = data.selectRandom(mob.getRandom());
-        if (entry == null) return;
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            EquipmentEntry entry = data.selectRandom(slot, mob.getRandom());
+            if (entry == null) continue;
 
-        ItemStack stack = entry.createItemStack(mob.getRandom());
-        GunCurseUtil.applyCurseIfRoll(stack, mob.getRandom());
-        mob.setItemSlot(EquipmentSlot.MAINHAND, stack);
-        mob.setDropChance(EquipmentSlot.MAINHAND, entry.dropChance);
+            ItemStack stack = entry.createItemStack(mob.getRandom());
+
+            if (slot == EquipmentSlot.MAINHAND) {
+                GunCurseUtil.applyCurseIfRoll(stack, mob.getRandom());
+            }
+
+            mob.setItemSlot(slot, stack);
+            mob.setDropChance(slot, entry.dropChance);
+        }
     }
 
     @SubscribeEvent
@@ -176,11 +206,29 @@ public class EntityEquipmentConfig {
             @Override
             protected void apply(Void object, ResourceManager resourceManager, ProfilerFiller profiler) {
                 CONFIGS.clear();
-                loadConfig(resourceManager, "cog_minion");
-                loadConfig(resourceManager, "cog_knight");
-                loadConfig(resourceManager, "adjudicator");
-                loadConfig(resourceManager, "subjugator");
+                loadAllConfigs(resourceManager);
             }
         });
+    }
+
+    private static void loadAllConfigs(ResourceManager resourceManager) {
+        String namespace = "scguns";
+        String folderPath = "entity/equipment";
+
+        try {
+            Map<ResourceLocation, Resource> resources = resourceManager.listResources(
+                    folderPath,
+                    location -> location.getPath().endsWith(".json")
+            );
+            for (ResourceLocation location : resources.keySet()) {
+                if (!location.getNamespace().equals(namespace)) {
+                    continue;
+                }
+
+                loadConfig(resourceManager, location);
+            }
+        } catch (Exception e) {
+            LOGGER.error("Failed to scan equipment configs directory", e);
+        }
     }
 }

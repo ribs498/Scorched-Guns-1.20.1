@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "X": {
+      "item": "scguns:night_vision_module"
+    },
+    "L": {
+      "item": "scguns:diamond_steel_ingot"
+    },
+    "R": {
+      "item": "minecraft:skeleton_skull"
+    },
+    "M": {
+      "item": "scguns:anthralite_ingot"
+    }
+  },
+  "pattern": [
+    "LXL",
+    "MRM",
+    " M "
+  ],
+  "result": {
+    "item": "scguns:viventrum_package",
+    "count": 1
+  }
+}

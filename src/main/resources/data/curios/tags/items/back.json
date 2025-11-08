@@ -2,6 +2,7 @@
   "replace": false,
   "values": [
     "scguns:air_canister",
-    "scguns:reinforced_air_canister"
+    "scguns:reinforced_air_canister",
+    "scguns:creative_air_canister"
   ]
 }

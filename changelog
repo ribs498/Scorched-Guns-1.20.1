@@ -1,37 +1,69 @@
-- Fixed the dissident sounds (provided by Razzller)
-- Fixed fake soul fire stacking on itself
-- added fixed mold textures (thanks to jadn once again)
-- fixed blueprint bug
-- Removed some additional remnants of redcoat stuff
-- increased distance from player for raid spawning
-- added config for days between raids
-- allowed for raid boss/henchmen to spawn with nbt stuff
-- fixed raid henchmen sometimes spawning with incorrect tier stuff
-- added config timeout for raid bosses (default 10 minute raid)
-- White flag despawns henchmen too
-- Raids shouldnt crash if boss despawns
-- Fixed Charge weapons maintaining charge after swapped
-- improved a bunch of the stuff regarding sky carriers, visual and mechanical
-- Curse of binding now works on attachments (creative mode allows removal still)
-- Gun tiers restructured, easier for addons to add new tiers
-- Added damage falloff for all guns
-- Scaled down the laser sight slightly
-- Extended barrel and muzzle brake attachments now increases damage falloff range
-- Fixed the bumpstock to work more consistently, has a variable increase depending on initial fire rate so all guns benefit
-- Its tooltip just displays increased fire rate since its varies significantly per gun
-- Fixed double application of damage decrease for standard silencer oop
-- Enemy turrets ignore players with invisiblity
-- Player turrets ignore entities with invisiblity (unless range module attached)
-- Turret projectiles more closely match the behavior of the rounds it fires, (gibbs increase xp, etc)
-- Added shatter round compat for turrets
-- Removed gibbs from basic turret, added shatter rounds
-- Buffed Bearpack damage for turret
-- Added Armor penetration variable to Turret Json
-- Added bunch of new EPIC blocks thansk to Jadn!
-- Fixed Anthralite knife not being able to harvest grass
-- Bayonets serve as knives as well
-- Readded the sensitivity multiplier for scopes
-- POSSIBLY fixed scope bug with choppy input, havent pinpointed whats causing it but made some changes that might help
-- Fixed cogknight held item position
-- overhauled blaze rod projectile (used by nervepinch) a lot cooler now
-- Tweaked some trade recipes
+- Fixed localization for bump stock
+- Buffed carbine weapons stats
+- Buffed Hot barrel damage heavily
+- Added the Mother Ghast mob, rare spawn in nether, and a member of Piglin Raids
+- Added The Minksy Laser Rifle (thanks to albatroz once again!)
+- Added the Mas Peddler
+- Added the Teslock Rifle
+- Added the Libertas
+- Added Jury Rigged Wrist Breaker
+- Nerfed Plasmabuss
+- Added Whistler Sniper
+- Added Blooper Grenade Launcher
+- Added Triquetra Grenade Launcher
+- Added Hammer GL Grenade launcher
+- Added Truant Grenade Launcher
+- Actually Added Frog Dart projectile
+- Added Zilk 45
+- Added Hyperbaria
+- Added 4 Grenade rounds, High Explosive, Bouncy, Gas and Fire
+- Added 2 new epic cog chamber rooms thanks to Jadn
+- Reworked Sculk Resonator
+- Added TONS of new building blocks thanks to Jadn
+- Added new plasma shotgun sounds
+- Reworked Choke Bombs
+- Added the Praetor Mob
+- Added Ammo swap system
+- Moved tons of variables from General to Projectile
+- added gun durability damage variable
+- Gunner mobs using guns with reusuable ammo dont produce it anymore
+- A few gun stat tweaks
+- Added the Viventrum tameable mob
+- Added config for signal beacon spawning chance
+- Added explosive~~ capabilities to the trauma unit
+- Cog/Robot enemies get inflicted with Slowness from sulfur clouds
+- Cleaned up the bearpack shell code, more inline with other projectiles
+- Entity muzzle flash position reworked
+- Redesigned Blunderer
+- Added Kiln Gun
+- Added Waraxe
+- Redid scope sensitivity stuff, should help with choppy issues
+- Shell catcher now attempts to add to inventory if no casing pouch present
+- Reworked Dissident animations
+- Added Niter Patches in caves
+- Overhauled Advanced composter, produces niter and phosphor rarely in comparison to bone meal
+- Added Finforcer Mob to Ocean Raids
+- Overhauled Attachment Screen
+- Added Create Ironworks compat
+- Added the Sulfurhead Mob
+- Added Weird Flesh
+- Visual Overhaul for Hive and Swarm
+- Optimized Sulfur Clouds
+- Added Spirulida to Ocean Tier
+- Rechambered Marlin to Gibbs
+- Buffed the other ocean guns
+- Hornlin/piglins now dont convert if wearing a respirator (mod tag of Gas mask)
+- Reload Byproduct now attempts to add to casing pouch if present
+- Scamppanzer takes heavily decreased explosive damage now
+- Overhauled Supply Scamp Animations, more lively now. Including Dance animation
+- Split up the creative menu into 3 tabs, items, blocks and guns
+- Lowered Guano spawn rates
+- Decreased Peal requirement for sculk cells
+- Overhauled cog minion visually, can wear helmets now
+- Improved Shulkshot projectile
+- Added Iron Mask
+- Simplified Gunpowder requirements for rounds
+- Fixed Dozier Sights
+- Fixed incorrect tagging for CR4K mining laser
+- Fixed bug with scrolling mouse and automatic guns
+- Fixed Draw animation bugs

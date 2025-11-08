@@ -102,6 +102,7 @@ public class Config
         public final ForgeConfigSpec.DoubleValue dynamicCrosshairMaxScale;
         public final ForgeConfigSpec.BooleanValue renderArms;
         public final ForgeConfigSpec.BooleanValue enablePerformanceSulfurCloud;
+        public final ForgeConfigSpec.BooleanValue showProgressionMessages;
 
 
         public Display(ForgeConfigSpec.Builder builder)
@@ -135,6 +136,7 @@ public class Config
                         .defineInRange("dynamicCrosshairMaxScale", 8.0, 1.0, 20.0);
                 this.renderArms = builder.comment("If true, renders the player's arms when holding a gun").define("renderArms", true);
                 this.enablePerformanceSulfurCloud = builder.comment("If true, enables a performance mode for the sulfur smoke particle which reduces the max number of particles.").define("enablePerformanceSulfurCloud", false);
+                this.showProgressionMessages = builder.comment("If enabled, shows messages when unlocking new gun tiers and raid levels").define("showProgressionMessages", false);
             }
             builder.pop();
         }
@@ -284,7 +286,7 @@ public class Config
                 this.raidTimeoutMinutes = builder
                         .comment("Time in minutes before a raid automatically fails if the boss is not defeated.",
                                 "Default: 10 minutes")
-                        .defineInRange("raidTimeoutMinutes", 10, 0, 60);
+                        .defineInRange("raidTimeoutMinutes", 20, 0, 60);
             }
             builder.pop();
         }
@@ -358,6 +360,7 @@ public class Config
         public final ForgeConfigSpec.DoubleValue mobFireRateMultiplier;
         public final ForgeConfigSpec.DoubleValue mobBurstDelayMultiplier;
         public final ForgeConfigSpec.DoubleValue mobGunDamageMultiplier;
+        public final ForgeConfigSpec.DoubleValue cogBeaconSpawnChance;
 
 
         public Gameplay(ForgeConfigSpec.Builder builder)
@@ -412,6 +415,7 @@ public class Config
                 this.mobGunDamageMultiplier = builder
                         .comment("Global multiplier for mob gun damage. 1.0 = normal damage, 0.5 = half damage, 2.0 = double damage. Affects all projectile damage from mobs.")
                         .defineInRange("mobGunDamageMultiplier", 1.0, 0.01, 100.0);
+                this.cogBeaconSpawnChance = builder.comment("Chance (0.0 to 1.0) that Cog enemies will spawn a Signal Beacon on death. Set to 0.0 to disable beacon spawning from Cog deaths.").defineInRange("cogBeaconSpawnChance", 0.15, 0.0, 1.0);
             }
             builder.pop();
         }

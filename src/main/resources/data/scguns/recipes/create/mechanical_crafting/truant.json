@@ -1,0 +1,44 @@
+{
+  "type": "create:mechanical_crafting",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "scguns:gun_magazine"
+    },
+    "S": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "I": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "X": {
+      "item": "scguns:diamond_steel_ingot"
+    },
+    "M": {
+      "item": "scguns:diamond_steel_blueprint"
+    },
+    "O": {
+      "item": "scguns:diamond_steel_gun_frame"
+    }
+  },
+  "pattern": [
+    "XIOM",
+    "LRS ",
+    "Q X "
+  ],
+  "result": {
+    "item": "scguns:truant"
+  }
+}

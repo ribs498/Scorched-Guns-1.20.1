@@ -14,20 +14,16 @@
   },
   "general": {
     "weaponType": "flamethrower",
-    "alwaysSpread": true,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:one_handed_2",
     "baseGripType": "scguns:one_handed_2",
     "rate": 7,
-    "projectileAmount": 3,
-    "recoilAngle": 4.0,
-    "recoilKick": 0.5,
-    "spread": 4.0,
+    "alwaysSpread": true,
+
     "meleeDamage": 3.0,
     "meleeReach": 2.5,
     "meleeCooldownTicks": 10,
-    "hotBarrelRate": 12,
-    "criticalChance": 0.05
+    "hotBarrelRate": 12
   },
   "modules": {
     "attachments": {
@@ -36,6 +32,11 @@
   },
   "projectile": {
     "visible": true,
+    "projectileAmount": 3,
+    "recoilAngle": 4.0,
+    "recoilKick": 0.5,
+    "spread": 4.0,
+    "criticalChance": 0.05,
     "damageFalloffStart": 10.0,
     "damageFalloffEnd": 26.0,
     "damageFalloffMinMultiplier": 0.48,

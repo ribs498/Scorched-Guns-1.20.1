@@ -11,18 +11,23 @@
       "item": "scguns:nitro_powder_dust"
     },
     {
-      "item": "scguns:buckshot"
+      "item": "scguns:nitro_powder_dust"
     },
     {
       "item": "scguns:buckshot"
     },
     {
-      "tag": "forge:dusts/phosphorus"
+      "item": "scguns:buckshot"
     }
   ],
   "results": [
     {
-      "count": 5,
+      "count": 3,
+      "item": "scguns:nitro_buckshot"
+    },
+    {
+      "chance": 0.35,
+      "count": 1,
       "item": "scguns:nitro_buckshot"
     }
   ]

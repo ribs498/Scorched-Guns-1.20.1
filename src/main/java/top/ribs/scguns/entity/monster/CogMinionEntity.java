@@ -27,32 +27,25 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.ServerLevelAccessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import top.ribs.scguns.Config;
 import top.ribs.scguns.config.EntityEquipmentConfig;
-import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModTags;
-import top.ribs.scguns.interfaces.IEntityCanReload;
 
-public class CogMinionEntity extends Monster implements IEntityCanReload {
+public class CogMinionEntity extends Monster {
     private static final EntityDataAccessor<Boolean> ATTACKING =
             SynchedEntityData.defineId(CogMinionEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> ATTACK_TIMEOUT =
+            SynchedEntityData.defineId(CogMinionEntity.class, EntityDataSerializers.INT);
 
-    private int reloadTick;
-    public int ticksUntilNextAttack = 0;
+    public final AnimationState idleAnimationState = new AnimationState();
+    public final AnimationState attackAnimationState = new AnimationState();
 
     public CogMinionEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
         this.setCanPickUpLoot(true);
     }
-    @Override
-    public int mob$getReloadTick() {
-        return this.reloadTick;
-    }
 
-    @Override
-    public void mob$setReloadTick(int reloadTick) {
-        this.reloadTick = reloadTick;
-    }
 
     private boolean isHoldingExplosiveBlock() {
         ItemStack mainHandItem = this.getMainHandItem();
@@ -83,7 +76,6 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
                 effect == MobEffects.MOVEMENT_SLOWDOWN ||
                 effect == MobEffects.DIG_SLOWDOWN ||
                 effect == MobEffects.HARM ||
-                effect == ModEffects.SULFUR_POISONING.get() ||
                 effect == MobEffects.HEAL) {
             return false;
         }
@@ -107,8 +99,8 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
         super.die(source);
         if (!this.level().isClientSide) {
             if (source.getEntity() instanceof Player) {
-                float rand = this.random.nextFloat();
-                if (rand < 0.15f) {
+                float spawnChance = Config.COMMON.gameplay.cogBeaconSpawnChance.get().floatValue();
+                if (spawnChance > 0 && this.random.nextFloat() < spawnChance) {
                     SignalBeaconEntity beacon = new SignalBeaconEntity(ModEntities.SIGNAL_BEACON.get(), this.level());
                     beacon.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                     this.level().addFreshEntity(beacon);
@@ -121,7 +113,7 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
                                         MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData,
                                         @Nullable CompoundTag pDataTag) {
         super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
-        EntityEquipmentConfig.equipEntity(this, "cog_minion");
+        EntityEquipmentConfig.equipEntity(this, "scguns:cog_minion");
         return pSpawnData;
     }
 
@@ -129,42 +121,78 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
     public void tick() {
         super.tick();
 
+        if (!this.level().isClientSide()) {
+            if (this.isAttacking() && this.getAttackTimeout() > 0) {
+                this.setAttackTimeout(this.getAttackTimeout() - 1);
+                if (this.getAttackTimeout() == 6) {
+                    LivingEntity target = this.getTarget();
+                    if (target != null && this.distanceToSqr(target) <= this.getBbWidth() * 2.0F * this.getBbWidth() * 2.0F + target.getBbWidth()) {
+                        boolean didHurt = this.doHurtTarget(target);
+                        if (didHurt) {
+                            this.explodeIfHoldingExplosive();
+                        }
+                    }
+                }
+
+                if (this.getAttackTimeout() <= 0) {
+                    this.setAttacking(false);
+                }
+            }
+        }
+
         if (this.level().isClientSide()) {
             setupAnimationStates();
         }
+    }
 
-        if (this.ticksUntilNextAttack > 0) {
-            this.ticksUntilNextAttack--;
+    private void setupAnimationStates() {
+        if (this.isAttacking()) {
+            this.idleAnimationState.stop();
+            this.attackAnimationState.startIfStopped(this.tickCount);
+        } else {
+            this.attackAnimationState.stop();
+            this.idleAnimationState.startIfStopped(this.tickCount);
         }
     }
+
     @Override
     public boolean wantsToPickUp(ItemStack pStack) {
         return this.canHoldItem(pStack);
     }
-    public final AnimationState idleAnimationState = new AnimationState();
-    public final AnimationState attackAnimationState = new AnimationState();
-    public int attackAnimationTimeout = 0;
-    private int idleAnimationTimeout = 0;
-    private void setupAnimationStates() {
-        if (this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = this.random.nextInt(40) + 80;
-            this.idleAnimationState.start(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
+
+    @Override
+    public boolean canTakeItem(ItemStack stack) {
+        EquipmentSlot slot = Mob.getEquipmentSlotForItem(stack);
+        if (!this.getItemBySlot(slot).isEmpty()) {
+            return false;
         }
-        if (this.isAttacking()) {
-            if (attackAnimationTimeout <= 0) {
-                attackAnimationTimeout = 20;
-                attackAnimationState.start(this.tickCount);
-            }
-            --attackAnimationTimeout;
-        } else {
-            attackAnimationState.stop();
-        }
+        return slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.HEAD;
     }
+
+    @Override
+    public boolean canReplaceCurrentItem(ItemStack candidate, ItemStack existing) {
+        if (existing.isEmpty()) {
+            EquipmentSlot slot = Mob.getEquipmentSlotForItem(candidate);
+            return slot == EquipmentSlot.MAINHAND || slot == EquipmentSlot.HEAD;
+        }
+        return false;
+    }
+
     public void setAttacking(boolean attacking) {
         this.entityData.set(ATTACKING, attacking);
+        if (attacking) {
+            this.setAttackTimeout(12);
+        }
     }
+
+    public void setAttackTimeout(int timeout) {
+        this.entityData.set(ATTACK_TIMEOUT, timeout);
+    }
+
+    public int getAttackTimeout() {
+        return this.entityData.get(ATTACK_TIMEOUT);
+    }
+
     public boolean isAttacking() {
         return this.entityData.get(ATTACKING);
     }
@@ -172,6 +200,7 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
     protected void defineSynchedData() {
         super.defineSynchedData();
         this.entityData.define(ATTACKING, false);
+        this.entityData.define(ATTACK_TIMEOUT, 0);
     }
     @Override
     protected void updateWalkAnimation(float pPartialTick) {
@@ -184,14 +213,6 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
         this.walkAnimation.update(f, 0.2f);
     }
     @Override
-    public boolean doHurtTarget(Entity pEntity) {
-        boolean didHurt = super.doHurtTarget(pEntity);
-        if (didHurt) {
-            this.explodeIfHoldingExplosive();
-        }
-        return didHurt;
-    }
-    @Override
     protected Vec3i getPickupReach() {
         return new Vec3i(3, 3, 3);
     }
@@ -202,7 +223,21 @@ public class CogMinionEntity extends Monster implements IEntityCanReload {
     }
     @Override
     protected void registerGoals() {
-       this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, true));
+        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.2, false) {
+            @Override
+            protected void checkAndPerformAttack(LivingEntity pEnemy, double pDistToEnemySqr) {
+                if (pDistToEnemySqr <= this.getAttackReachSqr(pEnemy) && this.getTicksUntilNextAttack() <= 0 && !CogMinionEntity.this.isAttacking()) {
+                    CogMinionEntity.this.setAttacking(true);
+                    this.resetAttackCooldown();
+                    this.mob.swing(InteractionHand.MAIN_HAND);
+                }
+            }
+
+            @Override
+            protected void resetAttackCooldown() {
+                this.adjustedTickDelay(25);
+            }
+        });
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0));
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this).setAlertOthers(CogMinionEntity.class));
         this.targetSelector.addGoal(2, new NearestAttackableTargetGoal<>(this, Player.class, true));

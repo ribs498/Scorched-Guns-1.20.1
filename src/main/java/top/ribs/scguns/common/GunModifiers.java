@@ -12,20 +12,12 @@ public class GunModifiers
 {
     public static final IGunModifier LONG_SCOPE_SENSITIVITY_COMPENSATION = new IGunModifier()
     {
-        @Override
-        public double modifySensitivity(double sensitivity)
-        {
-            return sensitivity * 1.001;
-        }
+
     };
 
     public static final IGunModifier MEDIUM_SCOPE_SENSITIVITY_COMPENSATION = new IGunModifier()
     {
-        @Override
-        public double modifySensitivity(double sensitivity)
-        {
-            return sensitivity * 1.001;
-        }
+
     };
     public static final IGunModifier SILENCED = new IGunModifier()
     {
@@ -306,6 +298,7 @@ public class GunModifiers
         public double modifyAimDownSightSpeed(double speed) {
             return speed * 1.1F;
         }
+
         @Override
         public double modifyDrawSpeed(double speed) {
             return speed * 1.2F;
@@ -327,6 +320,7 @@ public class GunModifiers
         public float kickModifier() {
             return 0.9F;
         }
+
         @Override
         public double modifyDrawSpeed(double speed) {
             return speed * 0.85F;
@@ -343,11 +337,11 @@ public class GunModifiers
         public double modifyAimDownSightSpeed(double speed) {
             return speed * 1.05F;
         }
-        public float criticalChance()
-        {
+
+        @Override
+        public float criticalChance() {
             return 0.05F;
         }
-
     };
     public static final IGunModifier BUMP_STOCK_MODIFIER = new IGunModifier() {
         @Override
@@ -416,12 +410,12 @@ public class GunModifiers
 
         @Override
         public float recoilModifier(ItemStack weapon) {
-            return isCarbineCandidate(weapon) ? 0.8F : 1.25F;
+            return isCarbineCandidate(weapon) ? 0.7F : 1.25F;
         }
 
         @Override
         public float kickModifier(ItemStack weapon) {
-            return isCarbineCandidate(weapon) ? 0.95F : 1.2F;
+            return isCarbineCandidate(weapon) ? 0.85F : 1.2F;
         }
 
         @Override
@@ -440,8 +434,10 @@ public class GunModifiers
         }
 
         private boolean isCarbineCandidate(ItemStack weapon) {
+            if (weapon == null || weapon.isEmpty()) return false;
             return ((GunItem) weapon.getItem()).isOneHandedCarbineCandidate(weapon);
         }
+
         @Override
         public double modifyDrawSpeed(double speed) {
             return speed * 0.95F;
@@ -505,7 +501,7 @@ public class GunModifiers
     public static final IGunModifier SPEED_MAG_MODIFIER = new IGunModifier() {
         @Override
         public double modifyReloadSpeed(double reloadSpeed) {
-            return reloadSpeed * 0.45;
+            return reloadSpeed * 0.65;
         }
 
         @Override
@@ -525,6 +521,38 @@ public class GunModifiers
         @Override
         public double modifyDrawSpeed(double speed) {
             return speed * 1.15F;
+        }
+    };
+
+    public static final IGunModifier CARBINE_ONE_HANDED_BONUS = new IGunModifier() {
+        @Override
+        public double modifyAimDownSightSpeed(double speed) {
+            return speed * 1.25F;
+        }
+
+        @Override
+        public double modifyDrawSpeed(double speed) {
+            return speed * 1.3F;
+        }
+
+        @Override
+        public double modifyReloadSpeed(double reloadSpeed) {
+            return reloadSpeed * 0.9;
+        }
+
+        @Override
+        public float recoilModifier() {
+            return 0.85F;
+        }
+
+        @Override
+        public float kickModifier() {
+            return 0.9F;
+        }
+
+        @Override
+        public float criticalChance() {
+            return 0.1F;
         }
     };
 

@@ -69,7 +69,7 @@ public class SubjugatorEntity extends Monster implements RangedAttackMob {
     public SpawnGroupData finalizeSpawn(ServerLevelAccessor pLevel, DifficultyInstance pDifficulty,
                                         MobSpawnType pReason, @Nullable SpawnGroupData pSpawnData,
                                         @Nullable CompoundTag pDataTag) {
-        EntityEquipmentConfig.equipEntity(this, "subjugator");
+        EntityEquipmentConfig.equipEntity(this, "scguns:subjugator");
         return super.finalizeSpawn(pLevel, pDifficulty, pReason, pSpawnData, pDataTag);
     }
 

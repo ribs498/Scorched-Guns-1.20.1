@@ -12,14 +12,10 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
     "rate": 5,
-    "recoilAngle": 3.5,
-    "recoilKick": 2.0,
-    "spread": 2.0,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 10,
     "meleeReach": 2.5,
-    "hotBarrelRate": 21,
-    "criticalChance": 0.05
+    "hotBarrelRate": 21
   },
   "modules": {
     "attachments": {
@@ -36,8 +32,13 @@
     }
   },
   "projectile": {
+    "recoilAngle": 3.5,
+    "recoilKick": 2.0,
+    "spread": 2.0,
+    "criticalChance": 0.05,
     "advantage": "scguns:water",
     "damage": 7.5,
+    "projectileAmount": 2,
     "damageFalloffStart": 12.0,
     "damageFalloffEnd": 30.0,
     "damageFalloffMinMultiplier": 0.45,
@@ -57,7 +58,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 4,
+    "maxAmmo": 6,
     "reloadAmount": 2,
     "reloadItem": "scguns:shock_cell",
     "reloadTimer": 15,

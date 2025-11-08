@@ -1,38 +1,37 @@
 {
 	"format_version": "1.21.6",
 	"credit": "Made with Blockbench",
-	"texture_size": [32, 32],
+	"texture_size": [64, 64],
 	"textures": {
-		"0": "scguns:item/prima_materia",
-      "particle": "scguns:item/prima_materia"
+		"1": "scguns:item/prima_materia"
 	},
 	"elements": [
 		{
 			"name": "advanced_silencer",
-			"from": [7.34688, 4.275, -0.2125],
-			"to": [8.84688, 5.775, 4.3625],
-			"rotation": {"angle": 45, "axis": "z", "origin": [8.04687, 4.9, 1.3]},
+			"from": [7.34688, 4.975, -1.4875],
+			"to": [8.84688, 6.475, 3.0875],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.04687, 5.6, 0.025]},
 			"faces": {
-				"north": {"uv": [9, 1, 9.75, 1.75], "texture": "#0"},
-				"east": {"uv": [1, 3, 3.25, 3.75], "texture": "#0"},
-				"south": {"uv": [9, 2, 9.75, 2.75], "texture": "#0"},
-				"west": {"uv": [3, 1, 5.25, 1.75], "texture": "#0"},
-				"up": {"uv": [4.25, 4.25, 3.5, 2], "texture": "#0"},
-				"down": {"uv": [1.75, 4, 1, 6.25], "texture": "#0"}
+				"north": {"uv": [7.25, 2, 7.625, 2.375], "texture": "#1"},
+				"east": {"uv": [3.25, 3.5, 4.375, 3.875], "texture": "#1"},
+				"south": {"uv": [7.25, 4.25, 7.625, 4.625], "texture": "#1"},
+				"west": {"uv": [4, 1.5, 5.125, 1.875], "texture": "#1"},
+				"up": {"uv": [3.625, 5.125, 3.25, 4], "texture": "#1"},
+				"down": {"uv": [4.125, 4, 3.75, 5.125], "texture": "#1"}
 			}
 		},
 		{
 			"name": "advanced_silencer",
-			"from": [7.52366, 4.625, 4.3625],
-			"to": [8.67366, 5.775, 4.8625],
-			"rotation": {"angle": 45, "axis": "z", "origin": [8.22366, 5, 1.8]},
+			"from": [7.52366, 5.325, 3.0875],
+			"to": [8.67366, 6.475, 3.5875],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.22366, 5.7, 0.525]},
 			"faces": {
-				"north": {"uv": [8, 7, 8.5, 7.5], "texture": "#0"},
-				"east": {"uv": [9.5, 11.5, 9.75, 12], "texture": "#0"},
-				"south": {"uv": [8.5, 2.5, 9, 3], "texture": "#0"},
-				"west": {"uv": [10.5, 11.5, 10.75, 12], "texture": "#0"},
-				"up": {"uv": [11.5, 11.75, 11, 11.5], "texture": "#0"},
-				"down": {"uv": [12, 11, 11.5, 11.25], "texture": "#0"}
+				"north": {"uv": [8.25, 6.5, 8.5, 6.75], "texture": "#1"},
+				"east": {"uv": [4, 9, 4.125, 9.25], "texture": "#1"},
+				"south": {"uv": [6.75, 8.25, 7, 8.5], "texture": "#1"},
+				"west": {"uv": [9, 4, 9.125, 4.25], "texture": "#1"},
+				"up": {"uv": [4.5, 9.125, 4.25, 9], "texture": "#1"},
+				"down": {"uv": [9.25, 4.25, 9, 4.375], "texture": "#1"}
 			}
 		}
 	],
@@ -68,10 +67,88 @@
 	},
 	"groups": [
 		{
+			"name": "main",
+			"origin": [8.44115, -5.025, 8],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "weighted_stock",
+			"origin": [8, -0.95, 9.5],
+			"color": 1,
+			"children": []
+		},
+		{
+			"name": "wooden_stock",
+			"origin": [8, -0.95, 9.5],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "light_stock",
+			"origin": [8, -0.95, 9.5],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "standard_mag",
+			"origin": [8.475, -8.01376, 11.0037],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "extended_mag",
+			"origin": [9.1, -8.075, 11.0119],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "speed_mag",
+			"origin": [8.6, -8.075, 11.0119],
+			"color": 4,
+			"children": []
+		},
+		{
+			"name": "standard_barrel",
+			"origin": [8.26287, -2.72733, -1.14767],
+			"color": 6,
+			"children": []
+		},
+		{
+			"name": "extended_barrel",
+			"origin": [8.26287, -2.72733, -1.14767],
+			"color": 7,
+			"children": []
+		},
+		{
+			"name": "muzzle_brake",
+			"origin": [8.68996, -4, 4.7],
+			"color": 8,
+			"children": []
+		},
+		{
 			"name": "advanced_silencer",
-			"origin": [8.29002, 3.8, 12.775],
+			"origin": [8.29002, -4, 11.5],
 			"color": 9,
 			"children": [0, 1]
+		},
+		{
+			"name": "silencer",
+			"origin": [8.48497, 3.205, 4],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "no_sights",
+			"origin": [8.125, -0.15, 5.5],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "sights",
+			"origin": [8.6, -0.45125, 30.5125],
+			"color": 2,
+			"children": []
 		}
 	]
 }

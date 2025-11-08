@@ -18,7 +18,7 @@ import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.NotNull;
-import top.ribs.scguns.config.BrassBoltConfig;
+import top.ribs.scguns.config.EnemyProjectileConfig;
 import top.ribs.scguns.init.ModEntities;
 import top.ribs.scguns.init.ModSounds;
 import top.ribs.scguns.network.PacketHandler;
@@ -32,12 +32,12 @@ public class EnemyProjectileEntity extends AbstractArrow {
     }
 
     public EnemyProjectileEntity(Level world, LivingEntity shooter) {
-        this(ModEntities.BRASS_BOLT.get(), world, shooter);
+        this(ModEntities.ENEMY_PROJECTILE.get(), world, shooter);
     }
 
     public EnemyProjectileEntity(EntityType<EnemyProjectileEntity> type, Level world, LivingEntity shooter) {
         super(type, shooter, world);
-        this.setBaseDamage(BrassBoltConfig.getDamageForEntity(shooter.getType()));
+        this.setBaseDamage(EnemyProjectileConfig.getDamageForEntity(shooter.getType()));
     }
 
     @Override

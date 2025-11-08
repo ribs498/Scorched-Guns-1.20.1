@@ -12,6 +12,19 @@
     "scguns:felix_memorial",
     "scguns:plasma_block",
     "scguns:reinforced_asgharian_tiles",
-    "scguns:scorched_block"
+
+    "scguns:diamond_steel_panel",
+    "scguns:chiseled_diamond_steel_block",
+    "scguns:cut_diamond_steel",
+    "scguns:cut_diamond_steel_stairs",
+    "scguns:cut_diamond_steel_slab",
+    "scguns:diamond_steel_tiles",
+    "scguns:diamond_steel_tiles_stairs",
+    "scguns:diamond_steel_tiles_slab",
+    "scguns:diamond_steel_lamp",
+    "scguns:diamond_steel_grate",
+    "scguns:diamond_steel_bars",
+    "scguns:diamond_steel_pillar",
+    "scguns:diamond_steel_grate_pane"
   ]
 }

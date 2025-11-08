@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "X": {
+      "item": "minecraft:redstone_block"
+    },
+    "#": {
+      "tag": "scguns:diamond_steel_plates"
+    }
+  },
+  "pattern": [
+    " # ",
+    "#X#",
+    " # "
+  ],
+  "result": {
+    "item": "scguns:diamond_steel_lamp",
+    "count": 4
+  }
+}

@@ -11,6 +11,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.placement.HeightRangePlacement;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.level.levelgen.placement.PlacementModifier;
+import net.minecraft.world.level.levelgen.placement.RarityFilter;
 import top.ribs.scguns.Reference;
 
 import java.util.List;
@@ -22,15 +23,17 @@ public class ModPlacedFeatures {
     public static final ResourceKey<PlacedFeature> VEHEMENT_COAL_ORE_PLACED_KEY = createKey("vehement_coal_ore_placed");
     public static final ResourceKey<PlacedFeature> RICH_PHOSPHORITE_ORE_PLACED_KEY = createKey("rich_phosphorite_placed");
     public static final ResourceKey<PlacedFeature> PHOSPHORITE_PLACED_KEY = createKey("phosphorite_placed");
+    public static final ResourceKey<PlacedFeature> NITER_CAVE_PATCH_PLACED_KEY = createKey("niter_cave_patch_placed");
 
     public static void bootstrap(BootstapContext<PlacedFeature> context) {
         HolderGetter<ConfiguredFeature<?, ?>> configuredFeatures = context.lookup(Registries.CONFIGURED_FEATURE);
+
         register(context, PHOSPHORITE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.PHOSPHORITE_KEY),
-                ModOrePlacement.commonOrePlacement(10, // Vein count
+                ModOrePlacement.commonOrePlacement(7,
                         HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(-64), VerticalAnchor.absolute(80))));
 
         register(context, RICH_PHOSPHORITE_ORE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.RICH_PHOSPHORITE_ORE_KEY),
-                ModOrePlacement.commonOrePlacement(7, // Vein count
+                ModOrePlacement.commonOrePlacement(20,
                         HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(0), VerticalAnchor.absolute(128))));
 
         register(context, ANTHRALITE_ORE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.ANTHRALITE_ORE_KEY),
@@ -45,12 +48,14 @@ public class ModPlacedFeatures {
                 ModOrePlacement.commonOrePlacement(30,
                         HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(10), VerticalAnchor.belowTop(10))));
 
-        // Vehement Coal Ore Placement
         register(context, VEHEMENT_COAL_ORE_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.VEHEMENT_COAL_ORE_KEY),
                 ModOrePlacement.commonOrePlacement(10,
                         HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(10), VerticalAnchor.belowTop(10))));
 
- }
+        register(context, NITER_CAVE_PATCH_PLACED_KEY, configuredFeatures.getOrThrow(ModConfiguredFeatures.NITER_CAVE_PATCH_KEY),
+                ModOrePlacement.commonOrePlacement(3,
+                        HeightRangePlacement.uniform(VerticalAnchor.aboveBottom(-64), VerticalAnchor.absolute(64))));
+    }
 
     private static ResourceKey<PlacedFeature> createKey(String name) {
         return ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation(Reference.MOD_ID, name));

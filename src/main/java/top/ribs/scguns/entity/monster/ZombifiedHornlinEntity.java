@@ -127,9 +127,9 @@ public class ZombifiedHornlinEntity extends Monster implements RangedAttackMob, 
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new ConsumeGoldGoal(this, this));
-        this.goalSelector.addGoal(1, new GoldSeekingGoal(this, this, 1.0, 16.0F));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, false));
+        this.goalSelector.addGoal(2, new ConsumeGoldGoal(this, this));
+        this.goalSelector.addGoal(3, new GoldSeekingGoal(this, this, 1.0, 16.0F));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
@@ -138,6 +138,7 @@ public class ZombifiedHornlinEntity extends Monster implements RangedAttackMob, 
                 (player) -> this.isAngryAt(player) && !((Player) player).isCreative() && !((Player) player).isSpectator()));
         this.targetSelector.addGoal(3, new ResetUniversalAngerTargetGoal<>(this, true));
     }
+
 
     private void maybeAlertAllies() {
         if (this.ticksUntilNextAlert > 0) {

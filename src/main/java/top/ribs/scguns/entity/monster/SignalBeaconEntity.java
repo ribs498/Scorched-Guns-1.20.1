@@ -24,11 +24,13 @@ public class SignalBeaconEntity extends Mob {
         this.lifespan = LIFESPAN_TICKS;
     }
 
-    public final AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimeout = 0;
     private static final int LIFESPAN_TICKS = 100;
     private int lifespan;
     private boolean hasSpawnedCarriers = false;
+
+    public int getRemainingLifespan() {
+        return lifespan;
+    }
 
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
@@ -49,8 +51,6 @@ public class SignalBeaconEntity extends Mob {
                 spawnSkyCarriers();
                 this.discard();
             }
-        } else {
-            setupAnimationStates();
         }
 
         if (this.tickCount % 20 == 0) {
@@ -71,15 +71,6 @@ public class SignalBeaconEntity extends Mob {
     public void die(net.minecraft.world.damagesource.DamageSource pDamageSource) {
         hasSpawnedCarriers = true;
         super.die(pDamageSource);
-    }
-
-    private void setupAnimationStates() {
-        if (this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = this.random.nextInt(40) + 80;
-            this.idleAnimationState.start(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
-        }
     }
 
     private void spawnSkyCarriers() {

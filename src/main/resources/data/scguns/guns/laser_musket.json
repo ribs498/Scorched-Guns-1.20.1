@@ -16,7 +16,6 @@
   "general": {
     "weaponType": "laser",
     "hasCameraShake": false,
-    "alwaysSpread": false,
     "fireMode": "scguns:semi_beam",
     "beamColor": "#ff0000",
     "secondaryBeamColor": "#e66363",
@@ -25,17 +24,13 @@
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 12,
-    "recoilAngle": 1.5,
-    "recoilKick": 1.0,
-    "spread": 0.1,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
     "meleeReach": 3.5,
     "hotBarrelRate": 20,
     "beamAmmoConsumptionDelay": 6000,
     "beamDamageDelay": 0,
-    "beamMaxDistance": 100.0,
-    "criticalChance": 0.05
+    "beamMaxDistance": 100.0
   },
   "modules": {
     "attachments": {
@@ -58,6 +53,10 @@
     }
   },
   "projectile": {
+    "recoilAngle": 1.5,
+    "recoilKick": 1.0,
+    "spread": 0.1,
+    "criticalChance": 0.05,
     "advantage": "scguns:none",
     "damage": 15,
     "ejectsCasing": false,
@@ -73,7 +72,7 @@
     "maxAmmo": 7,
     "reloadItem": "scguns:energy_core",
     "reloadByproduct": "scguns:depleted_energy_core",
-    "byproductChance": 0.55,
+    "byproductChance": 0.6,
     "reloadTimer": 27,
     "reloadType": "scguns:single_item"
   },

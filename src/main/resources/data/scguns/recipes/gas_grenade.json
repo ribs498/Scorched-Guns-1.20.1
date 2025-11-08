@@ -21,6 +21,7 @@
     " # "
   ],
   "result": {
-    "item": "scguns:gas_grenade"
+    "item": "scguns:gas_grenade",
+    "count": 2
   }
 }

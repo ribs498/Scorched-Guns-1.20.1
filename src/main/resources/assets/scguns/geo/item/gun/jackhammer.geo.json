@@ -1911,33 +1911,8 @@
 					]
 				},
 				{
-					"name": "magazine_2",
-					"parent": "gun_body",
-					"pivot": [0, -7.76376, 2.8287]
-				},
-				{
-					"name": "default_mag_2",
-					"parent": "magazine_2",
-					"pivot": [0, -7.76376, 2.8287]
-				},
-				{
-					"name": "extended_mag_2",
-					"parent": "magazine_2",
-					"pivot": [-0.625, -7.825, 2.8369]
-				},
-				{
-					"name": "speed_mag_2",
-					"parent": "magazine_2",
-					"pivot": [-0.125, -7.825, 2.8369]
-				},
-				{
-					"name": "attachment_bone",
-					"parent": "gun_body",
-					"pivot": [-0.00188, -6.57875, 3.24059]
-				},
-				{
 					"name": "left_arm",
-					"parent": "gun_body",
+					"parent": "magazine",
 					"pivot": [6, -1.9932, 6.00305],
 					"cubes": [
 						{
@@ -1953,6 +1928,11 @@
 							}
 						}
 					]
+				},
+				{
+					"name": "attachment_bone",
+					"parent": "gun_body",
+					"pivot": [-0.00188, -6.57875, 3.24059]
 				},
 				{
 					"name": "right_arm",

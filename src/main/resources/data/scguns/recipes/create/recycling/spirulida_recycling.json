@@ -1,0 +1,45 @@
+{
+  "type": "create:crushing",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "ingredients": [
+    {
+      "item": "scguns:spirulida"
+    }
+  ],
+  "processingTime": 250,
+  "results": [
+    {
+      "chance": 0.3,
+      "item": "minecraft:heart_of_the_sea"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:heavy_gun_parts"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:treated_brass_ingot"
+    }
+  ]
+}

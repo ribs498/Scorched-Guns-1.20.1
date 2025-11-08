@@ -3,21 +3,15 @@
   },
   "general": {
     "weaponType": "rifle",
-    "alwaysSpread": false,
+
     "fireMode": "scguns:pulse",
     "fireTimer": 23,
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 6,
-    "recoilAngle": 1.5,
-    "recoilKick": 1.0,
-    "spread": 0.1,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
     "meleeReach": 3.5,
-    "energyUse": 40.0,
-    "hotBarrelRate": 50,
-    "criticalChance": 0.05,
     "enableGunLight": false,
     "isSilenced": true
   },
@@ -43,6 +37,13 @@
     }
   },
   "projectile": {
+    "energyUse": 40.0,
+    "alwaysSpread": true,
+    "recoilAngle": 1.5,
+    "recoilKick": 1.0,
+    "spread": 4.0,
+    "hotBarrelRate": 50,
+    "criticalChance": 0.05,
     "advantage": "scguns:none",
     "damage": 16.0,
     "damageFalloffStart": 18.0,

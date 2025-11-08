@@ -1,0 +1,181 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "scguns:item/jr_wristbreaker"
+	},
+	"elements": [
+		{
+			"name": "bolt",
+			"from": [6.5, 5.45, 11.4],
+			"to": [7, 5.45, 11.775],
+			"rotation": {"angle": 45, "axis": "x", "origin": [8, 5.45, 11.5875]},
+			"faces": {
+				"north": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"east": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"south": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"west": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"up": {"uv": [9.375, 2.375, 9.25, 2.25], "texture": "#1"}
+			}
+		},
+		{
+			"name": "bolt",
+			"from": [6.25, 5.2, 11.4],
+			"to": [6.5, 5.7, 12.025],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.5, 8]},
+			"faces": {
+				"north": {"uv": [2.5, 9.25, 2.625, 9.375], "texture": "#1"},
+				"east": {"uv": [9.25, 2.5, 9.375, 2.625], "texture": "#1"},
+				"south": {"uv": [2.75, 9.25, 2.875, 9.375], "texture": "#1"},
+				"west": {"uv": [9.25, 2.75, 9.375, 2.875], "texture": "#1"},
+				"up": {"uv": [3.125, 9.375, 3, 9.25], "texture": "#1"},
+				"down": {"uv": [9.375, 3, 9.25, 3.125], "texture": "#1"}
+			}
+		},
+		{
+			"name": "bolt",
+			"from": [9.5, 5.2, 11.4],
+			"to": [9.75, 5.7, 12.025],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.5, 8]},
+			"faces": {
+				"north": {"uv": [3.25, 9.25, 3.375, 9.375], "texture": "#1"},
+				"east": {"uv": [9.25, 3.25, 9.375, 3.375], "texture": "#1"},
+				"south": {"uv": [3.5, 9.25, 3.625, 9.375], "texture": "#1"},
+				"west": {"uv": [9.25, 3.5, 9.375, 3.625], "texture": "#1"},
+				"up": {"uv": [3.875, 9.375, 3.75, 9.25], "texture": "#1"},
+				"down": {"uv": [9.375, 3.75, 9.25, 3.875], "texture": "#1"}
+			}
+		},
+		{
+			"name": "bolt",
+			"from": [9, 5.45, 11.4],
+			"to": [9.5, 5.45, 11.775],
+			"rotation": {"angle": 45, "axis": "x", "origin": [8, 5.45, 11.5875]},
+			"faces": {
+				"north": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"east": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"south": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"west": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"up": {"uv": [4.125, 9.375, 4, 9.25], "texture": "#1"}
+			}
+		},
+		{
+			"name": "bolt",
+			"from": [6.5, 5.45, 11.4],
+			"to": [7, 5.45, 11.775],
+			"rotation": {"angle": -45, "axis": "x", "origin": [8, 5.45, 11.5875]},
+			"faces": {
+				"north": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"east": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"south": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"west": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"up": {"uv": [9.375, 4.125, 9.25, 4], "texture": "#1"}
+			}
+		},
+		{
+			"name": "bolt",
+			"from": [9, 5.45, 11.4],
+			"to": [9.5, 5.45, 11.775],
+			"rotation": {"angle": -45, "axis": "x", "origin": [8, 5.45, 11.5875]},
+			"faces": {
+				"north": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"east": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"south": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"west": {"uv": [0, 0, 0.125, 0], "texture": "#1"},
+				"up": {"uv": [4.375, 9.375, 4.25, 9.25], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0.25, 5.25, -6.25],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0.25, 5.25, -6.25],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"firstperson_righthand": {
+			"translation": [-3.75, 8.5, 0.25]
+		},
+		"firstperson_lefthand": {
+			"translation": [-3.75, 8.5, 0.25]
+		},
+		"ground": {
+			"translation": [0, 9.5, -1.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-2.25, 3.75, 0]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [2.75, 6.5, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "main",
+			"origin": [8, -5.35, 8],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "bolt",
+			"origin": [8.62646, -3.65184, 11.38542],
+			"color": 3,
+			"children": [0, 1, 2, 3, 4, 5]
+		},
+		{
+			"name": "default_mag",
+			"origin": [8, -7.76376, 11.0787],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "extended_mag",
+			"origin": [8.625, -7.825, 11.0869],
+			"color": 4,
+			"children": []
+		},
+		{
+			"name": "speed_mag",
+			"origin": [8.125, -7.825, 11.0869],
+			"color": 5,
+			"children": []
+		},
+		{
+			"name": "standard_barrel",
+			"origin": [7.78787, -3.05233, -1.14767],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "extended_barrel",
+			"origin": [7.78787, -3.05233, 1.35233],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "muzzle_brake",
+			"origin": [8.21496, -4.475, 9.975],
+			"color": 4,
+			"children": []
+		},
+		{
+			"name": "advanced_silencer",
+			"origin": [7.81502, -4.475, 17.025],
+			"color": 5,
+			"children": []
+		},
+		{
+			"name": "silencer",
+			"origin": [8.00997, 2.68, 9.425],
+			"color": 6,
+			"children": []
+		}
+	]
+}

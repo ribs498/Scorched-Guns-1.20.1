@@ -29,6 +29,7 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> MASS_DESTRUCTION_EXTENDED = register("mass_destruction_extended");
     public static final RegistryObject<SoundEvent> COPPER_GUN_JAM = register("item.rusty_gnat.copper_jam");
     public static final RegistryObject<SoundEvent> BLACKPOWDER_FIRE = register("item.blackpowder.fire");
+    public static final RegistryObject<SoundEvent> RAIL_FIRE = register("item.rail.fire");
     public static final RegistryObject<SoundEvent> PING = register("item.ping.ping");
     public static final RegistryObject<SoundEvent> JETPACK = register("item.jetpack.fire");
     public static final RegistryObject<SoundEvent> JETPACK_LOOP = register("item.jetpack.loop");
@@ -40,6 +41,7 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> MACHINE_GUN_FIRE = register("item.machine_gun.fire");
     public static final RegistryObject<SoundEvent> WITHER = register("item.wither.wither");
     public static final RegistryObject<SoundEvent> AIRGUN_FIRE = register("item.airgun.fire");
+    public static final RegistryObject<SoundEvent> AIRGUN_FIRE_2 = register("item.airgun.fire_2");
     public static final RegistryObject<SoundEvent> BEAM_FIRE = register("item.beam.fire");
     public static final RegistryObject<SoundEvent> BRUISER_SILENCED_FIRE = register("item.bruiser.silenced_fire");
     public static final RegistryObject<SoundEvent> MAKESHIFT_RIFLE_FIRE = register("item.makeshift_rifle.fire");
@@ -71,9 +73,11 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> BRASS_PISTOL_FIRE = register("item.brass_pistol.fire");
     public static final RegistryObject<SoundEvent> PLASMA_FIRE = register("item.plasma.fire");
     public static final RegistryObject<SoundEvent> PLASMA_FIRE_2 = register("item.plasma.fire_2");
+    public static final RegistryObject<SoundEvent> PLASMA_SHOTGUN_FIRE = register("item.plasma_shotgun.fire");
     public static final RegistryObject<SoundEvent> GAUSS_FIRE = register("item.gauss.fire");
     public static final RegistryObject<SoundEvent> ROCKET_FIRE = register("item.rocket.fire");
     public static final RegistryObject<SoundEvent> ROCKET_RIFLE_FIRE = register("item.rocket_rifle.fire");
+    public static final RegistryObject<SoundEvent> ROCKET_RIFLE_FIRE_2 = register("item.rocket_rifle.fire_2");
     public static final RegistryObject<SoundEvent> BRASS_REVOLVER = register("item.brass_revolver.fire");
     public static final RegistryObject<SoundEvent> GAUSS_PRE_FIRE = register("item.gauss.pre_fire");
     public static final RegistryObject<SoundEvent> GAUSS_RELOAD = register("item.gauss.reload");
@@ -97,6 +101,15 @@ public class ModSounds {
     public static final RegistryObject<SoundEvent> DISSIDENT_HURT = register("entity.dissident.hurt");
     public static final RegistryObject<SoundEvent> DISSIDENT_DIE = register("entity.dissident.die");
     public static final RegistryObject<SoundEvent> DISSIDENT_IDLE = register("entity.dissident.idle");
+
+    public static final RegistryObject<SoundEvent> PRAETOR_HURT = register("entity.praetor.hurt");
+    public static final RegistryObject<SoundEvent> PRAETOR_DIE = register("entity.praetor.die");
+    public static final RegistryObject<SoundEvent> PRAETOR_IDLE = register("entity.praetor.idle");
+    public static final RegistryObject<SoundEvent> PRAETOR_ROAR = register("entity.praetor.roar");
+
+    public static final RegistryObject<SoundEvent> SULFURHEAD_HURT = register("entity.sulfurhead.hurt");
+    public static final RegistryObject<SoundEvent> SULFURHEAD_DIE = register("entity.sulfurhead.die");
+    public static final RegistryObject<SoundEvent> SULFURHEAD_IDLE = register("entity.sulfurhead.idle");
 
     //bullet flyby sounds
     public static final RegistryObject<SoundEvent> BULLET_FLYBY = register("bullet.flyby1"); //TODO: Set this to an actual sound later.

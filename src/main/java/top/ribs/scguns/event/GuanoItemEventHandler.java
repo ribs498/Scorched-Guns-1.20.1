@@ -58,6 +58,7 @@ public class GuanoItemEventHandler {
         BlockPos pos = itemEntity.blockPosition();
         BlockState stateAtPos = level.getBlockState(pos);
         BlockState stateBelow = level.getBlockState(pos.below());
+        boolean shouldRemove = false;
 
         if (stateAtPos.is(ModBlocks.BAT_GUANO_LAYER.get())) {
             int layers = stateAtPos.getValue(SnowLayerBlock.LAYERS);
@@ -65,23 +66,23 @@ public class GuanoItemEventHandler {
                 level.setBlock(pos, stateAtPos.setValue(SnowLayerBlock.LAYERS, layers + 1), 3);
                 itemEntity.getItem().shrink(1);
                 if (itemEntity.getItem().isEmpty()) {
-                    itemEntity.discard();
-                    return true;
+                    shouldRemove = true;
                 }
-                return false;
             }
-        }
-        if (!stateBelow.isAir() && stateBelow.isSolidRender(level, pos.below()) && stateAtPos.isAir()) {
+        } else if (!stateBelow.isAir() && stateBelow.isSolidRender(level, pos.below()) && stateAtPos.isAir()) {
             BlockState newLayer = ModBlocks.BAT_GUANO_LAYER.get().defaultBlockState()
                     .setValue(SnowLayerBlock.LAYERS, 1);
             level.setBlock(pos, newLayer, 3);
             itemEntity.getItem().shrink(1);
             if (itemEntity.getItem().isEmpty()) {
-                itemEntity.discard();
-                return true;
+                shouldRemove = true;
             }
         }
 
-        return false;
+        if (shouldRemove) {
+            itemEntity.discard();
+        }
+
+        return shouldRemove;
     }
 }

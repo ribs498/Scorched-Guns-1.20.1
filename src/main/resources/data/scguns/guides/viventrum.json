@@ -1,0 +1,27 @@
+{
+  "id": "scguns:viventrum",
+  "title": "info.scguns.viventrum_guide.title",
+
+  "pages": [
+    {
+      "type": "text",
+      "text": "info.scguns.viventrum_guide.page1"
+    },
+    {
+      "type": "text",
+      "text": "info.scguns.viventrum_guide.page2"
+    },
+    {
+      "type": "text",
+      "text": "info.scguns.viventrum_guide.page3"
+    },
+    {
+      "type": "text",
+      "text": "info.scguns.viventrum_guide.page4"
+    },
+    {
+      "type": "text",
+      "text": "info.scguns.viventrum_guide.page5"
+    }
+  ]
+}

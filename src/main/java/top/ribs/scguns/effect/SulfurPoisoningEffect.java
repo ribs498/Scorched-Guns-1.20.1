@@ -16,9 +16,9 @@ public class SulfurPoisoningEffect extends MobEffect {
     public SulfurPoisoningEffect(MobEffectCategory typeIn, int liquidColorIn) {
         super(typeIn, liquidColorIn);
 
-        this.addAttributeModifier(Attributes.MOVEMENT_SPEED, "7107DE5E-7CE8-4030-940E-514C1F160890", -0.25, AttributeModifier.Operation.MULTIPLY_TOTAL);
-        this.addAttributeModifier(Attributes.JUMP_STRENGTH, "9107DE5E-7CE8-4030-940E-514C1F160892", -0.3, AttributeModifier.Operation.MULTIPLY_TOTAL);
-        this.addAttributeModifier(Attributes.ATTACK_SPEED, "A107DE5E-7CE8-4030-940E-514C1F160893", -0.2, AttributeModifier.Operation.MULTIPLY_TOTAL);
+        this.addAttributeModifier(Attributes.MOVEMENT_SPEED, "7107DE5E-7CE8-4030-940E-514C1F160890", -0.10, AttributeModifier.Operation.MULTIPLY_TOTAL);
+        this.addAttributeModifier(Attributes.JUMP_STRENGTH, "9107DE5E-7CE8-4030-940E-514C1F160892", -0.15, AttributeModifier.Operation.MULTIPLY_TOTAL);
+        this.addAttributeModifier(Attributes.ATTACK_SPEED, "A107DE5E-7CE8-4030-940E-514C1F160893", -0.15, AttributeModifier.Operation.MULTIPLY_TOTAL);
     }
 
     @Override
@@ -30,10 +30,10 @@ public class SulfurPoisoningEffect extends MobEffect {
         int originalDuration = getOriginalDuration(effect);
         float intensityRatio = calculateIntensityRatio(duration, originalDuration);
 
-        int damageInterval = Math.max(20, (int)(40 - (amplifier * 10 * intensityRatio)));
+        int damageInterval = Math.max(15, (int)(30 - (amplifier * 8 * intensityRatio)));
         if (entity.tickCount % damageInterval == 0) {
-            float damage = (1.0f + amplifier * 0.5f) * intensityRatio;
-            if (damage > 0.2f) {
+            float damage = (1.5f + amplifier * 0.75f) * intensityRatio;
+            if (damage > 0.3f) {
                 entity.hurt(entity.damageSources().magic(), damage);
             }
         }
@@ -61,20 +61,22 @@ public class SulfurPoisoningEffect extends MobEffect {
 
     private void applyIntensePhaseEffects(LivingEntity entity, int amplifier, float intensityRatio, RandomSource random) {
         if (intensityRatio < 0.7f) return;
-        if (entity.tickCount % 200 == 0) {
-            if (random.nextFloat() < 0.3f * intensityRatio) {
-                entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, (int)(60 * intensityRatio), 0));
+
+        if (entity.tickCount % 300 == 0) {
+            if (random.nextFloat() < 0.2f * intensityRatio) {
+                entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, (int)(40 * intensityRatio), 0));
             }
         }
-        if (intensityRatio > 0.8f && entity.tickCount % 300 == 0) {
-            if (random.nextFloat() < 0.2f) {
-                entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, (int)(40 * intensityRatio), 0));
+
+        if (intensityRatio > 0.8f && entity.tickCount % 200 == 0) {
+            if (random.nextFloat() < 0.25f) {
+                entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, (int)(60 * intensityRatio), amplifier > 1 ? 1 : 0));
             }
         }
-        if (intensityRatio > 0.9f && amplifier >= 2) {
-            if (entity.tickCount % 400 == 0 && random.nextFloat() < 0.1f) {
-                entity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 30, 0));
-                entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 1));
+
+        if (intensityRatio > 0.85f && amplifier >= 2) {
+            if (entity.tickCount % 250 == 0 && random.nextFloat() < 0.15f) {
+                entity.addEffect(new MobEffectInstance(MobEffects.BLINDNESS, 40, 0));
             }
         }
     }

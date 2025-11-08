@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "scguns:block/cut_anthralite_slab"
+    },
+    "type=double": {
+      "model": "scguns:block/cut_anthralite"
+    },
+    "type=top": {
+      "model": "scguns:block/cut_anthralite_slab_top"
+    }
+  }
+}

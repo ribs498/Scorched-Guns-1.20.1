@@ -9,19 +9,14 @@
   },
   "general": {
     "weaponType": "lmg",
-    "alwaysSpread": false,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed_shotgun",
     "baseGripType": "scguns:two_handed_shotgun",
     "rate": 4,
-    "recoilAngle": 3.5,
-    "recoilKick": 1.0,
-    "spread": 4.0,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
     "meleeReach": 3.5,
-    "hotBarrelRate": 22,
-    "criticalChance": 0.05
+    "hotBarrelRate": 22
   },
   "modules": {
     "attachments": {
@@ -49,6 +44,11 @@
     }
   },
   "projectile": {
+    "alwaysSpread": false,
+    "recoilAngle": 3.5,
+    "recoilKick": 1.0,
+    "spread": 4.0,
+    "criticalChance": 0.05,
     "advantage": "scguns:none",
     "damageFalloffStart": 22.0,
     "damageFalloffEnd": 55.0,
@@ -66,7 +66,7 @@
   },
   "reloads": {
     "emptyMagTimer": 5,
-    "maxAmmo": 16,
+    "maxAmmo": 18,
     "reloadItem": "scguns:standard_copper_round",
     "reloadTimer": 40,
     "reloadType": "scguns:mag_fed"

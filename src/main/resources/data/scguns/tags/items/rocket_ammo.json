@@ -2,6 +2,10 @@
   "replace": false,
   "values": [
     "scguns:rocket",
-    "scguns:microjet"
+    "scguns:microjet",
+    "scguns:gas_grenade_round",
+    "scguns:fire_grenade_round",
+    "scguns:bouncy_grenade_round",
+    "scguns:he_grenade_round"
   ]
 }

@@ -1,0 +1,171 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "scguns:item/jr_wristbreaker"
+	},
+	"elements": [
+		{
+			"name": "silencer",
+			"from": [7.3625, 4.525, -0.6875],
+			"to": [8.7625, 5.925, -0.1125],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.0625, 5.15, 0.35]},
+			"faces": {
+				"north": {"uv": [7.25, 5.5, 7.625, 5.875], "texture": "#1"},
+				"east": {"uv": [8.75, 1, 8.875, 1.375], "texture": "#1"},
+				"south": {"uv": [1, 7.5, 1.375, 7.875], "texture": "#1"},
+				"west": {"uv": [1.5, 8.75, 1.625, 9.125], "texture": "#1"},
+				"up": {"uv": [9.125, 1.625, 8.75, 1.5], "texture": "#1"},
+				"down": {"uv": [2.125, 8.75, 1.75, 8.875], "texture": "#1"}
+			}
+		},
+		{
+			"name": "silencer",
+			"from": [7.1125, 4.275, -0.1125],
+			"to": [9.0125, 6.175, 3.4625],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.0625, 5.15, 0.925]},
+			"faces": {
+				"north": {"uv": [6.25, 6.25, 6.75, 6.75], "texture": "#1"},
+				"east": {"uv": [4.25, 1.25, 5.125, 1.75], "texture": "#1"},
+				"south": {"uv": [0.5, 6.5, 1, 7], "texture": "#1"},
+				"west": {"uv": [4.25, 1.75, 5.125, 2.25], "texture": "#1"},
+				"up": {"uv": [1.75, 5.125, 1.25, 4.25], "texture": "#1"},
+				"down": {"uv": [4.75, 3.25, 4.25, 4.125], "texture": "#1"}
+			}
+		},
+		{
+			"name": "silencer",
+			"from": [6.6625, 3.3, 1.4375],
+			"to": [6.6625, 5.2, 1.9375],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.5, 12.25]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.5], "texture": "#1"},
+				"east": {"uv": [4.25, 8.25, 4.375, 8.75], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 0.5], "texture": "#1"},
+				"west": {"uv": [5.25, 8.25, 5.375, 8.75], "texture": "#1"},
+				"up": {"uv": [0, 0.125, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 0.125], "texture": "#1"}
+			}
+		},
+		{
+			"name": "silencer",
+			"from": [9.3375, 3.8, 0.9125],
+			"to": [9.3375, 5.2, 1.4125],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.5, 12.25]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.375], "texture": "#1"},
+				"east": {"uv": [2.25, 8.75, 2.375, 9.125], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 0.375], "texture": "#1"},
+				"west": {"uv": [2.5, 8.75, 2.625, 9.125], "texture": "#1"},
+				"up": {"uv": [0, 0.125, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 0.125], "texture": "#1"}
+			}
+		},
+		{
+			"name": "silencer",
+			"from": [7, 4.375, -1],
+			"to": [8.75, 6.125, -0.5],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8, 5.375, -2.875]},
+			"faces": {
+				"north": {"uv": [6.5, 1, 7, 1.5], "texture": "#1"},
+				"east": {"uv": [8.25, 5.25, 8.375, 5.75], "texture": "#1"},
+				"south": {"uv": [1.5, 6.5, 2, 7], "texture": "#1"},
+				"west": {"uv": [5.5, 8.25, 5.625, 8.75], "texture": "#1"},
+				"up": {"uv": [6.25, 8.375, 5.75, 8.25], "texture": "#1"},
+				"down": {"uv": [8.75, 5.75, 8.25, 5.875], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0.25, 5.25, -6.25],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0.25, 5.25, -6.25],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"firstperson_righthand": {
+			"translation": [-3.75, 8.5, 0.25]
+		},
+		"firstperson_lefthand": {
+			"translation": [-3.75, 8.5, 0.25]
+		},
+		"ground": {
+			"translation": [0, 9.5, -1.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-2.25, 3.75, 0]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [2.75, 6.5, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "main",
+			"origin": [8, -5.35, 8],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "bolt",
+			"origin": [8.62646, -3.65184, 11.38542],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "default_mag",
+			"origin": [8, -7.76376, 11.0787],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "extended_mag",
+			"origin": [8.625, -7.825, 11.0869],
+			"color": 4,
+			"children": []
+		},
+		{
+			"name": "speed_mag",
+			"origin": [8.125, -7.825, 11.0869],
+			"color": 5,
+			"children": []
+		},
+		{
+			"name": "standard_barrel",
+			"origin": [7.78787, -3.05233, -1.14767],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "extended_barrel",
+			"origin": [7.78787, -3.05233, 1.35233],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "muzzle_brake",
+			"origin": [8.21496, -4.475, 9.975],
+			"color": 4,
+			"children": []
+		},
+		{
+			"name": "advanced_silencer",
+			"origin": [7.81502, -4.475, 17.025],
+			"color": 5,
+			"children": []
+		},
+		{
+			"name": "silencer",
+			"origin": [8.00997, 2.68, 9.425],
+			"color": 6,
+			"children": [0, 1, 2, 3, 4]
+		}
+	]
+}

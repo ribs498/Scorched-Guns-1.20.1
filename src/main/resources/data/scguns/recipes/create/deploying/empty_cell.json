@@ -8,7 +8,7 @@
   ],
   "ingredients": [
     {
-      "tag": "forge:ingots/iron"
+      "item": "scguns:treated_iron_ingot"
     },
     {
       "item": "scguns:medium_casing_mold"

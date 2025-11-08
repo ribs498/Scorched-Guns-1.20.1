@@ -35,6 +35,10 @@
     },
     {
       "chance": 0.3,
+      "item": "scguns:heavy_gun_barrel"
+    },
+    {
+      "chance": 0.3,
       "item": "scguns:gun_magazine"
     }
   ]

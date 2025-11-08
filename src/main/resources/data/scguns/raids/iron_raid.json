@@ -3,12 +3,20 @@
   "raid_level": 3,
 
   "boss": {
-    "entity_type": "minecraft:skeleton",
+    "entity_type": "minecraft:husk",
     "custom_name": "translation:raid.boss.scguns.iron",
     "fixed_health": 150.0,
     "weapon": {
       "item": "scguns:iron_spear",
-      "drop_chance": 0.25
+      "drop_chance": 0.25,
+      "nbt": {
+        "Enchantments": [
+          {
+            "id": "scguns:puncturing",
+            "lvl": 1
+          }
+        ]
+      }
     },
     "armor": [
       {
@@ -34,8 +42,8 @@
     ],
     "effects": [
       {
-        "effect": "minecraft:regeneration",
-        "amplifier": 0,
+        "effect": "minecraft:speed",
+        "amplifier": 1,
         "duration": -1,
         "ambient": false,
         "visible": false
@@ -54,7 +62,7 @@
         {
           "effect": "minecraft:speed",
           "amplifier": 1,
-          "duration": -1,
+          "duration": 2000,
           "ambient": true,
           "visible": false
         }
@@ -68,12 +76,12 @@
       {
         "entity_type": "minecraft:zombie",
         "weight": 4.0,
-        "health_multiplier": 1.3,
+        "fixed_health": 24.0,
         "weapons": [
-          "scguns:brawler",
+          "scguns:defender_pistol",
           "scguns:combat_shotgun",
-          "scguns:greaser_smg",
-          "minecraft:iron_axe"
+          "scguns:brawler",
+          "minecraft:iron_sword"
         ],
         "armor": [
           {
@@ -85,17 +93,7 @@
             "item": "scguns:anthralite_chestplate",
             "slot": "chest",
             "chance": 0.4
-          },
-            {
-                "item": "scguns:anthralite_leggings",
-                "slot": "legs",
-                "chance": 0.4
-            },
-            {
-                "item": "scguns:anthralite_boots",
-                "slot": "feet",
-                "chance": 0.4
-            }
+          }
         ],
         "effects": [
           {
@@ -107,21 +105,21 @@
           }
         ],
         "ai_difficulty": 2,
-        "ai_type": "RECKLESS"
+        "ai_type": "DEFAULT"
       },
       {
-        "entity_type": "minecraft:stray",
+        "entity_type": "minecraft:skeleton",
         "weight": 2.0,
-        "fixed_health": 30.0,
+        "fixed_health": 20.0,
         "weapons": [
           "scguns:iron_javelin",
           "scguns:m3_carabine",
-          "scguns:trenchur",
-          "minecraft:iron_sword"
+          "scguns:auvtomag",
+          "minecraft:bow"
         ],
         "armor": [
           {
-            "item": "scguns:ridgetop",
+            "item": "scguns:anthralite_helmet",
             "slot": "head",
             "chance": 1.0
           }
@@ -134,14 +132,14 @@
         "weight": 1.5,
         "health_multiplier": 1.4,
         "weapons": [
-          "scguns:auvtomag",
+          "scguns:trenchur",
           "scguns:greaser_smg",
-          "scguns:defender_pistol",
+          "minecraft:defender_pistol",
           "minecraft:iron_axe"
         ],
         "armor": [
           {
-            "item": "scguns:anthralite_respirator",
+            "item": "scguns:anthralite_helmet",
             "slot": "head",
             "chance": 0.5
           },
@@ -153,7 +151,7 @@
         ],
         "effects": [
           {
-            "effect": "minecraft:strength",
+            "effect": "minecraft:speed",
             "amplifier": 0,
             "duration": -1,
             "ambient": true,
@@ -161,11 +159,11 @@
           }
         ],
         "ai_difficulty": 3,
-        "ai_type": "RECKLESS"
+        "ai_type": "DEFAULT"
       }
     ],
-    "spawn_interval_ticks": 600,
-    "max_alive": 10,
+    "spawn_interval_ticks": 500,
+    "max_alive": 6,
     "spawn_radius": 15,
     "spawn_attempts_per_wave": 6
   },

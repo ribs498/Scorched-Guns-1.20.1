@@ -57,8 +57,10 @@ public class SulfurVentBlock extends VentBlock {
                 boolean hasCollectorAbove = hasVentCollectorAbove(world, pos);
 
                 if (state.getValue(VENT_TYPE) == VentType.BASE && !hasCollectorAbove) {
-                    spawnSulfurCloud(world, pos, random);
-                    spawnSulfurDust(world, pos, random);
+                    // Pass world game time as tick count for optimization
+                    int tickCount = (int) (world.getGameTime() % Integer.MAX_VALUE);
+                    spawnSulfurCloud(world, pos, random, tickCount);
+                    spawnSulfurDust(world, pos, random, tickCount);
                     performEnvironmentalAction(world, pos, center, random);
                 }
 
@@ -158,12 +160,14 @@ public class SulfurVentBlock extends VentBlock {
         super.onRemove(state, level, pos, newState, isMoving);
     }
 
-    private void spawnSulfurCloud(Level level, BlockPos pos, RandomSource random) {
+    private void spawnSulfurCloud(Level level, BlockPos pos, RandomSource random, int tickCount) {
         if (random.nextInt(100) >= CLOUD_SPAWN_CHANCE) return;
 
         Vec3 center = Vec3.atCenterOf(pos);
         float intensity = random.nextFloat() * 0.5f + 0.5f;
-        SulfurGasCloud.spawnEnhancedGasCloud(level, center, CLOUD_RADIUS, intensity, random);
+
+        // Use the new optimized method with tickCount
+        SulfurGasCloud.spawnEnhancedGasCloud(level, center, CLOUD_RADIUS, intensity, random, tickCount);
 
         if (random.nextFloat() < 0.2) {
             double x = pos.getX() + 0.5 + (random.nextDouble() - 0.5) * 2.0;
@@ -183,13 +187,15 @@ public class SulfurVentBlock extends VentBlock {
         }
     }
 
-    private void spawnSulfurDust(Level level, BlockPos pos, RandomSource random) {
+    private void spawnSulfurDust(Level level, BlockPos pos, RandomSource random, int tickCount) {
         if (random.nextInt(100) >= DUST_SPAWN_CHANCE) return;
 
         if (level instanceof ServerLevel serverLevel) {
             Vec3 center = Vec3.atCenterOf(pos);
             int particlesToSpawn = random.nextInt(MAX_DUST_PARTICLES_PER_TICK) + 5;
-            SulfurGasCloud.spawnDustParticlesForced(serverLevel, center, CLOUD_RADIUS * 1.2, particlesToSpawn, random);
+
+            // Use the new optimized method with tickCount
+            SulfurGasCloud.spawnDustParticlesForced(serverLevel, center, CLOUD_RADIUS * 1.2, particlesToSpawn, random, tickCount);
         }
     }
 

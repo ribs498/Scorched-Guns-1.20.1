@@ -13,14 +13,8 @@
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 6,
-    "recoilAngle": 2.5,
-    "recoilKick": 1.4,
-    "spread": 2.0,
-    "meleeDamage": 3.0,
     "meleeCooldownTicks": 10,
     "hotBarrelRate": 16,
-    "criticalChance": 0.25,
-    "critDamageMultiplier": 2.0,
     "isSilenced": true
   },
   "modules": {
@@ -47,6 +41,12 @@
     }
   },
   "projectile": {
+    "recoilAngle": 2.5,
+    "recoilKick": 1.4,
+    "spread": 2.0,
+    "criticalChance": 0.25,
+    "critDamageMultiplier": 2.0,
+    "meleeDamage": 3.0,
     "advantage": "scguns:none",
     "damage": 9.0,
     "damageFalloffStart": 18.0,

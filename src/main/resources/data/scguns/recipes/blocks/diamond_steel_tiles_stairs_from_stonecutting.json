@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "scguns:diamond_steel_tiles"
+  },
+  "result": "scguns:diamond_steel_tiles_stairs"
+}

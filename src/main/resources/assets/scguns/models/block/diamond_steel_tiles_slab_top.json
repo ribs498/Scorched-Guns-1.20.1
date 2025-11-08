@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "scguns:block/diamond_steel_tiles",
+    "side": "scguns:block/diamond_steel_tiles",
+    "top": "scguns:block/diamond_steel_tiles"
+  }
+}

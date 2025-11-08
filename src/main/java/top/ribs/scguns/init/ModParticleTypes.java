@@ -48,6 +48,8 @@ public class ModParticleTypes {
     public static final RegistryObject<SimpleParticleType> RAMROD_IMPACT = REGISTER.register("ramrod_impact", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> BEOWULF_IMPACT = REGISTER.register("beowulf_impact", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> ROCKET_EXPLOSION = REGISTER.register("rocket_explosion", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> GRENADE_EXPLOSION = REGISTER.register("grenade_explosion", () -> new SimpleParticleType(true));
+    public static final RegistryObject<SimpleParticleType> FIRE_GRENADE_EXPLOSION = REGISTER.register("fire_grenade_explosion", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> FIREBALL = REGISTER.register("fireball", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> SOUL_FIREBALL = REGISTER.register("soul_fireball", () -> new SimpleParticleType(true));
     public static final RegistryObject<SimpleParticleType> TURRET_MUZZLE_FLASH = REGISTER.register("turret_muzzle_flash", () -> new SimpleParticleType(true));

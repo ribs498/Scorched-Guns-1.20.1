@@ -1,0 +1,169 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "scguns:item/minksy"
+	},
+	"elements": [
+		{
+			"name": "light_stock",
+			"from": [7.75, 1.56584, 17.74006],
+			"to": [8.25, 2.06584, 23.74006],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8, 1.56584, 18.24006]},
+			"faces": {
+				"north": {"uv": [8.25, 0.5, 8.375, 0.625], "texture": "#0"},
+				"east": {"uv": [6.25, 4.75, 7.75, 4.875], "texture": "#0"},
+				"south": {"uv": [0.75, 8.25, 0.875, 8.375], "texture": "#0"},
+				"west": {"uv": [6.25, 5, 7.75, 5.125], "texture": "#0"},
+				"up": {"uv": [4.375, 7.75, 4.25, 6.25], "texture": "#0"},
+				"down": {"uv": [4.625, 6.25, 4.5, 7.75], "texture": "#0"}
+			}
+		},
+		{
+			"name": "light_stock",
+			"from": [7.5, -0.6, 23],
+			"to": [8.5, 3.4, 24],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.5, 8]},
+			"faces": {
+				"north": {"uv": [0.75, 5.5, 1, 6.5], "texture": "#0"},
+				"east": {"uv": [5.5, 3.5, 5.75, 4.5], "texture": "#0"},
+				"south": {"uv": [5.5, 4.5, 5.75, 5.5], "texture": "#0"},
+				"west": {"uv": [5, 5.5, 5.25, 6.5], "texture": "#0"},
+				"up": {"uv": [6.75, 0.75, 6.5, 0.5], "texture": "#0"},
+				"down": {"uv": [7, 1, 6.75, 1.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "light_stock",
+			"from": [7.751, 2.83535, 17.8912],
+			"to": [8.249, 3.33335, 23.8892],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.5, 8]},
+			"faces": {
+				"north": {"uv": [8.25, 0.5, 8.375, 0.625], "texture": "#0"},
+				"east": {"uv": [6.25, 4.75, 7.75, 4.875], "texture": "#0"},
+				"south": {"uv": [0.75, 8.25, 0.875, 8.375], "texture": "#0"},
+				"west": {"uv": [6.25, 5, 7.75, 5.125], "texture": "#0"},
+				"up": {"uv": [4.25, 6.25, 4.375, 7.75], "texture": "#0"},
+				"down": {"uv": [4.5, 6.25, 4.625, 7.75], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.75, -9],
+			"scale": [1.4, 1.4, 1.4]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.75, -9],
+			"scale": [1.4, 1.4, 1.4]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 9.75, -0.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.25, 9.75, -0.5]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1, 5, 0],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"fixed": {
+			"rotation": [-90, 90, 90],
+			"translation": [-3, 9.5, 0],
+			"scale": [2, 2, 2]
+		}
+	},
+	"groups": [
+		{
+			"name": "diamond_bayonet",
+			"origin": [8, 0.25, 4.075],
+			"color": 5,
+			"children": []
+		},
+		{
+			"name": "iron_bayonet",
+			"origin": [8, 0.25, 4.075],
+			"color": 6,
+			"children": []
+		},
+		{
+			"name": "anthralite_bayonet",
+			"origin": [8, 0.25, 4.075],
+			"color": 7,
+			"children": []
+		},
+		{
+			"name": "netherite_bayonet",
+			"origin": [8, 0.25, 4.075],
+			"color": 8,
+			"children": []
+		},
+		{
+			"name": "sights",
+			"origin": [7.98598, -1.70304, 10.72665],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "main",
+			"origin": [8, -3.75, 10.75],
+			"color": 9,
+			"children": [
+				{
+					"name": "hammer",
+					"origin": [8, -3.1, 13.9],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "lever",
+					"origin": [8, -5.25, 12],
+					"color": 1,
+					"children": []
+				},
+				{
+					"name": "barrel",
+					"origin": [8, -4, 3],
+					"color": 3,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "light_stock",
+			"origin": [8, -6.93416, 18.24006],
+			"color": 5,
+			"children": [0, 1, 2]
+		},
+		{
+			"name": "weighted_stock",
+			"origin": [8, -6.33363, 18.4888],
+			"color": 6,
+			"children": []
+		},
+		{
+			"name": "wooden_stock",
+			"origin": [8, -6.33363, 18.4888],
+			"color": 7,
+			"children": []
+		},
+		{
+			"name": "vertical_grip",
+			"origin": [8, 0.2, 6.85],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "light_grip",
+			"origin": [8, 0.2, 6.85],
+			"color": 3,
+			"children": []
+		}
+	]
+}

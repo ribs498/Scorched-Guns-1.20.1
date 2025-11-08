@@ -6,15 +6,32 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import top.ribs.scguns.entity.animations.ModAnimationDefinitions;
 import top.ribs.scguns.entity.monster.SwarmEntity;
 
 public class SwarmModel<T extends Entity> extends HierarchicalModel<T> {
     private final ModelPart Swarm;
+    private final ModelPart[] flies;
 
     public SwarmModel(ModelPart root) {
         this.Swarm = root.getChild("Swarm");
+
+        // Store all 12 fly parts for individual animation
+        this.flies = new ModelPart[12];
+        this.flies[0] = this.Swarm.getChild("Fly");
+        this.flies[1] = this.Swarm.getChild("Fly2");
+        this.flies[2] = this.Swarm.getChild("Fly3");
+        this.flies[3] = this.Swarm.getChild("Fly4");
+        this.flies[4] = this.Swarm.getChild("Fly5");
+        this.flies[5] = this.Swarm.getChild("Fly6");
+        this.flies[6] = this.Swarm.getChild("Fly7");
+        this.flies[7] = this.Swarm.getChild("Fly8");
+        this.flies[8] = this.Swarm.getChild("Fly9");
+        this.flies[9] = this.Swarm.getChild("Fly10");
+        this.flies[10] = this.Swarm.getChild("Fly11");
+        this.flies[11] = this.Swarm.getChild("Fly12");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -161,8 +178,37 @@ public class SwarmModel<T extends Entity> extends HierarchicalModel<T> {
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
-        this.animateWalk(ModAnimationDefinitions.SWARM_IDLE, limbSwing, limbSwingAmount, 2f, 2.5f);
-        this.animate(((SwarmEntity) entity).idleAnimationState, ModAnimationDefinitions.SWARM_IDLE, ageInTicks, 1f);
+
+        // Each fly gets its own unique random floating pattern
+        for (int i = 0; i < flies.length; i++) {
+            ModelPart fly = flies[i];
+
+            // Use fly index to offset timing for uniqueness
+            float timeOffset = i * 13.7F;
+            float time = ageInTicks + timeOffset;
+
+            // Random float patterns with different frequencies
+            float bobSpeed = 0.3F + (i % 3) * 0.1F;
+            float bobAmount = 0.8F + (i % 4) * 0.3F;
+
+            // Vertical bobbing
+            fly.y += Mth.sin(time * bobSpeed) * bobAmount;
+
+            // Horizontal sway in X
+            float swayXSpeed = 0.25F + (i % 5) * 0.08F;
+            float swayXAmount = 0.5F + (i % 3) * 0.2F;
+            fly.x += Mth.cos(time * swayXSpeed) * swayXAmount;
+
+            // Horizontal sway in Z
+            float swayZSpeed = 0.2F + ((i + 2) % 5) * 0.07F;
+            float swayZAmount = 0.4F + ((i + 1) % 3) * 0.25F;
+            fly.z += Mth.sin(time * swayZSpeed) * swayZAmount;
+
+            // Random rotation wobbles
+            fly.xRot = Mth.sin(time * 0.4F + i) * 0.2F;
+            fly.yRot = Mth.cos(time * 0.35F + i * 2) * 0.3F;
+            fly.zRot = Mth.sin(time * 0.3F + i * 3) * 0.15F;
+        }
     }
 
     @Override

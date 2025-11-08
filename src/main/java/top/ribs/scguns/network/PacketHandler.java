@@ -14,7 +14,7 @@ public class PacketHandler
     public static void init()
     {
         playChannel = FrameworkAPI.createNetworkBuilder(new ResourceLocation(Reference.MOD_ID, "play"), 1)
-
+                .registerPlayMessage(C2SMessageSwapAmmo.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(C2SMessageJetpackState.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(C2SMessageJetpackThrust.class, MessageDirection.PLAY_SERVER_BOUND)
                 .registerPlayMessage(C2SMessageOffhandMelee.class, MessageDirection.PLAY_SERVER_BOUND)

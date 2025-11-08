@@ -1,0 +1,183 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "scguns:item/minksy"
+	},
+	"elements": [
+		{
+			"name": "wooden_stock",
+			"from": [7.501, 1.16737, 17.4898],
+			"to": [8.499, 3.16537, 23.4878],
+			"rotation": {"angle": 22.5, "axis": "x", "origin": [8, 2.16637, 18.4888]},
+			"faces": {
+				"north": {"uv": [4, 7, 4.25, 7.5], "texture": "#0"},
+				"east": {"uv": [1, 2.75, 2.5, 3.25], "texture": "#0"},
+				"south": {"uv": [5.25, 7, 5.5, 7.5], "texture": "#0"},
+				"west": {"uv": [2.75, 1, 4.25, 1.5], "texture": "#0"},
+				"up": {"uv": [3.75, 4.25, 4, 5.75], "texture": "#0"},
+				"down": {"uv": [4.5, 2.75, 4.75, 4.25], "texture": "#0"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.5, 1.47293, 17.94761],
+			"to": [8.5, 3.47293, 22.44761],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.5, 8]},
+			"faces": {
+				"north": {"uv": [0.5, 7.25, 0.75, 7.75], "texture": "#0"},
+				"east": {"uv": [3, 2, 4.125, 2.5], "texture": "#0"},
+				"south": {"uv": [7.25, 0.5, 7.5, 1], "texture": "#0"},
+				"west": {"uv": [2, 3.25, 3.125, 3.75], "texture": "#0"},
+				"up": {"uv": [3.5, 5, 3.75, 6.125], "texture": "#0"},
+				"down": {"uv": [5.25, 2, 5.5, 3.125], "texture": "#0"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.75, -0.52707, 23.69761],
+			"to": [8.25, 3.22293, 24.19761],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.5, 8]},
+			"faces": {
+				"north": {"uv": [0.25, 5.5, 0.5, 6.625], "texture": "#0"},
+				"east": {"uv": [0, 6.75, 0.125, 7.875], "texture": "#0"},
+				"south": {"uv": [0.5, 5.5, 0.75, 6.625], "texture": "#0"},
+				"west": {"uv": [0.25, 6.75, 0.375, 7.875], "texture": "#0"},
+				"up": {"uv": [6, 7.875, 5.75, 7.75], "texture": "#0"},
+				"down": {"uv": [6.25, 7.75, 6, 7.875], "texture": "#0"}
+			}
+		},
+		{
+			"name": "wooden_stock",
+			"from": [7.5, -0.77707, 22.44761],
+			"to": [8.5, 3.47293, 23.94761],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.5, 8]},
+			"faces": {
+				"north": {"uv": [5.25, 3.25, 5.5, 4.375], "texture": "#0"},
+				"east": {"uv": [4, 3.75, 4.375, 4.875], "texture": "#0"},
+				"south": {"uv": [0, 5.5, 0.25, 6.625], "texture": "#0"},
+				"west": {"uv": [0, 4.25, 0.375, 5.375], "texture": "#0"},
+				"up": {"uv": [1.75, 7.25, 2, 7.625], "texture": "#0"},
+				"down": {"uv": [3.25, 7.25, 3.5, 7.625], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.75, -9],
+			"scale": [1.4, 1.4, 1.4]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.75, -9],
+			"scale": [1.4, 1.4, 1.4]
+		},
+		"firstperson_righthand": {
+			"translation": [-5.25, 9.75, -0.5]
+		},
+		"firstperson_lefthand": {
+			"translation": [-5.25, 9.75, -0.5]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1, 5, 0],
+			"scale": [0.9, 0.9, 0.9]
+		},
+		"fixed": {
+			"rotation": [-90, 90, 90],
+			"translation": [-3, 9.5, 0],
+			"scale": [2, 2, 2]
+		}
+	},
+	"groups": [
+		{
+			"name": "diamond_bayonet",
+			"origin": [8, 0.25, 4.075],
+			"color": 5,
+			"children": []
+		},
+		{
+			"name": "iron_bayonet",
+			"origin": [8, 0.25, 4.075],
+			"color": 6,
+			"children": []
+		},
+		{
+			"name": "anthralite_bayonet",
+			"origin": [8, 0.25, 4.075],
+			"color": 7,
+			"children": []
+		},
+		{
+			"name": "netherite_bayonet",
+			"origin": [8, 0.25, 4.075],
+			"color": 8,
+			"children": []
+		},
+		{
+			"name": "sights",
+			"origin": [7.98598, -1.70304, 10.72665],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "main",
+			"origin": [8, -3.75, 10.75],
+			"color": 9,
+			"children": [
+				{
+					"name": "hammer",
+					"origin": [8, -3.1, 13.9],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "lever",
+					"origin": [8, -5.25, 12],
+					"color": 1,
+					"children": []
+				},
+				{
+					"name": "barrel",
+					"origin": [8, -4, 3],
+					"color": 3,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "light_stock",
+			"origin": [8, -6.93416, 18.24006],
+			"color": 5,
+			"children": []
+		},
+		{
+			"name": "weighted_stock",
+			"origin": [8, -6.33363, 18.4888],
+			"color": 6,
+			"children": []
+		},
+		{
+			"name": "wooden_stock",
+			"origin": [8, -6.33363, 18.4888],
+			"color": 7,
+			"children": [0, 1, 2, 3]
+		},
+		{
+			"name": "vertical_grip",
+			"origin": [8, 0.2, 6.85],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "light_grip",
+			"origin": [8, 0.2, 6.85],
+			"color": 3,
+			"children": []
+		}
+	]
+}

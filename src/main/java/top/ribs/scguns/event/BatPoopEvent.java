@@ -19,9 +19,9 @@ public class BatPoopEvent {
     private static final String WELL_FED_TAG = "scguns:well_fed";
     private static final String WELL_FED_TIMER_TAG = "scguns:well_fed_timer";
     private static final String LAST_POOP_TIME_TAG = "scguns:last_poop_time";
-    private static final int POOP_COOLDOWN = 800;
-    private static final float BASE_POOP_CHANCE = 0.00075f;
-    private static final float WELL_FED_MULTIPLIER = 5.0f;
+    private static final int POOP_COOLDOWN = 1000;
+    private static final float BASE_POOP_CHANCE = 0.00055f;
+    private static final float WELL_FED_MULTIPLIER = 2.5f;
     private static final int WELL_FED_DURATION = 2000;
     private static final int MAX_CHECK_DEPTH = 48;
 

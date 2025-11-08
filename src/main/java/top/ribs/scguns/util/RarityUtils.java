@@ -22,15 +22,18 @@ public class RarityUtils {
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "grandle"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "cogloader"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "gale"), Constants.TREATED_BRASS);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "jr_wristbreaker"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "jackhammer"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "howler"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "howler_conversion"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "gauss_rifle"), Constants.TREATED_BRASS);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "libertas"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "niami"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "spitfire"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "gattaler"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "thunderhead"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "scratches"), Constants.TREATED_BRASS);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "hammer_gl"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "cr4k_mining_laser"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "dozier_rl"), Constants.TREATED_BRASS);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "treated_brass_blueprint"), Constants.TREATED_BRASS);
@@ -44,22 +47,28 @@ public class RarityUtils {
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "drill"), Constants.DIAMOND_STEEL);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "drill_conversion"), Constants.DIAMOND_STEEL);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "lockewood"), Constants.DIAMOND_STEEL);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "zilk_45"), Constants.DIAMOND_STEEL);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "rg_jigsaw"), Constants.DIAMOND_STEEL);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "nailer"), Constants.DIAMOND_STEEL);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "inertial"), Constants.DIAMOND_STEEL);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "mas_55"), Constants.DIAMOND_STEEL);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "mas_peddler"), Constants.DIAMOND_STEEL);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "minksy"), Constants.DIAMOND_STEEL);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "inquisitor"), Constants.DIAMOND_STEEL);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "plasgun"), Constants.DIAMOND_STEEL);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "truant"), Constants.DIAMOND_STEEL);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "cyclone"), Constants.DIAMOND_STEEL);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "shard_culler"), Constants.DIAMOND_STEEL);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "diamond_steel_blueprint"), Constants.DIAMOND_STEEL);
 
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "hyperbaria"), Constants.OCEANIC);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "floundergat"), Constants.OCEANIC);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "marlin"), Constants.OCEANIC);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "bomb_lance"), Constants.OCEANIC);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "ocean_blueprint"), Constants.OCEANIC);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "sequoia"), Constants.OCEANIC);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "hullbreaker"), Constants.OCEANIC);
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "spirulida"), Constants.OCEANIC);
 
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "super_shotgun"), Constants.PIGLISH);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "blasphemy"), Constants.PIGLISH);
@@ -110,6 +119,7 @@ public class RarityUtils {
 
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "felix_memorial"), Constants.PIGLISH);
 
+        ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "kiln_gun"), Constants.BIZARRE);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "ultra_knight_hawk"), Constants.BIZARRE);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "whizzbanger"), Constants.BIZARRE);
         ITEM_RARITY_MAP.put(new ResourceLocation("scguns", "big_bore"), Constants.BIZARRE);

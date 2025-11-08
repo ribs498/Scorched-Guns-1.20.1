@@ -12,7 +12,7 @@
       "item": "scguns:gun_grip"
     },
     "C": {
-      "minecraft": "minecraft:iron_ingot"
+      "item": "minecraft:iron_ingot"
     },
     "L": {
       "item": "scguns:firing_unit"

@@ -10,7 +10,6 @@ public class Attachments
     public static final Scope LONG_SCOPE = Scope.builder()
             .aimFovModifier(0.15F)
             .modifiers(
-                    GunModifiers.LONG_SCOPE_SENSITIVITY_COMPENSATION,
                     GunModifiers.SLOWER_ADS,
                     GunModifiers.LONG_SCOPE_RECOIL_REDUCTION
             )
@@ -19,7 +18,6 @@ public class Attachments
     public static final Scope MEDIUM_SCOPE = Scope.builder()
             .aimFovModifier(0.25F)
             .modifiers(
-                    GunModifiers.MEDIUM_SCOPE_SENSITIVITY_COMPENSATION,
                     GunModifiers.SLOWER_ADS,
                     GunModifiers.MEDIUM_SCOPE_RECOIL_REDUCTION
             )

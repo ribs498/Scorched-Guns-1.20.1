@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=y": {
+      "model": "scguns:block/anthralite_pillar"
+    },
+    "axis=z": {
+      "model": "scguns:block/anthralite_pillar",
+      "x": 90
+    },
+    "axis=x": {
+      "model": "scguns:block/anthralite_pillar",
+      "x": 90,
+      "y": 90
+    }
+  }
+}

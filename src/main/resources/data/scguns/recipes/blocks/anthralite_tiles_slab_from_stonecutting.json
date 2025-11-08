@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "scguns:anthralite_tiles"
+  },
+  "result": "scguns:anthralite_tiles_slab"
+}

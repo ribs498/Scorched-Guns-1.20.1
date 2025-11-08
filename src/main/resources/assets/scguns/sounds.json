@@ -1,4 +1,36 @@
 {
+  "entity.praetor.hurt": {
+    "subtitle": "subtitle.scguns.praetor.hurt",
+    "sounds": [
+      {
+        "name": "scguns:entity/praetor/hurt"
+      }
+    ]
+  },
+  "entity.praetor.die": {
+    "subtitle": "subtitle.scguns.praetor.die",
+    "sounds": [
+      {
+        "name": "scguns:entity/praetor/die"
+      }
+    ]
+  },
+  "entity.praetor.idle": {
+    "subtitle": "subtitle.scguns.praetor.idle",
+    "sounds": [
+      {
+        "name": "scguns:entity/praetor/idle"
+      }
+    ]
+  },
+  "entity.praetor.roar": {
+    "subtitle": "subtitle.scguns.praetor.roar",
+    "sounds": [
+      {
+        "name": "scguns:entity/praetor/roar"
+      }
+    ]
+  },
   "entity.scamp.hurt": {
     "subtitle": "subtitle.scguns.scamp.hurt",
     "sounds": [
@@ -39,7 +71,41 @@
       }
     ]
   },
+  "entity.sulfurhead.hurt": {
+    "subtitle": "subtitle.scguns.sulfurhead.hurt",
+    "sounds": [
+      {
+        "name": "scguns:entity/sulfurhead/hurt"
+      }
+    ]
+  },
+    "entity.sulfurhead.die": {
+        "subtitle": "subtitle.scguns.sulfurhead.die",
+        "sounds": [
+        {
+            "name": "scguns:entity/sulfurhead/die"
+        }
+        ]
+    },
+  "entity.sulfurhead.idle": {
+    "subtitle": "subtitle.scguns.sulfurhead.idle",
+    "sounds": [
+      {
+        "name": "scguns:entity/sulfurhead/idle"
+      }
+    ]
+  },
 
+
+
+  "item.slap.slap": {
+    "subtitle": "subtitle.scguns.mag_in",
+    "sounds": [
+      {
+        "name": "scguns:item/slap/slap"
+      }
+    ]
+  },
 
   "item.lever.lever": {
     "subtitle": "subtitle.scguns.mag_in",
@@ -161,6 +227,14 @@
       }
     ]
   },
+  "item.rail.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/rail/fire"
+      }
+    ]
+  },
   "item.ping.ping": {
     "subtitle": "subtitle.scguns.ping",
     "sounds": [
@@ -198,6 +272,14 @@
     "sounds": [
       {
         "name": "scguns:item/airgun/fire"
+      }
+    ]
+  },
+  "item.airgun.fire_2": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/airgun/fire_2"
       }
     ]
   },
@@ -437,6 +519,14 @@
       }
     ]
   },
+  "item.rocket_rifle.fire_2": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/rocket_rifle/fire_2"
+      }
+    ]
+  },
   "item.brass_revolver.fire": {
     "subtitle": "subtitle.scguns.fire",
     "sounds": [
@@ -503,6 +593,14 @@
       }
     ]
   },
+  "item.plasma_shotgun.fire": {
+    "subtitle": "subtitle.scguns.fire",
+    "sounds": [
+      {
+        "name": "scguns:item/plasma_shotgun/fire"
+      }
+    ]
+  },
   "item.plasma.fire_2": {
     "subtitle": "subtitle.scguns.fire",
     "sounds": [
@@ -529,7 +627,7 @@
     ]
   },
   "item.flamethrower.fire_2": {
-    "subtitle": "subtitle.scguns.fire_2",
+    "subtitle": "subtitle.scguns.fire",
     "sounds": [
       {
         "name": "scguns:item/flamethrower/fire_2"

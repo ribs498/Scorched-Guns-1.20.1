@@ -36,6 +36,8 @@ public class DissidentEntity extends Monster {
             SynchedEntityData.defineId(DissidentEntity.class, EntityDataSerializers.BOOLEAN);
     private static final EntityDataAccessor<Boolean> LEAPING =
             SynchedEntityData.defineId(DissidentEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Boolean> LANDING =
+            SynchedEntityData.defineId(DissidentEntity.class, EntityDataSerializers.BOOLEAN);
 
     public DissidentEntity(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -45,7 +47,9 @@ public class DissidentEntity extends Monster {
     public final AnimationState idleAnimationState = new AnimationState();
     public final AnimationState attackAnimationState = new AnimationState();
     public int attackAnimationTimeout = 0;
+    public int landingAnimationTimeout = 0;
     private int idleAnimationTimeout = 0;
+    private boolean wasInAir = false;
 
     public static AttributeSupplier.Builder createAttributes() {
         return Animal.createLivingAttributes()
@@ -66,8 +70,29 @@ public class DissidentEntity extends Monster {
     public void tick() {
         super.tick();
 
+        if (!this.level().isClientSide()) {
+            if (wasInAir && this.onGround() && this.getDeltaMovement().y <= 0) {
+                boolean wasLeaping = this.isLeaping();
+                this.setLeaping(false);
+                this.setLanding(true);
+                this.landingAnimationTimeout = 4;
+
+                if (wasLeaping) {
+                    this.level().broadcastEntityEvent(this, (byte) 6);
+                }
+            }
+            wasInAir = !this.onGround();
+        }
+
         if (this.level().isClientSide()) {
             setupAnimationStates();
+        }
+
+        if (this.landingAnimationTimeout > 0) {
+            --this.landingAnimationTimeout;
+            if (this.landingAnimationTimeout <= 0) {
+                this.setLanding(false);
+            }
         }
     }
     private void setupAnimationStates() {
@@ -138,6 +163,7 @@ public class DissidentEntity extends Monster {
         super.defineSynchedData();
         this.entityData.define(ATTACKING, false);
         this.entityData.define(LEAPING, false);
+        this.entityData.define(LANDING, false);
     }
     @Override
     protected void updateWalkAnimation(float pPartialTick) {
@@ -155,6 +181,14 @@ public class DissidentEntity extends Monster {
 
     public boolean isLeaping() {
         return this.entityData.get(LEAPING);
+    }
+
+    public void setLanding(boolean landing) {
+        this.entityData.set(LANDING, landing);
+    }
+
+    public boolean isLanding() {
+        return this.entityData.get(LANDING);
     }
     @Override
     protected void pickUpItem(ItemEntity pItemEntity) {
@@ -174,7 +208,7 @@ public class DissidentEntity extends Monster {
     public void handleEntityEvent(byte pId) {
         if (pId == 5) {
             if (this.level().isClientSide) {
-                for (int i = 0; i < 15; i++) {
+                for (int i = 0; i < 10; i++) {
                     this.level().addParticle(
                             net.minecraft.core.particles.ParticleTypes.POOF,
                             this.getX() + (this.random.nextDouble() - 0.5) * this.getBbWidth() * 2,
@@ -183,6 +217,22 @@ public class DissidentEntity extends Monster {
                             (this.random.nextDouble() - 0.5) * 0.2,
                             this.random.nextDouble() * 0.1,
                             (this.random.nextDouble() - 0.5) * 0.2
+                    );
+                }
+            }
+        } else if (pId == 6) {
+            if (this.level().isClientSide) {
+                for (int i = 0; i < 30; i++) {
+                    double offsetX = (this.random.nextDouble() - 0.5) * this.getBbWidth() * 2.5;
+                    double offsetZ = (this.random.nextDouble() - 0.5) * this.getBbWidth() * 2.5;
+                    this.level().addParticle(
+                            net.minecraft.core.particles.ParticleTypes.POOF,
+                            this.getX() + offsetX,
+                            this.getY() + 0.1,
+                            this.getZ() + offsetZ,
+                            (this.random.nextDouble() - 0.5) * 0.3,
+                            this.random.nextDouble() * 0.2,
+                            (this.random.nextDouble() - 0.5) * 0.3
                     );
                 }
             }
@@ -196,6 +246,14 @@ public class DissidentEntity extends Monster {
         if (this.isLeaping() && !this.onGround() && this.getDeltaMovement().y < 0.0) {
             this.setDeltaMovement(this.getDeltaMovement().multiply(1.0, 0.8, 1.0));
         }
+    }
+
+    @Override
+    public boolean causeFallDamage(float pFallDistance, float pMultiplier, DamageSource pSource) {
+        if (this.isLeaping()) {
+            return false;
+        }
+        return super.causeFallDamage(pFallDistance, pMultiplier, pSource);
     }
     @Nullable
     @Override
@@ -260,7 +318,7 @@ public class DissidentEntity extends Monster {
         }
 
         private boolean isEnemyWithinAttackDistance(LivingEntity pEnemy, double pDistToEnemySqr) {
-            double adjustedAttackDistance = this.getAttackReachSqr(pEnemy) * 1.1; 
+            double adjustedAttackDistance = this.getAttackReachSqr(pEnemy) * 1.1;
             return pDistToEnemySqr <= adjustedAttackDistance;
         }
 
@@ -348,7 +406,7 @@ public class DissidentEntity extends Monster {
             }
 
             double distanceToTarget = this.mob.distanceToSqr(this.target);
-            return distanceToTarget >= 9.0 && distanceToTarget <= this.maxLeapDistance * this.maxLeapDistance
+            return distanceToTarget >= 16.0 && distanceToTarget <= this.maxLeapDistance * this.maxLeapDistance
                     && this.mob.onGround() && this.mob.hasLineOfSight(this.target);
         }
 
@@ -360,7 +418,7 @@ public class DissidentEntity extends Monster {
         @Override
         public void start() {
             this.isLeaping = true;
-            this.leapTicks = 30;
+            this.leapTicks = 15;
             this.mob.setLeaping(true);
 
             double dx = this.target.getX() - this.mob.getX();
@@ -372,12 +430,14 @@ public class DissidentEntity extends Monster {
                 dx = dx / horizontalDistance;
                 dz = dz / horizontalDistance;
 
-                double horizontalVelocity = this.leapStrength;
-                double verticalVelocity = 0.6;
+                double distanceRatio = Math.min(horizontalDistance / this.maxLeapDistance, 1.0);
+                double horizontalVelocity = this.leapStrength * 1.8 * (0.7 + distanceRatio * 0.3);
+                double verticalVelocity = 0.4 + (distanceRatio * 0.3);
 
                 if (dy > 0) {
                     verticalVelocity += Math.min(dy * 0.3, 0.5);
                 }
+
                 this.mob.setDeltaMovement(
                         dx * horizontalVelocity,
                         verticalVelocity,
@@ -397,13 +457,14 @@ public class DissidentEntity extends Monster {
 
             this.mob.getLookControl().setLookAt(this.target, 30.0F, 30.0F);
 
-            if (this.mob.distanceToSqr(this.target) <= 3.0) {
+            if (this.mob.distanceToSqr(this.target) <= 4.5) {
                 this.performLeapAttack();
             }
-            if (this.mob.onGround() && this.mob.getDeltaMovement().y <= 0.1) {
-                this.leapTicks = Math.min(this.leapTicks, 5);
 
-                if (this.mob.distanceToSqr(this.target) <= 6.0) {
+            if (this.mob.onGround() && this.mob.getDeltaMovement().y <= 0.1) {
+                this.leapTicks = Math.min(this.leapTicks, 3);
+
+                if (this.mob.distanceToSqr(this.target) <= 9.0) {
                     this.performLeapAttack();
                 }
             }
@@ -419,10 +480,31 @@ public class DissidentEntity extends Monster {
         }
 
         private void performLeapAttack() {
-            if (this.target != null && this.mob.distanceToSqr(this.target) <= 6.0) {
+            if (this.target != null && this.mob.distanceToSqr(this.target) <= 12.0) {
                 float leapDamage = (float) this.mob.getAttributeValue(Attributes.ATTACK_DAMAGE) * 1.3f;
                 this.target.hurt(this.mob.damageSources().mobAttack(this.mob), leapDamage);
-                this.target.setDeltaMovement(this.target.getDeltaMovement().add(0, 0.2, 0));
+
+                this.target.addEffect(new net.minecraft.world.effect.MobEffectInstance(
+                        net.minecraft.world.effect.MobEffects.MOVEMENT_SLOWDOWN,
+                        60,
+                        1
+                ));
+
+                double knockbackStrength = 0.8;
+                double dx = this.target.getX() - this.mob.getX();
+                double dz = this.target.getZ() - this.mob.getZ();
+                double horizontalDistance = Math.sqrt(dx * dx + dz * dz);
+
+                if (horizontalDistance > 0.1) {
+                    this.target.setDeltaMovement(
+                            this.target.getDeltaMovement().add(
+                                    (dx / horizontalDistance) * knockbackStrength,
+                                    0.4,
+                                    (dz / horizontalDistance) * knockbackStrength
+                            )
+                    );
+                }
+
                 this.mob.playSound(SoundEvents.RABBIT_HURT, 1.0F, 1.2F);
                 this.mob.setAttacking(true);
             }

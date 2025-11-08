@@ -1,0 +1,10 @@
+{
+  "type": "scguns:niter_patch",
+  "config": {
+    "niter_block": "scguns:niter",
+    "min_layers": 1,
+    "max_layers": 3,
+    "spread_radius": 2,
+    "spread_attempts": 30
+  }
+}

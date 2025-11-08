@@ -15,21 +15,14 @@
   },
   "general": {
     "weaponType": "shotgun",
-    "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "projectileAmount": 18,
     "rate": 2,
-    "recoilAngle": 10.0,
-    "recoilKick": 3.0,
-    "spread": 6.0,
+
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 40,
-    "criticalChance": 0.05,
-    "playerKnockBack": true,
-    "playerKnockBackStrength": 0.25
+    "hotBarrelRate": 40
   },
   "modules": {
     "attachments": {
@@ -48,6 +41,14 @@
     }
   },
   "projectile": {
+    "projectileAmount": 18,
+    "alwaysSpread": true,
+    "recoilAngle": 10.0,
+    "recoilKick": 3.0,
+    "spread": 6.0,
+    "criticalChance": 0.05,
+    "playerKnockBack": true,
+    "playerKnockBackStrength": 0.25,
     "knockbackStrength": 0.75,
     "damageFalloffStart": 7.0,
     "damageFalloffEnd": 18.0,

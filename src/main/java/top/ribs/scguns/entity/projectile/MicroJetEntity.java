@@ -34,7 +34,7 @@ import java.util.List;
 public class MicroJetEntity extends ProjectileEntity {
     public static final float EXPLOSION_DAMAGE_MULTIPLIER = 2.0F;
     private static final float MAX_DAMAGE_MULTIPLIER = 1.5f;
-    private static final int TICKS_TO_MAX_SPEED = 15;
+    private static final int TICKS_TO_MAX_SPEED = 20;
     private static final float SHIELD_DISABLE_CHANCE = 0.75f;
     private static final float SHIELD_DAMAGE_PENETRATION = 0.2f;
     private static final float HEADSHOT_EFFECT_DURATION_MULTIPLIER = 1.5f;

@@ -19,13 +19,9 @@
     "gripType": "scguns:mini_gun",
     "baseGripType": "scguns:mini_gun",
     "rate": 4,
-    "recoilAngle": 2.0,
-    "recoilKick": 1.0,
-    "spread": 1.5,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 10,
-    "criticalChance": 0.05,
     "meleeReach": 3.5,
     "speedModifier": 0.85
   },
@@ -34,6 +30,10 @@
     }
   },
   "projectile": {
+    "recoilAngle": 2.0,
+    "recoilKick": 1.0,
+    "spread": 1.5,
+    "criticalChance": 0.05,
     "advantage": "scguns:heavy",
     "damage": 13.0,
     "damageFalloffStart": 20.0,

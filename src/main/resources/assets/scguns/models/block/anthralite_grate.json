@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "scguns:block/anthralite_grate"
+  },
+  "render_type": "cutout"
+}

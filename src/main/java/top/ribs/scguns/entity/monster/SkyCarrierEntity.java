@@ -99,7 +99,6 @@ public class SkyCarrierEntity extends FlyingMob implements Enemy {
                 effect == MobEffects.MOVEMENT_SLOWDOWN ||
                 effect == MobEffects.DIG_SLOWDOWN ||
                 effect == MobEffects.HARM ||
-                effect == ModEffects.SULFUR_POISONING.get() ||
                 effect == MobEffects.HEAL) {
             return false;
         }

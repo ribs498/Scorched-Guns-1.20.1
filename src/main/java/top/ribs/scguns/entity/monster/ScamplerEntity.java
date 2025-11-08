@@ -55,8 +55,7 @@ public class ScamplerEntity extends Monster {
                 effect == MobEffects.MOVEMENT_SLOWDOWN ||
                 effect == MobEffects.DIG_SLOWDOWN ||
                 effect == MobEffects.HARM ||
-                effect == MobEffects.HEAL ||
-                effect == ModEffects.SULFUR_POISONING.get()
+                effect == MobEffects.HEAL
                 ) {
             return false;
         }

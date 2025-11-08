@@ -112,9 +112,9 @@ public class HornlinEntity extends Monster implements RangedAttackMob, IGoldCons
     }
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new ConsumeGoldGoal(this, this));
-        this.goalSelector.addGoal(1, new GoldSeekingGoal(this, this, 1.0, 16.0F));
-        this.goalSelector.addGoal(2, new MeleeAttackGoal(this, 1.0D, false));
+        this.goalSelector.addGoal(1, new MeleeAttackGoal(this, 1.0D, false));
+        this.goalSelector.addGoal(2, new ConsumeGoldGoal(this, this));
+        this.goalSelector.addGoal(3, new GoldSeekingGoal(this, this, 1.0, 16.0F));
         this.goalSelector.addGoal(7, new WaterAvoidingRandomStrollGoal(this, 1.0D));
         this.goalSelector.addGoal(8, new LookAtPlayerGoal(this, Player.class, 8.0F));
         this.goalSelector.addGoal(9, new RandomLookAroundGoal(this));
@@ -208,12 +208,8 @@ public class HornlinEntity extends Monster implements RangedAttackMob, IGoldCons
             return false;
         }
 
-        if (this.getTags().contains("MobGunner")) {
-            return false;
-        }
-
-        ItemStack mainHandItem = this.getMainHandItem();
-        return !(mainHandItem.getItem() instanceof top.ribs.scguns.item.GunItem);
+        ItemStack helmet = this.getItemBySlot(EquipmentSlot.HEAD);
+        return !helmet.is(top.ribs.scguns.init.ModTags.Items.GAS_MASK);
     }
 
     private void convertToZombifiedHornlin() {

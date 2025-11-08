@@ -1,0 +1,30 @@
+{
+  "type": "create:deploying",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    },
+    {
+      "type": "forge:not",
+      "value": {
+        "type": "forge:tag_empty",
+        "tag": "forge:ingots/steel"
+      }
+    }
+  ],
+  "ingredients": [
+    {
+      "tag": "forge:ingots/steel"
+    },
+    {
+      "item": "scguns:bullet_mold"
+    }
+  ],
+  "results": [
+    {
+      "item": "scguns:hardened_bullet",
+        "count": 12
+    }
+  ]
+}

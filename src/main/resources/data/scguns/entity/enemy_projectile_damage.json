@@ -1,0 +1,8 @@
+{
+  "damage_values": {
+    "scguns:sky_carrier": 2.0,
+    "scguns:blunderer": 7.0,
+    "scguns:scamp_tank": 3.0,
+    "scguns:mother_ghast": 4.0
+  }
+}

@@ -34,6 +34,9 @@ public class ArmorRenderHandler {
                 if (armorStack.getItem() instanceof AdrienArmorItem) {
                     hideSecondLayerForSlot(playerModel, slot);
                 }
+                if (armorStack.getItem() instanceof TreatedBrassArmorItem) {
+                    hideSecondLayerForSlot(playerModel, slot);
+                }
                 if (armorStack.getItem() instanceof AnthraliteArmorItem) {
                     hideSecondLayerForSlot(playerModel, slot);
                 }

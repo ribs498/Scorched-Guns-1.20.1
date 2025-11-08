@@ -1,0 +1,82 @@
+{
+  "display": {
+    "flash": {
+      "size": 1.0,
+      "yOffset": 5.0,
+      "zOffset": -12.0,
+      "textureLocation": "muzzle_flash_1"
+    }
+  },
+  "general": {
+    "weaponType": "sniper",
+    "fireMode": "scguns:semi_automatic",
+    "gripType": "scguns:two_handed",
+    "baseGripType": "scguns:two_handed",
+    "rate": 12,
+    "meleeDamage": 2.5,
+    "meleeCooldownTicks": 20,
+    "meleeReach": 3.5,
+    "hotBarrelRate": 22
+  },
+  "modules": {
+    "attachments": {
+      "barrel": {
+        "yOffset": 4.75,
+        "zOffset": -12.25
+      },
+      "scope": {
+        "size": 0.7,
+        "yOffset": 6.0,
+        "zOffset": 4.5
+      },
+      "stock": {
+        "scale": 0.0
+      },
+      "underBarrel": {
+        "yOffset": 5.5,
+        "zOffset": -2.5
+      }
+    },
+    "zoom": {
+      "fovModifier": 0.6,
+      "yOffset": 6.2,
+      "zOffset": 2.0
+    }
+  },
+  "projectile": {
+    "alwaysSpread": false,
+    "recoilAngle": 12.5,
+    "recoilKick": 1.5,
+    "spread": 1.0,
+    "criticalChance": 0.15,
+    "advantage": "scguns:none",
+    "damageFalloffStart": 35.0,
+    "damageFalloffEnd": 90.0,
+    "damageFalloffMinMultiplier": 0.85,
+    "damage": 18.0,
+    "armorPen": 3.0,
+    "ejectsCasing": true,
+    "gravity": false,
+    "item": "scguns:gibbs_round",
+    "casingType": "scguns:medium_diamond_steel_casing",
+    "casingParticle": "scguns:diamond_steel_casing",
+    "life": 50,
+    "size": 0.05,
+    "speed": 10.0,
+    "trailLengthMultiplier": 2.0
+  },
+  "reloads": {
+    "emptyMagTimer": 5,
+    "maxAmmo": 1,
+    "reloadTimer": 40,
+    "reloadType": "scguns:mag_fed"
+  },
+  "sounds": {
+    "cock": "scguns:item.makeshift_rifle.cock",
+    "enchantedFire": "scguns:item.new_rifle.fire_2",
+    "fire": "scguns:item.new_rifle.fire_2",
+    "reload": "scguns:item.gauss.reload",
+    "silencedFire": "scguns:item.bruiser.silenced_fire",
+    "flyby": "scguns:bullet.flyby1"
+  }
+}

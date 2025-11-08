@@ -9,18 +9,14 @@
   },
   "general": {
     "weaponType": "heavy",
-    "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:bazooka",
     "baseGripType": "scguns:bazooka",
     "rate": 13,
-    "recoilAngle": 6.7,
-    "recoilKick": 2.22,
-    "spread": 3.0,
+
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 25,
     "hotBarrelRate": 18,
-    "criticalChance": 0.05,
     "isRevolver": true,
     "speedModifier": 0.95
   },
@@ -46,6 +42,11 @@
     }
   },
   "projectile": {
+    "alwaysSpread": false,
+    "recoilAngle": 6.7,
+    "recoilKick": 2.22,
+    "spread": 3.0,
+    "criticalChance": 0.05,
     "visible": true,
     "advantage": "scguns:none",
     "damage": 28.0,
@@ -54,7 +55,7 @@
     "item": "scguns:rocket",
     "life": 55,
     "size": 0.05,
-    "speed": 4.2,
+    "speed": 6.0,
     "trailLengthMultiplier": 2.0
   },
   "reloads": {

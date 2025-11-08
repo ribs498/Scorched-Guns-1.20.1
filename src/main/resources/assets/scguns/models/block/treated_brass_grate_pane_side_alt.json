@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/template_glass_pane_side_alt",
+  "render_type": "cutout",
+  "textures": {
+    "edge": "scguns:block/treated_brass_plates",
+    "pane": "scguns:block/treated_brass_grate"
+  }
+}

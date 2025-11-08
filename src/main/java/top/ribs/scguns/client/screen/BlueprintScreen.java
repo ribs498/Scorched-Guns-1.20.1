@@ -46,23 +46,23 @@ public class BlueprintScreen extends Screen {
 
             //ANTIQUE
             "flintlock_pistol", "handcannon", "musket", "blunderbuss", "doublet", "repeating_musket",
-            "longarm", "fencer_carabine", "fencer_thumper", "laser_musket", "plasmabuss",
+            "longarm", "fencer_carabine", "fencer_thumper",  "laser_musket", "plasmabuss", "teslock_rifle",
 
             //FRONTIER
             "pax", "winnie","winnie_millend", "red_raydar", "callwell", "callwell_conversion", "callwell_terminal", "saketini",
-            "saketini_ironport", "big_bore",
+            "saketini_ironport", "kiln_gun", "big_bore",
 
-           //COPPER
+            //COPPER
             "scrapper", "rusty_gnat", "umax_pistol", "makeshift_rifle", "boomstick", "bruiser",
-            "llr_director", "birdfeeder", "arc_worker",
+            "llr_director", "birdfeeder", "whistler", "blooper", "arc_worker",
 
             //IRON
             "defender_pistol", "trenchur", "greaser_smg", "m3_carabine", "m3_marksman","combat_shotgun", "venturi",
             "iron_javelin", "iron_spear", "auvtomag", "pulsar", "gyrojet_pistol", "brawler",
-            "crusader", "mk43_rifle", "rocket_rifle", "ultra_knight_hawk",
+            "crusader", "mk43_rifle", "triquetra", "rocket_rifle", "ultra_knight_hawk",
 
             //OCEAN
-            "floundergat", "marlin", "bomb_lance", "hullbreaker", "sequoia",
+            "floundergat", "hyperbaria", "marlin", "bomb_lance", "hullbreaker", "sequoia", "spirulida",
 
             //WRECKER
             "mokova", "mak_mkii", "stilleto", "railworker", "stiletto",
@@ -70,12 +70,12 @@ public class BlueprintScreen extends Screen {
 
             //DIAMONDSTEEL
             "krauser", "soul_drummer", "uppercut", "micina", "valora", "prush_gun", "drill", "drill_conversion", "lockewood",
-            "rg_jigsaw","nailer", "inertial",
-            "mas_55", "inquisitor", "plasgun", "cyclone", "shard_culler",
+            "zilk_45", "rg_jigsaw","nailer", "inertial", "minksy","mas_55", "mas_peddler",
+            "inquisitor", "plasgun", "truant", "cyclone", "shard_culler",
 
             //TREATEDBRASS
-            "m22_waltz", "waltz_conversion", "osgood_50", "grandle_og", "grandle", "cogloader", "gale", "jackhammer",
-            "howler", "howler_conversion", "gauss_rifle", "niami", "spitfire", "gattaler",
+            "m22_waltz", "waltz_conversion", "osgood_50", "grandle_og", "grandle", "cogloader", "gale","jr_wristbreaker", "jackhammer",
+            "howler", "howler_conversion", "gauss_rifle", "libertas", "niami", "hammer_gl","spitfire", "gattaler",
             "thunderhead", "scratches", "cr4k_mining_laser", "dozier_rl",
 
             //PIGLIN
@@ -101,6 +101,10 @@ public class BlueprintScreen extends Screen {
         LORE_ONLY_ITEMS.put(
                 new ResourceLocation("scguns", "piglin_blueprint"),
                 new ArrayList<>(Arrays.asList("blasphemy", "super_shotgun"))
+        );
+        LORE_ONLY_ITEMS.put(
+                new ResourceLocation("scguns", "frontier_blueprint"),
+                new ArrayList<>(Arrays.asList("kiln_gun"))
         );
     }
 

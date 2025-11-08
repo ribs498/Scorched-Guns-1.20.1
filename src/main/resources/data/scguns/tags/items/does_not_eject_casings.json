@@ -1,12 +1,15 @@
 {
   "replace": false,
   "values": [
-    "scguns:pyroclastic_flow",
     "scguns:flintlock_pistol",
     "scguns:handcannon",
     "scguns:musket",
+    "scguns:repeating_musket",
     "scguns:blunderbuss",
-    "scguns:cr4k_mining_laser",
+    "scguns:doublet",
+    "scguns:longarm",
+    "scguns:fencer_thumper",
+    "scguns:fencer_carabine",
     "scguns:nervepinch",
     "scguns:venturi",
     "scguns:umax_pistol",

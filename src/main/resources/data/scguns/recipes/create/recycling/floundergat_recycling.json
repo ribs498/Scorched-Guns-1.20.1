@@ -15,7 +15,7 @@
   "results": [
     {
       "chance": 0.3,
-      "item": "minecraft:heart_of_the_sea"
+      "item": "scguns:firing_unit"
     },
     {
       "chance": 0.3,
@@ -27,7 +27,19 @@
     },
     {
       "chance": 0.3,
-      "item": "scguns:anthralite_ingot"
+      "item": "scguns:heavy_gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:heavy_gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:heavy_gun_barrel"
+    },
+    {
+      "chance": 0.3,
+      "item": "scguns:treated_brass_ingot"
     }
   ]
 }

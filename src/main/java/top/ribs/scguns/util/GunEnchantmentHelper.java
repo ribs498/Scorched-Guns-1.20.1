@@ -9,6 +9,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import top.ribs.scguns.cache.HotBarrelCache;
 import top.ribs.scguns.common.*;
+import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModEnchantments;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.particles.TrailData;
@@ -61,9 +62,7 @@ public class GunEnchantmentHelper
             return getReloadInterval(weapon);
     }
 
-    /**
-     * Gets reload interval without hot barrel modifications to prevent timing issues
-     */
+
     public static int getReloadInterval(ItemStack weapon) {
         Gun modifiedGun = ((GunItem) weapon.getItem()).getModifiedGun(weapon);
         ReloadType reloadType = modifiedGun.getReloads().getReloadType();
@@ -202,7 +201,7 @@ public class GunEnchantmentHelper
 
     public static float getHotBarrelDamage(Player player, ItemStack weapon, float baseDamage) {
         int hotBarrelLevel = HotBarrelCache.getHotBarrelLevel(player, weapon);
-        float damageBoost = (hotBarrelLevel / 100.0f) * 0.35f;
+        float damageBoost = (hotBarrelLevel / 100.0f) * 0.6f;
         return baseDamage + (baseDamage * damageBoost);
     }
 
@@ -283,6 +282,10 @@ public class GunEnchantmentHelper
         ELEMENTAL_EFFECTS.put(MobEffects.CONFUSION, 2);
         ELEMENTAL_EFFECTS.put(MobEffects.WATER_BREATHING, 4);
         ELEMENTAL_EFFECTS.put(MobEffects.NIGHT_VISION, 3);
+        ELEMENTAL_EFFECTS.put(ModEffects.SULFUR_POISONING.get(), 5);
+        ELEMENTAL_EFFECTS.put(ModEffects.BLINDED.get(), 2);
+        ELEMENTAL_EFFECTS.put(ModEffects.DEAFENED.get(), 2);
+        ELEMENTAL_EFFECTS.put(ModEffects.LACERATED.get(), 4);
     }
 
     public static void applyElementalPopEffect(ItemStack weapon, LivingEntity target) {

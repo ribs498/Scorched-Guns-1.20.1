@@ -18,16 +18,11 @@
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 2,
-    "recoilAngle": 2.25,
-    "recoilKick": 1.25,
-    "spread": 5.0,
     "meleeDamage": 8.0,
     "meleeCooldownTicks": 15,
     "meleeReach": 3.5,
-    "hotBarrelRate": 5,
-    "criticalChance": 0.05,
-    "playerKnockBack": true,
-    "playerKnockBackStrength": 0.1
+    "hotBarrelRate": 5
+
   },
   "modules": {
     "attachments": {
@@ -56,6 +51,12 @@
     }
   },
   "projectile": {
+    "recoilAngle": 2.25,
+    "recoilKick": 1.25,
+    "spread": 5.0,
+    "criticalChance": 0.05,
+    "playerKnockBack": true,
+    "playerKnockBackStrength": 0.1,
     "advantage": "scguns:none",
     "damageFalloffStart": 20.0,
     "damageFalloffEnd": 50.0,

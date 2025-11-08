@@ -64,7 +64,6 @@ public class GunItem extends Item implements IColored, IMeta {
         baseDamage = GunEnchantmentHelper.getAcceleratorDamage(stack, baseDamage);
         baseDamage = GunEnchantmentHelper.getHeavyShotDamage(stack, baseDamage);
 
-
         baseDamage *= Config.COMMON.gameplay.globalDamageMultiplier.get().floatValue();
         String additionalDamageText = "";
         CompoundTag tagCompound = stack.getTag();
@@ -72,7 +71,6 @@ public class GunItem extends Item implements IColored, IMeta {
             if (tagCompound.contains("AdditionalDamage", Tag.TAG_ANY_NUMERIC)) {
                 float additionalDamage = tagCompound.getFloat("AdditionalDamage");
                 additionalDamage += GunModifierHelper.getAdditionalDamage(stack, false);
-
 
                 if (additionalDamage > 0) {
                     additionalDamageText = ChatFormatting.GREEN + " +" + ItemStack.ATTRIBUTE_MODIFIER_FORMAT.format(additionalDamage);
@@ -109,9 +107,7 @@ public class GunItem extends Item implements IColored, IMeta {
         if (modifiedGun.getReloads().getReloadType() == ReloadType.SINGLE_ITEM) {
             ammo = reloadItem;
         }
-        if (ammo != null) {
-            tooltip.add(Component.translatable("info.scguns.ammo_type", Component.translatable(ammo.getDescriptionId()).withStyle(ChatFormatting.WHITE)).withStyle(ChatFormatting.GRAY));
-        }
+
         if (tagCompound != null) {
             if (tagCompound.getBoolean("IgnoreAmmo")) {
                 tooltip.add(Component.translatable("info.scguns.ignore_ammo").withStyle(ChatFormatting.AQUA));
@@ -146,7 +142,40 @@ public class GunItem extends Item implements IColored, IMeta {
                     .append(": ")
                     .append(Component.translatable(weaponTypeKey).withStyle(ChatFormatting.AQUA)));
         }
+        if (ammo != null) {
+            tooltip.add(Component.translatable("info.scguns.ammo_type", Component.translatable(ammo.getDescriptionId()).withStyle(ChatFormatting.WHITE)).withStyle(ChatFormatting.GRAY));
+        }
 
+        if (modifiedGun.getGeneral().allowsAmmoChange() && !modifiedGun.getGeneral().getAvailableAmmoTypes().isEmpty()) {
+            if (net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
+                tooltip.add(Component.translatable("info.scguns.available_ammo_types").withStyle(ChatFormatting.GRAY));
+
+                int currentIndex = modifiedGun.getGeneral().getCurrentAmmoTypeIndex();
+                List<String> ammoTypes = modifiedGun.getGeneral().getAvailableAmmoTypes();
+
+                for (int i = 0; i < ammoTypes.size(); i++) {
+                    String ammoType = ammoTypes.get(i);
+                    ResourceLocation ammoLocation = new ResourceLocation(
+                            ammoType.contains(":") ? ammoType : top.ribs.scguns.Reference.MOD_ID + ":" + ammoType
+                    );
+                    Item ammoItem = ForgeRegistries.ITEMS.getValue(ammoLocation);
+
+                    if (ammoItem != null) {
+                        Component ammoName = Component.translatable(ammoItem.getDescriptionId());
+                        if (i == currentIndex) {
+                            tooltip.add(Component.literal("  • ").withStyle(ChatFormatting.YELLOW)
+                                    .append(ammoName.copy().withStyle(ChatFormatting.YELLOW))
+                                    .append(Component.literal(" ✓").withStyle(ChatFormatting.GREEN)));
+                        } else {
+                            tooltip.add(Component.literal("  • ").withStyle(ChatFormatting.GRAY)
+                                    .append(ammoName.copy().withStyle(ChatFormatting.WHITE)));
+                        }
+                    }
+                }
+            } else {
+                tooltip.add(Component.translatable("info.scguns.ammo_swap_available").withStyle(ChatFormatting.GOLD, ChatFormatting.ITALIC));
+            }
+        }
         tooltip.add(Component.translatable("info.scguns.attachment_help", KeyBinds.KEY_ATTACHMENTS.getTranslatedKeyMessage().getString().toUpperCase(Locale.ENGLISH)).withStyle(ChatFormatting.YELLOW));
     }
 
@@ -305,6 +334,13 @@ public class GunItem extends Item implements IColored, IMeta {
     public boolean isOneHandedCarbineCandidate(ItemStack gunStack) {
         return gunStack.is(ModTags.Items.ONE_HANDED_CARBINE);
     }
+
+    public boolean isOneHandedCarbineActive(ItemStack gunStack) {
+        return isOneHandedCarbineCandidate(gunStack) &&
+                !Gun.hasExtendedBarrel(gunStack) &&
+                !Gun.hasStock(gunStack);
+    }
+
     public void onAttachmentChanged(ItemStack stack) {
         CompoundTag tag = stack.getOrCreateTag();
         tag.putBoolean("AttachmentChanged", true);

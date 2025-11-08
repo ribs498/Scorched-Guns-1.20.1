@@ -7,52 +7,62 @@
     "custom_name": "translation:raid.boss.scguns.sculk",
     "fixed_health": 180.0,
     "weapon": {
-      "item": "scguns:forlorn_hope",
-      "drop_chance": 0.35
+      "item": "scguns:sculk_resonator",
+      "drop_chance": 0.25,
+      "nbt": {
+        "Enchantments": [
+          {
+            "id": "scguns:puncturing",
+            "lvl": 1
+          }
+        ]
+      }
     },
     "armor": [
       {
         "item": "minecraft:diamond_helmet",
         "slot": "head",
-        "drop_chance": 0.25
+        "drop_chance": 0.2
       },
       {
         "item": "minecraft:diamond_chestplate",
         "slot": "chest",
-        "drop_chance": 0.25
+        "drop_chance": 0.2
       },
       {
         "item": "minecraft:diamond_leggings",
         "slot": "legs",
-        "drop_chance": 0.2
+        "drop_chance": 0.15
       },
       {
         "item": "minecraft:diamond_boots",
         "slot": "feet",
-        "drop_chance": 0.2
+        "drop_chance": 0.15
       }
     ],
     "effects": [
       {
         "effect": "minecraft:speed",
-        "amplifier": 0,
+        "amplifier": 1,
         "duration": -1,
         "ambient": false,
         "visible": false
       }
     ],
-    "ai_difficulty": 5,
+    "ai_difficulty": 4,
     "ai_type": "TACTICAL",
     "special_loot_table": "scguns:raids/sculk_boss",
     "mount": {
       "entity_type": "minecraft:ravager",
-      "health_multiplier": 2.0,
-      "armor": [],
+      "health_multiplier": 1.75,
+      "armor": [
+
+      ],
       "effects": [
         {
           "effect": "minecraft:speed",
           "amplifier": 1,
-          "duration": -1,
+          "duration": 2000,
           "ambient": true,
           "visible": false
         }
@@ -66,27 +76,22 @@
       {
         "entity_type": "minecraft:vindicator",
         "weight": 4.0,
-        "health_multiplier": 1.5,
+        "fixed_health": 40.0,
         "weapons": [
-          "scguns:whispers",
-          "scguns:sculk_resonator",
           "scguns:echoes_2",
-          "minecraft:iron_axe"
+          "scguns:forlorn_hope",
+          "scguns:whispers",
+          "minecraft:diamond_axe"
         ],
         "armor": [
           {
-            "item": "minecraft:diamond_helmet",
+            "item": "scguns:anthralite_helmet",
             "slot": "head",
-            "chance": 0.6
+            "chance": 1.0
           },
           {
-            "item": "minecraft:diamond_chestplate",
+            "item": "scguns:anthralite_chestplate",
             "slot": "chest",
-            "chance": 0.5
-          },
-          {
-            "item": "minecraft:diamond_leggings",
-            "slot": "legs",
             "chance": 0.4
           }
         ],
@@ -99,27 +104,46 @@
             "visible": false
           }
         ],
-        "ai_difficulty": 4,
+        "ai_difficulty": 2,
+        "ai_type": "DEFAULT"
+      },
+      {
+        "entity_type": "scguns:blunderer",
+        "weight": 2.0,
+        "fixed_health": 100.0,
+        "weapons": [
+          "scguns:forlorn_hope",
+          "scguns:echoes_2",
+            "scguns:kiln_gun",
+            "scguns:war_axe"
+        ],
+        "armor": [
+          {
+            "item": "scguns:anthralite_helmet",
+            "slot": "head",
+            "chance": 1.0
+          }
+        ],
+        "ai_difficulty": 2,
         "ai_type": "DEFAULT"
       },
       {
         "entity_type": "minecraft:pillager",
-        "weight": 3.5,
-        "fixed_health": 40.0,
+        "weight": 1.5,
+        "health_multiplier": 1.4,
         "weapons": [
           "scguns:whispers",
-          "scguns:echoes_2",
           "scguns:sculk_resonator",
-          "minecraft:crossbow"
+          "minecraft:diamond_axe"
         ],
         "armor": [
           {
-            "item": "minecraft:chainmail_helmet",
+            "item": "scguns:anthralite_helmet",
             "slot": "head",
-            "chance": 0.7
+            "chance": 0.5
           },
           {
-            "item": "minecraft:chainmail_chestplate",
+            "item": "scguns:anthralite_chestplate",
             "slot": "chest",
             "chance": 0.6
           }
@@ -129,74 +153,48 @@
             "effect": "minecraft:speed",
             "amplifier": 0,
             "duration": -1,
-            "ambient": false,
+            "ambient": true,
             "visible": false
           }
         ],
         "ai_difficulty": 3,
-        "ai_type": "TACTICAL"
-      },
-      {
-        "entity_type": "minecraft:evoker",
-        "weight": 1.5,
-        "fixed_health": 50.0,
-        "weapons": [],
-        "armor": [
-          {
-            "item": "minecraft:diamond_helmet",
-            "slot": "head",
-            "chance": 0.8
-          }
-        ],
-        "effects": [
-          {
-            "effect": "minecraft:resistance",
-            "amplifier": 0,
-            "duration": -1,
-            "ambient": true,
-            "visible": false
-          },
-          {
-            "effect": "minecraft:regeneration",
-            "amplifier": 0,
-            "duration": -1,
-            "ambient": true,
-            "visible": false
-          }
-        ],
-        "ai_difficulty": 2,
-        "ai_type": "COWARD"
+        "ai_type": "DEFAULT"
       },
       {
         "entity_type": "minecraft:witch",
-        "weight": 1.0,
-        "fixed_health": 45.0,
-        "weapons": [],
-        "armor": [],
+        "weight": 1.5,
+        "health_multiplier": 1.4,
+        "weapons": [
+        ],
+        "armor": [
+          {
+            "item": "scguns:anthralite_helmet",
+            "slot": "head",
+            "chance": 0.5
+          },
+          {
+            "item": "scguns:anthralite_chestplate",
+            "slot": "chest",
+            "chance": 0.6
+          }
+        ],
         "effects": [
           {
             "effect": "minecraft:speed",
             "amplifier": 0,
             "duration": -1,
-            "ambient": false,
-            "visible": false
-          },
-          {
-            "effect": "minecraft:fire_resistance",
-            "amplifier": 0,
-            "duration": -1,
             "ambient": true,
             "visible": false
           }
         ],
-        "ai_difficulty": 2,
-        "ai_type": "COWARD"
+        "ai_difficulty": 3,
+        "ai_type": "DEFAULT"
       }
     ],
-    "spawn_interval_ticks": 600,
-    "max_alive": 10,
-    "spawn_radius": 20,
-    "spawn_attempts_per_wave": 5
+    "spawn_interval_ticks": 500,
+    "max_alive": 9,
+    "spawn_radius": 15,
+    "spawn_attempts_per_wave": 6
   },
 
   "spawn_conditions": {

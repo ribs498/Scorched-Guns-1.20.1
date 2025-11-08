@@ -17,12 +17,15 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.effect.MobEffects;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.init.ModEffects;
 import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.init.ModTags;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SulfurGasCloud {
 
@@ -35,15 +38,34 @@ public class SulfurGasCloud {
     private static final int PERF_MAX_CLOUD_PARTICLES = 15;
     private static final int PERF_MAX_DUST_PARTICLES = 10;
 
-    private static final int FULL_BASE_CLOUD_PARTICLES = 40;
-    private static final int FULL_BASE_DUST_PARTICLES = 25;
+    private static final int FULL_BASE_CLOUD_PARTICLES = 15;
+    private static final int FULL_BASE_DUST_PARTICLES = 10;
 
-    public static void spawnCloudParticlesForced(ServerLevel serverLevel, Vec3 center, double radius, int particleCount, RandomSource random) {
+    private static final int PARTICLE_SPAWN_INTERVAL = 3;
+    private static final Map<BlockPos, Integer> activeGasClouds = new HashMap<>();
+    private static final int CLOUD_PROXIMITY_THRESHOLD = 8;
+
+
+    /**
+     * Optimized particle spawning with smart throttling
+     */
+    public static void spawnCloudParticlesForced(ServerLevel serverLevel, Vec3 center, double radius, int particleCount, RandomSource random, int tickCount) {
         if (Config.CLIENT.display.enablePerformanceSulfurCloud.get()) {
             particleCount = Math.min(particleCount, PERF_MAX_CLOUD_PARTICLES);
         }
 
+        if (tickCount % PARTICLE_SPAWN_INTERVAL != 0) {
+            return;
+        }
+
+        BlockPos cloudPos = BlockPos.containing(center);
+        float overlapReduction = calculateOverlapReduction(cloudPos);
+        particleCount = Math.round(particleCount * overlapReduction);
+
+        if (particleCount <= 0) return;
+
         List<ServerPlayer> nearbyPlayers = getNearbyPlayers(serverLevel, center, PARTICLE_RENDER_DISTANCE);
+        if (nearbyPlayers.isEmpty()) return;
 
         for (int i = 0; i < particleCount; i++) {
             double angle = random.nextDouble() * 2 * Math.PI;
@@ -61,11 +83,38 @@ public class SulfurGasCloud {
                 serverLevel.sendParticles(player, ModParticleTypes.SULFUR_SMOKE.get(),
                         true,
                         x, y, z,
-                        1,
+                        2,
                         xSpeed, ySpeed, zSpeed,
-                        0.1);
+                        0.15);
             }
         }
+
+        activeGasClouds.put(cloudPos, (int) serverLevel.getGameTime());
+    }
+
+    /**
+     * Calculate particle reduction based on nearby clouds
+     */
+    private static float calculateOverlapReduction(BlockPos center) {
+        int nearbyClouds = 0;
+
+        for (Map.Entry<BlockPos, Integer> entry : activeGasClouds.entrySet()) {
+            BlockPos cloudPos = entry.getKey();
+            double distSq = center.distSqr(cloudPos);
+
+            if (distSq > 0 && distSq < CLOUD_PROXIMITY_THRESHOLD * CLOUD_PROXIMITY_THRESHOLD) {
+                nearbyClouds++;
+            }
+        }
+        if (nearbyClouds == 0) return 1.0f;
+        if (nearbyClouds == 1) return 0.75f;
+        if (nearbyClouds == 2) return 0.5f;
+        return 0.35f;
+    }
+
+    public static void cleanupCloudTracking(ServerLevel serverLevel) {
+        long currentTime = serverLevel.getGameTime();
+        activeGasClouds.entrySet().removeIf(entry -> currentTime - entry.getValue() > 400); // 20 seconds
     }
 
     public static void destroyNatureInArea(Level level, Vec3 center, double radius, RandomSource random) {
@@ -134,12 +183,23 @@ public class SulfurGasCloud {
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
     }
 
-    public static void spawnDustParticlesForced(ServerLevel serverLevel, Vec3 center, double radius, int particleCount, RandomSource random) {
+    public static void spawnDustParticlesForced(ServerLevel serverLevel, Vec3 center, double radius, int particleCount, RandomSource random, int tickCount) {
         if (Config.CLIENT.display.enablePerformanceSulfurCloud.get()) {
             particleCount = Math.min(particleCount, PERF_MAX_DUST_PARTICLES);
         }
 
+        if (tickCount % 4 != 0) {
+            return;
+        }
+
+        BlockPos cloudPos = BlockPos.containing(center);
+        float overlapReduction = calculateOverlapReduction(cloudPos);
+        particleCount = Math.round(particleCount * overlapReduction);
+
+        if (particleCount <= 0) return;
+
         List<ServerPlayer> nearbyPlayers = getNearbyPlayers(serverLevel, center, PARTICLE_RENDER_DISTANCE);
+        if (nearbyPlayers.isEmpty()) return;
 
         for (int i = 0; i < particleCount; i++) {
             double angle = random.nextDouble() * 2 * Math.PI;
@@ -175,6 +235,10 @@ public class SulfurGasCloud {
     public static void applyGasEffects(Level level, Vec3 center, double radius, int baseDuration, int baseAmplifier) {
         if (level.isClientSide) return;
 
+        if (top.ribs.scguns.common.ChokeBombCloud.isChokeBombActive(level, center, radius * 2)) {
+            return;
+        }
+
         double radiusSquared = radius * radius;
         double innerRadiusSquared = radiusSquared * INNER_ZONE_RATIO;
 
@@ -184,6 +248,10 @@ public class SulfurGasCloud {
         for (LivingEntity entity : entities) {
             double distanceSquared = entity.distanceToSqr(center);
             if (distanceSquared > radiusSquared) continue;
+
+            if (entity.getType().is(ModTags.Entities.IGNORES_SULFUR_GAS)) {
+                continue;
+            }
 
             if (entity instanceof Player player && (player.isCreative() || player.isSpectator())) {
                 continue;
@@ -198,15 +266,27 @@ public class SulfurGasCloud {
                 continue;
             }
             boolean inInnerZone = distanceSquared <= innerRadiusSquared;
+            boolean isBot = entity.getType().is(ModTags.Entities.BOT);
 
             int amplifier = inInnerZone ? baseAmplifier + 1 : baseAmplifier;
             int duration = inInnerZone ? baseDuration * 2 : baseDuration;
 
-            entity.addEffect(new MobEffectInstance(ModEffects.SULFUR_POISONING.get(), duration, amplifier));
+            if (isBot) {
+                entity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, duration, amplifier));
 
-            if (inInnerZone) {
-                entity.hurt(entity.damageSources().magic(), 1.0F);
-                entity.addEffect(new MobEffectInstance(net.minecraft.world.effect.MobEffects.CONFUSION, 60, 0));
+                float damage = inInnerZone ? 1.5F : 0.75F;
+                entity.hurt(entity.damageSources().magic(), damage);
+
+                if (inInnerZone) {
+                    entity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, duration / 2, 0));
+                }
+            } else {
+                entity.addEffect(new MobEffectInstance(ModEffects.SULFUR_POISONING.get(), duration, amplifier));
+
+                if (inInnerZone) {
+                    entity.hurt(entity.damageSources().magic(), 1.0F);
+                    entity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 60, 0));
+                }
             }
         }
     }
@@ -263,10 +343,19 @@ public class SulfurGasCloud {
         applyGasEffects(level, center, radius, baseDuration, baseAmplifier);
     }
 
-    public static void spawnEnhancedGasCloud(Level level, Vec3 center, double radius, float intensity, RandomSource random) {
+    public static void spawnEnhancedGasCloud(Level level, Vec3 center, double radius, float intensity, RandomSource random, int tickCount) {
         if (level.isClientSide) return;
 
+        if (top.ribs.scguns.common.ChokeBombCloud.isChokeBombActive(level, center, radius * 2)) {
+            return;
+        }
+
         ServerLevel serverLevel = (ServerLevel) level;
+
+        if (tickCount % 100 == 0) {
+            cleanupCloudTracking(serverLevel);
+        }
+
         int baseCloudParticles;
         int baseDustParticles;
 
@@ -281,8 +370,12 @@ public class SulfurGasCloud {
         int cloudParticles = Math.round(baseCloudParticles * intensity);
         int dustParticles = Math.round(baseDustParticles * intensity);
 
-        spawnCloudParticlesForced(serverLevel, center, radius, cloudParticles, random);
-        spawnDustParticlesForced(serverLevel, center, radius, dustParticles, random);
+        spawnCloudParticlesForced(serverLevel, center, radius, cloudParticles, random, tickCount);
+        spawnDustParticlesForced(serverLevel, center, radius, dustParticles, random, tickCount);
+    }
+
+    public static void spawnEnhancedGasCloud(Level level, Vec3 center, double radius, float intensity, RandomSource random) {
+        spawnEnhancedGasCloud(level, center, radius, intensity, random, 0);
     }
 
     public static boolean isFireInArea(Level level, Vec3 center, double radius) {

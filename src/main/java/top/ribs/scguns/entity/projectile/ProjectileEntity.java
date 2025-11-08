@@ -65,6 +65,7 @@ import top.ribs.scguns.interfaces.IHeadshotBox;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.item.animated.AnimatedDiamondSteelAirGunItem;
 import top.ribs.scguns.item.animated.AnimatedDiamondSteelGunItem;
+import top.ribs.scguns.item.animated.AnimatedDiamondSteelUnderWaterGunItem;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.S2CMessageBlood;
 import top.ribs.scguns.network.message.S2CMessageProjectileHitBlock;
@@ -115,7 +116,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         this.shooter = shooter;
         this.modifiedGun = modifiedGun;
         this.general = modifiedGun.getGeneral();
-        this.projectile = modifiedGun.getProjectile();
+        this.projectile = modifiedGun.getProjectile(weapon);
         if (shooter instanceof ServerPlayer player) {
             this.chargeProgress = player.getPersistentData().getFloat("ChargeProgress");
         } else if (shooter instanceof Player player) {
@@ -241,7 +242,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
     private Vec3 getDirection(LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
 
-        float baseSpread = modifiedGun.getGeneral().getSpread();
+        float baseSpread = modifiedGun.getProjectile().getSpread();
 
         float gunSpread;
         if (shooter instanceof Player player) {
@@ -260,7 +261,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         }
 
         if (shooter instanceof Player player) {
-            if (!modifiedGun.getGeneral().isAlwaysSpread()) {
+            if (!modifiedGun.getProjectile().isAlwaysSpread()) {
                 float spreadTrackerMultiplier = SpreadTracker.get(player).getSpread(item);
                 gunSpread *= spreadTrackerMultiplier;
             }
@@ -342,7 +343,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
             }
         }
 
-        return initialDamage / this.general.getProjectileAmount();
+        return initialDamage / this.projectile.getProjectileAmount();
     }
 
     public void setWeapon(ItemStack weapon) {
@@ -390,7 +391,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
 
             ResourceLocation flybySound = modifiedGun.getSounds().getFlybySound();
 
-            if (!players.isEmpty() && flybySound != null && modifiedGun.getGeneral().getProjectileAmount() == 1 && this.tickCount > 3 && soundTime < this.tickCount - 3) {
+            if (!players.isEmpty() && flybySound != null && modifiedGun.getProjectile().getProjectileAmount() == 1 && this.tickCount > 3 && soundTime < this.tickCount - 3) {
                 this.level().playSound(null, startVec.x,startVec.y,startVec.z, Objects.requireNonNull(ForgeRegistries.SOUND_EVENTS.getValue(flybySound)), SoundSource.NEUTRAL, (float) 0.5F + this.level().getRandom().nextFloat() * 0.4F, 0.8F + this.level().getRandom().nextFloat() * 0.4F);
                 this.soundTime = this.tickCount;
             }
@@ -835,7 +836,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
         if (!this.level().isClientSide && this.getShooter() instanceof Player player) {
             ItemStack weapon = player.getMainHandItem();
 
-            if (weapon.getItem() instanceof AnimatedDiamondSteelGunItem || weapon.getItem() instanceof AnimatedDiamondSteelGunItem) {
+            if (weapon.getItem() instanceof AnimatedDiamondSteelGunItem || weapon.getItem() instanceof AnimatedDiamondSteelAirGunItem|| weapon.getItem() instanceof AnimatedDiamondSteelUnderWaterGunItem) {
                 int baseXP = killedEntity.getExperienceReward();
                 int bonusXP = Math.round(baseXP * 0.2f);
 
@@ -986,7 +987,7 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
     float getCriticalDamage(ItemStack weapon, RandomSource rand, float damage) {
         float chance = GunModifierHelper.getCriticalChance(weapon);
         if (rand.nextFloat() < chance) {
-            float critMultiplier = this.modifiedGun.getGeneral().getCritDamageMultiplier();
+            float critMultiplier = this.modifiedGun.getProjectile().getCritDamageMultiplier();
             return damage * critMultiplier;
         }
         return damage;
@@ -1291,53 +1292,6 @@ public class ProjectileEntity extends Entity implements IEntityAdditionalSpawnDa
                         }
                     }
                 }
-            }
-        }
-    }
-
-    public static void createChokeExplosion(Entity entity, float radius) {
-        Level world = entity.level();
-        if (world.isClientSide()) {
-            return;
-        }
-
-        BlockPos centerPos = entity.blockPosition();
-        int radiusInt = (int) Math.ceil(radius);
-        int radiusSquared = radiusInt * radiusInt;
-        for (int x = -radiusInt; x <= radiusInt; x++) {
-            for (int y = -radiusInt; y <= radiusInt; y++) {
-                for (int z = -radiusInt; z <= radiusInt; z++) {
-                    BlockPos pos = centerPos.offset(x, y, z);
-                    if (centerPos.distSqr(pos) <= radiusSquared) {
-                        if (world.getBlockState(pos).getBlock() == Blocks.FIRE) {
-                            world.setBlock(pos, Blocks.AIR.defaultBlockState(), 3);
-                            world.playLocalSound(pos.getX(), pos.getY(), pos.getZ(), SoundEvents.FIRE_EXTINGUISH, SoundSource.BLOCKS, 1.0F, 1.0F, false);
-                        }
-                    }
-                }
-            }
-        }
-        AABB effectArea = new AABB(centerPos).inflate(radius);
-        List<LivingEntity> affectedEntities = world.getEntitiesOfClass(LivingEntity.class, effectArea);
-        for (LivingEntity affectedEntity : affectedEntities) {
-            if (affectedEntity.isOnFire()) {
-                affectedEntity.clearFire();
-            }
-        }
-        if (!world.isClientSide()) {
-            ServerLevel serverLevel = (ServerLevel) world;
-            for (int i = 0; i < 200; i++) {
-                double offsetX = (serverLevel.random.nextDouble() - 0.5) * 2.0 * radius;
-                double offsetY = (serverLevel.random.nextDouble() - 0.5) * 0.2;
-                double offsetZ = (serverLevel.random.nextDouble() - 0.5) * 2.0 * radius;
-                double posX = centerPos.getX() + offsetX;
-                double posY = centerPos.getY() + offsetY;
-                double posZ = centerPos.getZ() + offsetZ;
-                double speedX = (serverLevel.random.nextDouble() - 0.5) * 0.1;
-                double speedY = (serverLevel.random.nextDouble() - 0.5) * 0.1;
-                double speedZ = (serverLevel.random.nextDouble() - 0.5) * 0.1;
-                serverLevel.sendParticles(ParticleTypes.WHITE_ASH, posX, posY, posZ, 1, speedX, speedY, speedZ, 0.1);
-                serverLevel.sendParticles(ParticleTypes.SNOWFLAKE, posX, posY, posZ, 1, speedX, speedY, speedZ, 0.1);
             }
         }
     }

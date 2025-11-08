@@ -18,39 +18,34 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ShulkshotProjectileEntity extends ProjectileEntity {
-    private static final int DEFAULT_HOMING_DELAY = 10; // Ticks before homing starts
-    private static final double INITIAL_SPEED = 1.5;
-    private static final double MAX_SPEED = 2.5;
-    private static final double ACCELERATION = 0.05;
-    private static final double TURN_SPEED = 0.08;
-    private static final double PREDICTION_FACTOR = 0.7;
+    private static final int DEFAULT_HOMING_DELAY = 3;
+    private static final int RETARGET_INTERVAL = 10;
+    private static final double BASE_SPEED = 0.8;
+    private static final double TURN_SPEED = 0.15;
+    private static final double CLOSE_PROXIMITY_THRESHOLD = 3.0;
 
     private Mob target;
-    private Vec3 lastTargetPos;
-    private Vec3 targetVelocity = Vec3.ZERO;
-    private int homingDelay;
-    private Vec3 currentDirection;
+    private Vec3 targetDirection;
+    private int ticksSinceLastSearch = 0;
+
 
     public ShulkshotProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn) {
         super(entityType, worldIn);
-        this.homingDelay = DEFAULT_HOMING_DELAY;
     }
 
     public ShulkshotProjectileEntity(EntityType<? extends Entity> entityType, Level worldIn, LivingEntity shooter, ItemStack weapon, GunItem item, Gun modifiedGun) {
         super(entityType, worldIn, shooter, weapon, item, modifiedGun);
-        this.homingDelay = DEFAULT_HOMING_DELAY;
 
         Vec3 shooterDirection = shooter.getLookAngle();
 
-        if (modifiedGun.getGeneral().getProjectileAmount() > 1) {
-            float spread = modifiedGun.getGeneral().getSpread();
+        if (modifiedGun.getProjectile().getProjectileAmount() > 1) {
+            float spread = modifiedGun.getProjectile().getSpread();
             float yawSpread = (this.random.nextFloat() - 0.5F) * spread;
             float pitchSpread = (this.random.nextFloat() - 0.5F) * spread;
-
             shooterDirection = applySpread(shooterDirection, yawSpread, pitchSpread);
         }
 
-        this.currentDirection = shooterDirection.normalize();
+        this.targetDirection = shooterDirection.normalize();
 
         double offsetDistance = 1.5;
         this.setPos(
@@ -59,12 +54,8 @@ public class ShulkshotProjectileEntity extends ProjectileEntity {
                 shooter.getZ() + shooterDirection.z * offsetDistance
         );
 
-        this.setDeltaMovement(shooterDirection.scale(INITIAL_SPEED));
+        this.setDeltaMovement(this.targetDirection.scale(BASE_SPEED));
     }
-
-    /**
-     * Apply spread to the direction vector for multiple pellet support
-     */
     private Vec3 applySpread(Vec3 direction, float yawSpread, float pitchSpread) {
         double currentYaw = Math.atan2(-direction.x, direction.z);
         double currentPitch = Math.asin(-direction.y);
@@ -89,19 +80,34 @@ public class ShulkshotProjectileEntity extends ProjectileEntity {
         super.tick();
 
         if (!this.level().isClientSide) {
-            if (this.homingDelay > 0) {
-                this.homingDelay--;
-            } else {
-                if (this.target == null || !this.target.isAlive()) {
-                    this.findNewTarget();
-                }
+            this.ticksSinceLastSearch++;
 
-                if (this.target != null) {
-                    updateTargetVelocity();
-                    this.updateHomingMovement();
+            // Initial target acquisition
+            if (this.tickCount == DEFAULT_HOMING_DELAY && this.target == null) {
+                this.findNewTarget();
+                this.ticksSinceLastSearch = 0;
+            }
+
+            if (this.target == null && this.ticksSinceLastSearch >= RETARGET_INTERVAL) {
+                this.findNewTarget();
+                this.ticksSinceLastSearch = 0;
+            }
+
+            if (this.ticksSinceLastSearch >= RETARGET_INTERVAL / 2) {
+                Mob nearbyMob = findNearbyMob();
+                if (nearbyMob != null) {
+                    this.target = nearbyMob;
+                    this.ticksSinceLastSearch = 0;
                 }
             }
+
+            if (this.target != null && this.target.isAlive()) {
+                this.updateHomingMovement();
+            } else if (this.target != null && !this.target.isAlive()) {
+                this.target = null;
+            }
         }
+
         if (this.level().isClientSide) {
             addTrailingParticles();
         }
@@ -109,53 +115,18 @@ public class ShulkshotProjectileEntity extends ProjectileEntity {
         this.updateHeading();
     }
 
-    private void updateTargetVelocity() {
-        Vec3 currentTargetPos = new Vec3(
-                target.getX(),
-                target.getY() + target.getBbHeight() * 0.5,
-                target.getZ()
-        );
-
-        if (lastTargetPos != null) {
-            targetVelocity = currentTargetPos.subtract(lastTargetPos);
-        }
-        lastTargetPos = currentTargetPos;
-    }
-
-    private Vec3 getPredictedTargetPosition() {
-        if (target == null) return null;
-        Vec3 projectilePos = this.position();
+    private void updateHomingMovement() {
         Vec3 targetPos = new Vec3(
                 target.getX(),
                 target.getY() + target.getBbHeight() * 0.5,
                 target.getZ()
         );
-        double distance = projectilePos.distanceTo(targetPos);
-        double currentSpeed = this.getDeltaMovement().length();
-        double timeToIntercept = distance / currentSpeed;
-        Vec3 predictedPos = targetPos.add(
-                targetVelocity.scale(timeToIntercept * PREDICTION_FACTOR)
-        );
-        double leadMultiplier = Math.min(distance / 10.0, 2.0);
-        return predictedPos.add(targetVelocity.scale(leadMultiplier));
-    }
 
-    private void updateHomingMovement() {
-        Vec3 currentVelocity = this.getDeltaMovement();
-        double currentSpeed = currentVelocity.length();
+        Vec3 toTarget = targetPos.subtract(this.position()).normalize();
 
-        Vec3 predictedTargetPos = getPredictedTargetPosition();
-        if (predictedTargetPos == null) return;
+        this.targetDirection = this.targetDirection.lerp(toTarget, TURN_SPEED).normalize();
 
-        Vec3 toTarget = predictedTargetPos.subtract(this.position()).normalize();
-        Vec3 currentDirectionNorm = currentVelocity.normalize();
-
-        this.currentDirection = currentDirectionNorm.add(toTarget.scale(TURN_SPEED)).normalize();
-
-        double targetSpeed = Math.min(MAX_SPEED, currentSpeed + ACCELERATION);
-        double newSpeed = currentSpeed + (targetSpeed > currentSpeed ? ACCELERATION : -ACCELERATION);
-        newSpeed = Mth.clamp(newSpeed, 0, targetSpeed);
-        this.setDeltaMovement(this.currentDirection.scale(newSpeed));
+        this.setDeltaMovement(this.targetDirection.scale(BASE_SPEED));
     }
 
     private void addTrailingParticles() {
@@ -189,7 +160,7 @@ public class ShulkshotProjectileEntity extends ProjectileEntity {
     }
 
     private void findNewTarget() {
-        double searchRadius = 16.0;
+        double searchRadius = 20.0;
         List<Mob> potentialTargets = this.level().getEntitiesOfClass(
                 Mob.class,
                 this.getBoundingBox().inflate(searchRadius),
@@ -204,8 +175,28 @@ public class ShulkshotProjectileEntity extends ProjectileEntity {
                     entity.distanceToSqr(this.getX(), this.getY(), this.getZ())
             ));
             this.target = potentialTargets.get(0);
-            this.lastTargetPos = target.position();
         }
+    }
+
+    private Mob findNearbyMob() {
+        List<Mob> nearbyMobs = this.level().getEntitiesOfClass(
+                Mob.class,
+                this.getBoundingBox().inflate(CLOSE_PROXIMITY_THRESHOLD),
+                entity -> entity.isAlive() &&
+                        !entity.isSpectator() &&
+                        entity != this.getShooter() &&
+                        entity != this.target &&
+                        this.hasLineOfSight(entity)
+        );
+
+        if (!nearbyMobs.isEmpty()) {
+            nearbyMobs.sort(Comparator.comparingDouble(entity ->
+                    entity.distanceToSqr(this.getX(), this.getY(), this.getZ())
+            ));
+            return nearbyMobs.get(0);
+        }
+
+        return null;
     }
 
     private boolean hasLineOfSight(Entity target) {

@@ -45,8 +45,6 @@ import top.ribs.scguns.init.*;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.util.ModCauldronInteraction;
 import top.ribs.scguns.world.VillageStructures;
-import java.io.IOException;
-import java.io.InputStream;
 
 import static top.ribs.scguns.Reference.MOD_ID;
 import static top.ribs.scguns.compat.CompatManager.SCULK_HORDE_LOADED;
@@ -66,6 +64,7 @@ public class ScorchedGuns {
     public static boolean valkyrienSkiesLoaded;
     public static boolean soulFiredLoaded;
     public static boolean shoulderSurfingLoaded = false;
+    public static boolean createIronWorksLoaded = false;
 
     public ScorchedGuns() {
 
@@ -130,6 +129,8 @@ public class ScorchedGuns {
         MinecraftForge.EVENT_BUS.register(GunnerMobConfig.class);
         MinecraftForge.EVENT_BUS.register(TieredWeaponConfig.class);
         MinecraftForge.EVENT_BUS.register(EliteTierConfig.class);
+        MinecraftForge.EVENT_BUS.register(AdvancedComposterDropsConfig.class);
+        MinecraftForge.EVENT_BUS.register(MobGuideConfig.class);
         MinecraftForge.EVENT_BUS.register(EntityEquipmentConfig.class);
         MinecraftForge.EVENT_BUS.register(ProjectileAdvantageConfig.class);
         MinecraftForge.EVENT_BUS.register(TurretManager.class);
@@ -160,6 +161,7 @@ public class ScorchedGuns {
         mekanismLoaded = ModList.get().isLoaded("mekanism");
         soulFiredLoaded = ModList.get().isLoaded("soul_fire_d");
         shoulderSurfingLoaded = ModList.get().isLoaded("shouldersurfing");
+        createIronWorksLoaded = ModList.get().isLoaded("create_ironworks");
     }
     public static void setSoulFireOnEntity(Entity entity, int seconds) {
         if (soulFiredLoaded) {
@@ -231,7 +233,10 @@ public class ScorchedGuns {
             ProjectileManager.getInstance().registerFactory(ModItems.MICROJET.get(), (worldIn, entity, weapon, item, modifiedGun) -> new MicroJetEntity(ModEntities.MICROJET.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.GRENADE.get(), (worldIn, entity, weapon, item, modifiedGun) -> new GrenadeEntity(ModEntities.GRENADE.get(), worldIn, entity, weapon, item, modifiedGun));
             ProjectileManager.getInstance().registerFactory(ModItems.FROG_DART.get(), (worldIn, entity, weapon, item, modifiedGun) -> new FrogDartProjectileEntity(ModEntities.FROG_DART_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
-
+            ProjectileManager.getInstance().registerFactory(ModItems.HE_GRENADE_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new HeGrenadeRoundEntity(ModEntities.HE_GRENADE_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
+            ProjectileManager.getInstance().registerFactory(ModItems.FIRE_GRENADE_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new FireGrenadeRoundEntity(ModEntities.FIRE_GRENADE_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
+            ProjectileManager.getInstance().registerFactory(ModItems.GAS_GRENADE_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new GasGrenadeRoundEntity(ModEntities.GAS_GRENADE_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
+            ProjectileManager.getInstance().registerFactory(ModItems.BOUNCY_GRENADE_ROUND.get(), (worldIn, entity, weapon, item, modifiedGun) -> new BouncyGrenadeRoundEntity(ModEntities.BOUNCY_GRENADE_PROJECTILE.get(), worldIn, entity, weapon, item, modifiedGun));
           if (Config.COMMON.gameplay.improvedHitboxes.get()) {
                 MinecraftForge.EVENT_BUS.register(new BoundingBoxManager());
             }

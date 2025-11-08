@@ -10,27 +10,32 @@ import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.HumanoidArm;
-import top.ribs.scguns.entity.animations.ModAnimationDefinitions;
 import top.ribs.scguns.entity.monster.TraumaUnitEntity;
 
 public class TraumaUnitModel<T extends Entity> extends HierarchicalModel<T> implements ArmedModel {
     private final ModelPart main;
-    private final ModelPart bone;
+    private final ModelPart torso;
     private final ModelPart head;
     private final ModelPart leftArm;
     private final ModelPart rightArm;
-    private final ModelPart cog; // Add reference to the cog
+    private final ModelPart leftLeg;
+    private final ModelPart rightLeg;
+    private final ModelPart cog;
+
+    private float attackStartTime = -1;
     private int lastAttackTimeout = 0;
+    private static final float ATTACK_DURATION = 15.0f;
 
     public TraumaUnitModel(ModelPart root) {
         this.main = root;
         ModelPart full = this.main.getChild("Full");
-        ModelPart torso = full.getChild("Torso");
+        this.torso = full.getChild("Torso");
         this.head = torso.getChild("Head");
-        this.bone = torso.getChild("LeftArm");
         this.leftArm = torso.getChild("LeftArm");
         this.rightArm = torso.getChild("RightArm");
-        this.cog = torso.getChild("Cog"); // Get reference to the cog
+        this.leftLeg = torso.getChild("LeftLeg");
+        this.rightLeg = torso.getChild("RightLeg");
+        this.cog = torso.getChild("Cog");
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -111,12 +116,19 @@ public class TraumaUnitModel<T extends Entity> extends HierarchicalModel<T> impl
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         this.root().getAllParts().forEach(ModelPart::resetPose);
 
-        animateCog(ageInTicks);
+        this.cog.zRot = (ageInTicks * 0.1f) % ((float)Math.PI * 2);
 
-        if (entity instanceof TraumaUnitEntity) {
-            TraumaUnitEntity traumaUnit = (TraumaUnitEntity) entity;
+        if (entity instanceof TraumaUnitEntity traumaUnit) {
+            float legSwing = Mth.cos(limbSwing * 0.6662F) * 1.4F * limbSwingAmount;
+            this.leftLeg.xRot = legSwing;
+            this.rightLeg.xRot = -legSwing;
 
-            this.animateWalk(ModAnimationDefinitions.TRAUMA_UNIT_WALK, limbSwing, limbSwingAmount, 2f, 2.5f);
+            if (!traumaUnit.isAttacking() || traumaUnit.getAttackTimeout() <= 0) {
+                float armSwing = Mth.cos(limbSwing * 0.6662F + (float)Math.PI) * 1.0F * limbSwingAmount;
+                this.leftArm.xRot = armSwing;
+                this.rightArm.xRot = -armSwing;
+            }
+
             if (traumaUnit.isAttacking() && traumaUnit.getAttackTimeout() > 0) {
                 animateAttackSmooth(traumaUnit.getAttackTimeout(), ageInTicks);
             }
@@ -128,46 +140,32 @@ public class TraumaUnitModel<T extends Entity> extends HierarchicalModel<T> impl
         }
     }
 
-    private void animateCog(float ageInTicks) {
-        float rotationSpeed = 0.08f;
-        this.cog.zRot = ageInTicks * rotationSpeed;
-    }
-
     private void animateAttackSmooth(int attackTimeout, float ageInTicks) {
         if (attackTimeout <= 0) {
-            this.leftArm.xRot = 0;
-            this.leftArm.yRot = 0;
-            this.leftArm.zRot = 0;
-            this.rightArm.xRot = 0;
-            this.rightArm.yRot = 0;
-            this.rightArm.zRot = 0;
+            this.leftArm.xRot = 0.0f;
+            this.leftArm.yRot = 0.0f;
+            this.leftArm.zRot = 0.0f;
+            this.rightArm.xRot = 0.0f;
+            this.rightArm.yRot = 0.0f;
+            this.rightArm.zRot = 0.0f;
+            attackStartTime = -1;
             lastAttackTimeout = 0;
             return;
         }
 
-        float swingCurve = getSwingCurve(attackTimeout, ageInTicks);
-
-        float swingIntensity = swingCurve * 1.2f;
-        this.leftArm.xRot = -swingIntensity;
-        this.rightArm.xRot = -swingIntensity;
-
-        float sideMotion = swingCurve * 0.2f;
-        this.leftArm.yRot = sideMotion;
-        this.rightArm.yRot = -sideMotion;
-
-        float thrust = swingCurve * 0.2f;
-        this.leftArm.zRot = thrust;
-        this.rightArm.zRot = -thrust;
-
+        if (attackTimeout > lastAttackTimeout || attackStartTime < 0) {
+            attackStartTime = ageInTicks;
+        }
         lastAttackTimeout = attackTimeout;
-    }
 
-    private static float getSwingCurve(int attackTimeout, float ageInTicks) {
-        float attackProgress = (15.0f - attackTimeout) / 15.0f;
+        float elapsedTime = (ageInTicks - attackStartTime);
+        float attackProgress = elapsedTime / ATTACK_DURATION;
         attackProgress = Mth.clamp(attackProgress, 0.0f, 1.0f);
 
-        float smoothProgress = Mth.sin(attackProgress * (float)Math.PI);
-        return smoothProgress;
+        float swingCurve = Mth.sin(attackProgress * (float)Math.PI);
+
+        this.leftArm.xRot = -swingCurve * 2.0f;
+        this.rightArm.xRot = -swingCurve * 2.0f;
     }
 
     @Override

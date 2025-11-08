@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "scguns:block/cut_treated_brass_slab"
+    },
+    "type=double": {
+      "model": "scguns:block/cut_treated_brass"
+    },
+    "type=top": {
+      "model": "scguns:block/cut_treated_brass_slab_top"
+    }
+  }
+}

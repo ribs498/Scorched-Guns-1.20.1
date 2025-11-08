@@ -22,8 +22,9 @@ public class FrogDartProjectileEntity extends ProjectileEntity {
 
     private static final double UNDERWATER_SPEED_MULTIPLIER = 1.5;
     private static final double LAND_SPEED_MULTIPLIER = 0.6;
-    private static final double UNDERWATER_GRAVITY_REDUCTION = 0.3;
-    private static final float LAND_DAMAGE_PENALTY = 0.7f;
+    private static final double UNDERWATER_GRAVITY_REDUCTION = 0.1;
+    private static final double LAND_GRAVITY_MULTIPLIER = 3.0;
+    private static final float LAND_DAMAGE_PENALTY = 0.65f;
 
     private boolean wasUnderwater = false;
 
@@ -50,18 +51,8 @@ public class FrogDartProjectileEntity extends ProjectileEntity {
             Vec3 motion = this.getDeltaMovement();
             this.setDeltaMovement(motion.scale(LAND_SPEED_MULTIPLIER / UNDERWATER_SPEED_MULTIPLIER));
         }
-
         wasUnderwater = currentlyUnderwater;
-
         super.tick();
-        if (currentlyUnderwater && !this.level().isClientSide) {
-            if (this.tickCount % 3 == 0) {
-                ServerLevel serverLevel = (ServerLevel) this.level();
-                serverLevel.sendParticles(ParticleTypes.BUBBLE,
-                        this.getX(), this.getY(), this.getZ(),
-                        1, 0.05, 0.05, 0.05, 0.01);
-            }
-        }
     }
 
     @Override
@@ -79,7 +70,7 @@ public class FrogDartProjectileEntity extends ProjectileEntity {
         if (this.isInWater()) {
             return super.getModifiedGravity() * UNDERWATER_GRAVITY_REDUCTION;
         }
-        return super.getModifiedGravity();
+        return super.getModifiedGravity() * LAND_GRAVITY_MULTIPLIER;
     }
 
     @Override
@@ -92,21 +83,4 @@ public class FrogDartProjectileEntity extends ProjectileEntity {
         return baseDamage;
     }
 
-    @Override
-    protected void onHitBlock(BlockState state, BlockPos pos, Direction face, double x, double y, double z) {
-        super.onHitBlock(state, pos, face, x, y, z);
-        if (!this.level().isClientSide && !this.isInWater()) {
-            ServerLevel serverLevel = (ServerLevel) this.level();
-            Vec3 hitPos = new Vec3(x, y, z);
-            for (int i = 0; i < 3; i++) {
-                serverLevel.sendParticles(ParticleTypes.POOF,
-                        hitPos.x, hitPos.y, hitPos.z,
-                        1,
-                        (this.random.nextDouble() - 0.5) * 0.1,
-                        this.random.nextDouble() * 0.1,
-                        (this.random.nextDouble() - 0.5) * 0.1,
-                        0.02);
-            }
-        }
-    }
 }

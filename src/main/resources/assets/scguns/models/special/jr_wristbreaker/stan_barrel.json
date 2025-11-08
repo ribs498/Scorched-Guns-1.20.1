@@ -1,0 +1,185 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "scguns:item/jr_wristbreaker"
+	},
+	"elements": [
+		{
+			"name": "standard_barrel",
+			"from": [7.19822, 4.325, 3.9],
+			"to": [8.69822, 5.825, 5.4],
+			"rotation": {"angle": 45, "axis": "z", "origin": [7.82322, 5.2, 3.15]},
+			"faces": {
+				"north": {"uv": [3.75, 7, 4.125, 7.375], "texture": "#1"},
+				"east": {"uv": [7, 4, 7.375, 4.375], "texture": "#1"},
+				"south": {"uv": [4.25, 7, 4.625, 7.375], "texture": "#1"},
+				"west": {"uv": [7, 6, 7.375, 6.375], "texture": "#1"},
+				"up": {"uv": [7.375, 6.875, 7, 6.5], "texture": "#1"},
+				"down": {"uv": [7.375, 7, 7, 7.375], "texture": "#1"}
+			}
+		},
+		{
+			"name": "standard_barrel",
+			"from": [7, 4.375, 3.4],
+			"to": [8.75, 6.125, 3.9],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8, 5.375, 1.525]},
+			"faces": {
+				"north": {"uv": [0.5, 6, 1, 6.5], "texture": "#1"},
+				"east": {"uv": [8, 6.25, 8.125, 6.75], "texture": "#1"},
+				"south": {"uv": [6, 4.25, 6.5, 4.75], "texture": "#1"},
+				"west": {"uv": [6.75, 8, 6.875, 8.5], "texture": "#1"},
+				"up": {"uv": [8.5, 7.625, 8, 7.5], "texture": "#1"},
+				"down": {"uv": [8.5, 7.75, 8, 7.875], "texture": "#1"}
+			}
+		},
+		{
+			"name": "standard_barrel",
+			"from": [6.875, 4.25, 5.4],
+			"to": [8.875, 6.25, 9.4],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8, 5.375, 7.025]},
+			"faces": {
+				"north": {"uv": [6, 4.75, 6.5, 5.25], "texture": "#1"},
+				"east": {"uv": [3.75, 2.75, 4.75, 3.25], "texture": "#1"},
+				"south": {"uv": [6, 5.25, 6.5, 5.75], "texture": "#1"},
+				"west": {"uv": [4, 0, 5, 0.5], "texture": "#1"},
+				"up": {"uv": [1.25, 4.75, 0.75, 3.75], "texture": "#1"},
+				"down": {"uv": [2.25, 3.75, 1.75, 4.75], "texture": "#1"}
+			}
+		},
+		{
+			"name": "gun_body",
+			"from": [7.75, 3.09645, 5.925],
+			"to": [8.25, 4.59645, 6.375],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.75, 12.25]},
+			"faces": {
+				"north": {"uv": [3.25, 8.75, 3.375, 9.125], "texture": "#1"},
+				"east": {"uv": [8.75, 3.25, 8.875, 3.625], "texture": "#1"},
+				"south": {"uv": [8.75, 3.75, 8.875, 4.125], "texture": "#1"},
+				"west": {"uv": [4, 8.75, 4.125, 9.125], "texture": "#1"},
+				"up": {"uv": [9.375, 4.375, 9.25, 4.25], "texture": "#1"},
+				"down": {"uv": [4.625, 9.25, 4.5, 9.375], "texture": "#1"}
+			}
+		},
+		{
+			"name": "gun_body",
+			"from": [7.14645, 2.3, 5.9],
+			"to": [8.14645, 3.3, 6.4],
+			"rotation": {"angle": 45, "axis": "z", "origin": [7.64645, 3.3, 7.775]},
+			"faces": {
+				"north": {"uv": [6.5, 8.25, 6.75, 8.5], "texture": "#1"},
+				"east": {"uv": [9, 3.25, 9.125, 3.5], "texture": "#1"},
+				"south": {"uv": [8.25, 6.5, 8.5, 6.75], "texture": "#1"},
+				"west": {"uv": [3.5, 9, 3.625, 9.25], "texture": "#1"},
+				"up": {"uv": [9.25, 3.625, 9, 3.5], "texture": "#1"},
+				"down": {"uv": [4, 9, 3.75, 9.125], "texture": "#1"}
+			}
+		},
+		{
+			"name": "gun_body",
+			"from": [7.39645, 2.55, 5.4],
+			"to": [7.89645, 3.05, 6.9],
+			"rotation": {"angle": 45, "axis": "z", "origin": [7.64645, 3.3, 9.775]},
+			"faces": {
+				"north": {"uv": [9.25, 4.5, 9.375, 4.625], "texture": "#1"},
+				"east": {"uv": [8.75, 2.75, 9.125, 2.875], "texture": "#1"},
+				"south": {"uv": [4.75, 9.25, 4.875, 9.375], "texture": "#1"},
+				"west": {"uv": [4.25, 8.75, 4.625, 8.875], "texture": "#1"},
+				"up": {"uv": [4.875, 9.125, 4.75, 8.75], "texture": "#1"},
+				"down": {"uv": [8.875, 5, 8.75, 5.375], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0.25, 5.25, -6.25],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0.25, 5.25, -6.25],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"firstperson_righthand": {
+			"translation": [-3.75, 8.5, 0.25]
+		},
+		"firstperson_lefthand": {
+			"translation": [-3.75, 8.5, 0.25]
+		},
+		"ground": {
+			"translation": [0, 9.5, -1.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-2.25, 3.75, 0]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [2.75, 6.5, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "main",
+			"origin": [8, -5.35, 8],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "bolt",
+			"origin": [8.62646, -3.65184, 11.38542],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "default_mag",
+			"origin": [8, -7.76376, 11.0787],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "extended_mag",
+			"origin": [8.625, -7.825, 11.0869],
+			"color": 4,
+			"children": []
+		},
+		{
+			"name": "speed_mag",
+			"origin": [8.125, -7.825, 11.0869],
+			"color": 5,
+			"children": []
+		},
+		{
+			"name": "standard_barrel",
+			"origin": [7.78787, -3.05233, -1.14767],
+			"color": 2,
+			"children": [0, 1, 2, 3, 4, 5]
+		},
+		{
+			"name": "extended_barrel",
+			"origin": [7.78787, -3.05233, 1.35233],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "muzzle_brake",
+			"origin": [8.21496, -4.475, 9.975],
+			"color": 4,
+			"children": []
+		},
+		{
+			"name": "advanced_silencer",
+			"origin": [7.81502, -4.475, 17.025],
+			"color": 5,
+			"children": []
+		},
+		{
+			"name": "silencer",
+			"origin": [8.00997, 2.68, 9.425],
+			"color": 6,
+			"children": []
+		}
+	]
+}

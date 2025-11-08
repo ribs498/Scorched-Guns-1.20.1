@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "lit=false": {
+      "model": "scguns:block/chiseled_anthralite_block"
+    },
+    "lit=true": {
+      "model": "scguns:block/chiseled_anthralite_block_lit"
+    }
+  }
+}

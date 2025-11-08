@@ -24,6 +24,7 @@ import top.ribs.scguns.Reference;
 import top.ribs.scguns.attributes.SCAttributes;
 import top.ribs.scguns.client.handler.ReloadHandler;
 import top.ribs.scguns.common.exosuit.ExoSuitAmmoHelper;
+import top.ribs.scguns.event.GunEventBus;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.AmmoBoxItem;
 import top.ribs.scguns.item.GunItem;
@@ -74,6 +75,10 @@ public class ReloadTracker {
             Item byproduct = this.gun.getReloads().getReloadByproduct();
             if (byproduct != null) {
                 ItemStack byproductStack = new ItemStack(byproduct);
+
+                if (GunEventBus.addCasingDirectly(player, byproductStack)) {
+                    return;
+                }
 
                 boolean added = player.getInventory().add(byproductStack);
                 if (!added) {
@@ -372,13 +377,6 @@ public class ReloadTracker {
 
                 if (gun.getReloads().getReloadType() != ReloadType.MANUAL) {
                     CompoundTag tag = heldItem.getOrCreateTag();
-//                    if (tag.getBoolean("scguns:PausedDuringReload")) {
-//                        RELOAD_TRACKER_MAP.remove(player);
-//                        ModSyncedDataKeys.RELOADING.setValue(player, false);
-//                        tag.remove("IsReloading");
-//                        tag.remove("scguns:PausedDuringReload");
-//                        return;
-//                    }
                 }
 
                 CompoundTag tag = heldItem.getOrCreateTag();

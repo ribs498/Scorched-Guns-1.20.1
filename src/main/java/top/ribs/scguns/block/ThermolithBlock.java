@@ -1,16 +1,26 @@
 package top.ribs.scguns.block;
 
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
@@ -27,9 +37,12 @@ import top.ribs.scguns.blockentity.ThermolithBlockEntity;
 import top.ribs.scguns.init.ModBlockEntities;
 
 import javax.annotation.Nullable;
+import java.util.List;
+import java.util.stream.StreamSupport;
 
 public class ThermolithBlock extends BaseEntityBlock {
     public static final BooleanProperty LIT = BooleanProperty.create("lit");
+    private static final ResourceLocation THERMOLITH_INGREDIENT_TAG = new ResourceLocation("scguns", "thermolith_ingredient");
 
     public ThermolithBlock(Properties properties) {
         super(properties);
@@ -87,12 +100,10 @@ public class ThermolithBlock extends BaseEntityBlock {
             double y = pos.getY() + 1.0;
             double z = pos.getZ() + 0.5;
 
-            // Spawn lava drip particles
             if (random.nextDouble() < 0.3) {
                 level.addParticle(ParticleTypes.LAVA, x, y, z, 0.0, 0.0, 0.0);
             }
 
-            // Spawn smoke particles
             for (Direction direction : Direction.values()) {
                 if (direction != Direction.UP) {
                     BlockPos relativePos = pos.relative(direction);
@@ -107,10 +118,43 @@ public class ThermolithBlock extends BaseEntityBlock {
                 }
             }
 
-            // Play a sizzling sound occasionally
             if (random.nextDouble() < 0.1) {
                 level.playLocalSound(x, y, z, SoundEvents.LAVA_POP, SoundSource.BLOCKS, 0.2F + random.nextFloat() * 0.2F, 0.9F + random.nextFloat() * 0.15F, false);
             }
+        }
+    }
+
+    @Override
+    public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
+        super.appendHoverText(stack, level, tooltip, flag);
+
+        if (net.minecraft.client.gui.screens.Screen.hasShiftDown()) {
+            tooltip.add(Component.literal(""));
+            tooltip.add(Component.translatable("info.scguns.thermolith.accepted_fuel").withStyle(ChatFormatting.GOLD));
+
+            TagKey<Item> ingredientTag = ItemTags.create(THERMOLITH_INGREDIENT_TAG);
+
+            List<Item> fuelItems = StreamSupport.stream(
+                            BuiltInRegistries.ITEM.getTagOrEmpty(ingredientTag).spliterator(), false)
+                    .map(holder -> holder.value())
+                    .toList();
+
+            if (!fuelItems.isEmpty()) {
+                for (Item item : fuelItems) {
+                    tooltip.add(Component.literal("  ")
+                            .append(Component.translatable(item.getDescriptionId()).withStyle(ChatFormatting.WHITE)));
+                }
+            } else {
+                tooltip.add(Component.literal("  ")
+                        .append(Component.translatable("info.scguns.no_fuels"))
+                        .withStyle(ChatFormatting.DARK_GRAY));
+            }
+
+            tooltip.add(Component.literal(""));
+            tooltip.add(Component.translatable("info.scguns.thermolith.function")
+                    .withStyle(ChatFormatting.RED, ChatFormatting.ITALIC));
+        } else {
+            tooltip.add(Component.translatable("info.scguns.thermolith.shift_fuel").withStyle(ChatFormatting.GRAY));
         }
     }
 }

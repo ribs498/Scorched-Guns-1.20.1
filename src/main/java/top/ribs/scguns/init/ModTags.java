@@ -50,7 +50,7 @@ public class ModTags
         public static final TagKey<Item> ROCKET_AMMO = tag("rocket_ammo");
         public static final TagKey<Item> AMMO = tag("ammo");
 
-
+        public static final TagKey<Item> VIVENTRUM_BANNED_ITEMS = tag("viventrum_banned_items");
 
         public static final TagKey<Item> DOES_NOT_EJECT_CASINGS = tag("does_not_eject_casings");
         public static final TagKey<Item> SINGLE_SHOT = tag("single_shot");
@@ -60,16 +60,11 @@ public class ModTags
         public static final TagKey<Item> OCEAN_GUN = tag("ocean_gun");
         public static final TagKey<Item> PIGLIN_GUN = tag("piglin_gun");
         public static final TagKey<Item> BUILT_IN_BAYONET  = tag("built_in_bayonet");
-        public static final TagKey<Item> WEAK_FILTER = tag("weak_filter");
-        public static final TagKey<Item> STRONG_FILTER = tag("strong_filter");
         public static final TagKey<Item> WEAK_COMPOST = tag("weak_compost");
         public static final TagKey<Item> NORMAL_COMPOST = tag("normal_compost");
         public static final TagKey<Item> STRONG_COMPOST = tag("strong_compost");
-        public static final TagKey<Item> COMPOST_DROPS= tag("compost_drops");
         public static final TagKey<Item> GAS_MASK = tag("gas_mask");
         public static final TagKey<Item> EXPLOSIVE_BLOCK = tag("explosive_block");
-        public static final TagKey<Item> GEOTHERMAL_VENT_OUTPUT = tag("geothermal_vent_output");
-        public static final TagKey<Item> SULFUR_VENT_OUTPUT = tag("sulfur_vent_output");
         public static final TagKey<Item> MINING_GUN = tag("mining_gun");
 
         public static final TagKey<Item> ANTIQUE_GUN_TIER = tag("antique_gun_tier");
@@ -100,32 +95,6 @@ public class ModTags
             return stack.is(tierTag);
         }
 
-        /**
-         * Gets the tier for a given item by checking all registered tiers.
-         * Returns the highest tier that matches the item.
-         */
-        public static GunTier getTierForItem(ItemStack stack) {
-            if (stack.isEmpty()) {
-                return null;
-            }
-
-            GunTier highestTier = null;
-            int highestLevel = -1;
-
-            for (GunTier tier : GunTierRegistry.getAllTiers()) {
-                if (tier.getTagName() == null) continue;
-
-                if (isInTierTag(stack, tier)) {
-                    if (tier.getLevel() > highestLevel) {
-                        highestLevel = tier.getLevel();
-                        highestTier = tier;
-                    }
-                }
-            }
-
-            return highestTier;
-        }
-
         private static TagKey<Item> tag(String name)
         {
             return ItemTags.create(new ResourceLocation(Reference.MOD_ID, name));
@@ -134,6 +103,7 @@ public class ModTags
 
     public static class Entities
     {
+        public static final TagKey<EntityType<?>> IGNORES_SULFUR_GAS = tag("ignores_sulfur_gas");
         public static final TagKey<EntityType<?>> ASGHARIAN_MOB_TYPES = tag("asgharian_mob_types");
         public static final TagKey<EntityType<?>> DISABLE_BULLET_TRAIL = tag("disable_bullet_trail");
         public static final TagKey<EntityType<?>> GUNNER = tag("gunner");

@@ -6,7 +6,7 @@
       "modid": "create_new_age"
     }
   ],
-  "energy_needed": 1200,
+  "energy_needed": 12000,
   "ingredients": [
     {
       "item": "scguns:empty_cell"

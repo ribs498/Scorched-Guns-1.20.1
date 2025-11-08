@@ -9,19 +9,14 @@
   },
   "general": {
     "weaponType": "sniper",
-    "alwaysSpread": true,
     "fireMode": "scguns:pulse",
     "fireTimer": 16,
     "gripType": "scguns:one_handed",
     "rate": 8,
-    "recoilAngle": 8.0,
-    "spread": 2.0,
-    "recoilKick": 0.5,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 10,
     "meleeReach": 2.5,
-    "hotBarrelRate":  50,
-    "criticalChance": 0.05
+    "hotBarrelRate":  50
   },
   "modules": {
     "attachments": {
@@ -41,6 +36,11 @@
     }
   },
   "projectile": {
+    "alwaysSpread": true,
+    "recoilAngle": 8.0,
+    "spread": 4.0,
+    "recoilKick": 0.5,
+    "criticalChance": 0.05,
     "advantage": "scguns:wither",
     "damage": 15.0,
     "damageFalloffStart": 35.0,

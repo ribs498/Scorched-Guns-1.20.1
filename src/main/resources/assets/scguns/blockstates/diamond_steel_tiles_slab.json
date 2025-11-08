@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "scguns:block/diamond_steel_tiles_slab"
+    },
+    "type=double": {
+      "model": "scguns:block/diamond_steel_tiles"
+    },
+    "type=top": {
+      "model": "scguns:block/diamond_steel_tiles_slab_top"
+    }
+  }
+}

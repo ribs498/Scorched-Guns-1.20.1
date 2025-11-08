@@ -8,20 +8,14 @@
     }
   },
   "general": {
-    "weaponType": "sniper",
-    "alwaysSpread": false,
-    "fireMode": "scguns:pulse",
-    "fireTimer": 25,
+    "weaponType": "rifle",
+    "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 8,
-    "recoilAngle": 3.5,
-    "recoilKick": 1.0,
-    "spread": 3.0,
+    "rate": 5,
     "meleeDamage": 3.5,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 46,
-    "criticalChance": 0.15,
+    "hotBarrelRate": 10,
     "isSilenced": true
   },
   "modules": {
@@ -42,12 +36,16 @@
     }
   },
   "projectile": {
+    "recoilAngle": 3.5,
+    "recoilKick": 1.0,
+    "spread": 1.0,
+    "criticalChance": 0.1,
     "advantage": "scguns:none",
-    "damage": 24.0,
-    "damageFalloffStart": 35.0,
-    "damageFalloffEnd": 90.0,
+    "damage": 16.0,
+    "damageFalloffStart": 25.0,
+    "damageFalloffEnd": 60.0,
     "damageFalloffMinMultiplier": 0.85,
-    "armorPen": 7.5,
+    "armorPen": 6.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:sculk_cell",
@@ -60,7 +58,7 @@
   },
   "reloads": {
     "emptyMagTimer": 30,
-    "maxAmmo": 8,
+    "maxAmmo": 12,
     "reloadItem": "scguns:sculk_cell",
     "reloadTimer": 30,
     "reloadType": "scguns:mag_fed"

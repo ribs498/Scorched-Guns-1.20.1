@@ -19,16 +19,40 @@
             {
               "count": {
                 "type": "minecraft:uniform",
-                "max": 1.0,
+                "max": 2.0,
                 "min": 0.0
               },
               "function": "minecraft:looting_enchant"
             }
           ],
-          "name": "minecraft:rotten_flesh"
+          "name": "scguns:weird_flesh"
         }
       ],
       "rolls": 1.0
+    },
+    {
+      "bonus_rolls": 0.0,
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "minecraft:honeycomb",
+          "weight": 1,
+          "functions": [
+            {
+              "add": false,
+              "count": 1.0,
+              "function": "minecraft:set_count"
+            }
+          ]
+        }
+      ],
+      "rolls": 1.0,
+      "conditions": [
+        {
+          "condition": "minecraft:random_chance",
+          "chance": 0.15
+        }
+      ]
     }
   ],
   "random_sequence": "scguns:entities/hive"

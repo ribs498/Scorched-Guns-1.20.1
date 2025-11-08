@@ -1,0 +1,144 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"texture_size": [32, 32],
+	"textures": {
+		"0": "scguns:item/truant",
+		"particle": "scguns:item/truant"
+	},
+	"elements": [
+		{
+			"name": "light_grip",
+			"from": [7.06099, 2.25, 3.75],
+			"to": [8.91099, 2.75, 6.45],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.65, 9.3]},
+			"faces": {
+				"north": {"uv": [9.5, 1.5, 10, 1.625], "texture": "#0"},
+				"east": {"uv": [9, 6, 9.625, 6.125], "texture": "#0"},
+				"south": {"uv": [1.75, 9.5, 2.25, 9.625], "texture": "#0"},
+				"west": {"uv": [6.25, 9, 6.875, 9.125], "texture": "#0"},
+				"up": {"uv": [7, 5.625, 6.5, 5], "texture": "#0"},
+				"down": {"uv": [6, 6.5, 5.5, 7.125], "texture": "#0"}
+			}
+		},
+		{
+			"name": "light_grip",
+			"from": [7.18599, 1.85, 3.825],
+			"to": [8.78599, 2.35, 6.325],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.65, 9.3]},
+			"faces": {
+				"north": {"uv": [2, 9.75, 2.375, 9.875], "texture": "#0"},
+				"east": {"uv": [9, 6.25, 9.625, 6.375], "texture": "#0"},
+				"south": {"uv": [9.75, 2, 10.125, 2.125], "texture": "#0"},
+				"west": {"uv": [9, 6.5, 9.625, 6.625], "texture": "#0"},
+				"up": {"uv": [6.875, 7.875, 6.5, 7.25], "texture": "#0"},
+				"down": {"uv": [7.625, 7, 7.25, 7.625], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0.25, 7.25, -6.25],
+			"scale": [1.25, 1.25, 1.25]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0.25, 7.25, -6.25],
+			"scale": [1.25, 1.25, 1.25]
+		},
+		"firstperson_righthand": {
+			"translation": [-4, 9.75, -1]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4, 9.75, -1]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1, 7, 0],
+			"scale": [1.1, 1.1, 1.1]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [0, 10.75, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "vertical_grip",
+			"origin": [8.475, -0.6, 7],
+			"color": 5,
+			"children": []
+		},
+		{
+			"name": "light_grip",
+			"origin": [8.475, -0.6, 6.25],
+			"color": 6,
+			"children": [0, 1]
+		},
+		{
+			"name": "iron_bayonet",
+			"origin": [8.475, -0.35, 8],
+			"color": 7,
+			"children": []
+		},
+		{
+			"name": "anthralite_bayonet",
+			"origin": [8.475, -0.35, 8],
+			"color": 8,
+			"children": []
+		},
+		{
+			"name": "netherite_bayonet",
+			"origin": [8.475, -0.35, 8],
+			"color": 9,
+			"children": []
+		},
+		{
+			"name": "diamond_bayonet",
+			"origin": [8.475, -0.35, 8],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "weighted_stock",
+			"origin": [8.475, -0.35, 7.5],
+			"color": 1,
+			"children": []
+		},
+		{
+			"name": "wooden_stock",
+			"origin": [8.475, -0.35, 6.5],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "light_stock",
+			"origin": [8.475, 0.4, 8],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "main",
+			"origin": [7.99935, 0.725, 8.75],
+			"color": 2,
+			"children": [
+				{
+					"name": "cylinder_magazine",
+					"origin": [7.98842, -4.89649, 7.46114],
+					"color": 5,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "no_sights",
+			"origin": [7.99935, 0.975, 5.5],
+			"color": 7,
+			"children": []
+		}
+	]
+}

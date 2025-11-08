@@ -3,7 +3,7 @@
   "processingTime": 80,
   "ingredients": [
     {
-      "tag": "forge:ingots/iron"
+      "item": "scguns:treated_iron_ingot"
     }
   ],
   "mold": {

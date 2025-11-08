@@ -9,18 +9,13 @@
   },
   "general": {
     "weaponType": "pistol",
-    "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
     "rate": 3,
-    "recoilAngle": 4.0,
-    "recoilKick": 1.35,
-    "spread": 2.0,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 10,
     "meleeReach": 2.5,
-    "hotBarrelRate": 13,
-    "criticalChance": 0.05
+    "hotBarrelRate": 13
   },
   "modules": {
     "attachments": {
@@ -44,6 +39,11 @@
     }
   },
   "projectile": {
+    "alwaysSpread": true,
+    "recoilAngle": 2.8,
+    "recoilKick": 1.35,
+    "spread": 2.0,
+    "criticalChance": 0.05,
     "advantage": "scguns:none",
     "damage": 6.0,
     "damageFalloffStart": 12.0,
@@ -61,7 +61,7 @@
   },
   "reloads": {
     "emptyMagTimer": 10,
-    "maxAmmo": 8,
+    "maxAmmo": 9,
     "reloadItem": "scguns:compact_copper_round",
     "reloadTimer": 40,
     "reloadType": "scguns:mag_fed"

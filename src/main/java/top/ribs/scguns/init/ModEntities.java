@@ -56,6 +56,12 @@ public class ModEntities
     public static final RegistryObject<EntityType<FireRoundEntity>> FIRE_ROUND_PROJECTILE = registerBasic("fire_round_projectile", FireRoundEntity::new);
     public static final RegistryObject<EntityType<GrenadeEntity>> GRENADE = registerBasic("grenade", GrenadeEntity::new);
     public static final RegistryObject<EntityType<RocketEntity>> ROCKET = registerBasic("rocket", RocketEntity::new);
+    public static final RegistryObject<EntityType<HeGrenadeRoundEntity>> HE_GRENADE_PROJECTILE = registerBasic("he_grenade", HeGrenadeRoundEntity::new);
+    public static final RegistryObject<EntityType<FireGrenadeRoundEntity>> FIRE_GRENADE_PROJECTILE = registerBasic("fire_grenade", FireGrenadeRoundEntity::new);
+    public static final RegistryObject<EntityType<BouncyGrenadeRoundEntity>> BOUNCY_GRENADE_PROJECTILE = registerBasic("bouncy_grenade", BouncyGrenadeRoundEntity::new);
+     public static final RegistryObject<EntityType<GasGrenadeRoundEntity>> GAS_GRENADE_PROJECTILE = registerBasic("gas_grenade", GasGrenadeRoundEntity::new);
+
+
     public static final RegistryObject<EntityType<MicroJetEntity>> MICROJET = registerBasic("microjet", MicroJetEntity::new);
     public static final RegistryObject<EntityType<ShulkshotProjectileEntity>> SHULKSHOT = registerBasic("shulkshot_projectile", ShulkshotProjectileEntity::new);
     public static final RegistryObject<EntityType<SculkCellEntity>> SCULK_CELL = registerBasic("sculk_cell", SculkCellEntity::new);
@@ -76,6 +82,7 @@ public class ModEntities
     public static final RegistryObject<EntityType<ThrowableSwarmBombEntity>> THROWABLE_SWARM_BOMB = registerBasic("throwable_swarm_bomb", ThrowableSwarmBombEntity::new);
     public static final RegistryObject<EntityType<ThrowableShotballEntity>> THROWABLE_SHOTBALL = registerBasic("throwable_shotball", ThrowableShotballEntity::new);
     public static final RegistryObject<EntityType<ThrowableNailBombEntity>> THROWABLE_NAIL_BOMB = registerBasic("throwable_nail_bomb", ThrowableNailBombEntity::new);
+    public static final RegistryObject<EntityType<SulfurGasCloudEntity>> SULFUR_GAS_CLOUD = registerBasic("sulfur_gas_cloud", SulfurGasCloudEntity::new);
     /* Mobs */
     public static final RegistryObject<EntityType<CogMinionEntity>> COG_MINION = REGISTER.register("cog_minion", () -> EntityType.Builder.of(CogMinionEntity::new, MobCategory.MONSTER).sized(0.8F, 2.0F).build("cog_minion"));
     public static final RegistryObject<EntityType<CogKnightEntity>> COG_KNIGHT = REGISTER.register("cog_knight", () -> EntityType.Builder.of(CogKnightEntity::new, MobCategory.MONSTER).sized(0.8F, 2.2F).build("cog_knight"));
@@ -92,13 +99,18 @@ public class ModEntities
                     .sized(1.5F, 2.25F)
                     .build("the_merchant"));
 
+
+    public static final RegistryObject<EntityType<SulfurheadEntity>> SULFURHEAD = REGISTER.register("sulfurhead", () -> EntityType.Builder.of(SulfurheadEntity::new, MobCategory.MONSTER).sized(0.8F, 2.0F).build("sulfurhead"));
     public static final RegistryObject<EntityType<AdjudicatorEntity>> ADJUDICATOR = REGISTER.register("adjudicator", () -> EntityType.Builder.of(AdjudicatorEntity::new, MobCategory.MONSTER).sized(0.8F, 2.2F).build("adjudicator"));
     public static final RegistryObject<EntityType<SubjugatorEntity>> SUBJUGATOR = REGISTER.register("subjugator", () -> EntityType.Builder.of(SubjugatorEntity::new, MobCategory.MONSTER).sized(1.0F, 2.5F).build("subjugator"));
-    public static final RegistryObject<EntityType<BlundererEntity>> BLUNDERER = REGISTER.register("blunderer", () -> EntityType.Builder.of(BlundererEntity::new, MobCategory.MONSTER).sized(0.8F, 1.7F).build("blunderer"));
+    public static final RegistryObject<EntityType<BlundererEntity>> BLUNDERER = REGISTER.register("blunderer", () -> EntityType.Builder.of(BlundererEntity::new, MobCategory.MONSTER).sized(1.5F, 2.8F).build("blunderer"));
     public static final RegistryObject<EntityType<TraumaUnitEntity>> TRAUMA_UNIT = REGISTER.register("trauma_unit", () -> EntityType.Builder.of(TraumaUnitEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F).build("trauma_unit"));
     public static final RegistryObject<EntityType<ScampTankEntity>> SCAMP_TANK = REGISTER.register("scamp_tank", () -> EntityType.Builder.of(ScampTankEntity::new, MobCategory.MONSTER).sized(5.0F, 4F).build("scamp_tank"));
     public static final RegistryObject<EntityType<SignalBeaconEntity>> SIGNAL_BEACON = REGISTER.register("signal_beacon", () -> EntityType.Builder.of(SignalBeaconEntity::new, MobCategory.MISC).sized(1.0F, 1.0F).build("signal_beacon"));
     public static final RegistryObject<EntityType<ScamplerEntity>> SCAMPLER = REGISTER.register("scampler", () -> EntityType.Builder.of(ScamplerEntity::new, MobCategory.MONSTER).sized(1.0F, 1.0F).build("scampler"));
+    public static final RegistryObject<EntityType<MotherGhastEntity>> MOTHER_GHAST = REGISTER.register("mother_ghast", () -> EntityType.Builder.of(MotherGhastEntity::new, MobCategory.MONSTER).sized(8.0F, 7.0F).build("mother_ghast"));
+    public static final RegistryObject<EntityType<FinforcerEntity>> FINFORCER = REGISTER.register("finforcer", () -> EntityType.Builder.of(FinforcerEntity::new, MobCategory.MONSTER).sized(0.6F, 1.95F).build("finforcer"));
+    public static final RegistryObject<EntityType<PraetorEntity>> PRAETOR = REGISTER.register("praetor", () -> EntityType.Builder.of(PraetorEntity::new, MobCategory.MONSTER).sized(1.0F, 3.0F).build("praetor"));
     public static final RegistryObject<EntityType<BeaconProjectileEntity>> BEACON_PROJECTILE = REGISTER.register("beacon_projectile", () ->
             EntityType.Builder.<BeaconProjectileEntity>of(BeaconProjectileEntity::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F)
@@ -122,7 +134,7 @@ public class ModEntities
                     .setShouldReceiveVelocityUpdates(true).build("raid_flare"));
 
 
-    public static final RegistryObject<EntityType<EnemyProjectileEntity>> BRASS_BOLT = REGISTER.register("brass_bolt", () ->
+    public static final RegistryObject<EntityType<EnemyProjectileEntity>> ENEMY_PROJECTILE = REGISTER.register("brass_bolt", () ->
             EntityType.Builder.<EnemyProjectileEntity>of(EnemyProjectileEntity::new, MobCategory.MISC)
                     .sized(0.5F, 0.5F)
                     .setTrackingRange(64)

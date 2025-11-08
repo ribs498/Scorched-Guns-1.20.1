@@ -3,18 +3,14 @@
   },
   "general": {
     "weaponType": "special",
-    "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 19,
-    "recoilAngle": 1.0,
-    "recoilKick": 0.2,
-    "spread": 1.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 37,
-    "criticalChance": 0.05,
+
     "isSilenced": true,
     "enableGunLight": false
   },
@@ -31,6 +27,11 @@
     }
   },
   "projectile": {
+    "alwaysSpread": false,
+    "recoilAngle": 1.0,
+    "recoilKick": 0.2,
+    "spread": 1.0,
+    "criticalChance": 0.05,
     "weaponType": "special",
     "advantage": "scguns:none",
     "damage": 0.0,

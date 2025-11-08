@@ -1,5 +1,11 @@
 {
   "type": "createoreexcavation:vein",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "createoreexcavation"
+    }
+  ],
   "amountMax": 1.1,
   "amountMin": 0.7,
   "biomeWhitelist": "minecraft:is_nether",

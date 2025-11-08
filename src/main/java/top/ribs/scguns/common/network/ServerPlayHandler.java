@@ -1,7 +1,6 @@
 package top.ribs.scguns.common.network;
 
 import com.mrcrayfish.framework.api.network.LevelLocation;
-import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -16,7 +15,6 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.SimpleMenuProvider;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -31,7 +29,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.common.*;
-import top.ribs.scguns.common.container.AttachmentContainer;
+import top.ribs.scguns.client.screen.AttachmentContainer;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
 import top.ribs.scguns.event.GunEventBus;
 import top.ribs.scguns.event.GunFireEvent;
@@ -84,17 +82,17 @@ public class ServerPlayHandler {
             ModSyncedDataKeys.RELOADING.setValue(player, false);
         }
 
-        if (!modifiedGun.getGeneral().isAlwaysSpread() && modifiedGun.getGeneral().getSpread() > 0.0F) {
+        if (!modifiedGun.getProjectile().isAlwaysSpread() && modifiedGun.getProjectile().getSpread() > 0.0F) {
             SpreadTracker.get(player).update(player, item);
         }
         if (FireMode.BEAM.equals(modifiedGun.getGeneral().getFireMode()) ||
                 FireMode.SEMI_BEAM.equals(modifiedGun.getGeneral().getFireMode())) {
             BeamWeaponHandler.handleBeamWeapon(player, heldItem, modifiedGun);
         }
-        else if (modifiedGun.getProjectile().firesArrows()) {
-            int count = modifiedGun.getGeneral().getProjectileAmount();
+        else if (modifiedGun.getProjectile(heldItem).firesArrows()) {
+            int count = modifiedGun.getProjectile().getProjectileAmount();
             for (int i = 0; i < count; i++) {
-                Arrow arrow = getArrow(player, world, modifiedGun);
+                Arrow arrow = getArrow(player, world, heldItem, modifiedGun);
                 arrow.pickup = Arrow.Pickup.ALLOWED;
                 world.addFreshEntity(arrow);
             }
@@ -136,18 +134,24 @@ public class ServerPlayHandler {
 
     private static void handleCasingEjection(ServerPlayer player, ItemStack heldItem, Gun modifiedGun, Level world) {
         if (Config.COMMON.gameplay.spawnCasings.get()) {
-            if (modifiedGun.getProjectile().casingType != null && !player.getAbilities().instabuild &&
-                    !modifiedGun.getProjectile().ejectDuringReload()) {
+            if (modifiedGun.getProjectile(heldItem).casingType != null && !player.getAbilities().instabuild &&
+                    !modifiedGun.getProjectile(heldItem).ejectDuringReload()) {
                 ItemStack casingStack = new ItemStack(Objects.requireNonNull(
-                        ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile().casingType)));
+                        ForgeRegistries.ITEMS.getValue(modifiedGun.getProjectile(heldItem).casingType)));
 
                 double baseChance = 0.4;
                 int enchantmentLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.SHELL_CATCHER.get(), heldItem);
                 double finalChance = baseChance + (enchantmentLevel * 0.15);
 
                 if (Math.random() < finalChance) {
-                    if (!GunEventBus.addCasingToPouch(player, casingStack)) {
-                        GunEventBus.spawnCasingInWorld(world, player, casingStack);
+                    if (enchantmentLevel > 0) {
+                        if (!GunEventBus.addCasingDirectly(player, casingStack)) {
+                            GunEventBus.spawnCasingInWorld(world, player, casingStack);
+                        }
+                    } else {
+                        if (!GunEventBus.addCasingToPouch(player, casingStack)) {
+                            GunEventBus.spawnCasingInWorld(world, player, casingStack);
+                        }
                     }
                 }
             }
@@ -184,10 +188,10 @@ public class ServerPlayHandler {
     }
 
     @NotNull
-    private static Arrow getArrow(ServerPlayer player, Level world, Gun modifiedGun) {
+    private static Arrow getArrow(ServerPlayer player, Level world, ItemStack heldItem, Gun modifiedGun) {
         Arrow arrow = new Arrow(world, player);
 
-        float speed = (float) modifiedGun.getProjectile().getSpeed() * 0.35f;
+        float speed = (float) modifiedGun.getProjectile(heldItem).getSpeed() * 0.35f;
         float pitch = player.getXRot();
         float yaw = player.getYRot();
         float f = -Mth.sin(yaw * ((float)Math.PI / 180F)) * Mth.cos(pitch * ((float)Math.PI / 180F));
@@ -208,14 +212,14 @@ public class ServerPlayHandler {
         arrow.yRotO = arrow.getYRot();
         arrow.xRotO = arrow.getXRot();
 
-        arrow.setBaseDamage(modifiedGun.getProjectile().getDamage() * 0.15);
+        arrow.setBaseDamage(modifiedGun.getProjectile(heldItem).getDamage() * 0.15);
         return arrow;
     }
 
 
     private static void fireProjectiles(Level world, ServerPlayer player, ItemStack heldItem, GunItem item, Gun modifiedGun) {
-        int count = modifiedGun.getGeneral().getProjectileAmount();
-        Gun.Projectile projectileProps = modifiedGun.getProjectile();
+        int count = modifiedGun.getProjectile().getProjectileAmount();
+        Gun.Projectile projectileProps = modifiedGun.getProjectile(heldItem);
         ProjectileEntity[] spawnedProjectiles = new ProjectileEntity[count];
 
         for (int i = 0; i < count; i++) {
@@ -369,7 +373,7 @@ public class ServerPlayHandler {
                     int count = tag.getInt("AmmoCount");
                     tag.putInt("AmmoCount", 0);
 
-                    ResourceLocation id = ForgeRegistries.ITEMS.getKey(gun.getProjectile().getItem());
+                    ResourceLocation id = ForgeRegistries.ITEMS.getKey(gun.getCurrentAmmoItem(stack));
                     Item item = ForgeRegistries.ITEMS.getValue(id);
                     if (item == null) return;
 
@@ -418,7 +422,7 @@ public class ServerPlayHandler {
                 if (currentAmmo > modifiedCapacity) {
                     tag.putInt("AmmoCount", modifiedCapacity);
                     if (!hasCreativeBox) {
-                        ResourceLocation id = ForgeRegistries.ITEMS.getKey(gun.getProjectile().getItem());
+                        ResourceLocation id = ForgeRegistries.ITEMS.getKey(gun.getCurrentAmmoItem(stack));
                         Item item = ForgeRegistries.ITEMS.getValue(id);
                         if (item != null) {
                             int residue = currentAmmo - modifiedCapacity;

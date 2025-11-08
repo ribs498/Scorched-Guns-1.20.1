@@ -9,18 +9,13 @@
   },
   "general": {
     "weaponType": "plasma",
-    "alwaysSpread": false,
     "fireMode": "scguns:automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 4,
-    "recoilAngle": 2.0,
-    "recoilKick": 0.25,
-    "spread": 1.0,
     "meleeDamage": 5.5,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 10,
-    "criticalChance": 0.05
+    "hotBarrelRate": 10
   },
   "modules": {
     "attachments": {
@@ -43,6 +38,10 @@
     }
   },
   "projectile": {
+    "recoilAngle": 2.0,
+    "recoilKick": 0.25,
+    "spread": 1.0,
+    "criticalChance": 0.05,
     "advantage": "scguns:none",
     "damage": 21.5,
     "damageFalloffStart": 28.0,

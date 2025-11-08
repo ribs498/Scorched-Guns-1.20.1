@@ -98,7 +98,7 @@ public class DynamicCrosshair extends Crosshair {
                 spreadModifier = (float)Mth.lerp((double)sprintTransition * 0.5, spreadModifier, 1.0);
 
                 float baseSpread = GunCompositeStatHelper.getCompositeSpread(heldItem, modifiedGun);
-                float minSpread = modifiedGun.getGeneral().isAlwaysSpread() ? baseSpread : 0.0F;
+                float minSpread = modifiedGun.getProjectile().isAlwaysSpread() ? baseSpread : 0.0F;
                 if (modifiedGun.getGeneral().getFireMode() == FireMode.PULSE) {
                     float chargeProgress = getCurrentChargeProgress(mc.player, heldItem, modifiedGun);
                     float chargeSpreadMultiplier = calculateChargeSpreadMultiplier(chargeProgress, modifiedGun);

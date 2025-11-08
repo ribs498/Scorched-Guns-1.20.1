@@ -14,21 +14,14 @@
   },
   "general": {
     "weaponType": "pistol",
-    "alwaysSpread": true,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:dual_wield",
     "baseGripType": "scguns:dual_wield",
     "rate": 20,
-    "recoilAngle": 20.0,
-    "recoilKick": 1.0,
-    "spread": 20.0,
     "meleeDamage": 6.0,
     "meleeReach": 4.5,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 37,
-    "criticalChance": 0.05,
-    "playerKnockBack": true,
-    "playerKnockBackStrength": 1.5,
+    "hotBarrelRate": 99,
     "usesCustomMeleeAnimation": true
   },
   "modules": {
@@ -36,6 +29,13 @@
     }
   },
   "projectile": {
+    "alwaysSpread": true,
+    "recoilAngle": 20.0,
+    "recoilKick": 1.0,
+    "spread": 20.0,
+    "criticalChance": 0.05,
+    "playerKnockBack": true,
+    "playerKnockBackStrength": 1.5,
     "knockbackStrength": 3.0,
     "advantage": "scguns:bot",
     "damage": 88.0,

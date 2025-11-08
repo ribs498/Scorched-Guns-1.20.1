@@ -1,5 +1,5 @@
 {
-	"format_version": "1.12.0",
+	"format_version": "1.21.0",
 	"minecraft:geometry": [
 		{
 			"description": {
@@ -25,6 +25,57 @@
 								"west": {"uv": [16, 2], "uv_size": [4.5, 1.5]},
 								"up": {"uv": [5, 16], "uv_size": [1.5, 4.5]},
 								"down": {"uv": [7, 20.5], "uv_size": [1.5, -4.5]}
+							}
+						},
+						{
+							"origin": [-1.94894, -4.30233, 1.93685],
+							"size": [1, 1, 2],
+							"pivot": [-1.44894, -3.80233, 3.56185],
+							"rotation": [16.32495, -15.69986, -47.26579],
+							"uv": {
+								"north": {"uv": [37, 29], "uv_size": [1, 1]},
+								"east": {"uv": [37, 22], "uv_size": [2, 1]},
+								"south": {"uv": [30, 37], "uv_size": [1, 1]},
+								"west": {"uv": [23, 37], "uv_size": [2, 1]},
+								"up": {"uv": [37, 23], "uv_size": [1, 2]},
+								"down": {"uv": [25, 39], "uv_size": [1, -2]}
+							}
+						},
+						{
+							"origin": [-1.74678, -4.55233, 1.42733],
+							"size": [1, 1.5, 1],
+							"uv": {
+								"north": {"uv": [37, 25], "uv_size": [1, 1.5]},
+								"east": {"uv": [26, 37], "uv_size": [1, 1.5]},
+								"south": {"uv": [27, 37], "uv_size": [1, 1.5]},
+								"west": {"uv": [37, 27], "uv_size": [1, 1.5]},
+								"up": {"uv": [37, 30], "uv_size": [1, 1]},
+								"down": {"uv": [31, 38], "uv_size": [1, -1]}
+							}
+						},
+						{
+							"origin": [-1.74678, -3.05233, 2.17733],
+							"size": [1.5, 1, 0],
+							"uv": {
+								"east": {"uv": [0, 0], "uv_size": [0, 1]},
+								"south": {"uv": [28, 37], "uv_size": [1.5, 1]},
+								"west": {"uv": [0, 0], "uv_size": [0, 1]},
+								"up": {"uv": [0, 0], "uv_size": [1.5, 0]},
+								"down": {"uv": [0, 0], "uv_size": [1.5, 0]}
+							}
+						},
+						{
+							"origin": [-2.19894, -4.55233, 3.93685],
+							"size": [1.5, 1.5, 0.5],
+							"pivot": [-1.44894, -3.80233, 3.56185],
+							"rotation": [16.32495, -15.69986, -47.26579],
+							"uv": {
+								"north": {"uv": [37, 20], "uv_size": [1.5, 1.5]},
+								"east": {"uv": [37, 31], "uv_size": [0.5, 1.5]},
+								"south": {"uv": [21, 37], "uv_size": [1.5, 1.5]},
+								"west": {"uv": [32, 37], "uv_size": [0.5, 1.5]},
+								"up": {"uv": [33, 37], "uv_size": [1.5, 0.5]},
+								"down": {"uv": [37, 33.5], "uv_size": [1.5, -0.5]}
 							}
 						},
 						{
@@ -262,16 +313,11 @@
 				{
 					"name": "grips",
 					"parent": "barrel",
-					"pivot": [-0.225, -6.325, 2.025]
-				},
-				{
-					"name": "grips2",
-					"parent": "barrel",
 					"pivot": [0.21213, -3.30233, -9.14767]
 				},
 				{
 					"name": "vertical_grip",
-					"parent": "grips2",
+					"parent": "grips",
 					"pivot": [0, -0.1, 0],
 					"cubes": [
 						{
@@ -338,7 +384,7 @@
 				},
 				{
 					"name": "light_grip",
-					"parent": "grips2",
+					"parent": "grips",
 					"pivot": [0, -0.1, 0],
 					"cubes": [
 						{
@@ -405,7 +451,7 @@
 				},
 				{
 					"name": "iron_bayonet",
-					"parent": "grips2",
+					"parent": "grips",
 					"pivot": [0, -0.1, 0],
 					"cubes": [
 						{
@@ -447,7 +493,7 @@
 				},
 				{
 					"name": "diamond_bayonet",
-					"parent": "grips2",
+					"parent": "grips",
 					"pivot": [0, -0.1, 0],
 					"cubes": [
 						{
@@ -489,7 +535,7 @@
 				},
 				{
 					"name": "netherite_bayonet",
-					"parent": "grips2",
+					"parent": "grips",
 					"pivot": [0, -0.1, 0],
 					"cubes": [
 						{
@@ -531,7 +577,7 @@
 				},
 				{
 					"name": "anthralite_bayonet",
-					"parent": "grips2",
+					"parent": "grips",
 					"pivot": [0, -0.1, 0],
 					"cubes": [
 						{
@@ -599,6 +645,24 @@
 					"name": "sights",
 					"parent": "body",
 					"pivot": [0, -6.4, 0]
+				},
+				{
+					"name": "flame",
+					"parent": "body",
+					"pivot": [-1.72721, -3.62555, 4.32603],
+					"rotation": [16.32495, -15.69986, -47.26579],
+					"cubes": [
+						{
+							"origin": [-1.73803, -3.63541, 4.32052],
+							"size": [0.018, 0.018, 0.054],
+							"uv": {
+								"east": {"uv": [38, 2.5], "uv_size": [7, 2.5], "uv_rotation": 180},
+								"west": {"uv": [38, 7.5], "uv_size": [7, 2.5]},
+								"up": {"uv": [38, 5], "uv_size": [7, 2.5], "uv_rotation": 270},
+								"down": {"uv": [45, 2.5], "uv_size": [-7, -2.5], "uv_rotation": 270}
+							}
+						}
+					]
 				},
 				{
 					"name": "stocks",

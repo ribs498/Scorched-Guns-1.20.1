@@ -1,0 +1,33 @@
+{
+  "name": "scguns:spawners",
+  "fallback": "minecraft:empty",
+  "elements": [
+    {
+      "weight": 10,
+      "element": {
+        "location": "scguns:spawners/special/dissident",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 10,
+      "element": {
+        "location": "scguns:spawners/special/sky_carrier",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    },
+    {
+      "weight": 10,
+      "element": {
+        "location": "scguns:spawners/warrior/cog_minion",
+        "processors": "scguns:generic",
+        "projection": "rigid",
+        "element_type": "minecraft:single_pool_element"
+      }
+    }
+  ]
+}

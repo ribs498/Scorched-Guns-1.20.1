@@ -23,6 +23,7 @@ public class ModClientEventsBus {
         event.registerLayerDefinition(ModModelLayers.SUPPLY_SCAMP_LAYER, SupplyScampModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.BLUNDERER_LAYER, BlundererModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.DISSIDENT_LAYER, DissidentModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.PRAETOR_LAYER, PraetorModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.VIVENTRUM_LAYER, ViventrumModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.HIVE_LAYER, HiveModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.SWARM_LAYER, SwarmModel::createBodyLayer);
@@ -35,6 +36,9 @@ public class ModClientEventsBus {
         event.registerLayerDefinition(ModModelLayers.SCAMPLER_LAYER, ScamplerModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.ADJUDICATOR_LAYER, AdjudicatorModel::createBodyLayer);
         event.registerLayerDefinition(ModModelLayers.SUBJUGATOR_LAYER, SubjugatorModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.MOTHER_GHAST_LAYER, MotherGhastModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.FINFORCER_LAYER, FinforcerModel::createBodyLayer);
+        event.registerLayerDefinition(ModModelLayers.SULFURHEAD_LAYER, SulfurheadModel::createBodyLayer);
     }
 }
 

@@ -14,6 +14,6 @@
 		"item": "scguns:shock_cell",
 		"count": 1
 	},
-	"energy": 1600,
+	"energy": 12000,
 	"maxChargeRate": 200
 }

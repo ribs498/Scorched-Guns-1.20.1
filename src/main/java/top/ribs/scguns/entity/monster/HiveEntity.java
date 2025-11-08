@@ -25,9 +25,8 @@ import java.util.EnumSet;
 import java.util.List;
 
 public class HiveEntity extends Monster {
-    public final AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimeout = 0;
     private int swarmSummonCooldown = 0;
+    private int spawnAnimationTicks = 0;
 
     static final List<SwarmEntity> summonedSwarm = new ArrayList<>();
 
@@ -35,32 +34,37 @@ public class HiveEntity extends Monster {
         super(pEntityType, pLevel);
     }
 
+    public boolean isSpawning() {
+        return spawnAnimationTicks > 0;
+    }
+
+    public float getSpawnAnimationProgress(float partialTick) {
+        if (spawnAnimationTicks <= 0) return 0.0F;
+        return (spawnAnimationTicks - partialTick) / 20.0F;
+    }
+
     public Level getEntityLevel() {
         return this.level();
     }
+
     @Override
     public @NotNull MobType getMobType() {
         return MobType.UNDEAD;
     }
+
     @Override
     public void tick() {
         super.tick();
 
-        if (this.level().isClientSide()) {
-            setupAnimationStates();
-        }
         if (swarmSummonCooldown > 0) {
             --swarmSummonCooldown;
         }
-        summonedSwarm.removeIf(swarm -> !swarm.isAlive());
-    }
-    private void setupAnimationStates() {
-        if (this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = this.random.nextInt(40) + 80;
-            this.idleAnimationState.start(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
+
+        if (spawnAnimationTicks > 0) {
+            --spawnAnimationTicks;
         }
+
+        summonedSwarm.removeIf(swarm -> !swarm.isAlive());
     }
     @Override
     protected void updateWalkAnimation(float pPartialTick) {
@@ -125,6 +129,7 @@ public class HiveEntity extends Monster {
                 this.level().addFreshEntity(swarm);
                 summonedSwarm.add(swarm);
                 swarmSummonCooldown = 60;
+                spawnAnimationTicks = 20;
                 playSwarmSummonedSound();
             }
         }
@@ -197,4 +202,3 @@ public class HiveEntity extends Monster {
         }
     }
 }
-

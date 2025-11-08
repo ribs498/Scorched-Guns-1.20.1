@@ -4,9 +4,9 @@
       { "index": 0, "time": 100 },
       1, 2, 3,
       { "index": 2, "time": 60 },
-      4,
+      1,
       { "index": 0, "time": 70 },
-      { "index": 4, "time": 40 }
+      { "index": 1, "time": 40 }
     ],
     "frametime": 8
   }

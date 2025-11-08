@@ -154,16 +154,22 @@ public class ViventrumModel<T extends ViventrumEntity> extends EntityModel<T> im
 
         boolean holdingGun = entity.getMainHandItem().getItem() instanceof GunItem;
 
-        // Floating bob - affects both body and head together
+        if (entity.isTame() && entity.isDefensive()) {
+            animateDefensive(ageInTicks);
+            return;
+        }
+
+        if (entity.isTame() && entity.isPartying()) {
+            animateDancing(ageInTicks);
+            return;
+        }
+
         float bobAmount = Mth.sin(ageInTicks * 0.1F) * 0.1F;
         this.body.y += bobAmount;
         this.head.y += bobAmount;
 
-        // Subtle body tilt
-        float bodyTilt = Mth.cos(ageInTicks * 0.08F) * 0.04F;
-        this.body.zRot = bodyTilt;
+        this.body.zRot = Mth.cos(ageInTicks * 0.08F) * 0.04F;
 
-        // Tail sway animation
         float tailTime = ageInTicks * 0.12F;
         float tailSwayAmount = 0.3F;
 
@@ -176,27 +182,22 @@ public class ViventrumModel<T extends ViventrumEntity> extends EntityModel<T> im
         this.tail_end.xRot = Mth.sin(tailTime + 1.6F) * tailSwayAmount * 0.6F;
         this.tail_end.yRot = Mth.cos(tailTime + 1.2F) * 0.2F;
 
-        // Arm animation - more movement now that it's properly attached
         if (!holdingGun && !entity.isAttacking()) {
             float armTime = ageInTicks * 0.08F;
             this.left_arm.xRot = Mth.sin(armTime) * 0.15F - 0.15F;
             this.left_arm.zRot = Mth.cos(armTime * 0.6F) * 0.08F;
             this.left_arm.yRot = Mth.sin(armTime * 0.5F) * 0.05F;
         }
-
-        // Attack animation
         if (entity.isAttacking() && entity.getAttackTimeout() > 0 && !holdingGun) {
             animateAttackSmooth(entity.getAttackTimeout(), ageInTicks);
         }
 
-        // Gun holding pose
         if (holdingGun) {
             this.left_arm.xRot = -1.5708F;
             this.left_arm.yRot = 0.0F;
             this.left_arm.zRot = 0.0F;
         }
 
-        // Head rotation for looking
         float clampedYaw = Mth.clamp(netHeadYaw, -60.0F, 60.0F);
         float clampedPitch = Mth.clamp(headPitch, -30.0F, 30.0F);
         this.head.yRot = clampedYaw * ((float)Math.PI / 180F);
@@ -227,6 +228,69 @@ public class ViventrumModel<T extends ViventrumEntity> extends EntityModel<T> im
         this.left_arm.xRot = -swingCurve * 1.8f;
         this.left_arm.yRot = swingCurve * 0.3f;
         this.left_arm.zRot = 0.0f;
+    }
+
+    private void animateDefensive(float ageInTicks) {
+        float bob = Mth.sin(ageInTicks * 0.08F) * 0.15F;
+
+        this.body.y += 1.5f + bob;
+        this.body.xRot = -0.8f;
+        this.body.zRot = 0.0f;
+
+        this.head.xRot = 1.2f;
+        this.head.yRot = 0.0f;
+        this.head.zRot = 0.0f;
+        this.head.y += 0.5f + bob * 0.8f;
+
+        this.left_arm.xRot = -1.8f;
+        this.left_arm.yRot = 0.4f;
+        this.left_arm.zRot = 0.6f;
+        this.left_arm.y += 1.0f + bob * 0.7f;
+
+        this.tail_top.xRot = 2.0f;
+        this.tail_top.yRot = 0.0f;
+        this.tail_top.zRot = 0.0f;
+
+        this.tail_middle.xRot = 1.8f;
+        this.tail_middle.yRot = 0.0f;
+        this.tail_middle.zRot = 0.0f;
+
+        this.tail_end.xRot = 1.4f;
+        this.tail_end.yRot = 0.0f;
+        this.tail_end.zRot = 0.0f;
+    }
+
+    private void animateDancing(float ageInTicks) {
+        float danceSpeed = 0.4f;
+
+        float bounce = Mth.abs(Mth.sin(ageInTicks * danceSpeed)) * 1.5f;
+        this.body.y += bounce;
+        this.head.y += bounce * 1.2f;
+
+        this.body.zRot = Mth.sin(ageInTicks * danceSpeed * 0.8f) * 0.25f;
+        this.body.xRot = Mth.cos(ageInTicks * danceSpeed * 0.5f) * 0.12f;
+
+        this.head.xRot = Mth.sin(ageInTicks * danceSpeed * 2.0f) * 0.2f;
+        this.head.yRot = Mth.sin(ageInTicks * danceSpeed * 1.2f) * 0.35f;
+        this.head.zRot = Mth.cos(ageInTicks * danceSpeed * 1.5f) * 0.15f;
+
+        float armPhase = ageInTicks * danceSpeed;
+        this.left_arm.xRot = -2.2f + Mth.sin(armPhase * 1.3f) * 0.3f;
+        this.left_arm.zRot = Mth.sin(armPhase * 0.9f) * 0.4f;
+        this.left_arm.yRot = Mth.cos(armPhase * 0.7f) * 0.2f;
+
+        float tailTime = ageInTicks * danceSpeed * 1.5f;
+        this.tail_top.xRot = Mth.sin(tailTime) * 0.6f;
+        this.tail_top.zRot = Mth.cos(tailTime * 0.9f) * 0.5f;
+        this.tail_top.yRot = Mth.sin(tailTime * 0.7f) * 0.3f;
+
+        this.tail_middle.xRot = Mth.sin(tailTime + 1.0f) * 0.7f;
+        this.tail_middle.zRot = Mth.cos(tailTime * 0.8f + 0.8f) * 0.6f;
+        this.tail_middle.yRot = Mth.cos(tailTime + 0.5f) * 0.4f;
+
+        this.tail_end.xRot = Mth.sin(tailTime + 2.0f) * 0.5f;
+        this.tail_end.yRot = Mth.cos(tailTime + 1.5f) * 0.5f;
+        this.tail_end.zRot = Mth.sin(tailTime * 1.2f) * 0.3f;
     }
 
     @Override

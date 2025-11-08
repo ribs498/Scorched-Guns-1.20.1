@@ -86,11 +86,6 @@ public class TheMerchantEntity extends PathfinderMob implements Merchant {
         this(pEntityType, pLevel, false);
     }
 
-    public final AnimationState idleAnimationState = new AnimationState();
-    public final AnimationState attackAnimationState = new AnimationState();
-    public int attackAnimationTimeout = 0;
-    private int idleAnimationTimeout = 0;
-
     private void initializeTrades() {
         if (!tradesInitialized) {
             if (tradesSeed == 0L) {
@@ -216,9 +211,7 @@ public class TheMerchantEntity extends PathfinderMob implements Merchant {
     public void tick() {
         super.tick();
 
-        if (this.level().isClientSide()) {
-            setupAnimationStates();
-        } else {
+        if (!this.level().isClientSide()) {
             if (isSummonedByPact()) {
                 handleDespawnTimer();
                 handleWalkingToSummoner();
@@ -408,25 +401,6 @@ public class TheMerchantEntity extends PathfinderMob implements Merchant {
             this.setXRot(this.getXRot() + Mth.clamp(pitchDiff, -2.0F, 2.0F));
 
             this.yHeadRot = this.getYRot();
-        }
-    }
-
-    private void setupAnimationStates() {
-        if (this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = this.random.nextInt(40) + 80;
-            this.idleAnimationState.start(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
-        }
-
-        if (this.isAttacking()) {
-            if (attackAnimationTimeout <= 0) {
-                attackAnimationTimeout = 12;
-                attackAnimationState.start(this.tickCount);
-            }
-            --attackAnimationTimeout;
-        } else {
-            attackAnimationState.stop();
         }
     }
 

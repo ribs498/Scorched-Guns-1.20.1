@@ -17,6 +17,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.TagMatchTest;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.init.ModFeatures;
+import top.ribs.scguns.world.NiterPatchConfiguration;
 
 import java.util.List;
 
@@ -24,9 +25,10 @@ public class ModConfiguredFeatures {
     public static final ResourceKey<ConfiguredFeature<?, ?>> ANTHRALITE_ORE_KEY = registerKey("anthralite_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> SULFUR_ORE_KEY = registerKey("sulfur_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> NETHER_SULFUR_ORE_KEY = registerKey("nether_sulfur_ore");
-   public static final ResourceKey<ConfiguredFeature<?, ?>> VEHEMENT_COAL_ORE_KEY = registerKey("vehement_coal_ore");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> VEHEMENT_COAL_ORE_KEY = registerKey("vehement_coal_ore");
     public static final ResourceKey<ConfiguredFeature<?, ?>> RICH_PHOSPHORITE_ORE_KEY = registerKey("rich_phosphorite");
     public static final ResourceKey<ConfiguredFeature<?, ?>> PHOSPHORITE_KEY = registerKey("phosphorite");
+    public static final ResourceKey<ConfiguredFeature<?, ?>> NITER_CAVE_PATCH_KEY = registerKey("niter_cave_patch");
 
     public static void bootstrap(BootstapContext<ConfiguredFeature<?, ?>> context) {
         RuleTest stoneReplaceables = new TagMatchTest(BlockTags.STONE_ORE_REPLACEABLES);
@@ -41,9 +43,9 @@ public class ModConfiguredFeatures {
                 OreConfiguration.target(stoneReplaceables, ModBlocks.PHOSPHORITE.get().defaultBlockState())
         );
 
-        register(context, PHOSPHORITE_KEY, Feature.ORE, new OreConfiguration(phosphoriteOres, 33));
+        register(context, PHOSPHORITE_KEY, Feature.ORE, new OreConfiguration(phosphoriteOres, 48));
 
-        register(context, RICH_PHOSPHORITE_ORE_KEY, Feature.ORE, new OreConfiguration(richPhosphoriteOres, 8));
+        register(context, RICH_PHOSPHORITE_ORE_KEY, Feature.ORE, new OreConfiguration(richPhosphoriteOres, 12));
 
         List<OreConfiguration.TargetBlockState> overworldAnthraliteOres = List.of(
                 OreConfiguration.target(stoneReplaceables, ModBlocks.ANTHRALITE_ORE.get().defaultBlockState()),
@@ -68,7 +70,8 @@ public class ModConfiguredFeatures {
         register(context, NETHER_SULFUR_ORE_KEY, Feature.ORE, new OreConfiguration(netherSulfurOres, 12));
         register(context, VEHEMENT_COAL_ORE_KEY, Feature.ORE, new OreConfiguration(netherVehementCoalOres, 6));
 
-
+        register(context, NITER_CAVE_PATCH_KEY, ModFeatures.NITER_PATCH.get(),
+                new NiterPatchConfiguration(ModBlocks.NITER_LAYER.get(), 1, 3, 3, 16));
     }
 
     public static ResourceKey<ConfiguredFeature<?, ?>> registerKey(String name) {

@@ -1,0 +1,144 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"1": "scguns:item/teslock_rifle"
+	},
+	"elements": [
+		{
+			"name": "iron_bayonet",
+			"from": [7.20125, 3.49184, -0.88636],
+			"to": [8.70125, 4.99184, -0.38636],
+			"rotation": {"angle": 45, "axis": "z", "origin": [7.95125, 4.24184, -0.63636]},
+			"faces": {
+				"north": {"uv": [7.5, 0, 7.875, 0.375], "texture": "#1"},
+				"east": {"uv": [0.5, 8.75, 0.625, 9.125], "texture": "#1"},
+				"south": {"uv": [0.5, 7.5, 0.875, 7.875], "texture": "#1"},
+				"west": {"uv": [3, 8.75, 3.125, 9.125], "texture": "#1"},
+				"up": {"uv": [9.125, 3.625, 8.75, 3.5], "texture": "#1"},
+				"down": {"uv": [9.125, 3.75, 8.75, 3.875], "texture": "#1"}
+			}
+		},
+		{
+			"name": "iron_bayonet",
+			"from": [7.57625, 2.61684, -0.86136],
+			"to": [8.32625, 3.61684, -0.41136],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.96, 8.36684, 12.08864]},
+			"faces": {
+				"north": {"uv": [5.25, 6, 5.5, 6.25], "texture": "#1"},
+				"east": {"uv": [0, 9.25, 0.125, 9.5], "texture": "#1"},
+				"south": {"uv": [7.5, 5, 7.75, 5.25], "texture": "#1"},
+				"west": {"uv": [9.25, 0, 9.375, 0.25], "texture": "#1"},
+				"up": {"uv": [0.5, 9.375, 0.25, 9.25], "texture": "#1"},
+				"down": {"uv": [9.5, 0.25, 9.25, 0.375], "texture": "#1"}
+			}
+		},
+		{
+			"name": "iron_bayonet",
+			"from": [8.20125, 1.86684, -8.11136],
+			"to": [8.20125, 3.36684, -0.86136],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.20125, 2.61684, -4.48636]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.375], "texture": "#1"},
+				"east": {"uv": [1, 1, 2.875, 1.375], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 0.375], "texture": "#1"},
+				"up": {"uv": [0, 1.875, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 1.875], "texture": "#1"}
+			}
+		},
+		{
+			"name": "iron_bayonet",
+			"from": [7.97625, 1.86684, -8.11136],
+			"to": [7.97625, 2.61684, -0.86136],
+			"rotation": {"angle": -45, "axis": "z", "origin": [8.20125, 2.61684, -4.48636]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.25], "texture": "#1"},
+				"east": {"uv": [3.5, 2, 5.375, 2.25], "texture": "#1"},
+				"south": {"uv": [0, 0, 0, 0.25], "texture": "#1"},
+				"west": {"uv": [3.5, 2.25, 5.375, 2.5], "texture": "#1"},
+				"up": {"uv": [0, 1.875, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 1.875], "texture": "#1"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 7, -7.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 7, -7.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-4.5, 9.75, -1.25]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4.5, 9.75, -1.25]
+		},
+		"ground": {
+			"translation": [0, 7.5, -5.5],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1.5, 5.75, 0]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [2.25, 8, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "vertical_grip",
+			"origin": [6.77002, -5.41074, 5.71908],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "light_grip",
+			"origin": [7.12357, -5.17393, 5],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "iron_bayonet",
+			"origin": [8, -0.75, 8],
+			"color": 4,
+			"children": [0, 1, 2, 3]
+		},
+		{
+			"name": "anthralite_bayonet",
+			"origin": [8, -0.75, 8],
+			"color": 5,
+			"children": []
+		},
+		{
+			"name": "netherite_bayonet",
+			"origin": [8, -0.75, 8],
+			"color": 6,
+			"children": []
+		},
+		{
+			"name": "diamond_bayonet",
+			"origin": [8, -0.75, 8],
+			"color": 7,
+			"children": []
+		},
+		{
+			"name": "sights",
+			"origin": [7.98598, -3.55304, 10.82665],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "gun_body",
+			"origin": [8, -6.25, 8],
+			"color": 1,
+			"children": []
+		}
+	]
+}

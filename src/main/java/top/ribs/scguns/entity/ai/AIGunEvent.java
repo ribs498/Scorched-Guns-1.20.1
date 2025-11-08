@@ -53,7 +53,7 @@ public class AIGunEvent {
         final Level level = shooter.level();
         if (level.isClientSide()) return;
 
-        int count = modifiedGun.getGeneral().getProjectileAmount();
+        int count = modifiedGun.getProjectile().getProjectileAmount();
         Gun.Projectile projectileProps = modifiedGun.getProjectile();
         ProjectileEntity[] spawnedProjectiles = new ProjectileEntity[count];
 
@@ -163,14 +163,14 @@ public class AIGunEvent {
     private static float getDifficultyDamageMultiplier(Difficulty difficulty) {
         return switch(difficulty) {
             case PEACEFUL -> 0.05F;
-            case EASY -> 0.25F;
-            case NORMAL -> 0.45F;
-            case HARD -> 0.6F;
+            case EASY -> 0.4F;
+            case NORMAL -> 0.55F;
+            case HARD -> 0.7F;
         };
     }
 
     public static Vec3 getDirection(LivingEntity shooter, LivingEntity target, ItemStack weapon, GunItem item, Gun modifiedGun, float accuracyModifier) {
-        float gunSpread = GunModifierHelper.getModifiedSpread(weapon, modifiedGun.getGeneral().getSpread());
+        float gunSpread = GunModifierHelper.getModifiedSpread(weapon, modifiedGun.getProjectile().getSpread());
 
         float baseAimError = 5.0F;
 

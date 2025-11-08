@@ -9,19 +9,13 @@
   },
   "general": {
     "weaponType": "sniper",
-    "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
     "rate": 11,
-    "recoilAngle": 4.0,
-    "recoilKick": 2.0,
-    "spread": 0.5,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
-    "hotBarrelRate": 27,
-    "criticalChance": 0.05
-
+    "hotBarrelRate": 27
   },
   "modules": {
     "attachments": {
@@ -52,6 +46,10 @@
     }
   },
   "projectile": {
+    "recoilAngle": 4.0,
+    "recoilKick": 2.0,
+    "spread": 0.5,
+    "criticalChance": 0.05,
     "advantage": "scguns:heavy",
     "damage": 19.5,
     "damageFalloffStart": 35.0,

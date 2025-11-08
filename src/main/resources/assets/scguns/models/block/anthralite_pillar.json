@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "scguns:block/anthralite_pillar_top",
+    "side": "scguns:block/anthralite_pillar_side"
+  }
+}

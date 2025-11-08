@@ -15,4 +15,7 @@ public class ModCompat {
     public static boolean isMekanismLoaded() {
         return ModList.get().isLoaded("mekanism");
     }
+    public static boolean isCreateIronworksLoaded() {
+        return ModList.get().isLoaded("create_ironworks");
+    }
 }

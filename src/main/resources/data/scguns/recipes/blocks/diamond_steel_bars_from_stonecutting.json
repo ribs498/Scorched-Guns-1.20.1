@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 8,
+  "ingredient": {
+    "item": "scguns:diamond_steel_ingot"
+  },
+  "result": "scguns:diamond_steel_bars"
+}

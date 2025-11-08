@@ -37,7 +37,6 @@ import java.util.*;
 
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class RaidManager {
-   // private static final Logger LOGGER = LogManager.getLogger();
     private static final UUID BOSS_HEALTH_MODIFIER_UUID = UUID.fromString("a1b2c3d4-e5f6-7890-abcd-ef1234567890");
     private static final UUID MOUNT_HEALTH_MODIFIER_UUID = UUID.fromString("b2c3d4e5-f6a7-8901-bcde-f12345678901");
 
@@ -111,8 +110,6 @@ public class RaidManager {
 
             RaidSaveData saveData = RaidSaveData.get(level);
             saveData.removeActiveRaid(raid.getRaidId());
-
-            //LOGGER.info("Raid {} surrendered via white flag", raid.getRaidId());
         }
     }
     @SubscribeEvent
@@ -133,12 +130,10 @@ public class RaidManager {
         Collection<RaidSaveData.ActiveRaidData> savedRaids = saveData.getActiveRaidData();
         saveData.cleanupInvalidRaids(level);
 
-        int restored = 0;
         for (RaidSaveData.ActiveRaidData data : savedRaids) {
             RaidConfig.RaidData config = RaidConfig.getRaidById(data.configRaidId());
 
             if (config == null) {
-                //LOGGER.warn("Could not restore raid - no config for raid ID: {}", data.configRaidId());
                 continue;
             }
 
@@ -150,10 +145,7 @@ public class RaidManager {
             }
 
             raid.updateBossBarPlayers();
-            restored++;
         }
-
-        //LOGGER.info("Restored {} active raids", restored);
     }
     public void startRaidFromPlayer(RaidConfig.RaidData config, ServerLevel level, ServerPlayer player) {
         if (hasActiveRaid()) return;
@@ -216,11 +208,9 @@ public class RaidManager {
 
     private void saveActiveRaids(ServerLevel level) {
         RaidSaveData saveData = RaidSaveData.get(level);
-        int savedCount = 0;
         for (ActiveRaid raid : activeRaids.values()) {
             if (raid.isActive()) {
                 saveData.saveActiveRaid(raid);
-                savedCount++;
             }
         }
     }
@@ -235,50 +225,31 @@ public class RaidManager {
         RaidSaveData saveData = RaidSaveData.get(level);
 
         if (dayTime >= NIGHT_START && dayTime < NIGHT_START + 20) {
-            if (dayTime == NIGHT_START) {
-//                LOGGER.info("=== RAID SCHEDULING CHECK === Day: {}, Time: {}, Dimension: {}",
-//                        currentDay, dayTime, dimension);
-            }
 
             if (hasActiveRaid()) {
-                if (dayTime == NIGHT_START) {
-                    //LOGGER.info("  âŒ Blocked: Active raid already exists");
-                }
                 return;
             }
 
             RaidSaveData.ScheduledRaidData scheduled = saveData.getScheduledRaid(dimension);
 
             if (scheduled != null && scheduled.scheduledDay() < currentDay) {
-                if (dayTime == NIGHT_START) {
-                    //LOGGER.warn("  ðŸ§¹ Cleaning up stale raid schedule from day {}", scheduled.scheduledDay());
-                }
+
                 saveData.removeScheduledRaid(dimension);
                 scheduled = null;
             }
 
             if (scheduled != null) {
-                if (dayTime == NIGHT_START) {
-                    //LOGGER.info("  âŒ Blocked: Raid already scheduled for tonight (Day: {})", scheduled.scheduledDay());
-                }
+
                 return;
             }
 
             if (!Config.COMMON.raids.raidsEnabled.get()) {
-                if (dayTime == NIGHT_START) {
-                    //LOGGER.info("  âŒ Blocked: Raids disabled in config");
-                }
                 return;
             }
 
             if (dayTime == NIGHT_START) {
                 float raidChance = Config.COMMON.raids.nightlyRaidChance.get().floatValue();
                 float roll = level.random.nextFloat();
-
-//                LOGGER.info("  ðŸŽ² Chance Roll: {}/{} ({})",
-//                        String.format("%.3f", roll),
-//                        String.format("%.3f", raidChance),
-//                        roll < raidChance ? "âœ“ SUCCESS" : "âœ— FAILED");
 
                 if (roll < raidChance) {
                     scheduleRaidForTonight(level, dimension, currentDay, saveData);
@@ -287,36 +258,18 @@ public class RaidManager {
         }
 
         if (dayTime >= RAID_SPAWN_TIME && dayTime < RAID_SPAWN_TIME + 20) {
-            if (dayTime == RAID_SPAWN_TIME) {
-                //LOGGER.info("=== RAID SPAWN CHECK === Day: {}, Time: {}", currentDay, dayTime);
-            }
+
 
             if (hasActiveRaid()) {
-                if (dayTime == RAID_SPAWN_TIME) {
-                    //LOGGER.info("  âŒ Blocked: Active raid already exists");
-                }
                 return;
             }
 
             RaidSaveData.ScheduledRaidData scheduled = saveData.getScheduledRaid(dimension);
 
             if (scheduled == null) {
-                if (dayTime == RAID_SPAWN_TIME) {
-                    //LOGGER.info("  â„¹ No raid scheduled for tonight");
-                }
                 return;
             }
-
-            if (dayTime == RAID_SPAWN_TIME) {
-//                LOGGER.info("  âœ“ Scheduled Raid Found: {} (Scheduled Day: {}, Current Day: {})",
-//                        scheduled.raidId(), scheduled.scheduledDay(), currentDay);
-            }
-
             if (scheduled.scheduledDay() != currentDay) {
-                if (dayTime == RAID_SPAWN_TIME) {
-//                    LOGGER.warn("  âš  Day mismatch! Scheduled: {}, Current: {} - removing stale schedule",
-//                            scheduled.scheduledDay(), currentDay);
-                }
                 saveData.removeScheduledRaid(dimension);
                 return;
             }
@@ -324,9 +277,6 @@ public class RaidManager {
             ServerPlayer player = level.getServer().getPlayerList().getPlayer(scheduled.targetPlayerUUID());
 
             if (player == null || player.isRemoved() || player.isSpectator()) {
-                if (dayTime == RAID_SPAWN_TIME) {
-                    //LOGGER.warn("  âš  Target player invalid - cancelling raid");
-                }
                 saveData.removeScheduledRaid(dimension);
                 return;
             }
@@ -335,35 +285,21 @@ public class RaidManager {
             Vec3 spawnPos = findRaidSpawnLocation(level, playerPos);
 
             if (spawnPos == null) {
-                if (dayTime == RAID_SPAWN_TIME) {
-                    //LOGGER.warn("  âš  No valid spawn location found - delaying raid");
-                }
                 return;
             }
 
             RaidConfig.RaidData config = RaidConfig.getRaidById(scheduled.raidId());
             if (config == null) {
-                if (dayTime == RAID_SPAWN_TIME) {
-                   // LOGGER.error("  âŒ Raid config not found: {}", scheduled.raidId());
-                }
                 saveData.removeScheduledRaid(dimension);
                 return;
             }
-
-            if (dayTime == RAID_SPAWN_TIME) {
-               // LOGGER.info("  ðŸš€ STARTING RAID: {} at {}", config.raidId(), spawnPos);
-            }
-
             startRaid(config, level, spawnPos);
             saveData.removeScheduledRaid(dimension);
         }
     }
 
     private void scheduleRaidForTonight(ServerLevel level, ResourceLocation dimension, long currentDay, RaidSaveData saveData) {
-       // LOGGER.info("  â†’ Attempting to schedule raid for Day {}...", currentDay);
-
         if (hasActiveRaid()) {
-           // LOGGER.info("     âŒ Failed: Active raid exists");
             return;
         }
 
@@ -375,7 +311,6 @@ public class RaidManager {
         }
 
         if (validPlayers.isEmpty()) {
-           // LOGGER.warn("     âŒ Failed: No valid players (all spectator/creative)");
             return;
         }
 
@@ -383,29 +318,16 @@ public class RaidManager {
         PlayerGunProgression progression = PlayerGunProgression.get(targetPlayer);
         int raidLevel = progression.getCurrentRaidLevel();
 
-//        LOGGER.info("     Player: {} | Tier: {} | Raid Level: {}",
-//                targetPlayer.getName().getString(),
-//                progression.getCurrentTier().getId(),
-//                raidLevel);
-
         if (raidLevel == 0) {
-//            LOGGER.warn("     âŒ Failed: Player raid level is 0 (no tiered guns picked up)");
             return;
         }
 
         RaidConfig.RaidData selectedRaid = selectRaidForLevel(raidLevel, level.random);
 
         if (selectedRaid == null) {
-            //LOGGER.error("     âŒ Failed: No raid config for level {}", raidLevel);
             return;
         }
-
-        //LOGGER.info("     âœ“ Selected: {} (Level {})", selectedRaid.raidId(), raidLevel);
-
         saveData.scheduleRaid(dimension, targetPlayer, selectedRaid.raidId(), currentDay);
-
-        //LOGGER.info("     ðŸ“… Scheduled for Day: {} (current: {})", currentDay, currentDay);
-       // LOGGER.info("     âœ… RAID SCHEDULED FOR TONIGHT!");
 
         targetPlayer.sendSystemMessage(Component.translatable("raid.scguns.warning"));
     }
@@ -428,10 +350,12 @@ public class RaidManager {
         }
     }
 
-
     @Nullable
     private Vec3 findRaidSpawnLocation(ServerLevel level, Vec3 center) {
         net.minecraft.util.RandomSource random = level.getRandom();
+
+        int playerY = (int)center.y;
+        boolean isUnderground = playerY < 50;
 
         for (int attempt = 0; attempt < 15; attempt++) {
             double angle = random.nextDouble() * Math.PI * 2;
@@ -440,16 +364,49 @@ public class RaidManager {
             double x = center.x + Math.cos(angle) * distance;
             double z = center.z + Math.sin(angle) * distance;
 
-            BlockPos pos = new BlockPos((int)x, (int)center.y, (int)z);
-            BlockPos groundPos = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos);
+            BlockPos pos = new BlockPos((int)x, playerY, (int)z);
+
+            BlockPos groundPos;
+            if (isUnderground) {
+                groundPos = findNearestValidCaveSpawn(level, pos, playerY);
+                if (groundPos == null) continue;
+            } else {
+                groundPos = level.getHeightmapPos(net.minecraft.world.level.levelgen.Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, pos);
+            }
 
             if (level.getBlockState(groundPos.below()).isSolid() &&
                     level.getBlockState(groundPos).isAir() &&
-                    level.getBlockState(groundPos.above()).isAir()) {
+                    level.getBlockState(groundPos.above()).isAir() &&
+                    level.getBlockState(groundPos.above(2)).isAir()) {
                 return new Vec3(groundPos.getX() + 0.5, groundPos.getY(), groundPos.getZ() + 0.5);
             }
         }
 
+        return null;
+    }
+
+    @Nullable
+    private BlockPos findNearestValidCaveSpawn(ServerLevel level, BlockPos center, int playerY) {
+        for (int yOffset = -5; yOffset <= 5; yOffset++) {
+            BlockPos checkPos = new BlockPos(center.getX(), playerY + yOffset, center.getZ());
+
+            if (level.getBlockState(checkPos.below()).isSolid() &&
+                    level.getBlockState(checkPos).isAir() &&
+                    level.getBlockState(checkPos.above()).isAir() &&
+                    level.getBlockState(checkPos.above(2)).isAir()) {
+
+                int airCount = 0;
+                for (int i = 0; i < 4; i++) {
+                    if (level.getBlockState(checkPos.above(i)).isAir()) {
+                        airCount++;
+                    }
+                }
+
+                if (airCount >= 3) {
+                    return checkPos;
+                }
+            }
+        }
         return null;
     }
 
@@ -499,6 +456,7 @@ public class RaidManager {
 
         raid.announceToNearbyPlayers(announcementComponent, config.spawnConditions().searchRadius());
         spawnHenchmen(raid, level);
+        raid.resetSpawnTimer();
 
         RaidSaveData saveData = RaidSaveData.get(level);
         saveData.saveActiveRaid(raid);
@@ -598,6 +556,33 @@ public class RaidManager {
                 ));
             }
             GunnerMobSpawner.extendFollowRange(pathfinderBoss);
+
+            if (boss instanceof net.minecraft.world.entity.monster.piglin.AbstractPiglin abstractPiglin) {
+                abstractPiglin.setImmuneToZombification(true);
+
+                if (boss instanceof net.minecraft.world.entity.monster.piglin.Piglin piglin) {
+                    piglin.setAggressive(true);
+                }
+
+                ServerPlayer targetPlayer = findNearestPlayer(level, spawnPos);
+                if (targetPlayer != null) {
+                    try {
+                        var brain = abstractPiglin.getBrain();
+                        brain.eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ANGRY_AT);
+                        brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ANGRY_AT, targetPlayer.getUUID());
+                        brain.eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.UNIVERSAL_ANGER);
+                        brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.UNIVERSAL_ANGER, true);
+                        brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET, targetPlayer);
+                        brain.eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.NEAREST_VISIBLE_PLAYER);
+                        brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.NEAREST_VISIBLE_PLAYER, targetPlayer);
+
+                        abstractPiglin.setTarget(targetPlayer);
+                        abstractPiglin.setLastHurtByMob(targetPlayer);
+                    } catch (Exception e) {
+                        abstractPiglin.setTarget(targetPlayer);
+                    }
+                }
+            }
         }
 
         level.addFreshEntity(boss);
@@ -706,7 +691,6 @@ public class RaidManager {
         return null;
     }
 
-    @Nullable
     private Mob spawnHenchman(ActiveRaid raid, RaidConfig.HenchmanType type, ServerLevel level, Vec3 spawnPos) {
         EntityType<?> entityType = type.entityType();
         if (!(entityType.create(level) instanceof Mob henchman)) return null;
@@ -718,7 +702,6 @@ public class RaidManager {
 
         henchman.addTag("RaidHenchman");
         henchman.addTag("RaidMember_" + raid.getRaidId());
-        henchman.addTag("MobGunner");
         henchman.addTag("AI_" + type.aiType().name());
         henchman.setPersistenceRequired();
 
@@ -729,9 +712,8 @@ public class RaidManager {
             henchman.setDropChance(EquipmentSlot.MAINHAND, 0.05f);
         }
 
-        net.minecraftforge.event.ForgeEventFactory.onFinalizeSpawn(henchman, level,
-                level.getCurrentDifficultyAt(henchman.blockPosition()),
-                net.minecraft.world.entity.MobSpawnType.EVENT, null, null);
+        henchman.addTag("MobGunner");
+
 
         for (RaidConfig.ArmorEntry armorEntry : type.armor()) {
             if (level.random.nextFloat() > armorEntry.dropChance()) continue;
@@ -773,19 +755,28 @@ public class RaidManager {
                 pathfinderMob.setTarget(targetPlayer);
             }
 
-            if (henchman instanceof net.minecraft.world.entity.monster.piglin.Piglin piglin) {
-                if (!(heldItem.getItem() instanceof GunItem)) {
-                    piglin.setAggressive(true);
-                    if (targetPlayer != null) {
-                        piglin.setTarget(targetPlayer);
-                    }
-                }
-            }
+            if (henchman instanceof net.minecraft.world.entity.monster.piglin.AbstractPiglin abstractPiglin) {
+                abstractPiglin.setImmuneToZombification(true);
 
-            if (henchman instanceof net.minecraft.world.entity.monster.piglin.PiglinBrute brute) {
-                if (!(heldItem.getItem() instanceof GunItem)) {
-                    if (targetPlayer != null) {
-                        brute.setTarget(targetPlayer);
+                if (henchman instanceof net.minecraft.world.entity.monster.piglin.Piglin piglin) {
+                    piglin.setAggressive(true);
+                }
+
+                if (targetPlayer != null) {
+                    try {
+                        var brain = abstractPiglin.getBrain();
+                        brain.eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ANGRY_AT);
+                        brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ANGRY_AT, targetPlayer.getUUID());
+                        brain.eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.UNIVERSAL_ANGER);
+                        brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.UNIVERSAL_ANGER, true);
+                        brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET, targetPlayer);
+                        brain.eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.NEAREST_VISIBLE_PLAYER);
+                        brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.NEAREST_VISIBLE_PLAYER, targetPlayer);
+
+                        abstractPiglin.setTarget(targetPlayer);
+                        abstractPiglin.setLastHurtByMob(targetPlayer);
+                    } catch (Exception e) {
+                        abstractPiglin.setTarget(targetPlayer);
                     }
                 }
             }

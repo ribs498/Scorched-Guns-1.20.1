@@ -24,14 +24,10 @@
     "gripType": "scguns:dual_wield",
     "baseGripType": "scguns:dual_wield",
     "rate": 3,
-    "recoilAngle": 2.0,
-    "recoilKick": 1.0,
-    "spread": 2.0,
     "meleeDamage": 4.5,
     "meleeCooldownTicks": 15,
     "meleeReach": 2.5,
-    "hotBarrelRate": 15,
-    "criticalChance": 0.05
+    "hotBarrelRate": 15
   },
   "modules": {
     "attachments": {
@@ -45,6 +41,10 @@
     }
   },
   "projectile": {
+    "recoilAngle": 2.0,
+    "recoilKick": 1.0,
+    "spread": 2.0,
+    "criticalChance": 0.05,
     "advantage": "scguns:undead",
     "damage": 23.0,
     "damageFalloffStart": 18.0,

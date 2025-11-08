@@ -100,20 +100,22 @@ public class GunnerMobSpawner {
             return;
         }
 
+        if (mob instanceof AbstractPiglin abstractPiglin && abstractPiglin.level().dimension() == Level.OVERWORLD) {
+            if (abstractPiglin.tickCount % 20 == 0) {
+                ItemStack helmet = abstractPiglin.getItemBySlot(EquipmentSlot.HEAD);
+                if (helmet.is(top.ribs.scguns.init.ModTags.Items.GAS_MASK)) {
+                    abstractPiglin.setImmuneToZombification(true);
+                } else {
+                    abstractPiglin.setImmuneToZombification(false);
+                }
+            }
+        }
+
         if (mob.tickCount >= 2) {
             return;
         }
 
         ItemStack heldItem = mob.getMainHandItem();
-
-        if (mob instanceof AbstractPiglin abstractPiglin && abstractPiglin.level().dimension() == Level.OVERWORLD) {
-            for (String tag : mob.getTags()) {
-                if (tag.startsWith("RaidMember_") || mob.getTags().contains("MobGunner")) {
-                    abstractPiglin.setImmuneToZombification(true);
-                    break;
-                }
-            }
-        }
 
         if (!GunMobValues.enabled) {
             return;

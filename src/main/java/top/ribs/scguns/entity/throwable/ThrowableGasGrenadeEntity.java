@@ -17,6 +17,7 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import top.ribs.scguns.common.ChokeBombCloud;
 import top.ribs.scguns.common.SulfurGasCloud;
 import top.ribs.scguns.event.GasExplosion;
 import top.ribs.scguns.init.ModEntities;
@@ -37,7 +38,7 @@ public class ThrowableGasGrenadeEntity extends ThrowableGrenadeEntity {
     public ThrowableGasGrenadeEntity(EntityType<? extends ThrowableGrenadeEntity> entityType, Level worldIn) {
         super(entityType, worldIn);
         this.explosionRadius = 6.0f;
-        this.remainingTicks = 800;
+        this.remainingTicks = 400;
         this.delayTicks = 30;
     }
 
@@ -45,9 +46,9 @@ public class ThrowableGasGrenadeEntity extends ThrowableGrenadeEntity {
         super(ModEntities.THROWABLE_GAS_GRENADE.get(), world, entity);
         this.setShouldBounce(true);
         this.setItem(new ItemStack(ModItems.GAS_GRENADE.get()));
-        this.setMaxLife(20 * 3);
+        this.setMaxLife(400);
         this.explosionRadius = radius;
-        this.remainingTicks = 800;
+        this.remainingTicks = 400;
         this.delayTicks = 20;
     }
 
@@ -56,12 +57,14 @@ public class ThrowableGasGrenadeEntity extends ThrowableGrenadeEntity {
         super.tick();
 
         if (this.remainingTicks > 0) {
-            if (this.remainingTicks <= (800 - this.delayTicks)) {
-                emitGasCloudParticles();
-                applyGasEffects();
-                if (!this.level().isClientSide) {
-                    Vec3 center = this.position();
-                    SulfurGasCloud.checkAndHandleFireExplosion(this.level(), center, this.explosionRadius);
+            if (this.remainingTicks <= (400 - this.delayTicks)) {
+                if (!ChokeBombCloud.isChokeBombActive(this.level(), this.position(), this.explosionRadius * 1.5)) {
+                    emitGasCloudParticles();
+                    applyGasEffects();
+                    if (!this.level().isClientSide) {
+                        Vec3 center = this.position();
+                        SulfurGasCloud.checkAndHandleFireExplosion(this.level(), center, this.explosionRadius);
+                    }
                 }
             }
 
@@ -81,7 +84,7 @@ public class ThrowableGasGrenadeEntity extends ThrowableGrenadeEntity {
     private void applyGasEffects() {
         if (!this.level().isClientSide) {
             Vec3 center = this.position();
-            SulfurGasCloud.applyGasEffects(this.level(), center, this.explosionRadius, 500, 2);
+            SulfurGasCloud.applyGasEffects(this.level(), center, this.explosionRadius, 100, 2);
         }
     }
 

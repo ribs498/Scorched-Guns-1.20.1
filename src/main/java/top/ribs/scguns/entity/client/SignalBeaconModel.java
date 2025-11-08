@@ -6,17 +6,17 @@ import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.*;
+import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
-import top.ribs.scguns.entity.animations.ModAnimationDefinitions;
 import top.ribs.scguns.entity.monster.SignalBeaconEntity;
 
 public class SignalBeaconModel<T extends Entity> extends HierarchicalModel<T> {
-    private final ModelPart main;
-    private final ModelPart Body;
+    private final ModelPart body;
+    private final PartPose bodyDefault;
 
     public SignalBeaconModel(ModelPart root) {
-        this.Body = root.getChild("body");
-        this.main = root.getChild("body");
+        this.body = root.getChild("body");
+        this.bodyDefault = this.body.storePose();
     }
 
     public static LayerDefinition createBodyLayer() {
@@ -39,17 +39,35 @@ public class SignalBeaconModel<T extends Entity> extends HierarchicalModel<T> {
 
     @Override
     public void setupAnim(T entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        this.root().getAllParts().forEach(ModelPart::resetPose);
-        this.animate(((SignalBeaconEntity) entity).idleAnimationState, ModAnimationDefinitions.SIGNAL_BEACON_IDLE, ageInTicks, 1f);
+        this.body.loadPose(this.bodyDefault);
+
+        if (entity instanceof SignalBeaconEntity beacon) {
+            int remainingLife = beacon.getRemainingLifespan();
+
+            float breathScale = Mth.sin(ageInTicks * 0.1f) * 0.025f + 1.0f;
+            this.body.xScale = breathScale;
+            this.body.yScale = breathScale;
+            this.body.zScale = breathScale;
+
+            if (remainingLife <= 10 && remainingLife > 0) {
+                float deathProgress = 1.0f - (remainingLife / 10.0f);
+                float bounceIntensity = deathProgress * 0.5f;
+                float bounce = Mth.sin(ageInTicks * 0.8f) * bounceIntensity;
+                this.body.y += bounce;
+
+                float wobble = Mth.sin(ageInTicks * 0.6f) * deathProgress * 0.1f;
+                this.body.zRot = wobble;
+            }
+        }
     }
 
     @Override
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, float red, float green, float blue, float alpha) {
-        Body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
+        body.render(poseStack, vertexConsumer, packedLight, packedOverlay, red, green, blue, alpha);
     }
 
     @Override
     public ModelPart root() {
-        return Body;
+        return body;
     }
 }

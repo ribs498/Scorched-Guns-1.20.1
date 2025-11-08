@@ -8,8 +8,11 @@ import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.util.Mth;
 import net.minecraft.world.item.ItemDisplayContext;
+import top.ribs.scguns.client.SpecialModels;
 import top.ribs.scguns.client.util.RenderUtil;
+import top.ribs.scguns.entity.projectile.MicroJetEntity;
 import top.ribs.scguns.entity.projectile.ProjectileEntity;
 
 public class ProjectileRenderer extends EntityRenderer<ProjectileEntity>
@@ -35,20 +38,19 @@ public class ProjectileRenderer extends EntityRenderer<ProjectileEntity>
 
         poseStack.pushPose();
 
-        if(!RenderUtil.getModel(entity.getItem()).isGui3d())
-        {
-            poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-            poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-            Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(), ItemDisplayContext.NONE, light, OverlayTexture.NO_OVERLAY, poseStack, renderTypeBuffer, entity.level(), 0);
-        }
-        else
-        {
-            poseStack.mulPose(Axis.YP.rotationDegrees(180F));
-            poseStack.mulPose(Axis.YP.rotationDegrees(entityYaw));
-            poseStack.mulPose(Axis.XP.rotationDegrees(entity.getXRot()));
-            Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(), ItemDisplayContext.NONE, light, OverlayTexture.NO_OVERLAY, poseStack, renderTypeBuffer, entity.level(), 0);
-        }
+        poseStack.mulPose(Axis.YP.rotationDegrees(180F));
+        poseStack.mulPose(Axis.YP.rotationDegrees(entityYaw));
+        poseStack.mulPose(Axis.XP.rotationDegrees(entity.getXRot() - 90));
 
+        float spin = (entity.tickCount + partialTicks) * 20.0F;
+        poseStack.mulPose(Axis.YP.rotationDegrees(spin));
+
+        Minecraft.getInstance().getItemRenderer().renderStatic(entity.getItem(), ItemDisplayContext.NONE, 15728880, OverlayTexture.NO_OVERLAY, poseStack, renderTypeBuffer, entity.level(), 0);
+
+        poseStack.translate(0, -1, 0);
+        poseStack.scale(0.75F, 0.75F, 0.75F);
+        float pulseScale = 1.0F + Mth.sin((entity.tickCount + partialTicks) * 0.6F) * 0.2F;
+        poseStack.scale(pulseScale, pulseScale, pulseScale);
         poseStack.popPose();
     }
 }

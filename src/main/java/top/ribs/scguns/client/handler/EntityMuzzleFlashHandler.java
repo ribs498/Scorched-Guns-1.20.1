@@ -75,6 +75,8 @@ public class EntityMuzzleFlashHandler {
 
         poseStack.pushPose();
         double eyeHeight = entity.getEyeHeight();
+        float entityScale = entity.getBbHeight() / 1.8F;
+
         poseStack.translate(0, eyeHeight - 0.2, 0);
         float bodyYaw = entity.yBodyRot;
         float headPitch = entity.getXRot();
@@ -82,7 +84,12 @@ public class EntityMuzzleFlashHandler {
         poseStack.mulPose(Axis.YP.rotationDegrees(-bodyYaw + 180));
         poseStack.mulPose(Axis.XP.rotationDegrees(-headPitch));
 
-        poseStack.translate(0.8, -0.1, -1.0);
+        float baseForwardOffset = -1.0F * entityScale;
+        float baseSideOffset = 0.8F * entityScale;
+        float baseVerticalOffset = -0.1F * entityScale;
+
+        poseStack.translate(baseSideOffset, baseVerticalOffset, baseForwardOffset);
+
         Vec3 weaponOrigin = PropertyHelper.getModelOrigin(weapon, PropertyHelper.GUN_DEFAULT_ORIGIN);
         Vec3 flashPosition = PropertyHelper.getMuzzleFlashPosition(weapon, modifiedGun).subtract(weaponOrigin);
 

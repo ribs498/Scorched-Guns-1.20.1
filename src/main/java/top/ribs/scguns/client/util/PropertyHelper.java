@@ -46,24 +46,20 @@ public final class PropertyHelper
 
     private static DataObject getCustomData(ItemStack stack)
     {
-        // First try to get data from attachment data
         if(stack.getItem() instanceof IMeta)
         {
             return MetaLoader.getInstance().getData(stack.getItem());
         }
-        // Otherwise try to get the data from the model
         return FrameworkClientAPI.getOpenModelData(stack, null, null, 0);
     }
 
     public static Vec3 getScopeCamera(ItemStack stack) {
-        // Retrieve position from the model's data
         DataObject customObject = PropertyHelper.getCustomData(stack);
         if (customObject.has(SCOPE_KEY, DataType.OBJECT)) {
             DataObject scopeObject = customObject.getDataObject(SCOPE_KEY);
             if (scopeObject.has("camera", DataType.ARRAY)) {
                 DataArray cameraArray = scopeObject.getDataArray("camera");
                 Vec3 cameraPosition = arrayToVec3(cameraArray, Vec3.ZERO);
-                //System.out.println("Custom scope camera position: " + cameraPosition);
                 return cameraPosition;
             }
         }
@@ -74,7 +70,6 @@ public final class PropertyHelper
 
     public static Vec3 getIronSightCamera(ItemStack stack, Gun modifiedGun, Vec3 gunOrigin)
     {
-        // Retrieve position from the model's data
         DataObject ironSightObject = getObjectByPath(stack, WEAPON_KEY, "ironSight");
         if(ironSightObject.has("camera", DataType.ARRAY))
         {
@@ -100,7 +95,6 @@ public final class PropertyHelper
 
     public static Vec3 getModelOrigin(ItemStack stack, Vec3 defaultOrigin)
     {
-        // Retrieve position from the model's data
         DataObject customObject = PropertyHelper.getCustomData(stack);
         if(customObject.has(MODEL_KEY, DataType.OBJECT))
         {
@@ -119,7 +113,6 @@ public final class PropertyHelper
         if (scopeObject.has("translation", DataType.ARRAY)) {
             DataArray translationArray = scopeObject.getDataArray("translation");
             Vec3 translation = arrayToVec3(translationArray, Vec3.ZERO);
-           // System.out.println("Custom attachment position for " + type.getName() + ": " + translation);
             return translation;
         }
         Gun.ScaledPositioned positioned = modifiedGun.getAttachmentPosition(type);
@@ -128,7 +121,6 @@ public final class PropertyHelper
             double displayY = positioned.getYOffset();
             double displayZ = positioned.getZOffset();
             Vec3 translation = new Vec3(displayX, displayY, displayZ).add(GUN_DEFAULT_ORIGIN);
-            //System.out.println("Default attachment position for " + type.getName() + ": " + translation);
             return translation;
         }
         return Vec3.ZERO;
@@ -159,7 +151,6 @@ public final class PropertyHelper
 
     public static Vec3 getMuzzleFlashPosition(ItemStack weapon, Gun modifiedGun)
     {
-        // Try and get the animations from the scope
         if(Gun.hasAttachmentEquipped(weapon, modifiedGun, IAttachment.Type.BARREL))
         {
             ItemStack barrelStack = Gun.getAttachment(IAttachment.Type.BARREL, weapon);
@@ -226,40 +217,9 @@ public final class PropertyHelper
         return customObject.has("muzzleFlash", DataType.OBJECT);
     }
 
-    public static int getReticleColor(ItemStack stack)
-    {
-        // Prioritise getting the reticle colour from the ItemStack tag
-        CompoundTag tag = stack.getTag();
-        if(tag != null && tag.contains("ReticleColor", Tag.TAG_INT))
-        {
-            return tag.getInt("ReticleColor");
-        }
-
-        // Attempt to get the colour from the item's meta
-        boolean isScope = stack.getItem() instanceof IScope;
-        DataObject object = isScope ? getObjectByPath(stack, SCOPE_KEY) : getObjectByPath(stack, WEAPON_KEY, "ironSight");
-        if(object.has("reticleColor", DataType.NUMBER))
-        {
-            return object.getDataNumber("reticleColor").asInt();
-        }
-        else if(object.has("reticleColor", DataType.ARRAY))
-        {
-            DataArray array = object.getDataArray("reticleColor");
-            Vec3 color = arrayToVec3(array, RED);
-            int a = 255;
-            int r = Mth.clamp((int) color.x, 0, 255);
-            int g = Mth.clamp((int) color.y, 0, 255);
-            int b = Mth.clamp((int) color.z, 0, 255);
-            return ((a & 0xFF) << 24) | ((r & 0xFF) << 16) | ((g & 0xFF) << 8) | ((b & 0xFF));
-        }
-
-        // Default is red
-        return 0xFFFF0000;
-    }
 
     public static SightAnimation getSightAnimations(ItemStack weapon, Gun modifiedGun)
     {
-        // Try and get the animations from the scope
         if(Gun.hasAttachmentEquipped(weapon, modifiedGun, IAttachment.Type.SCOPE))
         {
             ItemStack scopeStack = Gun.getScopeStack(weapon);
@@ -272,8 +232,6 @@ public final class PropertyHelper
                 }
             }
         }
-
-        // Try and get the animations from the weapon
         DataObject customObject = getObjectByPath(weapon, WEAPON_KEY, "ironSight");
         if(customObject.get("sightAnimation") instanceof DataObject sightObject)
         {
@@ -285,7 +243,6 @@ public final class PropertyHelper
 
     public static double getViewportFov(ItemStack weapon, Gun modifiedGun)
     {
-        // Get the viewport from the attached scope
         if(Gun.hasAttachmentEquipped(weapon, modifiedGun, IAttachment.Type.SCOPE))
         {
             ItemStack scopeStack = Gun.getScopeStack(weapon);
@@ -296,14 +253,12 @@ public final class PropertyHelper
             }
         }
 
-        // Otherwise get it from the weapon
         DataObject customObject = getObjectByPath(weapon, WEAPON_KEY, "ironSight");
         if(customObject.has("viewportFov", DataType.NUMBER))
         {
             return Mth.clamp(customObject.getDataNumber("viewportFov").asDouble(), 1.0, 100.0);
         }
 
-        // Return zero, which means current fov is used
         return 0;
     }
 
@@ -347,11 +302,9 @@ public final class PropertyHelper
 
     public static Vec3 arrayToVec3(DataArray array, Vec3 defaultValue)
     {
-        // Ignore immediately if not correct length
         if(array.length() != 3)
             return defaultValue;
 
-        // Return cached vector, otherwise convert array and cache the vector
         ObjectCache cache = ObjectCache.getInstance(CACHE_KEY);
         Optional<Vec3> cachedValue = cache.get(array.getId());
         return cachedValue.orElseGet(() -> cache.store(array.getId(), () ->

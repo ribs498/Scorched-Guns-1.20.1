@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 2,
+  "ingredient": {
+    "item": "scguns:cut_treated_iron"
+  },
+  "result": "scguns:cut_treated_iron_slab"
+}

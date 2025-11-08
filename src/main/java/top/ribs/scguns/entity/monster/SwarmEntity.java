@@ -42,9 +42,6 @@ public class SwarmEntity extends FlyingMob implements Enemy {
         return MobType.ARTHROPOD;
     }
 
-    public final AnimationState idleAnimationState = new AnimationState();
-    private int idleAnimationTimeout = 0;
-
     @Override
     public boolean isAlive() {
         return !this.isDeadOrDying() && super.isAlive();
@@ -82,18 +79,6 @@ public class SwarmEntity extends FlyingMob implements Enemy {
             if (--this.lifespan <= 0) {
                 this.discard();
             }
-        }
-        if (this.level().isClientSide()) {
-            setupAnimationStates();
-        }
-    }
-
-    private void setupAnimationStates() {
-        if (this.idleAnimationTimeout <= 0) {
-            this.idleAnimationTimeout = this.random.nextInt(40) + 80;
-            this.idleAnimationState.start(this.tickCount);
-        } else {
-            --this.idleAnimationTimeout;
         }
     }
 

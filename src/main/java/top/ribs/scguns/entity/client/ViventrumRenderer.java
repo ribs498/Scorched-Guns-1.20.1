@@ -38,7 +38,7 @@ public class ViventrumRenderer extends MobRenderer<ViventrumEntity, ViventrumMod
                        MultiBufferSource buffer, int packedLight) {
         poseStack.pushPose();
 
-        poseStack.scale(0.9f, 0.9f, 0.9f);
+        poseStack.scale(1.0f, 1.0f, 1.0f);
         poseStack.translate(0.0D, 0.45D, 0.0D);
 
         super.render(entity, entityYaw, partialTicks, poseStack, buffer, packedLight);
@@ -49,6 +49,7 @@ public class ViventrumRenderer extends MobRenderer<ViventrumEntity, ViventrumMod
     private static class ViventrumHelmetLayer extends RenderLayer<ViventrumEntity, ViventrumModel<ViventrumEntity>> {
         private final ItemInHandRenderer itemInHandRenderer;
         private final HumanoidModel<ViventrumEntity> helmetModel;
+        private final HumanoidModel<ViventrumEntity> geoArmorProxy;
 
         public ViventrumHelmetLayer(MobRenderer<ViventrumEntity, ViventrumModel<ViventrumEntity>> renderer,
                                     EntityModelSet modelSet,
@@ -56,6 +57,7 @@ public class ViventrumRenderer extends MobRenderer<ViventrumEntity, ViventrumMod
             super(renderer);
             this.itemInHandRenderer = itemInHandRenderer;
             this.helmetModel = new HumanoidModel<>(modelSet.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR));
+            this.geoArmorProxy = new HumanoidModel<>(modelSet.bakeLayer(ModelLayers.PLAYER_INNER_ARMOR));
         }
 
         @Override
@@ -70,25 +72,70 @@ public class ViventrumRenderer extends MobRenderer<ViventrumEntity, ViventrumMod
 
             Item item = helmetStack.getItem();
 
-            poseStack.pushPose();
-            this.getParentModel().getHead().translateAndRotate(poseStack);
-
             if (item instanceof ArmorItem armorItem) {
                 if (item instanceof GeoItem) {
-                    poseStack.popPose();
-                    return;
+                    renderGeoHelmet(poseStack, buffer, packedLight, entity, helmetStack, armorItem, partialTicks);
                 } else {
+                    poseStack.pushPose();
+                    this.getParentModel().getHead().translateAndRotate(poseStack);
                     renderVanillaHelmet(poseStack, buffer, packedLight, entity, helmetStack, armorItem);
+                    poseStack.popPose();
                 }
             } else if (item instanceof BlockItem) {
+                poseStack.pushPose();
+                this.getParentModel().getHead().translateAndRotate(poseStack);
                 poseStack.scale(0.625F, -0.625F, -0.625F);
                 poseStack.translate(0.0D, -0.5D, 0.0D);
 
                 this.itemInHandRenderer.renderItem(entity, helmetStack, ItemDisplayContext.HEAD, false,
                         poseStack, buffer, packedLight);
+                poseStack.popPose();
             }
+        }
 
-            poseStack.popPose();
+        private void renderGeoHelmet(PoseStack poseStack, MultiBufferSource buffer, int packedLight,
+                                     ViventrumEntity entity, ItemStack helmetStack, ArmorItem armorItem, float partialTicks) {
+
+            copyHeadTransform(this.getParentModel().getHead(), this.geoArmorProxy.head);
+
+            this.geoArmorProxy.head.y -= 16.0f;
+
+            this.geoArmorProxy.head.visible = true;
+            this.geoArmorProxy.body.visible = false;
+            this.geoArmorProxy.rightArm.visible = false;
+            this.geoArmorProxy.leftArm.visible = false;
+            this.geoArmorProxy.rightLeg.visible = false;
+            this.geoArmorProxy.leftLeg.visible = false;
+            this.geoArmorProxy.hat.visible = false;
+
+            HumanoidModel<?> armorModel = getArmorModel(entity, helmetStack, EquipmentSlot.HEAD, this.geoArmorProxy);
+            if (armorModel != null) {
+                poseStack.pushPose();
+
+                float scale = 1.45f;
+                poseStack.scale(scale, scale, scale);
+
+                armorModel.renderToBuffer(poseStack, buffer.getBuffer(RenderType.armorCutoutNoCull(getArmorTexture(helmetStack))),
+                        packedLight, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+
+                poseStack.popPose();
+            }
+        }
+
+        private void copyHeadTransform(net.minecraft.client.model.geom.ModelPart source, net.minecraft.client.model.geom.ModelPart target) {
+            target.x = source.x;
+            target.y = source.y;
+            target.z = source.z;
+            target.xRot = source.xRot;
+            target.yRot = source.yRot;
+            target.zRot = source.zRot;
+            target.xScale = source.xScale;
+            target.yScale = source.yScale;
+            target.zScale = source.zScale;
+        }
+
+        private HumanoidModel<?> getArmorModel(ViventrumEntity entity, ItemStack stack, EquipmentSlot slot, HumanoidModel<?> defaultModel) {
+            return (HumanoidModel<?>) net.minecraftforge.client.ForgeHooksClient.getArmorModel(entity, stack, slot, defaultModel);
         }
 
         private void renderVanillaHelmet(PoseStack poseStack, MultiBufferSource buffer, int packedLight,

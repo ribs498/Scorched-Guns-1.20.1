@@ -95,8 +95,7 @@ public class BrassMaskArmorItem extends ArmorItem implements GeoItem {
                     double dissidentChance = Config.COMMON.gameplay.dissidentSpawnChance.get();
 
                     if (level.random.nextDouble() < dissidentChance) {
-                        DissidentEntity dissident = new DissidentEntity(ModEntities.DISSIDENT.get(), level);
-                        dissident.moveTo(bottomPos.getX() + 0.5, bottomPos.getY(), bottomPos.getZ() + 0.5, 0.0F, 0.0F);
+                        DissidentEntity dissident = createNeutralDissident(level, bottomPos, player);
                         level.addFreshEntity(dissident);
                         level.playSound(null, bottomPos, SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundSource.HOSTILE, 1.0F, 0.8F);
                     }
@@ -104,8 +103,7 @@ public class BrassMaskArmorItem extends ArmorItem implements GeoItem {
                     boolean createDissident = level.random.nextBoolean();
 
                     if (createDissident) {
-                        DissidentEntity dissident = new DissidentEntity(ModEntities.DISSIDENT.get(), level);
-                        dissident.moveTo(bottomPos.getX() + 0.5, bottomPos.getY(), bottomPos.getZ() + 0.5, 0.0F, 0.0F);
+                        DissidentEntity dissident = createNeutralDissident(level, bottomPos, player);
                         level.addFreshEntity(dissident);
                         level.playSound(null, bottomPos, SoundEvents.ZOMBIE_VILLAGER_CONVERTED, SoundSource.HOSTILE, 1.0F, 0.8F);
                     } else {
@@ -136,10 +134,6 @@ public class BrassMaskArmorItem extends ArmorItem implements GeoItem {
         return super.use(pLevel, pPlayer, pHand);
     }
 
-    /**
-     * Checks if the structure at the given position is valid for homunculus creation
-     * (2 clay blocks stacked vertically) - can click either block in the stack
-     */
     private boolean isValidHomUnculusStructure(Level level, BlockPos pos) {
         BlockState clickedBlock = level.getBlockState(pos);
         if (!clickedBlock.is(Blocks.CLAY)) {
@@ -151,9 +145,6 @@ public class BrassMaskArmorItem extends ArmorItem implements GeoItem {
         return level.getBlockState(pos.below()).is(Blocks.CLAY);
     }
 
-    /**
-     * Spawns particle effects for the homunculus creation
-     */
     private void spawnCreationEffects(ServerLevel level, BlockPos pos) {
         for (int i = 0; i < 20; i++) {
             double x = pos.getX() + 0.5 + (level.random.nextDouble() - 0.5) * 2.0;
@@ -169,6 +160,29 @@ public class BrassMaskArmorItem extends ArmorItem implements GeoItem {
 
             level.sendParticles(ParticleTypes.LARGE_SMOKE, x, y, z, 1, 0.0, 0.1, 0.0, 0.05);
         }
+    }
+
+    private DissidentEntity createNeutralDissident(Level level, BlockPos bottomPos, Player creator) {
+        DissidentEntity dissident = new DissidentEntity(ModEntities.DISSIDENT.get(), level);
+        dissident.moveTo(bottomPos.getX() + 0.5, bottomPos.getY(), bottomPos.getZ() + 0.5, 0.0F, 0.0F);
+
+        var maxHealthAttribute = dissident.getAttribute(net.minecraft.world.entity.ai.attributes.Attributes.MAX_HEALTH);
+        if (maxHealthAttribute != null) {
+            maxHealthAttribute.setBaseValue(maxHealthAttribute.getBaseValue() * 0.6);
+            dissident.setHealth((float) maxHealthAttribute.getValue());
+        }
+
+        if (creator != null) {
+            dissident.targetSelector.getAvailableGoals().removeIf(goal ->
+                    goal.getGoal() instanceof net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal);
+
+            dissident.targetSelector.addGoal(2, new net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal<>(
+                    dissident, Player.class, 10, true, false,
+                    player -> player != creator && !((Player)player).isCreative() && !player.isSpectator()
+            ));
+        }
+
+        return dissident;
     }
 
     private PlayState predicate(AnimationState animationState) {

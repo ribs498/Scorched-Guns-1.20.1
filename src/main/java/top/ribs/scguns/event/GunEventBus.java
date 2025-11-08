@@ -79,7 +79,7 @@ public class GunEventBus {
     public static void onServerStopping(ServerStoppingEvent event) {
         MinecraftServer server = event.getServer();
         for (ServerLevel world : server.getAllLevels()) {
-          TemporaryLightManager.emergencyCleanup(world);
+            TemporaryLightManager.emergencyCleanup(world);
         }
     }
 
@@ -148,7 +148,7 @@ public class GunEventBus {
                 return;
             }
 
-            int energyUse = gun.getGeneral().getEnergyUse();
+            int energyUse = gun.getProjectile().getEnergyUse();
             if (!player.isCreative()) {
                 if (heldItem.getItem() instanceof IEnergyGun) {
                     IEnergyStorage energyStorage = heldItem.getCapability(ForgeCapabilities.ENERGY)
@@ -288,7 +288,7 @@ public class GunEventBus {
             Gun gun = gunItem.getModifiedGun(heldItem);
             int hotBarrelLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.HOT_BARREL.get(), heldItem);
 
-            if (gun.getGeneral().hasPlayerKnockBack()) {
+            if (gun.getProjectile().hasPlayerKnockBack()) {
                 applyGunKnockback(player, gun);
             }
 
@@ -333,7 +333,7 @@ public class GunEventBus {
 
     private static void applyGunKnockback(Player player, Gun gun) {
         Vec3 lookVec = player.getLookAngle();
-        float baseStrength = gun.getGeneral().getPlayerKnockBackStrength();
+        float baseStrength = gun.getProjectile().getPlayerKnockBackStrength();
         float totalKnockbackResistance = 0.0F;
         totalKnockbackResistance += (float) player.getAttributeValue(Attributes.KNOCKBACK_RESISTANCE) * 0.5f;
 
@@ -400,7 +400,7 @@ public class GunEventBus {
         }
     }
     private static float calculateAirCostPerShot(Gun gun) {
-        return gun.getGeneral().getEnergyUse();
+        return gun.getProjectile().getEnergyUse();
     }
 
     public static void broken(ItemStack stack, Level level, Player player) {
@@ -417,9 +417,15 @@ public class GunEventBus {
                 int currentDamage = stack.getDamageValue();
                 boolean isUnderwater = player.isUnderWater();
                 boolean isUnderwaterGun = stack.getItem() instanceof UnderwaterGunItem
-                        || stack.getItem() instanceof AnimatedUnderWaterGunItem;
+                        || stack.getItem() instanceof AnimatedUnderWaterGunItem
+                        || stack.getItem() instanceof AnimatedDiamondSteelUnderWaterGunItem;
 
                 int damageAmount = 1;
+                if (stack.getItem() instanceof GunItem gunItem) {
+                    Gun gun = gunItem.getModifiedGun(stack);
+                    damageAmount = gun.getProjectile(stack).getDurabilityDamage();
+                }
+
                 int waterProofLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.WATER_PROOF.get(), stack);
                 int acceleratorLevel = EnchantmentHelper.getItemEnchantmentLevel(ModEnchantments.ACCELERATOR.get(), stack);
 
@@ -618,6 +624,42 @@ public class GunEventBus {
         });
 
         return result[0];
+    }
+
+    public static boolean addCasingDirectly(Player player, ItemStack casingStack) {
+        for (ItemStack itemStack : player.getInventory().items) {
+            if (itemStack.getItem() instanceof EmptyCasingPouchItem) {
+                int insertedItems = EmptyCasingPouchItem.add(itemStack, casingStack);
+                if (insertedItems > 0) {
+                    return true;
+                }
+            }
+        }
+
+        if (addCasingToExoSuitPouches(player, casingStack)) {
+            return true;
+        }
+
+        final boolean[] result = {false};
+        CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
+            IItemHandlerModifiable curios = handler.getEquippedCurios();
+            for (int i = 0; i < curios.getSlots(); i++) {
+                ItemStack stack = curios.getStackInSlot(i);
+                if (stack.getItem() instanceof EmptyCasingPouchItem) {
+                    int insertedItems = EmptyCasingPouchItem.add(stack, casingStack);
+                    if (insertedItems > 0) {
+                        result[0] = true;
+                        return;
+                    }
+                }
+            }
+        });
+
+        if (result[0]) {
+            return true;
+        }
+
+        return player.getInventory().add(casingStack);
     }
     private static boolean addCasingToExoSuitPouches(Player player, ItemStack casingStack) {
         ItemStack chestplate = getEquippedChestplate(player);

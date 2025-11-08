@@ -64,7 +64,7 @@ public class GunRecoilHandler {
                 }
                 recoilModifier = (float) ((double) recoilModifier * this.getAdsRecoilReduction(modifiedGun));
 
-                this.cameraRecoil = modifiedGun.getGeneral().getRecoilAngle() * recoilModifier;
+                this.cameraRecoil = modifiedGun.getProjectile().getRecoilAngle() * recoilModifier;
                 this.progressCameraRecoil = 0.0F;
                 this.gunRecoilRandom = this.random.nextFloat();
             }
@@ -130,7 +130,7 @@ public class GunRecoilHandler {
                     this.gunRecoilNormal = (double) amount < 0.5 ? (double) (2.0F * amount * amount) : (double) (-1.0F + (4.0F - 2.0F * amount) * amount);
                 }
 
-                float baseRecoilAngle = modifiedGun.getGeneral().getRecoilAngle();
+                float baseRecoilAngle = modifiedGun.getProjectile().getRecoilAngle();
                 Minecraft mc = Minecraft.getInstance();
                 if (mc.player != null) {
                     float recoilModifier = 1.0F - GunModifierHelper.getRecoilModifier(heldItem);

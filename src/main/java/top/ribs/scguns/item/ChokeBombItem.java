@@ -64,7 +64,7 @@ public class ChokeBombItem extends AmmoItem
             if(!(entityLiving instanceof Player) || !((Player) entityLiving).isCreative())
                 stack.shrink(1);
             float radius = 4.0f;
-            ThrowableGrenadeEntity grenade = this.create(worldIn, entityLiving, 0, radius);
+            ThrowableGrenadeEntity grenade = this.create(worldIn, entityLiving, 60, radius);
             grenade.onDeath();
             if(entityLiving instanceof Player)
             {
@@ -85,7 +85,8 @@ public class ChokeBombItem extends AmmoItem
                 if(!(entityLiving instanceof Player) || !((Player) entityLiving).isCreative())
                     stack.shrink(1);
                 float radius = 10.0F;
-                ThrowableGrenadeEntity grenade = this.create(worldIn, entityLiving, this.maxCookTime - duration, radius);
+                int remainingCookTime = Math.max(10, this.maxCookTime - duration);
+                ThrowableGrenadeEntity grenade = this.create(worldIn, entityLiving, remainingCookTime, radius);
                 grenade.shootFromRotation(entityLiving, entityLiving.getXRot(), entityLiving.getYRot(), 0.0F, Math.min(1.0F, duration / 10F), 1.0F);
                 worldIn.addFreshEntity(grenade);
                 this.onThrown(worldIn, grenade);
@@ -111,4 +112,3 @@ public class ChokeBombItem extends AmmoItem
     {
     }
 }
-

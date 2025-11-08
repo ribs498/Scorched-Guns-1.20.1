@@ -9,18 +9,14 @@
   },
   "general": {
     "weaponType": "magnum",
-    "alwaysSpread": false,
+
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
     "rate": 7,
-    "recoilAngle": 8.0,
-    "recoilKick": 2.0,
-    "spread": 1.2,
     "meleeDamage": 2.5,
     "meleeReach": 2.5,
     "meleeCooldownTicks": 10,
-    "hotBarrelRate": 20,
-    "criticalChance": 0.05
+    "hotBarrelRate": 20
   },
   "modules": {
     "attachments": {
@@ -41,6 +37,11 @@
     }
   },
   "projectile": {
+    "alwaysSpread": false,
+    "recoilAngle": 8.0,
+    "recoilKick": 2.0,
+    "spread": 1.2,
+    "criticalChance": 0.05,
     "knockbackStrength": 0.6,
     "damageFalloffStart": 18.0,
     "damageFalloffEnd": 40.0,

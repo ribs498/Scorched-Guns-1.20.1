@@ -1,6 +1,7 @@
 package top.ribs.scguns.entity.raid;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerLevel;
@@ -11,8 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.phys.Vec3;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.config.RaidConfig;
 
@@ -20,10 +19,9 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class ActiveRaid {
-    //private static final Logger LOGGER = LogManager.getLogger();
-    private static final int BOSS_VALIDATION_TICKS = 200;
     private static final int BOSS_REVALIDATION_INTERVAL = 100;
     private static final int TARGET_UPDATE_INTERVAL = 40;
+    private static final int BOSS_VALIDATION_TICKS = 600;
 
     private final UUID raidId;
     private final Integer raidLevel;
@@ -62,6 +60,9 @@ public class ActiveRaid {
         this.mountUUID = null;
         this.targetPlayerUUID = null;
         this.ticksSinceStart = 0;
+        this.ticksSinceLoad = 0;
+        this.ticksSinceLastValidation = 0;
+        this.ticksSinceTargetUpdate = 0;
 
         createBossBar();
     }
@@ -80,8 +81,6 @@ public class ActiveRaid {
 
         long elapsedTime = level.getGameTime() - data.startTime();
         raid.ticksSinceStart = (int) Math.min(elapsedTime, Integer.MAX_VALUE);
-//        LOGGER.info("Restored raid {} - elapsed time: {} ticks ({} minutes)",
-//                raid.raidId, raid.ticksSinceStart, raid.ticksSinceStart / (60 * 20));
 
         return raid;
     }
@@ -95,7 +94,7 @@ public class ActiveRaid {
         } else if (bossName != null) {
             title = Component.literal(bossName);
         } else {
-            title = Component.literal("Â§cÂ§lRaid Boss: " + config.raidId());
+            title = Component.literal("Raid Boss: " + config.raidId());
         }
 
         this.bossBar = new ServerBossEvent(title, BossEvent.BossBarColor.RED, BossEvent.BossBarOverlay.NOTCHED_10);
@@ -124,7 +123,6 @@ public class ActiveRaid {
             int timeoutTicks = timeoutMinutes * 60 * 20;
 
             if (ticksSinceStart >= timeoutTicks) {
-//                LOGGER.info("Raid {} timed out after {} minutes", raidId, timeoutMinutes);
                 announceToNearbyPlayers(
                         Component.translatable("raid.scguns.timeout")
                                 .withStyle(ChatFormatting.RED),
@@ -149,7 +147,6 @@ public class ActiveRaid {
 
         LivingEntity boss = getBoss();
         if (boss == null || !boss.isAlive()) {
-//            LOGGER.warn("Raid {} boss is null or dead - ending raid", raidId);
             endRaid(bossConfirmed);
             return;
         }
@@ -167,14 +164,14 @@ public class ActiveRaid {
             updateBossBarPlayers();
         }
 
-        if (spawnTimer > 0) {
+        if (bossConfirmed && spawnTimer > 0) {
             spawnTimer--;
         }
     }
 
     private void updateMobTargets() {
         ServerPlayer targetPlayer = getTargetPlayer(level);
-        if (targetPlayer == null || targetPlayer.isSpectator() || targetPlayer.isCreative() || !targetPlayer.isAlive()) {
+        if (targetPlayer == null || targetPlayer.isRemoved() || targetPlayer.isSpectator() || targetPlayer.isCreative() || !targetPlayer.isAlive()) {
             targetPlayer = findNewTargetPlayer();
             if (targetPlayer != null) {
                 targetPlayerUUID = targetPlayer.getUUID();
@@ -186,12 +183,40 @@ public class ActiveRaid {
         LivingEntity boss = getBoss();
         if (boss instanceof PathfinderMob pathfinderBoss && pathfinderBoss.getTarget() == null) {
             pathfinderBoss.setTarget(targetPlayer);
+
+            if (boss instanceof net.minecraft.world.entity.monster.piglin.AbstractPiglin abstractPiglin) {
+                try {
+                    var brain = abstractPiglin.getBrain();
+                    brain.eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ANGRY_AT);
+                    brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ANGRY_AT, targetPlayer.getUUID());
+                    brain.eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.UNIVERSAL_ANGER);
+                    brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.UNIVERSAL_ANGER, true);
+                    brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET, targetPlayer);
+                    brain.eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.NEAREST_VISIBLE_PLAYER);
+                    brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.NEAREST_VISIBLE_PLAYER, targetPlayer);
+                    abstractPiglin.setLastHurtByMob(targetPlayer);
+                } catch (Exception ignored) {}
+            }
         }
 
         for (UUID henchmanUUID : henchmenUUIDs) {
             Entity entity = level.getEntity(henchmanUUID);
             if (entity instanceof PathfinderMob pathfinderMob && pathfinderMob.getTarget() == null) {
                 pathfinderMob.setTarget(targetPlayer);
+
+                if (entity instanceof net.minecraft.world.entity.monster.piglin.AbstractPiglin abstractPiglin) {
+                    try {
+                        var brain = abstractPiglin.getBrain();
+                        brain.eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ANGRY_AT);
+                        brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ANGRY_AT, targetPlayer.getUUID());
+                        brain.eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.UNIVERSAL_ANGER);
+                        brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.UNIVERSAL_ANGER, true);
+                        brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.ATTACK_TARGET, targetPlayer);
+                        brain.eraseMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.NEAREST_VISIBLE_PLAYER);
+                        brain.setMemory(net.minecraft.world.entity.ai.memory.MemoryModuleType.NEAREST_VISIBLE_PLAYER, targetPlayer);
+                        abstractPiglin.setLastHurtByMob(targetPlayer);
+                    } catch (Exception ignored) {}
+                }
             }
         }
     }
@@ -223,7 +248,6 @@ public class ActiveRaid {
 
     private boolean validateBoss() {
         if (bossUUID == null) {
-//            LOGGER.error("Raid {} has null boss UUID - ending raid", raidId);
             endRaid(false);
             return false;
         }
@@ -234,14 +258,22 @@ public class ActiveRaid {
         if (boss != null && boss.isAlive()) {
             bossConfirmed = true;
             ticksSinceLoad = 0;
-//            LOGGER.info("Raid {} boss confirmed and active", raidId);
+
+            boss.setPos(spawnCenter.x, spawnCenter.y, spawnCenter.z);
+
             return true;
         }
 
         if (ticksSinceLoad >= BOSS_VALIDATION_TICKS) {
-            //LOGGER.error("Raid {} boss failed to load after {} ticks - ending raid", raidId, BOSS_VALIDATION_TICKS);
             endRaid(false);
             return false;
+        }
+
+        if (ticksSinceLoad % 20 == 0) {
+            net.minecraft.world.level.ChunkPos chunkPos = new net.minecraft.world.level.ChunkPos(
+                    new BlockPos((int)spawnCenter.x, (int)spawnCenter.y, (int)spawnCenter.z)
+            );
+            level.setChunkForced(chunkPos.x, chunkPos.z, true);
         }
 
         return false;
@@ -262,12 +294,14 @@ public class ActiveRaid {
         if (boss == null || !boss.isAlive()) return;
 
         List<ServerPlayer> nearbyPlayers = level.getPlayers(player -> {
+            if (!player.isAlive() || player.isRemoved() || player.isSpectator()) return false;
             double distance = player.position().distanceTo(boss.position());
             return distance <= 128;
         });
 
-        for (ServerPlayer player : bossBar.getPlayers()) {
-            if (!nearbyPlayers.contains(player)) {
+        List<ServerPlayer> currentPlayers = new ArrayList<>(bossBar.getPlayers());
+        for (ServerPlayer player : currentPlayers) {
+            if (!nearbyPlayers.contains(player) || !player.isAlive() || player.isRemoved()) {
                 bossBar.removePlayer(player);
             }
         }
@@ -388,17 +422,13 @@ public class ActiveRaid {
         } else {
             announceToNearbyPlayers(Component.translatable("raid.scguns.failed"), 64);
         }
-
         if (bossBar != null) {
             bossBar.setVisible(false);
             bossBar.removeAllPlayers();
         }
-
         cleanupBoss(bossDefeated);
         cleanupHenchmen(bossDefeated);
         cleanupMount(bossDefeated);
-
-        //LOGGER.info("Raid {} ended. Boss defeated: {}", raidId, bossDefeated);
     }
 
     private void cleanupBoss(boolean wasBossDefeated) {

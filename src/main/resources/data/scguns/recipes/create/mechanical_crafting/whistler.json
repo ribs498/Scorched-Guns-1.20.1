@@ -1,0 +1,47 @@
+{
+  "type": "create:mechanical_crafting",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "C": {
+      "item": "minecraft:copper_ingot"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "V": {
+      "item": "scguns:copper_gun_frame"
+    },
+    "I": {
+      "item": "scguns:gun_barrel"
+    },
+    "P": {
+      "item": "scguns:copper_blueprint"
+    },
+    "K": {
+      "tag": "minecraft:planks"
+    }
+  },
+  "pattern": [
+    "CVKP",
+    "LRSI",
+    "Q K "
+  ],
+  "result": {
+    "item": "scguns:whistler"
+  }
+}

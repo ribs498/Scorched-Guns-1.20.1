@@ -1,0 +1,51 @@
+{
+  "type": "create:mechanical_crafting",
+  "conditions": [
+    {
+      "type": "forge:mod_loaded",
+      "modid": "create"
+    }
+  ],
+  "acceptMirrored": true,
+  "key": {
+    "Q": {
+      "item": "scguns:gun_grip"
+    },
+    "C": {
+      "tag": "minecraft:planks"
+    },
+    "L": {
+      "item": "scguns:firing_unit"
+    },
+    "R": {
+      "item": "scguns:heavy_gun_parts"
+    },
+    "S": {
+      "item": "scguns:gun_barrel"
+    },
+    "J": {
+      "item": "scguns:heavy_gun_barrel"
+    },
+    "M": {
+      "item": "scguns:diamond_steel_ingot"
+    },
+    "X": {
+      "item": "scguns:diamond_steel_blueprint"
+    },
+    "K": {
+      "item": "scguns:diamond_steel_gun_frame"
+    },
+"A": {
+      "item": "scguns:gun_magazine"
+    }
+
+  },
+  "pattern": [
+    "MKAX",
+    "LRJS",
+    "Q C "
+  ],
+  "result": {
+    "item": "scguns:mas_peddler"
+  }
+}

@@ -7,22 +7,17 @@
       "item": "scguns:nitro_powder_dust"
     },
     {
-      "item": "scguns:buckshot"
+      "item": "scguns:nitro_powder_dust"
     },
     {
       "item": "scguns:buckshot"
     },
-    [
-      {
-        "item": "scguns:raw_phosphor"
-      },
-      {
-        "tag": "forge:dusts/phosphorus"
-      }
-    ]
+    {
+      "item": "scguns:buckshot"
+    }
   ],
   "result": {
-    "count": 5,
+    "count": 3,
     "item": "scguns:nitro_buckshot"
   }
 }

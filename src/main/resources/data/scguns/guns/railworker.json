@@ -4,19 +4,13 @@
   },
   "general": {
     "weaponType": "pistol",
-    "alwaysSpread": false,
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
     "rate": 4,
-    "recoilAngle": 1.0,
-    "recoilKick": 1.2,
-    "spread": 2.0,
     "meleeDamage": 3.0,
     "meleeCooldownTicks": 10,
     "meleeReach": 2.5,
-    "energyUse": 20.0,
     "hotBarrelRate": 10,
-    "criticalChance": 0.05,
     "isSilenced": true,
     "enableGunLight": false
   },
@@ -42,6 +36,11 @@
   },
   "projectile": {
     "advantage": "scguns:bot",
+    "energyUse": 20.0,
+    "recoilAngle": 1.0,
+    "recoilKick": 1.2,
+    "spread": 2.0,
+    "criticalChance": 0.05,
     "damage": 6.5,
     "damageFalloffStart": 12.0,
     "damageFalloffEnd": 30.0,
@@ -68,8 +67,8 @@
   },
   "sounds": {
     "cock": "scguns:item.pistol.cock",
-    "enchantedFire": "scguns:item.airgun.fire",
-    "fire": "scguns:item.airgun.fire",
+    "enchantedFire": "scguns:item.rail.fire",
+    "fire": "scguns:item.rail.fire",
     "reload": "scguns:item.gauss.reload",
     "flyby": "scguns:bullet.flyby1"
   }

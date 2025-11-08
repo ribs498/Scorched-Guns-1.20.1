@@ -3,7 +3,10 @@
   "category": "ammo",
   "ingredients": [
     {
-      "item": "scguns:gunpowder_dust"
+      "item": "minecraft:gunpowder"
+    },
+    {
+      "item": "scguns:pebbles"
     },
     {
       "item": "scguns:pebbles"
@@ -13,7 +16,7 @@
     }
   ],
   "result": {
-    "count": 2,
+    "count": 6,
     "item": "scguns:powder_and_ball"
   }
 }

@@ -7,7 +7,7 @@
     "custom_name": "translation:raid.boss.scguns.ocean",
     "fixed_health": 180.0,
     "weapon": {
-      "item": "scguns:sequoia",
+      "item": "scguns:spirulida",
       "drop_chance": 0.3
     },
     "armor": [
@@ -76,7 +76,7 @@
           {
             "item": "minecraft:turtle_helmet",
             "slot": "head",
-            "chance": 0.7
+            "chance": 1.0
           },
           {
             "item": "minecraft:chainmail_chestplate",
@@ -104,11 +104,12 @@
         "ai_type": "DEFAULT"
       },
       {
-        "entity_type": "minecraft:drowned",
+        "entity_type": "scguns:finforcer",
         "weight": 3.0,
         "fixed_health": 35.0,
         "weapons": [
-          "scguns:sequoia",
+          "scguns:spirulida",
+            "scguns:hyperbaria",
           "minecraft:trident"
         ],
         "armor": [
@@ -154,6 +155,7 @@
         "weapons": [
           "scguns:marlin",
           "scguns:floundergat",
+          "scguns:hyperbaria",
           "minecraft:iron_sword",
           "minecraft:iron_axe"
         ],

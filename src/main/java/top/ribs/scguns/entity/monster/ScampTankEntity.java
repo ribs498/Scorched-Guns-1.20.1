@@ -11,6 +11,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.BossEvent;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffect;
@@ -145,7 +146,10 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
     public boolean isInSecondPhase() {
         return this.entityData.get(IS_IN_SECOND_PHASE);
     }
-
+    @Override
+    public boolean isInvulnerableTo(DamageSource source) {
+        return source.is(DamageTypeTags.IS_FIRE) || super.isInvulnerableTo(source);
+    }
     public void setInSecondPhase(boolean inSecondPhase) {
         this.entityData.set(IS_IN_SECOND_PHASE, inSecondPhase);
     }
@@ -182,7 +186,6 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
                 effect == MobEffects.MOVEMENT_SLOWDOWN ||
                 effect == MobEffects.DIG_SLOWDOWN ||
                 effect == MobEffects.HARM ||
-                effect == ModEffects.SULFUR_POISONING.get() ||
                 effect == MobEffects.HEAL) {
             return false;
         }
@@ -235,6 +238,13 @@ public class ScampTankEntity extends Monster implements RangedAttackMob {
 
         this.targetSelector.addGoal(1, new HurtByTargetGoal(this));
         this.targetSelector.addGoal(2, new ExtendedRangeTargetGoal());
+    }
+    @Override
+    public boolean hurt(DamageSource source, float amount) {
+        if (source.is(net.minecraft.tags.DamageTypeTags.IS_EXPLOSION)) {
+            amount *= 0.5f;
+        }
+        return super.hurt(source, amount);
     }
     public boolean isInThirdPhase() {
         return this.entityData.get(IS_IN_THIRD_PHASE);

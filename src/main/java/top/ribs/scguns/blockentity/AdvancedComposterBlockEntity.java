@@ -83,18 +83,13 @@ public class AdvancedComposterBlockEntity extends BlockEntity implements Worldly
     }
 
     private void createOutputItems() {
-        List<Item> possibleDrops = new ArrayList<>();
-        Objects.requireNonNull(ForgeRegistries.ITEMS.tags()).getTag(ModTags.Items.COMPOST_DROPS).forEach(possibleDrops::add);
-        if (possibleDrops.isEmpty()) {
+        Random random = new Random();
+        List<ItemStack> output = top.ribs.scguns.config.AdvancedComposterDropsConfig.generateDrops(random);
+
+        if (output.isEmpty()) {
             return;
         }
-        Random random = new Random();
-        int totalItems = random.nextInt(3) + 1;
-        List<ItemStack> output = new ArrayList<>();
-        for (int i = 0; i < totalItems; i++) {
-            Item item = possibleDrops.get(random.nextInt(possibleDrops.size()));
-            output.add(new ItemStack(item, 1));
-        }
+
         for (int slot = OUTPUT_SLOT_START; slot < TOTAL_SLOTS && !output.isEmpty(); slot++) {
             if (items.get(slot).isEmpty()) {
                 items.set(slot, output.remove(0));

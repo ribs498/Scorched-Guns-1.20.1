@@ -246,9 +246,9 @@ public class BeamWeaponHandler {
     }
     private static float getBeamCriticalDamage(ItemStack weapon, Gun modifiedGun,
                                                net.minecraft.util.RandomSource rand, float damage) {
-        float chance = modifiedGun.getGeneral().getCriticalChance();
+        float chance = modifiedGun.getProjectile().getCriticalChance();
         if (rand.nextFloat() < chance) {
-            float critMultiplier = modifiedGun.getGeneral().getCritDamageMultiplier();
+            float critMultiplier = modifiedGun.getProjectile().getCritDamageMultiplier();
             return damage * critMultiplier;
         }
         return damage;
@@ -256,7 +256,7 @@ public class BeamWeaponHandler {
 
     private static boolean isBeamCritical(ItemStack weapon, Gun modifiedGun,
                                           net.minecraft.util.RandomSource rand, float baseDamage) {
-        float chance = modifiedGun.getGeneral().getCriticalChance();
+        float chance = modifiedGun.getProjectile().getCriticalChance();
         return rand.nextFloat() < chance;
     }
 

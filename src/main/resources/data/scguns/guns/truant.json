@@ -1,0 +1,130 @@
+{
+  "display": {
+
+  },
+  "general": {
+    "weaponType": "heavy",
+    "fireMode": "scguns:semi_automatic",
+    "gripType": "scguns:two_handed",
+    "baseGripType": "scguns:two_handed",
+    "rate": 5,
+    "meleeDamage": 2.5,
+    "meleeCooldownTicks": 20,
+    "hotBarrelRate": 15,
+    "allowAmmoChange": true,
+    "isRevolver": true
+  },
+  "modules": {
+    "attachments": {
+      "stock": {
+        "scale": 0.0
+      },
+      "underBarrel": {
+        "yOffset": 5.5,
+        "zOffset": -2.5
+      },
+      "scope": {
+        "size": 0.7,
+        "yOffset": 6.75,
+        "zOffset": 1.0
+      }
+    },
+    "zoom": {
+      "fovModifier": 0.6,
+      "yOffset": 6.6,
+      "zOffset": 1.75
+    }
+  },
+  "projectile": {
+    "recoilAngle": 6.5,
+    "recoilKick": 2.22,
+    "spread": 2.5,
+    "criticalChance": 0.05,
+    "playerKnockBack": true,
+    "playerKnockBackStrength": 0.2,
+    "visible": true,
+    "advantage": "scguns:none",
+    "damage": 23.0,
+    "ejectsCasing": true,
+    "gravity": true,
+    "item": "scguns:he_grenade_round",
+    "casingType": "scguns:large_brass_casing",
+    "casingParticle": "scguns:brass_casing",
+    "life": 55,
+    "size": 0.05,
+    "speed": 3.0,
+    "trailLengthMultiplier": 2.0
+  },
+  "projectile_1": {
+    "recoilAngle": 6.7,
+    "recoilKick": 2.22,
+    "spread": 2.5,
+    "criticalChance": 0.05,
+    "playerKnockBack": true,
+    "playerKnockBackStrength": 0.2,
+    "visible": true,
+    "advantage": "scguns:none",
+    "damage": 23.0,
+    "ejectsCasing": true,
+    "gravity": true,
+    "item": "scguns:fire_grenade_round",
+    "casingType": "scguns:large_brass_casing",
+    "casingParticle": "scguns:brass_casing",
+    "life": 55,
+    "size": 0.05,
+    "speed": 3.0,
+    "trailLengthMultiplier": 2.0
+  },
+  "projectile_2": {
+    "recoilAngle": 6.7,
+    "recoilKick": 2.22,
+    "spread": 2.5,
+    "criticalChance": 0.05,
+    "playerKnockBack": true,
+    "playerKnockBackStrength": 0.2,
+    "visible": true,
+    "advantage": "scguns:none",
+    "damage": 23.0,
+    "ejectsCasing": true,
+    "gravity": true,
+    "item": "scguns:gas_grenade_round",
+    "casingType": "scguns:large_brass_casing",
+    "casingParticle": "scguns:brass_casing",
+    "life": 55,
+    "size": 0.05,
+    "speed": 3.0,
+    "trailLengthMultiplier": 2.0
+  },
+  "projectile_3": {
+    "recoilAngle": 6.7,
+    "recoilKick": 2.22,
+    "spread": 2.5,
+    "criticalChance": 0.05,
+    "playerKnockBack": true,
+    "playerKnockBackStrength": 0.2,
+    "visible": true,
+    "advantage": "scguns:none",
+    "damage": 22.0,
+    "ejectsCasing": true,
+    "gravity": true,
+    "item": "scguns:bouncy_grenade_round",
+    "casingType": "scguns:large_brass_casing",
+    "casingParticle": "scguns:brass_casing",
+    "life": 55,
+    "size": 0.05,
+    "speed": 3.0,
+    "trailLengthMultiplier": 2.0
+  },
+  "reloads": {
+    "emptyMagTimer": 30,
+    "maxAmmo": 6,
+    "reloadTimer": 40,
+    "reloadType": "scguns:manual"
+  },
+  "sounds": {
+    "cock": "scguns:item.pistol.cock",
+    "enchantedFire": "scguns:item.rocket_rifle.fire",
+    "fire": "scguns:item.rocket_rifle.fire",
+    "reload": "scguns:item.gauss.reload"
+  }
+}

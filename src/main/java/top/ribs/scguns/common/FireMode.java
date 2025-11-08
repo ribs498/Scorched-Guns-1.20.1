@@ -39,6 +39,10 @@ public record FireMode(ResourceLocation id) {
      */
     public static final FireMode BURST = new FireMode(new ResourceLocation(Reference.MOD_ID, "burst"));
 
+    public static final FireMode BEAM_BURST = new FireMode(new ResourceLocation(Reference.MOD_ID, "burst"));
+
+    public static final FireMode AUTOMATIC_BEAM = new FireMode(new ResourceLocation(Reference.MOD_ID, "automatic_beam"));
+
 
     /**
      * The fire mode map.

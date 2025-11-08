@@ -1,8 +1,5 @@
 package top.ribs.scguns.entity.ai;
 
-import net.minecraft.commands.arguments.EntityAnchorArgument;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
@@ -35,6 +32,9 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
     protected int strafingTime = -1;
     protected boolean shouldStrafe = false;
     protected float strafeAmount = 0.0F;
+
+    protected int aimingStabilityTimer = 0;
+    protected static final int MIN_AIM_TIME = 10;
 
     protected int burstIntervalTimer = 0;
     protected int remainingBursts = 0;
@@ -79,6 +79,7 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
 
         float baseAccuracy = switch(aiType) {
             case TACTICAL -> 2.5F;
+            case SMART -> 2.2F;
             case DEFAULT -> 2.0F;
             case RECKLESS -> 1.2F;
             case COWARD -> 1.5F;
@@ -130,6 +131,7 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
         this.isReloading = false;
         this.strafingTime = -1;
         this.shouldStrafe = false;
+        this.aimingStabilityTimer = 0;
         this.shooter.removeTag("AI_" + this.aiType.name());
     }
 
@@ -203,6 +205,7 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
                             ModSounds.ITEM_PISTOL_COCK.get(), SoundSource.HOSTILE, 1.0F, 1F);
                     this.isReloading = false;
                 } else {
+                    this.shooter.getNavigation().stop();
                     --this.reloadTick;
                 }
                 return;
@@ -211,6 +214,8 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
             boolean inRange = distanceToTarget <= this.attackRadiusSqr;
             boolean tooClose = distanceToTarget < (this.minRange * this.minRange);
             boolean isRetreating = false;
+            boolean isMovingFast = this.shooter.getDeltaMovement().horizontalDistanceSqr() > 0.01;
+            boolean isNavigating = !this.shooter.getNavigation().isDone();
 
             if (!inRange || !canSeeTarget) {
                 if (this.shooter.tickCount % 20 == 0 || this.shooter.getNavigation().isDone()) {
@@ -222,13 +227,20 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
                 }
                 this.shouldStrafe = false;
                 this.strafingTime = -1;
+                this.aimingStabilityTimer = 0;
             } else if (tooClose && this.aiType != AIType.RECKLESS) {
                 Vec3 awayVector = this.shooter.position().subtract(target.position()).normalize();
                 Vec3 retreatPos = this.shooter.position().add(awayVector.scale(2.0));
                 this.shooter.getNavigation().moveTo(retreatPos.x, retreatPos.y, retreatPos.z, this.speedModifier * 0.8);
                 this.shouldStrafe = false;
                 this.strafingTime = -1;
+                this.aimingStabilityTimer = 0;
                 isRetreating = true;
+
+                if (this.aiType == AIType.SMART && distanceToTarget > (this.minRange * this.minRange * 0.8)) {
+                    this.shooter.getNavigation().stop();
+                    isRetreating = false;
+                }
             } else {
                 this.shooter.getNavigation().stop();
                 if (this.aiType != AIType.RECKLESS) {
@@ -252,11 +264,27 @@ public class GunAttackGoal<T extends PathfinderMob> extends Goal {
                 }
             }
 
-            if (canSeeTarget) {
+            if (canSeeTarget && !isRetreating && !isMovingFast) {
                 updateSmoothRotation(target);
+                if (this.aimingStabilityTimer < MIN_AIM_TIME) {
+                    this.aimingStabilityTimer++;
+                }
+            } else if (canSeeTarget && this.aiType == AIType.SMART && isNavigating) {
+                this.aimingStabilityTimer = 0;
+            } else {
+                this.aimingStabilityTimer = 0;
             }
 
-            if (inRange && canSeeTarget && this.seeTime >= 5 && !isRetreating) {
+            boolean isStableAndAimed = this.aimingStabilityTimer >= MIN_AIM_TIME;
+            boolean canShootWhileMoving = this.aiType == AIType.RECKLESS ||
+                    (this.aiType != AIType.SMART && !isNavigating);
+            boolean smartShouldShoot = this.aiType == AIType.SMART &&
+                    !isNavigating &&
+                    !isMovingFast &&
+                    this.shooter.getNavigation().isDone();
+
+            if (inRange && canSeeTarget && this.seeTime >= 5 && !isRetreating &&
+                    (canShootWhileMoving || smartShouldShoot) && !isMovingFast && isStableAndAimed) {
                 if (this.shooter.getMainHandItem().getTag().getInt("AmmoCount") > 0) {
                     if (--this.attackTime <= 0) {
                         float configBurstMultiplier = Config.COMMON.gameplay.mobBurstDelayMultiplier.get().floatValue();

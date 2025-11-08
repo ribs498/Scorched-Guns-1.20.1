@@ -95,9 +95,8 @@ public class CorrodedEnchantment extends Enchantment {
                 int corrodedLevel = weapon.getEnchantmentLevel(ModEnchantments.CORRODED.get());
 
                 if (corrodedLevel > 0 && event.getEntity() instanceof LivingEntity) {
-                    LivingEntity target = (LivingEntity) event.getEntity();
+                    LivingEntity target = event.getEntity();
                     if (isBotEntity(target)) {
-                        // Apply bonus damage to bots
                         float bonusDamage = getBotDamageBonus(corrodedLevel);
                         event.setAmount(event.getAmount() + bonusDamage);
                     }

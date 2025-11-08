@@ -37,7 +37,10 @@ public class GunEntityRenderers
         event.registerEntityRenderer(ModEntities.OSBORNE_SLUG_PROJECTILE.get(), ProjectileRenderer::new);
         event.registerEntityRenderer(ModEntities.GRENADE.get(), GrenadeRenderer::new);
 
-
+        event.registerEntityRenderer(ModEntities.HE_GRENADE_PROJECTILE.get(), GrenadeRoundRenderer::new);
+        event.registerEntityRenderer(ModEntities.FIRE_GRENADE_PROJECTILE.get(), GrenadeRoundRenderer::new);
+        event.registerEntityRenderer(ModEntities.BOUNCY_GRENADE_PROJECTILE.get(), GrenadeRoundRenderer::new);
+        event.registerEntityRenderer(ModEntities.GAS_GRENADE_PROJECTILE.get(), GrenadeRoundRenderer::new);
         event.registerEntityRenderer(ModEntities.ROCKET.get(), RocketRenderer::new);
         event.registerEntityRenderer(ModEntities.MICROJET.get(), MicroJetRenderer::new);
         event.registerEntityRenderer(ModEntities.SCULK_CELL.get(), ProjectileRenderer::new);
