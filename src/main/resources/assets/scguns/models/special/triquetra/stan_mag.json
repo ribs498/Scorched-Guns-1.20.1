@@ -1,0 +1,87 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "scguns:item/triquetra"
+	},
+	"elements": [
+		{
+			"name": "sliding_magazine",
+			"from": [3.75, 3.82267, 9.85233],
+			"to": [7.75, 5.57267, 13.35233],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.4, 9.05]},
+			"faces": {
+				"north": {"uv": [3.5, 4.25, 4.5, 4.75], "texture": "#0"},
+				"east": {"uv": [4.75, 0, 5.625, 0.5], "texture": "#0"},
+				"south": {"uv": [0, 4.5, 1, 5], "texture": "#0"},
+				"west": {"uv": [4.75, 4.25, 5.625, 4.75], "texture": "#0"},
+				"up": {"uv": [2.5, 2.375, 1.5, 1.5], "texture": "#0"},
+				"down": {"uv": [2.5, 2.5, 1.5, 3.375], "texture": "#0"}
+			}
+		},
+		{
+			"name": "sliding_magazine",
+			"from": [2.25, 4.69767, 9.85233],
+			"to": [3.75, 4.69767, 13.35233],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.4, 9.05]},
+			"faces": {
+				"north": {"uv": [0, 0, 0.375, 0], "texture": "#0"},
+				"east": {"uv": [0, 0, 0.875, 0], "texture": "#0"},
+				"south": {"uv": [0, 0, 0.375, 0], "texture": "#0"},
+				"west": {"uv": [0, 0, 0.875, 0], "texture": "#0"},
+				"up": {"uv": [6.375, 0.875, 6, 0], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "main",
+			"origin": [8, -5.35, 8.2],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "weighted_stock",
+			"origin": [8, 0.15, 8.2],
+			"color": 8,
+			"children": []
+		},
+		{
+			"name": "wooden_stock",
+			"origin": [8, 0.15, 8.2],
+			"color": 9,
+			"children": []
+		},
+		{
+			"name": "light_stock",
+			"origin": [8, 0.15, 8.2],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "standard_grip",
+			"origin": [7.875, -4.55725, 14.416],
+			"color": 1,
+			"children": []
+		},
+		{
+			"name": "sights",
+			"origin": [8, -1.55233, 8.52733],
+			"color": 5,
+			"children": []
+		},
+		{
+			"name": "no_sights",
+			"origin": [8, -1.55233, 8.52733],
+			"color": 6,
+			"children": []
+		},
+		{
+			"name": "sliding_magazine",
+			"origin": [5.375, -3.70233, 10.55233],
+			"color": 3,
+			"children": [0, 1]
+		}
+	]
+}

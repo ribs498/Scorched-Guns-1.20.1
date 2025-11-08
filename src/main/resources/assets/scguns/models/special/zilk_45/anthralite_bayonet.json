@@ -1,0 +1,186 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "scguns:item/zilk_45"
+	},
+	"elements": [
+		{
+			"name": "anthralite_bayonet",
+			"from": [7.98598, 1.325, -9.425],
+			"to": [7.98598, 2.875, 0.825],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.95, 8.75]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.375], "texture": "#0"},
+				"east": {"uv": [3, 1.75, 5.5, 2.125], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 0.375], "texture": "#0"},
+				"up": {"uv": [0, 0, 0, 2.5], "texture": "#0"},
+				"down": {"uv": [0, 0, 0, 2.5], "texture": "#0"}
+			}
+		},
+		{
+			"name": "anthralite_bayonet",
+			"from": [7.27563, 3.58536, -0.2],
+			"to": [8.47563, 4.78536, 0.35],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8.00062, 4.31036, 0.0875]},
+			"faces": {
+				"north": {"uv": [9.5, 2.5, 9.75, 2.75], "texture": "#0"},
+				"east": {"uv": [10, 7.75, 10.125, 8], "texture": "#0"},
+				"south": {"uv": [2.75, 9.5, 3, 9.75], "texture": "#0"},
+				"west": {"uv": [8, 10, 8.125, 10.25], "texture": "#0"},
+				"up": {"uv": [10.25, 8.125, 10, 8], "texture": "#0"},
+				"down": {"uv": [8.5, 10, 8.25, 10.125], "texture": "#0"}
+			}
+		},
+		{
+			"name": "anthralite_bayonet",
+			"from": [7.23599, 2.9, -0.175],
+			"to": [8.73599, 4.15, 0.325],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.95, 8.75]},
+			"faces": {
+				"north": {"uv": [2.5, 9.25, 2.875, 9.5], "texture": "#0"},
+				"east": {"uv": [10, 8.25, 10.125, 8.5], "texture": "#0"},
+				"south": {"uv": [9.25, 2.75, 9.625, 3], "texture": "#0"},
+				"west": {"uv": [8.5, 10, 8.625, 10.25], "texture": "#0"},
+				"up": {"uv": [10.125, 8.625, 9.75, 8.5], "texture": "#0"},
+				"down": {"uv": [10.125, 8.75, 9.75, 8.875], "texture": "#0"}
+			}
+		},
+		{
+			"name": "anthralite_bayonet",
+			"from": [7.61098, 1.9, -0.175],
+			"to": [8.36098, 2.9, 0.325],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.95, 8.75]},
+			"faces": {
+				"north": {"uv": [3, 9.5, 3.25, 9.75], "texture": "#0"},
+				"east": {"uv": [8.75, 10, 8.875, 10.25], "texture": "#0"},
+				"south": {"uv": [3.25, 9.5, 3.5, 9.75], "texture": "#0"},
+				"west": {"uv": [9.25, 10, 9.375, 10.25], "texture": "#0"},
+				"up": {"uv": [9.75, 10.125, 9.5, 10], "texture": "#0"},
+				"down": {"uv": [10, 10, 9.75, 10.125], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 6.75, -6.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 6.75, -6.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-4.75, 9.25, -0.75]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4.75, 9.25, -0.75]
+		},
+		"ground": {
+			"translation": [0, 9.5, -3.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1.75, 5.5, 0]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [2.75, 7.25, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "main",
+			"origin": [8.475, -5.85, 8],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "default_mag",
+			"origin": [7.98441, -6.45126, 8.92432],
+			"color": 6,
+			"children": []
+		},
+		{
+			"name": "extended_mag",
+			"origin": [9.1, -8.325, 10.8369],
+			"color": 7,
+			"children": []
+		},
+		{
+			"name": "speed_mag",
+			"origin": [8.6, -8.325, 10.8369],
+			"color": 8,
+			"children": []
+		},
+		{
+			"name": "weighted_stock",
+			"origin": [8.475, -1.1, 8],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "wooden_stock",
+			"origin": [8.475, -1.1, 7.75],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "light_stock",
+			"origin": [8.475, -0.35, 8],
+			"color": 4,
+			"children": []
+		},
+		{
+			"name": "vertical_grip",
+			"origin": [8.475, -0.35, 6.75],
+			"color": 5,
+			"children": []
+		},
+		{
+			"name": "light_grip",
+			"origin": [8.475, -0.35, 6.5],
+			"color": 6,
+			"children": []
+		},
+		{
+			"name": "iron_bayonet",
+			"origin": [8.475, -0.35, 8],
+			"color": 7,
+			"children": []
+		},
+		{
+			"name": "anthralite_bayonet",
+			"origin": [8.475, -0.35, 8],
+			"color": 8,
+			"children": [0, 1, 2, 3]
+		},
+		{
+			"name": "netherite_bayonet",
+			"origin": [8.475, -0.35, 8],
+			"color": 9,
+			"children": []
+		},
+		{
+			"name": "diamond_bayonet",
+			"origin": [8.475, -0.35, 8],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "sights",
+			"origin": [8.48902, -1.45125, 24.0625],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "bolt",
+			"origin": [9.60146, -3.65184, 14.88542],
+			"color": 3,
+			"children": []
+		}
+	]
+}

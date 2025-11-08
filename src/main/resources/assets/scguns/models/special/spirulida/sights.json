@@ -1,0 +1,141 @@
+{
+	"format_version": "1.9.0",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"2": "scguns:item/spirulida"
+	},
+	"elements": [
+		{
+			"name": "sights",
+			"from": [7.71249, 5.38577, 11.72697],
+			"to": [7.83624, 5.66298, 11.94972],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.96, 8.48316, 9.08636]},
+			"faces": {
+				"north": {"uv": [0.75, 9.5, 0.875, 9.625], "texture": "#2"},
+				"east": {"uv": [9.5, 0.75, 9.625, 0.875], "texture": "#2"},
+				"south": {"uv": [1, 9.5, 1.125, 9.625], "texture": "#2"},
+				"west": {"uv": [9.5, 1, 9.625, 1.125], "texture": "#2"},
+				"up": {"uv": [1.375, 9.625, 1.25, 9.5], "texture": "#2"},
+				"down": {"uv": [1.625, 9.5, 1.5, 9.625], "texture": "#2"}
+			}
+		},
+		{
+			"name": "sights",
+			"from": [8.08375, 5.38577, 11.72697],
+			"to": [8.2075, 5.66298, 11.94972],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.96, 8.48316, 9.08636]},
+			"faces": {
+				"north": {"uv": [9.5, 1.5, 9.625, 1.625], "texture": "#2"},
+				"east": {"uv": [1.75, 9.5, 1.875, 9.625], "texture": "#2"},
+				"south": {"uv": [9.5, 1.75, 9.625, 1.875], "texture": "#2"},
+				"west": {"uv": [2, 9.5, 2.125, 9.625], "texture": "#2"},
+				"up": {"uv": [9.625, 2.125, 9.5, 2], "texture": "#2"},
+				"down": {"uv": [2.375, 9.5, 2.25, 9.625], "texture": "#2"}
+			}
+		},
+		{
+			"name": "sights",
+			"from": [7.71249, 5.54045, 11.7282],
+			"to": [7.83624, 5.74548, 11.94848],
+			"rotation": {"angle": 45, "axis": "z", "origin": [7.96, 5.64297, 11.86309]},
+			"faces": {
+				"north": {"uv": [9.5, 2.25, 9.625, 2.375], "texture": "#2"},
+				"east": {"uv": [2.5, 9.5, 2.625, 9.625], "texture": "#2"},
+				"south": {"uv": [9.5, 2.5, 9.625, 2.625], "texture": "#2"},
+				"west": {"uv": [2.75, 9.5, 2.875, 9.625], "texture": "#2"},
+				"up": {"uv": [9.625, 2.875, 9.5, 2.75], "texture": "#2"},
+				"down": {"uv": [3.125, 9.5, 3, 9.625], "texture": "#2"}
+			}
+		},
+		{
+			"name": "sights",
+			"from": [7.842, 5.39547, 11.72697],
+			"to": [8.07797, 5.51922, 11.94972],
+			"rotation": {"angle": 0, "axis": "y", "origin": [7.96, 8.48316, 9.08636]},
+			"faces": {
+				"north": {"uv": [9.5, 3, 9.625, 3.125], "texture": "#2"},
+				"east": {"uv": [3.25, 9.5, 3.375, 9.625], "texture": "#2"},
+				"south": {"uv": [9.5, 3.25, 9.625, 3.375], "texture": "#2"},
+				"west": {"uv": [3.5, 9.5, 3.625, 9.625], "texture": "#2"},
+				"up": {"uv": [9.625, 3.625, 9.5, 3.5], "texture": "#2"},
+				"down": {"uv": [3.875, 9.5, 3.75, 9.625], "texture": "#2"}
+			}
+		},
+		{
+			"name": "sights",
+			"from": [7.85749, 5.39547, 11.7282],
+			"to": [8.06251, 5.51922, 11.94848],
+			"rotation": {"angle": 45, "axis": "z", "origin": [7.96, 5.64297, 11.86309]},
+			"faces": {
+				"north": {"uv": [9.5, 3.75, 9.625, 3.875], "texture": "#2"},
+				"east": {"uv": [4, 9.5, 4.125, 9.625], "texture": "#2"},
+				"south": {"uv": [9.5, 4, 9.625, 4.125], "texture": "#2"},
+				"west": {"uv": [4.25, 9.5, 4.375, 9.625], "texture": "#2"},
+				"up": {"uv": [9.625, 4.375, 9.5, 4.25], "texture": "#2"},
+				"down": {"uv": [4.625, 9.5, 4.5, 9.625], "texture": "#2"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0, 7, -7.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0, 7, -7.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"firstperson_righthand": {
+			"translation": [-4.5, 9.75, -1.25]
+		},
+		"firstperson_lefthand": {
+			"translation": [-4.5, 9.75, -1.25]
+		},
+		"ground": {
+			"translation": [0, 7.5, -5.5],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-1.5, 5.75, 0]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [2.25, 8, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "gun_body",
+			"origin": [8, -6.05, 8],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "weighted_stock",
+			"origin": [8, -0.475, 7.85],
+			"color": 1,
+			"children": []
+		},
+		{
+			"name": "wooden_stock",
+			"origin": [8, -0.475, 7.85],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "light_stock",
+			"origin": [8, -0.475, 7.85],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "sights",
+			"origin": [8, -5.675, 7.425],
+			"color": 5,
+			"children": [0, 1, 2, 3, 4]
+		}
+	]
+}

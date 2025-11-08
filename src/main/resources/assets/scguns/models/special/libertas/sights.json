@@ -1,0 +1,155 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "scguns:item/libertas"
+	},
+	"elements": [
+		{
+			"name": "sights",
+			"from": [7.88082, 6.75348, 13.27271],
+			"to": [8.11917, 6.87848, 13.49771],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.5, 8]},
+			"faces": {
+				"north": {"uv": [1.5, 12, 1.625, 12.125], "texture": "#0"},
+				"east": {"uv": [12, 1.5, 12.125, 1.625], "texture": "#0"},
+				"south": {"uv": [1.75, 12, 1.875, 12.125], "texture": "#0"},
+				"west": {"uv": [12, 1.75, 12.125, 1.875], "texture": "#0"},
+				"up": {"uv": [2.125, 12.125, 2, 12], "texture": "#0"},
+				"down": {"uv": [12.125, 2, 12, 2.125], "texture": "#0"}
+			}
+		},
+		{
+			"name": "sights",
+			"from": [8.125, 6.74368, 13.27271],
+			"to": [8.25, 7.05703, 13.49771],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.5, 8]},
+			"faces": {
+				"north": {"uv": [0, 12, 0.125, 12.125], "texture": "#0"},
+				"east": {"uv": [12, 0, 12.125, 0.125], "texture": "#0"},
+				"south": {"uv": [0.25, 12, 0.375, 12.125], "texture": "#0"},
+				"west": {"uv": [12, 0.25, 12.125, 0.375], "texture": "#0"},
+				"up": {"uv": [0.625, 12.125, 0.5, 12], "texture": "#0"},
+				"down": {"uv": [12.125, 0.5, 12, 0.625], "texture": "#0"}
+			}
+		},
+		{
+			"name": "sights",
+			"from": [7.75, 6.89993, 13.27396],
+			"to": [7.875, 7.10703, 13.49646],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8, 7.00348, 13.38521]},
+			"faces": {
+				"north": {"uv": [0.75, 12, 0.875, 12.125], "texture": "#0"},
+				"east": {"uv": [12, 0.75, 12.125, 0.875], "texture": "#0"},
+				"south": {"uv": [1, 12, 1.125, 12.125], "texture": "#0"},
+				"west": {"uv": [12, 1, 12.125, 1.125], "texture": "#0"},
+				"up": {"uv": [1.375, 12.125, 1.25, 12], "texture": "#0"},
+				"down": {"uv": [12.125, 1.25, 12, 1.375], "texture": "#0"}
+			}
+		},
+		{
+			"name": "sights",
+			"from": [7.75, 6.74368, 13.27271],
+			"to": [7.875, 7.05703, 13.49771],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.5, 8]},
+			"faces": {
+				"north": {"uv": [11.75, 11, 11.875, 11.125], "texture": "#0"},
+				"east": {"uv": [11.25, 11.75, 11.375, 11.875], "texture": "#0"},
+				"south": {"uv": [11.75, 11.25, 11.875, 11.375], "texture": "#0"},
+				"west": {"uv": [11.5, 11.75, 11.625, 11.875], "texture": "#0"},
+				"up": {"uv": [11.875, 11.625, 11.75, 11.5], "texture": "#0"},
+				"down": {"uv": [11.875, 11.75, 11.75, 11.875], "texture": "#0"}
+			}
+		},
+		{
+			"name": "sights",
+			"from": [7.89645, 6.75348, 13.27396],
+			"to": [8.10355, 6.87848, 13.49646],
+			"rotation": {"angle": 45, "axis": "z", "origin": [8, 7.00348, 13.38521]},
+			"faces": {
+				"north": {"uv": [2.25, 12, 2.375, 12.125], "texture": "#0"},
+				"east": {"uv": [12, 2.25, 12.125, 2.375], "texture": "#0"},
+				"south": {"uv": [2.5, 12, 2.625, 12.125], "texture": "#0"},
+				"west": {"uv": [12, 2.5, 12.125, 2.625], "texture": "#0"},
+				"up": {"uv": [2.875, 12.125, 2.75, 12], "texture": "#0"},
+				"down": {"uv": [12.125, 2.75, 12, 2.875], "texture": "#0"}
+			}
+		},
+		{
+			"name": "sights",
+			"from": [7.6625, 6.70115, 13.16254],
+			"to": [8.3375, 6.77615, 13.63754],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.5, 8]},
+			"faces": {
+				"north": {"uv": [11.75, 10.25, 11.875, 10.375], "texture": "#0"},
+				"east": {"uv": [10.5, 11.75, 10.625, 11.875], "texture": "#0"},
+				"south": {"uv": [11.75, 10.5, 11.875, 10.625], "texture": "#0"},
+				"west": {"uv": [10.75, 11.75, 10.875, 11.875], "texture": "#0"},
+				"up": {"uv": [11.875, 10.875, 11.75, 10.75], "texture": "#0"},
+				"down": {"uv": [11.125, 11.75, 11, 11.875], "texture": "#0"}
+			}
+		}
+	],
+	"display": {
+		"thirdperson_righthand": {
+			"translation": [0.25, 5.25, -6.25],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"thirdperson_lefthand": {
+			"translation": [0.25, 5.25, -6.25],
+			"scale": [1.2, 1.2, 1.2]
+		},
+		"firstperson_righthand": {
+			"translation": [-3.75, 8.5, 0.25]
+		},
+		"firstperson_lefthand": {
+			"translation": [-3.75, 8.5, 0.25]
+		},
+		"ground": {
+			"translation": [0, 9.5, -1.75],
+			"scale": [1.3, 1.3, 1.3]
+		},
+		"gui": {
+			"rotation": [74.02, -53.34, 70.48],
+			"translation": [-2.25, 3.75, 0]
+		},
+		"fixed": {
+			"rotation": [90, 55, -90],
+			"translation": [2.75, 6.5, 0],
+			"scale": [1.5, 1.5, 1.5]
+		}
+	},
+	"groups": [
+		{
+			"name": "gun_body",
+			"origin": [8, -5.35, 8],
+			"color": 0,
+			"children": []
+		},
+		{
+			"name": "default_mag",
+			"origin": [8.225, -7.36376, 11.3287],
+			"color": 1,
+			"children": []
+		},
+		{
+			"name": "extended_mag",
+			"origin": [8.85, -7.425, 11.3369],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "speed_mag",
+			"origin": [8.35, -7.425, 11.3369],
+			"color": 3,
+			"children": []
+		},
+		{
+			"name": "sights",
+			"origin": [8, 0.25, 7.25],
+			"color": 1,
+			"children": [0, 1, 2, 3, 4, 5]
+		}
+	]
+}

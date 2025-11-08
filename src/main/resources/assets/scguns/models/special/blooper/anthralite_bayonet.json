@@ -1,0 +1,118 @@
+{
+	"format_version": "1.21.6",
+	"credit": "Made with Blockbench",
+	"texture_size": [64, 64],
+	"textures": {
+		"0": "scguns:item/blooper"
+	},
+	"elements": [
+		{
+			"name": "anthralite_bayonet",
+			"from": [7.625, 0.5, 4.025],
+			"to": [8.375, 1.5, 4.525],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.25, 8]},
+			"faces": {
+				"north": {"uv": [1.25, 8.25, 1.5, 8.5], "texture": "#0"},
+				"east": {"uv": [5.75, 8.5, 5.875, 8.75], "texture": "#0"},
+				"south": {"uv": [8.25, 1.25, 8.5, 1.5], "texture": "#0"},
+				"west": {"uv": [6, 8.5, 6.125, 8.75], "texture": "#0"},
+				"up": {"uv": [6.5, 8.625, 6.25, 8.5], "texture": "#0"},
+				"down": {"uv": [6.75, 8.5, 6.5, 8.625], "texture": "#0"}
+			}
+		},
+		{
+			"name": "anthralite_bayonet",
+			"from": [8, -0.075, -5.225],
+			"to": [8, 1.475, 5.025],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 7.25, 8]},
+			"faces": {
+				"north": {"uv": [0, 0, 0, 0.375], "texture": "#0"},
+				"east": {"uv": [1.5, 2, 4.125, 2.375], "texture": "#0"},
+				"south": {"uv": [0, 0, 0, 0.375], "texture": "#0"},
+				"up": {"uv": [0, 2.625, 0, 0], "texture": "#0"},
+				"down": {"uv": [0, 0, 0, 2.625], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "standard_barrel",
+			"origin": [7.78787, -3.45233, 9.85233],
+			"color": 4,
+			"children": []
+		},
+		{
+			"name": "weighted_stock",
+			"origin": [7.91901, -0.25, 8],
+			"color": 6,
+			"children": []
+		},
+		{
+			"name": "wooden_stock",
+			"origin": [7.91901, -0.25, 8],
+			"color": 7,
+			"children": []
+		},
+		{
+			"name": "light_stock",
+			"origin": [7.91901, -0.25, 8],
+			"color": 8,
+			"children": []
+		},
+		{
+			"name": "standard_grip",
+			"origin": [7.91901, -5.75, 8],
+			"color": 9,
+			"children": []
+		},
+		{
+			"name": "vertical_grip",
+			"origin": [7.92138, 0.2, 10.5],
+			"color": 7,
+			"children": []
+		},
+		{
+			"name": "light_grip",
+			"origin": [7.92138, -0.25, 9],
+			"color": 8,
+			"children": []
+		},
+		{
+			"name": "iron_bayonet",
+			"origin": [7.92138, -0.25, 8],
+			"color": 9,
+			"children": []
+		},
+		{
+			"name": "anthralite_bayonet",
+			"origin": [7.92138, -0.25, 8],
+			"color": 0,
+			"children": [0, 1]
+		},
+		{
+			"name": "netherite_bayonet",
+			"origin": [7.92138, -0.25, 8],
+			"color": 1,
+			"children": []
+		},
+		{
+			"name": "diamond_bayonet",
+			"origin": [7.92138, -0.25, 8],
+			"color": 2,
+			"children": []
+		},
+		{
+			"name": "main",
+			"origin": [8, -5.75, 8],
+			"color": 1,
+			"children": [
+				{
+					"name": "sights",
+					"origin": [8, -2.25233, 13.65233],
+					"color": 5,
+					"children": []
+				}
+			]
+		}
+	]
+}
