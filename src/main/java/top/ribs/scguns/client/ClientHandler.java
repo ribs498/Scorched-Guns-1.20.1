@@ -61,10 +61,12 @@ import java.lang.reflect.Field;
 @Mod.EventBusSubscriber(modid = Reference.MOD_ID, value = Dist.CLIENT)
 public class ClientHandler {
     private static Field mouseOptionsField;
+    private static long lastAmmoSwapTime = 0;
+    private static final long SWAP_COOLDOWN_MS = 1000;
 
     public static void registerClientHandlers(IEventBus bus) {
         FrameworkClientAPI.registerDataLoader(MetaLoader.getInstance());
-       // onRegisterCreativeTab(bus);
+        // onRegisterCreativeTab(bus);
         bus.addListener(KeyBinds::registerKeyMappings);
         bus.addListener(CrosshairHandler::onConfigReload);
         bus.addListener(ClientHandler::onRegisterReloadListener);
@@ -359,7 +361,7 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.DEFENDER_PISTOL.get(), new DefenderPistolModel());
         ModelOverrides.register(ModItems.COMBAT_SHOTGUN.get(), new CombatShotgunModel());
         ModelOverrides.register(ModItems.AUVTOMAG.get(), new AuvtomagModel());
-         ModelOverrides.register(ModItems.GAUSS_RIFLE.get(), new GaussRifleModel());
+        ModelOverrides.register(ModItems.GAUSS_RIFLE.get(), new GaussRifleModel());
         ModelOverrides.register(ModItems.ROCKET_RIFLE.get(), new RocketRifleModel());
         ModelOverrides.register(ModItems.PRUSH_GUN.get(), new PrushGunModel());
         ModelOverrides.register(ModItems.RAILWORKER.get(), new RailworkerModel());
@@ -371,10 +373,10 @@ public class ClientHandler {
         ModelOverrides.register(ModItems.UPPERCUT.get(), new UppercutModel());
         ModelOverrides.register(ModItems.MAS_55.get(), new Mas55Model());
         ModelOverrides.register(ModItems.MAS_PEDDLER.get(), new MasPeddlerModel());
-         ModelOverrides.register(ModItems.CYCLONE.get(), new CycloneModel());
-         ModelOverrides.register(ModItems.SOUL_DRUMMER.get(), new SoulDrummerModel());
+        ModelOverrides.register(ModItems.CYCLONE.get(), new CycloneModel());
+        ModelOverrides.register(ModItems.SOUL_DRUMMER.get(), new SoulDrummerModel());
         ModelOverrides.register(ModItems.VALORA.get(), new ValoraModel());
-       ModelOverrides.register(ModItems.KRAUSER.get(), new KrauserModel());
+        ModelOverrides.register(ModItems.KRAUSER.get(), new KrauserModel());
         ModelOverrides.register(ModItems.M22_WALTZ.get(), new M22WaltzModel());
         ModelOverrides.register(ModItems.TRENCHUR.get(), new TrenchurModel());
         ModelOverrides.register(ModItems.MICINA.get(), new MicinaModel());
@@ -422,7 +424,11 @@ public class ClientHandler {
                 PacketHandler.getPlayChannel().sendToServer(new C2SMessageAttachments());
             }
             if (KeyBinds.KEY_SWAP_AMMO.isDown()) {
-                PacketHandler.getPlayChannel().sendToServer(new C2SMessageSwapAmmo());
+                long currentTime = System.currentTimeMillis();
+                if (currentTime - lastAmmoSwapTime >= SWAP_COOLDOWN_MS) {
+                    lastAmmoSwapTime = currentTime;
+                    PacketHandler.getPlayChannel().sendToServer(new C2SMessageSwapAmmo());
+                }
             }
             if (hasAnyExoSuitEquipped(mc.player)) {
                 if (KeyBinds.KEY_ENABLE_EXO_HELMET.consumeClick()) {

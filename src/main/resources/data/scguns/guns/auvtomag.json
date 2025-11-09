@@ -50,6 +50,7 @@
     "knockbackStrength": 0.8,
     "advantage": "scguns:undead",
     "damage": 15.0,
+
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:ramrod_round",

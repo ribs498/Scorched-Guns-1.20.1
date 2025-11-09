@@ -53,7 +53,7 @@
     "damageFalloffStart": 35.0,
     "damageFalloffEnd": 90.0,
     "damageFalloffMinMultiplier": 0.85,
-    "armorPen": 1.0,
+    "armorPen": 2.5,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:standard_copper_round",

@@ -11,7 +11,8 @@ public class Attachments
             .aimFovModifier(0.15F)
             .modifiers(
                     GunModifiers.SLOWER_ADS,
-                    GunModifiers.LONG_SCOPE_RECOIL_REDUCTION
+                    GunModifiers.LONG_SCOPE_RECOIL_REDUCTION,
+                    GunModifiers.REFLEX_SIGHT_CRIT_BONUS
             )
             .build();
 

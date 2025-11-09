@@ -153,6 +153,7 @@ public class BouncyGrenadeRoundEntity extends ProjectileEntity {
             spawnBounceParticles(hitVec);
         } else {
             createBouncyGrenadeExplosion(this, EXPLOSION_RADIUS);
+            this.remove(RemovalReason.KILLED);
         }
     }
 

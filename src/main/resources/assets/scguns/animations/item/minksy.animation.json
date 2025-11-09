@@ -173,6 +173,11 @@
 						}
 					}
 				}
+			},
+			"sound_effects": {
+				"0.2083": {
+					"effect": "lever"
+				}
 			}
 		},
 		"shoot": {
@@ -332,8 +337,8 @@
 				}
 			},
 			"sound_effects": {
-				"0.25": {
-					"effect": "rack"
+				"0.2083": {
+					"effect": "lever"
 				}
 			}
 		},

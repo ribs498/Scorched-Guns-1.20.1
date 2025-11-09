@@ -39,7 +39,7 @@
   "projectile": {
     "recoilAngle": 2.5,
     "recoilKick": 1.5,
-    "spread": 3.0,
+    "spread": 4.0,
     "criticalChance": 0.04,
     "alwaysSpread": true,
     "advantage": "scguns:bot",

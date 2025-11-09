@@ -430,11 +430,11 @@ public class SupplyScampEntity extends TamableAnimal {
             return flag ? InteractionResult.CONSUME : InteractionResult.PASS;
         } else {
             if (this.isTame()) {
-                if (itemstack.is(ModItems.ANCIENT_BRASS.get()) && this.getHealth() < this.getMaxHealth()) {
+                if (itemstack.is(ModItems.REPAIR_KIT.get()) && this.getHealth() < this.getMaxHealth()) {
                     if (!player.getAbilities().instabuild) {
                         itemstack.shrink(1);
                     }
-                    float healAmount = 6.0F;
+                    float healAmount = 10.0F;
                     this.heal(healAmount);
                     this.playSound(SoundEvents.GENERIC_EAT, 0.5F, 1.0F);
                     if (this.level() instanceof ServerLevel serverLevel) {

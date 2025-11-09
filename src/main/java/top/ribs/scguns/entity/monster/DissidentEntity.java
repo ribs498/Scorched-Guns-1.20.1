@@ -114,7 +114,7 @@ public class DissidentEntity extends Monster {
     }
     @Override
     public double getPassengersRidingOffset() {
-        return (double)this.getBbHeight() * 0.9D;
+        return (double)this.getBbHeight() * 1.05D;
     }
 
     @Nullable
@@ -145,6 +145,12 @@ public class DissidentEntity extends Monster {
                 babyZombie.setBaby(true);
                 babyZombie.moveTo(this.getX(), this.getY(), this.getZ(), this.getYRot(), 0.0F);
                 babyZombie.finalizeSpawn(pLevel, pDifficulty, pReason, null, null);
+
+                if (pLevel.getRandom().nextFloat() < 0.5F) {
+                    babyZombie.addTag("MobGunner");
+                    babyZombie.addTag("ProgressionGunner");
+                }
+
                 babyZombie.startRiding(this);
                 pLevel.addFreshEntity(babyZombie);
             }

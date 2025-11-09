@@ -17,7 +17,7 @@
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:two_handed",
     "baseGripType": "scguns:two_handed",
-    "rate": 24,
+    "rate": 19,
     "meleeDamage": 2.5,
     "meleeCooldownTicks": 20,
     "hotBarrelRate": 30
@@ -42,11 +42,11 @@
   "projectile": {
     "alwaysSpread": true,
     "recoilAngle": 4.0,
-    "recoilKick": 2.0,
+    "recoilKick": 1.0,
     "spread": 1.0,
     "criticalChance": 0.03,
     "advantage": "scguns:none",
-    "damage": 8.5,
+    "damage": 9.0,
     "damageFalloffStart": 22.0,
     "damageFalloffEnd": 55.0,
     "damageFalloffMinMultiplier": 0.7,

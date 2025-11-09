@@ -410,11 +410,11 @@ public class ViventrumEntity extends TamableAnimal {
                     return InteractionResult.SUCCESS;
                 }
 
-                if (!player.isShiftKeyDown() && itemstack.is(Items.DIAMOND) && this.getHealth() < this.getMaxHealth()) {
+                if (!player.isShiftKeyDown() && itemstack.is(ModItems.REPAIR_KIT.get()) && this.getHealth() < this.getMaxHealth()) {
                     if (!player.getAbilities().instabuild) {
                         itemstack.shrink(1);
                     }
-                    this.heal(6.0F);
+                    this.heal(10.0F);
                     this.playSound(SoundEvents.GENERIC_EAT, 0.5F, 1.0F);
                     if (this.level() instanceof ServerLevel serverLevel) {
                         serverLevel.sendParticles(ParticleTypes.HEART,

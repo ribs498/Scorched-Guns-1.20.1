@@ -1637,7 +1637,7 @@ public class ModItems {
     public static final RegistryObject<Item> ANTHRALITE_BOOTS = REGISTER.register("anthralite_boots", () -> new AnthraliteArmorItem(ModArmorMaterials.ANTHRALITE, ArmorItem.Type.BOOTS, new Item.Properties()));
     public static final RegistryObject<Item> RIDGETOP = REGISTER.register("ridgetop", () -> new RidgetopArmorItem(ArmorMaterials.LEATHER, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> BRASS_MASK = REGISTER.register("brass_mask", () -> new BrassMaskArmorItem(ModArmorMaterials.TREATED_BRASS, ArmorItem.Type.HELMET, new Item.Properties()));
-    public static final RegistryObject<Item> IRON_MASK = REGISTER.register("iron_mask", () -> new IronMaskArmorItem(ArmorMaterials.IRON, ArmorItem.Type.HELMET, new Item.Properties()));
+    public static final RegistryObject<Item> IRON_MASK = REGISTER.register("iron_mask", () -> new IronMaskArmorItem(ModArmorMaterials.DIAMOND_STEEL, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> ADRIEN_HELM = REGISTER.register("adrien_helm", () -> new AdrienArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.HELMET, new Item.Properties()));
     public static final RegistryObject<Item> ADRIEN_CHESTPLATE = REGISTER.register("adrien_chestplate", () -> new AdrienArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.CHESTPLATE, new Item.Properties()));
     public static final RegistryObject<Item> ADRIEN_LEGGINGS = REGISTER.register("adrien_leggings", () -> new AdrienArmorItem(ModArmorMaterials.ADRIEN, ArmorItem.Type.LEGGINGS, new Item.Properties()));

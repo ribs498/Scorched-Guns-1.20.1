@@ -9,7 +9,6 @@
   },
   "general": {
     "weaponType": "magnum",
-
     "fireMode": "scguns:semi_automatic",
     "gripType": "scguns:one_handed",
     "rate": 7,
@@ -47,7 +46,7 @@
     "damageFalloffEnd": 40.0,
     "damageFalloffMinMultiplier": 0.6,
     "advantage": "scguns:undead",
-    "damage": 13.5,
+    "damage": 14.0,
     "ejectsCasing": true,
     "gravity": false,
     "item": "scguns:ramrod_round",

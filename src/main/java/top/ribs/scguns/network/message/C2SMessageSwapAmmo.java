@@ -12,6 +12,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import top.ribs.scguns.common.Gun;
+import top.ribs.scguns.common.ReloadType;
 import top.ribs.scguns.init.ModSyncedDataKeys;
 import top.ribs.scguns.item.GunItem;
 import top.ribs.scguns.network.PacketHandler;
@@ -67,12 +68,15 @@ public class C2SMessageSwapAmmo extends PlayMessage<C2SMessageSwapAmmo> {
 
             if (currentAmmo > 0 && !player.isCreative()) {
                 Item currentAmmoItem = modifiedGun.getProjectile(heldItem).getItem();
+                assert currentAmmoItem != null;
                 ItemStack ammoStack = new ItemStack(currentAmmoItem, currentAmmo);
                 if (!player.getInventory().add(ammoStack)) {
                     player.drop(ammoStack, false);
                 }
-                tag.putInt("AmmoCount", 0);
             }
+
+            tag.putInt("AmmoCount", 0);
+            PacketHandler.getPlayChannel().sendToPlayer(() -> player, new S2CMessageUpdateAmmo(0));
 
             int currentIndex = general.getCurrentAmmoTypeIndex();
             int nextIndex = (currentIndex + 1) % general.getAvailableAmmoTypes().size();
@@ -113,6 +117,13 @@ public class C2SMessageSwapAmmo extends PlayMessage<C2SMessageSwapAmmo> {
                 ModSyncedDataKeys.RELOADING.setValue(player, true);
                 tag.putBoolean("IsReloading", true);
                 tag.putBoolean("scguns:IsReloading", true);
+
+                if (modifiedGun.getReloads().getReloadType() == ReloadType.MANUAL) {
+                    tag.putBoolean("IsManualReload", true);
+                    tag.putString("scguns:ReloadState", "NONE");
+                } else {
+                    tag.putBoolean("InCriticalReloadPhase", true);
+                }
 
                 PacketHandler.getPlayChannel().sendToPlayer(() -> player, new S2CMessageReload(true));
             }

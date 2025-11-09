@@ -195,7 +195,7 @@ public class AttachmentScreen extends AbstractContainerScreen<AttachmentContaine
         float renderRotationX = this.prevRotationX + (this.windowRotationX - this.prevRotationX) * partialTicks;
         float renderRotationY = this.prevRotationY + (this.windowRotationY - this.prevRotationY) * partialTicks;
 
-        pGuiGraphics.enableScissor(left + 8 - 14, top + 17 - 82, left + 8 + 176 + 14, top + 17 + 64 + 0);
+        pGuiGraphics.enableScissor(left + 8 - 14, top + 17 - 82, left + 8 + 176 + 14, top + 17 + 64);
         pGuiGraphics.pose().pushPose();
         pGuiGraphics.pose().translate(96, 48, 150);
         pGuiGraphics.pose().translate(this.windowX + (this.mouseGrabbed && this.mouseGrabbedButton == 0 ? mouseX - this.mouseClickedX : 0), 0, 0);
@@ -241,7 +241,7 @@ public class AttachmentScreen extends AbstractContainerScreen<AttachmentContaine
         int startX = -60;
         int startY = 0;
         int lineHeight = 7;
-        float scale = 0.68f;
+        float scale = 0.6f;
 
         pGuiGraphics.pose().pushPose();
         pGuiGraphics.pose().scale(scale, scale, scale);
