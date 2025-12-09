@@ -175,7 +175,6 @@ public class RaidManager {
 
         if (level.getGameTime() % SAVE_INTERVAL == 0) {
             saveActiveRaids(level);
-            level.getDataStorage().save();
         }
     }
 
