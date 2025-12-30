@@ -272,7 +272,7 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
                 .getAnimationControllers()
                 .get("controller");
 
-        rotationHandler.updateRotations(Minecraft.getInstance().getPartialTick());
+        rotationHandler.updateRotations(ClientUtil.getPartialTick());
         if (nbtCompound.getBoolean("AttachmentChanged")) {
             if (animationController != null) {
                 updateCarbineState(stack, animationController);
