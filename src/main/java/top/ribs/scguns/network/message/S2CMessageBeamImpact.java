@@ -2,11 +2,11 @@ package top.ribs.scguns.network.message;
 
 import com.mrcrayfish.framework.api.network.MessageContext;
 import com.mrcrayfish.framework.api.network.message.PlayMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.Vec3;
+import top.ribs.scguns.client.ClientUtil;
 import top.ribs.scguns.client.handler.BeamHandler;
 
 import java.util.UUID;
@@ -46,7 +46,7 @@ public class S2CMessageBeamImpact extends PlayMessage<S2CMessageBeamImpact> {
     @Override
     public void handle(S2CMessageBeamImpact message, MessageContext context) {
         context.execute(() -> {
-            ClientLevel world = Minecraft.getInstance().level;
+            ClientLevel world = ClientUtil.getClientWorld();
             if (world != null) {
                 Player player = world.getPlayerByUUID(message.playerUUID);
                 if (player != null) {

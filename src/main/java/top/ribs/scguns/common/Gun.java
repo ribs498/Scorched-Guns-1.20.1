@@ -2,7 +2,6 @@ package top.ribs.scguns.common;
 
 import com.google.common.base.Preconditions;
 import com.google.gson.JsonObject;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
@@ -29,6 +28,7 @@ import top.ribs.scguns.Reference;
 import top.ribs.scguns.annotation.Ignored;
 import top.ribs.scguns.annotation.Optional;
 import top.ribs.scguns.client.ClientHandler;
+import top.ribs.scguns.client.ClientUtil;
 import top.ribs.scguns.common.exosuit.ExoSuitAmmoHelper;
 import top.ribs.scguns.debug.Debug;
 import top.ribs.scguns.debug.IDebugWidget;
@@ -227,16 +227,16 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
     @Override
     public void getEditorWidgets(List<Pair<Component, Supplier<IDebugWidget>>> widgets) {
         DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> {
-            ItemStack heldItem = Objects.requireNonNull(Minecraft.getInstance().player).getMainHandItem();
+            ItemStack heldItem = Objects.requireNonNull(ClientUtil.getClientPlayer()).getMainHandItem();
             ItemStack scope = Gun.getScopeStack(heldItem);
             if (scope.getItem() instanceof ScopeItem scopeItem) {
                 widgets.add(Pair.of(scope.getItem().getName(scope), () -> new DebugButton(Component.translatable("Edit"), btn -> {
-                    Minecraft.getInstance().setScreen(ClientHandler.createEditorScreen(Debug.getScope(scopeItem)));
+                    ClientUtil.setScreen(ClientHandler.createEditorScreen(Debug.getScope(scopeItem)));
                 })));
             }
 
             widgets.add(Pair.of(this.modules.getEditorLabel(), () -> new DebugButton(Component.translatable(">"), btn -> {
-                Minecraft.getInstance().setScreen(ClientHandler.createEditorScreen(this.modules));
+                ClientUtil.setScreen(ClientHandler.createEditorScreen(this.modules));
             })));
         });
     }
@@ -2107,7 +2107,7 @@ public class Gun implements INBTSerializable<CompoundTag>, IEditorMenu {
 
                 widgets.add(Pair.of(Component.translatable("Adjust Iron Sights"), () -> new DebugButton(Component.translatable(">"), btn -> {
                     if (btn.active && this.zoom != null) {
-                        Minecraft.getInstance().setScreen(ClientHandler.createEditorScreen(this.zoom));
+                        ClientUtil.setScreen(ClientHandler.createEditorScreen(this.zoom));
                     }
                 }, () -> this.zoom != null)));
             });

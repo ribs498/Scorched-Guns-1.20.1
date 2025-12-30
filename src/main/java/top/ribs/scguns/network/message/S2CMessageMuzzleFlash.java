@@ -2,17 +2,11 @@ package top.ribs.scguns.network.message;
 
 import com.mrcrayfish.framework.api.network.MessageContext;
 import com.mrcrayfish.framework.api.network.message.PlayMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkEvent;
+import top.ribs.scguns.client.ClientUtil;
 import top.ribs.scguns.init.ModParticleTypes;
-
-import java.util.function.Supplier;
 
 public class S2CMessageMuzzleFlash extends PlayMessage<S2CMessageMuzzleFlash> {
 
@@ -49,7 +43,7 @@ public class S2CMessageMuzzleFlash extends PlayMessage<S2CMessageMuzzleFlash> {
     @Override
     public void handle(S2CMessageMuzzleFlash message, MessageContext context) {
         context.execute(() -> {
-            ClientLevel level = Minecraft.getInstance().level;
+            ClientLevel level = ClientUtil.getClientWorld();
             if (level != null) {
                 level.addParticle(
                         ModParticleTypes.TURRET_MUZZLE_FLASH.get(),

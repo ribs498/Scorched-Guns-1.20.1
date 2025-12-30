@@ -1,6 +1,5 @@
 package top.ribs.scguns.item;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -18,6 +17,7 @@ import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.ribs.scguns.Reference;
+import top.ribs.scguns.client.ClientUtil;
 import top.ribs.scguns.init.ModParticleTypes;
 
 import java.util.List;
@@ -47,7 +47,7 @@ public class RangeFinderItem extends Item {
 
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event) {
-            LocalPlayer player = Minecraft.getInstance().player;
+            LocalPlayer player = ClientUtil.getClientPlayer();
             if (player != null) {
                 tickCounter++;
                 if (tickCounter >= TICK_DELAY) {

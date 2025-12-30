@@ -1,9 +1,7 @@
 package top.ribs.scguns.item;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.core.Direction;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
@@ -23,8 +21,8 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.Mod.EventBusSubscriber.Bus;
 import top.ribs.scguns.Reference;
+import top.ribs.scguns.client.ClientUtil;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.init.ModParticleTypes;
 import top.ribs.scguns.item.attachment.impl.Scope;
@@ -51,7 +49,7 @@ public class LaserSightItem extends ScopeItem {
 
         @SubscribeEvent
         public static void onClientTick(TickEvent.ClientTickEvent event) {
-            LocalPlayer player = Minecraft.getInstance().player;
+            LocalPlayer player = ClientUtil.getClientPlayer();
             if (player != null) {
                 tickCounter++;
                 if (tickCounter >= TICK_DELAY) {

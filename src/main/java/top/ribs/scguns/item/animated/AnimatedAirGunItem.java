@@ -1,7 +1,6 @@
 package top.ribs.scguns.item.animated;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.util.Mth;
@@ -12,6 +11,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fml.DistExecutor;
+import top.ribs.scguns.client.ClientUtil;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.interfaces.IAirGun;
 import top.ribs.scguns.util.AirSourceHelper;
@@ -115,6 +115,6 @@ public class AnimatedAirGunItem extends AnimatedGunItem implements IAirGun {
 
     @OnlyIn(Dist.CLIENT)
     private static Player getClientPlayer() {
-        return Minecraft.getInstance().player;
+        return ClientUtil.getClientPlayer();
     }
 }

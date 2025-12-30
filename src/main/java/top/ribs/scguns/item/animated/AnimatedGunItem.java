@@ -1,6 +1,5 @@
 package top.ribs.scguns.item.animated;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
@@ -33,6 +32,7 @@ import software.bernie.geckolib.util.ClientUtils;
 import top.ribs.scguns.Config;
 import top.ribs.scguns.animations.GunAnimations;
 import top.ribs.scguns.attributes.SCAttributes;
+import top.ribs.scguns.client.ClientUtil;
 import top.ribs.scguns.client.KeyBinds;
 import top.ribs.scguns.client.handler.AimingHandler;
 import top.ribs.scguns.client.handler.GunRenderingHandler;
@@ -687,7 +687,7 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
     @OnlyIn(Dist.CLIENT)
     private void handleNormalReload(CompoundTag nbt, AnimationController<GeoAnimatable> animationController, ItemStack stack) {
         Gun modifiedGun = ((GunItem) stack.getItem()).getModifiedGun(stack);
-        Player player = Minecraft.getInstance().player;
+        Player player = ClientUtil.getClientPlayer();
         if (player == null) return;
 
         boolean serverReloading = ModSyncedDataKeys.RELOADING.getValue(player);
@@ -769,7 +769,7 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
         Gun modifiedGun = ((GunItem) stack.getItem()).getModifiedGun(stack);
         String currentState = nbt.getString(RELOAD_STATE);
 
-        Player player = Minecraft.getInstance().player;
+        Player player = ClientUtil.getClientPlayer();
         if (player == null) return;
         if(ModSyncedDataKeys.AIMING.getValue(player)) {
             ModSyncedDataKeys.AIMING.setValue(player, false);
@@ -800,8 +800,8 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
         }
 
         double reloadSpeedMultiplier = 1.0;
-        if (Minecraft.getInstance().player != null) {
-            AttributeInstance reloadSpeedAttribute = Minecraft.getInstance().player.getAttribute(SCAttributes.RELOAD_SPEED.get());
+        if (ClientUtil.getClientPlayer() != null) {
+            AttributeInstance reloadSpeedAttribute = ClientUtil.getClientPlayer().getAttribute(SCAttributes.RELOAD_SPEED.get());
             if (reloadSpeedAttribute != null) {
                 reloadSpeedMultiplier = reloadSpeedAttribute.getValue();
             }
@@ -941,8 +941,8 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
 
         animationController.setAnimationSpeed(1.0);
         nbt.remove("IsInspecting");
-        assert Minecraft.getInstance().player != null;
-        ItemStack stack = Minecraft.getInstance().player.getMainHandItem();
+        assert ClientUtil.getClientPlayer() != null;
+        ItemStack stack = ClientUtil.getClientPlayer().getMainHandItem();
         isInCarbineMode(stack);
         if (stack.getItem() instanceof AnimatedGunItem && isInCarbineMode(stack)) {
             animationController.tryTriggerAnimation("carbine_idle");
@@ -952,8 +952,8 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
     }
     private void handleRunningState(AnimationController<GeoAnimatable> animationController) {
         animationController.setAnimationSpeed(1.0);
-        assert Minecraft.getInstance().player != null;
-        ItemStack stack = Minecraft.getInstance().player.getMainHandItem();
+        assert ClientUtil.getClientPlayer() != null;
+        ItemStack stack = ClientUtil.getClientPlayer().getMainHandItem();
         boolean isCarbine = stack.getItem() instanceof AnimatedGunItem && isInCarbineMode(stack);
 
         if (isAnimationPlaying(animationController, isCarbine ? "carbine_inspect" : "inspect")) {
@@ -1132,7 +1132,7 @@ public class AnimatedGunItem extends GunItem implements GeoAnimatable, GeoItem {
     }
     @OnlyIn(Dist.CLIENT)
     private PlayState predicate(AnimationState<AnimatedGunItem> event) {
-        Player player = Minecraft.getInstance().player;
+        Player player = ClientUtil.getClientPlayer();
         if (player == null) {
             return PlayState.STOP;
         }
