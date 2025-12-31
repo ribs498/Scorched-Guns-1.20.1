@@ -1,6 +1,5 @@
 package top.ribs.scguns.client.handler;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.resources.ResourceLocation;
@@ -17,6 +16,7 @@ import software.bernie.geckolib.animatable.GeoItem;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animation.AnimationController;
 import top.ribs.scguns.Config;
+import top.ribs.scguns.client.ClientUtil;
 import top.ribs.scguns.client.KeyBinds;
 import top.ribs.scguns.common.Gun;
 import top.ribs.scguns.common.ReloadType;
@@ -104,7 +104,7 @@ public class ReloadHandler {
     public void onClientTick(TickEvent.ClientTickEvent event) {
         if (event.phase != TickEvent.Phase.END)
             return;
-        Player player = Minecraft.getInstance().player;
+        Player player = ClientUtil.getClientPlayer();
         if (player != null) {
             if(ModSyncedDataKeys.RELOADING.getValue(player)) {
                 if(ModSyncedDataKeys.AIMING.getValue(player)) {
@@ -115,7 +115,7 @@ public class ReloadHandler {
             this.prevReloadTimer = this.reloadTimer;
             if (ModSyncedDataKeys.RELOADING.getValue(player)) {
                 ItemStack stack = player.getMainHandItem();
-                if (Minecraft.getInstance().isPaused() && stack.getItem() instanceof GunItem) {
+                if (ClientUtil.isPaused() && stack.getItem() instanceof GunItem) {
                     Gun gun = ((GunItem) stack.getItem()).getModifiedGun(stack);
                     CompoundTag tag = stack.getOrCreateTag();
                     if (gun.getReloads().getReloadType() == ReloadType.MANUAL) {
@@ -169,7 +169,7 @@ public class ReloadHandler {
 
     @SubscribeEvent
     public void onKeyPressed(InputEvent.Key event) {
-        Player player = Minecraft.getInstance().player;
+        Player player = ClientUtil.getClientPlayer();
         if (player == null)
             return;
 
@@ -198,7 +198,7 @@ public class ReloadHandler {
 
     @SubscribeEvent
     public void onMouseInput(InputEvent.MouseButton event) {
-        Player player = Minecraft.getInstance().player;
+        Player player = ClientUtil.getClientPlayer();
         if (player == null)
             return;
 
@@ -223,7 +223,7 @@ public class ReloadHandler {
     }
 
     public void setReloading(boolean reloading) {
-        Player player = Minecraft.getInstance().player;
+        Player player = ClientUtil.getClientPlayer();
         if (player == null) return;
 
         ItemStack stack = player.getMainHandItem();

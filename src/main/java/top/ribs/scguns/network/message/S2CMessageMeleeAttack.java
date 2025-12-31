@@ -2,15 +2,12 @@ package top.ribs.scguns.network.message;
 
 import com.mrcrayfish.framework.api.network.MessageContext;
 import com.mrcrayfish.framework.api.network.message.PlayMessage;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.NetworkEvent;
+import top.ribs.scguns.client.ClientUtil;
 import top.ribs.scguns.client.handler.ClientMeleeAttackHandler;
 import top.ribs.scguns.item.GunItem;
-
-import java.util.function.Supplier;
 
 public class S2CMessageMeleeAttack extends PlayMessage<S2CMessageMeleeAttack> {
     private ItemStack heldItem;
@@ -38,7 +35,7 @@ public class S2CMessageMeleeAttack extends PlayMessage<S2CMessageMeleeAttack> {
     @Override
     public void handle(S2CMessageMeleeAttack message, MessageContext context) {
         context.execute(() -> {
-            LocalPlayer player = Minecraft.getInstance().player;
+            LocalPlayer player = ClientUtil.getClientPlayer();
             if (player != null) {
                 ItemStack currentHeldItem = player.getMainHandItem();
                 if (currentHeldItem.getItem() instanceof GunItem gunItem) {

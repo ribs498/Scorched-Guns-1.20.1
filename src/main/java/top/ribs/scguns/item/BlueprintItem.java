@@ -2,8 +2,6 @@
 package top.ribs.scguns.item;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.client.Minecraft;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.player.Player;
@@ -14,6 +12,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import org.jetbrains.annotations.NotNull;
+import top.ribs.scguns.client.ClientUtil;
 import top.ribs.scguns.client.screen.BlueprintScreen;
 import top.ribs.scguns.network.PacketHandler;
 import top.ribs.scguns.network.message.C2SMessageClearBlueprintRecipe;
@@ -59,7 +58,7 @@ public class BlueprintItem extends Item {
 
     @OnlyIn(Dist.CLIENT)
     private void openBlueprintScreen(ItemStack blueprintStack, Player player, InteractionHand hand) {
-        Minecraft.getInstance().setScreen(new BlueprintScreen(blueprintStack, player, hand));
+        ClientUtil.setScreen(new BlueprintScreen(blueprintStack, player, hand));
     }
 
     @OnlyIn(Dist.CLIENT)

@@ -1,22 +1,20 @@
 package top.ribs.scguns.client.handler;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.particles.SimpleParticleType;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.Vec3;
+import top.ribs.scguns.client.ClientUtil;
 import top.ribs.scguns.item.GunItem;
 
 public class ClientMeleeAttackHandler {
     public static void startMeleeAnimation(GunItem gunItem, ItemStack heldItem) {
-        if (Minecraft.getInstance().player != null) {
-            boolean isOnCooldown = MeleeAttackHandler.isMeleeOnCooldown(Minecraft.getInstance().player, heldItem);
+        if (ClientUtil.getClientPlayer() != null) {
+            boolean isOnCooldown = MeleeAttackHandler.isMeleeOnCooldown(ClientUtil.getClientPlayer(), heldItem);
             if (isOnCooldown) {
                 return;
             }
