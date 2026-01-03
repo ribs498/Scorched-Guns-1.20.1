@@ -337,7 +337,7 @@ public class Config
         public final ForgeConfigSpec.BooleanValue enableFirePlacement;
         public final ForgeConfigSpec.BooleanValue enableGunDamage;
         public final ForgeConfigSpec.BooleanValue enableAttachmentDamage;
-        public  final ForgeConfigSpec.BooleanValue spawnCasings;
+        public final ForgeConfigSpec.BooleanValue spawnCasings;
         public final ForgeConfigSpec.DoubleValue growBoundingBoxAmount;
         public final ForgeConfigSpec.BooleanValue enableHeadShots;
         public final ForgeConfigSpec.DoubleValue headShotDamageMultiplier;
@@ -361,6 +361,7 @@ public class Config
         public final ForgeConfigSpec.DoubleValue mobBurstDelayMultiplier;
         public final ForgeConfigSpec.DoubleValue mobGunDamageMultiplier;
         public final ForgeConfigSpec.DoubleValue cogBeaconSpawnChance;
+        public final ForgeConfigSpec.BooleanValue enableBatGuano;
 
 
         public Gameplay(ForgeConfigSpec.Builder builder)
@@ -416,6 +417,7 @@ public class Config
                         .comment("Global multiplier for mob gun damage. 1.0 = normal damage, 0.5 = half damage, 2.0 = double damage. Affects all projectile damage from mobs.")
                         .defineInRange("mobGunDamageMultiplier", 1.0, 0.01, 100.0);
                 this.cogBeaconSpawnChance = builder.comment("Chance (0.0 to 1.0) that Cog enemies will spawn a Signal Beacon on death. Set to 0.0 to disable beacon spawning from Cog deaths.").defineInRange("cogBeaconSpawnChance", 0.15, 0.0, 1.0);
+                this.enableBatGuano = builder.comment("If true, allows bats to leave the guano on the ground.").define("enableBatGuano", true);
             }
             builder.pop();
         }
