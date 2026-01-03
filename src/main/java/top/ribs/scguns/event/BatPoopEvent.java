@@ -9,6 +9,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import top.ribs.scguns.Config;
 import top.ribs.scguns.Reference;
 import top.ribs.scguns.init.ModBlocks;
 import top.ribs.scguns.init.ModItems;
@@ -27,6 +28,7 @@ public class BatPoopEvent {
 
     @SubscribeEvent
     public static void onBatTick(LivingEvent.LivingTickEvent event) {
+        if (!Config.COMMON.gameplay.enableBatGuano.get()) return;
         if (!(event.getEntity() instanceof Bat bat)) return;
         if (bat.level().isClientSide()) return;
 
