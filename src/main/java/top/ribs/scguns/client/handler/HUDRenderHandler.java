@@ -17,6 +17,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.RenderGuiOverlayEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -91,6 +92,10 @@ public class HUDRenderHandler {
         if (player == null || mc.screen != null) {
             return;
         }
+
+        if (event.getOverlay() != VanillaGuiOverlay.VIGNETTE.type()) {
+          return
+        };
 
         updateScreenCache(mc);
 
